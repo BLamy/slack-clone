@@ -1,0 +1,31 @@
+durable-streams:
+  port: 4100
+
+auth0:
+  port: 4101
+  baseUrl: http://127.0.0.1:4101
+  connections:
+    - name: Username-Password-Authentication
+      strategy: auth0
+  users:
+    - user_id: ada
+      email: ada@example.test
+      password: DemoPass123
+      email_verified: true
+      given_name: Ada
+      family_name: Lovelace
+      name: Ada Lovelace
+    - user_id: linus
+      email: linus@example.test
+      password: DemoPass123
+      email_verified: true
+      given_name: Linus
+      family_name: Torvalds
+      name: Linus Torvalds
+  oauth_clients:
+    - client_id: slack-clone-auth0
+      client_secret: slack-clone-secret
+      name: Slack Clone Auth0 Demo
+      grant_types:
+        - http://auth0.com/oauth/grant-type/password-realm
+        - refresh_token

@@ -1,17 +1,14 @@
 const params = new URLSearchParams(window.location.search);
 const room = normalizeRoom(params.get("room") || "durable-streams-demo");
-const persona = params.get("persona") || localStorage.getItem("slack-clone-persona") || randomPersona();
 const autopilot = params.get("autopilot") === "1";
 const closeWhenDone = params.get("close") === "1";
 const expectedCount = Number(params.get("expect") || "0");
-const autopilotMessage =
-  params.get("message") || `Replay check-in from ${persona} at ${new Date().toLocaleTimeString()}`;
-
-localStorage.setItem("slack-clone-persona", persona);
+const autopilotMessage = params.get("message") || `Replay check-in at ${new Date().toLocaleTimeString()}`;
 
 const state = {
   messages: new Map(),
   sentAutopilot: false,
+  session: null,
 };
 
 const messagesEl = document.querySelector("[data-testid='messages']");
@@ -20,12 +17,13 @@ const inputEl = document.querySelector("[data-testid='message-input']");
 const sendButton = document.querySelector("[data-testid='send-button']");
 const connectionStateEl = document.querySelector("[data-testid='connection-state']");
 const personaLabelEl = document.querySelector("[data-testid='persona-label']");
+const authProviderEl = document.querySelector("[data-testid='auth-provider']");
+const authUserEl = document.querySelector("[data-testid='auth-user']");
 const streamPathEl = document.querySelector("[data-testid='stream-path']");
 const streamOffsetEl = document.querySelector("[data-testid='stream-offset']");
 
 document.querySelector("[data-testid='room-label']").textContent = room;
 document.querySelector("[data-testid='header-room']").textContent = room;
-personaLabelEl.textContent = persona;
 inputEl.placeholder = `Message #${room}`;
 window.__demoComplete = false;
 
@@ -37,15 +35,10 @@ formEl.addEventListener("submit", async (event) => {
   await sendMessage(text);
 });
 
-connect();
+init();
 
 function normalizeRoom(value) {
   return value.trim().toLowerCase().replace(/[^a-z0-9_-]+/g, "-").replace(/^-+|-+$/g, "") || "durable-streams-demo";
-}
-
-function randomPersona() {
-  const names = ["Ada", "Linus", "Grace", "Margaret", "Barbara", "Dennis"];
-  return names[Math.floor(Math.random() * names.length)];
 }
 
 function initials(name) {
@@ -63,7 +56,7 @@ async function sendMessage(text) {
     const res = await fetch(`/api/rooms/${encodeURIComponent(room)}/messages`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user: persona, text }),
+      body: JSON.stringify({ text }),
     });
     const body = await res.json();
     if (!res.ok || !body.ok) throw new Error(body.error || "Failed to send message");
@@ -73,6 +66,25 @@ async function sendMessage(text) {
     sendButton.disabled = false;
     inputEl.focus();
   }
+}
+
+async function init() {
+  const res = await fetch("/api/session", { credentials: "include" });
+  if (res.status === 401) {
+    window.location.href = `/login?returnTo=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+    return;
+  }
+
+  const body = await res.json();
+  if (!body.ok) throw new Error(body.error || "Failed to load session");
+  state.session = body;
+
+  const userName = body.user.name || body.user.email || "Authenticated User";
+  personaLabelEl.textContent = userName;
+  authUserEl.textContent = body.user.email || userName;
+  authProviderEl.textContent = `${body.provider.name} (${body.provider.url})`;
+
+  connect();
 }
 
 function connect() {
@@ -168,7 +180,8 @@ function maybeFinishAutopilot() {
   if (!autopilot) return;
 
   const messages = [...state.messages.values()];
-  const hasOwnMessage = messages.some((message) => message.user === persona && message.text === autopilotMessage);
+  const userName = state.session?.user?.name || state.session?.user?.email || "";
+  const hasOwnMessage = messages.some((message) => message.user === userName && message.text === autopilotMessage);
   const hasExpectedCount = expectedCount > 0 ? messages.length >= expectedCount : hasOwnMessage;
 
   if (hasOwnMessage && hasExpectedCount) {

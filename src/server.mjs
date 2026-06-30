@@ -13,15 +13,211 @@ const PORT = Number(process.env.PORT ?? 5175);
 const HOST = process.env.HOST ?? "127.0.0.1";
 const DURABLE_STREAMS_URL = process.env.DURABLE_STREAMS_URL ?? "http://127.0.0.1:4100";
 const EMULATE_TOKEN = process.env.EMULATE_TOKEN ?? "test_token_admin";
+const AUTH0_EMULATOR_URL = process.env.AUTH0_EMULATOR_URL ?? "http://127.0.0.1:4101";
+const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID ?? "slack-clone-auth0";
+const AUTH0_CLIENT_SECRET = process.env.AUTH0_CLIENT_SECRET ?? "slack-clone-secret";
+const AUTH0_REALM = process.env.AUTH0_REALM ?? "Username-Password-Authentication";
 const ZERO_OFFSET = "0000000000000000_0000000000000000";
 
 const rooms = new Map();
+const sessions = new Map();
+const SESSION_COOKIE = "slack_clone_session";
 
 function authHeaders(contentType) {
   return {
     Authorization: `Bearer ${EMULATE_TOKEN}`,
     ...(contentType ? { "Content-Type": contentType } : {}),
   };
+}
+
+function parseCookies(req) {
+  const header = req.headers.cookie ?? "";
+  const cookies = new Map();
+  for (const part of header.split(";")) {
+    const index = part.indexOf("=");
+    if (index === -1) continue;
+    cookies.set(part.slice(0, index).trim(), decodeURIComponent(part.slice(index + 1).trim()));
+  }
+  return cookies;
+}
+
+function currentSession(req) {
+  const sessionId = parseCookies(req).get(SESSION_COOKIE);
+  return sessionId ? sessions.get(sessionId) ?? null : null;
+}
+
+function sessionUser(req) {
+  return currentSession(req)?.user ?? null;
+}
+
+function setSessionCookie(res, sessionId) {
+  res.setHeader("Set-Cookie", `${SESSION_COOKIE}=${encodeURIComponent(sessionId)}; HttpOnly; SameSite=Lax; Path=/`);
+}
+
+function clearSessionCookie(res) {
+  res.setHeader("Set-Cookie", `${SESSION_COOKIE}=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0`);
+}
+
+function redirect(res, location, statusCode = 302) {
+  res.writeHead(statusCode, { Location: location, "Cache-Control": "no-store" });
+  res.end();
+}
+
+function safeReturnTo(value) {
+  if (!value || !value.startsWith("/")) return "/";
+  if (value.startsWith("//")) return "/";
+  return value;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function renderLoginPage({ returnTo = "/", error = "" } = {}) {
+  const safePath = safeReturnTo(returnTo);
+  const errorHtml = error
+    ? `<div class="login__error" data-testid="login-error">${escapeHtml(error)}</div>`
+    : "";
+
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign in - Stream Slack</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="login-page">
+    <main class="login">
+      <section class="login__panel">
+        <div class="workspace__mark login__mark">S</div>
+        <h1>Sign in to Stream Slack</h1>
+        <p>Credentials are checked by the local Auth0 emulator at <span data-testid="auth0-emulator-url">${escapeHtml(AUTH0_EMULATOR_URL)}</span>.</p>
+        ${errorHtml}
+        <form class="login__form" method="post" action="/login" data-testid="login-form">
+          <input type="hidden" name="returnTo" value="${escapeHtml(safePath)}" />
+          <label>
+            <span>Email</span>
+            <input data-testid="email-input" name="email" autocomplete="username" value="ada@example.test" />
+          </label>
+          <label>
+            <span>Password</span>
+            <input data-testid="password-input" name="password" type="password" autocomplete="current-password" value="DemoPass123" />
+          </label>
+          <button data-testid="login-button" type="submit">Sign in with Auth0 emulator</button>
+        </form>
+        <div class="login__users">
+          <span>Seeded users</span>
+          <code>ada@example.test</code>
+          <code>linus@example.test</code>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>`;
+}
+
+function sendHtml(res, statusCode, html) {
+  res.writeHead(statusCode, {
+    "Content-Type": "text/html; charset=utf-8",
+    "Cache-Control": "no-store",
+  });
+  res.end(html);
+}
+
+async function readForm(req) {
+  const chunks = [];
+  for await (const chunk of req) chunks.push(chunk);
+  return new URLSearchParams(Buffer.concat(chunks).toString("utf8"));
+}
+
+async function exchangePassword(username, password) {
+  const tokenRes = await fetch(`${AUTH0_EMULATOR_URL}/oauth/token`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      grant_type: "http://auth0.com/oauth/grant-type/password-realm",
+      username,
+      password,
+      realm: AUTH0_REALM,
+      scope: "openid profile email",
+      client_id: AUTH0_CLIENT_ID,
+      client_secret: AUTH0_CLIENT_SECRET,
+    }),
+  });
+
+  if (!tokenRes.ok) {
+    const body = await tokenRes.json().catch(async () => ({ error_description: await tokenRes.text() }));
+    throw new Error(body.error_description ?? body.error ?? `Auth0 emulator token exchange failed: ${tokenRes.status}`);
+  }
+
+  const token = await tokenRes.json();
+  const userInfoRes = await fetch(`${AUTH0_EMULATOR_URL}/userinfo`, {
+    headers: { Authorization: `Bearer ${token.access_token}` },
+  });
+
+  if (!userInfoRes.ok) {
+    throw new Error(`Auth0 emulator userinfo failed: ${userInfoRes.status} ${await userInfoRes.text()}`);
+  }
+
+  const profile = await userInfoRes.json();
+  return {
+    token,
+    user: {
+      sub: profile.sub,
+      name: profile.name ?? profile.email ?? "Authenticated User",
+      email: profile.email ?? "",
+      preferredUsername: profile.nickname ?? profile.email ?? "",
+    },
+  };
+}
+
+async function handleAuth(req, res, url) {
+  if (url.pathname === "/login" && req.method === "GET") {
+    sendHtml(res, 200, renderLoginPage({ returnTo: url.searchParams.get("returnTo") ?? "/" }));
+    return true;
+  }
+
+  if (url.pathname === "/login" && req.method === "POST") {
+    const form = await readForm(req);
+    const returnTo = safeReturnTo(form.get("returnTo") ?? "/");
+    try {
+      const { user, token } = await exchangePassword(form.get("email") ?? "", form.get("password") ?? "");
+      const sessionId = crypto.randomUUID();
+      sessions.set(sessionId, {
+        user,
+        accessToken: token.access_token,
+        createdAt: Date.now(),
+      });
+      setSessionCookie(res, sessionId);
+      redirect(res, returnTo);
+    } catch (err) {
+      sendHtml(
+        res,
+        401,
+        renderLoginPage({
+          returnTo,
+          error: err instanceof Error ? err.message : String(err),
+        }),
+      );
+    }
+    return true;
+  }
+
+  if (url.pathname === "/logout") {
+    const sessionId = parseCookies(req).get(SESSION_COOKIE);
+    if (sessionId) sessions.delete(sessionId);
+    clearSessionCookie(res);
+    redirect(res, "/login");
+    return true;
+  }
+
+  return false;
 }
 
 function normalizeRoomId(roomId) {
@@ -76,13 +272,14 @@ async function readMessages(roomId, offset = "-1") {
   return { messages: Array.isArray(messages) ? messages : [], nextOffset };
 }
 
-async function appendMessage(roomId, input) {
+async function appendMessage(roomId, input, user) {
   await ensureStream(roomId);
 
   const message = {
     id: crypto.randomUUID(),
     room: normalizeRoomId(roomId),
-    user: String(input.user ?? "visitor").slice(0, 40),
+    user: String(user.name ?? user.email ?? "authenticated user").slice(0, 80),
+    email: String(user.email ?? ""),
     text: String(input.text ?? "").trim().slice(0, 2000),
     createdAt: new Date().toISOString(),
   };
@@ -207,16 +404,42 @@ function sendError(res, err) {
 async function handleApi(req, res, url) {
   if (url.pathname === "/api/health") {
     await ensureStream("healthcheck");
+    const authRes = await fetch(`${AUTH0_EMULATOR_URL}/.well-known/openid-configuration`);
     sendJson(res, 200, {
       ok: true,
       app: "slack-clone",
       durableStreamsUrl: DURABLE_STREAMS_URL,
+      auth0EmulatorUrl: AUTH0_EMULATOR_URL,
+      auth0: authRes.ok,
+    });
+    return true;
+  }
+
+  if (url.pathname === "/api/session") {
+    const session = currentSession(req);
+    if (!session) {
+      sendJson(res, 401, { ok: false, error: "not_authenticated" });
+      return true;
+    }
+    sendJson(res, 200, {
+      ok: true,
+      user: session.user,
+      provider: {
+        name: "Auth0 emulator",
+        url: AUTH0_EMULATOR_URL,
+      },
     });
     return true;
   }
 
   const match = url.pathname.match(/^\/api\/rooms\/([^/]+)\/(messages|events)$/);
   if (!match) return false;
+
+  const user = sessionUser(req);
+  if (!user) {
+    sendJson(res, 401, { ok: false, error: "not_authenticated" });
+    return true;
+  }
 
   const room = normalizeRoomId(decodeURIComponent(match[1]));
   const resource = match[2];
@@ -270,7 +493,7 @@ async function handleApi(req, res, url) {
 
   if (resource === "messages" && req.method === "POST") {
     const body = await readJson(req);
-    const result = await appendMessage(room, body);
+    const result = await appendMessage(room, body, user);
     sendJson(res, 201, {
       ok: true,
       room,
@@ -335,9 +558,17 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url ?? "/", `http://${req.headers.host ?? `${HOST}:${PORT}`}`);
 
   try {
+    if (await handleAuth(req, res, url)) return;
+
     if (url.pathname.startsWith("/api/")) {
       const handled = await handleApi(req, res, url);
       if (!handled) sendJson(res, 404, { ok: false, error: "Not found" });
+      return;
+    }
+
+    const isPublicAsset = url.pathname === "/styles.css" || url.pathname === "/app.js";
+    if (!isPublicAsset && !currentSession(req)) {
+      redirect(res, `/login?returnTo=${encodeURIComponent(`${url.pathname}${url.search}`)}`);
       return;
     }
 

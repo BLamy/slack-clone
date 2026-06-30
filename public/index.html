@@ -23,6 +23,10 @@
           </button>
         </nav>
         <section class="details">
+          <div class="details__label">Auth</div>
+          <div class="details__value" data-testid="auth-provider">Auth0 emulator</div>
+          <div class="details__label">Signed in</div>
+          <div class="details__value" data-testid="auth-user">pending</div>
           <div class="details__label">Durable stream</div>
           <div class="details__value" data-testid="stream-path">/rooms/durable-streams-demo/messages</div>
           <div class="details__label">Next offset</div>
@@ -34,9 +38,12 @@
         <header class="chat__header">
           <div>
             <div class="chat__channel"># <span data-testid="header-room">durable-streams-demo</span></div>
-            <div class="chat__subtitle">Messages are appended to Durable Streams and replayed to each connected client.</div>
+            <div class="chat__subtitle">Auth0 is emulated locally; messages are appended to Durable Streams and replayed to each connected client.</div>
           </div>
-          <div class="chat__pill" data-testid="persona-label">visitor</div>
+          <div class="chat__identity">
+            <div class="chat__pill" data-testid="persona-label">visitor</div>
+            <a class="chat__logout" href="/logout">Sign out</a>
+          </div>
         </header>
 
         <div class="messages" data-testid="messages" aria-live="polite"></div>

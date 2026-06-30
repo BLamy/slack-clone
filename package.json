@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "node scripts/start-stack.mjs",
     "dev:app": "node src/server.mjs",
-    "dev:emulate": "node emulate/packages/emulate/dist/index.js start --service durable-streams --port 4100",
+    "dev:emulate": "node emulate/packages/emulate/dist/index.js start --service durable-streams,auth0 --port 4100 --seed emulate.config.yaml",
     "setup:emulate": "pnpm --dir emulate install && pnpm --dir emulate --filter '@emulators/*' build && pnpm --dir emulate --filter emulate build",
     "test": "node scripts/run-playwright.mjs",
     "test:playwright": "playwright test",

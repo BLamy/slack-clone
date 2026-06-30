@@ -1,0 +1,6 @@
+node_modules/
+playwright-report/
+test-results/
+recordings/*.json
+*.log
+.DS_Store

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Slack Clone Durable Streams Demo</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <aside class="workspace">
+        <div class="workspace__brand">
+          <div class="workspace__mark">S</div>
+          <div>
+            <div class="workspace__name">Stream Slack</div>
+            <div class="workspace__status" data-testid="connection-state">connecting</div>
+          </div>
+        </div>
+        <nav class="channels" aria-label="Channels">
+          <button class="channel is-active" type="button">
+            <span>#</span>
+            <span data-testid="room-label">durable-streams-demo</span>
+          </button>
+        </nav>
+        <section class="details">
+          <div class="details__label">Durable stream</div>
+          <div class="details__value" data-testid="stream-path">/rooms/durable-streams-demo/messages</div>
+          <div class="details__label">Next offset</div>
+          <div class="details__value" data-testid="stream-offset">pending</div>
+        </section>
+      </aside>
+
+      <section class="chat">
+        <header class="chat__header">
+          <div>
+            <div class="chat__channel"># <span data-testid="header-room">durable-streams-demo</span></div>
+            <div class="chat__subtitle">Messages are appended to Durable Streams and replayed to each connected client.</div>
+          </div>
+          <div class="chat__pill" data-testid="persona-label">visitor</div>
+        </header>
+
+        <div class="messages" data-testid="messages" aria-live="polite"></div>
+
+        <form class="composer" data-testid="composer">
+          <input data-testid="message-input" name="message" autocomplete="off" placeholder="Message #durable-streams-demo" />
+          <button data-testid="send-button" type="submit">Send</button>
+        </form>
+      </section>
+    </main>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

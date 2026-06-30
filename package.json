@@ -1,0 +1,24 @@
+{
+  "name": "slack-clone",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Slack-style chat demo backed by the Durable Streams emulator from the BLamy/emulate submodule.",
+  "scripts": {
+    "dev": "node scripts/start-stack.mjs",
+    "dev:app": "node src/server.mjs",
+    "dev:emulate": "node emulate/packages/emulate/dist/index.js start --service durable-streams --port 4100",
+    "setup:emulate": "pnpm --dir emulate install && pnpm --dir emulate --filter '@emulators/*' build && pnpm --dir emulate --filter emulate build",
+    "test": "node scripts/run-playwright.mjs",
+    "test:playwright": "playwright test",
+    "record:replay": "node scripts/record-two-replays.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@replayio/playwright": "^5.0.3"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@11.2.2"
+}

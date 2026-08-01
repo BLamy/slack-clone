@@ -28,5 +28,8 @@ export default defineConfig({
   build: {
     outDir: 'dist/client',
     emptyOutDir: true,
+    minify: 'esbuild',
+    cssMinify: true,
+    sourcemap: false,
   },
 });

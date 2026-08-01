@@ -1,7 +1,29 @@
+import { lazy, Suspense } from 'react';
+
 import { ThemeProvider } from '@/components/theme-provider';
-import { ChatPage } from '@/pages/chat-page';
-import { HomePage } from '@/pages/home-page';
-import { LoginPage } from '@/pages/login-page';
+
+const ChatPage = lazy(async () => {
+  const module = await import('@/pages/chat-page');
+  return { default: module.ChatPage };
+});
+
+const HomePage = lazy(async () => {
+  const module = await import('@/pages/home-page');
+  return { default: module.HomePage };
+});
+
+const LoginPage = lazy(async () => {
+  const module = await import('@/pages/login-page');
+  return { default: module.LoginPage };
+});
+
+function RouteFallback() {
+  return (
+    <main className="grid min-h-screen place-items-center bg-background px-6 text-foreground" aria-busy="true">
+      <p className="text-sm text-muted-foreground">Loading Stream Slack…</p>
+    </main>
+  );
+}
 
 function route() {
   const pathname = window.location.pathname.replace(/\/$/, '') || '/';
@@ -14,5 +36,9 @@ function route() {
 }
 
 export function App() {
-  return <ThemeProvider>{route()}</ThemeProvider>;
+  return (
+    <ThemeProvider>
+      <Suspense fallback={<RouteFallback />}>{route()}</Suspense>
+    </ThemeProvider>
+  );
 }

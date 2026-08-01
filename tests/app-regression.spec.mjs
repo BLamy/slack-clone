@@ -40,8 +40,15 @@ test('homepage leads through emulator login into the React chat', async ({ page 
   expect(health.requestFailures).toEqual([]);
 });
 
+test('unauthenticated app routes return to the emulator login', async ({ page }) => {
+  await page.goto('/app?room=auth-gate-check');
+  await expect(page).toHaveURL(/\/login\?returnTo=/);
+  await expect(page.getByTestId('login-form')).toBeVisible();
+});
+
 test('login errors preserve the React form layout', async ({ page }) => {
   await page.goto('/login?returnTo=%2Fapp%3Froom%3Ddemo');
+  await expect(page.getByTestId('email-input')).toHaveValue('');
   const before = await page.getByTestId('login-form').boundingBox();
   await page.getByTestId('password-input').fill('incorrect-password');
   await page.getByTestId('login-button').click();

@@ -188,7 +188,6 @@ const meta = {
   title: 'Stream Slack/Design system',
   component: DesignSystemShowcase,
   parameters: { layout: 'fullscreen' },
-  tags: ['autodocs'],
 } satisfies Meta<typeof DesignSystemShowcase>;
 
 export default meta;

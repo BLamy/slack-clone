@@ -40,7 +40,7 @@ export function MessageCard({
         <AvatarFallback className="bg-avatar-surface font-semibold text-avatar-foreground">
           {initials}
         </AvatarFallback>
-        {online && <AvatarBadge aria-label="Online" className="bg-online" />}
+        {online && <AvatarBadge role="img" aria-label="Online" className="bg-online" />}
       </Avatar>
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">

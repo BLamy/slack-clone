@@ -1,4 +1,4 @@
-import { mkdir, readdir, stat, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { run } from "./process-utils.mjs";
@@ -45,6 +45,9 @@ const recordingsAfter = await snapshotDirectory(path.resolve("recordings"));
 if (JSON.stringify(recordingsAfter) !== JSON.stringify(recordingsBefore)) {
   throw new Error("Routine E0-T02 verification mutated existing recordings");
 }
+const streamProof = JSON.parse(
+  await readFile(path.join(artifactRoot, "stream-proof.json"), "utf8"),
+);
 const summary = {
   schemaVersion: 1,
   task: "E0-T02",
@@ -55,6 +58,7 @@ const summary = {
   replayUploadAttempted: false,
   externalTunnelAttempted: false,
   recordingsUnchanged: true,
+  streamProof,
 };
 await writeFile(
   path.join(artifactRoot, "verification-summary.json"),

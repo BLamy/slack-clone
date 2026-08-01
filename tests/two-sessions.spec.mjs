@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { writeFile } from "node:fs/promises";
 
 const APP_BASE_URL = process.env.APP_BASE_URL ?? "http://127.0.0.1:5175";
 const AUTH0_EMULATOR_URL =
@@ -260,9 +261,29 @@ test("a user can edit their message and the update persists across sessions", as
     return response.json();
   }, room);
   expect(streamState.streamDigest).toMatch(/^sha256:[0-9a-f]{64}$/);
+  expect(streamState.nextOffset).toMatch(/^[0-9a-f]{16}_[0-9a-f]{16}$/);
   await expect(ada.getByTestId("stream-digest")).toHaveText(
     streamState.streamDigest,
   );
+  await expect(ada.getByTestId("stream-offset")).toHaveText(
+    streamState.nextOffset,
+  );
+  const streamProof = {
+    schemaVersion: 1,
+    room,
+    stream: streamState.stream,
+    nextOffset: streamState.nextOffset,
+    streamDigest: streamState.streamDigest,
+    messageCount: streamState.messages.length,
+    domMatchedApi: true,
+  };
+  if (process.env.STREAM_PROOF_PATH) {
+    await writeFile(
+      process.env.STREAM_PROOF_PATH,
+      `${JSON.stringify(streamProof, null, 2)}\n`,
+    );
+  }
+  console.log(`STREAM_PROOF ${JSON.stringify(streamProof)}`);
 
   await adaContext.close();
   await linusContext.close();

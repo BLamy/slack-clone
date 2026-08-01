@@ -6,6 +6,7 @@ import { startStack } from "./test-stack.mjs";
 
 const context = await createRunContext();
 await mkdir(context.playwrightOutputDir, { recursive: true });
+const streamProofPath = `${context.artifactRoot}/stream-proof.json`;
 const stack = await startStack(context);
 const playwrightArgs = ["exec", "playwright", "test"];
 if (process.env.PLAYWRIGHT_GREP)
@@ -21,6 +22,7 @@ try {
         AUTH0_EMULATOR_URL: context.auth0EmulatorUrl,
         DURABLE_STREAMS_URL: context.durableStreamsUrl,
         PLAYWRIGHT_OUTPUT_DIR: context.playwrightOutputDir,
+        STREAM_PROOF_PATH: streamProofPath,
         TEST_ROOM_PREFIX: context.roomPrefix,
         TEST_RUN_ID: context.runId,
       },

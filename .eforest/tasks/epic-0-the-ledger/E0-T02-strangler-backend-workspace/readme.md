@@ -3,7 +3,7 @@ id: E0-T02
 epic: 0
 title: "Strangler backend workspace around the working chat demo"
 priority: 2
-status: implemented
+status: refuted
 depends_on: [E0-T01]
 estimate: L
 capstone: false
@@ -104,3 +104,99 @@ submodule files into the task.
   stacks cannot share sessions, streams, output, or teardown. A fresh cold clone, a
   forbidden pure-package capability that passes, a non-owner edit that succeeds, or any
   cross-stack observation refutes this claim.
+
+### Critic — 2026-08-01
+
+VERDICT: refuted
+
+Fresh independent Critic did not implement E0-T02. Predictions for all seven acceptance
+criteria were written before any test output or E0-T02 evidence JSON was inspected, in
+`work/critic-predictions.md`. The exact range
+`2cff7718128a0ebe2343efa8f416629e160225b2..b84297e8ff21388a9b14b402086dfd7bd0330e3c`
+was reviewed with application behavior pinned at
+`db8077fd92e9578913886c543090d5cce0b5b239`. Full redacted results are in
+`evidence/critic-independent-verification.json`.
+
+**Finding 1 — the pure-package boundary has a composed-verifier false green
+(blocking, AC3).** `tools/check-boundaries.mjs:92-97` extracts imports with a regex that
+requires whitespace after the `import` token. In a disposable exact-implementation clone,
+the critic inserted this valid static filesystem import in the pure protocol package:
+`// prettier-ignore` followed by `import"node:fs";`. The ignore directive made the spelling
+formatter-approved while preserving the regex evasion. `pnpm format:check`, `pnpm lint`,
+and `pnpm typecheck` each exited 0; the boundary check printed `layers=5 violations=0`.
+Most importantly, `TEST_RUN_ID=critic-boundary-bypass-7f3c9a pnpm verify` also exited 0:
+12/12 unit, 5/5 browser compatibility, 1/1 concurrency, and build all passed with the
+forbidden capability import present. This directly falsifies the criterion that package
+checks prove pure protocol/reducer modules cannot import filesystem capabilities and the
+builder claim that a forbidden pure-package capability cannot pass.
+
+**Finding 2 — default port allocation has a practical probe/bind race (blocking,
+AC4/deliverable).** `scripts/process-utils.mjs:90-110` tests candidate ports by binding and
+then closing each socket before returning the block; no reservation survives until child
+startup and no `EADDRINUSE` retry exists. With a fixed critic random candidate, two
+independent allocator calls made before either stack started both returned
+`41631/41632/41633`. Starting the stacks concurrently produced one ready stack and one
+rejection, `app:critic-race-b exited unexpectedly with code 1`, with the child reporting
+`EADDRINUSE 127.0.0.1:41633`. Distinct explicitly assigned blocks work, but the default
+helper advertised as safe for concurrent task work can issue colliding assignments.
+
+**Cold reproduction and compatibility.** A new `git clone --no-hardlinks` detached at
+`db8077f` first proved `node_modules`, the built emulator CLI, `.env`, and
+`recordings/latest.json` absent. With Replay environment removed,
+`TEST_RUN_ID=critic-cold-7f3c9a make verify-E0-T02` exited 0 after frozen root/emulator
+installs and the pinned emulator checkout `8b880275…`. It passed format, lint, five package
+layers/35 syntax files, 12/12 unit tests, 5/5 inherited browser tests, 1/1 isolation test,
+and the 28-file build. The fresh owner-edit run persisted after reload and DOM/API state
+matched at offset `0000000000000000_0000000000000539`, digest
+`sha256:2967c3930be9500452335b39588629676ce433ec2c3aa4db7ebf7e29c1516c96`.
+The emulator declared a non-fatal Node `>=24` engine warning under Node `23.11.0`; its
+build and runtime completed.
+
+**Independent isolation/startup/side-effect attacks.** With fresh seed `7f3c9a`, canary
+`E0T02-CRITIC-CANARY-20260801-7f3c9a-DO-NOT-LEAK`, and the same logical room, stacks at
+`20398/20399/20400` and `35786/35787/35788` refused each other's cookies in both
+directions, kept both canary messages out of the peer stream, used distinct artifact
+roots, and stopped independently: after A stopped, B remained healthy; then both became
+unreachable. Artifact and unrelated-process sentinels survived. Fresh app- and
+emulator-startup failures each exited 31, terminated only the managed sibling with
+`SIGTERM`, and left an unrelated process/artifact alive. A pristine routine `pnpm verify`
+passed with a pre-existing recording sentinel unchanged; static call-path audit found no
+Replay/tunnel invocation. An out-of-scope `BUILD_DIR` was rejected before deletion and its
+sentinel retained SHA-256 `487180fb…a13b442`.
+
+**Detector sensitivity (both required mutations went red).** An ordinary `import
+"node:fs"` in the pure protocol package made `pnpm typecheck` exit 1 and identify the
+exact forbidden import. Separately, changing `messageOwnedBy` to authorize every user made
+the composed `pnpm verify` exit 1 at the unit gate: 10 passed, while the cross-subject
+ownership check failed `true !== false` at `test/unit/backend-packages.test.mjs:48` and
+the service test reported a missing expected rejection at line 159. The detector can go
+red for ordinary defects; Finding 1 proves its boundary coverage is nevertheless
+incomplete.
+
+**Earlier static-review leads.** The hard-coded-looking isolation booleans are emitted
+only after concrete assertions: artifact-root distinction, foreign-cookie/stream checks,
+post-stop connection failures, and recording snapshots. `evidence/isolation.json` does
+compress two sources — concurrent facts come from Playwright, while unrelated-process
+cleanup comes from unit fixtures — but both were independently reproduced. The import
+regex concern is confirmed and escalated by Finding 1: the format gate does not save it
+when `prettier-ignore` is used. The default Playwright config does fall back to
+`test-results/playwright`, but every routine wrapper sets `PLAYWRIGHT_OUTPUT_DIR` beneath
+its run root and no default output appeared; that lead is dismissed for the routine
+verification surface. The port race is confirmed by Finding 2.
+
+**Coverage/provenance/redaction.** Executed: all five package modules/manifests; server
+composition/auth/static/API/SSE behavior; every format/lint/static/unit/integration/
+concurrency/build/setup/process/run-context helper; both lockfiles; both Playwright configs;
+all E0-T02 tests; and all 28 build entries. Explicitly waived after source audit:
+README/package-boundary prose, `.gitignore`, task/queue metadata, and generated lockfile
+text beyond successful frozen installs. Dead: none. Requiring evidence: none. The
+committed build manifest hashes to `a4624289…510f6c`; all 28 entries match the exact
+implementation tree and the critic's independent build file list. The post-implementation
+delta is task/queue/evidence only. No provider credential, session cookie, customer
+content, private key, or unredacted capture appears in E0-T02 evidence.
+
+Lifecycle is `refuted`, which keeps E0-T02 as the sole builder-rework gate and leaves
+E0-T03 blocked. Replay: N/A (server extraction with unchanged browser behavior) +
+mitigation: inherited Playwright compatibility suite, package-boundary audit, and
+cold-clone composed gates. The Replay waiver itself is accurate; the package-boundary
+mitigation is what failed adversarially.

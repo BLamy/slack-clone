@@ -3,7 +3,7 @@ id: E0-T02
 epic: 0
 title: "Strangler backend workspace around the working chat demo"
 priority: 2
-status: in-progress
+status: implemented
 depends_on: [E0-T01]
 estimate: L
 capstone: false
@@ -37,19 +37,19 @@ submodule files into the task.
 
 ## Acceptance criteria
 
-- [ ] `make verify-E0-T02` installs from the lockfile in a cold clone and passes format,
+- [x] `make verify-E0-T02` installs from the lockfile in a cold clone and passes format,
       lint, static analysis, unit, existing Playwright, and build gates with zero skips.
-- [ ] The homepage, emulator-backed login, stable login error, two authenticated sessions,
+- [x] The homepage, emulator-backed login, stable login error, two authenticated sessions,
       and owner-only persisted edit behave exactly as before extraction.
-- [ ] Package dependency checks prove pure protocol/reducer modules cannot import HTTP,
+- [x] Package dependency checks prove pure protocol/reducer modules cannot import HTTP,
       filesystem, network, environment, clock, or provider modules.
-- [ ] Two verification runs can use assigned ports concurrently without sharing sessions,
+- [x] Two verification runs can use assigned ports concurrently without sharing sessions,
       streams, output directories, or teardown targets.
-- [ ] Routine verification performs no Replay upload, external tunnel, recursive deletion
+- [x] Routine verification performs no Replay upload, external tunnel, recursive deletion
       outside its run directory, or mutation of existing recordings.
-- [ ] The diff contains no opportunistic redesign of the visible Slack UI or authentication
+- [x] The diff contains no opportunistic redesign of the visible Slack UI or authentication
       flow; behavior changes require later task IDs.
-- [ ] Replay is declared `Replay: N/A (server extraction with unchanged browser behavior) +
+- [x] Replay is declared `Replay: N/A (server extraction with unchanged browser behavior) +
       mitigation: inherited Playwright compatibility suite, package-boundary audit, and
       cold-clone composed gates`.
 
@@ -66,3 +66,41 @@ submodule files into the task.
 5. Sabotage one inherited edit-authorization assertion; the composed target must fail.
 
 ## Verification log
+
+### Builder — 2026-08-01
+
+- Exact implementation commit: `db8077fd92e9578913886c543090d5cce0b5b239`.
+- Scope: extracted the protocol, reducer, Durable Streams adapter, application-service,
+  and HTTP/SSE seams while retaining `src/server.mjs` as the environment/auth/static-file
+  composition root. The public HTML, CSS, client behavior, and Auth0 flow were not
+  redesigned.
+- Cold command: a no-hardlinks clone detached at the implementation commit first proved
+  `node_modules`, `emulate/packages/emulate/dist/index.js`, `.env`, and
+  `recordings/latest.json` absent, then `make verify-E0-T02` installed both frozen
+  lockfiles, initialized emulator commit `8b88027535e4ea6a18c3ce92a13af706382a451f`,
+  and passed format, lint, static analysis, unit, integration, concurrency, and build.
+- Results: 5 package layers with zero boundary violations; 35 syntax-checked files; 12/12
+  unit tests, 5/5 inherited browser compatibility tests, and 1/1 stack-isolation test,
+  with zero failures or skips; 28 files in the SHA-256 build manifest.
+- Stream proof: browser DOM and authenticated API matched at next offset
+  `0000000000000000_0000000000000539` and canonical digest
+  `sha256:5918b9ceb2acc0872442eb970b1733b75fb8945f26302051bdcad6afc967c976`;
+  the owner edit remained persisted after reload.
+- Isolation proof: concurrent stacks used app/Auth0/Durable Streams ports
+  `44885/44884/44883` and `22193/22192/22191`, distinct artifact roots, rejected a
+  foreign session, isolated the same room name, stopped their own children, and left
+  recordings and unrelated processes untouched.
+- Detector sensitivity: adding `node:fs` to the pure protocol package made
+  `pnpm typecheck` exit 1 and name the forbidden import. Inverting the inherited non-owner
+  edit assertion from 403 to 200 made the composed `pnpm verify` reach Playwright and exit
+  1 with `Expected: 200, Received: 403`. Forced emulator/app startup failures also stopped
+  only their managed siblings.
+- Evidence: `evidence/cold-verification.json`, `evidence/isolation.json`,
+  `evidence/sensitivity.json`, and `evidence/build-manifest.json`.
+- Replay: N/A (server extraction with unchanged browser behavior) + mitigation: inherited
+  Playwright compatibility suite, package-boundary audit, and cold-clone composed gates.
+- Claim: at the exact implementation commit, the existing authenticated chat behavior is
+  unchanged, the new package direction fails closed, and two independently allocated
+  stacks cannot share sessions, streams, output, or teardown. A fresh cold clone, a
+  forbidden pure-package capability that passes, a non-owner edit that succeeds, or any
+  cross-stack observation refutes this claim.

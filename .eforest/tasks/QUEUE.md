@@ -8,7 +8,7 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-1. **E0-T01** — Versioned event envelope and authoritative stream topology *(builder working)*
+1. **E0-T01** — Versioned event envelope and authoritative stream topology *(awaiting independent critic)*
 
 ## Next up (dependencies satisfied)
 
@@ -20,7 +20,7 @@ No new task may start until **E0-T01** clears the gate.
 
 ## Epic 0 — `epic-0-the-ledger`
 
-- [~] `   1` [E0-T01](epic-0-the-ledger/E0-T01-versioned-event-envelope-and-stream-topology/readme.md) — Versioned event envelope and authoritative stream topology *(deps: —)*
+- [?] `   1` [E0-T01](epic-0-the-ledger/E0-T01-versioned-event-envelope-and-stream-topology/readme.md) — Versioned event envelope and authoritative stream topology *(deps: —)*
 - [ ] `   2` [E0-T02](epic-0-the-ledger/E0-T02-strangler-backend-workspace/readme.md) — Strangler backend workspace around the working chat demo *(deps: E0-T01)*
 - [ ] `   3` [E0-T03](epic-0-the-ledger/E0-T03-official-durable-streams-adapter/readme.md) — Official Durable Streams adapter with resumable reads *(deps: E0-T02)*
 - [ ] `   4` [E0-T04](epic-0-the-ledger/E0-T04-fenced-dispatch-and-idempotency/readme.md) — Fenced dispatch and idempotent application writes *(deps: E0-T03)*

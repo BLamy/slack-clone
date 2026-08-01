@@ -1,10 +1,19 @@
 {
-  "proofType": "focused temporary commit cloned into a clean worktree",
-  "sourceCheckoutHead": "9ec2eca253e9c1c2c18008472f4cf77079a1b932",
-  "snapshotCommit": "52d420f7b1da1641b85ed332ff09c24c87e584ba",
-  "command": "make verify-E0-T01",
+  "proofType": "exact implementation commit cloned with local object hardlinks disabled",
+  "implementationCommit": "3974930495021b6f6eae8a0cc08716ec9a77ef08",
+  "commands": [
+    "git clone --no-hardlinks . <ticket-work>/repo",
+    "git checkout --detach 3974930495021b6f6eae8a0cc08716ec9a77ef08",
+    "make verify-E0-T01",
+    "pnpm test:ledger"
+  ],
   "result": "PASS",
   "checks": 9,
   "skipped": 0,
-  "note": "The primary checkout contained unrelated uncommitted roadmap and demo work, so the focused E0-T01 files were committed only inside the ticket's ignored work directory and cloned from there. This proves cold-clone portability but is not a publishable repository submission commit."
+  "ledgerTests": {
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0
+  },
+  "note": "The clone was created inside the ticket-owned ignored work directory and checked out detached at the published implementation commit before either command ran."
 }

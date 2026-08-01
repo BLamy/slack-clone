@@ -13,5 +13,6 @@ redaction, exact-request changes, cancellation, and terminal failure visible.
 
 Current Storybook compositions: `stream-slack-agent-studio--directory`,
 `stream-slack-agent-studio--identity-form`, `stream-slack-agent-studio--review`, and
-`stream-slack-agent-studio--review-dark`. Backend activation remains out of scope until
-the frontend approval gate passes.
+`stream-slack-agent-studio--review-dark`. The thread story also exposes the relationship
+between an AI response and its selected, redacted run log without calling the backend.
+Backend activation remains out of scope until the frontend approval gate passes.

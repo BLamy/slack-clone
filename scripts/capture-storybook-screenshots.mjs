@@ -78,6 +78,30 @@ const stories = [
     viewport: { width: 1280, height: 720 },
     fullPage: true,
   },
+  {
+    id: 'stream-slack-threads--thread',
+    file: 'storybook-thread-empty-log.png',
+    viewport: { width: 1280, height: 720 },
+    fullPage: true,
+  },
+  {
+    id: 'stream-slack-threads--thread-with-run-log',
+    file: 'storybook-thread-run-log.png',
+    viewport: { width: 1280, height: 720 },
+    fullPage: true,
+  },
+  {
+    id: 'stream-slack-threads--thread-with-run-log',
+    file: 'storybook-thread-run-log-mobile.png',
+    viewport: { width: 390, height: 844 },
+    fullPage: true,
+  },
+  {
+    id: 'stream-slack-threads--thread-with-run-log-dark',
+    file: 'storybook-thread-run-log-dark.png',
+    viewport: { width: 1280, height: 720 },
+    fullPage: true,
+  },
 ];
 
 await fs.mkdir(outputDir, { recursive: true });

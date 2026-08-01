@@ -94,8 +94,8 @@ states visible before implementation is promoted into application composition.
 | `MessageBody` | plain text, links, code, long wrap, mention highlight | planned |
 | `MessageActions` | edit, delete, reply, react, more; owner/non-owner, confirmation | foundation ready |
 | `Reaction` / `ReactionPicker` | none, one, many, selected, overflow | planned |
-| `ThreadPanel` | empty, active, replies, unread, mobile sheet | planned |
-| `ThreadMessage` | root, reply, nested metadata | planned |
+| `ThreadPanel` | empty, active, replies, unread, selected agent run, mobile sheet | foundation ready |
+| `ThreadMessage` | root, reply, nested metadata, agent response trigger | foundation ready |
 | `Composer` | empty, focused, text, multiline, sending, disabled, error | planned |
 | `ComposerToolbar` | attachment, emoji, mention, formatting, shortcuts | planned |
 | `MentionAutocomplete` | humans, agents, loading, no results, keyboard selection | planned |
@@ -112,9 +112,10 @@ states visible before implementation is promoted into application composition.
 | `AgentIdentityForm` | display name, handle, description, harness, preview | foundation ready |
 | `AgentPermissionReview` | grants, warnings, draft, submit-for-review, dark mode | foundation ready |
 | `AgentBadge` / `AgentAvatar` | enabled, disabled, owner, harness label | planned |
-| `RunStatusBadge` | queued, running, waiting approval, succeeded, failed, canceled | planned |
-| `RunTimeline` | pending, streaming, tool call, approval, terminal | planned |
-| `ToolCallCard` | read, write, blocked, approval required, redacted args | planned |
+| `AgentRunLogPanel` | empty selection, selected response, timeline, tool calls, redacted raw log, mobile | foundation ready |
+| `RunStatusBadge` | queued, running, waiting approval, succeeded, failed, canceled | partial |
+| `RunTimeline` | pending, streaming, tool call, approval, terminal | partial |
+| `ToolCallCard` | read, write, blocked, approval required, redacted args | partial |
 | `ApprovalCard` | exact request, approve, reject, expired, changed digest | planned |
 | `RunControls` | cancel, retry, open details, disabled by state | planned |
 | `ArtifactCard` | diff, log, image, link, checksum, unavailable | planned |

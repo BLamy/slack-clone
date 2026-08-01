@@ -1,6 +1,6 @@
 {
   "baseUrl": "http://127.0.0.1:6006",
-  "generatedAt": "2026-08-01T16:25:32.115Z",
+  "generatedAt": "2026-08-01T16:38:22.377Z",
   "stories": [
     {
       "id": "stream-slack-design-system--light-mode",
@@ -126,6 +126,50 @@
     {
       "id": "stream-slack-agent-studio--review-dark",
       "file": "storybook-agent-review-dark.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "fullPage": true,
+      "consoleErrors": [],
+      "requestFailures": []
+    },
+    {
+      "id": "stream-slack-threads--thread",
+      "file": "storybook-thread-empty-log.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "fullPage": true,
+      "consoleErrors": [],
+      "requestFailures": []
+    },
+    {
+      "id": "stream-slack-threads--thread-with-run-log",
+      "file": "storybook-thread-run-log.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "fullPage": true,
+      "consoleErrors": [],
+      "requestFailures": []
+    },
+    {
+      "id": "stream-slack-threads--thread-with-run-log",
+      "file": "storybook-thread-run-log-mobile.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "consoleErrors": [],
+      "requestFailures": []
+    },
+    {
+      "id": "stream-slack-threads--thread-with-run-log-dark",
+      "file": "storybook-thread-run-log-dark.png",
       "viewport": {
         "width": 1280,
         "height": 720

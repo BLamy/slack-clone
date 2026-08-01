@@ -92,6 +92,7 @@ async function sendMessage(text) {
     });
     const body = await res.json();
     if (!res.ok || !body.ok) throw new Error(body.error || "Failed to send message");
+    setConnectionState("live");
   } catch (err) {
     setConnectionState(err instanceof Error ? err.message : String(err));
   } finally {
@@ -270,6 +271,7 @@ async function saveMessage(messageId) {
     state.editingMessageId = null;
     state.editingDraft = "";
     state.savingMessageId = null;
+    setConnectionState("live");
     render();
   } catch (err) {
     state.savingMessageId = null;

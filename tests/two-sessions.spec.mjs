@@ -161,6 +161,7 @@ test("a user can edit their message and the update persists across sessions", as
   await expect(ada.getByText(updated)).toBeVisible();
   await expect(ada.getByText(original)).not.toBeVisible();
   await expect(ada.getByTestId("message-edited")).toBeVisible();
+  await expect(ada.getByTestId("connection-state")).toHaveText("live");
   await expect(linus.getByText(updated)).toBeVisible();
   await expect(linus.getByText(original)).not.toBeVisible();
   await expect(linus.getByTestId("message").filter({ hasText: updated }).getByRole("button", { name: "Edit message" })).toHaveCount(0);

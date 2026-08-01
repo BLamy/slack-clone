@@ -23,7 +23,8 @@ session lookups, fetch, timer functions, and provider URLs. Only `src/server.mjs
 environment variables or selects production adapters.
 
 `tools/check-boundaries.mjs` verifies both package manifests and parser-discovered source
-imports. It also walks ambient capability expressions, so alternate whitespace, comments,
-computed `process["env"]` access, and formatter-ignore directives cannot evade the pure
-leaf policy. A later provider or framework migration must preserve this direction or
-deliberately amend the contract in a ticket that owns the boundary.
+imports. It also inspects lexical references, so aliases, computed property names,
+alternate whitespace, comments, and formatter-ignore directives cannot evade the pure
+leaf policy. Pure packages may use an explicit allowlist of deterministic language globals
+and local relative modules only. A later provider or framework migration must preserve
+this direction or deliberately amend the contract in a ticket that owns the boundary.

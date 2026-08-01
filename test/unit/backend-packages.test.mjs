@@ -115,9 +115,52 @@ import("node:net");
     "node:net",
   ]);
   assert.deepEqual(analysis.ambientCapabilities.sort(), [
+    "ambient global globalThis",
     "dynamic import",
     "environment",
+  ]);
+});
+
+test("boundary parser catches aliased and computed ambient capabilities", () => {
+  const analysis = analyzeModuleSource(`
+const verifierGlobal = globalThis;
+const verifierFetch = verifierGlobal?.["fe" + "tch"];
+const processAlias = process;
+const directFetchAlias = fetch;
+const mathAlias = Math;
+export function verifierCapabilityFixture(url) {
+  processAlias["e" + "nv"];
+  mathAlias.random();
+  directFetchAlias;
+  return verifierFetch?.(url);
+}
+`);
+  assert.deepEqual(analysis.ambientCapabilities.sort(), [
+    "ambient global globalThis",
+    "environment",
     "network",
+    "randomness",
+  ]);
+});
+
+test("boundary parser permits injected names and deterministic globals", () => {
+  const analysis = analyzeModuleSource(`
+export function mapInjected(records, fetch, clock) {
+  const byId = new Map(records.map((record) => [String(record.id), record]));
+  return { byId, value: fetch(clock()) };
+}
+`);
+  assert.deepEqual(analysis, { imports: [], ambientCapabilities: [] });
+});
+
+test("boundary parser rejects module metadata and unknown provider globals", () => {
+  const analysis = analyzeModuleSource(`
+export const moduleUrl = import.meta.url;
+export const provider = workspaceProvider;
+`);
+  assert.deepEqual(analysis.ambientCapabilities.sort(), [
+    "ambient global workspaceProvider",
+    "module metadata",
   ]);
 });
 

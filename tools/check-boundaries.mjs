@@ -22,7 +22,8 @@ for (const [layer, policy] of Object.entries(config.layers)) {
     `@stream-slack/${layer}`,
     `${layer} package name must match its layer`,
   );
-  const declaredInternal = Object.keys(manifest.dependencies ?? {})
+  const declaredDependencies = Object.keys(manifest.dependencies ?? {});
+  const declaredInternal = declaredDependencies
     .filter((name) => name.startsWith("@stream-slack/"))
     .map((name) => packageToLayer.get(name))
     .sort();
@@ -32,20 +33,41 @@ for (const [layer, policy] of Object.entries(config.layers)) {
       `${layer} manifest declares [${declaredInternal.join(", ")}] but policy allows [${allowed.join(", ")}]`,
     );
   }
+  const declaredExternal = declaredDependencies.filter(
+    (name) => !name.startsWith("@stream-slack/"),
+  );
+  if (policy.pure && declaredExternal.length > 0) {
+    failures.push(
+      `${layer} pure-package manifest declares external dependencies [${declaredExternal.join(", ")}]`,
+    );
+  }
 
   for (const file of await listModules(path.join(packageRoot, "src"))) {
     const source = await readFile(file, "utf8");
     const analysis = analyzeModuleSource(source, relative(file));
     for (const specifier of analysis.imports) {
-      const targetLayer = packageToLayer.get(specifier);
+      const targetLayer = internalLayerFor(specifier);
       if (targetLayer && !policy.mayImport.includes(targetLayer)) {
         failures.push(
           `${relative(file)} imports forbidden layer ${targetLayer}`,
         );
       }
+      if (
+        isRelativeSpecifier(specifier) &&
+        escapesPackage(file, specifier, packageRoot)
+      ) {
+        failures.push(
+          `${relative(file)} imports a relative path outside package ${layer}: ${specifier}`,
+        );
+      }
       if (policy.pure && isCapabilityImport(specifier)) {
         failures.push(
           `${relative(file)} imports capability module ${specifier}`,
+        );
+      }
+      if (policy.pure && isBareSpecifier(specifier)) {
+        failures.push(
+          `${relative(file)} imports non-local module ${specifier} from a pure package`,
         );
       }
     }
@@ -81,6 +103,36 @@ function isCapabilityImport(specifier) {
       "@stream-slack/http",
       "@stream-slack/services",
     ].includes(specifier)
+  );
+}
+
+function isBareSpecifier(specifier) {
+  return !isRelativeSpecifier(specifier);
+}
+
+function isRelativeSpecifier(specifier) {
+  return specifier.startsWith("./") || specifier.startsWith("../");
+}
+
+function internalLayerFor(specifier) {
+  for (const [packageName, layer] of packageToLayer) {
+    if (specifier === packageName || specifier.startsWith(`${packageName}/`)) {
+      return layer;
+    }
+  }
+  return undefined;
+}
+
+function escapesPackage(file, specifier, packageRoot) {
+  const target = path.resolve(
+    path.dirname(file),
+    specifier.split(/[?#]/u, 1)[0],
+  );
+  const relativeTarget = path.relative(packageRoot, target);
+  return (
+    relativeTarget === ".." ||
+    relativeTarget.startsWith(`..${path.sep}`) ||
+    path.isAbsolute(relativeTarget)
   );
 }
 

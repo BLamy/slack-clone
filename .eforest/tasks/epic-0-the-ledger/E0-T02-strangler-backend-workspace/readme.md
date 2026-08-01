@@ -3,7 +3,7 @@ id: E0-T02
 epic: 0
 title: "Strangler backend workspace around the working chat demo"
 priority: 2
-status: in-progress
+status: implemented
 depends_on: [E0-T01]
 estimate: L
 capstone: false
@@ -388,3 +388,39 @@ Lifecycle remains `refuted`, keeping E0-T02 the sole builder-rework gate and E0-
 blocked. Replay: N/A (server/static-analysis critique with unchanged browser behavior) +
 mitigation: exact-head cold browser compatibility, DOM/API stream correlation,
 package-boundary matrix, runtime isolation, and detector-sensitivity proof.
+
+### Builder prototype-escape rework — 2026-08-01
+
+- Exact implementation commit: `dc9f273e22b8e7e4d8a2a711c4b86660c7addfc7`.
+- Pure package sources now use a capability-free JavaScript subset in addition to the
+  lexical ambient-global and import fences. The checker rejects `constructor`,
+  `prototype`, `__proto__`, call-stack and error-stack reflection, non-static computed
+  property keys, and the `Object`, `Reflect`, `Proxy`, and `Symbol` metaprogramming roots.
+  Static record properties and numeric literal indices remain valid.
+- Regression suite: 20/20 unit tests with zero skips. It includes the critic's exact
+  `(() => {}).constructor` fixture, a computed constructor-key variant, prototype and
+  metaprogramming roots, plus valid static property/index controls.
+- Detector sensitivity: the never-called critic fixture passed format and lint, then made
+  both `pnpm typecheck` and a cold composed `pnpm verify` exit 1 with
+  `reads forbidden dynamic code capability`. It made no request and was removed cleanly.
+- Local composed proof: `TEST_RUN_ID=builder-prototype-rework-local pnpm verify` passed all
+  seven gates, including 20/20 unit tests, 5/5 browser tests, forced-collision two-stack
+  isolation, and the 28-file build. DOM and authenticated API matched offset
+  `0000000000000000_0000000000000563`, digest
+  `sha256:db4894f8c600a43fc6c69f32d4b3f80030a97ed815a878c8828ee4302f071855`.
+- Cold proof: a new no-hardlinks clone detached at the implementation commit proved all
+  warm state absent before `TEST_RUN_ID=cold-prototype-dc9f273 make verify-E0-T02`.
+  Frozen root/emulator installs, the pinned emulator build, all seven gates, 20/20 unit,
+  5/5 browser, 1/1 concurrency, and the 28-file build passed with zero skips. Cold DOM/API
+  matched offset `0000000000000000_0000000000000547`, digest
+  `sha256:fe83ddc8ca3628ae425225109f59c62d4ab296270717260fabd5fd2322060e2c`.
+- Evidence: `evidence/builder-prototype-rework-verification.json`; cold summary, stream
+  proof, and build manifest hashes are `d6bb7cdc…f926b9`, `d35748d4…0eaaf9`, and
+  `cc92554d…374562`.
+- Replay: N/A (server/static-analysis rework with unchanged browser behavior) +
+  mitigation: inherited Playwright compatibility, strict pure-source subset audit,
+  exact-head cold clone, and cold constructor-sensitivity failure.
+- Claim: at the exact implementation commit, pure packages reject lexical ambient
+  authority plus prototype, dynamic-code, call-stack, metaprogramming, and non-static
+  computed-property escape hatches. The critic's exact constructor fixture makes the full
+  verifier go red, static data access stays green, and the unmutated cold clone passes.

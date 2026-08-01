@@ -318,7 +318,7 @@ checks += 1;
 output.push("PASS deterministic evidence artifacts written");
 output.push(`checks=${checks} skipped=0`);
 output.push(
-  "Replay: N/A (server/CLI schema contract) + mitigation: canonical fixtures, refusal dumps, digest parity, and cold-clone verification",
+  "Replay: REQUIRED (bundled browser surface) + evidence recorded separately from this deterministic ledger verifier",
 );
 output.push("RESULT PASS");
 

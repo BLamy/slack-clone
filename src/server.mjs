@@ -5,6 +5,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import crypto from "node:crypto";
 
+import { canonicalSha256 } from "./ledger/canonical-json.mjs";
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
 const publicDir = path.join(rootDir, "public");
@@ -275,6 +277,7 @@ async function readMessages(roomId, offset = "-1") {
     records: normalizedRecords,
     messages: materializeMessages(normalizedRecords),
     nextOffset,
+    streamDigest: canonicalSha256(normalizedRecords),
   };
 }
 
@@ -308,6 +311,7 @@ async function appendMessage(roomId, input, user) {
   const message = {
     id: crypto.randomUUID(),
     room: normalizeRoomId(roomId),
+    actorId: String(user.sub ?? ""),
     user: String(user.name ?? user.email ?? "authenticated user").slice(0, 80),
     email: String(user.email ?? ""),
     text: String(input.text ?? "").trim().slice(0, 2000),
@@ -338,9 +342,9 @@ async function updateMessage(roomId, messageId, input, user) {
     throw err;
   }
 
-  const ownsMessage = current.email
-    ? current.email === user.email
-    : current.user === (user.name ?? user.email ?? "");
+  const ownsMessage = typeof current.actorId === "string" && current.actorId.length > 0
+    ? current.actorId === user.sub
+    : typeof current.email === "string" && current.email.length > 0 && current.email === user.email;
   if (!ownsMessage) {
     const err = new Error("You can only edit your own messages");
     err.statusCode = 403;
@@ -370,6 +374,7 @@ function roomState(roomId) {
       room,
       clients: new Set(),
       nextOffset: null,
+      streamDigest: canonicalSha256([]),
       timer: null,
       polling: false,
     };
@@ -406,10 +411,15 @@ async function pollRoom(state) {
       broadcast(state, "message", message);
     }
 
+    if (result.records.length > 0) {
+      state.streamDigest = (await readMessages(state.room, "-1")).streamDigest;
+    }
+
     broadcast(state, "status", {
       durableStreamsUrl: DURABLE_STREAMS_URL,
       stream: `/rooms/${state.room}/messages`,
       nextOffset: state.nextOffset,
+      streamDigest: state.streamDigest,
       clients: state.clients.size,
     });
   } catch (err) {
@@ -520,7 +530,9 @@ async function handleApi(req, res, url) {
       durableStreamsUrl: DURABLE_STREAMS_URL,
       stream: `/rooms/${room}/messages`,
       nextOffset: snapshot.nextOffset,
+      streamDigest: snapshot.streamDigest,
     });
+    state.streamDigest = snapshot.streamDigest;
     if (state.nextOffset === null) {
       state.nextOffset = snapshot.nextOffset;
     }
@@ -545,6 +557,7 @@ async function handleApi(req, res, url) {
       stream: `/rooms/${room}/messages`,
       durableStreamsUrl: DURABLE_STREAMS_URL,
       nextOffset: result.nextOffset,
+      streamDigest: result.streamDigest,
       messages: result.messages,
     });
     return true;
@@ -579,7 +592,12 @@ async function handleApi(req, res, url) {
     await ensureStream(room);
     const state = roomState(room);
     state.nextOffset = null;
-    broadcast(state, "reset", { room });
+    state.streamDigest = canonicalSha256([]);
+    broadcast(state, "reset", {
+      room,
+      nextOffset: ZERO_OFFSET,
+      streamDigest: state.streamDigest,
+    });
     sendJson(res, 200, { ok: true, room });
     return true;
   }

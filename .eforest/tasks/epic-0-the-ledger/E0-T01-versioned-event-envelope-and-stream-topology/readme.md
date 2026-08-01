@@ -28,6 +28,11 @@ Cross-stream workflows are explicitly sagas. A source event is referenced by str
 offset, and digest; no later task may claim multi-stream atomicity that Durable Streams do
 not provide.
 
+At the human's direction, the pre-existing landing-page, chat-routing, and message-edit
+changes were committed with E0-T01 rather than split into a separate ticket. Those changed
+browser and authorization paths are therefore part of this ticket's verification surface
+even though the ledger contract remains its primary deliverable.
+
 ## Deliverables
 
 - Versioned schemas and canonical encoders for the event envelope and source references.
@@ -35,6 +40,8 @@ not provide.
   connection, audit, and rebuildable projection streams.
 - Valid and invalid golden fixtures, including forward-version and malformed-ID cases.
 - A deterministic verifier and `make verify-E0-T01` cold-clone target.
+- Browser evidence for the bundled public landing page, authenticated chat route, and
+  author-only durable message editing flow.
 
 ## Acceptance criteria
 
@@ -50,8 +57,10 @@ not provide.
       workspace IDs are rejected rather than normalized into an existing stream.
 - [ ] The topology document names the authoritative source and rebuild procedure for every
       derived index and explicitly defines cross-stream work as an idempotent saga.
-- [ ] Replay is declared `Replay: N/A (server/CLI schema contract) + mitigation: canonical
-      fixtures, refusal dumps, digest parity, and cold-clone verification`.
+- [ ] One final Replay Chromium session produces an uploaded Replay URL and same-session
+      MP4, reports zero console errors and unhandled request failures, compares the DOM
+      stream offset/digest with the authenticated API, and covers the public landing page,
+      login failure and success, edit cancel/error/save, and legacy identity-spoof refusal.
 
 ## Adversarial verification
 
@@ -63,6 +72,8 @@ not provide.
 3. Flip one byte in every golden event. The digest must change or decoding must fail.
 4. Remove the version or source-offset validation in a scratch worktree and prove the
    verifier goes red; a green sabotage run refutes test sensitivity.
+5. Seed a legacy message with a display name but no stable subject or email. It must stay
+   readable while both the UI and PATCH endpoint refuse edit ownership.
 
 ## Verification log
 

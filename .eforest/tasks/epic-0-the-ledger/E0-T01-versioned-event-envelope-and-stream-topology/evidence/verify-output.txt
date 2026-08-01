@@ -10,5 +10,5 @@ PASS one-byte golden mutations change the digest or fail decoding
 PASS topology documentation declares authority, rebuilds, and idempotent sagas
 PASS deterministic evidence artifacts written
 checks=9 skipped=0
-Replay: N/A (server/CLI schema contract) + mitigation: canonical fixtures, refusal dumps, digest parity, and cold-clone verification
+Replay: REQUIRED (bundled browser surface) + evidence recorded separately from this deterministic ledger verifier
 RESULT PASS

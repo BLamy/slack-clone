@@ -23,6 +23,7 @@ const authProviderEl = document.querySelector("[data-testid='auth-provider']");
 const authUserEl = document.querySelector("[data-testid='auth-user']");
 const streamPathEl = document.querySelector("[data-testid='stream-path']");
 const streamOffsetEl = document.querySelector("[data-testid='stream-offset']");
+const streamDigestEl = document.querySelector("[data-testid='stream-digest']");
 
 document.querySelector("[data-testid='room-label']").textContent = room;
 document.querySelector("[data-testid='header-room']").textContent = room;
@@ -130,6 +131,7 @@ function connect() {
     const payload = JSON.parse(event.data);
     streamPathEl.textContent = payload.stream;
     streamOffsetEl.textContent = payload.nextOffset;
+    streamDigestEl.textContent = payload.streamDigest;
     state.messages.clear();
     for (const message of payload.messages) {
       state.messages.set(message.id, message);
@@ -149,10 +151,14 @@ function connect() {
     const payload = JSON.parse(event.data);
     streamPathEl.textContent = payload.stream;
     streamOffsetEl.textContent = payload.nextOffset;
+    streamDigestEl.textContent = payload.streamDigest;
   });
 
-  events.addEventListener("reset", () => {
+  events.addEventListener("reset", (event) => {
+    const payload = JSON.parse(event.data);
     state.messages.clear();
+    streamOffsetEl.textContent = payload.nextOffset;
+    streamDigestEl.textContent = payload.streamDigest;
     render();
   });
 
@@ -224,9 +230,8 @@ function renderMessage(message) {
 function isOwnMessage(message) {
   const user = state.session?.user;
   if (!user) return false;
-  return message.email
-    ? Boolean(user.email && message.email === user.email)
-    : message.user === (user.name || user.email);
+  if (message.actorId) return Boolean(user.sub && message.actorId === user.sub);
+  return Boolean(message.email && user.email && message.email === user.email);
 }
 
 function startEditing(messageId) {

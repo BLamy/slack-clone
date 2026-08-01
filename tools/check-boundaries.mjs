@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 
+import { analyzeModuleSource } from "./import-analysis.mjs";
+
 const root = path.resolve(import.meta.dirname, "..");
 const config = JSON.parse(
   await readFile(path.join(root, "tools/package-boundaries.json"), "utf8"),
@@ -10,15 +12,6 @@ const packageToLayer = new Map(
   Object.keys(config.layers).map((layer) => [`@stream-slack/${layer}`, layer]),
 );
 const failures = [];
-const forbiddenPurePatterns = [
-  ["environment", /\bprocess\s*\.\s*env\b/u],
-  ["network", /\b(?:fetch|WebSocket|EventSource)\s*\(/u],
-  ["clock", /\b(?:Date(?:\.now)?|performance\.now)\s*\(/u],
-  ["timer", /\b(?:setTimeout|setInterval|queueMicrotask)\s*\(/u],
-  ["randomness", /\b(?:Math\.random|crypto\.randomUUID)\s*\(/u],
-  ["dynamic import", /\bimport\s*\(/u],
-];
-
 for (const [layer, policy] of Object.entries(config.layers)) {
   const packageRoot = path.join(root, policy.path);
   const manifest = JSON.parse(
@@ -42,7 +35,8 @@ for (const [layer, policy] of Object.entries(config.layers)) {
 
   for (const file of await listModules(path.join(packageRoot, "src"))) {
     const source = await readFile(file, "utf8");
-    for (const specifier of importSpecifiers(source)) {
+    const analysis = analyzeModuleSource(source, relative(file));
+    for (const specifier of analysis.imports) {
       const targetLayer = packageToLayer.get(specifier);
       if (targetLayer && !policy.mayImport.includes(targetLayer)) {
         failures.push(
@@ -56,9 +50,10 @@ for (const [layer, policy] of Object.entries(config.layers)) {
       }
     }
     if (policy.pure) {
-      for (const [name, pattern] of forbiddenPurePatterns) {
-        if (pattern.test(source))
-          failures.push(`${relative(file)} reads forbidden ${name} capability`);
+      for (const capability of analysis.ambientCapabilities) {
+        failures.push(
+          `${relative(file)} reads forbidden ${capability} capability`,
+        );
       }
     }
   }
@@ -87,13 +82,6 @@ function isCapabilityImport(specifier) {
       "@stream-slack/services",
     ].includes(specifier)
   );
-}
-
-function importSpecifiers(source) {
-  const matches = source.matchAll(
-    /(?:^|\n)\s*(?:import|export)\s+(?:[^"']*?\s+from\s+)?["']([^"']+)["']/gu,
-  );
-  return [...matches].map((match) => match[1]);
 }
 
 async function listModules(directory) {

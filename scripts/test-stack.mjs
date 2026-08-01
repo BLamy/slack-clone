@@ -47,11 +47,19 @@ export async function startStack(context, options = {}) {
   const children = [emulator, app];
   options.onSpawn?.({ app, emulator });
   let stopping = false;
+  let leaseReleased = false;
+
+  async function releaseLease() {
+    if (leaseReleased) return;
+    leaseReleased = true;
+    await context.releasePortLease?.();
+  }
 
   async function shutdown() {
     if (stopping) return;
     stopping = true;
     await Promise.all(children.map((child) => stop(child)));
+    await releaseLease();
   }
 
   const failure = Promise.race(
@@ -76,6 +84,7 @@ export async function startStack(context, options = {}) {
       (options.waitForReady ?? waitForHttp)(`${context.appBaseUrl}/api/health`),
       failure,
     ]);
+    await releaseLease();
   } catch (error) {
     await shutdown();
     throw error;

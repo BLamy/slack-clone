@@ -16,7 +16,9 @@ import {
   stop,
   waitForExit,
 } from "../../scripts/process-utils.mjs";
+import { createRunContext } from "../../scripts/run-context.mjs";
 import { startStack } from "../../scripts/test-stack.mjs";
+import { analyzeModuleSource } from "../../tools/import-analysis.mjs";
 
 const ada = {
   sub: "auth0|ada",
@@ -97,6 +99,106 @@ test("message reducer keeps the latest record for each stable ID", () => {
     { id: "one", text: "after", editedAt: "now" },
     { id: "two", text: "second" },
   ]);
+});
+
+test("boundary parser catches formatter-ignored and ambient capabilities", () => {
+  const analysis = analyzeModuleSource(`
+// prettier-ignore
+import"node:fs"; export { value } from "@stream-slack/http";
+globalThis.fetch("https://invalid.test");
+process["env"].TOKEN;
+import("node:net");
+`);
+  assert.deepEqual(analysis.imports, [
+    "node:fs",
+    "@stream-slack/http",
+    "node:net",
+  ]);
+  assert.deepEqual(analysis.ambientCapabilities.sort(), [
+    "dynamic import",
+    "environment",
+    "network",
+  ]);
+});
+
+test("port leases prevent identical probe candidates from colliding", async () => {
+  const contexts = [];
+  try {
+    contexts.push(
+      ...(await Promise.all([
+        createRunContext({
+          env: { TEST_RUN_ID: "lease-race-a" },
+          random: () => 0.25,
+        }),
+        createRunContext({
+          env: { TEST_RUN_ID: "lease-race-b" },
+          random: () => 0.25,
+        }),
+      ])),
+    );
+    const portsA = [
+      contexts[0].emulatorPort,
+      contexts[0].auth0Port,
+      contexts[0].appPort,
+    ];
+    const portsB = [
+      contexts[1].emulatorPort,
+      contexts[1].auth0Port,
+      contexts[1].appPort,
+    ];
+    assert.equal(
+      portsA.some((port) => portsB.includes(port)),
+      false,
+    );
+  } finally {
+    await Promise.all(contexts.map((context) => context.releasePortLease()));
+  }
+});
+
+test("port leases coordinate independent allocator processes", async () => {
+  const runContextUrl = new URL(
+    "../../scripts/run-context.mjs",
+    import.meta.url,
+  ).href;
+  const childSource = `
+import { createRunContext } from ${JSON.stringify(runContextUrl)};
+const context = await createRunContext({
+  env: { TEST_RUN_ID: process.env.LEASE_TEST_ID },
+  random: () => 0.5,
+});
+console.log("LEASE_CONTEXT " + JSON.stringify({
+  emulatorPort: context.emulatorPort,
+  auth0Port: context.auth0Port,
+  appPort: context.appPort,
+}));
+await new Promise((resolve) => setTimeout(resolve, 1500));
+await context.releasePortLease();
+`;
+  const runAllocator = async (name) => {
+    const child = spawnLogged(
+      process.execPath,
+      ["--input-type=module", "--eval", childSource],
+      {
+        name,
+        env: { ...process.env, LEASE_TEST_ID: name },
+      },
+    );
+    const result = await waitForExit(child);
+    assert.equal(result.code, 0);
+    const match = result.output.match(/LEASE_CONTEXT (\{[^\n]+\})/u);
+    assert.ok(match, `missing lease context in ${result.output}`);
+    return JSON.parse(match[1]);
+  };
+  const [contextA, contextB] = await Promise.all([
+    runAllocator("lease-process-a"),
+    runAllocator("lease-process-b"),
+  ]);
+  const portsA = Object.values(contextA);
+  const portsB = Object.values(contextB);
+  assert.equal(
+    portsA.some((port) => portsB.includes(port)),
+    false,
+  );
 });
 
 test("Durable Streams adapter receives provider capabilities through injection", async () => {

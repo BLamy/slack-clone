@@ -22,6 +22,8 @@ root. `services` receives the store, ID generator, and clock. `http` receives se
 session lookups, fetch, timer functions, and provider URLs. Only `src/server.mjs` reads
 environment variables or selects production adapters.
 
-`tools/check-boundaries.mjs` verifies both package manifests and source imports. A later
-provider or framework migration must preserve this direction or deliberately amend the
-contract in a ticket that owns the boundary.
+`tools/check-boundaries.mjs` verifies both package manifests and parser-discovered source
+imports. It also walks ambient capability expressions, so alternate whitespace, comments,
+computed `process["env"]` access, and formatter-ignore directives cannot evade the pure
+leaf policy. A later provider or framework migration must preserve this direction or
+deliberately amend the contract in a ticket that owns the boundary.

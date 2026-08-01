@@ -35,6 +35,9 @@ installs the frozen lockfile and builds the pinned emulator before running the c
 verification. Test runs allocate their own emulator, Auth0, and app ports and keep all
 generated output under `.artifacts/e0-t02/<run-id>/`; set `EMULATE_PORT`, `AUTH0_PORT`,
 `APP_PORT`, and `TEST_ARTIFACT_DIR` only when a caller needs explicit assignments.
+Default allocations hold atomic per-port leases in the system temporary directory until
+the emulator, Auth0, and app have bound, preventing independent verification processes
+from selecting the same probed block.
 
 The extracted backend dependency direction and capability boundaries are documented in
 [`docs/backend-packages.md`](docs/backend-packages.md).

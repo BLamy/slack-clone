@@ -18,27 +18,35 @@ const artifactRoot = path.resolve(
 );
 const recordingsBefore = await snapshotDirectory(path.resolve("recordings"));
 
-const contextA = await createRunContext({
-  env: {
-    ...process.env,
-    TEST_RUN_ID: `${runId}-a`,
-    TEST_ARTIFACT_DIR: path.join(artifactRoot, "a"),
-  },
-});
-let contextB = await createRunContext({
-  env: {
-    ...process.env,
-    TEST_RUN_ID: `${runId}-b`,
-    TEST_ARTIFACT_DIR: path.join(artifactRoot, "b"),
-  },
-});
+const forcedCollision = () => 0.5;
+const [contextA, initialContextB] = await Promise.all([
+  createRunContext({
+    env: {
+      ...process.env,
+      TEST_RUN_ID: `${runId}-a`,
+      TEST_ARTIFACT_DIR: path.join(artifactRoot, "a"),
+    },
+    random: forcedCollision,
+  }),
+  createRunContext({
+    env: {
+      ...process.env,
+      TEST_RUN_ID: `${runId}-b`,
+      TEST_ARTIFACT_DIR: path.join(artifactRoot, "b"),
+    },
+    random: forcedCollision,
+  }),
+]);
+let contextB = initialContextB;
 while (ports(contextA).some((port) => ports(contextB).includes(port))) {
+  await contextB.releasePortLease();
   contextB = await createRunContext({
     env: {
       ...process.env,
       TEST_RUN_ID: `${runId}-b`,
       TEST_ARTIFACT_DIR: path.join(artifactRoot, "b"),
     },
+    random: forcedCollision,
   });
 }
 

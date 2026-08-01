@@ -1,6 +1,6 @@
 import path from "node:path";
 
-import { findAvailablePortBlock } from "./process-utils.mjs";
+import { findAvailablePortBlock, releasePortBlock } from "./process-utils.mjs";
 
 function safeRunId(value) {
   const normalized = String(value ?? "")
@@ -22,6 +22,7 @@ function parsePort(value, label) {
 export async function createRunContext({
   env = process.env,
   mode = "test",
+  random = Math.random,
 } = {}) {
   const runId = safeRunId(
     env.TEST_RUN_ID ?? `e0-t02-${process.pid}-${Date.now().toString(36)}`,
@@ -30,15 +31,22 @@ export async function createRunContext({
   let emulatorPort;
   let auth0Port;
   let appPort;
+  let releasePortLease = async () => {};
 
   if (env.EMULATE_PORT || env.APP_PORT || mode === "dev") {
     emulatorPort = parsePort(env.EMULATE_PORT ?? 4100, "EMULATE_PORT");
     auth0Port = parsePort(env.AUTH0_PORT ?? emulatorPort + 1, "AUTH0_PORT");
     appPort = parsePort(env.APP_PORT ?? env.PORT ?? 5175, "APP_PORT");
   } else {
-    emulatorPort = await findAvailablePortBlock(3, host);
+    emulatorPort = await findAvailablePortBlock(3, host, { random });
     auth0Port = emulatorPort + 1;
     appPort = emulatorPort + 2;
+    let released = false;
+    releasePortLease = async () => {
+      if (released) return;
+      released = true;
+      await releasePortBlock(emulatorPort, 3, host);
+    };
   }
 
   const artifactRoot = path.resolve(
@@ -57,5 +65,6 @@ export async function createRunContext({
     artifactRoot,
     playwrightOutputDir: path.join(artifactRoot, "playwright"),
     buildDir: path.join(artifactRoot, "build"),
+    releasePortLease,
   };
 }

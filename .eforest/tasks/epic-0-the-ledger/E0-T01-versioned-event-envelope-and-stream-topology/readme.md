@@ -3,7 +3,7 @@ id: E0-T01
 epic: 0
 title: "Versioned event envelope and authoritative stream topology"
 priority: 1
-status: implemented
+status: refuted
 depends_on: []
 estimate: M
 capstone: false
@@ -413,3 +413,155 @@ detector sensitivity needs rework; all of it survived this critic.
   its final browser proof is now directly interrogable as well as same-session MP4-backed.
   Any independent clone, Replay query, or fresh version/identity mutation contradicting
   these observations refutes the claim.
+
+### Critic 3 — 2026-08-01
+
+VERDICT: needs-evidence
+
+Lifecycle status set to `refuted`, the only value that routes this ticket back to the
+builder; the repository lifecycle still has no `needs-evidence` state. This verdict is
+narrower than either prior one, and it is not a product finding. A fresh critic that did
+not implement this ticket executed protocol steps 1–6 in full — cold clone, byte-identical
+verifier output, 147 independent attacks with a fresh seed and fresh canary, a coverage
+audit, and detector sensitivity — and **failed to falsify the ledger contract, the
+topology boundaries, the identity-spoof fix, or the verifier's ability to go red**.
+Predictions were written before any evidence JSON was read, in
+`work/critic3-predictions.md`. Full critic artifact:
+`evidence/critic3-independent-verification.json`.
+
+**Head hash.** The review request cited head `5d8cb6999c69a10a487d86a7ad91ef27c09518`.
+`git rev-parse HEAD` reports `5d8cb6958f393429cfac680440cdb61d30e6821d`; the two diverge
+after the shared 7-character prefix `5d8cb69`. The actual head was reviewed.
+`git diff --stat d6abddc 5d8cb69` confirms no change under `src/`, `public/`, `tests/`, or
+`tools/` after the pinned application commit — the delta is task metadata, six evidence
+files, `.replay/browser-session.json`, and the two new `scripts/e0-t01-replay-*` evidence
+files.
+
+**Reproduced (step 3).** A `git clone --no-hardlinks` detached at `5d8cb69` ran
+`make verify-E0-T01` PASS, 9 checks, 0 skipped, exit 0, and its output is **byte-identical**
+to `evidence/verify-output.txt` (`diff` clean). `pnpm test:ledger` 6/6. In the primary
+checkout `pnpm test` passed 6/6 ledger and 5/5 Playwright, matching
+`evidence/gate-summary.json`. Both golden fixtures recomputed to the manifest digests:
+envelope `sha256:4947425d…4c276a`, source reference `sha256:930748f1…bb97bd`.
+
+**Attacked independently (step 4).** `work/critic3-attacks.mjs`, critic seed `0x3c317`,
+fresh IDs `ws_3c317qkbmz8hd5v0rtn29fjw6y` / `ws_9pmwr4t0zx6cbk1hs82dnvgj73`, fresh canary
+`CRITIC3-CANARY-3c317-DO-NOT-LEAK`: **147 checks, 0 failures.** 28 hostile workspace-id
+forms (traversal, `%2e%2e`, separators, LF/CRLF/tab/space, case, off-by-one length,
+Crockford-excluded `i`/`l`/`o`/`u`, Cyrillic а, Greek ο, fullwidth ａ, Turkish dotless ı,
+ZWJ, RTL override, lone surrogate, sibling concatenation) refused with **zero collisions**
+onto the legitimate stream name; 9 non-string types including `Symbol`, `BigInt` and a
+boxed `String` refused; cross-workspace channel construction and `parseStreamName` scope
+mismatch refused; 14 canonical-encoder hostility cases refused; key-order independence and
+digest repeatability confirmed; a `__proto__` payload polluted nothing; 28 envelope
+mutations — forward/zero/string/float versions, unregistered and case-variant event types,
+cross-workspace actor, extra key, client-supplied `serverTimestamp` and `eventId`, six
+malformed causation shapes — all refused with **zero calls to the append callback**; every
+one-byte flip at three bit positions across the whole canonical encoding changed the digest
+or failed closed, zero survivors. **Attack not on the builder's list — issuance-side
+injection:** attacker-controlled extra issuance keys, a `clock` returning a non-`Date`, a
+`clock` returning an invalid `Date`, a missing `clock`, and a client-supplied
+`serverTimestamp` issuance key were all refused, so a caller cannot forge server-issued
+identity or time through the issuance channel.
+
+Two initial critic expectations were wrong and are corrected here rather than reported as
+defects: `causation: null` is required-but-nullable by design for root events, declared at
+`src/ledger/schemas/event-envelope.v1.schema.json:24-28` and enforced at
+`src/ledger/envelope.mjs:96` (incomplete causation *objects* are refused); and a
+null-prototype plain object is deliberately accepted at `src/ledger/errors.mjs:45` while
+class instances are refused.
+
+**Detector sensitivity proven, both exit codes (step 6).** In a disposable clone detached
+at `5d8cb69`, disabling the `schemaVersion` fence at `src/ledger/envelope.mjs:75` made
+`node tools/verify-e0-t01.mjs` exit **1** and `make verify-E0-T01` exit **2** with the
+trailer `make: *** [verify-E0-T01] Error 1`, both failing at
+`tools/verify-e0-t01.mjs:148` on
+`assert.ok(caught instanceof LedgerValidationError)`. This matches
+`evidence/verifier-sensitivity.json` exactly. **Critic 2's Finding 2 is fully cleared.**
+
+**Critic 2's Finding 1 is substantially addressed.** The confound is genuinely removed:
+the deliberate edit failure is now an HTTP-200 application error
+(`scripts/e0-t01-replay-flow.js:88-94`), so no browser resource-load error is emitted at
+all. The counting definition is now explicitly disclosed —
+`evidence/browser-proof.json:71-79` separates `flowConsoleErrors`,
+`playwrightCliConsoleErrors` and `replayConsoleErrors`, and `:107-111` records
+`observedStatuses` with a redirect note. Most importantly the figure is no longer merely
+assertable: `scripts/e0-t01-replay-flow.js:157-168` throws on any console error, console
+warning, request failure, or page response `>= 400`, so the committed harness cannot pass
+while the claim is false.
+
+**Finding 1 — protocol step 7 was not performable against recording `368a3b30`
+(blocking for sign-off, not a product defect).** No Replay MCP tools are configured in this
+session; `ToolSearch` surfaced only Playwright, Box and Gmail servers. `npx replayio list`,
+`curl https://app.replay.io/...`, `WebFetch`, and reads of `~/.replay/recordings.log` were
+each denied by the session sandbox, which confines filesystem access to the project
+directory and blocks network egress. The recording's upload status and its
+console/network/exception query results therefore rest **solely** on builder-authored
+artifacts — `.replay/browser-session.json`, `evidence/browser-proof.json`,
+`evidence/gate-summary.json`, and `evidence/replay-interrogation.json`, the last of which
+is produced by no committed script and is structurally the same class of unreproducible
+hand-authored artifact that critic 2 flagged. Note the asymmetry: critic 2 independently
+confirmed the *previous* recording `d8fdc763…` as `Uploaded` via `replayio list`; the new
+`368a3b30…` has never been independently confirmed by any critic. What this critic could
+authenticate, it did: `shasum -a 256` on `recordings/e0-t01-2d40835-final.mp4` returns
+`33fb975ea66928e5179a787ccb147af2d2506a29180266f8ba6d54fc373b4c9f`, exactly as claimed, at
+284,018 bytes, and `ffprobe` confirms h264 High, 1280x720, 19.600000 s, 588 frames. The
+sibling `…capture.webm` is 42.16 s, consistent in magnitude with the reported 49.4 s
+session compressed to a 19.6 s MP4. The MP4 is authentic; its upload twin is unverified.
+
+**Finding 2 — a committed evidence artifact does not do what the readme says it does
+(minor).** Builder rework 2 states that `scripts/e0-t01-replay-metadata.json` "makes its
+lifecycle recording queryable by Replay", and `evidence/browser-proof.json:6` cites it as
+`metadataFile`. The committed file contains exactly `{}`. An empty object supplies no
+title, no test metadata, and nothing that would make a recording queryable. The claim is
+false as written.
+
+**Finding 3 — two committed artifacts disagree, and one zero-count cannot see what it
+implies (minor).** `evidence/replay-interrogation.json:30-32` reports
+`statusDistribution {"2xx": 21}` across all 21 requests, while
+`evidence/browser-proof.json:109` reports `observedStatuses [200, 201, 302]` — a 302 is not
+2xx, so the two descriptions of one session conflict. Separately, the deliberate
+identity-spoof probe is issued through Playwright's `APIRequestContext`
+(`scripts/e0-t01-replay-flow.js:143-146`) rather than through the page, so its 403 is
+invisible to both page-level response capture and Replay's network panel — consistently,
+`replay-interrogation.json` records 2 PATCH requests and no 4xx. "0 failed requests" is
+therefore not evidence that error paths were exercised, and that measurement boundary is
+not disclosed the way the console-counting boundary now correctly is.
+
+**Coverage audit (step 5).** *Executed by evidence this critic reran:* `src/ledger/*`
+(8 modules), `src/ledger/schemas/*`, all 8 fixtures, `docs/stream-topology.md`,
+`tools/verify-e0-t01.mjs`, `test/ledger/*`, and the bundled browser surface —
+`src/server.mjs` routing and sessionless-`/` boundary, `updateMessage` ownership, and the
+`public/app.js` edit surface — via 5/5 committed browser tests, including
+`tests/two-sessions.spec.mjs:185` for the legacy display-name refusal. *Explicitly waived,
+no runtime behavior:* `AGENTS.md`, `ROADMAP.md`, `CLAUDE.md`, `README.md`, `.eforest/**`,
+`.github/pull_request_template.md`, `.gitignore`, `tools/build_queue.py`,
+`tools/audit_backlog.py`, `Makefile`, `package.json` wiring, `.replay/*`. *Requiring
+evidence:* only the `368a3b30` Replay queries (Finding 1). *Dead:* none. Noted, not
+blocking: `scripts/e0-t01-replay-flow.js` is committed but wired into no npm script, test,
+or record harness — it was run ad hoc via `playwright-cli run-code`
+(`evidence/browser-proof.json:11`), so reproducing it needs a manually started stack and
+Replay Chromium session. `tests/replay-concurrent.spec.mjs` remains excluded by
+`playwright.config.mjs` `testIgnore`, as critic 2 noted. *Redaction:* no raw secrets in
+committed evidence; only a deliberately wrong password literal and the local emulator
+fixture token `test_token_admin`, which the emulator prints itself at startup.
+
+**Required to clear the gate.** Finding 1 is an environment requirement, not builder
+rework: this ticket needs one critic session with Replay MCP tools or network egress to
+open `368a3b30-c22d-4dcd-b010-fb8803bd9406` and record its console, network, exception and
+interaction panels. Re-recording is **not** required and no ledger or browser rework is
+warranted — everything the builder controls survived this review. The builder-side items
+are only the two cheap corrections: (a) either populate
+`scripts/e0-t01-replay-metadata.json` with the metadata it is claimed to carry or correct
+the readme/`browser-proof.json` description of it, and (b) reconcile the 2xx-versus-302
+disagreement and disclose that the 403 spoof probe is issued off-page and so is excluded
+from the failed-request counts.
+
+- Replay: N/A for this critic entry (no new recording produced; no Replay tooling or
+  network egress available in this session, so the uploaded recording's timeline could not
+  be interrogated) + mitigation: cold-clone verifier reproduction byte-identical to the
+  committed output, 147 independent ledger attacks with a fresh seed and canary, both
+  `node` and `make` detector-sensitivity exit codes reproduced at
+  `tools/verify-e0-t01.mjs:148`, independent recomputation of both golden digests, 5/5
+  committed browser tests rerun, and SHA-256 plus `ffprobe` authentication of the
+  same-session MP4.

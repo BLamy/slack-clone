@@ -27,20 +27,16 @@ const SAFE_PURE_GLOBALS = new Set([
   "Map",
   "NaN",
   "Number",
-  "Object",
   "parseFloat",
   "parseInt",
   "Promise",
-  "Proxy",
   "RangeError",
   "ReferenceError",
-  "Reflect",
   "RegExp",
   "Set",
   "String",
   "structuredClone",
   "SuppressedError",
-  "Symbol",
   "SyntaxError",
   "TextDecoder",
   "TextEncoder",
@@ -77,9 +73,25 @@ const GLOBAL_CAPABILITY_KINDS = new Map([
   ["Intl", "environment"],
   ["location", "environment"],
   ["process", "environment"],
+  ["Object", "prototype reflection"],
+  ["Reflect", "prototype reflection"],
+  ["Proxy", "metaprogramming"],
+  ["Symbol", "process-wide state"],
   ["Function", "dynamic code"],
   ["eval", "dynamic code"],
   ["require", "dynamic import"],
+]);
+const FORBIDDEN_PROPERTY_CAPABILITIES = new Map([
+  ["constructor", "dynamic code"],
+  ["__proto__", "prototype reflection"],
+  ["prototype", "prototype reflection"],
+  ["caller", "call-stack reflection"],
+  ["callee", "call-stack reflection"],
+  ["arguments", "call-stack reflection"],
+  ["stack", "environment"],
+  ["captureStackTrace", "environment"],
+  ["prepareStackTrace", "environment"],
+  ["stackTraceLimit", "environment"],
 ]);
 
 export function analyzeModuleSource(source, filename = "module.mjs") {
@@ -106,6 +118,34 @@ export function analyzeModuleSource(source, filename = "module.mjs") {
         },
         MetaProperty() {
           ambientCapabilities.push("module metadata");
+        },
+        MemberExpression(node) {
+          capturePropertyCapability(
+            node.property,
+            node.computed,
+            ambientCapabilities,
+          );
+        },
+        Property(node) {
+          capturePropertyCapability(
+            node.key,
+            node.computed,
+            ambientCapabilities,
+          );
+        },
+        MethodDefinition(node) {
+          capturePropertyCapability(
+            node.key,
+            node.computed,
+            ambientCapabilities,
+          );
+        },
+        PropertyDefinition(node) {
+          capturePropertyCapability(
+            node.key,
+            node.computed,
+            ambientCapabilities,
+          );
         },
         "Program:exit"() {
           captureAmbientGlobalReferences(context, ambientCapabilities);
@@ -140,6 +180,27 @@ export function analyzeModuleSource(source, filename = "module.mjs") {
     imports,
     ambientCapabilities: [...new Set(ambientCapabilities)],
   };
+}
+
+function capturePropertyCapability(property, computed, capabilities) {
+  const name = staticPropertyName(property, computed);
+  if (computed && name === null) {
+    capabilities.push("dynamic property access");
+    return;
+  }
+  const capability = FORBIDDEN_PROPERTY_CAPABILITIES.get(name);
+  if (capability) capabilities.push(capability);
+}
+
+function staticPropertyName(property, computed) {
+  if (!computed && property.type === "Identifier") return property.name;
+  if (
+    property.type === "Literal" &&
+    (typeof property.value === "string" || typeof property.value === "number")
+  ) {
+    return String(property.value);
+  }
+  return null;
 }
 
 function captureAmbientGlobalReferences(context, capabilities) {

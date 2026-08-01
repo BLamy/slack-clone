@@ -137,6 +137,7 @@ export function verifierCapabilityFixture(url) {
 `);
   assert.deepEqual(analysis.ambientCapabilities.sort(), [
     "ambient global globalThis",
+    "dynamic property access",
     "environment",
     "network",
     "randomness",
@@ -162,6 +163,37 @@ export const provider = workspaceProvider;
     "ambient global workspaceProvider",
     "module metadata",
   ]);
+});
+
+test("boundary parser rejects constructor and prototype reflection escapes", () => {
+  const analysis = analyzeModuleSource(`
+const capabilityFactory = (() => {}).constructor;
+const computedFactory = (() => {})["con" + "structor"];
+const reflected = Object.getPrototypeOf(() => {});
+const reflectedAgain = Reflect.getPrototypeOf(() => {});
+const proxied = new Proxy({}, {});
+const sharedSymbol = Symbol.for("fixture");
+export function latentResolver() {
+  return capabilityFactory("return globalThis.fetch");
+}
+`);
+  assert.deepEqual(analysis.ambientCapabilities.sort(), [
+    "dynamic code",
+    "dynamic property access",
+    "metaprogramming",
+    "process-wide state",
+    "prototype reflection",
+  ]);
+});
+
+test("boundary parser allows static data properties and numeric indices", () => {
+  const analysis = analyzeModuleSource(`
+export function selectRecord(records) {
+  const first = records[0];
+  return { id: first.id, text: first["text"] };
+}
+`);
+  assert.deepEqual(analysis, { imports: [], ambientCapabilities: [] });
 });
 
 test("port leases prevent identical probe candidates from colliding", async () => {

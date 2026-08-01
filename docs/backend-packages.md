@@ -26,5 +26,8 @@ environment variables or selects production adapters.
 imports. It also inspects lexical references, so aliases, computed property names,
 alternate whitespace, comments, and formatter-ignore directives cannot evade the pure
 leaf policy. Pure packages may use an explicit allowlist of deterministic language globals
-and local relative modules only. A later provider or framework migration must preserve
-this direction or deliberately amend the contract in a ticket that owns the boundary.
+and local relative modules only. Prototype, call-stack, dynamic-code, metaprogramming, and
+non-static computed-property escape hatches are forbidden; static record properties and
+numeric literal indices remain available. A later provider or framework migration must
+preserve this direction or deliberately amend the contract in a ticket that owns the
+boundary.

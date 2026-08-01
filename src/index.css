@@ -164,8 +164,10 @@
   --radius-xl: calc(var(--radius) + 0.25rem);
 }
 
-* {
-  border-color: var(--border);
+@layer base {
+  * {
+    border-color: var(--border);
+  }
 }
 
 html {

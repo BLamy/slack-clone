@@ -21,7 +21,7 @@ export function WorkspacePreview({ className }: { className?: string }) {
     <section
       aria-label="Stream Slack workspace preview"
       className={cn(
-        'grid min-h-[560px] overflow-hidden rounded-[1.4rem] border border-border bg-background shadow-[0_28px_80px_color-mix(in_oklch,var(--sidebar),transparent_82%)] md:grid-cols-[15rem_minmax(0,1fr)]',
+        'grid min-h-[560px] overflow-hidden rounded-[1.4rem] bg-background shadow-sm md:grid-cols-[15rem_minmax(0,1fr)]',
         className,
       )}
     >

@@ -11,6 +11,6 @@ pnpm storybook:screenshots
 ```
 
 The JSON manifest records the story ID, viewport, and browser console/request checks for
-each capture. The current set is the review gate for the initial React Aria/shadcn
-direction: light mode, dark mode, keyboard focus, desktop workspace shell, and mobile
-workspace shell.
+each capture. The current set is the review gate for the React Aria/shadcn direction:
+light/dark foundations, keyboard focus, neutral message actions, desktop/mobile
+workspace shell, and the agent directory, identity, and review pages.

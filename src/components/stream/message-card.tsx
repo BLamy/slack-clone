@@ -1,8 +1,9 @@
-import { MoreHorizontal, Pencil } from 'lucide-react';
+import { Check, MoreHorizontal, Pencil, Trash2, X } from 'lucide-react';
 
 import { Avatar, AvatarBadge, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 
 export type MessageCardProps = {
@@ -13,8 +14,16 @@ export type MessageCardProps = {
   edited?: boolean;
   online?: boolean;
   canEdit?: boolean;
+  canDelete?: boolean;
+  actionsVisible?: boolean;
+  isEditing?: boolean;
+  editValue?: string;
   tone?: 'default' | 'agent';
   onEdit?: () => void;
+  onDelete?: () => void;
+  onEditValueChange?: (value: string) => void;
+  onSaveEdit?: () => void;
+  onCancelEdit?: () => void;
 };
 
 export function MessageCard({
@@ -25,15 +34,21 @@ export function MessageCard({
   edited = false,
   online = true,
   canEdit = false,
+  canDelete = false,
+  actionsVisible = false,
+  isEditing = false,
+  editValue,
   tone = 'default',
   onEdit,
+  onDelete,
+  onEditValueChange,
+  onSaveEdit,
+  onCancelEdit,
 }: MessageCardProps) {
   return (
     <article
-      className={cn(
-        'group/message flex gap-3 rounded-2xl px-3 py-3 transition-colors hover:bg-message-hover',
-        tone === 'agent' && 'bg-agent-surface/65 ring-1 ring-agent-border/70',
-      )}
+      className="group/message flex gap-3 rounded-2xl px-3 py-3 transition-colors hover:bg-message-hover"
+      data-tone={tone}
       data-slot="message-card"
     >
       <Avatar size="default" className="mt-0.5 bg-avatar-surface">
@@ -49,12 +64,39 @@ export function MessageCard({
           <time className="text-xs text-muted-foreground">{timestamp}</time>
           {edited && <span className="text-xs text-muted-foreground">(edited)</span>}
         </div>
-        <p className="mt-1 whitespace-pre-wrap text-[0.95rem] leading-6 text-message-foreground">
-          {body}
-        </p>
+        {isEditing ? (
+          <div className="mt-2 space-y-2">
+            <Textarea
+              aria-label={`Edit ${author}'s message`}
+              rows={3}
+              value={editValue ?? body}
+              onChange={(event) => onEditValueChange?.(event.target.value)}
+            />
+            <div className="flex flex-wrap items-center gap-2">
+              <Button size="sm" onPress={onSaveEdit}>
+                <Check aria-hidden="true" />
+                Save edit
+              </Button>
+              <Button size="sm" variant="ghost" onPress={onCancelEdit}>
+                <X aria-hidden="true" />
+                Cancel
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <p className="mt-1 whitespace-pre-wrap text-[0.95rem] leading-6 text-message-foreground">
+            {body}
+          </p>
+        )}
       </div>
-      <div className="flex shrink-0 self-start opacity-0 transition-opacity group-hover/message:opacity-100 group-focus-within/message:opacity-100">
-        {canEdit && (
+      <div
+        className={cn(
+          'flex shrink-0 self-start transition-opacity group-hover/message:opacity-100 group-focus-within/message:opacity-100',
+          !actionsVisible && 'opacity-0',
+        )}
+        data-slot="message-actions"
+      >
+        {canEdit && !isEditing && (
           <Button
             aria-label={`Edit ${author}'s message`}
             className="text-muted-foreground"
@@ -65,9 +107,22 @@ export function MessageCard({
             <Pencil aria-hidden="true" />
           </Button>
         )}
-        <Button aria-label="More message actions" className="text-muted-foreground" size="icon-sm" variant="ghost">
+        {canDelete && !isEditing && (
+          <Button
+            aria-label={`Delete ${author}'s message`}
+            className="text-destructive"
+            size="icon-sm"
+            variant="ghost"
+            onPress={onDelete}
+          >
+            <Trash2 aria-hidden="true" />
+          </Button>
+        )}
+        {!isEditing && (
+          <Button aria-label="More message actions" className="text-muted-foreground" size="icon-sm" variant="ghost">
           <MoreHorizontal aria-hidden="true" />
-        </Button>
+          </Button>
+        )}
       </div>
     </article>
   );

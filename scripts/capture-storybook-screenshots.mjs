@@ -36,6 +36,48 @@ const stories = [
     file: 'storybook-workspace-mobile.png',
     viewport: { width: 390, height: 844 },
   },
+  {
+    id: 'stream-slack-messages--action-states',
+    file: 'storybook-message-actions.png',
+    viewport: { width: 1280, height: 720 },
+    fullPage: true,
+  },
+  {
+    id: 'stream-slack-messages--action-states-dark',
+    file: 'storybook-message-actions-dark.png',
+    viewport: { width: 1280, height: 720 },
+    fullPage: true,
+  },
+  {
+    id: 'stream-slack-agent-studio--directory',
+    file: 'storybook-agent-directory.png',
+    viewport: { width: 1280, height: 720 },
+    fullPage: true,
+  },
+  {
+    id: 'stream-slack-agent-studio--identity-form',
+    file: 'storybook-agent-identity.png',
+    viewport: { width: 1280, height: 720 },
+    fullPage: true,
+  },
+  {
+    id: 'stream-slack-agent-studio--identity-form',
+    file: 'storybook-agent-identity-mobile.png',
+    viewport: { width: 390, height: 844 },
+    fullPage: true,
+  },
+  {
+    id: 'stream-slack-agent-studio--review',
+    file: 'storybook-agent-review.png',
+    viewport: { width: 1280, height: 720 },
+    fullPage: true,
+  },
+  {
+    id: 'stream-slack-agent-studio--review-dark',
+    file: 'storybook-agent-review-dark.png',
+    viewport: { width: 1280, height: 720 },
+    fullPage: true,
+  },
 ];
 
 await fs.mkdir(outputDir, { recursive: true });

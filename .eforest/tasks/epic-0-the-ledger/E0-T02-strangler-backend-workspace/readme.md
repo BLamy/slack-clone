@@ -3,7 +3,7 @@ id: E0-T02
 epic: 0
 title: "Strangler backend workspace around the working chat demo"
 priority: 2
-status: pending
+status: in-progress
 depends_on: [E0-T01]
 estimate: L
 capstone: false

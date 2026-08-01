@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 export type ThreadViewPreviewProps = {
   className?: string;
   initialRunOpen?: boolean;
+  onClose?: () => void;
 };
 
 const runEvents = [
@@ -22,7 +23,7 @@ const runEvents = [
   { time: '09:44:11', title: 'Response posted', detail: 'Published the reply to this thread as the agent principal.', icon: ShieldCheck },
 ] as const;
 
-function ThreadHeader() {
+function ThreadHeader({ onClose }: { onClose?: () => void }) {
   return (
     <header className="flex min-h-16 items-center gap-3 border-b border-border bg-background/80 px-4 backdrop-blur sm:px-6">
       <div className="min-w-0 flex-1">
@@ -33,7 +34,7 @@ function ThreadHeader() {
         </div>
         <p className="mt-0.5 truncate text-xs text-muted-foreground">A focused conversation about the release handoff.</p>
       </div>
-      <Button aria-label="Close thread" size="icon-sm" variant="ghost">
+      <Button aria-label="Close thread" size="icon-sm" variant="ghost" onPress={onClose}>
         <X aria-hidden="true" />
       </Button>
     </header>
@@ -176,13 +177,13 @@ function AgentRunLogPanel({ onClose }: { onClose: () => void }) {
   );
 }
 
-export function ThreadViewPreview({ className, initialRunOpen = false }: ThreadViewPreviewProps) {
+export function ThreadViewPreview({ className, initialRunOpen = false, onClose }: ThreadViewPreviewProps) {
   const [selectedRunOpen, setSelectedRunOpen] = useState(initialRunOpen);
 
   return (
     <section aria-label="Thread view with agent run logs" className={cn('grid min-h-[640px] overflow-hidden rounded-[1.4rem] bg-background shadow-sm xl:grid-cols-[minmax(0,1fr)_minmax(20rem,25rem)]', className)}>
       <div className="flex min-w-0 flex-col bg-message-surface">
-        <ThreadHeader />
+        <ThreadHeader onClose={onClose} />
         <div className="flex-1 space-y-4 overflow-auto px-4 py-5 sm:px-6">
           <div className="flex items-center justify-between gap-3">
             <div>

@@ -3,7 +3,7 @@ id: E0-T02
 epic: 0
 title: "Strangler backend workspace around the working chat demo"
 priority: 2
-status: in-progress
+status: implemented
 depends_on: [E0-T01]
 estimate: L
 capstone: false
@@ -283,3 +283,44 @@ also matches the summary exactly at offset `0000000000000000_0000000000000571`, 
 Lifecycle is `refuted`, keeping E0-T02 as the sole gate and E0-T03 blocked. Replay: N/A
 (server/static-analysis confirmation with no changed browser behavior) + mitigation:
 exact-head no-hardlink reproduction and hash-verified prior full-suite artifact.
+
+### Builder capability rework — 2026-08-01
+
+- Exact implementation commit: `0bdcc0a764513f266de246f904c86a9e49e1e1b8`.
+- The pure-package checker now uses ESLint lexical scope references. Unresolved ambient
+  globals are rejected at capture time, so later aliasing, optional calls, and computed
+  property spelling cannot hide their authority. A deterministic-global allowlist keeps
+  ordinary values available, while locally bound and injected names—including a parameter
+  named `fetch`—remain valid.
+- The boundary also rejects unknown provider globals, `import.meta`, dynamic imports, bare
+  module imports and external manifest dependencies in pure packages, internal package
+  subpaths that violate dependency direction, and relative imports that escape a package.
+- Regression suite: 18/18 unit tests with zero skips. It includes the critic's exact
+  `globalThis` alias plus `["fe" + "tch"]` fixture, direct process/fetch/Math aliases,
+  unknown provider globals, module metadata, and a negative control for injected names.
+- Detector sensitivity: the formatter-valid critic fixture passed format and lint, then
+  made both `pnpm typecheck` and a cold composed `pnpm verify` exit 1 with
+  `packages/protocol/src/index.mjs reads forbidden ambient global globalThis capability`.
+  The fixture was never called, made no request, and was removed cleanly afterward.
+- Local composed proof: `TEST_RUN_ID=builder-capability-rework-local pnpm verify` passed all
+  seven gates: 18 unit tests, 5 browser tests, forced-collision two-stack isolation, and a
+  28-file build. DOM and authenticated API matched offset
+  `0000000000000000_0000000000000565`, digest
+  `sha256:8485dbce6c213d3b7dbe3589db2489a8bd6e4f2d30d0ad64636100ed6f18443f`.
+- Cold proof: a no-hardlinks clone detached at the implementation commit had no root or
+  emulator dependencies, emulator build, `.env`, Replay metadata, or artifacts before
+  `TEST_RUN_ID=cold-capability-0bdcc0a make verify-E0-T02`. Frozen installs, the pinned
+  emulator build, all seven gates, 18/18 unit tests, 5/5 browser tests, 1/1 concurrency
+  test, and the 28-file build passed with zero skips. The cold DOM/API proof matched offset
+  `0000000000000000_0000000000000549`, digest
+  `sha256:eb6f0fc0691b0b813b74cf3a5a95f284576e352bcc8fab0228234289431ab678`.
+- Evidence: `evidence/builder-capability-rework-verification.json`; the cold summary,
+  stream proof, and build manifest hash respectively to `5980ea53…d7c377`,
+  `737d8f5b…9b83cf`, and `1d0bfe80…7f614b`.
+- Replay: N/A (server/static-analysis rework with unchanged browser behavior) +
+  mitigation: inherited Playwright compatibility suite, lexical package-boundary audit,
+  exact-head cold clone, and a cold detector-sensitivity failure.
+- Claim: at the exact implementation commit, unresolved ambient authority is rejected at
+  lexical capture time regardless of later aliasing or computed property spelling, while
+  injected/local names remain permitted. The critic's formatter-valid fixture now makes
+  the full verifier go red, and the unmutated exact-head cold clone passes every gate.

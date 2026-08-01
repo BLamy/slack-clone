@@ -3,7 +3,7 @@ id: E0-T02
 epic: 0
 title: "Strangler backend workspace around the working chat demo"
 priority: 2
-status: implemented
+status: refuted
 depends_on: [E0-T01]
 estimate: L
 capstone: false
@@ -424,3 +424,61 @@ package-boundary matrix, runtime isolation, and detector-sensitivity proof.
   authority plus prototype, dynamic-code, call-stack, metaprogramming, and non-static
   computed-property escape hatches. The critic's exact constructor fixture makes the full
   verifier go red, static data access stays green, and the unmutated cold clone passes.
+
+### Fresh independent critic — 2026-08-01
+
+VERDICT: refuted
+
+Fresh independent Critic did not implement E0-T02 and made no product-code fix.
+Predictions were frozen before orientation in `work/critic-predictions-fe42b9e.md`.
+The exact range
+`5316c6acf136d7ff1539a8885ba37181fe519ab6..fe42b9e215a1a4fed02fe4b2e6bbf01018a27b65`
+was reviewed with product code pinned at
+`dc9f273e22b8e7e4d8a2a711c4b86660c7addfc7`. Full redacted results are in
+`evidence/critic-prototype-lookup-refutation.json`.
+
+**Blocking finding — legacy prototype getter reflection false-greens AC3.** In a fresh
+no-hardlinks clone detached at exact submitted head `fe42b9e`, the critic added one inert,
+unimported, never-called pure-protocol fixture:
+`const protoGetter = value.__lookupGetter__("__proto__"); return protoGetter.call(value);`.
+If later called with an ordinary object, this recovers and invokes the inherited
+`__proto__` getter without expressing `__proto__` as a member-property AST node. Offline
+dependency preparation reused 154 packages and downloaded zero. `pnpm format:check` exited
+0, `pnpm lint` exited 0, and `pnpm typecheck` also exited 0 with
+`layers=5 violations=0` and `syntax files=37`. No fixture code or dynamic code executed,
+and no request was made.
+
+The cause is narrow and reproducible: `tools/import-analysis.mjs` classifies member-property
+names and unresolved ambient globals. `__lookupGetter__` is not in its forbidden-property
+map, while the forbidden `"__proto__"` spelling is a call argument rather than the
+visited property key. A pure leaf therefore retains prototype-reflection authority while
+the exact checker reports PASS, directly falsifying the strict pure-source claim and AC3.
+
+**Required matrix and controls.** Before the isolated confirmation, static dot/string
+record properties, numeric literal indices, deterministic allowlisted globals, locally
+bound and injected names, and a local relative import passed format, lint, and static
+analysis (`layers=5`, `violations=0`, `syntax files=43`). After format and lint passed,
+the combined forbidden matrix made static analysis exit 1 and individually named the prior
+exact `(() => {}).constructor` resolver; direct, static-computed, concatenated-computed,
+and destructured constructor access; direct `prototype` and `__proto__`; call/error stack
+properties; Object/Reflect reflection; Proxy; Symbol; static/dynamic imports and
+`import.meta`; Function/eval; `Object.getOwnPropertyDescriptor`; and async/generator
+function constructors. The only missing fixture was the independently isolated legacy
+prototype getter path above.
+
+Final confirmation used the original exact-head matrix clone after removing forbidden
+fixtures 01–21 and retaining only the seven valid-control sources plus
+`critic-forbidden-22-legacy-prototype-lookup.mjs`. `pnpm format:check`, `pnpm lint`, and
+`pnpm typecheck` all exited 0; the checker again printed `layers=5 violations=0` and
+`syntax files=44`. This isolates the false green from every other forbidden fixture.
+
+The human's stop rule required an immediate refuted verdict once any forbidden fixture
+remained green. A pristine cold target already in progress was therefore interrupted with
+exit 130 after its real forced-collision concurrency test passed and cleaned up both
+stacks; no completed cold summary, build result, or independent stream offset/digest is
+claimed, and no additional sensitivity mutation was run. The blocking exact-head false
+green is sufficient to refute the ticket.
+
+Lifecycle is `refuted`, keeping E0-T02 the sole gate and E0-T03 blocked. Replay: N/A
+(server/static-analysis critique with unchanged browser behavior) + mitigation: exact-head
+no-hardlink inert-source reproduction; no upload or tunnel was invoked.

@@ -3,7 +3,7 @@ id: E0-T02
 epic: 0
 title: "Strangler backend workspace around the working chat demo"
 priority: 2
-status: implemented
+status: refuted
 depends_on: [E0-T01]
 estimate: L
 capstone: false
@@ -324,3 +324,67 @@ exact-head no-hardlink reproduction and hash-verified prior full-suite artifact.
   lexical capture time regardless of later aliasing or computed property spelling, while
   injected/local names remain permitted. The critic's formatter-valid fixture now makes
   the full verifier go red, and the unmutated exact-head cold clone passes every gate.
+
+### Final independent critic — 2026-08-01
+
+VERDICT: refuted
+
+Fresh independent Critic did not implement E0-T02 and made no product-code fix.
+Predictions were written before execution in `work/critic-final-a502186-predictions.md`.
+The submitted head was `a502186e0e6d4c91e2332f7b015881051f0230dc`; application code was
+pinned at `0bdcc0a764513f266de246f904c86a9e49e1e1b8`. Full redacted results are in
+`evidence/critic-final-constructor-capability-refutation.json`.
+
+**Blocking finding — constructor-derived network authority remains green (AC3).** In a
+new no-hardlinks detached clone, the critic added this inert pure-protocol fixture:
+`const capabilityFactory = (() => {}).constructor;` and an exported, never-called
+function returning `capabilityFactory("return globalThis.fetch")`. It made no request.
+The fixture passed the direct Prettier check (exit 0), ESLint (exit 0), and
+`node tools/static-analysis.mjs` (exit 0), which printed `layers=5 violations=0` and
+`syntax files=39`. The checker rejects unresolved ambient identifiers but permits a
+function literal's constructor property, which can compile a later `globalThis.fetch`
+resolver. A pure leaf therefore retains latent dynamic-code/network authority while the
+claimed boundary is green. This directly falsifies AC3.
+
+**Required matrix and valid controls.** The prior exact `globalThis` → optional
+`["fe" + "tch"]` → local-function form, direct `fetch`, `process`, and `Math` aliases,
+destructuring from `globalThis`, an unknown provider global, `import.meta`, a bare external
+import, an internal HTTP subpath, and a relative package escape all passed format/lint and
+were individually named by failing static analysis. External pure-manifest dependency and
+removed service dependency also went red. Corrected negative controls — a local function,
+injected names including a parameter named `fetch`, deterministic allowlisted globals,
+and a local relative import — passed format, lint, and static analysis with
+`layers=5 violations=0`, `syntax files=38`. An initial parameter literally named
+`globalThis` was discarded because the repository's lint policy intentionally forbids
+shadowing that restricted name.
+
+**Cold, provenance, and browser results.** Builder hashes for the three rework sources,
+the preserved cold summary (`5980ea53…d7c377`), stream proof
+(`737d8f5b…9b83cf`), and build manifest (`1d0bfe80…7f614b`) all matched. All 28 manifest
+entries rehashed against the exact implementation with zero mismatches. A separate fresh
+no-hardlinks clone passed `make verify-E0-T02`: frozen root and pinned emulator setup,
+format, lint, static analysis, 18/18 unit tests, 5/5 inherited browser tests, 1/1 real
+two-stack test, and the 28-file build. The owner edit persisted and DOM/API state matched
+at offset `0000000000000000_0000000000000553`, digest
+`sha256:c2dadedb75552cae78e2c535b678bbdc04d3a40561d6ff674c03d907f3f36349`.
+
+**Isolation, side effects, and sensitivity.** Same-process and independent-process
+allocators forced to one candidate received disjoint blocks; an explicit real stack used
+exactly `41453/41454/41455`, returned health 200, and stopped cleanly. A forced app failure
+SIGTERM'd only its managed sibling while an unrelated process and artifact survived.
+Offline routine `pnpm verify` preserved the sole recording sentinel byte-for-byte and
+matched DOM/API at offset `0000000000000000_0000000000000549`, digest
+`sha256:7214426cf3c69ce088659dad0c64967e0c075e258605b2c480be31f1e24a9fa1`;
+an out-of-scope `BUILD_DIR` was rejected before deletion. A critic-authored
+`messageOwnedBy` defect made composed verification exit 1 after format/lint/static passed,
+with 16 unit passes and two precise owner-authorization failures; the clone was restored.
+
+Harness disclosure: a first dummy manifest dependency caused pnpm's dependency-status
+check to attempt one registry lookup, which failed 404 before any fixture executed. The
+manifest was restored without a lockfile change and rerun using an already-installed
+dependency and direct local binaries. No fixture or application request was made.
+
+Lifecycle remains `refuted`, keeping E0-T02 the sole builder-rework gate and E0-T03
+blocked. Replay: N/A (server/static-analysis critique with unchanged browser behavior) +
+mitigation: exact-head cold browser compatibility, DOM/API stream correlation,
+package-boundary matrix, runtime isolation, and detector-sensitivity proof.

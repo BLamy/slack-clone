@@ -3,7 +3,7 @@ id: E0-T02
 epic: 0
 title: "Strangler backend workspace around the working chat demo"
 priority: 2
-status: in-progress
+status: implemented
 depends_on: [E0-T01]
 estimate: L
 capstone: false
@@ -200,3 +200,39 @@ E0-T03 blocked. Replay: N/A (server extraction with unchanged browser behavior) 
 mitigation: inherited Playwright compatibility suite, package-boundary audit, and
 cold-clone composed gates. The Replay waiver itself is accurate; the package-boundary
 mitigation is what failed adversarially.
+
+### Builder rework — 2026-08-01
+
+- Exact rework implementation commit: `0019a5813378653ae107c5464a0b8f5e72885f75`.
+- Finding 1 closed: `tools/check-boundaries.mjs` now uses ESLint parser visitors through
+  `tools/import-analysis.mjs` for static imports, re-exports, dynamic imports, and ambient
+  environment/network/clock/timer/randomness capabilities. It no longer depends on import
+  whitespace or line layout.
+- Finding 2 closed: dynamic allocation now acquires atomic per-port leases shared across
+  processes, retains them until the emulator/Auth0/app health check proves all three ports
+  bound, releases normally and on process exit, and reclaims stale owners. Retry candidates
+  advance deterministically even when two allocators receive the same random value.
+- Regressions: 15/15 unit tests include the exact `// prettier-ignore` plus
+  `import"node:fs";` spelling, same-process same-candidate allocation, and two separate Node
+  allocator processes forced to the same first candidate. Both processes received disjoint
+  blocks: `45418/45419/45420` and `37499/37500/37501`.
+- Exact-head sensitivity: in the disposable cold clone, the critic's formatter-aware import
+  mutation passed format and lint but made the composed `pnpm verify` exit 1 at static
+  analysis with `packages/protocol/src/index.mjs imports capability module node:fs`.
+- Cold proof: a new no-hardlinks clone detached at the rework commit proved dependencies,
+  emulator build, `.env`, Replay metadata, and `.artifacts` absent before
+  `TEST_RUN_ID=cold-rework-0019a58 make verify-E0-T02`. Both frozen installs completed;
+  format, lint, 5 layers/36 syntax files, 15 unit tests, 5 browser tests, the forced-collision
+  two-stack test, and the 28-file build all passed with zero skips.
+- Stream proof: DOM and authenticated API matched at offset
+  `0000000000000000_0000000000000541`, digest
+  `sha256:193d979cc362ff5f3827d4e66422c0e57c251aac45b3a0cf043b8656f96c8a7e`.
+- Evidence: `evidence/builder-rework-verification.json` and
+  `evidence/build-manifest-rework-delta.json`; the complete rework manifest hashes to
+  `16044155ed82ac900527e9fc89e405ff7333f249198f4158a85fc83bb58f65f5`.
+- Replay: N/A (server extraction with unchanged browser behavior) + mitigation: inherited
+  Playwright compatibility suite, package-boundary audit, and cold-clone composed gates.
+- Claim: at the exact rework commit, no parser-valid forbidden capability import can evade
+  the pure-leaf check, and independently running allocators cannot reserve overlapping port
+  blocks before bind. A formatter-approved forbidden import that passes `pnpm verify`, or
+  any overlap under a forced identical candidate, refutes this rework.

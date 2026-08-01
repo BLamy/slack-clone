@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T02",
+  "role": "builder-rework",
+  "recordedAt": "2026-08-01T22:25:49Z",
+  "implementationCommit": "0019a5813378653ae107c5464a0b8f5e72885f75",
+  "addressesCriticCommit": "7619d632d68f249f03ca949d9e5565e5c0e3ff24",
+  "result": "PASS",
+  "fixes": [
+    {
+      "finding": "C1 formatter-aware static import bypass",
+      "change": "replaced regex import extraction with ESLint parser visitors for static imports, re-exports, dynamic imports, and ambient capabilities",
+      "regression": "the exact // prettier-ignore plus import\"node:fs\" spelling is parser-discovered"
+    },
+    {
+      "finding": "C2 probe-to-bind port collision",
+      "change": "atomic per-port leases coordinate independent processes until all three services bind; stale owners are reclaimed and normal exit cleans leases",
+      "regression": "same-process and separate-process allocators forced to the same first candidate receive disjoint three-port blocks"
+    }
+  ],
+  "coldClone": {
+    "kind": "local git clone --no-hardlinks",
+    "detachedHead": "0019a5813378653ae107c5464a0b8f5e72885f75",
+    "preflightAbsent": [
+      "node_modules",
+      "emulate/packages/emulate/dist/index.js",
+      ".env",
+      "recordings/latest.json",
+      ".artifacts"
+    ],
+    "command": "TEST_RUN_ID=cold-rework-0019a58 make verify-E0-T02",
+    "emulatorCommit": "8b88027535e4ea6a18c3ce92a13af706382a451f"
+  },
+  "gates": {
+    "format": "PASS",
+    "lint": "PASS",
+    "staticAnalysis": {
+      "result": "PASS",
+      "packageLayers": 5,
+      "boundaryViolations": 0,
+      "syntaxFiles": 36
+    },
+    "unit": {
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0
+    },
+    "integration": {
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    },
+    "concurrency": {
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "forcedSameInitialCandidate": true,
+      "stackAPorts": [45418, 45419, 45420],
+      "stackBPorts": [37499, 37500, 37501],
+      "foreignSessionRefused": true,
+      "sameRoomStreamsIsolated": true,
+      "childrenStopped": true,
+      "recordingsUnchanged": true
+    },
+    "build": {
+      "result": "PASS",
+      "fileCount": 28,
+      "manifestSha256": "16044155ed82ac900527e9fc89e405ff7333f249198f4158a85fc83bb58f65f5"
+    }
+  },
+  "crossProcessLeaseProof": {
+    "forcedSameInitialCandidate": true,
+    "processAPorts": [45418, 45419, 45420],
+    "processBPorts": [37499, 37500, 37501],
+    "overlap": false
+  },
+  "streamProof": {
+    "stream": "/rooms/cold-rework-0019a58-edit-1785623092195/messages",
+    "nextOffset": "0000000000000000_0000000000000541",
+    "streamDigest": "sha256:193d979cc362ff5f3827d4e66422c0e57c251aac45b3a0cf043b8656f96c8a7e",
+    "messageCount": 1,
+    "domMatchedApi": true
+  },
+  "sensitivity": {
+    "mutation": "inserted // prettier-ignore followed by import\"node:fs\" in packages/protocol/src/index.mjs",
+    "command": "TEST_RUN_ID=cold-rework-boundary-sensitivity pnpm verify",
+    "formatResult": "PASS",
+    "lintResult": "PASS",
+    "staticAnalysisExitCode": 1,
+    "observation": "packages/protocol/src/index.mjs imports capability module node:fs",
+    "composedDetectorWentRed": true
+  },
+  "routineSideEffects": {
+    "replayUploadAttempted": false,
+    "externalTunnelAttempted": false,
+    "recordingsUnchanged": true
+  },
+  "replay": "Replay: N/A (server extraction with unchanged browser behavior) + mitigation: inherited Playwright compatibility suite, package-boundary audit, and cold-clone composed gates",
+  "claim": "At the exact rework commit, parser-valid capability imports cannot evade the pure-leaf boundary, and independent verification processes cannot receive overlapping dynamic port blocks before bind. Any formatter-approved forbidden import that passes the composed verifier or any same-candidate overlapping allocation refutes this claim."
+}

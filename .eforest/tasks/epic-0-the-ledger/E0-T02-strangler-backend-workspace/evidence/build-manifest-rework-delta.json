@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T02",
+  "implementationCommit": "0019a5813378653ae107c5464a0b8f5e72885f75",
+  "baseManifest": "evidence/build-manifest.json",
+  "baseManifestSha256": "a4624289d6d3707c17f7e0925406244e3fc1b6d9d0601f36de83460215510f6c",
+  "reworkManifestSha256": "16044155ed82ac900527e9fc89e405ff7333f249198f4158a85fc83bb58f65f5",
+  "fileCount": 28,
+  "unchangedEntries": 26,
+  "changedEntries": [
+    {
+      "path": "docs/backend-packages.md",
+      "bytes": 1630,
+      "sha256": "163cd5cdcbdf61f7a6daf0f0012fd31c27eeb11f5d7a37b92dbf63da304fd319"
+    },
+    {
+      "path": "package.json",
+      "bytes": 3120,
+      "sha256": "e172e94f4d488341840618bb05325f0066a510636e9b6c4a7ae3aa4f44e7b6ea"
+    }
+  ]
+}

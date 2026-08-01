@@ -67,4 +67,17 @@ backend remains out of scope until the screenshot set is approved.
 
 ## Verification log
 
-<!-- Append screenshot manifests, commands, and approval notes here. -->
+- 2026-08-01 builder run, commits `195e2a4` and `0eddae5`: `pnpm exec tsc --noEmit`,
+  `pnpm build`, `pnpm build-storybook`, and `pnpm test:storybook` passed. The
+  Storybook suite reports 1 file and 4 tests passed. `pnpm storybook:screenshots`
+  captured five variants in `evidence/`; the manifest records zero console errors
+  and zero request failures. Light and dark theme scans report zero accessibility
+  violations. `git diff --check` passed.
+- `pnpm test` remains blocked in this clean worktree because the pinned `emulate`
+  submodule is present only as an uninitialized gitlink and
+  `emulate/packages/emulate/dist/index.js` is missing. The submodule was not edited.
+  Replay: N/A (approval-gated Storybook-only frontend pass; no backend browser claim)
+  + mitigation: the local screenshot harness covers visual, console, request-failure,
+  responsive, keyboard-focus, and accessibility checks; backend tests stay deferred
+  to the post-approval app branch.
+- Human visual approval: pending.

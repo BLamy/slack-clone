@@ -1,0 +1,61 @@
+{
+  "baseUrl": "http://127.0.0.1:6006",
+  "generatedAt": "2026-08-01T02:02:54.724Z",
+  "stories": [
+    {
+      "id": "stream-slack-design-system--light-mode",
+      "file": "storybook-light-mode.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "fullPage": true,
+      "consoleErrors": [],
+      "requestFailures": []
+    },
+    {
+      "id": "stream-slack-design-system--dark-mode",
+      "file": "storybook-dark-mode.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "fullPage": true,
+      "consoleErrors": [],
+      "requestFailures": []
+    },
+    {
+      "id": "stream-slack-design-system--interaction-states",
+      "file": "storybook-interaction-states.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "fullPage": false,
+      "consoleErrors": [],
+      "requestFailures": []
+    },
+    {
+      "id": "stream-slack-design-system--workspace-shell",
+      "file": "storybook-workspace-shell.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "fullPage": false,
+      "consoleErrors": [],
+      "requestFailures": []
+    },
+    {
+      "id": "stream-slack-design-system--workspace-shell",
+      "file": "storybook-workspace-mobile.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "consoleErrors": [],
+      "requestFailures": []
+    }
+  ]
+}

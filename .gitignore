@@ -5,3 +5,8 @@ recordings/*.json
 recordings/*.mp4
 *.log
 .DS_Store
+
+*storybook.log
+storybook-static
+dist/
+.vite/

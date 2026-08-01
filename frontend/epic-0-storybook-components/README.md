@@ -92,4 +92,15 @@ backend remains out of scope until the screenshot set is approved.
 - Replay: N/A (Storybook-only component iteration; no backend or external upload was
   authorized) + mitigation: screenshot evidence is committed under `evidence/` and
   backend wiring remains prohibited until human visual approval.
+- 2026-08-01 thread iteration, commit `3b3b63a`: added the fixture-only thread view,
+  clickable AI response, selected/unselected run-log states, run timeline, tool-call
+  details, redacted raw output, and responsive mobile stacking. `pnpm exec tsc --noEmit`,
+  `pnpm build`, `pnpm build-storybook`, `pnpm test:storybook`, and `git diff --check`
+  passed; the Storybook suite reports 4 files and 13 tests passed. `pnpm
+  storybook:screenshots` captured 16 variants with zero console errors and zero request
+  failures. Browser verification confirmed keyboard Enter opens the full run logs,
+  dismissal restores the empty state, and the light and dark selected stories report
+  zero accessibility violations. Replay: N/A (fixture-only Storybook work; no backend
+  or external upload was authorized) + mitigation: local Storybook evidence is committed
+  under `evidence/` and backend wiring remains prohibited until human visual approval.
 - Human visual approval: pending.

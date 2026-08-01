@@ -30,6 +30,38 @@ every harness—while keeping credentials behind Infisical Agent Proxy.
   harness adapters. It is not vendored here, so cold-clone task contracts cannot depend
   on reading that adjacent checkout at runtime.
 
+## Frontend track: Epic 0 — The Storybook Workbench
+
+The frontend has a deliberately separate Epic 0 for the pre-Epic-7 visual approval
+slice. Its source of truth is the component inventory and Storybook stories under
+`frontend/epic-0-storybook-components/`. It does not replace or reorder the server
+Epic 0 above, and it does not add a gate to `.eforest/tasks/QUEUE.md`.
+
+Every frontend component is built first against local fixtures in Storybook. Each story
+must make its states explicit—light, dark, system, keyboard focus, disabled/loading,
+error/empty where applicable, and responsive narrow/wide layouts—before a component is
+used by a page or connected to an API. The review loop is:
+
+```text
+component contract → Storybook variants → local screenshots → human approval
+                                                        │
+                                                        ▼
+                                       page composition → backend wiring
+```
+
+The Epic 0 inventory is intentionally broader than the first chat slice. It covers the
+shared primitives, workspace shell, message timeline, agent/run surfaces, onboarding,
+feedback states, and the accessibility/responsive harness needed to keep those surfaces
+reviewable as the product grows.
+
+**Epic 0 exit:** the component inventory has stories and screenshots for the agreed
+variants, `pnpm build-storybook` and the Storybook test suite are green, and the human
+reviewer approves the visual direction. Backend wiring starts only after that approval.
+
+See [`frontend/epic-0-storybook-components/README.md`](frontend/epic-0-storybook-components/README.md)
+and [`frontend/epic-0-storybook-components/component-inventory.md`](frontend/epic-0-storybook-components/component-inventory.md)
+for the working breakdown.
+
 ## The architectural bet
 
 The chat timeline is not merely an interface to an agent runner. It is the durable source

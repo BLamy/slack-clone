@@ -1,5 +1,5 @@
 {
-  "proofType": "independent Replay MCP interrogation of the final same-session recording",
+  "proofType": "Replay MCP interrogation by the builder session of the final same-session recording",
   "evidenceCommit": "2d40835e62f0e5663f7a9720a63637c2f8ffa3b7",
   "recordingId": "368a3b30-c22d-4dcd-b010-fb8803bd9406",
   "url": "https://app.replay.io/recording/368a3b30-c22d-4dcd-b010-fb8803bd9406",
@@ -19,6 +19,7 @@
     "marker": "E0-T01 interrogable Replay proof"
   },
   "network": {
+    "observationScope": "Replay page-network request table only; off-page Playwright APIRequestContext calls are not present.",
     "totalRequests": 21,
     "apiRequests": 9,
     "failedRequests": 0,
@@ -31,7 +32,9 @@
       "GET": 18,
       "POST": 1,
       "PATCH": 2
-    }
+    },
+    "redirectReconciliation": "Replay reported 21 terminal request entries, all 2xx. The Playwright page response listener separately observed the expected intermediate 302 authentication redirect; Replay did not enumerate that redirect response in its request table.",
+    "excludedExpectedRefusal": "The legacy identity-spoof PATCH used Playwright APIRequestContext and returned the separately asserted 403, so it is intentionally absent from Replay page-network counts."
   },
   "uncaughtExceptions": 0,
   "userInteractions": {

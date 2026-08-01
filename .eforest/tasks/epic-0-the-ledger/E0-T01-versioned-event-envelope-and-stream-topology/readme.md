@@ -3,7 +3,7 @@ id: E0-T01
 epic: 0
 title: "Versioned event envelope and authoritative stream topology"
 priority: 1
-status: in-progress
+status: implemented
 depends_on: []
 estimate: M
 capstone: false
@@ -377,8 +377,10 @@ detector sensitivity needs rework; all of it survived this critic.
 
 - Exact evidence commit: `2d40835e62f0e5663f7a9720a63637c2f8ffa3b7`; application code remains pinned at
   `d6abddc8908275931b73fcdd9c8b084353aad3b4`. The committed
-  `scripts/e0-t01-replay-flow.js` is the browser assertion harness, and
-  `scripts/e0-t01-replay-metadata.json` makes its lifecycle recording queryable by Replay.
+  `scripts/e0-t01-replay-flow.js` is the browser assertion harness. The path to
+  `scripts/e0-t01-replay-metadata.json` is passed as `RECORD_REPLAY_METADATA_FILE`; its
+  literal `{}` content is the initialized sentinel state used by the pinned Replay
+  Playwright package, while descriptive metadata is supplied separately.
 - Fresh gates at the evidence commit: `make verify-E0-T01` passed 9 checks with zero
   skipped; `pnpm test` passed 6/6 ledger tests and 5/5 Playwright tests. A no-hardlinks
   cold clone at that exact commit independently passed `make verify-E0-T01` and
@@ -565,3 +567,25 @@ from the failed-request counts.
   `tools/verify-e0-t01.mjs:148`, independent recomputation of both golden digests, 5/5
   committed browser tests rerun, and SHA-256 plus `ffprobe` authentication of the
   same-session MP4.
+
+### Builder rework 3 — 2026-08-01
+
+- Critic 3 found no product defect and independently passed protocol steps 1–6. This
+  rework changes evidence descriptions only; the application, browser harness, recording,
+  and MP4 are unchanged.
+- C3-F2 is clarified in `evidence/browser-proof.json`: the literal `{}` file is an
+  initialization sentinel, not a title payload. The pinned `@replayio/playwright@5.0.3`
+  bundled `initMetadataFile` creates exactly `{}` when absent and exports that file path as
+  `RECORD_REPLAY_METADATA_FILE`; the final lifecycle command supplied that path. The
+  descriptive title was supplied separately through `PLAYWRIGHT_REPLAY_METADATA`.
+- C3-F3 is reconciled by naming the observation scopes. Playwright's page-level response
+  listener observed the expected intermediate 302 authentication redirect and no response
+  at or above 400. Replay's page-network table enumerated 21 terminal request entries, all
+  2xx, and did not enumerate the intermediate redirect. The hostile legacy PATCH was
+  intentionally issued through Playwright `APIRequestContext`, returned the separately
+  asserted 403, and is excluded from both page and Replay network-failure counts. The zero
+  counts therefore mean zero unexpected failures inside their stated scopes, not that no
+  expected refusal occurred.
+- C3-F1 requires no new recording or builder claim: the existing recording is being handed
+  to a fresh critic session with Replay MCP access for direct console, network, exception,
+  interaction, and upload interrogation.

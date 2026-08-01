@@ -4,6 +4,12 @@
   "applicationCommit": "d6abddc8908275931b73fcdd9c8b084353aad3b4",
   "flowScript": "scripts/e0-t01-replay-flow.js",
   "metadataFile": "scripts/e0-t01-replay-metadata.json",
+  "metadataSentinel": {
+    "contents": {},
+    "environmentVariable": "RECORD_REPLAY_METADATA_FILE",
+    "purpose": "The Replay runtime watches the initialized file path. The pinned @replayio/playwright@5.0.3 initializer likewise creates a literal {} file before exporting this path to Replay Chromium; the empty object is the sentinel state, not descriptive test metadata.",
+    "descriptiveMetadataEnvironmentVariable": "PLAYWRIGHT_REPLAY_METADATA"
+  },
   "mode": "repository-mandated local Auth0 and Durable Streams emulators",
   "commands": [
     "pnpm dev",
@@ -104,10 +110,15 @@
       "equal": true
     }
   ],
-  "pageResponses": {
+  "playwrightPageResponses": {
     "failed": 0,
     "observedStatuses": [200, 201, 302],
-    "redirectNote": "The 302 is the expected protected-route authentication redirect; no response was 400 or greater."
+    "redirectNote": "The Playwright page response listener saw the expected intermediate 302 protected-route authentication redirect; no page response was 400 or greater. Replay's request table reports terminal request entries and did not enumerate that intermediate redirect response."
+  },
+  "offPageApiContextChecks": {
+    "includedInPageOrReplayNetworkCounts": false,
+    "legacyIdentitySpoofPatchStatus": 403,
+    "reason": "The hostile PATCH was deliberately issued through Playwright APIRequestContext so the authenticated server authorization boundary could be asserted without creating a page resource error. Its expected 403 is asserted separately and is outside the zero-failed-page-request claim."
   },
   "replayInterrogation": "evidence/replay-interrogation.json"
 }

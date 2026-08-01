@@ -38,7 +38,14 @@
     "consoleErrors": 0,
     "consoleWarnings": 0,
     "uncaughtExceptions": 0,
-    "failedNetworkRequests": 0,
-    "unhandledRequestFailures": 0
+    "replayPageFailedNetworkRequests": 0,
+    "playwrightPageUnhandledRequestFailures": 0,
+    "offPageExpectedRefusals": [
+      {
+        "operation": "legacy identity-spoof PATCH via Playwright APIRequestContext",
+        "status": 403,
+        "includedInPageNetworkCounts": false
+      }
+    ]
   }
 }

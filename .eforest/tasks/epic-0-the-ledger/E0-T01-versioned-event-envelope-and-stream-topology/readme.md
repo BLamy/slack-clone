@@ -3,7 +3,7 @@ id: E0-T01
 epic: 0
 title: "Versioned event envelope and authoritative stream topology"
 priority: 1
-status: refuted
+status: in-progress
 depends_on: []
 estimate: M
 capstone: false

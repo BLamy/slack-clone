@@ -202,7 +202,7 @@ async function handleAuth(req, res, url) {
     } catch (err) {
       sendHtml(
         res,
-        401,
+        200,
         renderLoginPage({
           returnTo,
           error: err instanceof Error ? err.message : String(err),

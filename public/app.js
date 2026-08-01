@@ -6,6 +6,8 @@ const expectedCount = Number(params.get("expect") || "0");
 const autopilotMessage = params.get("message") || `Replay check-in at ${new Date().toLocaleTimeString()}`;
 
 const state = {
+  editingDraft: "",
+  editingMessageId: null,
   messages: new Map(),
   sentAutopilot: false,
   session: null,
@@ -33,6 +35,35 @@ formEl.addEventListener("submit", async (event) => {
   if (!text) return;
   inputEl.value = "";
   await sendMessage(text);
+});
+
+messagesEl.addEventListener("click", (event) => {
+  const target = event.target instanceof Element ? event.target : null;
+  const button = target?.closest("button[data-message-action]");
+  const messageEl = button?.closest("[data-message-id]");
+  const messageId = messageEl?.dataset.messageId;
+  if (!button || !messageId) return;
+
+  if (button.dataset.messageAction === "edit") {
+    startEditing(messageId);
+  } else if (button.dataset.messageAction === "cancel-edit") {
+    stopEditing();
+  }
+});
+
+messagesEl.addEventListener("input", (event) => {
+  const target = event.target instanceof HTMLTextAreaElement ? event.target : null;
+  if (target?.dataset.testid === "edit-message-input") {
+    state.editingDraft = target.value;
+  }
+});
+
+messagesEl.addEventListener("submit", (event) => {
+  const target = event.target instanceof HTMLFormElement ? event.target : null;
+  if (!target?.matches("[data-message-edit-form]")) return;
+  event.preventDefault();
+  const messageId = target.dataset.messageId;
+  if (messageId) void saveMessage(messageId);
 });
 
 init();
@@ -154,6 +185,26 @@ function render() {
 
 function renderMessage(message) {
   const time = new Date(message.createdAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  const isEditing = state.editingMessageId === message.id;
+  const isSaving = state.savingMessageId === message.id;
+  const isOwn = isOwnMessage(message);
+  const editedLabel = message.editedAt ? `<span class="message__edited" data-testid="message-edited">(edited)</span>` : "";
+  const actions = isOwn && !isEditing
+    ? `<div class="message__actions">
+        <button class="message__action" type="button" data-message-action="edit" aria-label="Edit message">Edit</button>
+      </div>`
+    : "";
+  const content = isEditing
+    ? `<form class="message__edit-form" data-message-edit-form data-message-id="${escapeAttr(message.id)}">
+        <label class="visually-hidden" for="edit-message-input">Edit message</label>
+        <textarea id="edit-message-input" data-testid="edit-message-input" rows="2" ${isSaving ? "disabled" : ""}>${escapeHtml(state.editingDraft)}</textarea>
+        <div class="message__edit-actions">
+          <button class="message__edit-button message__edit-button--save" type="submit" ${isSaving ? "disabled" : ""}>${isSaving ? "Saving..." : "Save"}</button>
+          <button class="message__edit-button" type="button" data-message-action="cancel-edit" ${isSaving ? "disabled" : ""}>Cancel</button>
+        </div>
+      </form>`
+    : `<div class="message__text">${escapeHtml(message.text)}</div>`;
+
   return `
     <article class="message" data-testid="message" data-message-id="${escapeAttr(message.id)}">
       <div class="message__avatar">${escapeHtml(initials(message.user))}</div>
@@ -161,11 +212,65 @@ function renderMessage(message) {
         <div class="message__meta">
           <span class="message__user">${escapeHtml(message.user)}</span>
           <span class="message__time">${escapeHtml(time)}</span>
+          ${editedLabel}
+          ${actions}
         </div>
-        <div class="message__text">${escapeHtml(message.text)}</div>
+        ${content}
       </div>
     </article>
   `;
+}
+
+function isOwnMessage(message) {
+  const user = state.session?.user;
+  if (!user) return false;
+  return message.email
+    ? Boolean(user.email && message.email === user.email)
+    : message.user === (user.name || user.email);
+}
+
+function startEditing(messageId) {
+  const message = state.messages.get(messageId);
+  if (!message || !isOwnMessage(message)) return;
+  state.editingMessageId = messageId;
+  state.editingDraft = message.text;
+  render();
+  const editInput = document.querySelector("[data-testid='edit-message-input']");
+  editInput?.focus();
+  editInput?.select();
+}
+
+function stopEditing() {
+  state.editingMessageId = null;
+  state.editingDraft = "";
+  state.savingMessageId = null;
+  render();
+}
+
+async function saveMessage(messageId) {
+  const text = state.editingDraft.trim();
+  if (!text) return;
+
+  state.savingMessageId = messageId;
+  render();
+  try {
+    const res = await fetch(`/api/rooms/${encodeURIComponent(room)}/messages/${encodeURIComponent(messageId)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+    const body = await res.json();
+    if (!res.ok || !body.ok) throw new Error(body.error || "Failed to edit message");
+    if (body.message) state.messages.set(body.message.id, body.message);
+    state.editingMessageId = null;
+    state.editingDraft = "";
+    state.savingMessageId = null;
+    render();
+  } catch (err) {
+    state.savingMessageId = null;
+    render();
+    setConnectionState(err instanceof Error ? err.message : String(err));
+  }
 }
 
 function maybeRunAutopilot() {

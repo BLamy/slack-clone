@@ -1,0 +1,32 @@
+{
+  "availableGates": [
+    {
+      "command": "pnpm test:ledger",
+      "result": "PASS",
+      "tests": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "make verify-E0-T01",
+      "result": "PASS",
+      "checks": 9,
+      "skipped": 0
+    },
+    {
+      "command": "pnpm test",
+      "result": "PASS",
+      "ledgerTests": 6,
+      "browserTests": 4,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "undefinedGates": [
+    "pnpm format:check",
+    "pnpm lint",
+    "pnpm typecheck",
+    "pnpm build"
+  ],
+  "replay": "N/A (server/CLI schema contract) + mitigation: canonical fixtures, refusal dumps, digest parity, and cold-clone verification"
+}

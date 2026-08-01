@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stream-slack.local/schemas/event-envelope.v1.schema.json",
+  "title": "Stream Slack event envelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "actorId",
+    "causation",
+    "correlationId",
+    "data",
+    "eventId",
+    "eventType",
+    "idempotencyKey",
+    "schemaVersion",
+    "serverTimestamp",
+    "workspaceId"
+  ],
+  "properties": {
+    "actorId": {
+      "type": "string",
+      "pattern": "^pr_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "causation": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "source-reference.v1.schema.json" }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "pattern": "^cr_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "data": {
+      "type": "object"
+    },
+    "eventId": {
+      "type": "string",
+      "pattern": "^ev_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "eventType": {
+      "enum": [
+        "ledger.fixture-recorded",
+        "workspace.directory.updated",
+        "channel.message.created",
+        "agent.config.revised",
+        "workspace.invocation.requested",
+        "run.lifecycle.changed",
+        "connection.config.revised",
+        "workspace.audit.recorded",
+        "projection.checkpointed"
+      ]
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "pattern": "^ik_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "serverTimestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+    },
+    "workspaceId": {
+      "type": "string",
+      "pattern": "^ws_[0-9a-hjkmnp-tv-z]{26}$"
+    }
+  }
+}

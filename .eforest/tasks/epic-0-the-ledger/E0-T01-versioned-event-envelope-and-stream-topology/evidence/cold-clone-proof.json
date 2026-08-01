@@ -1,0 +1,10 @@
+{
+  "proofType": "focused temporary commit cloned into a clean worktree",
+  "sourceCheckoutHead": "9ec2eca253e9c1c2c18008472f4cf77079a1b932",
+  "snapshotCommit": "52d420f7b1da1641b85ed332ff09c24c87e584ba",
+  "command": "make verify-E0-T01",
+  "result": "PASS",
+  "checks": 9,
+  "skipped": 0,
+  "note": "The primary checkout contained unrelated uncommitted roadmap and demo work, so the focused E0-T01 files were committed only inside the ticket's ignored work directory and cloned from there. This proves cold-clone portability but is not a publishable repository submission commit."
+}

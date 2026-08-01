@@ -16,7 +16,7 @@ pnpm setup:emulate
 pnpm dev
 ```
 
-Open `http://127.0.0.1:5175/?room=demo` in two windows. Each window redirects to a local Auth0-backed login form. Sign in with seeded users `ada@example.test` or `linus@example.test` using password `DemoPass123`. A message sent in either window is appended to the durable stream and reflected in the other window.
+Open `http://127.0.0.1:5175/` for the homepage, then choose **Open demo room** to enter the chat at `http://127.0.0.1:5175/app?room=demo`. The chat route redirects to a local Auth0-backed login form when there is no session. Sign in with seeded users `ada@example.test` or `linus@example.test` using password `DemoPass123`. Messages are appended to the durable stream, reflected in the other window, and can be edited by their author with the update persisted as another stream record.
 
 ## Verify
 

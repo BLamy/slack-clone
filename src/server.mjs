@@ -18,6 +18,7 @@ const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID ?? "slack-clone-auth0";
 const AUTH0_CLIENT_SECRET = process.env.AUTH0_CLIENT_SECRET ?? "slack-clone-secret";
 const AUTH0_REALM = process.env.AUTH0_REALM ?? "Username-Password-Authentication";
 const ZERO_OFFSET = "0000000000000000_0000000000000000";
+const DEFAULT_CHAT_PATH = "/app?room=demo";
 
 const rooms = new Map();
 const sessions = new Map();
@@ -64,8 +65,8 @@ function redirect(res, location, statusCode = 302) {
 }
 
 function safeReturnTo(value) {
-  if (!value || !value.startsWith("/")) return "/";
-  if (value.startsWith("//")) return "/";
+  if (!value || !value.startsWith("/")) return DEFAULT_CHAT_PATH;
+  if (value.startsWith("//")) return DEFAULT_CHAT_PATH;
   return value;
 }
 
@@ -78,10 +79,10 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-function renderLoginPage({ returnTo = "/", error = "" } = {}) {
+function renderLoginPage({ returnTo = DEFAULT_CHAT_PATH, error = "" } = {}) {
   const safePath = safeReturnTo(returnTo);
   const errorHtml = error
-    ? `<div class="login__error" data-testid="login-error">${escapeHtml(error)}</div>`
+    ? `<div class="login__error" data-testid="login-error" role="alert">${escapeHtml(error)}</div>`
     : "";
 
   return `<!doctype html>
@@ -98,7 +99,7 @@ function renderLoginPage({ returnTo = "/", error = "" } = {}) {
         <div class="workspace__mark login__mark">S</div>
         <h1>Sign in to Stream Slack</h1>
         <p>Credentials are checked by the local Auth0 emulator at <span data-testid="auth0-emulator-url">${escapeHtml(AUTH0_EMULATOR_URL)}</span>.</p>
-        ${errorHtml}
+        <div class="login__error-slot" aria-live="polite">${errorHtml}</div>
         <form class="login__form" method="post" action="/login" data-testid="login-form">
           <input type="hidden" name="returnTo" value="${escapeHtml(safePath)}" />
           <label>
@@ -268,13 +269,42 @@ async function readMessages(roomId, offset = "-1") {
   }
 
   const nextOffset = res.headers.get("Stream-Next-Offset") ?? ZERO_OFFSET;
-  const messages = await res.json();
-  return { messages: Array.isArray(messages) ? messages : [], nextOffset };
+  const records = await res.json();
+  const normalizedRecords = Array.isArray(records) ? records : [];
+  return {
+    records: normalizedRecords,
+    messages: materializeMessages(normalizedRecords),
+    nextOffset,
+  };
+}
+
+function materializeMessages(records) {
+  const messages = new Map();
+  for (const record of records) {
+    if (!record || typeof record !== "object" || typeof record.id !== "string") continue;
+    messages.set(record.id, record);
+  }
+  return [...messages.values()];
+}
+
+async function appendStreamRecord(roomId, record) {
+  await ensureStream(roomId);
+
+  const res = await fetch(streamUrl(roomId), {
+    method: "POST",
+    headers: authHeaders("application/json"),
+    body: JSON.stringify(record),
+  });
+
+  if (res.status === 200 || res.status === 204) {
+    return { message: record, nextOffset: res.headers.get("Stream-Next-Offset") ?? ZERO_OFFSET };
+  }
+
+  const text = await res.text();
+  throw new Error(`Failed to append message to durable stream for ${roomId}: ${res.status} ${text}`);
 }
 
 async function appendMessage(roomId, input, user) {
-  await ensureStream(roomId);
-
   const message = {
     id: crypto.randomUUID(),
     room: normalizeRoomId(roomId),
@@ -290,18 +320,46 @@ async function appendMessage(roomId, input, user) {
     throw err;
   }
 
-  const res = await fetch(streamUrl(roomId), {
-    method: "POST",
-    headers: authHeaders("application/json"),
-    body: JSON.stringify(message),
-  });
+  return appendStreamRecord(roomId, message);
+}
 
-  if (res.status === 200 || res.status === 204) {
-    return { message, nextOffset: res.headers.get("Stream-Next-Offset") ?? ZERO_OFFSET };
+async function updateMessage(roomId, messageId, input, user) {
+  const id = String(messageId ?? "").trim();
+  if (!id) {
+    const err = new Error("Message id is required");
+    err.statusCode = 400;
+    throw err;
   }
 
-  const text = await res.text();
-  throw new Error(`Failed to append message to durable stream for ${roomId}: ${res.status} ${text}`);
+  const current = (await readMessages(roomId, "-1")).records.findLast((record) => record?.id === id);
+  if (!current) {
+    const err = new Error("Message not found");
+    err.statusCode = 404;
+    throw err;
+  }
+
+  const ownsMessage = current.email
+    ? current.email === user.email
+    : current.user === (user.name ?? user.email ?? "");
+  if (!ownsMessage) {
+    const err = new Error("You can only edit your own messages");
+    err.statusCode = 403;
+    throw err;
+  }
+
+  const text = String(input.text ?? "").trim().slice(0, 2000);
+  if (!text) {
+    const err = new Error("Message text is required");
+    err.statusCode = 400;
+    throw err;
+  }
+
+  return appendStreamRecord(roomId, {
+    ...current,
+    id,
+    text,
+    editedAt: new Date().toISOString(),
+  });
 }
 
 function roomState(roomId) {
@@ -344,7 +402,7 @@ async function pollRoom(state) {
     const result = await readMessages(state.room, state.nextOffset);
     state.nextOffset = result.nextOffset;
 
-    for (const message of result.messages) {
+    for (const message of result.records) {
       broadcast(state, "message", message);
     }
 
@@ -432,7 +490,7 @@ async function handleApi(req, res, url) {
     return true;
   }
 
-  const match = url.pathname.match(/^\/api\/rooms\/([^/]+)\/(messages|events)$/);
+  const match = url.pathname.match(/^\/api\/rooms\/([^/]+)\/(messages|events)(?:\/([^/]+))?$/);
   if (!match) return false;
 
   const user = sessionUser(req);
@@ -443,6 +501,7 @@ async function handleApi(req, res, url) {
 
   const room = normalizeRoomId(decodeURIComponent(match[1]));
   const resource = match[2];
+  const messageId = match[3] ? decodeURIComponent(match[3]) : null;
 
   if (resource === "events" && req.method === "GET") {
     const state = roomState(room);
@@ -503,6 +562,18 @@ async function handleApi(req, res, url) {
     return true;
   }
 
+  if (resource === "messages" && messageId && req.method === "PATCH") {
+    const body = await readJson(req);
+    const result = await updateMessage(room, messageId, body, user);
+    sendJson(res, 200, {
+      ok: true,
+      room,
+      message: result.message,
+      nextOffset: result.nextOffset,
+    });
+    return true;
+  }
+
   if (resource === "messages" && req.method === "DELETE") {
     await deleteStream(room);
     await ensureStream(room);
@@ -525,7 +596,7 @@ const contentTypes = new Map([
 ]);
 
 async function serveStatic(req, res, url) {
-  const pathname = url.pathname === "/" ? "/index.html" : url.pathname;
+  const pathname = routeToStaticPath(url);
   const filePath = path.join(publicDir, path.normalize(pathname).replace(/^(\.\.[/\\])+/, ""));
 
   if (!filePath.startsWith(publicDir)) {
@@ -545,13 +616,36 @@ async function serveStatic(req, res, url) {
     });
     createReadStream(filePath).pipe(res);
   } catch {
-    const fallback = await readFile(path.join(publicDir, "index.html"), "utf8");
+    const fallback = await readFile(path.join(publicDir, isChatRequest(url) ? "app.html" : "index.html"), "utf8");
     res.writeHead(200, {
       "Content-Type": "text/html; charset=utf-8",
       "Cache-Control": "no-store",
     });
     res.end(fallback);
   }
+}
+
+function hasChatQuery(url) {
+  return url.searchParams.has("room") || url.searchParams.has("autopilot") || url.searchParams.has("persona");
+}
+
+function isChatRequest(url) {
+  return (
+    url.pathname === "/app" ||
+    url.pathname === "/app/" ||
+    url.pathname === "/app.html" ||
+    (url.pathname === "/" && hasChatQuery(url))
+  );
+}
+
+function isPublicPage(url) {
+  return url.pathname === "/" && !isChatRequest(url);
+}
+
+function routeToStaticPath(url) {
+  if (isChatRequest(url)) return "/app.html";
+  if (url.pathname === "/") return "/index.html";
+  return url.pathname;
 }
 
 const server = http.createServer(async (req, res) => {
@@ -567,7 +661,7 @@ const server = http.createServer(async (req, res) => {
     }
 
     const isPublicAsset = url.pathname === "/styles.css" || url.pathname === "/app.js";
-    if (!isPublicAsset && !currentSession(req)) {
+    if (!isPublicAsset && !isPublicPage(url) && !currentSession(req)) {
       redirect(res, `/login?returnTo=${encodeURIComponent(`${url.pathname}${url.search}`)}`);
       return;
     }

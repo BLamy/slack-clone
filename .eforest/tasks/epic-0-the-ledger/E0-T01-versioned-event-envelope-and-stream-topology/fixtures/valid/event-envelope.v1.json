@@ -1,0 +1,23 @@
+{
+  "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "causation": {
+    "digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "offset": "0000000000000001_0000000000000002",
+    "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+  },
+  "correlationId": "cr_dddddddddddddddddddddddddd",
+  "data": {
+    "messageId": "fixture-message-1",
+    "metadata": {
+      "priority": 1,
+      "tags": ["demo", "ledger"]
+    },
+    "text": "hello from the canonical ledger"
+  },
+  "eventId": "ev_cccccccccccccccccccccccccc",
+  "eventType": "channel.message.created",
+  "idempotencyKey": "ik_eeeeeeeeeeeeeeeeeeeeeeeeee",
+  "schemaVersion": 1,
+  "serverTimestamp": "2026-01-01T00:00:00.000Z",
+  "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+}

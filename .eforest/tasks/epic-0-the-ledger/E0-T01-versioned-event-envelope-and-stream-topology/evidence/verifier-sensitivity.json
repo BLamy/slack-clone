@@ -1,0 +1,10 @@
+{
+  "proofType": "targeted defect in a disposable clone",
+  "baseSnapshotCommit": "52d420f7b1da1641b85ed332ff09c24c87e584ba",
+  "mutation": "disabled validateEventEnvelope schemaVersion equality check",
+  "command": "make verify-E0-T01",
+  "expected": "non-zero exit on the forward-version refusal fixture",
+  "observedExitCode": 2,
+  "observedFailure": "invalid golden fixture no longer produced LedgerValidationError at tools/verify-e0-t01.mjs:148",
+  "detectorSensitive": true
+}

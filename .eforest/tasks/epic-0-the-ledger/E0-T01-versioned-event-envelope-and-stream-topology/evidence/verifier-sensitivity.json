@@ -1,6 +1,6 @@
 {
   "proofType": "targeted defect in a disposable clone",
-  "baseImplementationCommit": "3974930495021b6f6eae8a0cc08716ec9a77ef08",
+  "baseImplementationCommit": "d6abddc8908275931b73fcdd9c8b084353aad3b4",
   "mutation": "disabled validateEventEnvelope schemaVersion equality check",
   "command": "make verify-E0-T01",
   "expected": "non-zero exit on the forward-version refusal fixture",

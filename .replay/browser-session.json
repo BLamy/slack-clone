@@ -1,12 +1,15 @@
 {
-  "url": "http://127.0.0.1:5175/app?room=replay-lifecycle-1782888857471",
-  "video_path": "/Users/brettlamy/Documents/slack-clone/recordings/replay-lifecycle-1782888857471-linus.mp4",
-  "mp4_path": "/Users/brettlamy/Documents/slack-clone/recordings/replay-lifecycle-1782888857471-linus.mp4",
-  "webm_path": "/Users/brettlamy/Documents/slack-clone/recordings/replay-lifecycle-1782888857471-linus.capture.webm",
-  "capture_format": "webm",
+  "url": "http://127.0.0.1:5175/",
+  "product_commit": "d6abddc8908275931b73fcdd9c8b084353aad3b4",
+  "recording_id": "d8fdc763-b621-453f-a00c-9010c6cb5a5f",
+  "replay_url": "https://app.replay.io/recording/d8fdc763-b621-453f-a00c-9010c6cb5a5f",
+  "recording_status": "finished",
+  "upload_status": "uploaded",
+  "video_path": "/Users/brettlamy/Dev/slack-clone/recordings/e0-t01-d6abddc-final.mp4",
+  "mp4_path": "/Users/brettlamy/Dev/slack-clone/recordings/e0-t01-d6abddc-final.mp4",
+  "capture_format": "webm-to-mp4",
   "encoder": "ffmpeg",
-  "playwright_session": "slack-linus-lifecycle",
-  "playwright_command_prefix": "npx --yes --package @playwright/cli playwright-cli -s=slack-linus-lifecycle",
-  "started_at": "2026-07-01T06:59:11.258Z",
+  "playwright_session": "replayio-1785615355733",
+  "started_at": "2026-08-01T20:16:03.775Z",
   "replay_chromium_path": "/Users/brettlamy/.replay/runtimes/Replay-Chromium.app/Contents/MacOS/Chromium"
 }

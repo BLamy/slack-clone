@@ -17,7 +17,7 @@
       "command": "pnpm test",
       "result": "PASS",
       "ledgerTests": 6,
-      "browserTests": 4,
+      "browserTests": 5,
       "failed": 0,
       "skipped": 0
     }
@@ -28,5 +28,13 @@
     "pnpm typecheck",
     "pnpm build"
   ],
-  "replay": "N/A (server/CLI schema contract) + mitigation: canonical fixtures, refusal dumps, digest parity, and cold-clone verification"
+  "replay": {
+    "result": "PASS",
+    "url": "https://app.replay.io/recording/d8fdc763-b621-453f-a00c-9010c6cb5a5f",
+    "recordingStatus": "finished",
+    "uploadStatus": "uploaded",
+    "sameSessionMp4": "/Users/brettlamy/Dev/slack-clone/recordings/e0-t01-d6abddc-final.mp4",
+    "consoleErrors": 0,
+    "unhandledRequestFailures": 0
+  }
 }

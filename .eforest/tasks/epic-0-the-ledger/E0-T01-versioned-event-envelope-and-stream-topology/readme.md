@@ -3,7 +3,7 @@ id: E0-T01
 epic: 0
 title: "Versioned event envelope and authoritative stream topology"
 priority: 1
-status: in-progress
+status: implemented
 depends_on: []
 estimate: M
 capstone: false
@@ -208,3 +208,43 @@ execution permissions must still perform protocol steps 3, 4, and 6.
 
 - Replay: N/A for this critic entry (no product code executed; verdict rests on the diff,
   the committed evidence manifest, and AGENTS.md protocol requirements).
+
+### Builder rework — 2026-08-01
+
+- Exact product commit: `d6abddc8908275931b73fcdd9c8b084353aad3b4`.
+- Refutation addressed: the bundled browser surface is now explicitly in the ticket's
+  verification scope and no longer claims a Replay waiver. Message records carry the
+  Auth0 subject, ownership prefers that stable subject, email is the only legacy fallback,
+  and display-name-only records remain readable but non-editable. Successful retries clear
+  handled UI errors back to `live`.
+- Gates: `make verify-E0-T01` passed 9 checks with zero skipped; `pnpm test` passed 6/6
+  ledger tests and 5/5 Playwright tests; the latter covers the public landing page,
+  login failure, two authenticated sessions, edit cancel/error/save/persistence, and a
+  display-name collision that receives no edit control and a 403 PATCH response.
+- Cold clone: a no-hardlinks clone detached at the exact product commit passed
+  `make verify-E0-T01` (9 checks, zero skipped) and `pnpm test:ledger` (6/6). Disabling
+  the envelope schema-version fence in that disposable clone made the verifier fail with
+  exit 2 at `tools/verify-e0-t01.mjs:148`.
+- Replay: [d8fdc763-b621-453f-a00c-9010c6cb5a5f](https://app.replay.io/recording/d8fdc763-b621-453f-a00c-9010c6cb5a5f)
+  is `finished` and `uploaded`. Same-session MP4:
+  `/Users/brettlamy/Dev/slack-clone/recordings/e0-t01-d6abddc-final.mp4` (verified
+  `video/mp4`, 284,624 bytes, 20.2 seconds, SHA-256
+  `013d6127a29bb1623315a344b784e04051356e281c489f0aa00e713fa2944e68`).
+  Stale-frame compression used the default scale of 3.
+- Browser observations: zero console errors, zero console warnings, and zero unhandled
+  request failures. The final status recovered to `live`; the cancelled and failed drafts
+  did not persist; the successful edit did; and a display-name-only legacy record had zero
+  edit controls while its PATCH returned 403.
+- Stream correlation: DOM and authenticated API matched at append offset
+  `0000000000000000_0000000000000209` / digest
+  `sha256:1096426e95c5da67427074956f11d7a6ab496b10facf84a8e6bcdb3d3541e43c`,
+  edit offset `0000000000000000_0000000000000463` / digest
+  `sha256:9417ca0994b896cee22077550855d08686550829b200f0847c7d49c9e15b9cbf`,
+  and final offset `0000000000000000_0000000000000637` / digest
+  `sha256:7456236dd99c19bf735f55e358c18bb3205331b51034413aed3602bd8a1e71db`.
+  Full redacted metadata is in `evidence/browser-proof.json`.
+- Claim: at the exact product commit, E0-T01's ledger envelope and topology boundaries
+  fail closed and remain detector-sensitive, while every browser/server behavior bundled
+  into the ticket has same-session Replay/MP4 proof, canonical stream correlation, and
+  fail-closed edit ownership. Any independent cold clone, Replay interrogation, or fresh
+  identity/version mutation that contradicts those observations refutes this claim.

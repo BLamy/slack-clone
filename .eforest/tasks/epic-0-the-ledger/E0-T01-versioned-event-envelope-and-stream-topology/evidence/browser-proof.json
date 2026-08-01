@@ -1,0 +1,84 @@
+{
+  "proofType": "single Replay Chromium session with same-session MP4",
+  "productCommit": "d6abddc8908275931b73fcdd9c8b084353aad3b4",
+  "mode": "repository-mandated local Auth0 and Durable Streams emulators",
+  "browser": {
+    "name": "Replay Chromium",
+    "buildId": "macOS-chromium-20260626-9aa456976e8d-bbef03887da6",
+    "playwrightSession": "replayio-1785615355733",
+    "startedAt": "2026-08-01T20:16:03.775Z"
+  },
+  "replay": {
+    "recordingId": "d8fdc763-b621-453f-a00c-9010c6cb5a5f",
+    "url": "https://app.replay.io/recording/d8fdc763-b621-453f-a00c-9010c6cb5a5f",
+    "recordingStatus": "finished",
+    "uploadStatus": "uploaded",
+    "durationMs": 48751
+  },
+  "mp4": {
+    "path": "/Users/brettlamy/Dev/slack-clone/recordings/e0-t01-d6abddc-final.mp4",
+    "mime": "video/mp4",
+    "bytes": 284624,
+    "durationSeconds": 20.2,
+    "sha256": "013d6127a29bb1623315a344b784e04051356e281c489f0aa00e713fa2944e68",
+    "encoder": "ffmpeg",
+    "staleFrameCompression": {
+      "enabled": true,
+      "filter": "mpdecimate,setpts=(3*N)/(30*TB),fps=30",
+      "staleTimeScale": 3
+    }
+  },
+  "assertions": {
+    "publicLandingUrl": "http://127.0.0.1:5175/",
+    "protectedChatRedirectedToLogin": true,
+    "handledLoginError": "Wrong email or password.",
+    "authenticatedAs": "ada@example.test",
+    "cancelledDraftPersisted": false,
+    "handledEditError": {
+      "message": "simulated edit failure",
+      "draftPreserved": "Failed Replay draft"
+    },
+    "recoveredConnectionState": "live",
+    "editedMessagePersisted": "Replay proof after durable edit",
+    "legacyIdentityAttack": {
+      "recordId": "legacy-1785615386934",
+      "displayName": "Ada Lovelace",
+      "stableIdentityFields": "absent",
+      "editButtons": 0,
+      "patchStatus": 403
+    },
+    "consoleErrors": 0,
+    "consoleWarnings": 0,
+    "unhandledRequestFailures": 0
+  },
+  "streamComparisons": [
+    {
+      "phase": "after append",
+      "domOffset": "0000000000000000_0000000000000209",
+      "apiOffset": "0000000000000000_0000000000000209",
+      "domDigest": "sha256:1096426e95c5da67427074956f11d7a6ab496b10facf84a8e6bcdb3d3541e43c",
+      "apiDigest": "sha256:1096426e95c5da67427074956f11d7a6ab496b10facf84a8e6bcdb3d3541e43c",
+      "equal": true
+    },
+    {
+      "phase": "after durable edit",
+      "domOffset": "0000000000000000_0000000000000463",
+      "apiOffset": "0000000000000000_0000000000000463",
+      "domDigest": "sha256:9417ca0994b896cee22077550855d08686550829b200f0847c7d49c9e15b9cbf",
+      "apiDigest": "sha256:9417ca0994b896cee22077550855d08686550829b200f0847c7d49c9e15b9cbf",
+      "equal": true
+    },
+    {
+      "phase": "after legacy spoof refusal",
+      "domOffset": "0000000000000000_0000000000000637",
+      "apiOffset": "0000000000000000_0000000000000637",
+      "domDigest": "sha256:7456236dd99c19bf735f55e358c18bb3205331b51034413aed3602bd8a1e71db",
+      "apiDigest": "sha256:7456236dd99c19bf735f55e358c18bb3205331b51034413aed3602bd8a1e71db",
+      "equal": true
+    }
+  ],
+  "pageRequests": {
+    "failed": 0,
+    "observedStatuses": [200, 201]
+  }
+}

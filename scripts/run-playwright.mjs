@@ -1,38 +1,32 @@
-import { spawnLogged, run, stop, waitForHttp } from "./process-utils.mjs";
+import { mkdir } from "node:fs/promises";
 
-const emulator = spawnLogged(
-  "node",
-  [
-    "emulate/packages/emulate/dist/index.js",
-    "start",
-    "--service",
-    "durable-streams,auth0",
-    "--port",
-    "4100",
-    "--seed",
-    "emulate.config.yaml",
-  ],
-  {
-    name: "emulate",
-  },
-);
+import { run } from "./process-utils.mjs";
+import { createRunContext } from "./run-context.mjs";
+import { startStack } from "./test-stack.mjs";
 
-const app = spawnLogged("node", ["src/server.mjs"], {
-  name: "app",
-  env: {
-    ...process.env,
-    DURABLE_STREAMS_URL: "http://127.0.0.1:4100",
-    AUTH0_EMULATOR_URL: "http://127.0.0.1:4101",
-    AUTH0_CLIENT_ID: "slack-clone-auth0",
-    AUTH0_CLIENT_SECRET: "slack-clone-secret",
-    AUTH0_REALM: "Username-Password-Authentication",
-    PORT: "5175",
-  },
-});
+const context = await createRunContext();
+await mkdir(context.playwrightOutputDir, { recursive: true });
+const stack = await startStack(context);
+const playwrightArgs = ["exec", "playwright", "test"];
+if (process.env.PLAYWRIGHT_GREP)
+  playwrightArgs.push("--grep", process.env.PLAYWRIGHT_GREP);
 
 try {
-  await waitForHttp("http://127.0.0.1:5175/api/health");
-  await run("pnpm", ["exec", "playwright", "test"], { name: "playwright" });
+  await Promise.race([
+    run("pnpm", playwrightArgs, {
+      name: `playwright:${context.runId}`,
+      env: {
+        ...process.env,
+        APP_BASE_URL: context.appBaseUrl,
+        AUTH0_EMULATOR_URL: context.auth0EmulatorUrl,
+        DURABLE_STREAMS_URL: context.durableStreamsUrl,
+        PLAYWRIGHT_OUTPUT_DIR: context.playwrightOutputDir,
+        TEST_ROOM_PREFIX: context.roomPrefix,
+        TEST_RUN_ID: context.runId,
+      },
+    }),
+    stack.failure,
+  ]);
 } finally {
-  await Promise.all([stop(app), stop(emulator)]);
+  await stack.stop();
 }

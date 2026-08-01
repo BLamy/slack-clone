@@ -1,0 +1,11 @@
+{
+  "name": "@stream-slack/durable-streams",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.mjs",
+  "dependencies": {
+    "@stream-slack/protocol": "workspace:*",
+    "@stream-slack/reducers": "workspace:*"
+  }
+}

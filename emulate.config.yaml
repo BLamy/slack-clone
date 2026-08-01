@@ -1,9 +1,6 @@
-durable-streams:
-  port: 4100
+durable-streams: {}
 
 auth0:
-  port: 4101
-  baseUrl: http://127.0.0.1:4101
   connections:
     - name: Username-Password-Authentication
       strategy: auth0

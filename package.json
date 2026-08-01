@@ -5,19 +5,38 @@
   "type": "module",
   "description": "Slack-style chat demo backed by the Durable Streams emulator from the BLamy/emulate submodule.",
   "scripts": {
+    "build": "node scripts/build.mjs",
     "dev": "node scripts/start-stack.mjs",
     "dev:app": "node src/server.mjs",
     "dev:emulate": "node emulate/packages/emulate/dist/index.js start --service durable-streams,auth0 --port 4100 --seed emulate.config.yaml",
-    "setup:emulate": "pnpm --dir emulate install && pnpm --dir emulate --filter '@emulators/*' build && pnpm --dir emulate --filter emulate build",
-    "test": "pnpm test:ledger && node scripts/run-playwright.mjs",
+    "format": "prettier --write package.json pnpm-workspace.yaml emulate.config.yaml eslint.config.mjs playwright.config.mjs isolation.playwright.config.mjs README.md docs/backend-packages.md src/server.mjs \"packages/**/*.{mjs,json}\" scripts/build.mjs scripts/cold-verify-e0-t02.mjs scripts/process-utils.mjs scripts/run-context.mjs scripts/run-playwright.mjs scripts/setup-emulator.mjs scripts/start-stack.mjs scripts/test-stack.mjs scripts/verify-e0-t02.mjs scripts/verify-stack-isolation.mjs tools/check-boundaries.mjs tools/package-boundaries.json tools/static-analysis.mjs \"test/unit/*.test.mjs\" tests/two-sessions.spec.mjs tests/stack-isolation.spec.mjs",
+    "format:check": "prettier --check package.json pnpm-workspace.yaml emulate.config.yaml eslint.config.mjs playwright.config.mjs isolation.playwright.config.mjs README.md docs/backend-packages.md src/server.mjs \"packages/**/*.{mjs,json}\" scripts/build.mjs scripts/cold-verify-e0-t02.mjs scripts/process-utils.mjs scripts/run-context.mjs scripts/run-playwright.mjs scripts/setup-emulator.mjs scripts/start-stack.mjs scripts/test-stack.mjs scripts/verify-e0-t02.mjs scripts/verify-stack-isolation.mjs tools/check-boundaries.mjs tools/package-boundaries.json tools/static-analysis.mjs \"test/unit/*.test.mjs\" tests/two-sessions.spec.mjs tests/stack-isolation.spec.mjs",
+    "lint": "eslint src packages scripts tools test tests \"*.config.mjs\"",
+    "setup:emulate": "node scripts/setup-emulator.mjs",
+    "test": "pnpm test:unit && pnpm test:integration",
+    "test:concurrency": "node scripts/verify-stack-isolation.mjs",
+    "test:integration": "node scripts/run-playwright.mjs",
     "test:ledger": "node --test test/ledger/*.test.mjs",
-    "test:playwright": "playwright test",
+    "test:playwright": "pnpm test:integration",
+    "test:unit": "node --test test/ledger/*.test.mjs test/unit/*.test.mjs",
+    "typecheck": "node tools/static-analysis.mjs",
+    "verify": "node scripts/verify-e0-t02.mjs",
     "verify:E0-T01": "node tools/verify-e0-t01.mjs",
+    "verify:E0-T02": "node scripts/cold-verify-e0-t02.mjs",
     "record:replay": "node scripts/record-two-replays.mjs"
+  },
+  "dependencies": {
+    "@stream-slack/durable-streams": "workspace:*",
+    "@stream-slack/http": "workspace:*",
+    "@stream-slack/protocol": "workspace:*",
+    "@stream-slack/reducers": "workspace:*",
+    "@stream-slack/services": "workspace:*"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
-    "@replayio/playwright": "^5.0.3"
+    "@replayio/playwright": "^5.0.3",
+    "eslint": "^10.8.0",
+    "prettier": "^3.9.6"
   },
   "engines": {
     "node": ">=22"

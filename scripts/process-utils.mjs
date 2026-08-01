@@ -1,4 +1,5 @@
 import { spawn } from "node:child_process";
+import net from "node:net";
 
 export function spawnLogged(command, args, options = {}) {
   const child = spawn(command, args, {
@@ -26,8 +27,15 @@ export function spawnLogged(command, args, options = {}) {
 }
 
 export function waitForExit(child) {
+  if (child.exitCode !== null || child.signalCode !== null) {
+    return Promise.resolve({
+      code: child.exitCode,
+      signal: child.signalCode,
+      output: child.outputText?.() ?? "",
+    });
+  }
   return new Promise((resolve) => {
-    child.on("exit", (code, signal) => {
+    child.once("exit", (code, signal) => {
       resolve({ code, signal, output: child.outputText?.() ?? "" });
     });
   });
@@ -37,7 +45,9 @@ export async function run(command, args, options = {}) {
   const child = spawnLogged(command, args, options);
   const result = await waitForExit(child);
   if (result.code !== 0) {
-    throw new Error(`${command} ${args.join(" ")} failed with code ${result.code}`);
+    throw new Error(
+      `${command} ${args.join(" ")} failed with code ${result.code}`,
+    );
   }
   return result;
 }
@@ -54,18 +64,49 @@ export async function waitForHttp(url, timeoutMs = 30000) {
     } catch (err) {
       lastError = err;
     }
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 300);
+    });
   }
 
   throw lastError ?? new Error(`Timed out waiting for ${url}`);
 }
 
-export async function stop(child) {
-  if (!child || child.killed) return;
+export async function stop(child, graceMs = 5000) {
+  if (!child || child.exitCode !== null || child.signalCode !== null) return;
   child.kill("SIGTERM");
   const result = await Promise.race([
     waitForExit(child),
-    new Promise((resolve) => setTimeout(() => resolve(null), 5000)),
+    new Promise((resolve) => {
+      setTimeout(() => resolve(null), graceMs);
+    }),
   ]);
-  if (!result && !child.killed) child.kill("SIGKILL");
+  if (!result && child.exitCode === null && child.signalCode === null) {
+    child.kill("SIGKILL");
+    await waitForExit(child);
+  }
+}
+
+async function canListen(port, host) {
+  return new Promise((resolve) => {
+    const server = net.createServer();
+    server.unref();
+    server.once("error", () => resolve(false));
+    server.listen(port, host, () => server.close(() => resolve(true)));
+  });
+}
+
+export async function findAvailablePortBlock(size = 3, host = "127.0.0.1") {
+  for (let attempt = 0; attempt < 200; attempt += 1) {
+    const start = 20000 + Math.floor(Math.random() * 35000);
+    let available = true;
+    for (let offset = 0; offset < size; offset += 1) {
+      if (!(await canListen(start + offset, host))) {
+        available = false;
+        break;
+      }
+    }
+    if (available) return start;
+  }
+  throw new Error(`Unable to allocate ${size} consecutive ports on ${host}`);
 }

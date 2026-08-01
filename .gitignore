@@ -5,6 +5,7 @@ __pycache__/
 tmp/
 playwright-report/
 test-results/
+.artifacts/
 recordings/*.json
 recordings/*.mp4
 recordings/*.webm

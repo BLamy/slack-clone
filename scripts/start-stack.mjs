@@ -1,48 +1,24 @@
-import { spawnLogged, stop, waitForHttp } from "./process-utils.mjs";
+import { createRunContext } from "./run-context.mjs";
+import { startStack } from "./test-stack.mjs";
 
-const emulator = spawnLogged(
-  "node",
-  [
-    "emulate/packages/emulate/dist/index.js",
-    "start",
-    "--service",
-    "durable-streams,auth0",
-    "--port",
-    "4100",
-    "--seed",
-    "emulate.config.yaml",
-  ],
-  {
-    name: "emulate",
-  },
-);
+const context = await createRunContext({ mode: "dev" });
+const stack = await startStack(context);
+let shuttingDown = false;
 
-const app = spawnLogged("node", ["src/server.mjs"], {
-  name: "app",
-  env: {
-    ...process.env,
-    DURABLE_STREAMS_URL: "http://127.0.0.1:4100",
-    AUTH0_EMULATOR_URL: "http://127.0.0.1:4101",
-    AUTH0_CLIENT_ID: "slack-clone-auth0",
-    AUTH0_CLIENT_SECRET: "slack-clone-secret",
-    AUTH0_REALM: "Username-Password-Authentication",
-    PORT: "5175",
-  },
-});
-
-let stopping = false;
-async function shutdown() {
-  if (stopping) return;
-  stopping = true;
-  await Promise.all([stop(app), stop(emulator)]);
+async function shutdown(exitCode = 0) {
+  if (shuttingDown) return;
+  shuttingDown = true;
+  await stack.stop();
+  process.exit(exitCode);
 }
 
-process.on("SIGINT", () => void shutdown().then(() => process.exit(0)));
-process.on("SIGTERM", () => void shutdown().then(() => process.exit(0)));
-process.on("exit", () => {
-  app.kill("SIGTERM");
-  emulator.kill("SIGTERM");
-});
+process.on("SIGINT", () => void shutdown(0));
+process.on("SIGTERM", () => void shutdown(0));
 
-await waitForHttp("http://127.0.0.1:5175/api/health");
-console.log("stack ready at http://127.0.0.1:5175");
+console.log(`stack ready at ${context.appBaseUrl}`);
+try {
+  await stack.failure;
+} catch (error) {
+  console.error(error instanceof Error ? error.message : String(error));
+  await shutdown(1);
+}

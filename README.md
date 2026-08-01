@@ -21,8 +21,23 @@ Open `http://127.0.0.1:5175/` for the homepage, then choose **Open demo room** t
 ## Verify
 
 ```bash
-pnpm test
+pnpm format:check
+pnpm lint
+pnpm typecheck
+pnpm test:unit
+pnpm test:integration
+pnpm test:concurrency
+pnpm build
 ```
+
+`pnpm verify` composes those gates in that order. `make verify-E0-T02` additionally
+installs the frozen lockfile and builds the pinned emulator before running the composed
+verification. Test runs allocate their own emulator, Auth0, and app ports and keep all
+generated output under `.artifacts/e0-t02/<run-id>/`; set `EMULATE_PORT`, `AUTH0_PORT`,
+`APP_PORT`, and `TEST_ARTIFACT_DIR` only when a caller needs explicit assignments.
+
+The extracted backend dependency direction and capability boundaries are documented in
+[`docs/backend-packages.md`](docs/backend-packages.md).
 
 ## Replay Recordings
 
@@ -31,3 +46,7 @@ pnpm record:replay
 ```
 
 The script starts the Durable Streams and Auth0 emulators plus the chat app, runs two concurrent Replay Chromium Playwright workers in the same room, uploads the new local Replay recordings, and writes local upload metadata to `recordings/latest.json`. It also enables Playwright video for the run and writes a side-by-side MP4 proof under `recordings/`.
+
+Replay recording is intentionally separate from routine verification. None of the
+format, lint, static-analysis, unit, integration, concurrency, build, or composed E0-T02
+commands upload a Replay, open a tunnel, or mutate existing recordings.

@@ -3,7 +3,7 @@ id: E0-T01
 epic: 0
 title: "Versioned event envelope and authoritative stream topology"
 priority: 1
-status: in-progress
+status: implemented
 depends_on: []
 estimate: M
 capstone: false
@@ -372,3 +372,44 @@ detector sensitivity needs rework; all of it survived this critic.
   141 independent ledger attacks, three detector-sensitivity probes including one browser
   probe, and independent DOM-versus-API stream correlation at offsets
   `0000000000000000_0000000000000236` and `0000000000000000_0000000000000510`.
+
+### Builder rework 2 — 2026-08-01
+
+- Exact evidence commit: `2d40835e62f0e5663f7a9720a63637c2f8ffa3b7`; application code remains pinned at
+  `d6abddc8908275931b73fcdd9c8b084353aad3b4`. The committed
+  `scripts/e0-t01-replay-flow.js` is the browser assertion harness, and
+  `scripts/e0-t01-replay-metadata.json` makes its lifecycle recording queryable by Replay.
+- Fresh gates at the evidence commit: `make verify-E0-T01` passed 9 checks with zero
+  skipped; `pnpm test` passed 6/6 ledger tests and 5/5 Playwright tests. A no-hardlinks
+  cold clone at that exact commit independently passed `make verify-E0-T01` and
+  `pnpm test:ledger` (6/6).
+- Replay: [368a3b30-c22d-4dcd-b010-fb8803bd9406](https://app.replay.io/recording/368a3b30-c22d-4dcd-b010-fb8803bd9406)
+  is `finished`, `uploaded`, and interrogable. Replay's own `RecordingOverview`,
+  `ConsoleMessages`, `NetworkRequest`, and `UncaughtException` queries report zero errors,
+  zero warnings, zero failed or missing-response requests, and zero uncaught exceptions.
+  Its sole console message is the committed proof marker. The full redacted query summary
+  is `evidence/replay-interrogation.json`.
+- Same-session MP4:
+  `/Users/brettlamy/Dev/slack-clone/recordings/e0-t01-2d40835-final.mp4` is H.264 High,
+  1280x720, 19.6 seconds, 588 frames, 284,018 bytes, and SHA-256
+  `33fb975ea66928e5179a787ccb147af2d2506a29180266f8ba6d54fc373b4c9f`.
+- The final browser run covered the public landing page, protected-route redirect, handled
+  login failure and successful login, durable append, edit cancel, a handled HTTP-200
+  application error with its draft preserved, successful edit recovery to `live`, and a
+  display-name-only legacy message with zero edit controls and a 403 PATCH refusal.
+  DOM and authenticated API state matched exactly after append at offset
+  `0000000000000000_0000000000000218` / digest
+  `sha256:fda0634eb6ecf36dfee27f1e3ae863767851b7f444f9ef76752e21681a7902ae`,
+  after edit at offset `0000000000000000_0000000000000481` / digest
+  `sha256:836b98752916628eb5786f50ec5b1090e5dbee289af5fb94c578ff46108315f1`,
+  and finally at offset `0000000000000000_0000000000000659` / digest
+  `sha256:3298644cf0a115db55630fec88dca13ed18a6eeb33fb567c299e894e58885ba8`.
+- Exit-code clarification: disabling the schema-version fence makes direct
+  `node tools/verify-e0-t01.mjs` exit 1; the requested `make verify-E0-T01` wrapper exits
+  2 and prints `make: *** [verify-E0-T01] Error 1`. Both observations and the shared line
+  148 failure are now explicit in `evidence/verifier-sensitivity.json`; the earlier
+  builder claim about the `make` command was accurate.
+- Claim: the exact evidence commit is cold-clone reproducible and detector-sensitive, and
+  its final browser proof is now directly interrogable as well as same-session MP4-backed.
+  Any independent clone, Replay query, or fresh version/identity mutation contradicting
+  these observations refutes the claim.

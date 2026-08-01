@@ -30,11 +30,15 @@
   ],
   "replay": {
     "result": "PASS",
-    "url": "https://app.replay.io/recording/d8fdc763-b621-453f-a00c-9010c6cb5a5f",
+    "url": "https://app.replay.io/recording/368a3b30-c22d-4dcd-b010-fb8803bd9406",
     "recordingStatus": "finished",
     "uploadStatus": "uploaded",
-    "sameSessionMp4": "/Users/brettlamy/Dev/slack-clone/recordings/e0-t01-d6abddc-final.mp4",
+    "interrogationResult": "PASS",
+    "sameSessionMp4": "/Users/brettlamy/Dev/slack-clone/recordings/e0-t01-2d40835-final.mp4",
     "consoleErrors": 0,
+    "consoleWarnings": 0,
+    "uncaughtExceptions": 0,
+    "failedNetworkRequests": 0,
     "unhandledRequestFailures": 0
   }
 }

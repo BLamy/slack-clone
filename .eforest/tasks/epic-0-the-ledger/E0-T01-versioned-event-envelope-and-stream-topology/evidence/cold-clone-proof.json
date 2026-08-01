@@ -1,9 +1,9 @@
 {
   "proofType": "exact implementation commit cloned with local object hardlinks disabled",
-  "implementationCommit": "d6abddc8908275931b73fcdd9c8b084353aad3b4",
+  "implementationCommit": "2d40835e62f0e5663f7a9720a63637c2f8ffa3b7",
   "commands": [
     "git clone --no-hardlinks . <ticket-work>/repo",
-    "git checkout --detach d6abddc8908275931b73fcdd9c8b084353aad3b4",
+    "git checkout --detach 2d40835e62f0e5663f7a9720a63637c2f8ffa3b7",
     "make verify-E0-T01",
     "pnpm test:ledger"
   ],

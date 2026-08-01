@@ -1,0 +1,51 @@
+{
+  "proofType": "independent Replay MCP interrogation of the final same-session recording",
+  "evidenceCommit": "2d40835e62f0e5663f7a9720a63637c2f8ffa3b7",
+  "recordingId": "368a3b30-c22d-4dcd-b010-fb8803bd9406",
+  "url": "https://app.replay.io/recording/368a3b30-c22d-4dcd-b010-fb8803bd9406",
+  "recordingOverview": {
+    "healthy": true,
+    "totalErrors": 0,
+    "totalWarnings": 0,
+    "durationMs": 49356,
+    "finalUrl": "http://127.0.0.1:5175/app?room=demo",
+    "finalScreenshotPoint": "39266744992747736302248460124423090"
+  },
+  "consoleMessages": {
+    "total": 1,
+    "errors": 0,
+    "warnings": 0,
+    "info": 1,
+    "marker": "E0-T01 interrogable Replay proof"
+  },
+  "network": {
+    "totalRequests": 21,
+    "apiRequests": 9,
+    "failedRequests": 0,
+    "noResponseRequests": 0,
+    "slowRequests": 0,
+    "statusDistribution": {
+      "2xx": 21
+    },
+    "methods": {
+      "GET": 18,
+      "POST": 1,
+      "PATCH": 2
+    }
+  },
+  "uncaughtExceptions": 0,
+  "userInteractions": {
+    "total": 11,
+    "clicks": 11,
+    "keypresses": 0,
+    "note": "Text fields were driven through Playwright fill events; Replay separately observed eleven real click interactions."
+  },
+  "tools": [
+    "RecordingOverview",
+    "ConsoleMessages summary and messages",
+    "NetworkRequest summary and complete request list",
+    "UncaughtException",
+    "UserInteractions summary"
+  ],
+  "result": "PASS"
+}

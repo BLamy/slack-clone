@@ -1,26 +1,44 @@
 {
-  "proofType": "single Replay Chromium session with same-session MP4",
-  "productCommit": "d6abddc8908275931b73fcdd9c8b084353aad3b4",
+  "proofType": "single interrogable Replay Chromium session with same-session MP4",
+  "evidenceCommit": "2d40835e62f0e5663f7a9720a63637c2f8ffa3b7",
+  "applicationCommit": "d6abddc8908275931b73fcdd9c8b084353aad3b4",
+  "flowScript": "scripts/e0-t01-replay-flow.js",
+  "metadataFile": "scripts/e0-t01-replay-metadata.json",
   "mode": "repository-mandated local Auth0 and Durable Streams emulators",
+  "commands": [
+    "pnpm dev",
+    "RECORD_REPLAY_METADATA_FILE=<repo>/scripts/e0-t01-replay-metadata.json PLAYWRIGHT_REPLAY_METADATA='<redacted title>' node <replayio-plugin>/scripts/browser-open.js http://127.0.0.1:5175/ --output <repo>/recordings/e0-t01-2d40835-final.mp4",
+    "npx --yes --package @playwright/cli playwright-cli -s=replayio-1785617243215 run-code --filename scripts/e0-t01-replay-flow.js",
+    "npx --yes --package @playwright/cli playwright-cli -s=replayio-1785617243215 console error",
+    "npx --yes --package @playwright/cli playwright-cli -s=replayio-1785617243215 requests",
+    "node <replayio-plugin>/scripts/browser-close.js --output <repo>/recordings/e0-t01-2d40835-final.mp4"
+  ],
   "browser": {
     "name": "Replay Chromium",
     "buildId": "macOS-chromium-20260626-9aa456976e8d-bbef03887da6",
-    "playwrightSession": "replayio-1785615355733",
-    "startedAt": "2026-08-01T20:16:03.775Z"
+    "playwrightSession": "replayio-1785617243215",
+    "startedAt": "2026-08-01T20:47:38.559Z"
   },
   "replay": {
-    "recordingId": "d8fdc763-b621-453f-a00c-9010c6cb5a5f",
-    "url": "https://app.replay.io/recording/d8fdc763-b621-453f-a00c-9010c6cb5a5f",
+    "recordingId": "368a3b30-c22d-4dcd-b010-fb8803bd9406",
+    "url": "https://app.replay.io/recording/368a3b30-c22d-4dcd-b010-fb8803bd9406",
     "recordingStatus": "finished",
     "uploadStatus": "uploaded",
-    "durationMs": 48751
+    "listDurationMs": 49079,
+    "interrogationDurationMs": 49356,
+    "interrogable": true
   },
   "mp4": {
-    "path": "/Users/brettlamy/Dev/slack-clone/recordings/e0-t01-d6abddc-final.mp4",
+    "path": "/Users/brettlamy/Dev/slack-clone/recordings/e0-t01-2d40835-final.mp4",
     "mime": "video/mp4",
-    "bytes": 284624,
-    "durationSeconds": 20.2,
-    "sha256": "013d6127a29bb1623315a344b784e04051356e281c489f0aa00e713fa2944e68",
+    "codec": "h264",
+    "profile": "High",
+    "width": 1280,
+    "height": 720,
+    "frames": 588,
+    "bytes": 284018,
+    "durationSeconds": 19.6,
+    "sha256": "33fb975ea66928e5179a787ccb147af2d2506a29180266f8ba6d54fc373b4c9f",
     "encoder": "ffmpeg",
     "staleFrameCompression": {
       "enabled": true,
@@ -33,52 +51,63 @@
     "protectedChatRedirectedToLogin": true,
     "handledLoginError": "Wrong email or password.",
     "authenticatedAs": "ada@example.test",
+    "runId": "msauf1ry",
+    "messageId": "bd39d94e-dc5b-4b12-a471-85ba7fc9bd57",
     "cancelledDraftPersisted": false,
     "handledEditError": {
       "message": "simulated edit failure",
-      "draftPreserved": "Failed Replay draft"
+      "transportStatus": 200,
+      "draftPreserved": "Failed Replay draft msauf1ry"
     },
     "recoveredConnectionState": "live",
-    "editedMessagePersisted": "Replay proof after durable edit",
+    "editedMessagePersisted": "Replay proof msauf1ry after durable edit",
     "legacyIdentityAttack": {
-      "recordId": "legacy-1785615386934",
+      "recordId": "legacy-msauf1ry",
       "displayName": "Ada Lovelace",
       "stableIdentityFields": "absent",
       "editButtons": 0,
       "patchStatus": 403
     },
-    "consoleErrors": 0,
-    "consoleWarnings": 0,
-    "unhandledRequestFailures": 0
+    "flowConsoleErrors": 0,
+    "flowConsoleWarnings": 0,
+    "flowRequestFailures": 0,
+    "flowNonSuccessResponses": 0,
+    "playwrightCliConsoleErrors": 0,
+    "replayConsoleErrors": 0,
+    "replayConsoleWarnings": 0,
+    "replayUncaughtExceptions": 0,
+    "replayFailedNetworkRequests": 0
   },
   "streamComparisons": [
     {
       "phase": "after append",
-      "domOffset": "0000000000000000_0000000000000209",
-      "apiOffset": "0000000000000000_0000000000000209",
-      "domDigest": "sha256:1096426e95c5da67427074956f11d7a6ab496b10facf84a8e6bcdb3d3541e43c",
-      "apiDigest": "sha256:1096426e95c5da67427074956f11d7a6ab496b10facf84a8e6bcdb3d3541e43c",
+      "domOffset": "0000000000000000_0000000000000218",
+      "apiOffset": "0000000000000000_0000000000000218",
+      "domDigest": "sha256:fda0634eb6ecf36dfee27f1e3ae863767851b7f444f9ef76752e21681a7902ae",
+      "apiDigest": "sha256:fda0634eb6ecf36dfee27f1e3ae863767851b7f444f9ef76752e21681a7902ae",
       "equal": true
     },
     {
       "phase": "after durable edit",
-      "domOffset": "0000000000000000_0000000000000463",
-      "apiOffset": "0000000000000000_0000000000000463",
-      "domDigest": "sha256:9417ca0994b896cee22077550855d08686550829b200f0847c7d49c9e15b9cbf",
-      "apiDigest": "sha256:9417ca0994b896cee22077550855d08686550829b200f0847c7d49c9e15b9cbf",
+      "domOffset": "0000000000000000_0000000000000481",
+      "apiOffset": "0000000000000000_0000000000000481",
+      "domDigest": "sha256:836b98752916628eb5786f50ec5b1090e5dbee289af5fb94c578ff46108315f1",
+      "apiDigest": "sha256:836b98752916628eb5786f50ec5b1090e5dbee289af5fb94c578ff46108315f1",
       "equal": true
     },
     {
       "phase": "after legacy spoof refusal",
-      "domOffset": "0000000000000000_0000000000000637",
-      "apiOffset": "0000000000000000_0000000000000637",
-      "domDigest": "sha256:7456236dd99c19bf735f55e358c18bb3205331b51034413aed3602bd8a1e71db",
-      "apiDigest": "sha256:7456236dd99c19bf735f55e358c18bb3205331b51034413aed3602bd8a1e71db",
+      "domOffset": "0000000000000000_0000000000000659",
+      "apiOffset": "0000000000000000_0000000000000659",
+      "domDigest": "sha256:3298644cf0a115db55630fec88dca13ed18a6eeb33fb567c299e894e58885ba8",
+      "apiDigest": "sha256:3298644cf0a115db55630fec88dca13ed18a6eeb33fb567c299e894e58885ba8",
       "equal": true
     }
   ],
-  "pageRequests": {
+  "pageResponses": {
     "failed": 0,
-    "observedStatuses": [200, 201]
-  }
+    "observedStatuses": [200, 201, 302],
+    "redirectNote": "The 302 is the expected protected-route authentication redirect; no response was 400 or greater."
+  },
+  "replayInterrogation": "evidence/replay-interrogation.json"
 }

@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T02",
+  "role": "independent-critic-confirmation",
+  "recordedAt": "2026-08-01T22:58:56Z",
+  "verdict": "refuted",
+  "candidateHead": "0ae14b4fb81dbd26b38cd70263a5f59b4c3d17b1",
+  "implementationCommit": "0019a5813378653ae107c5464a0b8f5e72885f75",
+  "scope": "Bounded confirmation of the pure-package network-capability false negative; no product-code fix and no fresh browser or full-suite run.",
+  "predictionPath": ".eforest/tasks/epic-0-the-ledger/E0-T02-strangler-backend-workspace/work/critic-confirmation-0ae14b4-predictions.md",
+  "freshReproduction": {
+    "clone": {
+      "kind": "local git clone --no-hardlinks --no-checkout, then detached checkout",
+      "relativePath": ".eforest/tasks/epic-0-the-ledger/E0-T02-strangler-backend-workspace/work/critic-capability-0ae14b4.AfvF8O/repo",
+      "detachedHead": "0ae14b4fb81dbd26b38cd70263a5f59b4c3d17b1",
+      "gitAlternatesPresent": false,
+      "onlyTrackedMutation": "packages/protocol/src/index.mjs"
+    },
+    "fixture": {
+      "source": [
+        "const verifierGlobal = globalThis;",
+        "const verifierFetch = verifierGlobal?.[\"fe\" + \"tch\"];",
+        "export function verifierCapabilityFixture(url) {",
+        "  return verifierFetch?.(url);",
+        "}"
+      ],
+      "semanticDifferenceFromRequestedOneLineSpelling": "none; only the function body was expanded to Prettier-canonical whitespace after the literal one-line spelling failed format:check",
+      "called": false,
+      "externalRequestMade": false,
+      "referenceSearchObservation": "verifierFetch and verifierCapabilityFixture occur only in their definitions and function body",
+      "cleanSourceSha256": "6a7f4f4ed7989d05bedf0b4b67a59a862f504176887e8132b6a2f32eb0ed7519",
+      "mutatedSourceSha256": "28bcf22b0ba740396f65def7a0ec106285a83a0e0df307f4590a771c0a40ad61",
+      "diffSha256": "b1721bb504b780e172738c08512de881c93c6ce611765acfb48b1b6c0c7bee06"
+    },
+    "runtime": {
+      "node": "v23.11.0",
+      "pnpm": "11.2.2"
+    },
+    "dependencyPreparation": {
+      "command": "CI=1 COREPACK_ENABLE_NETWORK=0 pnpm install --offline --frozen-lockfile --ignore-scripts",
+      "exitCode": 0,
+      "packagesReused": 154,
+      "packagesDownloaded": 0
+    },
+    "commands": [
+      {
+        "sequence": 1,
+        "command": "pnpm format:check",
+        "fixtureLayout": "literal requested one-line function spelling",
+        "exitCode": 1,
+        "observation": "Prettier reported packages/protocol/src/index.mjs as non-canonical; static analysis was not run in this failed sequence."
+      },
+      {
+        "sequence": 2,
+        "command": "pnpm format:check",
+        "fixtureLayout": "whitespace-only Prettier-canonical function body",
+        "exitCode": 0,
+        "observation": "All matched files use Prettier code style."
+      },
+      {
+        "sequence": 3,
+        "command": "pnpm lint",
+        "exitCode": 0,
+        "observation": "ESLint accepted the inert computed global-property fixture with no diagnostics."
+      },
+      {
+        "sequence": 4,
+        "command": "pnpm typecheck",
+        "exitCode": 0,
+        "observation": "PASS backend package dependency direction and pure-leaf capability boundary; layers=5 violations=0; PASS static syntax analysis files=36."
+      }
+    ],
+    "staticExecutionAudit": {
+      "typecheckEntrypoint": "tools/static-analysis.mjs",
+      "behavior": "Runs node --check, reads package sources as text, and invokes tools/check-boundaries.mjs; it does not import or execute packages/protocol/src/index.mjs.",
+      "fixtureExecuted": false
+    }
+  },
+  "priorFullSuiteArtifact": {
+    "summaryPath": ".eforest/tasks/epic-0-the-ledger/E0-T02-strangler-backend-workspace/work/critic-resubmission-0019a58.qzbCqM/repo/.artifacts/e0-t02/critic-resubmission-ambient-6b92d1/verification-summary.json",
+    "cloneDetachedHead": "0019a5813378653ae107c5464a0b8f5e72885f75",
+    "cloneStatus": [
+      "M packages/protocol/src/index.mjs"
+    ],
+    "onlyDirtyDiff": "Equivalent inert globalThis computed-fetch fixture in packages/protocol/src/index.mjs",
+    "summarySha256": "53caa778da13fad4fac7683e6b05499d3b9e0f7a5eb0777eb580343bcb2c3d60",
+    "metadata": {
+      "schemaVersion": 1,
+      "task": "E0-T02",
+      "runId": "critic-resubmission-ambient-6b92d1",
+      "result": "PASS"
+    },
+    "gates": [
+      "format: pnpm format:check: PASS",
+      "lint: pnpm lint: PASS",
+      "static-analysis: pnpm typecheck: PASS",
+      "unit: pnpm test:unit: PASS",
+      "integration: pnpm test:integration: PASS",
+      "concurrency: pnpm test:concurrency: PASS",
+      "build: pnpm build: PASS"
+    ],
+    "fixtureHashChain": {
+      "dirtySourceSha256": "15cd036a8bd9b181d1632418b89a11c253ecd3d1e6d0d0c72819b6fed330ad08",
+      "builtSourceSha256": "15cd036a8bd9b181d1632418b89a11c253ecd3d1e6d0d0c72819b6fed330ad08",
+      "manifestEntryBytes": 1844,
+      "manifestEntrySha256": "15cd036a8bd9b181d1632418b89a11c253ecd3d1e6d0d0c72819b6fed330ad08",
+      "sourceBuildAndManifestEntryMatch": true
+    },
+    "buildManifest": {
+      "fileSha256": "5c5f1df073a4b1c8634fb44593b03f1c665e12a6df49ea5a8615507d8a49c0c8",
+      "entryCount": 28,
+      "recomputedMismatchCount": 0
+    },
+    "streamProof": {
+      "fileSha256": "df9ca39ddecf541fa2c0327bbda30383208083d793000c62ed9cf1754e10e3b0",
+      "matchesSummaryObject": true,
+      "nextOffset": "0000000000000000_0000000000000571",
+      "streamDigest": "sha256:c2b86b18516dcfe99f91687d9c9ca2d529baf2f217a02839b598ad6185b6a418",
+      "domMatchedApi": true
+    },
+    "fixtureReferenceSearchObservation": "criticFetch and criticAmbientBoundaryBypass occur only in the source fixture definitions/body outside generated build output",
+    "replayUploadAttempted": false,
+    "externalTunnelAttempted": false,
+    "recordingsUnchanged": true
+  },
+  "finding": {
+    "acceptanceCriterion": "AC3: pure protocol/reducer modules cannot import or access network capabilities",
+    "classification": "blocking static-analysis false negative",
+    "observation": "A formatter- and lint-approved pure protocol module can capture globalThis, resolve fetch through a computed concatenated property, and retain a callable network capability while pnpm typecheck exits 0 and reports violations=0.",
+    "cause": "tools/import-analysis.mjs resolves only identifier and statically literal member paths at call sites; it does not propagate aliases or fold computed string expressions when the capability is captured before the call.",
+    "conclusion": "The checker does not prove the claimed pure-package network-capability boundary, so E0-T02 is refuted."
+  },
+  "redaction": {
+    "containsRawSecret": false,
+    "containsSessionCookie": false,
+    "containsProviderToken": false,
+    "containsCustomerContent": false,
+    "externalHostContacted": false
+  },
+  "replay": "Replay: N/A (server/static-analysis confirmation with no changed browser behavior) + mitigation: exact-head no-hardlink reproduction and hash-verified prior full-suite artifact"
+}

@@ -3,7 +3,7 @@ id: E0-T02
 epic: 0
 title: "Strangler backend workspace around the working chat demo"
 priority: 2
-status: implemented
+status: refuted
 depends_on: [E0-T01]
 estimate: L
 capstone: false
@@ -236,3 +236,50 @@ mitigation is what failed adversarially.
   the pure-leaf check, and independently running allocators cannot reserve overlapping port
   blocks before bind. A formatter-approved forbidden import that passes `pnpm verify`, or
   any overlap under a forced identical candidate, refutes this rework.
+
+### Critic resubmission confirmation — 2026-08-01
+
+VERDICT: refuted
+
+Fresh independent critic did not implement E0-T02 and made no product-code fix. Predictions
+were recorded before the fresh commands in
+`work/critic-confirmation-0ae14b4-predictions.md`; durable redacted results are in
+`evidence/critic-resubmission-network-capability-refutation.json`.
+
+**Blocking finding — computed global network capability false green (AC3).** In a new
+`git clone --no-hardlinks` detached at exact candidate head
+`0ae14b4fb81dbd26b38cd70263a5f59b4c3d17b1`, the critic appended the inert fixture that
+captures `globalThis`, resolves `["fe" + "tch"]`, and returns the captured capability only
+if its exported function is later called. The fixture was never called and no external
+request was made. The literal one-line function spelling first made `pnpm format:check`
+exit 1, so only its whitespace was expanded to the Prettier-canonical multiline body and
+the required sequence restarted. The semantically identical fixture then produced:
+
+- `pnpm format:check` — exit 0, all matched files use Prettier code style;
+- `pnpm lint` — exit 0, no diagnostics;
+- `pnpm typecheck` — exit 0, `PASS backend package dependency direction and pure-leaf
+  capability boundary`, `layers=5 violations=0`, and 36 syntax files.
+
+This falsifies the acceptance criterion that package checks prove pure protocol/reducer
+modules cannot access network capabilities and directly refutes the rework claim that no
+parser-valid forbidden capability can evade the pure-leaf check. The checker observes calls
+whose callee path is already a recognized global name, but does not propagate this alias or
+fold the computed string expression at capture time.
+
+**Prior full-suite artifact provenance.** The supplied artifact at
+`work/critic-resubmission-0019a58.qzbCqM/repo/.artifacts/e0-t02/critic-resubmission-ambient-6b92d1/verification-summary.json`
+belongs to detached implementation head
+`0019a5813378653ae107c5464a0b8f5e72885f75`; the clone has exactly one dirty product file,
+`packages/protocol/src/index.mjs`, containing the equivalent inert fixture. The summary is
+task `E0-T02`, run `critic-resubmission-ambient-6b92d1`, result `PASS`, with format, lint,
+static-analysis, unit, integration, concurrency, and build all marked PASS. Its SHA-256 is
+`53caa778da13fad4fac7683e6b05499d3b9e0f7a5eb0777eb580343bcb2c3d60`.
+The fixture source, built copy, and 1,844-byte build-manifest entry all hash to
+`15cd036a8bd9b181d1632418b89a11c253ecd3d1e6d0d0c72819b6fed330ad08`;
+all 28 manifest entries independently rehash with zero mismatches. The stream-proof object
+also matches the summary exactly at offset `0000000000000000_0000000000000571`, digest
+`sha256:c2b86b18516dcfe99f91687d9c9ca2d529baf2f217a02839b598ad6185b6a418`.
+
+Lifecycle is `refuted`, keeping E0-T02 as the sole gate and E0-T03 blocked. Replay: N/A
+(server/static-analysis confirmation with no changed browser behavior) + mitigation:
+exact-head no-hardlink reproduction and hash-verified prior full-suite artifact.

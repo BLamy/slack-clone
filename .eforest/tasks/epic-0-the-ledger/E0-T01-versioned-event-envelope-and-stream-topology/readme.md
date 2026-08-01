@@ -3,7 +3,7 @@ id: E0-T01
 epic: 0
 title: "Versioned event envelope and authoritative stream topology"
 priority: 1
-status: implemented
+status: verified
 depends_on: []
 estimate: M
 capstone: false
@@ -45,19 +45,19 @@ even though the ledger contract remains its primary deliverable.
 
 ## Acceptance criteria
 
-- [ ] `make verify-E0-T01` exits 0 from a cold clone with zero skipped checks and records
+- [x] `make verify-E0-T01` exits 0 from a cold clone with zero skipped checks and records
       the exact command output under this task's `evidence/` directory.
-- [ ] Encoding the same logical event twice produces byte-identical canonical JSON and
+- [x] Encoding the same logical event twice produces byte-identical canonical JSON and
       SHA-256 digest on every supported runtime.
-- [ ] Unknown schema versions, unknown event types, invalid IDs, client-supplied server
+- [x] Unknown schema versions, unknown event types, invalid IDs, client-supplied server
       timestamps, and incomplete source references are refused before append with stable
       typed errors.
-- [ ] Every rejected fixture leaves a captured before/after stream dump byte-identical.
-- [ ] Stream names built from traversal text, separators, Unicode confusables, or sibling
+- [x] Every rejected fixture leaves a captured before/after stream dump byte-identical.
+- [x] Stream names built from traversal text, separators, Unicode confusables, or sibling
       workspace IDs are rejected rather than normalized into an existing stream.
-- [ ] The topology document names the authoritative source and rebuild procedure for every
+- [x] The topology document names the authoritative source and rebuild procedure for every
       derived index and explicitly defines cross-stream work as an idempotent saga.
-- [ ] One final Replay Chromium session produces an uploaded Replay URL and same-session
+- [x] One final Replay Chromium session produces an uploaded Replay URL and same-session
       MP4, reports zero console errors and unhandled request failures, compares the DOM
       stream offset/digest with the authenticated API, and covers the public landing page,
       login failure and success, edit cancel/error/save, and legacy identity-spoof refusal.
@@ -589,3 +589,97 @@ from the failed-request counts.
 - C3-F1 requires no new recording or builder claim: the existing recording is being handed
   to a fresh critic session with Replay MCP access for direct console, network, exception,
   interaction, and upload interrogation.
+
+### Critic 4 — 2026-08-01
+
+VERDICT: verified
+
+Fresh Critic 4 did not implement E0-T01 product code or builder evidence. Predictions for
+all seven acceptance criteria were written before execution in
+`work/critic4-predictions.md`. The submitted and reviewed head matched exactly:
+`d2531992613349f02e7ae27dd21f113895f1e11a`. No product defect, evidence contradiction,
+uncovered changed behavior, or insensitive detector survived the independent checks. Full
+redacted results are in `evidence/critic4-independent-verification.json`.
+
+**Cold reproduction and gates (steps 1–3).** A no-hardlinks clone detached at `d253199`
+ran `make verify-E0-T01` with exit 0, 9 checks and zero skipped; a second invocation diffed
+byte-identically against `evidence/verify-output.txt`. `pnpm test:ledger` passed 6/6 in
+that clone. Independent digest recomputation matched both manifest values exactly:
+event envelope `sha256:4947425d…4c276a` and source reference
+`sha256:930748f1…bb97bd`. In the submitted checkout, `pnpm test` passed 6/6 ledger tests
+and 5/5 Playwright tests. `pnpm run format:check`, `lint`, `typecheck`, and `build` each
+reported `ERR_PNPM_NO_SCRIPT`; they are unavailable gates, not passes. `python3
+tools/audit_backlog.py` reported 95 tasks, 12 epics, 12 capstones, and an acyclic graph
+before the verdict. After the required acceptance boxes were checked, that initial-backlog
+authoring linter exited 1 because lines 101–104 require three unchecked boxes and forbid
+checked boxes. This is not an E0-T01 gate; the explicit critic instruction to check verified
+criteria was preserved, and `tools/build_queue.py` regenerated the verified queue normally.
+
+**Independent attacks (step 4).** `work/critic4-attacks.mjs`, run against the detached
+exact-head clone with seed `0x4c417`, fresh workspaces
+`ws_4c417qkbmz8hd5v0rtn29fjw6y` / `ws_8pmwr4t0zx6cbk1hs82dnvgj73`,
+and canary `CRITIC4-CANARY-4c417-20260801-DO-NOT-LEAK`, passed **171/171** checks.
+Traversal, percent encoding, separators, controls, case and length changes, Crockford
+exclusions, Unicode confusables/bidi/zero-width forms, and sibling-scope IDs all refused
+without collision or normalization. All eight topology forms round-tripped. Canonical
+encoding refused unsafe/non-finite values, invalid Unicode, unsupported values,
+non-plain/prototype-sensitive objects, sparse arrays, and cycles. Unknown versions/types,
+extra/client-issued fields, malformed IDs/source references, and all five invalid fixtures
+were typed refusals before append; the fixtures reproduced their exact expected code/path,
+before/after stream bytes and digests stayed identical, and rejected inputs made zero
+append calls. All 1,968 one-byte mutations changed the digest or failed closed, with zero
+survivors and zero canary reflection in errors.
+
+**Coverage audit (step 5).** Executed: `src/ledger/*`, both schemas, all fixtures,
+`docs/stream-topology.md`, `tools/verify-e0-t01.mjs`, `test/ledger/*`; `src/server.mjs`
+routing/session/auth/edit boundaries and `public/app.js`, `app.html`, `index.html`, and
+`styles.css` through the 5 browser tests; Make/package gate wiring; backlog audit/queue
+generation; and recorded `app.js` source behavior through Replay. Explicitly waived with
+no independent product behavior: planning/docs/templates, ignore/config files, and the
+Replay evidence harness/metadata sentinel after source-and-recording audit.
+`tests/replay-concurrent.spec.mjs` is test-only and excluded by `playwright.config.mjs`;
+no acceptance criterion depends on it. Dead: none. Requiring evidence: none. A redaction
+scan found no real provider credential, session cookie, customer content, or unredacted
+HTTP capture; the wrong-password string and emulator fixture token are local test data.
+
+**Detector sensitivity (step 6).** In a second disposable clone detached at `d253199`,
+Critic 4 removed canonical source-offset pattern validation while retaining the string
+type check. `node tools/verify-e0-t01.mjs` went red with exit 1 and `make
+verify-E0-T01` went red with exit 2 / `make: *** [verify-E0-T01] Error 1`, both at the
+expected typed-refusal assertion (`tools/verify-e0-t01.mjs:65`, reached from line 255).
+The verifier detects a critic-authored defect distinct from the prior version-fence probe.
+
+**Replay interrogation (step 7).** Recording
+`368a3b30-c22d-4dcd-b010-fb8803bd9406` was independently opened with Replay MCP tools
+`RecordingOverview`, `ConsoleMessages` summary/messages, `NetworkRequest`
+summary/complete-list/detail, `UncaughtException`, `UserInteractions`, `SearchSources`,
+and `Evaluate`. It is queryable at `http://127.0.0.1:5175/app?room=demo`, duration
+49,356 ms, with 0 errors, 0 warnings, 0 uncaught exceptions, and one info message at
+`Point:1`: `E0-T01 interrogable Replay proof`. Replay enumerated 21 requests — 20 status
+200 and one 201, distribution 21 2xx; 18 GET, 1 POST, 2 PATCH; zero failed,
+missing-response, or slow requests. It observed 11 clicks, 0 keypresses, from 16,838 to
+28,342 ms. `SearchSources` showed recorded `app.js` execution: two `saveMessage` hits,
+86 stream-digest assignment hits, and 13 edited-label render hits.
+
+Replay request index 20 (`Point:2`) returned final API offset
+`0000000000000000_0000000000000659` and digest
+`sha256:3298644cf0a115db55630fec88dca13ed18a6eeb33fb567c299e894e58885ba8`;
+`Evaluate` at the final recording point returned the exact same DOM offset/digest and
+connection state `live`. `replayio list` independently showed `368a3b30…`, duration 49s,
+status `Uploaded`. The same-session MP4 independently matched SHA-256
+`33fb975ea66928e5179a787ccb147af2d2506a29180266f8ba6d54fc373b4c9f`, 284,018
+bytes, H.264 High, 1280x720, 588 frames, 19.600000s, probe score 100. Default stale-frame
+compression explains why MP4 duration is shorter than recording duration.
+
+**Critic 3 findings.** C3-F1 is cleared by the direct Replay MCP and `replayio list`
+observations above. C3-F2 is cleared: the frozen lock resolves
+`@replayio/playwright@5.0.3`; its installed `initMetadataFile` source and a Critic 4
+behavioral probe both show that an absent explicit metadata path is initialized to literal
+`{}` and returned as the watched path, while `PLAYWRIGHT_REPLAY_METADATA` supplies
+descriptive metadata separately. C3-F3 is cleared by consistent named scopes: Playwright's
+page listener saw 200/201 and the expected intermediate 302 with no page response >=400;
+Replay's terminal page-network table saw 21 2xx entries and did not enumerate that
+intermediate redirect; the separate Playwright `APIRequestContext` legacy-spoof PATCH
+returned the asserted 403 and is intentionally outside both zero-failure counts.
+
+All seven acceptance criteria are checked and lifecycle status is `verified`.

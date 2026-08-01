@@ -186,6 +186,31 @@ export function latentResolver() {
   ]);
 });
 
+test("boundary parser rejects legacy prototype accessor reflection", () => {
+  const analysis = analyzeModuleSource(`
+export function lookupPrototypeWithoutDirectKey(value) {
+  const protoGetter = value.__lookupGetter__("__proto__");
+  const protoSetter = value["__lookupSetter__"]("__proto__");
+  const defineGetter = value.__defineGetter__;
+  const { __defineSetter__: defineSetter } = value;
+  const computedLookup = value["__lookup" + "Getter__"];
+  const descriptor = value.getOwnPropertyDescriptor;
+  return {
+    protoGetter,
+    protoSetter,
+    defineGetter,
+    defineSetter,
+    computedLookup,
+    descriptor,
+  };
+}
+`);
+  assert.deepEqual(analysis.ambientCapabilities.sort(), [
+    "dynamic property access",
+    "prototype reflection",
+  ]);
+});
+
 test("boundary parser allows static data properties and numeric indices", () => {
   const analysis = analyzeModuleSource(`
 export function selectRecord(records) {

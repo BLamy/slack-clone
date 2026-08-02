@@ -9,6 +9,10 @@ import {
 import { createChatHttpDelivery, sendError } from "@stream-slack/http";
 
 import { analyzeDurableStreamsAccess } from "../../tools/audit-durable-streams-access.mjs";
+import {
+  assertIdleWindowRequestConstant,
+  observeHttpIdleWindow,
+} from "../support/http-idle-probe.mjs";
 
 const ZERO = "opaque-checkpoint-zero";
 
@@ -65,10 +69,7 @@ test("official SSE follow stays request-constant while idle, wakes on append, an
 
   await eventually(() => store.diagnostics().pendingIdleWaiters === 1);
   const idleRequestCount = protocol.requests.length;
-  const fakeClock = { now: 0 };
-  fakeClock.now += 15 * 60 * 1_000;
   await settleMicrotasks();
-  assert.equal(fakeClock.now, 900_000);
   assert.equal(protocol.requests.length, idleRequestCount);
   assert.ok(store.diagnostics().sseRequests <= 2);
   assert.equal(store.diagnostics().longPollRequests, 0);
@@ -119,6 +120,26 @@ test("official SSE follow stays request-constant while idle, wakes on append, an
   await settleMicrotasks();
   assert.equal(protocol.requests.length, requestsAfterCancel);
   store.close();
+});
+
+test("HTTP delivery stays adapter-request constant across fifteen virtual idle minutes", async () => {
+  const observation = await observeHttpIdleWindow();
+  assertIdleWindowRequestConstant(observation);
+  assert.equal(observation.callsBeforeLogicalAdvance, 2);
+  assert.equal(observation.callsAfterLogicalAdvance, 2);
+  assert.equal(observation.keepAliveTimerExecutions, 90);
+});
+
+test("idle request detector rejects a 350-millisecond polling positive control", async () => {
+  const observation = await observeHttpIdleWindow({
+    pollingMutationMs: 350,
+  });
+  assert.throws(
+    () => assertIdleWindowRequestConstant(observation),
+    /additional Durable Streams adapter calls/u,
+  );
+  assert.equal(observation.pollingTimerExecutions, 2_571);
+  assert.equal(observation.callDeltaWhileIdle, 2_571);
 });
 
 test("adapter rejects malformed offsets, bodies, content types, and committed-stream appends", async (t) => {

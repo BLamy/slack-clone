@@ -1,3 +1,5 @@
+import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { mkdir, readFile, readdir, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -8,6 +10,27 @@ const runId = String(
 )
   .toLowerCase()
   .replace(/[^a-z0-9_-]+/gu, "-");
+const implementationCommit = String(
+  process.env.E0_T03_IMPLEMENTATION_COMMIT ??
+    execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }),
+).trim();
+assert.match(
+  implementationCommit,
+  /^[0-9a-f]{40}$/u,
+  "E0-T03 evidence requires an exact implementation commit",
+);
+if (process.env.PROMOTE_EVIDENCE === "1") {
+  const trackedChanges = execFileSync(
+    "git",
+    ["status", "--porcelain", "--untracked-files=no"],
+    { encoding: "utf8" },
+  ).trim();
+  assert.equal(
+    trackedChanges,
+    "",
+    "promoted E0-T03 evidence must start from a clean tracked implementation tree",
+  );
+}
 const artifactRoot = path.resolve(
   process.env.TEST_ARTIFACT_DIR ?? path.join(".artifacts", "e0-t03", runId),
 );
@@ -19,6 +42,7 @@ const recordingsBefore = await snapshotDirectory(path.resolve("recordings"));
 const env = {
   ...process.env,
   BUILD_DIR: path.join(artifactRoot, "build"),
+  E0_T03_IMPLEMENTATION_COMMIT: implementationCommit,
   TEST_ARTIFACT_DIR: artifactRoot,
   TEST_RUN_ID: runId,
 };
@@ -62,6 +86,9 @@ const summary = {
   schemaVersion: 1,
   task: "E0-T03",
   runId,
+  implementationCommit,
+  implementationTreeCleanAtStart:
+    process.env.PROMOTE_EVIDENCE === "1" ? true : null,
   result: "PASS",
   artifactRoot,
   gates: results,

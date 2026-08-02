@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import crypto from "node:crypto";
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -6,6 +7,10 @@ import path from "node:path";
 import { createDurableStreamsStore } from "@stream-slack/durable-streams";
 
 import { canonicalSha256 } from "../src/ledger/canonical-json.mjs";
+import {
+  assertIdleWindowRequestConstant,
+  observeHttpIdleWindow,
+} from "../test/support/http-idle-probe.mjs";
 import { auditDurableStreamsAccess } from "../tools/audit-durable-streams-access.mjs";
 import { createRunContext } from "./run-context.mjs";
 import { startStack } from "./test-stack.mjs";
@@ -16,6 +21,15 @@ const taskEvidenceDirectory = path.resolve(
 const runId = safeRunId(
   process.env.TEST_RUN_ID ??
     `e0-t03-conformance-${process.pid}-${Date.now().toString(36)}`,
+);
+const implementationCommit = String(
+  process.env.E0_T03_IMPLEMENTATION_COMMIT ??
+    execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }),
+).trim();
+assert.match(
+  implementationCommit,
+  /^[0-9a-f]{40}$/u,
+  "E0-T03 evidence requires an exact implementation commit",
 );
 const artifactRoot = path.resolve(
   process.env.TEST_ARTIFACT_DIR ?? path.join(".artifacts", "e0-t03", runId),
@@ -34,6 +48,7 @@ const environmentManifest = {
   schemaVersion: 1,
   task: "E0-T03",
   runId,
+  implementationCommit,
   variables: {
     AUTH0_EMULATOR_URL: context.auth0EmulatorUrl,
     DURABLE_STREAMS_ADMIN_TOKEN: "[REDACTED]",
@@ -122,12 +137,9 @@ try {
   await eventually(() => store.diagnostics().pendingIdleWaiters === 1);
   const diagnosticsAtIdle = store.diagnostics();
   const requestCountAtIdle = transcript.length;
-  const logicalClock = { nowMs: 0 };
-  logicalClock.nowMs += 15 * 60 * 1_000;
   await settleMicrotasks();
-  const requestCountAfterLogicalAdvance = transcript.length;
-  assert.equal(logicalClock.nowMs, 900_000);
-  assert.equal(requestCountAfterLogicalAdvance, requestCountAtIdle);
+  const requestCountAfterIdleSettle = transcript.length;
+  assert.equal(requestCountAfterIdleSettle, requestCountAtIdle);
   assert.ok(diagnosticsAtIdle.sseRequests <= 2);
   assert.equal(diagnosticsAtIdle.longPollRequests, 0);
 
@@ -162,6 +174,17 @@ try {
   assert.equal(requestsAfterCancellationSettled, requestsAtCancel);
   const diagnosticsAfterCancel = store.diagnostics();
   assert.equal(diagnosticsAfterCancel.pendingIdleWaiters, 0);
+
+  const idleWindow = await observeHttpIdleWindow();
+  assertIdleWindowRequestConstant(idleWindow);
+  const pollingPositiveControl = await observeHttpIdleWindow({
+    pollingMutationMs: 350,
+  });
+  assert.throws(
+    () => assertIdleWindowRequestConstant(pollingPositiveControl),
+    /additional Durable Streams adapter calls/u,
+  );
+  assert.equal(pollingPositiveControl.pollingTimerExecutions, 2_571);
 
   const allAccepted = [...accepted, liveRecord, secondLiveRecord];
   const allOffsets = [
@@ -199,6 +222,7 @@ try {
     schemaVersion: 1,
     task: "E0-T03",
     runId,
+    implementationCommit,
     result: "PASS",
     room,
     officialClient: "@durable-streams/client@0.2.6",
@@ -225,17 +249,31 @@ try {
     schemaVersion: 1,
     task: "E0-T03",
     runId,
+    implementationCommit,
     result: "PASS",
-    logicalIdleDurationMs: logicalClock.nowMs,
-    requestsBeforeLogicalAdvance: requestCountAtIdle,
-    requestsAfterLogicalAdvance: requestCountAfterLogicalAdvance,
-    requestDeltaWhileIdle: 0,
+    requestCounter: idleWindow.boundary,
+    logicalIdleDurationMs: idleWindow.logicalIdleDurationMs,
+    requestsBeforeLogicalAdvance: idleWindow.callsBeforeLogicalAdvance,
+    requestsAfterLogicalAdvance: idleWindow.callsAfterLogicalAdvance,
+    requestDeltaWhileIdle: idleWindow.callDeltaWhileIdle,
     frozenTotalRequestCap: 24,
     totalRequests: transcript.length,
     createRequests: createRequests.length,
     sseRequests: sseRequests.length,
     requestsAtCancel,
     requestsAfterCancellationSettled,
+    realEmulatorIdleObservation: {
+      requestsWhenOfficialFollowParked: requestCountAtIdle,
+      requestsAfterMicrotaskSettle: requestCountAfterIdleSettle,
+    },
+    idleWindow,
+    pollingPositiveControl: {
+      detectorRejected: true,
+      logicalIdleDurationMs: pollingPositiveControl.logicalIdleDurationMs,
+      pollingMutationMs: pollingPositiveControl.pollingMutationMs,
+      pollingTimerExecutions: pollingPositiveControl.pollingTimerExecutions,
+      requestDeltaWhileIdle: pollingPositiveControl.callDeltaWhileIdle,
+    },
     diagnosticsAtIdle,
     diagnosticsAfterCancel,
   };
@@ -250,6 +288,7 @@ try {
     schemaVersion: 1,
     task: "E0-T03",
     runId,
+    implementationCommit,
     result: "PASS",
     ...sourceAudit,
     sensitivity:
@@ -272,6 +311,7 @@ const summary = {
   schemaVersion: 1,
   task: "E0-T03",
   runId,
+  implementationCommit,
   result: "PASS",
   protocolConformance,
   requestBudget,
@@ -368,6 +408,7 @@ async function scanForCanary({
     schemaVersion: 1,
     task: "E0-T03",
     runId,
+    implementationCommit,
     result: "PASS",
     canarySha256: crypto.createHash("sha256").update(secret).digest("hex"),
     encodingsScanned: ["raw", "url-encoded", "base64"],

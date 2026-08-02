@@ -43,11 +43,17 @@ JSON, preventing a late live-read failure from causing a second response write.
 `pnpm typecheck` runs `tools/audit-durable-streams-access.mjs`. It rejects imports of the
 official client and direct requests to provider room streams outside this adapter and the
 E0-T03 conformance harness; it separately scans public assets for server credential
-references. `make verify-E0-T03` performs the cold install and emulator build before the
-format, lint, static, unit, real-emulator conformance, browser integration, concurrency,
-and build gates. Generated proof stays under `.artifacts/e0-t03/<run-id>/`; a builder may
-set `PROMOTE_EVIDENCE=1` to copy the redacted conformance, request-budget, canary, and
-source-audit proofs into the ticket's committed `evidence/` directory.
+references. The request-budget gate drives the HTTP delivery timer boundary through
+900,000 deterministic milliseconds and confirms that its single snapshot read and live
+follow do not grow. A 350-millisecond polling positive control executes 2,571 reads over
+the same clock and must be rejected, proving the detector can go red.
+
+`make verify-E0-T03` performs the cold install and emulator build before the format, lint,
+static, unit, real-emulator conformance, browser integration, concurrency, and build gates.
+Generated proof stays under `.artifacts/e0-t03/<run-id>/`; a builder may set
+`PROMOTE_EVIDENCE=1` only from a clean tracked tree. Promotion stamps the exact HEAD commit
+into every redacted conformance, request-budget, canary, source-audit, and cold-verification
+artifact copied into the ticket's committed `evidence/` directory.
 
 Replay: N/A (server transport adapter) + mitigation: real-emulator protocol transcript,
 request-budget proof, canary scan, reconnect matrix, and deterministic cancellation tests.

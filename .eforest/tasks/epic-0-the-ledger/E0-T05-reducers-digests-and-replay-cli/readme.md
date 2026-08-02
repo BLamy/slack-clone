@@ -3,7 +3,7 @@ id: E0-T05
 epic: 0
 title: "Pure reducers, canonical state digests, and replay CLI"
 priority: 5
-status: implemented
+status: in-progress
 depends_on: [E0-T01, E0-T04]
 estimate: M
 capstone: false
@@ -103,3 +103,18 @@ database to fill gaps.
 - Builder claim: the pure reducer registry, canonical state/digest contract, typed
   replay/validation CLI, and cold evidence satisfy every E0-T05 acceptance criterion and
   are ready for an independent critic.
+
+### Critic — 2026-08-02 — independent provenance sensitivity audit
+
+VERDICT: refuted
+
+- Critic session `019fc3fe-7505-7343-bf99-f7cbda7ec0f8` confirmed the cold replay, purity,
+  canonical ordering, duplicate/offset/transition failures, and timezone/locale checks, but
+  found that mutating `serverTimestamp`, `correlationId`, `idempotencyKey`, `actorId`, or
+  `causation.digest` could be accepted with the unchanged final digest
+  `sha256:62bccd2874d1473c699b37e6837e269dda5ceabcc34666cdd6481c169ad0fbc0`.
+- The cause is that the reducer state retained reduced payloads and event IDs but not the
+  envelope provenance needed to distinguish source facts. The claim is therefore refuted;
+  the next builder pass must retain canonical envelope provenance and add independent
+  metadata/source-reference mutation tests. The critic did not edit product code or task
+  metadata.

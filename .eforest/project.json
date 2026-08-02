@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E0-T05 implementation and promoted cold evidence are complete; awaiting an independent critic before verification.",
-  "updatedAt": "2026-08-02T19:40:20Z"
+  "statusReason": "E0-T05 was refuted by provenance sensitivity attacks; builder is repairing canonical replay state before a fresh critic.",
+  "updatedAt": "2026-08-02T19:43:00Z"
 }

@@ -1,5 +1,5 @@
 {
-  "e0-t04-final-final-same-key": {
+  "e0-t04-final-converged-same-key": {
     "records": [
       {
         "logical": "one-event",
@@ -9,17 +9,17 @@
           "expectedHead": "0000000000000000_0000000000000000",
           "idempotencyKey": "ik_00000000000000000000000001",
           "operation": "chat.message.create",
-          "requestDigest": "sha256:412b0988e383e1b1f1483c57590b47ecdb04c4e97c23501a9f3634b7a5f11e4b",
+          "requestDigest": "sha256:c23799f651a71c7e7dd4403ec66909ba5a8bf92333d5654dee9b009747d17e22",
           "schemaVersion": 1,
-          "stream": "e0-t04-final-final-same-key",
+          "stream": "e0-t04-final-converged-same-key",
           "workspaceId": "ws_00000000000000000000000001"
         }
       }
     ],
-    "nextOffset": "0000000000000000_0000000000000398",
-    "streamDigest": "sha256:adfba5c047cd9e96bfacc1d40bedbcee32eedc39e8cb774ab003cddd73ea271d"
+    "nextOffset": "0000000000000000_0000000000000402",
+    "streamDigest": "sha256:a5622613950dd43b846c96d158a47248c3b351e099764ccde45fe8daff8216f7"
   },
-  "e0-t04-final-final-conflicts": {
+  "e0-t04-final-converged-conflicts": {
     "records": [
       {
         "value": "original",
@@ -28,41 +28,41 @@
           "expectedHead": "0000000000000000_0000000000000000",
           "idempotencyKey": "ik_00000000000000000000000002",
           "operation": "chat.message.create",
-          "requestDigest": "sha256:8f418204a5401e8978ceba442098eb3b510374e5c4adc50867f8f088f4659968",
+          "requestDigest": "sha256:726493bb1ee822503aeda31de53deb200c908837705b7d8624e8f4078fba9cab",
           "schemaVersion": 1,
-          "stream": "e0-t04-final-final-conflicts",
+          "stream": "e0-t04-final-converged-conflicts",
           "workspaceId": "ws_00000000000000000000000001"
         }
       }
     ],
-    "nextOffset": "0000000000000000_0000000000000386",
-    "streamDigest": "sha256:1e4bec3cd9c39f111768d86eaeb7b1f285cc2b286f8bcac0ed6c7c2bdac2a2d6"
+    "nextOffset": "0000000000000000_0000000000000390",
+    "streamDigest": "sha256:915f144dbcb05849a798906931de26b934dc3d031b577c49b7cda5f0d79daf3f"
   },
-  "e0-t04-final-final-conflict-candidate": {
+  "e0-t04-final-converged-conflict-candidate": {
     "records": [],
     "nextOffset": "0000000000000000_0000000000000000",
     "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
   },
-  "e0-t04-final-final-race": {
+  "e0-t04-final-converged-race": {
     "records": [
       {
-        "writer": "b",
+        "writer": "a",
         "dispatch": {
           "actorId": "pr_ada",
           "expectedHead": "0000000000000000_0000000000000000",
-          "idempotencyKey": "ik_00000000000000000000000004",
+          "idempotencyKey": "ik_00000000000000000000000003",
           "operation": "chat.message.create",
-          "requestDigest": "sha256:93c392686690536599ede6de02e9e24a84e450fe8db5766a3876b89cf0683f2e",
+          "requestDigest": "sha256:c3f4e28692aad8c6daa71ea4bd26dfa630aea95a1722eb3799bd3d4259f8d498",
           "schemaVersion": 1,
-          "stream": "e0-t04-final-final-race",
+          "stream": "e0-t04-final-converged-race",
           "workspaceId": "ws_00000000000000000000000001"
         }
       }
     ],
-    "nextOffset": "0000000000000000_0000000000000375",
-    "streamDigest": "sha256:eced4d23af86b093a6362e899eda4d829a2a0b075edb3ee4f28413a1ea59ae79"
+    "nextOffset": "0000000000000000_0000000000000379",
+    "streamDigest": "sha256:ea3669bbb0d9af2acb3b4062def8d97bbc1de488af81eed4a26d3d7f0c1f9704"
   },
-  "e0-t04-final-final-lost-ack": {
+  "e0-t04-final-converged-lost-ack": {
     "records": [
       {
         "recovery": "durable",
@@ -71,17 +71,17 @@
           "expectedHead": "0000000000000000_0000000000000000",
           "idempotencyKey": "ik_00000000000000000000000005",
           "operation": "chat.message.create",
-          "requestDigest": "sha256:0591bd577a8a5891bda14cd9e98fa5b3123e36801f7e6df8ee90f1ffa36bd5af",
+          "requestDigest": "sha256:09ca1936d2e20a6b0b2af7627a3621f030ca5aec3d5fff0f7bb172a1d6bff6a3",
           "schemaVersion": 1,
-          "stream": "e0-t04-final-final-lost-ack",
+          "stream": "e0-t04-final-converged-lost-ack",
           "workspaceId": "ws_00000000000000000000000001"
         }
       }
     ],
-    "nextOffset": "0000000000000000_0000000000000387",
-    "streamDigest": "sha256:37444b519d09adb94c404ea91f03b0a04f4d3bf5620fa3d4e3a392eed2c1e585"
+    "nextOffset": "0000000000000000_0000000000000391",
+    "streamDigest": "sha256:66242e1d629951e9a7710cf48b7373ea08089b12ccfa89840b11f310725fa039"
   },
-  "e0-t04-final-final-captured": {
+  "e0-t04-final-converged-captured": {
     "records": [
       {
         "advance": true,
@@ -90,22 +90,22 @@
           "expectedHead": "0000000000000000_0000000000000000",
           "idempotencyKey": "ik_00000000000000000000000007",
           "operation": "chat.message.create",
-          "requestDigest": "sha256:74f1c006996e29394a9cab836d1be97897f06822660830e9f1cc1c10945d5b23",
+          "requestDigest": "sha256:bbcce568cb52e2c2123a0ca6cc83182001cec6cd0e0eca9921c3eef4dcc5aff8",
           "schemaVersion": 1,
-          "stream": "e0-t04-final-final-captured",
+          "stream": "e0-t04-final-converged-captured",
           "workspaceId": "ws_00000000000000000000000001"
         }
       }
     ],
-    "nextOffset": "0000000000000000_0000000000000381",
-    "streamDigest": "sha256:eb6d522c4ec3c07ac14382baadebaf7152d9d728f7a24b38dac7966441fbf04d"
+    "nextOffset": "0000000000000000_0000000000000385",
+    "streamDigest": "sha256:63eab3f1717365bab70222bb53779d4c6d9f74f8a76acfd89690db6013b256e6"
   },
-  "e0-t04-final-final-revoked": {
+  "e0-t04-final-converged-revoked": {
     "records": [],
     "nextOffset": "0000000000000000_0000000000000000",
     "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
   },
-  "e0-t04-final-final-deleted": {
+  "e0-t04-final-converged-deleted": {
     "records": [],
     "nextOffset": "0000000000000000_0000000000000000",
     "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
@@ -116,13 +116,13 @@
         "kind": "dispatch.accepted",
         "receipt": {
           "actorId": "pr_ada",
-          "eventDigest": "sha256:bbd8084305e44325a5e9b62102312f87c6eabd4e2d47a4410265e4014eb1fd1d",
+          "eventDigest": "sha256:12eb08132e6aa3cc6993163cd2a01d5cb4d32f37e1e842d9a48763d0a4c92171",
           "idempotencyKey": "ik_00000000000000000000000001",
-          "nextOffset": "0000000000000000_0000000000000398",
+          "nextOffset": "0000000000000000_0000000000000402",
           "operation": "chat.message.create",
-          "requestDigest": "sha256:412b0988e383e1b1f1483c57590b47ecdb04c4e97c23501a9f3634b7a5f11e4b",
+          "requestDigest": "sha256:c23799f651a71c7e7dd4403ec66909ba5a8bf92333d5654dee9b009747d17e22",
           "status": "accepted",
-          "stream": "e0-t04-final-final-same-key",
+          "stream": "e0-t04-final-converged-same-key",
           "workspaceId": "ws_00000000000000000000000001"
         }
       },
@@ -130,13 +130,13 @@
         "kind": "dispatch.accepted",
         "receipt": {
           "actorId": "pr_ada",
-          "eventDigest": "sha256:63ca9cbcc472ee23dce2c18b1ca12ed9bf4bd9bd748bfd2b123700a3dc2c5313",
+          "eventDigest": "sha256:75532333552a2f468d050b49ac95bdd2d5ce0012d8f0bd629eaadf469b9f8cbe",
           "idempotencyKey": "ik_00000000000000000000000002",
-          "nextOffset": "0000000000000000_0000000000000386",
+          "nextOffset": "0000000000000000_0000000000000390",
           "operation": "chat.message.create",
-          "requestDigest": "sha256:8f418204a5401e8978ceba442098eb3b510374e5c4adc50867f8f088f4659968",
+          "requestDigest": "sha256:726493bb1ee822503aeda31de53deb200c908837705b7d8624e8f4078fba9cab",
           "status": "accepted",
-          "stream": "e0-t04-final-final-conflicts",
+          "stream": "e0-t04-final-converged-conflicts",
           "workspaceId": "ws_00000000000000000000000001"
         }
       },
@@ -144,13 +144,13 @@
         "kind": "dispatch.accepted",
         "receipt": {
           "actorId": "pr_ada",
-          "eventDigest": "sha256:6a685e4a310cfc31d66c117cd84de0704d85a51c3c77b5dac95fa63e1add2633",
-          "idempotencyKey": "ik_00000000000000000000000004",
-          "nextOffset": "0000000000000000_0000000000000375",
+          "eventDigest": "sha256:b827ca4c50fda02420aad52dab2790703dc58f89d608b85d2eb8ab4f0934af28",
+          "idempotencyKey": "ik_00000000000000000000000003",
+          "nextOffset": "0000000000000000_0000000000000379",
           "operation": "chat.message.create",
-          "requestDigest": "sha256:93c392686690536599ede6de02e9e24a84e450fe8db5766a3876b89cf0683f2e",
+          "requestDigest": "sha256:c3f4e28692aad8c6daa71ea4bd26dfa630aea95a1722eb3799bd3d4259f8d498",
           "status": "accepted",
-          "stream": "e0-t04-final-final-race",
+          "stream": "e0-t04-final-converged-race",
           "workspaceId": "ws_00000000000000000000000001"
         }
       },
@@ -158,13 +158,13 @@
         "kind": "dispatch.accepted",
         "receipt": {
           "actorId": "pr_ada",
-          "eventDigest": "sha256:3e37a06968069f1224fcd2432c7f30f287854c7a835e1122ee80bcff799b47b7",
+          "eventDigest": "sha256:1586de686f7fcee323156a3b1653a50faf4d7824e4fed9da2f8962b0af61b40a",
           "idempotencyKey": "ik_00000000000000000000000005",
-          "nextOffset": "0000000000000000_0000000000000387",
+          "nextOffset": "0000000000000000_0000000000000391",
           "operation": "chat.message.create",
-          "requestDigest": "sha256:0591bd577a8a5891bda14cd9e98fa5b3123e36801f7e6df8ee90f1ffa36bd5af",
+          "requestDigest": "sha256:09ca1936d2e20a6b0b2af7627a3621f030ca5aec3d5fff0f7bb172a1d6bff6a3",
           "status": "accepted",
-          "stream": "e0-t04-final-final-lost-ack",
+          "stream": "e0-t04-final-converged-lost-ack",
           "workspaceId": "ws_00000000000000000000000001"
         }
       },
@@ -172,18 +172,18 @@
         "kind": "dispatch.accepted",
         "receipt": {
           "actorId": "pr_ada",
-          "eventDigest": "sha256:ae04b599fe3f5ec71b7261ac2e1cca52d676501c93968039abd442a3fec60e0a",
+          "eventDigest": "sha256:c84b78985bda33bb8ee9765af2301fc5b5f6058118b6926063869464e321c9c6",
           "idempotencyKey": "ik_00000000000000000000000007",
-          "nextOffset": "0000000000000000_0000000000000381",
+          "nextOffset": "0000000000000000_0000000000000385",
           "operation": "chat.message.create",
-          "requestDigest": "sha256:74f1c006996e29394a9cab836d1be97897f06822660830e9f1cc1c10945d5b23",
+          "requestDigest": "sha256:bbcce568cb52e2c2123a0ca6cc83182001cec6cd0e0eca9921c3eef4dcc5aff8",
           "status": "accepted",
-          "stream": "e0-t04-final-final-captured",
+          "stream": "e0-t04-final-converged-captured",
           "workspaceId": "ws_00000000000000000000000001"
         }
       }
     ],
-    "nextOffset": "0000000000000000_0000000000002397",
-    "streamDigest": "sha256:54b38c0e013ff53a93f78bbeba0be482e100ba4c1a2d0aa3a946fc9808e7c81d"
+    "nextOffset": "0000000000000000_0000000000002417",
+    "streamDigest": "sha256:8b09a56bd7384b488fbcdb95a8d5a9447cf280616cad2d41fd25a7c804611a1a"
   }
 }

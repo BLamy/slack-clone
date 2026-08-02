@@ -3,7 +3,7 @@ id: E0-T04
 epic: 0
 title: "Fenced dispatch and idempotent application writes"
 priority: 4
-status: in-progress
+status: implemented
 depends_on: [E0-T03]
 estimate: L
 capstone: false
@@ -211,3 +211,12 @@ key cannot be replayed for different content.
   100-request real HTTP conformance race across both dispatch doors.
 - Added focused tests for cross-door same-key receipts and provider-independent
   expected-head sensitivity. A final cold run and a fresh critic must now rerun.
+
+### Builder — 2026-08-02 — final converged verification handoff
+
+- Exact final implementation commit: `7125a8ae598f9cb065cebc63450d694e37248c2f`.
+- `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t04-final-converged TEST_ARTIFACT_DIR=.artifacts/e0-t04/e0-t04-final-converged make verify-E0-T04` passed every gate from the clean exact-head tree: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (58 unit/ledger tests and 5 browser tests), `pnpm test:conformance:e0-t04`, and `pnpm build`.
+- The final conformance run alternated 100 same-key requests across independent dispatch doors and produced one logical event. All receipts reference offset `0000000000000000_0000000000000402` and event digest `sha256:12eb08132e6aa3cc6993163cd2a01d5cb4d32f37e1e842d9a48763d0a4c92171`; the expected-head race remained one accepted append and one stale-fence refusal, lost-ack recovery remained one durable target event, and authorization/key conflicts left candidate streams unchanged.
+- The application expected-head check now has provider-independent mutation sensitivity through the permissive-provider fixture; cross-door stale-fence and receipt-index conflicts reconcile only matching durable events and fail closed on orphan or mismatched receipts.
+- Promoted evidence: `evidence/cold-verification.json`, `evidence/dispatch-conformance.json`, `evidence/final-stream-dump.json`, and `evidence/request-transcript.json`. Replay: N/A (server dispatch concurrency contract) + mitigation: alternating real-HTTP race logs, provider-independent sensitivity fixture, lost-ack/process-restart recovery, reset ordering, head/digest dumps, and the cold-clone verifier. No Replay upload or tunnel was attempted.
+- Claim: independent dispatch doors converge same-key retries to one durable receipt without weakening cross-key fencing; logical idempotency remains stable across expected-head changes and process restart; reset remains a durable idempotent event; and validation, authorization, orphan-receipt, and mismatched-receipt paths fail closed before candidate mutation. A fresh critic must now verify this exact implementation and evidence handoff.

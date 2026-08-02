@@ -1,59 +1,59 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-resubmit8",
-  "implementationCommit": "339aca3cb9b4d92dac30c5b1156cb7a200317aed",
+  "runId": "e0-t03-repair9-cold",
+  "implementationCommit": "fd7fbecf99753f89a2f22d0be366e0b7adb4b4a1",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
-  "artifactRoot": "/Users/brettlamy/Dev/slack-clone/.artifacts/e0-t03/e0-t03-builder-resubmit8",
+  "artifactRoot": "/Users/brettlamy/Dev/slack-clone/.artifacts/e0-t03/e0-t03-repair9-cold",
   "gates": [
     {
       "name": "format",
       "command": "pnpm format:check",
       "result": "PASS",
-      "durationMs": 1173
+      "durationMs": 1611
     },
     {
       "name": "lint",
       "command": "pnpm lint",
       "result": "PASS",
-      "durationMs": 1076
+      "durationMs": 1234
     },
     {
       "name": "static-analysis",
       "command": "pnpm typecheck",
       "result": "PASS",
-      "durationMs": 2728
+      "durationMs": 3426
     },
     {
       "name": "unit",
       "command": "pnpm test:unit",
       "result": "PASS",
-      "durationMs": 7600
+      "durationMs": 7595
     },
     {
       "name": "conformance",
       "command": "pnpm test:conformance",
       "result": "PASS",
-      "durationMs": 6822
+      "durationMs": 6757
     },
     {
       "name": "integration",
       "command": "pnpm test:integration",
       "result": "PASS",
-      "durationMs": 11155
+      "durationMs": 15588
     },
     {
       "name": "concurrency",
       "command": "pnpm test:concurrency",
       "result": "PASS",
-      "durationMs": 11010
+      "durationMs": 19035
     },
     {
       "name": "build",
       "command": "pnpm build",
       "result": "PASS",
-      "durationMs": 522
+      "durationMs": 1564
     }
   ],
   "replay": "N/A (server transport adapter) + mitigation: real-emulator protocol transcript, request-budget proof, canary scan, and reconnect matrix",
@@ -62,11 +62,11 @@
   "recordingsUnchanged": true,
   "conformance": {
     "capturedOffsets": [
-      "0000000000000000_0000000000000096",
-      "0000000000000000_0000000000000193",
-      "0000000000000000_0000000000000289",
-      "0000000000000000_0000000000000409",
-      "0000000000000000_0000000000000535"
+      "0000000000000000_0000000000000091",
+      "0000000000000000_0000000000000183",
+      "0000000000000000_0000000000000274",
+      "0000000000000000_0000000000000389",
+      "0000000000000000_0000000000000510"
     ],
     "resumeMatrix": [
       {
@@ -85,11 +85,11 @@
           "record-live",
           "record-live-2"
         ],
-        "nextOffset": "0000000000000000_0000000000000535",
-        "streamDigest": "sha256:1c5f785a3fe38ae9dee9a8d7cdc195857bed35d30c85108e6ffa6a15da73829a"
+        "nextOffset": "0000000000000000_0000000000000510",
+        "streamDigest": "sha256:1ab8832942f2a9ecd400ce1ea9c85014e2492c739ede160e4984ed7251dbc3f7"
       },
       {
-        "checkpoint": "0000000000000000_0000000000000096",
+        "checkpoint": "0000000000000000_0000000000000091",
         "expectedIds": [
           "record-2",
           "record-3",
@@ -102,11 +102,11 @@
           "record-live",
           "record-live-2"
         ],
-        "nextOffset": "0000000000000000_0000000000000535",
-        "streamDigest": "sha256:9c40564d0ee9290d605dc5f66a29ee13b0564cc4bf143561c80452c17958c116"
+        "nextOffset": "0000000000000000_0000000000000510",
+        "streamDigest": "sha256:7803ce562d5dd1e645db8e961c3549195b96c45c35e877e7d6b247e192b62689"
       },
       {
-        "checkpoint": "0000000000000000_0000000000000193",
+        "checkpoint": "0000000000000000_0000000000000183",
         "expectedIds": [
           "record-3",
           "record-live",
@@ -117,11 +117,11 @@
           "record-live",
           "record-live-2"
         ],
-        "nextOffset": "0000000000000000_0000000000000535",
-        "streamDigest": "sha256:6c4469771040d0398030b3e40932d79fe9d112e6e0c67c6d7a90e9b1b09a0d74"
+        "nextOffset": "0000000000000000_0000000000000510",
+        "streamDigest": "sha256:5678d50492cb5c6a12ede5fc3bbd91e8cbf17e1ba1b8b7811b2985039f1df67f"
       },
       {
-        "checkpoint": "0000000000000000_0000000000000289",
+        "checkpoint": "0000000000000000_0000000000000274",
         "expectedIds": [
           "record-live",
           "record-live-2"
@@ -130,33 +130,33 @@
           "record-live",
           "record-live-2"
         ],
-        "nextOffset": "0000000000000000_0000000000000535",
-        "streamDigest": "sha256:1a49de0ac6c3ca8a190ef0a7b72ccf51e75fd6c4c817659f4cb600f3b2d71ab4"
+        "nextOffset": "0000000000000000_0000000000000510",
+        "streamDigest": "sha256:8b121fd7b2694d427a7bf3e2700f6c6b871af92752e262ddaa63d6c3e4d5372f"
       },
       {
-        "checkpoint": "0000000000000000_0000000000000409",
+        "checkpoint": "0000000000000000_0000000000000389",
         "expectedIds": [
           "record-live-2"
         ],
         "observedIds": [
           "record-live-2"
         ],
-        "nextOffset": "0000000000000000_0000000000000535",
-        "streamDigest": "sha256:21256c0b85b376bac6827c8b97c54408b974ad23b6a87f7a7c6b11c04909f2de"
+        "nextOffset": "0000000000000000_0000000000000510",
+        "streamDigest": "sha256:808a0547efd961e24ff0a27008484cb9f4d2402245f5a20c6fc1c96d265401e7"
       },
       {
-        "checkpoint": "0000000000000000_0000000000000535",
+        "checkpoint": "0000000000000000_0000000000000510",
         "expectedIds": [],
         "observedIds": [],
-        "nextOffset": "0000000000000000_0000000000000535",
+        "nextOffset": "0000000000000000_0000000000000510",
         "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
       }
     ],
     "requestBudget": {
       "schemaVersion": 1,
       "task": "E0-T03",
-      "runId": "e0-t03-builder-resubmit8",
-      "implementationCommit": "339aca3cb9b4d92dac30c5b1156cb7a200317aed",
+      "runId": "e0-t03-repair9-cold",
+      "implementationCommit": "fd7fbecf99753f89a2f22d0be366e0b7adb4b4a1",
       "result": "PASS",
       "requestCounter": "HTTP delivery to Durable Streams adapter",
       "logicalIdleDurationMs": 900000,
@@ -250,10 +250,10 @@
     "canaryScan": {
       "schemaVersion": 1,
       "task": "E0-T03",
-      "runId": "e0-t03-builder-resubmit8",
-      "implementationCommit": "339aca3cb9b4d92dac30c5b1156cb7a200317aed",
+      "runId": "e0-t03-repair9-cold",
+      "implementationCommit": "fd7fbecf99753f89a2f22d0be366e0b7adb4b4a1",
       "result": "PASS",
-      "canarySha256": "e52de83b08c4c79c62f731e3158944d786f69e3121afa44331b7e597d80f1e84",
+      "canarySha256": "0506c55621cd2a8f8ddd860333c1f6731be347906b991aa2380d1ce5231b9620",
       "encodingsScanned": [
         "raw",
         "url-encoded",
@@ -268,7 +268,7 @@
       "categories": {
         "browserAssetsAndApi": {
           "entries": 7,
-          "bytesScanned": 32856,
+          "bytesScanned": 32821,
           "matches": 0
         },
         "logs": {
@@ -278,12 +278,12 @@
         },
         "environmentManifests": {
           "entries": 1,
-          "bytesScanned": 375,
+          "bytesScanned": 370,
           "matches": 0
         },
         "runArtifacts": {
           "entries": 4,
-          "bytesScanned": 27053,
+          "bytesScanned": 27636,
           "matches": 0
         }
       }
@@ -291,10 +291,10 @@
   },
   "browserRegression": {
     "schemaVersion": 1,
-    "room": "e0-t03-builder-resubmit8-edit-1785651561200",
-    "stream": "/rooms/e0-t03-builder-resubmit8-edit-1785651561200/messages",
-    "nextOffset": "0000000000000000_0000000000000551",
-    "streamDigest": "sha256:0519a6c427eeb36317e79319cf5bad85095af61ebd51ac824030bf866fd10b2c",
+    "room": "e0-t03-repair9-cold-edit-1785689628602",
+    "stream": "/rooms/e0-t03-repair9-cold-edit-1785689628602/messages",
+    "nextOffset": "0000000000000000_0000000000000541",
+    "streamDigest": "sha256:b760c166cce918c31d000f7e7f90585b023e2c55b8f3d1bfcf6ae741c0c69a0e",
     "messageCount": 1,
     "domMatchedApi": true
   }

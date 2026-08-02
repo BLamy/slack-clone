@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-resubmit8",
-  "implementationCommit": "339aca3cb9b4d92dac30c5b1156cb7a200317aed",
+  "runId": "e0-t03-repair9-cold",
+  "implementationCommit": "fd7fbecf99753f89a2f22d0be366e0b7adb4b4a1",
   "result": "PASS",
   "filesScanned": 27,
   "failures": [],
@@ -92,6 +92,13 @@
       "application-tagged-stream-url",
       "application-conditional-targets",
       "declared-application-events-door",
+      "commonjs-network-loader",
+      "named-process-loader",
+      "safe-named-process-import",
+      "dom-script-src-loader",
+      "dom-image-src-loader",
+      "dom-worker-loader",
+      "service-worker-loader",
       "window-top-fetch",
       "bare-top-fetch",
       "document-default-view-fetch",
@@ -349,6 +356,25 @@
       "application-tagged-stream-url": [],
       "application-conditional-targets": [],
       "declared-application-events-door": [],
+      "commonjs-network-loader": [
+        "direct-provider-network"
+      ],
+      "named-process-loader": [
+        "direct-provider-network"
+      ],
+      "safe-named-process-import": [],
+      "dom-script-src-loader": [
+        "direct-provider-network"
+      ],
+      "dom-image-src-loader": [
+        "direct-provider-network"
+      ],
+      "dom-worker-loader": [
+        "direct-provider-network"
+      ],
+      "service-worker-loader": [
+        "direct-provider-network"
+      ],
       "window-top-fetch": [
         "direct-provider-network"
       ],

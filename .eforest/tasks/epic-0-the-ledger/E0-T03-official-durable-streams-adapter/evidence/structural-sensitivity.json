@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T03",
+  "implementationCommit": "fd7fbecf99753f89a2f22d0be366e0b7adb4b4a1",
+  "result": "PASS",
+  "mutations": [
+    {
+      "name": "remove-cjs-extension-from-shared-enumerator",
+      "command": "pnpm test:unit",
+      "observedExit": 1,
+      "detectorWentRed": true,
+      "refutation": "full repository audit covers CommonJS and browser loader files"
+    },
+    {
+      "name": "disable-browser-request-member-set",
+      "command": "pnpm test:unit",
+      "observedExit": 1,
+      "detectorWentRed": true,
+      "refutation": "source guard rejects the DOM script loader fixture and the full repository audit loses its DOM failure"
+    },
+    {
+      "name": "disable-node-process-import-policy",
+      "command": "pnpm test:unit",
+      "observedExit": 1,
+      "detectorWentRed": true,
+      "refutation": "source guard rejects the named-process-loader fixture and the full repository audit loses its loader failure"
+    }
+  ],
+  "cleanImplementationGates": [
+    "pnpm format:check",
+    "pnpm lint",
+    "pnpm typecheck",
+    "pnpm test:unit",
+    "pnpm test:conformance",
+    "pnpm test:integration",
+    "pnpm test:concurrency",
+    "pnpm build"
+  ]
+}

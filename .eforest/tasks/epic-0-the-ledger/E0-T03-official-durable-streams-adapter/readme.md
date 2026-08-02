@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: in-progress
+status: implemented
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -64,6 +64,45 @@ Streams; higher layers work in domain events and checkpoints.
    guard goes red.
 
 ## Verification log
+
+### Builder — 2026-08-02 — structural transport-door repair
+
+- Implementation commit: `fd7fbecf99753f89a2f22d0be366e0b7adb4b4a1`.
+- Final cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t03-repair9-cold make
+  verify-E0-T03`; the clean implementation tree passed format, lint, typecheck,
+  46/46 unit tests, real-emulator conformance, browser integration (5/5), concurrency
+  (1/1), and build. The cold verifier recorded Node 23.11.0 with the emulator's Node
+  >=24 warning; all gates still passed.
+- Structural repair: one shared executable enumerator now covers `.mjs`, `.js`, and
+  `.cjs` across the shipped runtime roots and the syntax/lint/boundary gates. The
+  source audit also rejects browser DOM loader surfaces (`Image`, `Worker`,
+  `SharedWorker`, `navigator.serviceWorker`, element resource setters and insertion
+  methods), named `node:process` loader imports, external HTML/CSS resource URLs, and
+  inline HTML scripts through the same transport-door policy.
+- Evidence: `evidence/cold-verification.json`, `evidence/protocol-conformance.json`,
+  `evidence/request-budget.json`, `evidence/canary-scan.json`,
+  `evidence/source-access-audit.json`, and `evidence/structural-sensitivity.json`.
+  The conformance run captured opaque offsets
+  `0000000000000000_0000000000000091`,
+  `0000000000000000_0000000000000183`,
+  `0000000000000000_0000000000000274`,
+  `0000000000000000_0000000000000389`, and
+  `0000000000000000_0000000000000510`; the terminal digest was
+  `sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`.
+  The browser regression recorded offset
+  `0000000000000000_0000000000000541`, digest
+  `sha256:b760c166cce918c31d000f7e7f90585b023e2c55b8f3d1bfcf6ae741c0c69a0e`, and
+  `domMatchedApi: true`.
+- Sensitivity: removing `.cjs` coverage, disabling browser request-member coverage,
+  or disabling the named `node:process` policy each made `pnpm test:unit` exit 1;
+  the clean audit scanned 27 executable files with zero violations.
+- Replay: N/A (server transport adapter) + mitigation: real-emulator protocol transcript,
+  request-budget proof, canary scan, reconnect matrix, and browser regression.
+- Claim: the enforcement boundary now covers every executable file type shipped from
+  the runtime roots and the browser resource/loader surfaces identified by the ninth
+  critic, while preserving the declared Durable Streams, Auth0, inbound HTTP, and
+  application API doors. A direct network loader in any covered file should make the
+  source audit or its sensitivity tests go red.
 
 ### Builder — 2026-08-02 — human-directed structural repair reopened
 

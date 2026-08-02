@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-resubmit8",
-  "implementationCommit": "339aca3cb9b4d92dac30c5b1156cb7a200317aed",
+  "runId": "e0-t03-repair9-cold",
+  "implementationCommit": "fd7fbecf99753f89a2f22d0be366e0b7adb4b4a1",
   "result": "PASS",
-  "room": "e0-t03-builder-resubmit8-adapter",
+  "room": "e0-t03-repair9-cold-adapter",
   "officialClient": "@durable-streams/client@0.2.6",
   "createOnce": {
     "ensureCalls": 3,
@@ -18,11 +18,11 @@
     "record-live-2"
   ],
   "capturedOffsets": [
-    "0000000000000000_0000000000000096",
-    "0000000000000000_0000000000000193",
-    "0000000000000000_0000000000000289",
-    "0000000000000000_0000000000000409",
-    "0000000000000000_0000000000000535"
+    "0000000000000000_0000000000000091",
+    "0000000000000000_0000000000000183",
+    "0000000000000000_0000000000000274",
+    "0000000000000000_0000000000000389",
+    "0000000000000000_0000000000000510"
   ],
   "resumeMatrix": [
     {
@@ -41,11 +41,11 @@
         "record-live",
         "record-live-2"
       ],
-      "nextOffset": "0000000000000000_0000000000000535",
-      "streamDigest": "sha256:1c5f785a3fe38ae9dee9a8d7cdc195857bed35d30c85108e6ffa6a15da73829a"
+      "nextOffset": "0000000000000000_0000000000000510",
+      "streamDigest": "sha256:1ab8832942f2a9ecd400ce1ea9c85014e2492c739ede160e4984ed7251dbc3f7"
     },
     {
-      "checkpoint": "0000000000000000_0000000000000096",
+      "checkpoint": "0000000000000000_0000000000000091",
       "expectedIds": [
         "record-2",
         "record-3",
@@ -58,11 +58,11 @@
         "record-live",
         "record-live-2"
       ],
-      "nextOffset": "0000000000000000_0000000000000535",
-      "streamDigest": "sha256:9c40564d0ee9290d605dc5f66a29ee13b0564cc4bf143561c80452c17958c116"
+      "nextOffset": "0000000000000000_0000000000000510",
+      "streamDigest": "sha256:7803ce562d5dd1e645db8e961c3549195b96c45c35e877e7d6b247e192b62689"
     },
     {
-      "checkpoint": "0000000000000000_0000000000000193",
+      "checkpoint": "0000000000000000_0000000000000183",
       "expectedIds": [
         "record-3",
         "record-live",
@@ -73,11 +73,11 @@
         "record-live",
         "record-live-2"
       ],
-      "nextOffset": "0000000000000000_0000000000000535",
-      "streamDigest": "sha256:6c4469771040d0398030b3e40932d79fe9d112e6e0c67c6d7a90e9b1b09a0d74"
+      "nextOffset": "0000000000000000_0000000000000510",
+      "streamDigest": "sha256:5678d50492cb5c6a12ede5fc3bbd91e8cbf17e1ba1b8b7811b2985039f1df67f"
     },
     {
-      "checkpoint": "0000000000000000_0000000000000289",
+      "checkpoint": "0000000000000000_0000000000000274",
       "expectedIds": [
         "record-live",
         "record-live-2"
@@ -86,25 +86,25 @@
         "record-live",
         "record-live-2"
       ],
-      "nextOffset": "0000000000000000_0000000000000535",
-      "streamDigest": "sha256:1a49de0ac6c3ca8a190ef0a7b72ccf51e75fd6c4c817659f4cb600f3b2d71ab4"
+      "nextOffset": "0000000000000000_0000000000000510",
+      "streamDigest": "sha256:8b121fd7b2694d427a7bf3e2700f6c6b871af92752e262ddaa63d6c3e4d5372f"
     },
     {
-      "checkpoint": "0000000000000000_0000000000000409",
+      "checkpoint": "0000000000000000_0000000000000389",
       "expectedIds": [
         "record-live-2"
       ],
       "observedIds": [
         "record-live-2"
       ],
-      "nextOffset": "0000000000000000_0000000000000535",
-      "streamDigest": "sha256:21256c0b85b376bac6827c8b97c54408b974ad23b6a87f7a7c6b11c04909f2de"
+      "nextOffset": "0000000000000000_0000000000000510",
+      "streamDigest": "sha256:808a0547efd961e24ff0a27008484cb9f4d2402245f5a20c6fc1c96d265401e7"
     },
     {
-      "checkpoint": "0000000000000000_0000000000000535",
+      "checkpoint": "0000000000000000_0000000000000510",
       "expectedIds": [],
       "observedIds": [],
-      "nextOffset": "0000000000000000_0000000000000535",
+      "nextOffset": "0000000000000000_0000000000000510",
       "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     }
   ],
@@ -114,7 +114,7 @@
       "record-live",
       "record-live-2"
     ],
-    "finalOffset": "0000000000000000_0000000000000535"
+    "finalOffset": "0000000000000000_0000000000000510"
   },
   "cancellation": {
     "repeatedCancelSafe": true,
@@ -171,160 +171,160 @@
     {
       "sequence": 1,
       "method": "HEAD",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {},
       "status": 404,
       "contentType": "text/plain; charset=UTF-8",
       "nextOffset": null,
       "streamClosed": null,
-      "durationMs": 5
+      "durationMs": 11
     },
     {
       "sequence": 2,
       "method": "PUT",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {},
       "status": 201,
       "contentType": "application/json",
       "nextOffset": "0000000000000000_0000000000000000",
       "streamClosed": null,
-      "durationMs": 6
+      "durationMs": 7
     },
     {
       "sequence": 3,
       "method": "POST",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {},
       "status": 204,
       "contentType": null,
-      "nextOffset": "0000000000000000_0000000000000096",
+      "nextOffset": "0000000000000000_0000000000000091",
       "streamClosed": null,
-      "durationMs": 5
+      "durationMs": 4
     },
     {
       "sequence": 4,
       "method": "POST",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {},
       "status": 204,
       "contentType": null,
-      "nextOffset": "0000000000000000_0000000000000193",
+      "nextOffset": "0000000000000000_0000000000000183",
       "streamClosed": null,
-      "durationMs": 3
+      "durationMs": 4
     },
     {
       "sequence": 5,
       "method": "POST",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {},
       "status": 204,
       "contentType": null,
-      "nextOffset": "0000000000000000_0000000000000289",
+      "nextOffset": "0000000000000000_0000000000000274",
       "streamClosed": null,
-      "durationMs": 35
+      "durationMs": 22
     },
     {
       "sequence": 6,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {
-        "offset": "0000000000000000_0000000000000289"
+        "offset": "0000000000000000_0000000000000274"
       },
       "status": 200,
       "contentType": "application/json",
-      "nextOffset": "0000000000000000_0000000000000289",
+      "nextOffset": "0000000000000000_0000000000000274",
       "streamClosed": null,
-      "durationMs": 30
+      "durationMs": 5
     },
     {
       "sequence": 7,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {
-        "offset": "0000000000000000_0000000000000289",
+        "offset": "0000000000000000_0000000000000274",
         "live": "sse"
       },
       "status": 200,
       "contentType": "text/event-stream",
       "nextOffset": null,
       "streamClosed": null,
-      "durationMs": 6
+      "durationMs": 4
     },
     {
       "sequence": 8,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {
-        "offset": "0000000000000000_0000000000000289",
+        "offset": "0000000000000000_0000000000000274",
         "live": "sse",
-        "cursor": "1785651550"
+        "cursor": "1785689615"
       },
       "status": 200,
       "contentType": "text/event-stream",
       "nextOffset": null,
       "streamClosed": null,
-      "durationMs": 6
+      "durationMs": 2
     },
     {
       "sequence": 8,
       "method": "POST",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {},
       "status": 204,
       "contentType": null,
-      "nextOffset": "0000000000000000_0000000000000409",
+      "nextOffset": "0000000000000000_0000000000000389",
       "streamClosed": null,
-      "durationMs": 6
+      "durationMs": 7
     },
     {
       "sequence": 10,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {
-        "offset": "0000000000000000_0000000000000289",
+        "offset": "0000000000000000_0000000000000274",
         "live": "sse",
-        "cursor": "1785651550"
+        "cursor": "1785689615"
       },
       "status": 200,
       "contentType": "text/event-stream",
       "nextOffset": null,
       "streamClosed": null,
-      "durationMs": 2
+      "durationMs": 1
     },
     {
       "sequence": 11,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {
-        "offset": "0000000000000000_0000000000000409",
+        "offset": "0000000000000000_0000000000000389",
         "live": "sse",
-        "cursor": "1785651550"
+        "cursor": "1785689615"
       },
       "status": 200,
       "contentType": "text/event-stream",
       "nextOffset": null,
       "streamClosed": null,
-      "durationMs": 2
+      "durationMs": 3
     },
     {
       "sequence": 12,
       "method": "POST",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {},
       "status": 204,
       "contentType": null,
-      "nextOffset": "0000000000000000_0000000000000535",
+      "nextOffset": "0000000000000000_0000000000000510",
       "streamClosed": null,
-      "durationMs": 3
+      "durationMs": 2
     },
     {
       "sequence": 13,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {
-        "offset": "0000000000000000_0000000000000409",
+        "offset": "0000000000000000_0000000000000389",
         "live": "sse",
-        "cursor": "1785651550"
+        "cursor": "1785689615"
       },
       "status": 200,
       "contentType": "text/event-stream",
@@ -335,95 +335,95 @@
     {
       "sequence": 14,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {
-        "offset": "0000000000000000_0000000000000535",
+        "offset": "0000000000000000_0000000000000510",
         "live": "sse",
-        "cursor": "1785651550"
+        "cursor": "1785689615"
       },
       "status": 200,
       "contentType": "text/event-stream",
       "nextOffset": null,
       "streamClosed": null,
-      "durationMs": 3
+      "durationMs": 2
     },
     {
       "sequence": 15,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {
         "offset": "-1"
       },
       "status": 200,
       "contentType": "application/json",
-      "nextOffset": "0000000000000000_0000000000000535",
+      "nextOffset": "0000000000000000_0000000000000510",
       "streamClosed": null,
-      "durationMs": 4
+      "durationMs": 3
     },
     {
       "sequence": 16,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {
-        "offset": "0000000000000000_0000000000000096"
+        "offset": "0000000000000000_0000000000000091"
       },
       "status": 200,
       "contentType": "application/json",
-      "nextOffset": "0000000000000000_0000000000000535",
+      "nextOffset": "0000000000000000_0000000000000510",
       "streamClosed": null,
-      "durationMs": 2
+      "durationMs": 3
     },
     {
       "sequence": 17,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {
-        "offset": "0000000000000000_0000000000000193"
+        "offset": "0000000000000000_0000000000000183"
       },
       "status": 200,
       "contentType": "application/json",
-      "nextOffset": "0000000000000000_0000000000000535",
+      "nextOffset": "0000000000000000_0000000000000510",
       "streamClosed": null,
       "durationMs": 2
     },
     {
       "sequence": 18,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {
-        "offset": "0000000000000000_0000000000000289"
+        "offset": "0000000000000000_0000000000000274"
       },
       "status": 200,
       "contentType": "application/json",
-      "nextOffset": "0000000000000000_0000000000000535",
+      "nextOffset": "0000000000000000_0000000000000510",
       "streamClosed": null,
-      "durationMs": 2
+      "durationMs": 1
     },
     {
       "sequence": 19,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {
-        "offset": "0000000000000000_0000000000000409"
+        "offset": "0000000000000000_0000000000000389"
       },
       "status": 200,
       "contentType": "application/json",
-      "nextOffset": "0000000000000000_0000000000000535",
+      "nextOffset": "0000000000000000_0000000000000510",
       "streamClosed": null,
-      "durationMs": 2
+      "durationMs": 1
     },
     {
       "sequence": 20,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit8-adapter/messages",
+      "path": "/rooms/e0-t03-repair9-cold-adapter/messages",
       "query": {
-        "offset": "0000000000000000_0000000000000535"
+        "offset": "0000000000000000_0000000000000510"
       },
       "status": 200,
       "contentType": "application/json",
-      "nextOffset": "0000000000000000_0000000000000535",
+      "nextOffset": "0000000000000000_0000000000000510",
       "streamClosed": null,
-      "durationMs": 3
+      "durationMs": 2
     }
   ]
 }

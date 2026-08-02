@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: implemented
+status: refuted
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -99,3 +99,28 @@ Streams; higher layers work in domain events and checkpoints.
   the ticket criteria under the frozen cold verifier. A duplicate/missed resumed record,
   linear idle request growth, leaked follower/waiter, second response write, credential
   match, or source-audit bypass refutes this claim.
+
+### Independent critic — 2026-08-01
+
+VERDICT: refuted
+
+- Critic session: Claude Code `ddee7529-ee61-42f8-b26d-43f34ce58874`, reviewing
+  submission `8629923` against baseline `c542f4b` in a detached disposable worktree.
+- Refuting observation: `scripts/verify-e0-t03-conformance.mjs` and
+  `test/unit/durable-streams-adapter.test.mjs` increment standalone `logicalClock` /
+  `fakeClock` objects that are not passed to the adapter or HTTP timer boundary, then
+  drain only microtasks. The recorded `logicalIdleDurationMs: 900000` therefore represents
+  no elapsed or virtually advanced system time.
+- Sensitivity failure: a 350-millisecond idle polling regression schedules no request in
+  that effectively zero-length observation, so the cited request-count assertion is not
+  shown capable of going red. `evidence/cold-verification.json` corroborates that the whole
+  conformance gate ran in 8.087 seconds, not a real fifteen-minute interval.
+- Affected criterion: the claim that an idle room performs no 350-millisecond PUT/GET loop
+  and adversarial case 4 are unsupported. The builder statement that zero requests occur
+  during a fifteen-minute logical idle interval is therefore refuted.
+- Secondary evidence gap: none of the five committed evidence artifacts contains the
+  implementation commit SHA, so their binding to `133779b` is assertion-only.
+- The critic could not execute the cold verifier or mutation because its Claude sandbox
+  denied command execution and the detached worktree had no installed dependencies. The
+  code-level idle-window refutation is sufficient for this verdict; all other criteria
+  remain unverified rather than failed.

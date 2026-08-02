@@ -3,7 +3,7 @@ id: E0-T04
 epic: 0
 title: "Fenced dispatch and idempotent application writes"
 priority: 4
-status: implemented
+status: verified
 depends_on: [E0-T03]
 estimate: L
 capstone: false
@@ -248,3 +248,10 @@ key cannot be replayed for different content.
 - Verdict: `VERDICT: needs-evidence`.
 - The replacement critic confirmed the promoted cold evidence is tied to the exact repaired implementation, but its independent rerun stopped before the attack and sensitivity audit because it selected a task-local build artifact path rejected by `scripts/build.mjs`; no product, task metadata, evidence, or commits were changed.
 - The queue remains at E0-T04 awaiting an independent critic. The same fresh critic will resume with a repository-valid `.artifacts/` path and must complete the essential attack set before any verification status changes.
+
+### Critic — 2026-08-02 — final independent verification
+
+- Verdict: `VERDICT: verified`.
+- The fresh critic ran `pnpm test:unit` with 61 passing tests and a bounded independent harness. It reproduced 100 cross-door same-key convergence, the different-key stale-fence race, conflict and candidate-head invariants, forged tail receipt refusal, producer-duplicate mismatch refusal, orphan receipt refusal, authorization/validation ordering, process-restart create/edit recovery, reset idempotency, and the application expected-head sensitivity mutation; all passed.
+- Direct HTTP/SSE inspection observed `message, reset, message` for a mixed batch. The exact product repair remains `b011b67326f052951965e0afa66e657e1a6ddab7`; the checkout at critic time was `83b7c16`, metadata-only after the promoted evidence handoff, with no product diff.
+- Replay: N/A (server dispatch concurrency contract) + mitigation: promoted cold verifier, bounded independent dispatch races, receipt/provider attacks, direct HTTP/SSE ordering, reset/restart coverage, and mutation sensitivity. No product, task metadata, evidence, or commits were changed by the critic.

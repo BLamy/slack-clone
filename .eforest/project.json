@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E0-T04 repair passed the promoted cold verifier; the replacement critic needs evidence after using an invalid task-local build path and will resume with a valid .artifacts path.",
-  "updatedAt": "2026-08-02T14:45:00Z"
+  "statusReason": "E0-T04 is verified at the exact repaired product commit; E0-T05 is the next eligible queue gate.",
+  "updatedAt": "2026-08-02T19:22:00Z"
 }

@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: in-progress
+status: implemented
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -622,3 +622,58 @@ VERDICT: refuted
   classes, and computed provider targets; make a successful live response with the wrong
   media type terminate `follow.closed` with typed `CONTENT_TYPE_MISMATCH`. Promote both
   critic findings into required controls and prove each detector can go red.
+
+### Builder resubmission 5 — 2026-08-01
+
+- Implementation commit: `330687fe13bbc142f0ce85ec58f5295a644e77d9`; regenerated
+  evidence commit: `d545485d56e6bbb71d504c864af54f169f8b4ce4`.
+- Final cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t03-builder-resubmit5
+  E0_T03_IMPLEMENTATION_COMMIT=330687fe13bbc142f0ce85ec58f5295a644e77d9 make
+  verify-E0-T03`. The tracked implementation tree was clean at start and all eight gates
+  passed: format, lint, static analysis, unit (42/42), real-emulator conformance, browser
+  integration (5/5), concurrency (1/1), and the 30-file build.
+- Source-boundary proof: the audit now converges callable and provider-target provenance
+  to a fixed point independent of declaration order. Its 28 promoted positive controls
+  cover direct and destructured calls, `call`/`apply`/`Reflect.apply` aliases, bound and
+  higher-order wrappers, forward nested wrappers, aliased and nested containers, array and
+  object destructuring, class members, and computed fetch/provider targets. The production
+  scan inspected 50 files with zero failures while declared application-API wrappers
+  remained allowed.
+- Live-response proof: a successful live response with `Content-Type: application/json`
+  now rejects `follow.closed` as typed `CONTENT_TYPE_MISMATCH` after exactly one live
+  request. The promoted fixture passes a `Response.clone()` into the adapter and retains
+  its unread sibling branch, proving cleanup cannot hang while awaiting tee cancellation.
+- Detector sensitivity was exercised in a disposable worktree at the exact implementation
+  commit. Replacing fixed-point convergence with a single alias pass made the focused
+  source test fail on `forward-nested-wrapper` with actual `[]`. Restoring awaited response
+  cancellation made the cloned wrong-media test fail after 500 ms because `follow.closed`
+  did not settle. Byte-exact restoration returned both focused tests to green.
+- Final implementation provenance: the audit blob/SHA-256 is
+  `3d784ec70f24c0d9d713beb944e59a21c72bd82f` /
+  `c415ccc37ee9bfd6064493023797abd5b9b31f3b91fc0070e19e5a370698557d`;
+  the adapter blob/SHA-256 is `c514717a80bd2c9f40b0454beb6088aa5997c93a` /
+  `e6d37efbeb9953004ce161be15ef18dcb9198c17ba56188b10ba36d42b6ac0ee`;
+  and the unit-test blob/SHA-256 is `9430a8b8803dc019539391e2b19526fc493d9ce8` /
+  `38d30419ed2acd4f48c6a167e82561074619f84d6dcd8b4d4d72f5eeb281c27b`.
+- Real conformance used 20 requests under cap 24, created once, held cancellation at
+  14 -> 14, and left no active follower or idle waiter. The exact 900,000 ms idle window
+  stayed at 2 -> 2 calls while its 350 ms polling control generated 2,571 calls.
+- Opaque resume proof captured five checkpoints and ends at offset
+  `0000000000000000_0000000000000535`; the full-stream digest is
+  `sha256:0fb8233c9dc98d18c3c3b4cdc5d691dd9ae4d80b24425e5cfc8203a4421c5cfa`.
+  Browser/API state matched at offset `0000000000000000_0000000000000551`, digest
+  `sha256:df15d9398e731ff760ee74d8ad45f652e35ccb85faeb72a3d8c501190cc4c34f`.
+- Every evidence JSON names implementation `330687fe13bbc142f0ce85ec58f5295a644e77d9`.
+  The canary scan detected raw, URL-encoded, and base64 positive controls and found zero
+  output matches. The run attempted no Replay upload or tunnel and left recordings
+  unchanged.
+- Replay: N/A (server transport adapter) + mitigation: real-emulator protocol transcript,
+  request-budget proof, canary scan, redirect-origin proof, convergent source-provenance
+  controls, cloned-response terminalization proof, and reconnect matrix.
+- Resubmitted claim: the fifth critic's source-boundary and wrong-live-media findings are
+  closed by a convergent provenance guard and non-blocking tee-branch cleanup, each backed
+  by promoted controls and an independent red/green mutation; all adapter, lifecycle,
+  security, provenance, and cold-clone acceptance criteria are satisfied at the cited
+  implementation commit. Any ordinary provider-capable alias that evades the guard, or any
+  wrong-media live response whose terminal promise does not reject promptly, refutes this
+  claim.

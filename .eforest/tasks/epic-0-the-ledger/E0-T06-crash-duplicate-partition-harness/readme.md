@@ -3,7 +3,7 @@ id: E0-T06
 epic: 0
 title: "Crash, duplicate-delivery, and partition sensitivity harness"
 priority: 6
-status: pending
+status: in-progress
 depends_on: [E0-T04, E0-T05]
 estimate: L
 capstone: false
@@ -62,3 +62,12 @@ schedule, and every final claim cites a stream dump and digest.
    schedule fails.
 
 ## Verification log
+
+### Builder — 2026-08-02 — activated after E0-T05 verification
+
+- E0-T05 is verified at the exact replay/provenance repair handoff, and E0-T06 is the
+  sole active queue gate. The implementation will use named protocol hooks and seeded
+  schedules, with all crash/restart and partition claims tied to durable stream dumps,
+  checkpoints, and E0-T05 replay digests. Replay: N/A (headless failure harness) +
+  mitigation: deterministic schedules, process restarts, stream dumps, checkpoint proofs,
+  and replay digests.

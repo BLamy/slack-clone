@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-resubmit6",
-  "implementationCommit": "f815d7fae0b6626b69d7dcf1bd857e0b6244eee9",
+  "runId": "e0-t03-builder-resubmit7",
+  "implementationCommit": "4afa3d7fe45398e466b21a541298a21026173d2a",
   "result": "PASS",
-  "filesScanned": 51,
+  "filesScanned": 27,
   "failures": [],
   "sensitivity": {
     "result": "PASS",
@@ -64,7 +64,34 @@
       "application-api-conditional",
       "application-api-wrapper-options",
       "partially-bound-application-api",
-      "returned-application-api-target"
+      "returned-application-api-target",
+      "mutually-recursive-network-capability",
+      "closure-returning-network-capability",
+      "async-network-wrapper",
+      "generator-network-wrapper",
+      "spread-argument-forwarding",
+      "prototype-method-inheritance",
+      "define-property-network-getter",
+      "late-weak-map-network-capability",
+      "nested-destructuring-network-default",
+      "tagged-network-selector",
+      "proxy-network-get-trap",
+      "proxy-network-apply-trap",
+      "reflect-construct-network-injection",
+      "inherited-network-getter",
+      "optional-network-call",
+      "reflect-computed-network-member",
+      "map-closure-network-capability",
+      "nested-default-rest-network-capability",
+      "async-generator-network-capability",
+      "mixed-door-network-capability",
+      "declared-application-door-literal",
+      "declared-application-door-closure",
+      "application-literal-getter",
+      "application-inherited-getter",
+      "application-tagged-stream-url",
+      "application-conditional-targets",
+      "declared-application-events-door"
     ],
     "detections": {
       "direct": [
@@ -224,7 +251,74 @@
       "application-api-conditional": [],
       "application-api-wrapper-options": [],
       "partially-bound-application-api": [],
-      "returned-application-api-target": []
+      "returned-application-api-target": [],
+      "mutually-recursive-network-capability": [
+        "direct-provider-network"
+      ],
+      "closure-returning-network-capability": [
+        "direct-provider-network"
+      ],
+      "async-network-wrapper": [
+        "direct-provider-network"
+      ],
+      "generator-network-wrapper": [
+        "direct-provider-network"
+      ],
+      "spread-argument-forwarding": [
+        "direct-provider-network"
+      ],
+      "prototype-method-inheritance": [
+        "direct-provider-network"
+      ],
+      "define-property-network-getter": [
+        "direct-provider-network"
+      ],
+      "late-weak-map-network-capability": [
+        "direct-provider-network"
+      ],
+      "nested-destructuring-network-default": [
+        "direct-provider-network"
+      ],
+      "tagged-network-selector": [
+        "direct-provider-network"
+      ],
+      "proxy-network-get-trap": [
+        "direct-provider-network"
+      ],
+      "proxy-network-apply-trap": [
+        "direct-provider-network"
+      ],
+      "reflect-construct-network-injection": [
+        "direct-provider-network"
+      ],
+      "inherited-network-getter": [
+        "direct-provider-network"
+      ],
+      "optional-network-call": [
+        "direct-provider-network"
+      ],
+      "reflect-computed-network-member": [
+        "direct-provider-network"
+      ],
+      "map-closure-network-capability": [
+        "direct-provider-network"
+      ],
+      "nested-default-rest-network-capability": [
+        "direct-provider-network"
+      ],
+      "async-generator-network-capability": [
+        "direct-provider-network"
+      ],
+      "mixed-door-network-capability": [
+        "direct-provider-network"
+      ],
+      "declared-application-door-literal": [],
+      "declared-application-door-closure": [],
+      "application-literal-getter": [],
+      "application-inherited-getter": [],
+      "application-tagged-stream-url": [],
+      "application-conditional-targets": [],
+      "declared-application-events-door": []
     }
   }
 }

@@ -3,7 +3,7 @@ id: E0-T04
 epic: 0
 title: "Fenced dispatch and idempotent application writes"
 priority: 4
-status: in-progress
+status: implemented
 depends_on: [E0-T03]
 estimate: L
 capstone: false
@@ -166,3 +166,24 @@ key cannot be replayed for different content.
 - Added a process-restart unit test covering both create and edit after target append and
   lost acknowledgement, plus an assertion that changing only the expected head does not
   change the logical digest. The final cold verifier and a fresh critic must now rerun.
+
+### Builder — 2026-08-02 — final logical retry verification
+
+- Exact final implementation commit: `c94ca7e834c9218a7016c61112d6d45615dd95fc`.
+- `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t04-final-final TEST_ARTIFACT_DIR=.artifacts/e0-t04/e0-t04-final-final make verify-E0-T04` passed every gate from a clean exact-head tree: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (56 unit/ledger tests and 5 browser tests), `pnpm test:conformance:e0-t04`, and `pnpm build`.
+- The final run produced one logical event for 100 concurrent requests with receipt
+  offset `0000000000000000_0000000000000398` and event digest
+  `sha256:bbd8084305e44325a5e9b62102312f87c6eabd4e2d47a4410265e4014eb1fd1d`; the
+  expected-head race remained one accepted/one stale, lost-ack recovery remained one
+  target event, process-restart create/edit recovery preserved IDs and timestamps, and
+  authorization/key conflict candidate streams stayed unchanged.
+- Promoted evidence: `evidence/cold-verification.json`,
+  `evidence/dispatch-conformance.json`, `evidence/final-stream-dump.json`, and
+  `evidence/request-transcript.json`. Replay: N/A (server dispatch concurrency contract)
+  + mitigation: real HTTP race/retry/reset logs, provider headers, lost-ack recovery,
+  head/digest dumps, process-restart tests, and the cold-clone verifier. No Replay upload
+  or tunnel was attempted.
+- Claim: logical idempotency is stable across expected-head changes and process restart;
+  fences still reject concurrent stale writers, reset remains a durable idempotent event,
+  and orphan or mismatched receipts fail closed. A fresh critic must now verify this
+  final claim.

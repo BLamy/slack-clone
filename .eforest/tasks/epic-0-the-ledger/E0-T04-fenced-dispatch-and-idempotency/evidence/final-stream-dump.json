@@ -1,5 +1,5 @@
 {
-  "e0-t04-repair-same-key": {
+  "e0-t04-final-final-same-key": {
     "records": [
       {
         "logical": "one-event",
@@ -9,17 +9,17 @@
           "expectedHead": "0000000000000000_0000000000000000",
           "idempotencyKey": "ik_00000000000000000000000001",
           "operation": "chat.message.create",
-          "requestDigest": "sha256:0a2f53eb5764eaa252a8081d21a2573089d52505e69965f3559517eada16f310",
+          "requestDigest": "sha256:412b0988e383e1b1f1483c57590b47ecdb04c4e97c23501a9f3634b7a5f11e4b",
           "schemaVersion": 1,
-          "stream": "e0-t04-repair-same-key",
+          "stream": "e0-t04-final-final-same-key",
           "workspaceId": "ws_00000000000000000000000001"
         }
       }
     ],
-    "nextOffset": "0000000000000000_0000000000000393",
-    "streamDigest": "sha256:196b936487fdb23ee3a3593cf674b87f8dd362ecc0b71acc03a3d7b467fcc2e6"
+    "nextOffset": "0000000000000000_0000000000000398",
+    "streamDigest": "sha256:adfba5c047cd9e96bfacc1d40bedbcee32eedc39e8cb774ab003cddd73ea271d"
   },
-  "e0-t04-repair-conflicts": {
+  "e0-t04-final-final-conflicts": {
     "records": [
       {
         "value": "original",
@@ -28,41 +28,41 @@
           "expectedHead": "0000000000000000_0000000000000000",
           "idempotencyKey": "ik_00000000000000000000000002",
           "operation": "chat.message.create",
-          "requestDigest": "sha256:ae37c26a8152db987a863a74fde7d5b8caaa082158a3dd3e55aad4301b84e8d1",
+          "requestDigest": "sha256:8f418204a5401e8978ceba442098eb3b510374e5c4adc50867f8f088f4659968",
           "schemaVersion": 1,
-          "stream": "e0-t04-repair-conflicts",
+          "stream": "e0-t04-final-final-conflicts",
           "workspaceId": "ws_00000000000000000000000001"
         }
       }
     ],
-    "nextOffset": "0000000000000000_0000000000000381",
-    "streamDigest": "sha256:29e2bc255fb972f91b7846a5b19d6f9f2b7317ca11ba82a23510568792890ada"
+    "nextOffset": "0000000000000000_0000000000000386",
+    "streamDigest": "sha256:1e4bec3cd9c39f111768d86eaeb7b1f285cc2b286f8bcac0ed6c7c2bdac2a2d6"
   },
-  "e0-t04-repair-conflict-candidate": {
+  "e0-t04-final-final-conflict-candidate": {
     "records": [],
     "nextOffset": "0000000000000000_0000000000000000",
     "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
   },
-  "e0-t04-repair-race": {
+  "e0-t04-final-final-race": {
     "records": [
       {
-        "writer": "a",
+        "writer": "b",
         "dispatch": {
           "actorId": "pr_ada",
           "expectedHead": "0000000000000000_0000000000000000",
-          "idempotencyKey": "ik_00000000000000000000000003",
+          "idempotencyKey": "ik_00000000000000000000000004",
           "operation": "chat.message.create",
-          "requestDigest": "sha256:76d740438ab0b5a1638819753bcbd75784508e315824e415e9a23d77ec57db38",
+          "requestDigest": "sha256:93c392686690536599ede6de02e9e24a84e450fe8db5766a3876b89cf0683f2e",
           "schemaVersion": 1,
-          "stream": "e0-t04-repair-race",
+          "stream": "e0-t04-final-final-race",
           "workspaceId": "ws_00000000000000000000000001"
         }
       }
     ],
-    "nextOffset": "0000000000000000_0000000000000370",
-    "streamDigest": "sha256:da4d75d30891dfe79bdc8f63e64b5d93747c17bfdb70e4f4779b27bece3fe13e"
+    "nextOffset": "0000000000000000_0000000000000375",
+    "streamDigest": "sha256:eced4d23af86b093a6362e899eda4d829a2a0b075edb3ee4f28413a1ea59ae79"
   },
-  "e0-t04-repair-lost-ack": {
+  "e0-t04-final-final-lost-ack": {
     "records": [
       {
         "recovery": "durable",
@@ -71,17 +71,17 @@
           "expectedHead": "0000000000000000_0000000000000000",
           "idempotencyKey": "ik_00000000000000000000000005",
           "operation": "chat.message.create",
-          "requestDigest": "sha256:f136c2d43ac81d2eea8e115a585ad4912963f2e2f56a7238437942b83748af26",
+          "requestDigest": "sha256:0591bd577a8a5891bda14cd9e98fa5b3123e36801f7e6df8ee90f1ffa36bd5af",
           "schemaVersion": 1,
-          "stream": "e0-t04-repair-lost-ack",
+          "stream": "e0-t04-final-final-lost-ack",
           "workspaceId": "ws_00000000000000000000000001"
         }
       }
     ],
-    "nextOffset": "0000000000000000_0000000000000382",
-    "streamDigest": "sha256:0adf6cc98370182fbc1d24e4d73d399d55c9be4592ac727fb4d5e36161dd1ede"
+    "nextOffset": "0000000000000000_0000000000000387",
+    "streamDigest": "sha256:37444b519d09adb94c404ea91f03b0a04f4d3bf5620fa3d4e3a392eed2c1e585"
   },
-  "e0-t04-repair-captured": {
+  "e0-t04-final-final-captured": {
     "records": [
       {
         "advance": true,
@@ -90,22 +90,22 @@
           "expectedHead": "0000000000000000_0000000000000000",
           "idempotencyKey": "ik_00000000000000000000000007",
           "operation": "chat.message.create",
-          "requestDigest": "sha256:649170ea380711af6f566a8b3f94b59fd5e4d20d5f8d43e33d291d6d1345bacf",
+          "requestDigest": "sha256:74f1c006996e29394a9cab836d1be97897f06822660830e9f1cc1c10945d5b23",
           "schemaVersion": 1,
-          "stream": "e0-t04-repair-captured",
+          "stream": "e0-t04-final-final-captured",
           "workspaceId": "ws_00000000000000000000000001"
         }
       }
     ],
-    "nextOffset": "0000000000000000_0000000000000376",
-    "streamDigest": "sha256:b44e3423cc363965fbb29915b1d2adf310b623a9386a2b30f461905340330242"
+    "nextOffset": "0000000000000000_0000000000000381",
+    "streamDigest": "sha256:eb6d522c4ec3c07ac14382baadebaf7152d9d728f7a24b38dac7966441fbf04d"
   },
-  "e0-t04-repair-revoked": {
+  "e0-t04-final-final-revoked": {
     "records": [],
     "nextOffset": "0000000000000000_0000000000000000",
     "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
   },
-  "e0-t04-repair-deleted": {
+  "e0-t04-final-final-deleted": {
     "records": [],
     "nextOffset": "0000000000000000_0000000000000000",
     "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
@@ -116,13 +116,13 @@
         "kind": "dispatch.accepted",
         "receipt": {
           "actorId": "pr_ada",
-          "eventDigest": "sha256:89f3b31bc09cef7d50edd4c9cd963bbadc258e0716eb89e983a3da80e5cbe0e7",
+          "eventDigest": "sha256:bbd8084305e44325a5e9b62102312f87c6eabd4e2d47a4410265e4014eb1fd1d",
           "idempotencyKey": "ik_00000000000000000000000001",
-          "nextOffset": "0000000000000000_0000000000000393",
+          "nextOffset": "0000000000000000_0000000000000398",
           "operation": "chat.message.create",
-          "requestDigest": "sha256:0a2f53eb5764eaa252a8081d21a2573089d52505e69965f3559517eada16f310",
+          "requestDigest": "sha256:412b0988e383e1b1f1483c57590b47ecdb04c4e97c23501a9f3634b7a5f11e4b",
           "status": "accepted",
-          "stream": "e0-t04-repair-same-key",
+          "stream": "e0-t04-final-final-same-key",
           "workspaceId": "ws_00000000000000000000000001"
         }
       },
@@ -130,60 +130,60 @@
         "kind": "dispatch.accepted",
         "receipt": {
           "actorId": "pr_ada",
-          "eventDigest": "sha256:4726edf1739afbd9d0ed28d7ba4591dd51f166e1f7d5ad7d6c50a7cec41549c6",
+          "eventDigest": "sha256:63ca9cbcc472ee23dce2c18b1ca12ed9bf4bd9bd748bfd2b123700a3dc2c5313",
           "idempotencyKey": "ik_00000000000000000000000002",
+          "nextOffset": "0000000000000000_0000000000000386",
+          "operation": "chat.message.create",
+          "requestDigest": "sha256:8f418204a5401e8978ceba442098eb3b510374e5c4adc50867f8f088f4659968",
+          "status": "accepted",
+          "stream": "e0-t04-final-final-conflicts",
+          "workspaceId": "ws_00000000000000000000000001"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_ada",
+          "eventDigest": "sha256:6a685e4a310cfc31d66c117cd84de0704d85a51c3c77b5dac95fa63e1add2633",
+          "idempotencyKey": "ik_00000000000000000000000004",
+          "nextOffset": "0000000000000000_0000000000000375",
+          "operation": "chat.message.create",
+          "requestDigest": "sha256:93c392686690536599ede6de02e9e24a84e450fe8db5766a3876b89cf0683f2e",
+          "status": "accepted",
+          "stream": "e0-t04-final-final-race",
+          "workspaceId": "ws_00000000000000000000000001"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_ada",
+          "eventDigest": "sha256:3e37a06968069f1224fcd2432c7f30f287854c7a835e1122ee80bcff799b47b7",
+          "idempotencyKey": "ik_00000000000000000000000005",
+          "nextOffset": "0000000000000000_0000000000000387",
+          "operation": "chat.message.create",
+          "requestDigest": "sha256:0591bd577a8a5891bda14cd9e98fa5b3123e36801f7e6df8ee90f1ffa36bd5af",
+          "status": "accepted",
+          "stream": "e0-t04-final-final-lost-ack",
+          "workspaceId": "ws_00000000000000000000000001"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_ada",
+          "eventDigest": "sha256:ae04b599fe3f5ec71b7261ac2e1cca52d676501c93968039abd442a3fec60e0a",
+          "idempotencyKey": "ik_00000000000000000000000007",
           "nextOffset": "0000000000000000_0000000000000381",
           "operation": "chat.message.create",
-          "requestDigest": "sha256:ae37c26a8152db987a863a74fde7d5b8caaa082158a3dd3e55aad4301b84e8d1",
+          "requestDigest": "sha256:74f1c006996e29394a9cab836d1be97897f06822660830e9f1cc1c10945d5b23",
           "status": "accepted",
-          "stream": "e0-t04-repair-conflicts",
-          "workspaceId": "ws_00000000000000000000000001"
-        }
-      },
-      {
-        "kind": "dispatch.accepted",
-        "receipt": {
-          "actorId": "pr_ada",
-          "eventDigest": "sha256:229d52a46471f4ce4c2c519650ac03b56279467213b489784fea0f8d4071dfb1",
-          "idempotencyKey": "ik_00000000000000000000000003",
-          "nextOffset": "0000000000000000_0000000000000370",
-          "operation": "chat.message.create",
-          "requestDigest": "sha256:76d740438ab0b5a1638819753bcbd75784508e315824e415e9a23d77ec57db38",
-          "status": "accepted",
-          "stream": "e0-t04-repair-race",
-          "workspaceId": "ws_00000000000000000000000001"
-        }
-      },
-      {
-        "kind": "dispatch.accepted",
-        "receipt": {
-          "actorId": "pr_ada",
-          "eventDigest": "sha256:999bf2371854df5f38944e958a6074c21ab9eae70e4c09add902cac5522f78ac",
-          "idempotencyKey": "ik_00000000000000000000000005",
-          "nextOffset": "0000000000000000_0000000000000382",
-          "operation": "chat.message.create",
-          "requestDigest": "sha256:f136c2d43ac81d2eea8e115a585ad4912963f2e2f56a7238437942b83748af26",
-          "status": "accepted",
-          "stream": "e0-t04-repair-lost-ack",
-          "workspaceId": "ws_00000000000000000000000001"
-        }
-      },
-      {
-        "kind": "dispatch.accepted",
-        "receipt": {
-          "actorId": "pr_ada",
-          "eventDigest": "sha256:9861d103261eed5888e7aef080b0ce491c8d4253b6e33d42ffad751ba3144911",
-          "idempotencyKey": "ik_00000000000000000000000007",
-          "nextOffset": "0000000000000000_0000000000000376",
-          "operation": "chat.message.create",
-          "requestDigest": "sha256:649170ea380711af6f566a8b3f94b59fd5e4d20d5f8d43e33d291d6d1345bacf",
-          "status": "accepted",
-          "stream": "e0-t04-repair-captured",
+          "stream": "e0-t04-final-final-captured",
           "workspaceId": "ws_00000000000000000000000001"
         }
       }
     ],
-    "nextOffset": "0000000000000000_0000000000002372",
-    "streamDigest": "sha256:c090271a3d928cf79eddb74a77200d350cb392afa74bd1491c8434698e9700b5"
+    "nextOffset": "0000000000000000_0000000000002397",
+    "streamDigest": "sha256:54b38c0e013ff53a93f78bbeba0be482e100ba4c1a2d0aa3a946fc9808e7c81d"
   }
 }

@@ -1,45 +1,45 @@
 {
   "schemaVersion": 1,
   "task": "E0-T04",
-  "runId": "e0-t04-repair",
-  "implementationCommit": "57a19eba516fb4f4f0883833ecced3da3122bfcb",
+  "runId": "e0-t04-final-final",
+  "implementationCommit": "c94ca7e834c9218a7016c61112d6d45615dd95fc",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
-  "artifactRoot": "/Users/brettlamy/Dev/slack-clone/.artifacts/e0-t04/e0-t04-repair",
+  "artifactRoot": "/Users/brettlamy/Dev/slack-clone/.artifacts/e0-t04/e0-t04-final-final",
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 4305,
+      "durationMs": 1894,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 2961,
+      "durationMs": 2056,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 6677,
+      "durationMs": 4371,
       "name": "static-analysis",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 23424,
+      "durationMs": 22269,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm test:conformance:e0-t04",
-      "durationMs": 7750,
+      "durationMs": 8167,
       "name": "conformance",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 1050,
+      "durationMs": 589,
       "name": "build",
       "result": "PASS"
     }
@@ -53,10 +53,10 @@
       "requests": 100,
       "logicalEvents": 1,
       "receiptOffsets": [
-        "0000000000000000_0000000000000393"
+        "0000000000000000_0000000000000398"
       ],
       "receiptDigests": [
-        "sha256:89f3b31bc09cef7d50edd4c9cd963bbadc258e0716eb89e983a3da80e5cbe0e7"
+        "sha256:bbd8084305e44325a5e9b62102312f87c6eabd4e2d47a4410265e4014eb1fd1d"
       ]
     },
     "conflicts": {
@@ -85,16 +85,16 @@
       "noCandidateMutation": true
     },
     "requestDigestEvidence": {
-      "accepted": "sha256:0a2f53eb5764eaa252a8081d21a2573089d52505e69965f3559517eada16f310",
+      "accepted": "sha256:412b0988e383e1b1f1483c57590b47ecdb04c4e97c23501a9f3634b7a5f11e4b",
       "conflictRefusals": [
-        "sha256:a2fff5ae67aff3b677cfe9c51a59a7aa28af0481fb832fa60441a5494f13c2e7",
-        "sha256:6e5a29086273eb28e3a800a69de1bdc54a624a9199de0a2b54a0e4b37f6dcdf9",
-        "sha256:d3f3df547dbe5cf6c714a35c48fe2a7632803b5d898200f356cb8e874385d49c",
-        "sha256:0ffdc901bd72715d8c86f0a7f46ab58121ba29937f9a7d8b4d4e0b2603be556b",
-        "sha256:08dac25868b029db3202f14a39ab0466ef61c2b3cb7a74a787ec435d2f1c5b2c"
+        "sha256:ce2bbe0bb90487b35487bc9d3837bed3493d98a806ea0158e599f80cd5c75f09",
+        "sha256:af404dc394873b768d1895f7f8322adfccb7b2455fea4bde8fedaf59fa803e0e",
+        "sha256:f953af5ad50813c7c45499c1d7f991136ed9327f765d40f53e036ae1a5dc7414",
+        "sha256:670098a55d47fc794b2895661b6182f66ede546eb231b175e7ed38c28f1eff8c",
+        "sha256:149c3c51e46c4fcf0d1bdd49e5c316933a9255112e1b06d1983cc376ecb2b032"
       ],
-      "staleFence": "sha256:67446ba7f746fe5addf440f43f9365434dda5e7db51f53ff3e785fc14e958c19",
-      "lostAckRecovery": "sha256:f136c2d43ac81d2eea8e115a585ad4912963f2e2f56a7238437942b83748af26"
+      "staleFence": "sha256:adafa911a44e97662fc6069dde65745dd4fdcbaa95f7ec8fc77c8dec3c0d69c3",
+      "lostAckRecovery": "sha256:0591bd577a8a5891bda14cd9e98fa5b3123e36801f7e6df8ee90f1ffa36bd5af"
     }
   }
 }

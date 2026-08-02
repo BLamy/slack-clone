@@ -58,6 +58,37 @@ test("one hundred concurrent same-scope requests append one logical event", asyn
   door.close();
 });
 
+test("independent doors converge same-key races to one receipt", async () => {
+  const store = createMemoryStore({ appendDelayMs: 5 });
+  const doorA = createDispatchDoor({
+    producerEpoch: 0,
+    producerId: "unit-same-key-door-a",
+    streamStore: store,
+  });
+  const doorB = createDispatchDoor({
+    producerEpoch: 0,
+    producerId: "unit-same-key-door-b",
+    streamStore: store,
+  });
+  const input = request({
+    idempotencyKey: idempotencyKey(12),
+    payload: { logical: "one-cross-door-event" },
+    stream: "cross-door-same-key",
+  });
+  const results = await Promise.all([
+    doorA.dispatch(input),
+    doorB.dispatch(input),
+  ]);
+  assert.deepEqual(results[0].receipt, results[1].receipt);
+  assert.equal((await store.read(input.stream)).records.length, 1);
+  assert.equal(
+    (await store.read("__stream_slack_dispatch_idempotency__")).records.length,
+    1,
+  );
+  doorA.close();
+  doorB.close();
+});
+
 test("reusing a key across payload, actor, workspace, operation, or stream is refused", async () => {
   const store = createMemoryStore();
   const door = createDispatchDoor({
@@ -133,6 +164,29 @@ test("two independent writers sharing an expected head have one provider-enforce
   assert.equal((await store.read(first.stream)).records.length, 1);
   doorA.close();
   doorB.close();
+});
+
+test("application expected-head refusal is sensitive without provider fencing", async () => {
+  const store = createMemoryStore({ enforceStreamSeq: false });
+  const door = createDispatchDoor({
+    producerEpoch: 0,
+    producerId: "unit-application-fence-door",
+    streamStore: store,
+  });
+  const stream = "application-fence-room";
+  await store.append(stream, { seed: true });
+  const stale = request({
+    expectedHead: "offset-0",
+    idempotencyKey: idempotencyKey(13),
+    stream,
+  });
+
+  await assert.rejects(
+    door.dispatch(stale),
+    (error) => error.code === DISPATCH_REFUSAL_CODES.STALE_FENCE,
+  );
+  assert.equal((await store.read(stream)).records.length, 1);
+  door.close();
 });
 
 test("a lost acknowledgement recovers from the durable event without a second target append", async () => {
@@ -265,6 +319,7 @@ async function dumpStreams(store, streams) {
 
 function createMemoryStore({
   appendDelayMs = 0,
+  enforceStreamSeq = true,
   failAfterAppendFor = null,
 } = {}) {
   const streams = new Map();
@@ -280,6 +335,7 @@ function createMemoryStore({
       const records = streams.get(stream) ?? [];
       const expectedHead = `offset-${records.length}`;
       if (
+        enforceStreamSeq &&
         options.streamSeq !== undefined &&
         options.streamSeq !== expectedHead
       ) {

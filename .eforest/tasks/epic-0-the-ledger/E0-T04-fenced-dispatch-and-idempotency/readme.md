@@ -3,7 +3,7 @@ id: E0-T04
 epic: 0
 title: "Fenced dispatch and idempotent application writes"
 priority: 4
-status: implemented
+status: in-progress
 depends_on: [E0-T03]
 estimate: L
 capstone: false
@@ -187,3 +187,27 @@ key cannot be replayed for different content.
   fences still reject concurrent stale writers, reset remains a durable idempotent event,
   and orphan or mismatched receipts fail closed. A fresh critic must now verify this
   final claim.
+
+### Critic — 2026-08-02 — third independent refutation
+
+- Verdict: `VERDICT: refuted`.
+- The critic passed the final cold verifier, process-restart create/edit recovery, reset
+  ordering, receipt integrity, authorization, and changed-payload attacks. It found two
+  remaining gaps: disabling the application expected-head check stayed green because the
+  conformance race was still protected by provider `Stream-Seq`, and 100 same-key
+  requests split across independent dispatch doors returned stale refusals instead of all
+  converging on one receipt.
+- Scratch attack output is retained under `work/critic-final/`; it is not committed
+  evidence or a product artifact. The critic did not modify product code or metadata.
+
+### Builder — 2026-08-02 — cross-door convergence and verifier sensitivity repair
+
+- On a stale-fence append, re-read the target for the same idempotency key and reconcile
+  its durable event/receipt; receipt-stream append conflicts similarly re-read the index.
+  Independent doors now converge same-key retries to one receipt while different-key
+  races remain stale refusals.
+- Added a permissive-provider unit fixture with an already-advanced head so the
+  application expected-head refusal itself is mutation-sensitive, and alternated the
+  100-request real HTTP conformance race across both dispatch doors.
+- Added focused tests for cross-door same-key receipts and provider-independent
+  expected-head sensitivity. A final cold run and a fresh critic must now rerun.

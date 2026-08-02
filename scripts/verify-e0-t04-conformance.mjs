@@ -142,8 +142,11 @@ try {
     stream: sameRoom,
   });
   const concurrent = await Promise.all(
-    Array.from({ length: 100 }, () =>
-      postJson(`${endpoint}/dispatch-a`, sameRequest),
+    Array.from({ length: 100 }, (_, index) =>
+      postJson(
+        `${endpoint}/${index % 2 === 0 ? "dispatch-a" : "dispatch-b"}`,
+        sameRequest,
+      ),
     ),
   );
   assert.equal(concurrent.filter((result) => result.ok).length, 100);

@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E0-T04 fence/digest split passes the final exact cold verifier and awaits a fresh independent critic.",
-  "updatedAt": "2026-08-02T13:55:00Z"
+  "statusReason": "E0-T04 independent-door convergence and provider-independent fence sensitivity are being reverified after the third critic refutation.",
+  "updatedAt": "2026-08-02T14:30:00Z"
 }

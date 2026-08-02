@@ -225,15 +225,13 @@ export function createDispatchDoor({
       request.idempotencyKey,
     );
     if (recovered) {
-      assertMetadataMatchesRequest(recovered.dispatch, request, requestDigest);
-      const receipt = createReceipt({
+      return recoverTargetReceipt({
         request,
         requestDigest,
-        eventDigest: canonicalSha256(recovered),
-        nextOffset: targetSnapshot.nextOffset,
+        signal,
+        snapshot: targetSnapshot,
+        event: recovered,
       });
-      const persisted = await persistReceipt(receipt, signal);
-      return resultFromReceipt(persisted, targetSnapshot, recovered);
     }
 
     if (targetSnapshot.nextOffset !== request.expectedHead) {
@@ -269,7 +267,27 @@ export function createDispatchDoor({
       });
       producerSequences.set(request.stream, producerSeq + 1);
     } catch (error) {
-      throw mapAppendError(error, requestDigest);
+      const refusal = mapAppendError(error, requestDigest);
+      if (
+        refusal instanceof DispatchRefusalError &&
+        refusal.code === DISPATCH_REFUSAL_CODES.STALE_FENCE
+      ) {
+        const targetSnapshot = await readStream(request.stream, signal);
+        const recovered = findTargetEvent(
+          targetSnapshot.records,
+          request.idempotencyKey,
+        );
+        if (recovered) {
+          return recoverTargetReceipt({
+            request,
+            requestDigest,
+            signal,
+            snapshot: targetSnapshot,
+            event: recovered,
+          });
+        }
+      }
+      throw refusal;
     }
 
     const receipt = createReceipt({
@@ -322,10 +340,47 @@ export function createDispatchDoor({
         );
         producerSequences.set(idempotencyStream, sequence + 1);
       } catch (error) {
-        throw mapAppendError(error, receipt.requestDigest);
+        const refusal = mapAppendError(error, receipt.requestDigest);
+        if (
+          refusal instanceof DispatchRefusalError &&
+          refusal.code === DISPATCH_REFUSAL_CODES.STALE_FENCE
+        ) {
+          const refreshed = await readStream(idempotencyStream, signal);
+          const indexed = findIndexedReceipt(
+            refreshed.records,
+            receipt.idempotencyKey,
+          );
+          if (indexed) {
+            assertReceiptMatchesRequest(
+              indexed,
+              receiptRequest(receipt),
+              receipt.requestDigest,
+            );
+            return indexed;
+          }
+        }
+        throw refusal;
       }
       return receipt;
     });
+  }
+
+  async function recoverTargetReceipt({
+    request,
+    requestDigest,
+    signal,
+    snapshot,
+    event,
+  }) {
+    assertMetadataMatchesRequest(event.dispatch, request, requestDigest);
+    const receipt = createReceipt({
+      request,
+      requestDigest,
+      eventDigest: canonicalSha256(event),
+      nextOffset: snapshot.nextOffset,
+    });
+    const persisted = await persistReceipt(receipt, signal);
+    return resultFromReceipt(persisted, snapshot, event);
   }
 
   async function readStream(stream, signal) {

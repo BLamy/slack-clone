@@ -16,7 +16,9 @@ event and rebuild the receipt from Durable Streams without a cache acting as aut
 The target append sends the exact expected checkpoint as `Stream-Seq` and sends
 `Producer-Id`, `Producer-Epoch`, and `Producer-Seq`. The adapter turns a provider conflict
 into a stable stale-fence refusal. A duplicate producer response is a successful recovery
-case, not a second logical event.
+case, not a second logical event. If another dispatcher wins the same idempotency key,
+the loser re-reads the target and reconciles the winner's durable event and receipt;
+different keys still receive a stale-fence refusal.
 
 Validation and authorization happen before idempotency success lookup or append. A key
 already bound to another canonical request, actor, workspace, operation, or stream is

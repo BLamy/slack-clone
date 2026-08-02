@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-resubmit3",
-  "implementationCommit": "226e51eee32037d2208e52a1254ed8bab7e57007",
+  "runId": "e0-t03-builder-resubmit4",
+  "implementationCommit": "88a4fec7ce8c35b7aaff49f06051734f770c08d6",
   "result": "PASS",
   "filesScanned": 50,
   "failures": [],
@@ -13,7 +13,13 @@
       "destructured",
       "assigned",
       "bound",
-      "twoStepGlobal"
+      "twoStepGlobal",
+      "fetchCall",
+      "fetchApply",
+      "reflectApply",
+      "wrapperFunction",
+      "objectPropertyAssignment",
+      "templateComputed"
     ],
     "detections": {
       "direct": [
@@ -29,6 +35,24 @@
         "direct-provider-network"
       ],
       "twoStepGlobal": [
+        "direct-provider-network"
+      ],
+      "fetchCall": [
+        "direct-provider-network"
+      ],
+      "fetchApply": [
+        "direct-provider-network"
+      ],
+      "reflectApply": [
+        "direct-provider-network"
+      ],
+      "wrapperFunction": [
+        "direct-provider-network"
+      ],
+      "objectPropertyAssignment": [
+        "direct-provider-network"
+      ],
+      "templateComputed": [
         "direct-provider-network"
       ]
     }

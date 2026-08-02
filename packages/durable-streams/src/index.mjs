@@ -13,7 +13,24 @@ const JSON_CONTENT_TYPE = "application/json";
 const MAX_CHECKPOINT_BYTES = 512;
 const PROTOCOL_ERROR_HEADER = "x-stream-slack-protocol-error";
 const RETRY_AFTER_HTTP_DATE =
-  /^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} GMT$/u;
+  /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), (\d{2}) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{4}) (\d{2}):(\d{2}):(\d{2}) GMT$/u;
+const HTTP_MONTHS = new Map(
+  [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ].map((month, index) => [month, index]),
+);
+const HTTP_WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const DEFAULT_BACKOFF = Object.freeze({
   initialDelay: 25,
   maxDelay: 1_000,
@@ -39,6 +56,7 @@ export function createDurableStreamsStore({
   backoffOptions = DEFAULT_BACKOFF,
 }) {
   const origin = normalizeBaseUrl(baseUrl);
+  const configuredOrigin = new URL(origin).origin;
   if (typeof token !== "string" || token.length === 0) {
     throw new TypeError("Durable Streams administration token is required");
   }
@@ -86,7 +104,7 @@ export function createDurableStreamsStore({
     };
     const instrumentedFetch = async (input, init = {}) => {
       const url = new URL(String(input));
-      if (url.origin !== new URL(origin).origin) {
+      if (url.origin !== configuredOrigin) {
         throw new DurableStreamsAdapterError(
           "Durable Streams client attempted a request outside its configured origin",
           { code: "ORIGIN_VIOLATION" },
@@ -102,8 +120,13 @@ export function createDurableStreamsStore({
         metrics.longPollRequests += 1;
       }
 
-      let response = await fetchFn(input, init);
+      let response = await fetchFn(input, { ...init, redirect: "manual" });
       increment(metrics.responsesByStatus, String(response.status));
+      await validateResponseOrigin({
+        configuredOrigin,
+        requestUrl: url,
+        response,
+      });
       if (!response.ok) {
         try {
           validateRetryAfter(response);
@@ -494,15 +517,90 @@ function validateRetryAfter(response) {
   if (/^\d+$/u.test(retryAfter)) {
     const seconds = Number(retryAfter);
     if (Number.isSafeInteger(seconds)) return;
-  } else if (
-    RETRY_AFTER_HTTP_DATE.test(retryAfter) &&
-    Number.isFinite(Date.parse(retryAfter))
-  ) {
+  } else if (isCanonicalHttpDate(retryAfter)) {
     return;
   }
   throw new DurableStreamsAdapterError(
     "Durable Streams response used a malformed Retry-After header",
     { code: "INVALID_RETRY_AFTER", status: response.status },
+  );
+}
+
+function isCanonicalHttpDate(value) {
+  const match = RETRY_AFTER_HTTP_DATE.exec(value);
+  if (!match) return false;
+  const [
+    ,
+    weekday,
+    dayText,
+    monthText,
+    yearText,
+    hourText,
+    minuteText,
+    secondText,
+  ] = match;
+  const day = Number(dayText);
+  const month = HTTP_MONTHS.get(monthText);
+  const year = Number(yearText);
+  const hour = Number(hourText);
+  const minute = Number(minuteText);
+  const second = Number(secondText);
+  if (month === undefined || hour > 23 || minute > 59 || second > 59) {
+    return false;
+  }
+
+  const parsed = new Date(0);
+  parsed.setUTCHours(hour, minute, second, 0);
+  parsed.setUTCFullYear(year, month, day);
+  return (
+    parsed.getUTCFullYear() === year &&
+    parsed.getUTCMonth() === month &&
+    parsed.getUTCDate() === day &&
+    parsed.getUTCHours() === hour &&
+    parsed.getUTCMinutes() === minute &&
+    parsed.getUTCSeconds() === second &&
+    HTTP_WEEKDAYS[parsed.getUTCDay()] === weekday
+  );
+}
+
+async function validateResponseOrigin({
+  configuredOrigin,
+  requestUrl,
+  response,
+}) {
+  if (response.url) {
+    const responseUrl = new URL(response.url, requestUrl);
+    if (responseUrl.origin !== configuredOrigin) {
+      await discardResponse(response);
+      throw new DurableStreamsAdapterError(
+        "Durable Streams client received a response outside its configured origin",
+        { code: "ORIGIN_VIOLATION", status: response.status },
+      );
+    }
+  }
+
+  if (response.status < 300 || response.status > 399) return;
+  const location = response.headers.get("location");
+  let redirectUrl;
+  try {
+    redirectUrl = location ? new URL(location, requestUrl) : null;
+  } catch {
+    await discardResponse(response);
+    throw new DurableStreamsAdapterError(
+      "Durable Streams response used a malformed redirect location",
+      { code: "INVALID_REDIRECT", status: response.status },
+    );
+  }
+  await discardResponse(response);
+  if (redirectUrl && redirectUrl.origin !== configuredOrigin) {
+    throw new DurableStreamsAdapterError(
+      "Durable Streams client refused a redirect outside its configured origin",
+      { code: "ORIGIN_VIOLATION", status: response.status },
+    );
+  }
+  throw new DurableStreamsAdapterError(
+    "Durable Streams client refused an unexpected provider redirect",
+    { code: "UNEXPECTED_REDIRECT", status: response.status },
   );
 }
 

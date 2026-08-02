@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import crypto from "node:crypto";
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { createServer } from "node:http";
 import path from "node:path";
 
 import { createDurableStreamsStore } from "@stream-slack/durable-streams";
@@ -189,6 +190,7 @@ try {
   );
   assert.equal(pollingPositiveControl.pollingTimerExecutions, 2_571);
   const malformedRetryAfter = await verifyMalformedRetryAfter();
+  const redirectBoundary = await verifyRedirectBoundary();
 
   const allAccepted = [...accepted, liveRecord, secondLiveRecord];
   const allOffsets = [
@@ -247,7 +249,7 @@ try {
       activeFollowers: diagnosticsAfterCancel.activeFollowers,
       pendingIdleWaiters: diagnosticsAfterCancel.pendingIdleWaiters,
     },
-    strictTransport: { malformedRetryAfter },
+    strictTransport: { malformedRetryAfter, redirectBoundary },
     requestTranscript: transcript,
   };
   requestBudget = {
@@ -329,8 +331,77 @@ console.log(
 
 async function verifyMalformedRetryAfter() {
   const checkpoint = "opaque-retry-checkpoint";
-  let getAttempts = 0;
-  const retryStore = createDurableStreamsStore({
+  const invalidCases = [];
+  for (const [name, retryAfter] of [
+    ["non-date", "conformance-not-a-delay"],
+    ["impossible-imf-date", "Mon, 31 Feb 2026 00:00:00 GMT"],
+  ]) {
+    let getAttempts = 0;
+    const retryStore = createRetryStore({
+      checkpoint,
+      retryAfter,
+      onGet: () => {
+        getAttempts += 1;
+        return getAttempts;
+      },
+    });
+    try {
+      let observed;
+      try {
+        await retryStore.read(`strict-retry-${name}`, "-1");
+      } catch (error) {
+        observed = error;
+      }
+      assert.equal(observed?.code, "INVALID_RETRY_AFTER");
+      assert.equal(observed?.status, 503);
+      assert.equal(getAttempts, 1);
+      invalidCases.push({
+        name,
+        retryAfter,
+        rejectionCode: observed.code,
+        responseStatus: observed.status,
+        getAttempts,
+        silentlyRetried: false,
+      });
+    } finally {
+      retryStore.close();
+    }
+  }
+
+  let validGetAttempts = 0;
+  const validStore = createRetryStore({
+    checkpoint,
+    retryAfter: "Thu, 01 Jan 1970 00:00:00 GMT",
+    onGet: () => {
+      validGetAttempts += 1;
+      return validGetAttempts;
+    },
+  });
+  try {
+    const result = await validStore.read("strict-retry-valid-date", "-1");
+    assert.deepEqual(result.records, []);
+    assert.equal(validGetAttempts, 2);
+  } finally {
+    validStore.close();
+  }
+
+  return {
+    malformedValue: "[MALFORMED]",
+    rejectionCode: invalidCases[0].rejectionCode,
+    responseStatus: invalidCases[0].responseStatus,
+    getAttempts: invalidCases[0].getAttempts,
+    silentlyRetried: false,
+    invalidCases,
+    canonicalHttpDate: {
+      retryAfter: "Thu, 01 Jan 1970 00:00:00 GMT",
+      accepted: true,
+      getAttempts: validGetAttempts,
+    },
+  };
+}
+
+function createRetryStore({ checkpoint, retryAfter, onGet }) {
+  return createDurableStreamsStore({
     baseUrl: "http://streams.invalid",
     token: "protocol-double-token",
     digestRecords: canonicalSha256,
@@ -347,11 +418,10 @@ async function verifyMalformedRetryAfter() {
           headers: { "Stream-Next-Offset": checkpoint },
         });
       }
-      getAttempts += 1;
-      if (getAttempts === 1) {
+      if (onGet() === 1) {
         return new Response("busy", {
           status: 503,
-          headers: { "Retry-After": "conformance-not-a-delay" },
+          headers: { "Retry-After": retryAfter },
         });
       }
       return new Response("[]", {
@@ -364,25 +434,53 @@ async function verifyMalformedRetryAfter() {
       });
     },
   });
+}
+
+async function verifyRedirectBoundary() {
+  let sourceRequests = 0;
+  let targetRequests = 0;
+  const target = await listenOnLoopback((_request, response) => {
+    targetRequests += 1;
+    response.writeHead(200, {
+      "Stream-Next-Offset": "opaque-redirect-target",
+    });
+    response.end();
+  });
+  const source = await listenOnLoopback((_request, response) => {
+    sourceRequests += 1;
+    response.writeHead(307, {
+      Connection: "close",
+      Location: `${target.origin}/redirect-target`,
+    });
+    response.end();
+  });
+  const redirectStore = createDurableStreamsStore({
+    baseUrl: source.origin,
+    token: "protocol-double-token",
+    fetchFn: fetch,
+    digestRecords: canonicalSha256,
+  });
   try {
     let observed;
     try {
-      await retryStore.read("strict-retry", "-1");
+      await redirectStore.ensure("redirect-boundary");
     } catch (error) {
       observed = error;
     }
-    assert.equal(observed?.code, "INVALID_RETRY_AFTER");
-    assert.equal(observed?.status, 503);
-    assert.equal(getAttempts, 1);
+    assert.equal(observed?.code, "ORIGIN_VIOLATION");
+    assert.equal(observed?.status, 307);
+    assert.equal(sourceRequests, 1);
+    assert.equal(targetRequests, 0);
     return {
-      malformedValue: "[MALFORMED]",
+      configuredOriginRequests: sourceRequests,
+      redirectedOriginRequests: targetRequests,
       rejectionCode: observed.code,
       responseStatus: observed.status,
-      getAttempts,
-      silentlyRetried: false,
+      targetReceivedRequest: false,
     };
   } finally {
-    retryStore.close();
+    redirectStore.close();
+    await Promise.all([source.close(), target.close()]);
   }
 }
 
@@ -409,6 +507,12 @@ function verifySourceAuditSensitivity() {
       const streamOrigin = "http://streams.invalid";
       send(streamOrigin + "/rooms/bound/messages");
     `,
+    twoStepGlobal: `
+      const runtime = globalThis;
+      const dispatch = runtime.fetch;
+      const streamOrigin = "http://streams.invalid";
+      dispatch(streamOrigin + "/rooms/two-step/messages");
+    `,
   };
   const detections = Object.fromEntries(
     Object.entries(fixtures).map(([name, source]) => [
@@ -425,6 +529,27 @@ function verifySourceAuditSensitivity() {
     result: "PASS",
     fixtures: Object.keys(fixtures),
     detections,
+  };
+}
+
+async function listenOnLoopback(handler) {
+  const server = createServer(handler);
+  await new Promise((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(0, "127.0.0.1", () => {
+      server.off("error", reject);
+      resolve();
+    });
+  });
+  const address = server.address();
+  assert.ok(address && typeof address === "object");
+  return {
+    origin: `http://127.0.0.1:${address.port}`,
+    close: () =>
+      new Promise((resolve, reject) => {
+        server.close((error) => (error ? reject(error) : resolve()));
+        server.closeAllConnections?.();
+      }),
   };
 }
 

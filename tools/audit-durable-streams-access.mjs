@@ -29,6 +29,7 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
   const violations = [];
   const providerIdentifiers = new Set();
   const networkIdentifiers = new Set(["fetch"]);
+  const networkContainerIdentifiers = new Set(["globalThis", "self", "window"]);
   let sourceCode;
   const captureRule = {
     meta: { type: "problem", schema: [] },
@@ -92,7 +93,18 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
             providerIdentifiers.add(identifier);
           }
         }
-        captureNetworkAliases(pattern, value, sourceCode, networkIdentifiers);
+        captureNetworkContainerAliases(
+          pattern,
+          value,
+          networkContainerIdentifiers,
+        );
+        captureNetworkAliases(
+          pattern,
+          value,
+          sourceCode,
+          networkIdentifiers,
+          networkContainerIdentifiers,
+        );
       }
     },
   };
@@ -227,28 +239,68 @@ function isNetworkCall(callee, sourceCode, networkIdentifiers) {
   );
 }
 
-function isNetworkReference(node, sourceCode, networkIdentifiers) {
+function isNetworkReference(
+  node,
+  sourceCode,
+  networkIdentifiers,
+  networkContainerIdentifiers,
+) {
   if (node.type === "ChainExpression") {
-    return isNetworkReference(node.expression, sourceCode, networkIdentifiers);
+    return isNetworkReference(
+      node.expression,
+      sourceCode,
+      networkIdentifiers,
+      networkContainerIdentifiers,
+    );
   }
   if (node.type === "AwaitExpression") {
-    return isNetworkReference(node.argument, sourceCode, networkIdentifiers);
+    return isNetworkReference(
+      node.argument,
+      sourceCode,
+      networkIdentifiers,
+      networkContainerIdentifiers,
+    );
   }
   if (node.type === "SequenceExpression") {
     return node.expressions.some((expression) =>
-      isNetworkReference(expression, sourceCode, networkIdentifiers),
+      isNetworkReference(
+        expression,
+        sourceCode,
+        networkIdentifiers,
+        networkContainerIdentifiers,
+      ),
     );
   }
   if (node.type === "ConditionalExpression") {
     return (
-      isNetworkReference(node.consequent, sourceCode, networkIdentifiers) ||
-      isNetworkReference(node.alternate, sourceCode, networkIdentifiers)
+      isNetworkReference(
+        node.consequent,
+        sourceCode,
+        networkIdentifiers,
+        networkContainerIdentifiers,
+      ) ||
+      isNetworkReference(
+        node.alternate,
+        sourceCode,
+        networkIdentifiers,
+        networkContainerIdentifiers,
+      )
     );
   }
   if (node.type === "LogicalExpression") {
     return (
-      isNetworkReference(node.left, sourceCode, networkIdentifiers) ||
-      isNetworkReference(node.right, sourceCode, networkIdentifiers)
+      isNetworkReference(
+        node.left,
+        sourceCode,
+        networkIdentifiers,
+        networkContainerIdentifiers,
+      ) ||
+      isNetworkReference(
+        node.right,
+        sourceCode,
+        networkIdentifiers,
+        networkContainerIdentifiers,
+      )
     );
   }
   if (node.type === "CallExpression") {
@@ -259,7 +311,12 @@ function isNetworkReference(node, sourceCode, networkIdentifiers) {
     return (
       callee.type === "MemberExpression" &&
       memberPropertyName(callee) === "bind" &&
-      isNetworkReference(callee.object, sourceCode, networkIdentifiers)
+      isNetworkReference(
+        callee.object,
+        sourceCode,
+        networkIdentifiers,
+        networkContainerIdentifiers,
+      )
     );
   }
   if (node.type === "Identifier") {
@@ -272,26 +329,47 @@ function isNetworkReference(node, sourceCode, networkIdentifiers) {
   return (
     typeof property === "string" &&
     /^(?:fetch|request)$/iu.test(property) &&
-    /(?:axios|client|fetch|globalThis|http|request|undici)/iu.test(
-      sourceCode.getText(node.object),
-    )
+    (isNetworkContainerReference(node.object, networkContainerIdentifiers) ||
+      /(?:axios|client|fetch|globalThis|http|request|undici)/iu.test(
+        sourceCode.getText(node.object),
+      ))
   );
 }
 
-function captureNetworkAliases(pattern, value, sourceCode, networkIdentifiers) {
+function captureNetworkAliases(
+  pattern,
+  value,
+  sourceCode,
+  networkIdentifiers,
+  networkContainerIdentifiers,
+) {
   if (pattern.type === "Identifier") {
-    if (isNetworkReference(value, sourceCode, networkIdentifiers)) {
+    if (
+      isNetworkReference(
+        value,
+        sourceCode,
+        networkIdentifiers,
+        networkContainerIdentifiers,
+      )
+    ) {
       networkIdentifiers.add(pattern.name);
     }
     return;
   }
   if (pattern.type === "AssignmentPattern") {
-    captureNetworkAliases(pattern.left, value, sourceCode, networkIdentifiers);
+    captureNetworkAliases(
+      pattern.left,
+      value,
+      sourceCode,
+      networkIdentifiers,
+      networkContainerIdentifiers,
+    );
     return;
   }
   if (pattern.type !== "ObjectPattern") return;
 
   const networkContainer =
+    isNetworkContainerReference(value, networkContainerIdentifiers) ||
     /(?:axios|client|fetch|globalThis|http|request|self|undici|window)/iu.test(
       sourceCode.getText(value),
     );
@@ -309,6 +387,87 @@ function captureNetworkAliases(pattern, value, sourceCode, networkIdentifiers) {
       networkIdentifiers.add(identifier);
     }
   }
+}
+
+function captureNetworkContainerAliases(
+  pattern,
+  value,
+  networkContainerIdentifiers,
+) {
+  if (pattern.type === "Identifier") {
+    if (isNetworkContainerReference(value, networkContainerIdentifiers)) {
+      networkContainerIdentifiers.add(pattern.name);
+    }
+    return;
+  }
+  if (pattern.type === "AssignmentPattern") {
+    captureNetworkContainerAliases(
+      pattern.left,
+      value,
+      networkContainerIdentifiers,
+    );
+    return;
+  }
+  if (
+    pattern.type !== "ObjectPattern" ||
+    !isNetworkContainerReference(value, networkContainerIdentifiers)
+  ) {
+    return;
+  }
+  for (const property of pattern.properties) {
+    if (property.type !== "Property") continue;
+    if (!/^(?:globalThis|self|window)$/u.test(patternPropertyName(property))) {
+      continue;
+    }
+    for (const identifier of patternIdentifiers(property.value)) {
+      networkContainerIdentifiers.add(identifier);
+    }
+  }
+}
+
+function isNetworkContainerReference(node, networkContainerIdentifiers) {
+  if (node.type === "ChainExpression") {
+    return isNetworkContainerReference(
+      node.expression,
+      networkContainerIdentifiers,
+    );
+  }
+  if (node.type === "AwaitExpression") {
+    return isNetworkContainerReference(
+      node.argument,
+      networkContainerIdentifiers,
+    );
+  }
+  if (node.type === "SequenceExpression") {
+    return node.expressions.some((expression) =>
+      isNetworkContainerReference(expression, networkContainerIdentifiers),
+    );
+  }
+  if (node.type === "ConditionalExpression") {
+    return (
+      isNetworkContainerReference(
+        node.consequent,
+        networkContainerIdentifiers,
+      ) ||
+      isNetworkContainerReference(node.alternate, networkContainerIdentifiers)
+    );
+  }
+  if (node.type === "LogicalExpression") {
+    return (
+      isNetworkContainerReference(node.left, networkContainerIdentifiers) ||
+      isNetworkContainerReference(node.right, networkContainerIdentifiers)
+    );
+  }
+  if (node.type === "Identifier") {
+    return networkContainerIdentifiers.has(node.name);
+  }
+  if (node.type !== "MemberExpression") return false;
+  const property = memberPropertyName(node);
+  return (
+    typeof property === "string" &&
+    /^(?:globalThis|self|window)$/u.test(property) &&
+    isNetworkContainerReference(node.object, networkContainerIdentifiers)
+  );
 }
 
 function patternIdentifiers(pattern) {

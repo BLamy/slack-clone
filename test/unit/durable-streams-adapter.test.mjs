@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { EventEmitter } from "node:events";
+import { createServer } from "node:http";
 import test from "node:test";
 
 import {
@@ -323,6 +324,98 @@ test("adapter rejects malformed Retry-After before the official client can coerc
   store.close();
 });
 
+test("adapter rejects impossible IMF Retry-After dates without calendar normalization", async () => {
+  let getAttempts = 0;
+  const fetchFn = async (_input, init = {}) => {
+    if (init.method === "HEAD") return existsHead();
+    getAttempts += 1;
+    if (getAttempts === 1) {
+      return new Response("busy", {
+        status: 503,
+        headers: { "Retry-After": "Mon, 31 Feb 2026 00:00:00 GMT" },
+      });
+    }
+    return jsonResponse("[]", ZERO);
+  };
+  const store = createStore(fetchFn, {
+    initialDelay: 0,
+    maxDelay: 0,
+    multiplier: 1,
+    maxRetries: 2,
+  });
+  await assert.rejects(
+    store.read("impossible-retry-date-room", "-1"),
+    (error) =>
+      error instanceof DurableStreamsAdapterError &&
+      error.code === "INVALID_RETRY_AFTER" &&
+      error.status === 503,
+  );
+  assert.equal(getAttempts, 1);
+  store.close();
+});
+
+test("adapter accepts a canonical IMF Retry-After date", async () => {
+  let getAttempts = 0;
+  const fetchFn = async (_input, init = {}) => {
+    if (init.method === "HEAD") return existsHead();
+    getAttempts += 1;
+    if (getAttempts === 1) {
+      return new Response("busy", {
+        status: 503,
+        headers: { "Retry-After": "Thu, 01 Jan 1970 00:00:00 GMT" },
+      });
+    }
+    return jsonResponse("[]", ZERO);
+  };
+  const store = createStore(fetchFn, {
+    initialDelay: 0,
+    maxDelay: 0,
+    multiplier: 1,
+    maxRetries: 1,
+  });
+  const result = await store.read("canonical-retry-date-room", "-1");
+  assert.deepEqual(result.records, []);
+  assert.equal(getAttempts, 2);
+  store.close();
+});
+
+test("adapter refuses a cross-origin redirect before the target receives a request", async () => {
+  let targetRequests = 0;
+  const target = await listenOnLoopback((_request, response) => {
+    targetRequests += 1;
+    response.writeHead(200, streamHeaders(ZERO));
+    response.end();
+  });
+  const source = await listenOnLoopback((_request, response) => {
+    response.writeHead(307, {
+      Connection: "close",
+      Location: `${target.origin}/redirect-target`,
+    });
+    response.end();
+  });
+  const store = createDurableStreamsStore({
+    baseUrl: source.origin,
+    token: "server-only-canary",
+    fetchFn: fetch,
+    digestRecords: () => "digest:empty",
+  });
+  try {
+    await assert.rejects(
+      store.ensure("redirect-room"),
+      (error) =>
+        error instanceof DurableStreamsAdapterError &&
+        error.code === "ORIGIN_VIOLATION" &&
+        error.status === 307,
+    );
+    assert.equal(targetRequests, 0);
+    assert.equal(store.diagnostics().requests, 1);
+    assert.equal(store.diagnostics().responsesByStatus["307"], 1);
+  } finally {
+    store.close();
+    await Promise.all([source.close(), target.close()]);
+  }
+});
+
 test("follow cancellation aborts an in-flight upstream body and releases every waiter", async () => {
   let upstreamAborted = false;
   let reads = 0;
@@ -519,6 +612,20 @@ test("source guard rejects an adapter bypass while allowing the application API"
     ["direct-provider-network"],
   );
 
+  const twoStepGlobalBypass = analyzeDurableStreamsAccess(
+    `
+      const runtime = globalThis;
+      const dispatch = runtime.fetch;
+      const streamOrigin = "http://streams.invalid";
+      await dispatch(streamOrigin + "/rooms/demo/messages");
+    `,
+    "scratch-two-step-global-bypass.mjs",
+  );
+  assert.deepEqual(
+    twoStepGlobalBypass.map((violation) => violation.kind),
+    ["direct-provider-network"],
+  );
+
   const applicationApi = analyzeDurableStreamsAccess(
     'await fetch("/api/rooms/demo/messages");',
     "browser-client.mjs",
@@ -651,6 +758,27 @@ function sequenceFetch(responses) {
 function adapterError(code) {
   return (error) =>
     error instanceof DurableStreamsAdapterError && error.code === code;
+}
+
+async function listenOnLoopback(handler) {
+  const server = createServer(handler);
+  await new Promise((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(0, "127.0.0.1", () => {
+      server.off("error", reject);
+      resolve();
+    });
+  });
+  const address = server.address();
+  assert.ok(address && typeof address === "object");
+  return {
+    origin: `http://127.0.0.1:${address.port}`,
+    close: () =>
+      new Promise((resolve, reject) => {
+        server.close((error) => (error ? reject(error) : resolve()));
+        server.closeAllConnections?.();
+      }),
+  };
 }
 
 async function eventually(predicate, attempts = 200) {

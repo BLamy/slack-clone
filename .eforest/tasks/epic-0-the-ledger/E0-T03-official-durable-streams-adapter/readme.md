@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: implemented
+status: refuted
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -677,3 +677,126 @@ VERDICT: refuted
   implementation commit. Any ordinary provider-capable alias that evades the guard, or any
   wrong-media live response whose terminal promise does not reject promptly, refutes this
   claim.
+
+### Sixth fresh independent critic — 2026-08-01
+
+VERDICT: refuted
+
+- Fresh Codex critic; did not implement E0-T03 and made no product repair. Predictions and
+  narrow refuters for every acceptance/adversarial criterion were frozen before execution
+  at `work/critic6-frozen-predictions.md` (SHA-256
+  `7efdebf85befd5a6a63468d8c71dfb7cabd940b977f98f060dee0a82046a6bca`). Reviewed
+  `AGENTS.md`, the full E0-T03 history, E0-T02's dependency contract, the exact
+  baseline-to-implementation and implementation-to-submission diffs, and every promoted
+  evidence artifact.
+- **Blocking AC6 source-boundary refutation:**
+  `node work/critic6-source-audit-matrix.mjs` exited 1 against the exported production
+  analyzer. Of 22 fresh, formatter-valid cases, it produced 14 provider false negatives:
+  higher-order parameter dispatch and object factories; callback/array/`Map` containers;
+  class constructor injection; `Reflect.get` and descriptor extraction; borrowed
+  `Function.prototype.call`/`apply`; provider targets passed in default/rest arguments;
+  and mixed application/provider conditional and sequence targets. It also rejected two
+  pure application-API cases, while declaration-order three-hop, alias-cycle,
+  computed-symbol, logical, and `Reflect.get(...).bind(...)` controls behaved as expected.
+  This is independent of the 28 promoted controls and exercises every requested callable,
+  container, class, computed, call/apply/bind, expression, and application-API boundary.
+- The smallest full-gate proof is
+  `work/critic6-synthetic-repo/src/hof-provider-bypass.mjs:2-9`: a normal helper receives
+  `globalThis.fetch` and the Durable Streams URL as arguments, then calls the provider.
+  `auditDurableStreamsAccess({repositoryRoot})` scanned that synthetic repository and
+  returned `filesScanned: 1, failures: []`. Adding the direct-fetch positive control made
+  the same full audit scan two files and correctly report
+  `src/direct-provider-control.mjs:4 calls Durable Streams directly via globalThis.fetch`.
+  Therefore the detector can go red but does not enforce the claimed adapter-only
+  boundary. The submitted implementation detects only calls whose callable provenance is
+  captured by `tools/audit-durable-streams-access.mjs:98-105,264-303`; it has no
+  interprocedural parameter flow for this ordinary invocation, and its literal-only
+  application-API exemption at `:259-262` also explains the fresh false positives. One
+  formatter-valid provider call that the complete source gate accepts is a direct refuter
+  for AC6, so verification is not honest.
+- Provenance otherwise passed. `d545485d56e6bbb71d504c864af54f169f8b4ce4` is the direct
+  child of implementation `330687fe13bbc142f0ce85ec58f5295a644e77d9`, and submission
+  `6cafd4b60ec48ddb1ae1130af6bec7d21ae11e52` is the direct child of `d545485`; baseline
+  `c542f4b202995caf09579701db8bf29b375d23ad` is an ancestor. All five evidence JSONs name
+  the full implementation SHA and report `PASS`; no product path changes after the
+  implementation. Their before/after non-promoting-cold SHA-256 values remained exactly
+  `58f30a84...0d12`, `b4f55a33...f89`, `7a843a41...3381`, `69bafb18...f33b`, and
+  `06afba5f...7219`, proving the cold run could not promote or mutate committed evidence.
+- The required cold command was run exactly:
+  `env -u PROMOTE_EVIDENCE TEST_RUN_ID=e0-t03-critic6-cold
+  E0_T03_IMPLEMENTATION_COMMIT=330687fe13bbc142f0ce85ec58f5295a644e77d9 make
+  verify-E0-T03`. Only disposable generated state was absent first; tracked
+  `.replay/config.json` and `.replay/browser-session.json` were preserved. The pinned
+  emulator initialized and built from cold state, and all eight gates exited 0: format
+  (1,882 ms), lint (1,743 ms), static analysis (3,525 ms), unit 42/42 (7,518 ms), real
+  conformance (6,872 ms), browser 5/5 (11,366 ms), concurrency 1/1 (11,185 ms), and the
+  30-file build (605 ms).
+- Cold stream/request/browser output was internally consistent. Captured offsets were
+  `...0091`, `...0183`, `...0274`, `...0389`, and `...0510`; every suffix from `-1` and
+  each checkpoint matched exactly. The full stream ended at `...0510` with digest
+  `sha256:d90830b3764d31ef6402e0f9a9425919903b5775ba9de63516a26ada6d861cdd`.
+  Conformance made 20 requests under cap 24, one create, six SSE requests, held request
+  count at 14 -> 14 after cancellation, and left zero followers/waiters. The 900,000 ms
+  HTTP boundary stayed at calls 2 -> 2, reads 1 -> 1, follows 1 -> 1 with 90 keepalives;
+  the 350 ms positive control made 2,571 calls. Browser/API state matched for room
+  `e0-t03-critic6-cold-edit-1785643199817` at offset `...0541`, digest
+  `sha256:76cd59882d5122b43fa8224217aa3fb0455a020669fd3f727fc25d81ad23738b`.
+- Fresh protocol attacks otherwise passed. A successful live `Response.clone()` with an
+  unread sibling branch made `follow.closed` reject typed `CONTENT_TYPE_MISMATCH`, status
+  200, in 15.245 ms after exactly one live request, with zero followers/waiters and no
+  locked sibling. Twelve malformed Retry-After/calendar forms stopped after one request;
+  zero, leading-zero, and canonical past leap-day forms retried exactly once. A
+  protocol-relative cross-origin 308 produced typed `ORIGIN_VIOLATION`; the target saw
+  zero requests and no Authorization header. Two adapters raced through three HEADs and
+  two PUT attempts to exactly one successful create, with both callers fulfilled.
+- Fresh nonnumeric opaque checkpoints
+  `opaque:critic6-k6p9:{alpha,beta,omega}/%2F?sig=...` yielded exact suffixes
+  `[a,b,c]`, `[b,c]`, `[c]`, and `[]` without duplication or arithmetic; terminal empty
+  suffix digest was
+  `sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`.
+  Triple cancellation caused one upstream abort and no request growth, with zero retained
+  followers/waiters. Fresh malformed local/remote checkpoints, wrong JSON media,
+  malformed JSON, an unterminated SSE frame, and a committed stream rejected as typed
+  `INVALID_CHECKPOINT`, `CONTENT_TYPE_MISMATCH`, `PARSE_ERROR`, `MALFORMED_SSE_FRAME`,
+  and `STREAM_CLOSED`; the partial frame delivered zero records and the committed response
+  preserved final offset `opaque:critic6-k6p9:committed-final`.
+- Fresh HTTP lifecycle attacks passed at all four required timings. Disconnect before
+  headers made zero writes/follows; disconnect after headers committed one response,
+  canceled once, cleared its timer, and refused a late JSON write; disconnect during a
+  two-record batch delivered the first record but made zero writes after close and never
+  wrote the second; two close signals concurrent with delivery shutdown still canceled
+  once and left zero intervals. The independent idle probe again distinguished zero call
+  growth from the 2,571-call polling control.
+- Credential controls were sensitive. A fresh preload planted the run's random canary in
+  raw, URL-encoded, and base64 forms in a sandbox/run artifact; non-promoting conformance
+  exited 1 at `scripts/verify-e0-t03-conformance.mjs:867` with `3 !== 0` and
+  `Durable Streams token canary leaked`. A temporary browser-visible credential fixture
+  made `pnpm typecheck` exit 1 with
+  `public/critic6-browser-canary.js references a server credential`. Both plants were
+  removed; clean cold scanning found zero matches and all three built-in controls.
+- Required detector sensitivity went red one defect at a time. Replacing fixed-point
+  provenance convergence with one alias pass made the focused test exit 1 on
+  `forward-nested-wrapper`, actual `[]`; restoration returned it green. Replacing the
+  submitted non-awaited cloned-response cancellation with awaited cancellation made the
+  adapter test exit 1 after 508.759 ms because `follow.closed did not settle`; restoration
+  returned all 21 adapter tests green. Product/verifier files were restored byte-exact:
+  source audit blob/SHA-256 `3d784ec70f24c0d9d713beb944e59a21c72bd82f` /
+  `c415ccc37ee9bfd6064493023797abd5b9b31f3b91fc0070e19e5a370698557d`, adapter
+  blob/SHA-256 `c514717a80bd2c9f40b0454beb6088aa5997c93a` /
+  `e6d37efbeb9953004ce161be15ef18dcb9198c17ba56188b10ba36d42b6ac0ee`.
+  A clean `pnpm typecheck` then passed with 50 audited files and zero submitted-tree
+  violations; this green result coexists with the demonstrated higher-order false green.
+- Coverage classification: executed — typed adapter create/append/read/SSE follow,
+  create races, every opaque resume suffix, malformed/committed/retry/redirect handling,
+  wrong-media clone terminalization, cancellation and response-body cleanup, HTTP
+  disconnects and timers, services/server/browser integration, request budgets,
+  canary/source boundaries, cold verification, concurrency, and build; waived — type
+  declarations, manifests, lockfile, Makefile, and documentation as non-runtime changes
+  (still inspected and format/type/build checked), plus Replay recording for this
+  server-transport ticket; dead — none identified; requiring repair — the executed and
+  refuted AC6 interprocedural provider-call and application-API provenance boundary.
+  Replay remains honestly `N/A (server transport adapter) + mitigation: real-emulator
+  protocol transcript, request-budget proof, canary scan, redirect-origin proof,
+  cloned-response proof, source controls, and reconnect matrix`; upload and tunnel flags
+  were false, recordings were unchanged, and no Replay command was run. E0-T04 remains
+  blocked.

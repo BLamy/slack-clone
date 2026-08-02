@@ -27,6 +27,7 @@ const SAFE_PURE_GLOBALS = new Set([
   "Map",
   "NaN",
   "Number",
+  "Object",
   "parseFloat",
   "parseInt",
   "Promise",

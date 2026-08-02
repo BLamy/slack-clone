@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-resubmit4",
-  "implementationCommit": "88a4fec7ce8c35b7aaff49f06051734f770c08d6",
+  "runId": "e0-t03-builder-resubmit5",
+  "implementationCommit": "330687fe13bbc142f0ce85ec58f5295a644e77d9",
   "result": "PASS",
   "filesScanned": 50,
   "failures": [],
@@ -19,7 +19,24 @@
       "reflectApply",
       "wrapperFunction",
       "objectPropertyAssignment",
-      "templateComputed"
+      "templateComputed",
+      "reflectApplyAlias",
+      "boundReflectApplyAlias",
+      "callAlias",
+      "applyAlias",
+      "forwardNestedWrapper",
+      "higherOrderWrapper",
+      "aliasedMemberContainer",
+      "reverseAliasedMemberContainer",
+      "nestedObjectMember",
+      "arrayMember",
+      "arrayDestructuring",
+      "objectDestructuring",
+      "classStaticField",
+      "classStaticMethod",
+      "classInstanceField",
+      "dynamicComputedFetch",
+      "dynamicComputedProvider"
     ],
     "detections": {
       "direct": [
@@ -53,6 +70,57 @@
         "direct-provider-network"
       ],
       "templateComputed": [
+        "direct-provider-network"
+      ],
+      "reflectApplyAlias": [
+        "direct-provider-network"
+      ],
+      "boundReflectApplyAlias": [
+        "direct-provider-network"
+      ],
+      "callAlias": [
+        "direct-provider-network"
+      ],
+      "applyAlias": [
+        "direct-provider-network"
+      ],
+      "forwardNestedWrapper": [
+        "direct-provider-network"
+      ],
+      "higherOrderWrapper": [
+        "direct-provider-network"
+      ],
+      "aliasedMemberContainer": [
+        "direct-provider-network"
+      ],
+      "reverseAliasedMemberContainer": [
+        "direct-provider-network"
+      ],
+      "nestedObjectMember": [
+        "direct-provider-network"
+      ],
+      "arrayMember": [
+        "direct-provider-network"
+      ],
+      "arrayDestructuring": [
+        "direct-provider-network"
+      ],
+      "objectDestructuring": [
+        "direct-provider-network"
+      ],
+      "classStaticField": [
+        "direct-provider-network"
+      ],
+      "classStaticMethod": [
+        "direct-provider-network"
+      ],
+      "classInstanceField": [
+        "direct-provider-network"
+      ],
+      "dynamicComputedFetch": [
+        "direct-provider-network"
+      ],
+      "dynamicComputedProvider": [
         "direct-provider-network"
       ]
     }

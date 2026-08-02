@@ -12,6 +12,7 @@ import {
   assertIdleWindowRequestConstant,
   observeHttpIdleWindow,
 } from "../test/support/http-idle-probe.mjs";
+import { INTERPROCEDURAL_SOURCE_AUDIT_CASES } from "../test/support/source-audit-fixtures.mjs";
 import {
   analyzeDurableStreamsAccess,
   auditDurableStreamsAccess,
@@ -755,10 +756,25 @@ function verifySourceAuditSensitivity() {
   for (const result of Object.values(detections)) {
     assert.deepEqual(result, ["direct-provider-network"]);
   }
+  const interproceduralDetections = Object.fromEntries(
+    INTERPROCEDURAL_SOURCE_AUDIT_CASES.map(
+      ({ name, source, expectedKinds }) => {
+        const observed = analyzeDurableStreamsAccess(
+          source,
+          `${name}-sensitivity.mjs`,
+        ).map((violation) => violation.kind);
+        assert.deepEqual(observed, expectedKinds, name);
+        return [name, observed];
+      },
+    ),
+  );
   return {
     result: "PASS",
-    fixtures: Object.keys(fixtures),
-    detections,
+    fixtures: [
+      ...Object.keys(fixtures),
+      ...INTERPROCEDURAL_SOURCE_AUDIT_CASES.map(({ name }) => name),
+    ],
+    detections: { ...detections, ...interproceduralDetections },
   };
 }
 

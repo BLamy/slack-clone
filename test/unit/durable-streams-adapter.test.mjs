@@ -14,6 +14,7 @@ import {
   assertIdleWindowRequestConstant,
   observeHttpIdleWindow,
 } from "../support/http-idle-probe.mjs";
+import { INTERPROCEDURAL_SOURCE_AUDIT_CASES } from "../support/source-audit-fixtures.mjs";
 
 const ZERO = "opaque-checkpoint-zero";
 
@@ -951,6 +952,20 @@ test("source guard rejects an adapter bypass while allowing the application API"
     "declared-browser-client.mjs",
   );
   assert.deepEqual(declaredApplicationApi, []);
+
+  for (const {
+    name,
+    source,
+    expectedKinds,
+  } of INTERPROCEDURAL_SOURCE_AUDIT_CASES) {
+    assert.deepEqual(
+      analyzeDurableStreamsAccess(source, `${name}.mjs`).map(
+        (violation) => violation.kind,
+      ),
+      expectedKinds,
+      name,
+    );
+  }
 });
 
 function createStore(fetchFn, backoffOptions) {

@@ -24,16 +24,39 @@ const NETWORK_METHODS = new Set([
   "put",
   "request",
 ]);
+const NETWORK_CALLBACK_METHODS = new Set([
+  "every",
+  "filter",
+  "find",
+  "findLast",
+  "forEach",
+  "map",
+  "some",
+]);
+const NETWORK_EXTRACTION_METHODS = new Set([
+  "at",
+  "entries",
+  "find",
+  "findLast",
+  "get",
+  "keys",
+  "next",
+  "pop",
+  "shift",
+  "values",
+]);
 
 export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
   const violations = [];
   const providerReferences = new Set();
+  const applicationReferences = new Set();
   const network = {
     containers: new Set(["globalThis", "self", "window"]),
     identifiers: new Set(["fetch"]),
     invokers: new Set(["Reflect.apply"]),
     members: new Set(),
     taintedContainers: new Set(),
+    applicationReferences,
   };
   let sourceCode;
   const captureRule = {
@@ -42,6 +65,7 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
       sourceCode = context.sourceCode;
       const aliases = [];
       const calls = [];
+      const functionDefinitions = new Map();
       return {
         ImportDeclaration(node) {
           captureOfficialClientImport(node.source, node.loc.start.line);
@@ -63,11 +87,22 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
             value: node.init,
             expression: node,
           });
+          if (node.id.type === "Identifier" && isFunctionNode(node.init)) {
+            functionDefinitions.set(node.id.name, node.init);
+          }
         },
         FunctionDeclaration(node) {
           if (node.id) {
             aliases.push({ pattern: node.id, value: node, expression: node });
+            functionDefinitions.set(node.id.name, node);
           }
+          captureDefaultParameters(node, aliases);
+        },
+        FunctionExpression(node) {
+          captureDefaultParameters(node, aliases);
+        },
+        ArrowFunctionExpression(node) {
+          captureDefaultParameters(node, aliases);
         },
         ClassDeclaration(node) {
           if (node.id) {
@@ -90,18 +125,40 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
           let previousFactCount = -1;
           while (previousFactCount !== factCount()) {
             previousFactCount = factCount();
-            for (const { pattern, value, expression } of aliases) {
-              captureAliases(pattern, value, expression);
+            for (const { pattern, value } of aliases) {
+              captureAliases(pattern, value);
             }
+            propagateNetworkParameters(
+              calls,
+              functionDefinitions,
+              sourceCode,
+              network,
+            );
           }
 
           for (const node of calls) {
             const invocation = describeNetworkCall(node, sourceCode, network);
             if (!invocation) continue;
-            for (const target of networkCallTargets(node, invocation)) {
+            const explicitTargets = networkCallTargets(node, invocation);
+            const targets =
+              explicitTargets.length > 0
+                ? explicitTargets
+                : unwrapChain(node.callee).type === "Identifier"
+                  ? [node.callee]
+                  : [];
+            for (const target of targets) {
               if (
-                referencesProvider(target, sourceCode, providerReferences) &&
-                !isApplicationApiReference(target, sourceCode)
+                referencesProvider(
+                  target,
+                  sourceCode,
+                  providerReferences,
+                  applicationReferences,
+                ) &&
+                !isApplicationApiReference(
+                  target,
+                  sourceCode,
+                  applicationReferences,
+                )
               ) {
                 violations.push({
                   kind: "direct-provider-network",
@@ -124,9 +181,52 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
         });
       }
 
-      function captureAliases(pattern, value, expression) {
+      function captureAliases(pattern, value) {
         if (!value) return;
-        if (referencesProvider(expression, sourceCode, providerReferences)) {
+        const returnedTargets = functionReturnedExpressions(value);
+        if (
+          returnedTargets.length > 0 &&
+          returnedTargets.every((target) =>
+            isApplicationApiReference(
+              target,
+              sourceCode,
+              applicationReferences,
+            ),
+          )
+        ) {
+          captureReferenceAliases(pattern, applicationReferences);
+        }
+        if (
+          returnedTargets.some((target) =>
+            referencesProvider(
+              target,
+              sourceCode,
+              providerReferences,
+              applicationReferences,
+            ),
+          )
+        ) {
+          captureProviderAliases(pattern, providerReferences);
+        }
+        const carriesTargetValue =
+          !isFunctionNode(value) &&
+          value.type !== "ClassDeclaration" &&
+          value.type !== "ClassExpression";
+        if (
+          carriesTargetValue &&
+          isApplicationApiReference(value, sourceCode, applicationReferences)
+        ) {
+          captureReferenceAliases(pattern, applicationReferences);
+        }
+        if (
+          carriesTargetValue &&
+          referencesProvider(
+            value,
+            sourceCode,
+            providerReferences,
+            applicationReferences,
+          )
+        ) {
           captureProviderAliases(pattern, providerReferences);
         }
         captureNetworkContainerAliases(pattern, value, network.containers);
@@ -136,6 +236,7 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
       function factCount() {
         return (
           providerReferences.size +
+          applicationReferences.size +
           network.containers.size +
           network.identifiers.size +
           network.invokers.size +
@@ -237,18 +338,30 @@ export async function auditDurableStreamsAccess({
 }
 
 function captureProviderAliases(pattern, providerReferences) {
+  captureReferenceAliases(pattern, providerReferences);
+}
+
+function captureReferenceAliases(pattern, references) {
   for (const identifier of patternIdentifiers(pattern)) {
-    providerReferences.add(identifier);
+    references.add(identifier);
   }
   const target = unwrapChain(pattern);
   if (target.type !== "MemberExpression") return;
   const reference = memberReference(target);
   const container = memberReference(target.object);
-  if (reference) providerReferences.add(reference);
-  if (container) providerReferences.add(container);
+  if (reference) references.add(reference);
+  if (container) references.add(container);
 }
 
-function referencesProvider(node, sourceCode, providerReferences) {
+function referencesProvider(
+  node,
+  sourceCode,
+  providerReferences,
+  applicationReferences = new Set(),
+) {
+  if (isApplicationApiReference(node, sourceCode, applicationReferences)) {
+    return false;
+  }
   const text = sourceCode.getText(node);
   if (PROVIDER_REFERENCE.test(text)) return true;
   return [...providerReferences].some((reference) =>
@@ -256,13 +369,252 @@ function referencesProvider(node, sourceCode, providerReferences) {
   );
 }
 
-function isApplicationApiReference(node, sourceCode) {
-  const text = sourceCode.getText(node);
-  return /["'`]\/api\/rooms\//u.test(text);
+function isApplicationApiReference(
+  node,
+  sourceCode,
+  applicationReferences = new Set(),
+) {
+  const expression = unwrapChain(node);
+  if (expression.type === "AwaitExpression") {
+    return isApplicationApiReference(
+      expression.argument,
+      sourceCode,
+      applicationReferences,
+    );
+  }
+  if (expression.type === "Identifier") {
+    return applicationReferences.has(expression.name);
+  }
+  if (expression.type === "Literal" && typeof expression.value === "string") {
+    return expression.value.startsWith("/api/rooms/");
+  }
+  if (expression.type === "TemplateLiteral") {
+    const prefix =
+      expression.quasis[0]?.value.cooked ??
+      expression.quasis[0]?.value.raw ??
+      "";
+    return prefix.startsWith("/api/rooms/");
+  }
+  if (expression.type === "CallExpression") {
+    const calleeReference = memberReference(expression.callee);
+    if (calleeReference && applicationReferences.has(calleeReference)) {
+      return true;
+    }
+    if (
+      expression.callee.type === "MemberExpression" &&
+      memberPropertyName(expression.callee) === "bind"
+    ) {
+      const boundArguments = expression.arguments.slice(1);
+      const hasApplicationTarget = boundArguments.some((argument) =>
+        isApplicationApiReference(argument, sourceCode, applicationReferences),
+      );
+      const hasExplicitProviderTarget = boundArguments.some(
+        (argument) =>
+          !isApplicationApiReference(
+            argument,
+            sourceCode,
+            applicationReferences,
+          ) && PROVIDER_REFERENCE.test(sourceCode.getText(argument)),
+      );
+      return hasApplicationTarget && !hasExplicitProviderTarget;
+    }
+  }
+  if (expression.type === "ConditionalExpression") {
+    return (
+      isApplicationApiReference(
+        expression.consequent,
+        sourceCode,
+        applicationReferences,
+      ) &&
+      isApplicationApiReference(
+        expression.alternate,
+        sourceCode,
+        applicationReferences,
+      )
+    );
+  }
+  if (expression.type === "LogicalExpression") {
+    return (
+      isApplicationApiReference(
+        expression.left,
+        sourceCode,
+        applicationReferences,
+      ) &&
+      isApplicationApiReference(
+        expression.right,
+        sourceCode,
+        applicationReferences,
+      )
+    );
+  }
+  if (expression.type === "SequenceExpression") {
+    const finalExpression = expression.expressions.at(-1);
+    return Boolean(
+      finalExpression &&
+      isApplicationApiReference(
+        finalExpression,
+        sourceCode,
+        applicationReferences,
+      ),
+    );
+  }
+  if (expression.type === "BinaryExpression" && expression.operator === "+") {
+    return isApplicationApiReference(
+      expression.left,
+      sourceCode,
+      applicationReferences,
+    );
+  }
+  const reference = memberReference(expression);
+  return Boolean(reference && applicationReferences.has(reference));
+}
+
+function isFunctionNode(node) {
+  return Boolean(
+    node &&
+    (node.type === "FunctionDeclaration" ||
+      node.type === "FunctionExpression" ||
+      node.type === "ArrowFunctionExpression"),
+  );
+}
+
+function functionReturnedExpressions(node) {
+  if (!isFunctionNode(node)) return [];
+  if (
+    node.type === "ArrowFunctionExpression" &&
+    node.body.type !== "BlockStatement"
+  ) {
+    return [node.body];
+  }
+  const returned = [];
+  collectReturnedExpressions(node.body, returned, node);
+  return returned;
+}
+
+function collectReturnedExpressions(node, returned, rootFunction) {
+  if (!node || typeof node !== "object") return;
+  if (node !== rootFunction && isFunctionNode(node)) return;
+  if (node.type === "ReturnStatement") {
+    if (node.argument) returned.push(node.argument);
+    return;
+  }
+  for (const [key, value] of Object.entries(node)) {
+    if (
+      key === "parent" ||
+      key === "loc" ||
+      key === "range" ||
+      key === "tokens" ||
+      key === "comments"
+    ) {
+      continue;
+    }
+    if (Array.isArray(value)) {
+      for (const item of value) {
+        collectReturnedExpressions(item, returned, rootFunction);
+      }
+    } else {
+      collectReturnedExpressions(value, returned, rootFunction);
+    }
+  }
+}
+
+function captureDefaultParameters(node, aliases) {
+  for (const parameter of node.params) {
+    if (parameter.type !== "AssignmentPattern") continue;
+    aliases.push({
+      pattern: parameter.left,
+      value: parameter.right,
+      expression: parameter,
+    });
+  }
+}
+
+function propagateNetworkParameters(
+  calls,
+  functionDefinitions,
+  sourceCode,
+  network,
+) {
+  for (const call of calls) {
+    const callee = unwrapChain(call.callee);
+    let definition = functionDefinitions.get(memberReference(callee));
+    let argumentsList = call.arguments;
+    if (
+      !definition &&
+      callee.type === "MemberExpression" &&
+      memberPropertyName(callee) === "bind"
+    ) {
+      definition = functionDefinitions.get(memberReference(callee.object));
+      argumentsList = call.arguments.slice(1);
+    }
+    if (definition) {
+      propagateArgumentsToPatterns(
+        definition.params,
+        argumentsList,
+        sourceCode,
+        network,
+      );
+    }
+
+    if (callee.type !== "MemberExpression") continue;
+    const method = memberPropertyName(callee);
+    if (
+      !NETWORK_CALLBACK_METHODS.has(method) ||
+      !isNetworkContainerValue(callee.object, sourceCode, network)
+    ) {
+      continue;
+    }
+    const callback = unwrapChain(call.arguments[0] ?? {});
+    if (!isFunctionNode(callback) || !callback.params[0]) continue;
+    markNetworkPattern(callback.params[0], network);
+  }
+}
+
+function propagateArgumentsToPatterns(
+  patterns,
+  argumentsList,
+  sourceCode,
+  network,
+) {
+  let argumentIndex = 0;
+  for (const pattern of patterns) {
+    if (pattern.type === "RestElement") {
+      if (
+        argumentsList
+          .slice(argumentIndex)
+          .some((argument) => isNetworkReference(argument, sourceCode, network))
+      ) {
+        markNetworkPattern(pattern.argument, network);
+      }
+      return;
+    }
+    const argument = argumentsList[argumentIndex];
+    argumentIndex += 1;
+    if (argument && isNetworkReference(argument, sourceCode, network)) {
+      markNetworkPattern(
+        pattern.type === "AssignmentPattern" ? pattern.left : pattern,
+        network,
+      );
+    }
+  }
+}
+
+function markNetworkPattern(pattern, network) {
+  for (const identifier of patternIdentifiers(pattern)) {
+    network.identifiers.add(identifier);
+  }
 }
 
 function describeNetworkCall(node, sourceCode, network) {
   const callee = unwrapChain(node.callee);
+  if (
+    callee.type === "MemberExpression" &&
+    (NETWORK_CALLBACK_METHODS.has(memberPropertyName(callee)) ||
+      NETWORK_EXTRACTION_METHODS.has(memberPropertyName(callee))) &&
+    isNetworkContainerValue(callee.object, sourceCode, network)
+  ) {
+    return null;
+  }
   if (
     callee.type === "MemberExpression" &&
     memberReference(callee) === "Reflect.apply" &&
@@ -274,6 +626,14 @@ function describeNetworkCall(node, sourceCode, network) {
   if (callee.type === "MemberExpression") {
     const method = memberPropertyName(callee);
     if (
+      method === "call" &&
+      isNetworkInvokerReference(callee.object, sourceCode, network) &&
+      node.arguments[0] &&
+      isNetworkReference(node.arguments[0], sourceCode, network)
+    ) {
+      return "borrowed-invoker";
+    }
+    if (
       (method === "call" || method === "apply") &&
       isNetworkReference(callee.object, sourceCode, network)
     ) {
@@ -283,10 +643,19 @@ function describeNetworkCall(node, sourceCode, network) {
   if (isNetworkInvokerReference(callee, sourceCode, network)) {
     return "indirect";
   }
+  if (callee.type === "Identifier" && callee.name === "fetch") {
+    return "direct";
+  }
+  if (callee.type === "Identifier" && network.identifiers.has(callee.name)) {
+    return "indirect";
+  }
   return isNetworkReference(callee, sourceCode, network) ? "direct" : null;
 }
 
 function networkCallTargets(node, invocation) {
+  if (invocation === "borrowed-invoker") {
+    return node.arguments.slice(1).flatMap(appliedTargets);
+  }
   if (invocation === "call") {
     return node.arguments[1] ? [node.arguments[1]] : [];
   }
@@ -304,6 +673,9 @@ function networkCallTargets(node, invocation) {
 
 function appliedTargets(argument) {
   if (!argument) return [];
+  if (argument.type === "SpreadElement") {
+    return appliedTargets(argument.argument);
+  }
   if (argument.type !== "ArrayExpression") return [argument];
   return argument.elements[0] ? [argument.elements[0]] : [];
 }
@@ -345,6 +717,16 @@ function isNetworkReference(node, sourceCode, network) {
   }
   if (expression.type === "CallExpression") {
     const callee = unwrapChain(expression.callee);
+    if (isReflectiveNetworkExtraction(callee, expression.arguments, network)) {
+      return true;
+    }
+    if (
+      callee.type === "MemberExpression" &&
+      NETWORK_EXTRACTION_METHODS.has(memberPropertyName(callee)) &&
+      isNetworkContainerValue(callee.object, sourceCode, network)
+    ) {
+      return true;
+    }
     if (
       callee.type === "MemberExpression" &&
       memberPropertyName(callee) === "bind" &&
@@ -377,10 +759,13 @@ function isNetworkReference(node, sourceCode, network) {
   if (expression.type === "Identifier") {
     return (
       network.identifiers.has(expression.name) ||
-      /(?:fetch|request)/iu.test(expression.name)
+      /^(?:fetch|fetchFn)$/iu.test(expression.name)
     );
   }
   if (expression.type !== "MemberExpression") return false;
+  if (isNetworkContainerValue(expression.object, sourceCode, network)) {
+    return true;
+  }
   const reference = memberReference(expression);
   if (
     reference &&
@@ -404,6 +789,26 @@ function isNetworkReference(node, sourceCode, network) {
         sourceCode.getText(expression.object),
       ))
   );
+}
+
+function isReflectiveNetworkExtraction(callee, argumentsList, network) {
+  const reference = memberReference(callee);
+  if (
+    reference !== "Reflect.get" &&
+    reference !== "Reflect.getOwnPropertyDescriptor" &&
+    reference !== "Object.getOwnPropertyDescriptor"
+  ) {
+    return false;
+  }
+  const [container, property] = argumentsList;
+  if (
+    !container ||
+    !isNetworkContainerReference(container, network.containers)
+  ) {
+    return false;
+  }
+  const propertyName = property ? staticStringValue(property) : null;
+  return propertyName === null || /^(?:fetch|request)$/iu.test(propertyName);
 }
 
 function containsNetworkReference(node, sourceCode, network) {
@@ -519,6 +924,12 @@ function isNetworkInvokerReference(node, sourceCode, network) {
     );
   }
   const reference = memberReference(expression);
+  if (
+    reference === "Function.prototype.call" ||
+    reference === "Function.prototype.apply"
+  ) {
+    return true;
+  }
   if (reference && network.invokers.has(reference)) return true;
   if (expression.type === "Identifier") {
     return network.invokers.has(expression.name);
@@ -622,8 +1033,22 @@ function isNetworkContainerValue(node, sourceCode, network) {
   ) {
     return isNetworkReference(expression, sourceCode, network);
   }
+  if (expression.type === "CallExpression") {
+    return (
+      isNetworkReference(expression, sourceCode, network) ||
+      expression.arguments.some((argument) =>
+        isNetworkReference(argument, sourceCode, network),
+      )
+    );
+  }
   if (expression.type === "NewExpression") {
-    return isTaintedNetworkContainer(expression.callee, network);
+    return (
+      isTaintedNetworkContainer(expression.callee, network) ||
+      isNetworkReference(expression.callee, sourceCode, network) ||
+      expression.arguments.some((argument) =>
+        isNetworkReference(argument, sourceCode, network),
+      )
+    );
   }
   return isTaintedNetworkContainer(expression, network);
 }

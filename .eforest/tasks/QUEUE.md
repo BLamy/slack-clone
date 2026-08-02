@@ -8,7 +8,7 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-1. **E0-T06** — Crash, duplicate-delivery, and partition sensitivity harness *(awaiting independent critic)*
+1. **E0-T06** — Crash, duplicate-delivery, and partition sensitivity harness *(builder rework required)*
 
 ## Next up (dependencies satisfied)
 
@@ -25,7 +25,7 @@ No new task may start until **E0-T06** clears the gate.
 - [x] `   3` [E0-T03](epic-0-the-ledger/E0-T03-official-durable-streams-adapter/readme.md) — Official Durable Streams adapter with resumable reads *(deps: E0-T02)*
 - [x] `   4` [E0-T04](epic-0-the-ledger/E0-T04-fenced-dispatch-and-idempotency/readme.md) — Fenced dispatch and idempotent application writes *(deps: E0-T03)*
 - [x] `   5` [E0-T05](epic-0-the-ledger/E0-T05-reducers-digests-and-replay-cli/readme.md) — Pure reducers, canonical state digests, and replay CLI *(deps: E0-T01, E0-T04)*
-- [?] `   6` [E0-T06](epic-0-the-ledger/E0-T06-crash-duplicate-partition-harness/readme.md) — Crash, duplicate-delivery, and partition sensitivity harness *(deps: E0-T04, E0-T05)*
+- [!] `   6` [E0-T06](epic-0-the-ledger/E0-T06-crash-duplicate-partition-harness/readme.md) — Crash, duplicate-delivery, and partition sensitivity harness *(deps: E0-T04, E0-T05)*
 - [ ] `   7` [E0-T07](epic-0-the-ledger/E0-T07-two-writers-one-log/readme.md) — Capstone: two writers, one authoritative log **[CAPSTONE]** *(deps: E0-T03, E0-T06)*
 
 ## Epic 1 — `epic-1-the-workspace`

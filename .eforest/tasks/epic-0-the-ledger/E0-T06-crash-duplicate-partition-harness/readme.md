@@ -3,7 +3,7 @@ id: E0-T06
 epic: 0
 title: "Crash, duplicate-delivery, and partition sensitivity harness"
 priority: 6
-status: implemented
+status: refuted
 depends_on: [E0-T04, E0-T05]
 estimate: L
 capstone: false
@@ -95,3 +95,18 @@ schedule, and every final claim cites a stream dump and digest.
   and schedule sensitivity. Replay: N/A (headless failure harness) + mitigation:
   deterministic schedules, process restarts, stream dumps, checkpoint proofs, and replay
   digests. Fresh critic verification remains required.
+
+### Critic — 2026-08-02 — `VERDICT: refuted`
+
+- Fresh critic independently reran `make verify-E0-T06`; all five gates passed, all 13
+  schedules and seven hooks were reached, and the committed digest/sensitivity claims
+  reproduced.
+- Refutation: the reader restart reused the same in-memory `streams` map, so
+  `stateDeleted: true` did not prove a durable authority restart. The slow-consumer
+  probe clipped measurements with `Math.min`, hard-coded isolation, and flooded the
+  unrelated stream only after reader recovery instead of while the partition was held.
+  Acknowledgement delay recorded ticks without delaying a real bounded acknowledgement.
+- Repair required before verification: export/import durable stream authority across a
+  restarted reader, enforce (rather than report) bounded queue policies during the
+  partition, flood an unrelated stream while that partition is active, and model the
+  acknowledgement delay as a deterministic deferred acknowledgement.

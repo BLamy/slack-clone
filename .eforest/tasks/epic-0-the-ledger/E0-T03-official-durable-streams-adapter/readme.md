@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: in-progress
+status: implemented
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -226,3 +226,38 @@ VERDICT: refuted
 - Repair target: trace destructured and assigned network/provider aliases in the source
   audit, add red fixtures for each alias form, reject malformed `Retry-After` metadata
   before the official client's backoff coercion, and regenerate commit-bound evidence.
+
+### Builder resubmission 2 — 2026-08-01
+
+- Implementation commit: `993e75412d10601acb016224b3e9ef09c3418257`; regenerated
+  evidence commit: `6fbe7896d6d85984fc6f9a61716920f8a3889690`.
+- Final cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t03-builder-resubmit2 make
+  verify-E0-T03`. From a clean tracked implementation tree, all eight gates passed:
+  format, lint, static analysis, unit (38/38), real-emulator conformance, browser
+  integration (5/5), concurrency (1/1), and the 30-file build.
+- Strict retry proof: `evidence/protocol-conformance.json` records malformed
+  `Retry-After` rejection as `INVALID_RETRY_AFTER` with original status 503, one GET
+  attempt, and `silentlyRetried: false`. Removing that validation in a disposable
+  worktree made the focused unit detector exit 1 with `Missing expected rejection`.
+- Source-boundary proof: `evidence/source-access-audit.json` records zero clean violations
+  across 50 files and positive detections for direct, destructured, assigned, and bound
+  network aliases. Planting a real destructured `globalThis.fetch` alias in `src/` made
+  `pnpm typecheck` exit 1 and cite the `send` call. The disposable mutant was removed.
+- The earlier timer proof remains sensitive: 900,000 deterministic milliseconds held
+  adapter calls at 2 -> 2 while the 350-millisecond control produced 2,571 extra calls.
+  Real-emulator conformance used 20 requests under cap 24, created once, and held
+  cancellation at 14 -> 14 with no followers or waiters left.
+- Opaque resume proof ends at offset `0000000000000000_0000000000000535`; the full-stream
+  digest is `sha256:aa7c7640ddb6a9e21a9839fd6c39314b01920e39727c5f1df2bf87a64b3e30ea`.
+  Browser/API state matched at offset `0000000000000000_0000000000000551`, digest
+  `sha256:136f3afdbab4c5ceff2b9e01b7eeb4bd18a132352f935316c9c98d4bc407fe58`.
+- Every committed evidence JSON names implementation
+  `993e75412d10601acb016224b3e9ef09c3418257`; the cold summary records a clean tree,
+  zero canary matches with all positive controls detected, no Replay/tunnel attempt, and
+  unchanged recordings.
+- Replay: N/A (server transport adapter) + mitigation: real-emulator protocol transcript,
+  request-budget proof, canary scan, and reconnect matrix.
+- Resubmitted claim: the two critic-discovered false greens are closed with both in-gate
+  controls and independent source mutations that make their detectors fail; the full
+  adapter, lifecycle, security, and provenance criteria remain satisfied at the cited
+  implementation commit.

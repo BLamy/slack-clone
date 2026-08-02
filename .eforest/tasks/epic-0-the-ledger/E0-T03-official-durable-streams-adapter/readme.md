@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: refuted
+status: in-progress
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -460,3 +460,10 @@ VERDICT: refuted
   mitigation: real-emulator protocol transcript, request-budget proof, canary scan, and
   reconnect matrix`. Status is `refuted`; E0-T04 remains blocked until the source guard
   rejects ordinary provider-capable call indirections and proves that repair sensitive.
+
+### Builder repair 4 — 2026-08-01
+
+- Repair target: model callable provenance instead of only identifier names so the source
+  guard catches `call`/`apply`, wrapper functions, member assignments, and static template
+  properties. Promote all four critic bypasses into positive controls and prove a focused
+  regression makes the detector fail.

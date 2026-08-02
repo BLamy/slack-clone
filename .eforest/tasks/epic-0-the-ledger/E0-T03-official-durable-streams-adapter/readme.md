@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: in-progress
+status: implemented
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -467,3 +467,40 @@ VERDICT: refuted
   guard catches `call`/`apply`, wrapper functions, member assignments, and static template
   properties. Promote all four critic bypasses into positive controls and prove a focused
   regression makes the detector fail.
+
+### Builder resubmission 4 — 2026-08-01
+
+- Implementation commit: `88a4fec7ce8c35b7aaff49f06051734f770c08d6`; regenerated
+  evidence commit: `65be25bfc244722b3446eae9ccc60aba8c8de6df`.
+- Final cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t03-builder-resubmit4
+  E0_T03_IMPLEMENTATION_COMMIT=88a4fec7ce8c35b7aaff49f06051734f770c08d6 make
+  verify-E0-T03`. From a clean tracked implementation tree, all eight gates passed:
+  format, lint, static analysis, unit (41/41), real-emulator conformance, browser
+  integration (5/5), concurrency (1/1), and the 30-file build.
+- Source-boundary proof: callable provenance now rejects direct invocation, `.call`,
+  `.apply`, `Reflect.apply`, arrow and declared wrappers, object-member assignment and
+  object-literal dispatch, plus static template-computed fetch access. The promoted audit
+  detects all eleven fixtures and reports zero production-source failures.
+- Detector sensitivity was independently exercised in a disposable worktree. Removing
+  call/apply classification, wrapper-function propagation, member-assignment propagation,
+  or static-template resolution made the focused source test fail on its corresponding
+  positive control. Byte-exact restoration returned the test to green; the final audit
+  blob matched implementation HEAD at `14294b734d9975e06506e4b02f3a4004f7723e9e`.
+- Strict Retry-After validation and the configured-origin redirect fence remain covered.
+  Real conformance used 20 requests under cap 24, created once, held cancellation at
+  14 -> 14, and left no active follower or idle waiter. The exact 900,000 ms idle window
+  stayed at 2 -> 2 calls while its 350 ms polling control generated 2,571 calls.
+- Opaque resume proof ends at offset `0000000000000000_0000000000000535`; the full-stream
+  digest is `sha256:76c9428a4604f060726dc6b1f146407c79dd6f430ddcbfb3248427a8ed0803e1`.
+  Browser/API state matched at offset `0000000000000000_0000000000000551`, digest
+  `sha256:d24f6d2d0e0774e4b9adf8fccb84648671798545404bc71ad7500044065ab3fc`.
+- Every evidence JSON names implementation `88a4fec7ce8c35b7aaff49f06051734f770c08d6`;
+  the canary scan reports zero matches with raw, URL-encoded, and base64 controls detected.
+  The run attempted no Replay upload or tunnel and left recordings unchanged.
+- Replay: N/A (server transport adapter) + mitigation: real-emulator protocol transcript,
+  request-budget proof, canary scan, redirect-origin proof, source-provenance controls,
+  and reconnect matrix.
+- Resubmitted claim: the fourth critic's ordinary callable-indirection bypasses are closed
+  by a provenance-aware source guard with committed positive controls and four independent
+  red/green mutations; all adapter, lifecycle, security, provenance, and cold-clone
+  acceptance criteria are satisfied at the cited implementation commit.

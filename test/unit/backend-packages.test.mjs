@@ -405,6 +405,84 @@ test("chat service preserves append and owner-only edit behavior", async () => {
   assert.equal(edited.message.editedAt, "2026-08-01T00:01:00.000Z");
 });
 
+test("chat service reuses explicit idempotency payloads and dispatches room resets", async () => {
+  const records = [];
+  let randomSequence = 0;
+  let timestampSequence = 0;
+  const streamStore = {
+    close: () => {},
+    ensure: async () => {},
+    follow: async () => {},
+    read: async () => ({
+      records: [...records],
+      messages: materializeMessages(records),
+      nextOffset: `offset-${records.length}`,
+      streamDigest: `digest:${records.length}`,
+    }),
+  };
+  const dispatch = async (request) => {
+    const existing = records.find(
+      (record) =>
+        record?.dispatch?.idempotencyKey === request.idempotencyKey &&
+        record.dispatch.operation === request.operation,
+    );
+    if (existing) {
+      return {
+        event: existing,
+        receipt: { nextOffset: `offset-${records.indexOf(existing) + 1}` },
+      };
+    }
+    const event = {
+      ...request.payload,
+      dispatch: {
+        actorId: request.actorId,
+        expectedHead: request.expectedHead,
+        idempotencyKey: request.idempotencyKey,
+        operation: request.operation,
+        requestDigest: `digest:${request.idempotencyKey}`,
+        schemaVersion: 1,
+        stream: request.stream,
+        workspaceId: request.workspaceId,
+      },
+    };
+    records.push(event);
+    return {
+      event,
+      receipt: { nextOffset: `offset-${records.length}` },
+    };
+  };
+  const service = createChatService({
+    dispatch,
+    randomId: () => `message-${++randomSequence}`,
+    now: () => `2026-08-01T00:0${++timestampSequence}:00.000Z`,
+    streamStore,
+    workspaceId: "ws_00000000000000000000000000",
+  });
+
+  const first = await service.appendMessage("demo", { text: "retry me" }, ada, {
+    idempotencyKey: "ik_00000000000000000000000001",
+  });
+  const retry = await service.appendMessage("demo", { text: "retry me" }, ada, {
+    idempotencyKey: "ik_00000000000000000000000001",
+  });
+  assert.deepEqual(retry.message, first.message);
+  assert.equal(records.filter((record) => record.id).length, 1);
+  assert.equal(timestampSequence, 1);
+
+  const reset = await service.resetRoom("demo", ada, {
+    idempotencyKey: "ik_00000000000000000000000002",
+  });
+  const resetRetry = await service.resetRoom("demo", ada, {
+    idempotencyKey: "ik_00000000000000000000000002",
+  });
+  assert.equal(reset.nextOffset, resetRetry.nextOffset);
+  assert.equal(materializeMessages(records).length, 0);
+  assert.equal(
+    records.filter((record) => record.kind === "room.reset").length,
+    1,
+  );
+});
+
 for (const failingChild of ["emulator", "app"]) {
   test(`startup failure in ${failingChild} stops only its managed sibling`, async () => {
     const unrelated = spawnLogged(

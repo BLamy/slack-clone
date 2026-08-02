@@ -160,6 +160,42 @@ test("a lost acknowledgement recovers from the durable event without a second ta
   door.close();
 });
 
+test("an indexed receipt without its target event fails closed", async () => {
+  const store = createMemoryStore();
+  const input = request({ stream: "orphan-receipt-room" });
+  const requestDigest = dispatchRequestDigest(input);
+  await store.append(
+    "__stream_slack_dispatch_idempotency__",
+    {
+      kind: "dispatch.accepted",
+      receipt: {
+        actorId: input.actorId,
+        eventDigest: canonicalSha256({ missing: true }),
+        idempotencyKey: input.idempotencyKey,
+        nextOffset: "offset-1",
+        operation: input.operation,
+        requestDigest,
+        status: "accepted",
+        stream: input.stream,
+        workspaceId: input.workspaceId,
+      },
+    },
+    { streamSeq: "offset-0" },
+  );
+  const door = createDispatchDoor({
+    producerEpoch: 0,
+    producerId: "unit-orphan-receipt-door",
+    streamStore: store,
+  });
+
+  await assert.rejects(
+    door.dispatch(input),
+    (error) => error.code === DISPATCH_REFUSAL_CODES.DURABILITY_GAP,
+  );
+  assert.equal((await store.read(input.stream)).records.length, 0);
+  door.close();
+});
+
 test("validation and authorization refuse before append or durable success record", async () => {
   const store = createMemoryStore();
   const denied = createDispatchDoor({

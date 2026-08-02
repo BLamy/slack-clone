@@ -126,14 +126,26 @@ export function createChatHttpDelivery({
         onBatch: async (batch) => {
           if (generation !== state.followGeneration) return;
           state.nextOffset = batch.nextOffset;
+          let resetSeen = false;
           for (const record of batch.records) {
-            broadcast(state, "message", record);
+            if (record?.dispatch?.operation === "chat.room.reset") {
+              resetSeen = true;
+            } else {
+              broadcast(state, "message", record);
+            }
           }
           if (batch.records.length > 0) {
             const snapshot = await chatService.readMessages(state.room, "-1");
             if (generation !== state.followGeneration) return;
             state.nextOffset = snapshot.nextOffset;
             state.streamDigest = snapshot.streamDigest;
+          }
+          if (resetSeen) {
+            broadcast(state, "reset", {
+              room: state.room,
+              nextOffset: state.nextOffset,
+              streamDigest: state.streamDigest,
+            });
           }
           broadcastStatus(state);
         },
@@ -318,16 +330,26 @@ export function createChatHttpDelivery({
     if (resource === "messages" && request.method === "DELETE") {
       const state = roomState(room);
       stopFollowing(state, "room reset");
-      await chatService.resetRoom(room);
-      state.nextOffset = ZERO_OFFSET;
-      state.streamDigest = emptyDigest;
+      const reset = await chatService.resetRoom(room, user, {
+        idempotencyKey:
+          typeof request.headers["idempotency-key"] === "string"
+            ? request.headers["idempotency-key"]
+            : undefined,
+      });
+      state.nextOffset = reset.nextOffset;
+      state.streamDigest = reset.streamDigest ?? emptyDigest;
       broadcast(state, "reset", {
         room,
-        nextOffset: ZERO_OFFSET,
-        streamDigest: emptyDigest,
+        nextOffset: state.nextOffset,
+        streamDigest: state.streamDigest,
       });
       startFollowing(state);
-      sendJson(response, 200, { ok: true, room });
+      sendJson(response, 200, {
+        ok: true,
+        room,
+        nextOffset: state.nextOffset,
+        streamDigest: state.streamDigest,
+      });
       return true;
     }
 

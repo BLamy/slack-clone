@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E0-T03 is verified after the human-directed structural repair and fresh critic review; E0-T04 is now the next eligible queue gate.",
-  "updatedAt": "2026-08-02T08:32:00Z"
+  "statusReason": "E0-T04 was refuted by an independent critic; retry determinism, reset dispatch fencing, and orphan receipt handling are being repaired before re-verification.",
+  "updatedAt": "2026-08-02T12:00:00Z"
 }

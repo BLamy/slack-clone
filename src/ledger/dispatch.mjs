@@ -14,6 +14,7 @@ export const DISPATCH_REFUSAL_CODES = Object.freeze({
   IDEMPOTENCY_CONFLICT: "DISPATCH_IDEMPOTENCY_CONFLICT",
   STALE_FENCE: "DISPATCH_STALE_FENCE",
   PRODUCER_FENCED: "DISPATCH_PRODUCER_FENCED",
+  DURABILITY_GAP: "DISPATCH_DURABILITY_GAP",
 });
 
 const REQUEST_KEYS = [
@@ -188,10 +189,23 @@ export function createDispatchDoor({
     );
     if (indexed) {
       assertReceiptMatchesRequest(indexed, request, requestDigest);
-      return resultFromReceipt(
-        indexed,
-        await readStream(request.stream, signal),
+      const targetSnapshot = await readStream(request.stream, signal);
+      const targetEvent = findTargetEvent(
+        targetSnapshot.records,
+        request.idempotencyKey,
       );
+      if (!targetEvent) {
+        throw durabilityGap(
+          requestDigest,
+          `receipt for ${request.idempotencyKey} has no target event`,
+        );
+      }
+      assertMetadataMatchesRequest(
+        targetEvent.dispatch,
+        request,
+        requestDigest,
+      );
+      return resultFromReceipt(indexed, targetSnapshot, targetEvent);
     }
 
     const targetSnapshot = await readStream(request.stream, signal);
@@ -350,6 +364,18 @@ function resultFromReceipt(receipt, snapshot, recoveredEvent) {
         record?.dispatch?.idempotencyKey === receipt.idempotencyKey &&
         record.dispatch.requestDigest === receipt.requestDigest,
     );
+  if (!event) {
+    throw durabilityGap(
+      receipt.requestDigest,
+      `accepted receipt for ${receipt.idempotencyKey} has no target event`,
+    );
+  }
+  if (canonicalSha256(event) !== receipt.eventDigest) {
+    throw durabilityGap(
+      receipt.requestDigest,
+      `target event for ${receipt.idempotencyKey} does not match its receipt`,
+    );
+  }
   return Object.freeze({
     event: event ?? null,
     receipt,
@@ -486,6 +512,14 @@ function mapAppendError(error, requestDigest) {
     );
   }
   return error;
+}
+
+function durabilityGap(requestDigest, detail) {
+  return new DispatchRefusalError(
+    DISPATCH_REFUSAL_CODES.DURABILITY_GAP,
+    detail,
+    { requestDigest, statusCode: 503 },
+  );
 }
 
 function serialize(tails, key, operation) {

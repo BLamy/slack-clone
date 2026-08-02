@@ -5,6 +5,7 @@ import {
   messageOwnedBy,
   normalizeMessageId,
   normalizeRoomId,
+  normalizeMessageText,
 } from "@stream-slack/protocol";
 
 export function createChatService({
@@ -18,30 +19,62 @@ export function createChatService({
     throw new TypeError("chat service requires the application dispatch door");
   }
 
+  const requestSeeds = new Map();
+
   async function appendMessage(roomId, input, user, { idempotencyKey } = {}) {
+    const stream = normalizeRoomId(roomId);
+    const actorId = String(user.sub ?? "");
+    const text = normalizeMessageText(input.text);
     const messageId = randomId();
-    const message = createMessageRecord({
-      roomId,
-      input,
-      user,
-      id: messageId,
-      timestamp: now(),
-    });
+    const requestKey = idempotencyKey ?? toIdempotencyKey(messageId);
     const snapshot = await streamStore.read(roomId, "-1");
-    const result = await dispatch({
-      actorId: String(user.sub ?? ""),
-      expectedHead: snapshot.nextOffset,
-      idempotencyKey: idempotencyKey ?? toIdempotencyKey(messageId),
+    const existing = idempotencyKey
+      ? findExistingMessage(snapshot.records, {
+          actorId,
+          idempotencyKey,
+          operation: "chat.message.create",
+          room: stream,
+          text,
+        })
+      : null;
+    const seedKey = requestSeedKey({
+      actorId,
+      idempotencyKey: requestKey,
       operation: "chat.message.create",
-      payload: message,
-      stream: normalizeRoomId(roomId),
+      stream,
+      text,
       workspaceId,
     });
-    return {
-      message: projectMessage(result.event ?? message),
-      nextOffset: result.receipt.nextOffset,
-      receipt: result.receipt,
-    };
+    const message =
+      existing ??
+      requestSeeds.get(seedKey) ??
+      createMessageRecord({
+        roomId,
+        input: { ...input, text },
+        user,
+        id: messageId,
+        timestamp: now(),
+      });
+    if (idempotencyKey && !existing) requestSeeds.set(seedKey, message);
+
+    try {
+      const result = await dispatch({
+        actorId,
+        expectedHead: snapshot.nextOffset,
+        idempotencyKey: requestKey,
+        operation: "chat.message.create",
+        payload: message,
+        stream,
+        workspaceId,
+      });
+      return {
+        message: projectMessage(result.event ?? message),
+        nextOffset: result.receipt.nextOffset,
+        receipt: result.receipt,
+      };
+    } finally {
+      if (requestSeeds.get(seedKey) === message) requestSeeds.delete(seedKey);
+    }
   }
 
   async function updateMessage(
@@ -52,6 +85,9 @@ export function createChatService({
     { idempotencyKey } = {},
   ) {
     const messageId = normalizeMessageId(rawMessageId);
+    const stream = normalizeRoomId(roomId);
+    const actorId = String(user.sub ?? "");
+    const text = normalizeMessageText(input.text);
     const snapshot = await streamStore.read(roomId, "-1");
     const current = snapshot.records.findLast(
       (record) => record?.id === messageId,
@@ -60,31 +96,76 @@ export function createChatService({
     if (!messageOwnedBy(current, user)) {
       throw httpError(403, "You can only edit your own messages");
     }
-    const edited = createEditedMessage({
-      current: withoutDispatch(current),
+    const requestKey = idempotencyKey ?? toIdempotencyKey(randomId());
+    const existing = idempotencyKey
+      ? findExistingMessage(snapshot.records, {
+          actorId,
+          idempotencyKey,
+          messageId,
+          operation: "chat.message.edit",
+          room: stream,
+          text,
+        })
+      : null;
+    const seedKey = requestSeedKey({
+      actorId,
+      idempotencyKey: requestKey,
       messageId,
-      input,
-      timestamp: now(),
-    });
-    const result = await dispatch({
-      actorId: String(user.sub ?? ""),
-      expectedHead: snapshot.nextOffset,
-      idempotencyKey: idempotencyKey ?? toIdempotencyKey(randomId()),
       operation: "chat.message.edit",
-      payload: edited,
-      stream: normalizeRoomId(roomId),
+      stream,
+      text,
       workspaceId,
     });
-    return {
-      message: projectMessage(result.event ?? edited),
-      nextOffset: result.receipt.nextOffset,
-      receipt: result.receipt,
-    };
+    const edited =
+      existing ??
+      requestSeeds.get(seedKey) ??
+      createEditedMessage({
+        current: withoutDispatch(current),
+        messageId,
+        input: { ...input, text },
+        timestamp: now(),
+      });
+    if (idempotencyKey && !existing) requestSeeds.set(seedKey, edited);
+
+    try {
+      const result = await dispatch({
+        actorId,
+        expectedHead: snapshot.nextOffset,
+        idempotencyKey: requestKey,
+        operation: "chat.message.edit",
+        payload: edited,
+        stream,
+        workspaceId,
+      });
+      return {
+        message: projectMessage(result.event ?? edited),
+        nextOffset: result.receipt.nextOffset,
+        receipt: result.receipt,
+      };
+    } finally {
+      if (requestSeeds.get(seedKey) === edited) requestSeeds.delete(seedKey);
+    }
   }
 
-  async function resetRoom(roomId) {
-    await streamStore.remove(roomId);
-    await streamStore.ensure(roomId);
+  async function resetRoom(roomId, user, { idempotencyKey } = {}) {
+    const stream = normalizeRoomId(roomId);
+    const snapshot = await streamStore.read(stream, "-1");
+    const requestKey = idempotencyKey ?? toIdempotencyKey(randomId());
+    const result = await dispatch({
+      actorId: String(user?.sub ?? ""),
+      expectedHead: snapshot.nextOffset,
+      idempotencyKey: requestKey,
+      operation: "chat.room.reset",
+      payload: { kind: "room.reset", room: stream },
+      stream,
+      workspaceId,
+    });
+    const after = await streamStore.read(stream, "-1");
+    return {
+      nextOffset: result.receipt.nextOffset,
+      receipt: result.receipt,
+      streamDigest: after.streamDigest ?? null,
+    };
   }
 
   return {
@@ -111,6 +192,44 @@ function withoutDispatch(record) {
   const message = { ...record };
   delete message.dispatch;
   return message;
+}
+
+function findExistingMessage(records, expected) {
+  const record = records.findLast(
+    (candidate) =>
+      candidate?.dispatch?.idempotencyKey === expected.idempotencyKey &&
+      candidate.dispatch.operation === expected.operation,
+  );
+  if (
+    !record ||
+    record.room !== expected.room ||
+    record.actorId !== expected.actorId ||
+    record.text !== expected.text ||
+    (expected.messageId !== undefined && record.id !== expected.messageId)
+  ) {
+    return null;
+  }
+  return withoutDispatch(record);
+}
+
+function requestSeedKey({
+  actorId,
+  idempotencyKey,
+  messageId,
+  operation,
+  stream,
+  text,
+  workspaceId,
+}) {
+  return JSON.stringify([
+    actorId,
+    idempotencyKey,
+    messageId ?? null,
+    operation,
+    stream,
+    text,
+    workspaceId,
+  ]);
 }
 
 function toIdempotencyKey(value) {

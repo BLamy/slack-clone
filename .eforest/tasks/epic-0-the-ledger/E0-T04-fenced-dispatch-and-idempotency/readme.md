@@ -3,7 +3,7 @@ id: E0-T04
 epic: 0
 title: "Fenced dispatch and idempotent application writes"
 priority: 4
-status: implemented
+status: in-progress
 depends_on: [E0-T03]
 estimate: L
 capstone: false
@@ -99,3 +99,28 @@ key cannot be replayed for different content.
   stale expected heads fail closed, provider fencing prevents the losing writer from
   mutating later, and a lost local acknowledgement can be reconstructed from durable
   stream facts. A fresh critic must now test that claim against the exact diff and evidence.
+
+### Critic — 2026-08-02 — independent refutation
+
+- Verdict: `VERDICT: refuted`.
+- The fresh critic passed independent duplicate, conflict, race, replay, revocation,
+  deletion, canonicalization, lost-ack, and expected-head sensitivity attacks, but found
+  three underlying gaps: service retries regenerated message IDs and timestamps before
+  dispatch, `resetRoom()` removed and recreated streams outside the dispatch door, and an
+  indexed receipt could be returned without a matching target event.
+- Scratch attack output is retained under `work/critic-2026-08-02/`; it is not evidence or
+  a product artifact. No product code or committed task metadata was changed by the critic.
+
+### Builder — 2026-08-02 — repair in progress
+
+- Reuse explicit-key message and edit payloads from the durable target event, with a
+  bounded in-process seed for concurrent first attempts, so a retry after lost response or
+  process restart preserves the original ID and timestamp while changed text still reaches
+  dispatch as an idempotency conflict.
+- Replace destructive room stream removal with an idempotent `chat.room.reset` dispatch
+  event; the pure message reducer treats that durable control event as a logical reset and
+  live HTTP delivery emits a reset notification without bypassing the application door.
+- Require every indexed receipt to resolve to a target event whose dispatch metadata and
+  canonical event digest match; otherwise fail closed with `DISPATCH_DURABILITY_GAP`.
+- Added focused tests for explicit-key retry reuse, reset idempotency, and orphan-receipt
+  refusal. A fresh critic must re-run the exact cold evidence after this repair.

@@ -142,6 +142,10 @@ test("invalid golden logs fail at the offending offset with stable typed errors"
       code: REDUCER_ERROR_CODES.DUPLICATE_LOGICAL_ID,
       offset: "0000000000000002_0000000000000006",
     },
+    "invalid-offset.json": {
+      code: REDUCER_ERROR_CODES.INVALID_OFFSET,
+      offset: "not-an-offset",
+    },
     "illegal-transition.json": {
       code: REDUCER_ERROR_CODES.ILLEGAL_TRANSITION,
       offset: "0000000000000002_0000000000000004",
@@ -173,24 +177,33 @@ test("reducer rejects duplicate events and reused offsets", () => {
   expectFailure(
     () =>
       reduceEnvelope(
-        reduceEnvelope(createInitialState(), first, { offset: "one" }),
+        reduceEnvelope(createInitialState(), first, {
+          offset: "0000000000000003_0000000000000001",
+        }),
         first,
-        { offset: "two" },
+        { offset: "0000000000000003_0000000000000002" },
       ),
     {
       code: REDUCER_ERROR_CODES.DUPLICATE_EVENT_ID,
-      offset: "two",
+      offset: "0000000000000003_0000000000000002",
     },
   );
   expectFailure(
     () =>
       replayRecords([
-        { offset: "same", event: first },
-        { offset: "same", event: second },
+        { offset: "0000000000000004_0000000000000001", event: first },
+        { offset: "0000000000000004_0000000000000001", event: second },
       ]),
     {
       code: REDUCER_ERROR_CODES.OFFSET_REUSED,
-      offset: "same",
+      offset: "0000000000000004_0000000000000001",
+    },
+  );
+  expectFailure(
+    () => replayRecords([{ offset: "not-an-offset", event: first }]),
+    {
+      code: REDUCER_ERROR_CODES.INVALID_OFFSET,
+      offset: "not-an-offset",
     },
   );
 });
@@ -228,6 +241,74 @@ test("semantic fixture mutations change the affected prefix and final digest", a
       original.prefixes.at(0).stateDigest,
     );
     assert.notEqual(mutated.finalStateDigest, original.finalStateDigest);
+  }
+});
+
+test("envelope provenance and source-reference mutations change replay digests", async () => {
+  const originalDump = await readJson(
+    path.join(validDirectory, "ledger-log.v1.json"),
+  );
+  const original = validateAndReplayDump(originalDump);
+  const mutations = [
+    [
+      "serverTimestamp",
+      (event) => {
+        event.serverTimestamp = "2026-01-01T00:00:00.010Z";
+      },
+    ],
+    [
+      "correlationId",
+      (event) => {
+        event.correlationId = "cr_bbbbbbbbbbbbbbbbbbbbbbbbbb";
+      },
+    ],
+    [
+      "idempotencyKey",
+      (event) => {
+        event.idempotencyKey = "ik_bbbbbbbbbbbbbbbbbbbbbbbbbb";
+      },
+    ],
+    [
+      "actorId",
+      (event) => {
+        event.actorId =
+          "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc";
+      },
+    ],
+    [
+      "offset",
+      (...args) => {
+        args.at(1).records.at(0).offset = "0000000000000000_000000000000000a";
+      },
+    ],
+    [
+      "causation.digest",
+      (event) => {
+        event.causation = {
+          digest:
+            "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          offset: "0000000000000000_0000000000000001",
+          stream:
+            "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        };
+      },
+    ],
+  ];
+
+  for (const [name, mutate] of mutations) {
+    const mutatedDump = structuredClone(originalDump);
+    mutate(mutatedDump.records.at(0).event, mutatedDump);
+    const mutated = validateAndReplayDump(mutatedDump);
+    assert.notEqual(
+      mutated.prefixes.at(0).stateDigest,
+      original.prefixes.at(0).stateDigest,
+      `${name} mutation was accepted without changing the prefix digest`,
+    );
+    assert.notEqual(
+      mutated.finalStateDigest,
+      original.finalStateDigest,
+      `${name} mutation was accepted without changing the final digest`,
+    );
   }
 });
 

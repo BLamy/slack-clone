@@ -58,6 +58,7 @@ await mkdir(artifactRoot, { recursive: true });
 const validFixtureNames = ["ledger-log.v1.json", "message-and-run-log.v1.json"];
 const invalidFixtureNames = [
   "duplicate-logical-id.json",
+  "invalid-offset.json",
   "illegal-transition.json",
   "malformed-envelope.json",
   "unknown-event-type.json",
@@ -67,6 +68,7 @@ const prefixEvidence = {};
 const replayEvidence = {};
 const invalidEvidence = {};
 const mutationEvidence = {};
+const provenanceEvidence = {};
 
 for (const fixtureName of validFixtureNames) {
   const fixturePath = path.join(validDirectory, fixtureName);
@@ -117,6 +119,10 @@ const invalidExpectations = {
   "duplicate-logical-id.json": {
     code: "REDUCER_DUPLICATE_LOGICAL_ID",
     offset: "0000000000000002_0000000000000006",
+  },
+  "invalid-offset.json": {
+    code: "REDUCER_INVALID_OFFSET",
+    offset: "not-an-offset",
   },
   "illegal-transition.json": {
     code: "REDUCER_ILLEGAL_TRANSITION",
@@ -175,6 +181,134 @@ for (const fixtureName of validFixtureNames) {
       outcome: "validation-failed",
     };
   }
+}
+
+for (const fixtureName of validFixtureNames) {
+  const fixturePath = path.join(validDirectory, fixtureName);
+  const originalDump = JSON.parse(await readFile(fixturePath, "utf8"));
+  const cases = [
+    [
+      "serverTimestamp",
+      (event) => {
+        event.serverTimestamp = "2026-01-01T00:00:00.010Z";
+      },
+    ],
+    [
+      "correlationId",
+      (event) => {
+        event.correlationId = "cr_bbbbbbbbbbbbbbbbbbbbbbbbbb";
+      },
+    ],
+    [
+      "idempotencyKey",
+      (event) => {
+        event.idempotencyKey = "ik_bbbbbbbbbbbbbbbbbbbbbbbbbb";
+      },
+    ],
+    [
+      "actorId",
+      (event) => {
+        event.actorId =
+          "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc";
+      },
+    ],
+    [
+      "eventId",
+      (event) => {
+        event.eventId = "ev_zzzzzzzzzzzzzzzzzzzzzzzzzz";
+      },
+    ],
+    [
+      "schemaVersion",
+      (event) => {
+        event.schemaVersion = 2;
+      },
+    ],
+    [
+      "offset",
+      (...args) => {
+        args.at(1).records.at(0).offset = "0000000000000000_000000000000000a";
+      },
+    ],
+  ];
+  const results = [];
+  for (const [name, mutate] of cases) {
+    const mutatedDump = structuredClone(originalDump);
+    mutate(mutatedDump.records.at(0).event, mutatedDump);
+    const mutatedPath = path.join(
+      artifactRoot,
+      `provenance-${fixtureName}-${name}.json`,
+    );
+    await writeFile(mutatedPath, `${JSON.stringify(mutatedDump)}\n`);
+    const result = await runCli(["replay", mutatedPath], cliEnvironment);
+    if (result.code === 0) {
+      const mutatedOutput = JSON.parse(result.stdout);
+      assert.notEqual(
+        mutatedOutput.finalStateDigest,
+        replayEvidence[fixtureName].finalStateDigest,
+        `${fixtureName} ${name} mutation did not change final digest`,
+      );
+      results.push({
+        finalStateDigest: mutatedOutput.finalStateDigest,
+        name,
+        outcome: "digest-changed",
+      });
+    } else {
+      const failure = JSON.parse(result.stderr);
+      assert.ok(failure.error);
+      results.push({
+        code: failure.error.code,
+        name,
+        offset: failure.error.offset,
+        outcome: "validation-failed",
+      });
+    }
+  }
+
+  const sourceBaseline = structuredClone(originalDump);
+  sourceBaseline.records.at(0).event.causation = {
+    digest:
+      "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    offset: "0000000000000000_0000000000000001",
+    stream: "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+  };
+  const sourceMutated = structuredClone(sourceBaseline);
+  sourceMutated.records.at(0).event.causation.digest =
+    "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+  const sourceBaselinePath = path.join(
+    artifactRoot,
+    `provenance-${fixtureName}-source-baseline.json`,
+  );
+  const sourceMutatedPath = path.join(
+    artifactRoot,
+    `provenance-${fixtureName}-source-mutated.json`,
+  );
+  await writeFile(sourceBaselinePath, `${JSON.stringify(sourceBaseline)}\n`);
+  await writeFile(sourceMutatedPath, `${JSON.stringify(sourceMutated)}\n`);
+  const sourceBaselineResult = await runCli(
+    ["replay", sourceBaselinePath],
+    cliEnvironment,
+  );
+  const sourceMutatedResult = await runCli(
+    ["replay", sourceMutatedPath],
+    cliEnvironment,
+  );
+  assert.equal(sourceBaselineResult.code, 0, sourceBaselineResult.stderr);
+  assert.equal(sourceMutatedResult.code, 0, sourceMutatedResult.stderr);
+  const sourceBaselineOutput = JSON.parse(sourceBaselineResult.stdout);
+  const sourceMutatedOutput = JSON.parse(sourceMutatedResult.stdout);
+  assert.notEqual(
+    sourceMutatedOutput.finalStateDigest,
+    sourceBaselineOutput.finalStateDigest,
+    `${fixtureName} causation.digest mutation did not change final digest`,
+  );
+  results.push({
+    baselineFinalStateDigest: sourceBaselineOutput.finalStateDigest,
+    finalStateDigest: sourceMutatedOutput.finalStateDigest,
+    name: "causation.digest",
+    outcome: "digest-changed",
+  });
+  provenanceEvidence[fixtureName] = results;
 }
 
 const purityAudit = [];
@@ -256,6 +390,7 @@ const summary = {
   invalidFixtures: invalidEvidence,
   prefixDigests: prefixEvidence,
   mutationSensitivity: mutationEvidence,
+  provenanceSensitivity: provenanceEvidence,
   purityAudit,
 };
 await writeJson(path.join(artifactRoot, "prefix-digests.json"), prefixEvidence);
@@ -266,6 +401,10 @@ await writeJson(
 await writeJson(
   path.join(artifactRoot, "mutation-results.json"),
   mutationEvidence,
+);
+await writeJson(
+  path.join(artifactRoot, "provenance-results.json"),
+  provenanceEvidence,
 );
 await writeJson(path.join(artifactRoot, "purity-audit.json"), purityAudit);
 await writeJson(path.join(artifactRoot, "verification-summary.json"), summary);
@@ -288,6 +427,7 @@ if (process.env.PROMOTE_EVIDENCE === "1") {
   for (const name of [
     "invalid-results.json",
     "mutation-results.json",
+    "provenance-results.json",
     "prefix-digests.json",
     "purity-audit.json",
     "verification-summary.json",

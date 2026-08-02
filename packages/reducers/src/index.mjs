@@ -28,11 +28,14 @@ export const REDUCER_ERROR_CODES = Object.freeze({
   DUPLICATE_LOGICAL_ID: "REDUCER_DUPLICATE_LOGICAL_ID",
   ILLEGAL_TRANSITION: "REDUCER_ILLEGAL_TRANSITION",
   INVALID_EVENT_DATA: "REDUCER_INVALID_EVENT_DATA",
+  INVALID_OFFSET: "REDUCER_INVALID_OFFSET",
   MALFORMED_ENVELOPE: "REDUCER_MALFORMED_ENVELOPE",
   OFFSET_REUSED: "REDUCER_OFFSET_REUSED",
   UNKNOWN_EVENT_TYPE: "REDUCER_UNKNOWN_EVENT_TYPE",
   UNSUPPORTED_SCHEMA_VERSION: "REDUCER_UNSUPPORTED_SCHEMA_VERSION",
 });
+
+const OFFSET_PATTERN = /^[0-9a-f]{16}_[0-9a-f]{16}$/u;
 
 export class ReducerError extends Error {
   toJSON() {
@@ -61,6 +64,7 @@ export function createInitialState() {
   return {
     schemaVersion: REDUCER_SCHEMA_VERSION,
     appliedEventIds: [],
+    eventProvenance: [],
     entities: {
       agents: {},
       connections: {},
@@ -96,6 +100,10 @@ export function reduceEnvelope(state, envelope, { offset = null } = {}) {
   const reducer = registryReducer(envelope.eventType);
   reducer(next, envelope.data, { envelope, offset });
   next.appliedEventIds.push(envelope.eventId);
+  next.eventProvenance.push({
+    envelope: copyJson(envelope),
+    offset,
+  });
   return next;
 }
 
@@ -116,9 +124,16 @@ export function replayRecords(records) {
     const offset = record?.offset ?? `index:${index}`;
     if (typeof offset !== "string" || offset.length === 0) {
       throw reducerError(
-        REDUCER_ERROR_CODES.MALFORMED_ENVELOPE,
-        "record offset must be a non-empty string",
+        REDUCER_ERROR_CODES.INVALID_OFFSET,
+        "record offset must be a canonical Durable Streams offset",
         { offset: String(offset), path: `$.records[${index}].offset` },
+      );
+    }
+    if (!OFFSET_PATTERN.test(offset)) {
+      throw reducerError(
+        REDUCER_ERROR_CODES.INVALID_OFFSET,
+        "record offset must be a canonical Durable Streams offset",
+        { offset, path: `$.records[${index}].offset` },
       );
     }
     if (seenOffsets.has(offset)) {
@@ -508,6 +523,7 @@ function cloneState(state) {
   return {
     schemaVersion: state.schemaVersion,
     appliedEventIds: [...state.appliedEventIds],
+    eventProvenance: copyJson(state.eventProvenance),
     entities: Object.fromEntries(
       Object.entries(state.entities).map(([key, value]) => [
         key,

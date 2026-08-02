@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E0-T05 provenance repair and promoted cold evidence are complete; awaiting a fresh independent critic.",
-  "updatedAt": "2026-08-02T19:52:30Z"
+  "statusReason": "E0-T05 is verified after provenance repair; E0-T06 is the next eligible queue gate.",
+  "updatedAt": "2026-08-02T19:58:40Z"
 }

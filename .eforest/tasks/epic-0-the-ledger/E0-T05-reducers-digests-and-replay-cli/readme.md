@@ -3,7 +3,7 @@ id: E0-T05
 epic: 0
 title: "Pure reducers, canonical state digests, and replay CLI"
 priority: 5
-status: implemented
+status: verified
 depends_on: [E0-T01, E0-T04]
 estimate: M
 capstone: false
@@ -150,3 +150,25 @@ VERDICT: refuted
   mutation tests.
 - Repair claim: the critic’s provenance sensitivity finding is addressed at the state
   contract, and the repaired implementation is ready for a fresh independent critic.
+
+### Critic — 2026-08-02 — final independent verification
+
+VERDICT: verified
+
+- Fresh critic session `019fc409-9fc1-7aa3-9f01-e4bc6cb81447` audited handoff `3ac6463`
+  and repair `a23b4962eddf1e413aa76c211a0032d2b2397c7e` without editing the repository.
+- Both valid logs replayed in fresh processes with byte-identical full output and prefix
+  digests: ten prefixes ending at
+  `sha256:5462e5c9d9d93fa56ae173a15d49ea3c931db073a2ee3da0dd2083ebeb99b79e`, and four
+  prefixes ending at
+  `sha256:abe1b4ab514e5b182efd0e509efef3f42b4b8ae7bf843361b18b991c7d9522ef`.
+- Independent attacks confirmed typed failures for invalid offsets, duplicate event and
+  logical IDs, unknown/malformed events, illegal transitions, and revision regressions.
+  Timestamp, correlation, idempotency, actor, event ID, schema, offset, payload, and
+  non-null causation digest mutations were either rejected or changed prefix/final
+  digests. Canonical key reordering remained invariant.
+- The reducer capability audit was clean; a disposable `Date.now()` mutation was detected
+  as `clock`. Query-store/build-cache paths stayed absent with network-disabled settings.
+  Replay: N/A (CLI replay apparatus, not browser behavior) + mitigation: golden event
+  logs, per-prefix digests, purity audit, and mutation tests.
+- E0-T05 is verified and unlocks E0-T06.

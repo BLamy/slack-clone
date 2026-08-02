@@ -1,12 +1,11 @@
 import { spawnSync } from "node:child_process";
-import { readdir } from "node:fs/promises";
 import path from "node:path";
 
+import { ANALYSIS_ROOTS, listExecutableFiles } from "./runtime-files.mjs";
+
 const root = path.resolve(import.meta.dirname, "..");
-const roots = ["src", "packages", "scripts", "tools", "test", "tests"];
 const files = [];
-for (const directory of roots)
-  files.push(...(await listModules(path.join(root, directory))));
+files.push(...(await listExecutableFiles(root, ANALYSIS_ROOTS)));
 for (const file of [
   "playwright.config.mjs",
   "replay.playwright.config.mjs",
@@ -52,20 +51,3 @@ if (streamAccessAudit.status !== 0) {
   process.exit(streamAccessAudit.status ?? 1);
 }
 console.log(`PASS static syntax analysis files=${files.length}`);
-
-async function listModules(directory) {
-  const found = [];
-  let entries;
-  try {
-    entries = await readdir(directory, { withFileTypes: true });
-  } catch (error) {
-    if (error?.code === "ENOENT") return found;
-    throw error;
-  }
-  for (const entry of entries) {
-    const entryPath = path.join(directory, entry.name);
-    if (entry.isDirectory()) found.push(...(await listModules(entryPath)));
-    else if (entry.name.endsWith(".mjs")) found.push(entryPath);
-  }
-  return found;
-}

@@ -1,8 +1,9 @@
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import { analyzeModuleSource } from "./import-analysis.mjs";
+import { listFiles } from "./runtime-files.mjs";
 
 const root = path.resolve(import.meta.dirname, "..");
 const config = JSON.parse(
@@ -137,13 +138,11 @@ function escapesPackage(file, specifier, packageRoot) {
 }
 
 async function listModules(directory) {
-  const files = [];
-  for (const entry of await readdir(directory, { withFileTypes: true })) {
-    const entryPath = path.join(directory, entry.name);
-    if (entry.isDirectory()) files.push(...(await listModules(entryPath)));
-    else if (entry.name.endsWith(".mjs")) files.push(entryPath);
-  }
-  return files.sort();
+  return listFiles(
+    directory,
+    (file) =>
+      file.endsWith(".mjs") || file.endsWith(".js") || file.endsWith(".cjs"),
+  );
 }
 
 function relative(file) {

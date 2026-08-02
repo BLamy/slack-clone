@@ -184,6 +184,60 @@ test("full repository audit rejects nested ambient acquisition and permits the a
   }
 });
 
+test("full repository audit covers CommonJS and browser loader files", async () => {
+  const repositoryRoot = await mkdtemp(
+    path.join(os.tmpdir(), "stream-slack-structural-door-"),
+  );
+  try {
+    await mkdir(path.join(repositoryRoot, "src"), { recursive: true });
+    await mkdir(path.join(repositoryRoot, "public"), { recursive: true });
+    await writeFile(
+      path.join(repositoryRoot, "src/unscanned-loader.cjs"),
+      'module.exports = require("node:http");\n',
+    );
+    await writeFile(
+      path.join(repositoryRoot, "public/dom-loader.js"),
+      `
+        const script = document.createElement("script");
+        script.src = "http://streams.invalid/rooms/dom/messages";
+        document.head.append(script);
+      `,
+    );
+    await writeFile(
+      path.join(repositoryRoot, "public/process-loader.js"),
+      `
+        import { getBuiltinModule } from "node:process";
+        export const request = getBuiltinModule("node:http").request;
+      `,
+    );
+    await writeFile(
+      path.join(repositoryRoot, "public/index.html"),
+      '<script src="https://streams.invalid/rooms/html/messages"></script>\n',
+    );
+
+    const result = await auditDurableStreamsAccess({ repositoryRoot });
+    assert.ok(result.filesScanned >= 5);
+    assert.match(
+      result.failures.join("\n"),
+      /unscanned-loader\.cjs:1 imports outbound network module node:http outside a declared transport door/u,
+    );
+    assert.match(
+      result.failures.join("\n"),
+      /dom-loader\.js:2 uses browser request surface createElement outside the application transport door/u,
+    );
+    assert.match(
+      result.failures.join("\n"),
+      /process-loader\.js:2 imports runtime capability node:process outside a declared transport door/u,
+    );
+    assert.match(
+      result.failures.join("\n"),
+      /index\.html:1 contains browser network URL in a resource attribute/u,
+    );
+  } finally {
+    await rm(repositoryRoot, { recursive: true, force: true });
+  }
+});
+
 function jsonResponse(status, value) {
   return new Response(JSON.stringify(value), {
     status,

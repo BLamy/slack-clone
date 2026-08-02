@@ -599,6 +599,69 @@ export const NETWORK_DOOR_SOURCE_AUDIT_CASES = Object.freeze([
 ]);
 
 export const STATIC_DOOR_CONTRACT_SOURCE_AUDIT_CASES = Object.freeze([
+  violationCase(
+    "commonjs-network-loader",
+    `
+      module.exports = require("node:http");
+    `,
+    ["direct-provider-network"],
+    "src/commonjs-network-loader.cjs",
+  ),
+  violationCase(
+    "named-process-loader",
+    `
+      import { getBuiltinModule } from "node:process";
+      export const request = getBuiltinModule("node:http").request;
+    `,
+    ["direct-provider-network"],
+    "src/named-process-loader.mjs",
+  ),
+  allowCase(
+    "safe-named-process-import",
+    `
+      import { env, exit, on } from "node:process";
+      export const runtime = { env, exit, on };
+    `,
+    "src/safe-process-import.mjs",
+  ),
+  violationCase(
+    "dom-script-src-loader",
+    `
+      const script = document.createElement("script");
+      script.src = "http://streams.invalid/rooms/dom-script/messages";
+      document.head.append(script);
+    `,
+    ["direct-provider-network"],
+    "public/dom-script-loader.js",
+  ),
+  violationCase(
+    "dom-image-src-loader",
+    `
+      const beacon = new Image();
+      beacon.src = "http://streams.invalid/rooms/dom-image/messages";
+    `,
+    ["direct-provider-network"],
+    "public/dom-image-loader.js",
+  ),
+  violationCase(
+    "dom-worker-loader",
+    `
+      new Worker("http://streams.invalid/rooms/dom-worker/messages");
+      new SharedWorker("http://streams.invalid/rooms/dom-shared-worker/messages");
+    `,
+    ["direct-provider-network"],
+    "public/dom-worker-loader.js",
+  ),
+  violationCase(
+    "service-worker-loader",
+    `
+      navigator.serviceWorker.register(
+        "http://streams.invalid/rooms/dom-service-worker/messages",
+      );
+    `,
+    ["direct-provider-network"],
+    "public/dom-service-worker-loader.js",
+  ),
   providerCase(
     "window-top-fetch",
     `

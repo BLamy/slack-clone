@@ -15,11 +15,18 @@ export default [
   {
     files: [
       "src/**/*.mjs",
+      "src/**/*.{js,cjs}",
       "packages/**/*.mjs",
+      "packages/**/*.{js,cjs}",
       "scripts/**/*.mjs",
+      "scripts/**/*.{js,cjs}",
       "tools/**/*.mjs",
+      "tools/**/*.{js,cjs}",
       "test/**/*.mjs",
+      "test/**/*.{js,cjs}",
       "tests/**/*.mjs",
+      "tests/**/*.{js,cjs}",
+      "public/**/*.{js,mjs,cjs}",
       "*.config.mjs",
     ],
     languageOptions: {

@@ -1,12 +1,16 @@
-import { readFile, readdir } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Linter } from "eslint";
+import {
+  listExecutableFiles,
+  listFiles,
+  RUNTIME_ROOTS,
+} from "./runtime-files.mjs";
 
 const root = path.resolve(import.meta.dirname, "..");
 const OFFICIAL_CLIENT = "@durable-streams/client";
-const RUNTIME_ROOTS = ["src", "packages", "public"];
 const PROVIDER_REFERENCE =
   /(?:DURABLE_STREAMS|durableStreams|streamOrigin|streams\.invalid|https?:\/\/[^\s"'`]+\/rooms\/)/u;
 const BROWSER_SECRET_REFERENCE =
@@ -16,8 +20,14 @@ const AMBIENT_NETWORK_GLOBALS = new Set([
   "Deno",
   "EventSource",
   "Function",
+  "Image",
   "WebSocket",
+  "Worker",
+  "SharedWorker",
+  "Audio",
   "XMLHttpRequest",
+  "location",
+  "navigator",
   "eval",
   "fetch",
   "require",
@@ -36,7 +46,11 @@ const NETWORK_MEMBER_NAMES = new Set([
   "Deno",
   "EventSource",
   "Function",
+  "Image",
   "WebSocket",
+  "Worker",
+  "SharedWorker",
+  "Audio",
   "XMLHttpRequest",
   "eval",
   "fetch",
@@ -82,6 +96,28 @@ const NON_PROVIDER_DOOR_IMPORTS = new Set([
   "./application-api.js",
   "/application-api.js",
 ]);
+const SAFE_PROCESS_IMPORTS = new Set(["env", "exit", "on"]);
+const BROWSER_REQUEST_MEMBER_NAMES = new Set([
+  "append",
+  "appendChild",
+  "createElement",
+  "createElementNS",
+  "insertAdjacentElement",
+  "insertAdjacentHTML",
+  "insertBefore",
+  "replaceWith",
+  "serviceWorker",
+  "setAttribute",
+  "setAttributeNS",
+  "src",
+  "srcObject",
+  "submit",
+]);
+const BROWSER_RESOURCE_ATTRIBUTE =
+  /\b(?:src|href|action|formaction|poster|data|cite|background)\s*=\s*(["'])(?:https?:|\/\/|blob:|data:|file:|javascript:|npm:)/giu;
+const BROWSER_CSS_RESOURCE =
+  /\burl\(\s*(["']?)(?:https?:|\/\/|blob:|data:|file:|javascript:|npm:)/giu;
+const INLINE_SCRIPT = /<script\b[^>]*>([\s\S]*?)<\/script>/giu;
 
 const NETWORK_DOORS = Object.freeze([
   Object.freeze({
@@ -183,6 +219,23 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
     }
     if (specifier === "@stream-slack/durable-streams") {
       importsProviderDoor = true;
+    }
+    if (/^(?:node:)?process$/u.test(specifier) && !door?.provider) {
+      const safeImport =
+        declaration?.type === "ImportDeclaration" &&
+        declaration.specifiers.length > 0 &&
+        declaration.specifiers.every(
+          (imported) =>
+            imported.type === "ImportSpecifier" &&
+            SAFE_PROCESS_IMPORTS.has(imported.imported.name),
+        );
+      if (!safeImport) {
+        report(
+          "direct-provider-network",
+          node.loc.start.line,
+          `imports runtime capability ${specifier} outside a declared transport door`,
+        );
+      }
     }
     if (REMOTE_MODULE_PATTERN.test(specifier)) {
       report(
@@ -391,6 +444,17 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
               `uses runtime reflection escape ${object.name}.${property}`,
             );
           }
+          if (
+            relative.startsWith("public/") &&
+            !door?.allowAmbient &&
+            BROWSER_REQUEST_MEMBER_NAMES.has(property)
+          ) {
+            report(
+              "direct-provider-network",
+              node.loc.start.line,
+              `uses browser request surface ${property} outside the application transport door`,
+            );
+          }
           if (door?.allowAmbient) return;
           if (
             object.type === "Identifier" &&
@@ -498,7 +562,7 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
       {
         languageOptions: {
           ecmaVersion: "latest",
-          sourceType: "module",
+          sourceType: sourceTypeFor(relative),
         },
         plugins: { streams: { rules: { capture: captureRule } } },
         rules: { "streams/capture": "error" },
@@ -522,15 +586,7 @@ export async function auditDurableStreamsAccess({
   repositoryRoot = root,
 } = {}) {
   const failures = [];
-  const modules = [];
-  for (const directory of RUNTIME_ROOTS) {
-    modules.push(
-      ...(await listFiles(
-        path.join(repositoryRoot, directory),
-        (file) => file.endsWith(".mjs") || file.endsWith(".js"),
-      )),
-    );
-  }
+  const modules = await listExecutableFiles(repositoryRoot, RUNTIME_ROOTS);
 
   const conformanceHarness = path.join(
     repositoryRoot,
@@ -569,12 +625,12 @@ export async function auditDurableStreamsAccess({
     () => true,
   );
   for (const file of publicFiles) {
+    const relative = slash(path.relative(repositoryRoot, file));
     const source = await readFile(file, "utf8");
     if (BROWSER_SECRET_REFERENCE.test(source)) {
-      failures.push(
-        `${slash(path.relative(repositoryRoot, file))} references a server credential`,
-      );
+      failures.push(`${relative} references a server credential`);
     }
+    failures.push(...auditBrowserAsset(source, relative));
   }
 
   return {
@@ -771,26 +827,54 @@ function unwrapChain(node) {
   return node?.type === "ChainExpression" ? node.expression : node;
 }
 
-async function listFiles(directory, accept) {
-  const files = [];
-  let entries;
-  try {
-    entries = await readdir(directory, { withFileTypes: true });
-  } catch (error) {
-    if (error?.code === "ENOENT") return files;
-    throw error;
-  }
-  for (const entry of entries) {
-    const entryPath = path.join(directory, entry.name);
-    if (entry.isDirectory())
-      files.push(...(await listFiles(entryPath, accept)));
-    else if (entry.isFile() && accept(entryPath)) files.push(entryPath);
-  }
-  return files;
-}
-
 function slash(value) {
   return value.split(path.sep).join("/");
+}
+
+function sourceTypeFor(filename) {
+  return filename.endsWith(".cjs") ? "commonjs" : "module";
+}
+
+function auditBrowserAsset(source, filename) {
+  const failures = [];
+  if (filename.endsWith(".html")) {
+    for (const match of source.matchAll(BROWSER_RESOURCE_ATTRIBUTE)) {
+      failures.push(
+        `${filename}:${lineAt(source, match.index)} contains browser network URL in a resource attribute`,
+      );
+    }
+    let scriptIndex = 0;
+    for (const match of source.matchAll(INLINE_SCRIPT)) {
+      scriptIndex += 1;
+      const inlineFilename = `${filename}#inline-script-${scriptIndex}.js`;
+      try {
+        for (const violation of analyzeDurableStreamsAccess(
+          match[1],
+          inlineFilename,
+        )) {
+          failures.push(
+            `${filename}:${lineAt(source, match.index)} ${violation.message}`,
+          );
+        }
+      } catch (error) {
+        failures.push(
+          `${filename}:${lineAt(source, match.index)} inline script is not auditable: ${error.message}`,
+        );
+      }
+    }
+  }
+  if (filename.endsWith(".css")) {
+    for (const match of source.matchAll(BROWSER_CSS_RESOURCE)) {
+      failures.push(
+        `${filename}:${lineAt(source, match.index)} contains browser network URL in a stylesheet resource`,
+      );
+    }
+  }
+  return failures;
+}
+
+function lineAt(source, index) {
+  return source.slice(0, index ?? 0).split("\n").length;
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

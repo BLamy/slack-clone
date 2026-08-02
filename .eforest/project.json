@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E0-T04 retry, reset, and orphan-receipt repairs pass the exact cold verifier and await a fresh independent critic.",
-  "updatedAt": "2026-08-02T12:45:00Z"
+  "statusReason": "E0-T04 process-restart retries exposed expected-head contamination in the logical digest; the fence/digest split is being reverified.",
+  "updatedAt": "2026-08-02T13:20:00Z"
 }

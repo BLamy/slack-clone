@@ -3,7 +3,7 @@ id: E0-T04
 epic: 0
 title: "Fenced dispatch and idempotent application writes"
 priority: 4
-status: implemented
+status: in-progress
 depends_on: [E0-T03]
 estimate: L
 capstone: false
@@ -144,3 +144,25 @@ key cannot be replayed for different content.
   reset is an idempotent dispatch event rather than a stream bypass, and an orphan or
   mismatched receipt fails closed; the original dispatch fence/idempotency invariants
   remain intact. A fresh critic must now verify this repaired claim.
+
+### Critic — 2026-08-02 — second independent refutation
+
+- Verdict: `VERDICT: refuted`.
+- The fresh critic passed the exact cold verifier, reset ordering, receipt-digest
+  fail-closed, and expected-head sensitivity checks, but its independent process-restart
+  attack found that create and edit retries still conflicted after the stream head
+  advanced. The cause was `expectedHead` being included in the logical request digest.
+- Scratch attack output is retained under `work/critic-2026-08-02-59d4cad/`; it is not
+  committed evidence or a product artifact. The critic did not modify product code or
+  committed evidence.
+
+### Builder — 2026-08-02 — logical retry identity repair in progress
+
+- Keep `expectedHead` as a validated provider fence and event provenance field, but remove
+  it from `dispatchRequestDigest`; logical idempotency now covers actor, workspace,
+  operation, key, stream, and canonical payload only. A retry may therefore reread a
+  newer head and still recover the same durable receipt, while changed payloads remain
+  conflicts.
+- Added a process-restart unit test covering both create and edit after target append and
+  lost acknowledgement, plus an assertion that changing only the expected head does not
+  change the logical digest. The final cold verifier and a fresh critic must now rerun.

@@ -11,6 +11,7 @@ import {
 import { materializeMessages } from "@stream-slack/reducers";
 import { createChatService } from "@stream-slack/services";
 
+import { createDispatchDoor } from "../../src/ledger/dispatch.mjs";
 import {
   spawnLogged,
   stop,
@@ -481,6 +482,113 @@ test("chat service reuses explicit idempotency payloads and dispatches room rese
     records.filter((record) => record.kind === "room.reset").length,
     1,
   );
+});
+
+test("chat service recovers explicit create and edit keys after a process restart", async () => {
+  const streams = new Map();
+  let failTargetAppend = null;
+  const streamStore = {
+    async append(stream, record, options = {}) {
+      const records = streams.get(stream) ?? [];
+      const expectedHead = `offset-${records.length}`;
+      if (
+        options.streamSeq !== undefined &&
+        options.streamSeq !== expectedHead
+      ) {
+        throw Object.assign(new Error("stale head"), {
+          code: "APPEND_CONFLICT",
+          status: 409,
+        });
+      }
+      records.push(record);
+      streams.set(stream, records);
+      if (failTargetAppend === stream) {
+        failTargetAppend = null;
+        throw new Error("lost acknowledgement after target acceptance");
+      }
+      return { message: record, nextOffset: `offset-${records.length}` };
+    },
+    async read(stream) {
+      const records = [...(streams.get(stream) ?? [])];
+      return {
+        records,
+        messages: materializeMessages(records),
+        nextOffset: `offset-${records.length}`,
+      };
+    },
+  };
+  const createService = (label) => {
+    const door = createDispatchDoor({
+      producerEpoch: 0,
+      producerId: `restart-${label}`,
+      streamStore,
+    });
+    return {
+      door,
+      service: createChatService({
+        dispatch: door.dispatch,
+        randomId: () => `${label}-id`,
+        now: () =>
+          ({
+            "first-create": "2026-08-02T00:00:01.000Z",
+            "first-edit": "2026-08-02T00:00:02.000Z",
+            "restarted-create": "2026-08-02T00:00:03.000Z",
+            "restarted-edit": "2026-08-02T00:00:04.000Z",
+          })[label],
+        streamStore,
+        workspaceId: "ws_00000000000000000000000000",
+      }),
+    };
+  };
+  const room = "restart-room";
+  const createKey = "ik_00000000000000000000000011";
+  const firstCreate = createService("first-create");
+  failTargetAppend = room;
+  await assert.rejects(
+    firstCreate.service.appendMessage(room, { text: "durable" }, ada, {
+      idempotencyKey: createKey,
+    }),
+    /lost acknowledgement/u,
+  );
+  firstCreate.door.close();
+
+  const restartedCreate = createService("restarted-create");
+  const createRetry = await restartedCreate.service.appendMessage(
+    room,
+    { text: "durable" },
+    ada,
+    { idempotencyKey: createKey },
+  );
+  assert.equal(createRetry.message.id, "first-create-id");
+  assert.equal(createRetry.message.createdAt, "2026-08-02T00:00:01.000Z");
+
+  const editKey = "ik_00000000000000000000000012";
+  const firstEdit = createService("first-edit");
+  failTargetAppend = room;
+  await assert.rejects(
+    firstEdit.service.updateMessage(
+      room,
+      createRetry.message.id,
+      { text: "edited" },
+      ada,
+      { idempotencyKey: editKey },
+    ),
+    /lost acknowledgement/u,
+  );
+  firstEdit.door.close();
+
+  const restartedEdit = createService("restarted-edit");
+  const editRetry = await restartedEdit.service.updateMessage(
+    room,
+    createRetry.message.id,
+    { text: "edited" },
+    ada,
+    { idempotencyKey: editKey },
+  );
+  assert.equal(editRetry.message.id, createRetry.message.id);
+  assert.equal(editRetry.message.editedAt, "2026-08-02T00:00:02.000Z");
+  restartedCreate.door.close();
+  restartedEdit.door.close();
 });
 
 for (const failingChild of ["emulator", "app"]) {

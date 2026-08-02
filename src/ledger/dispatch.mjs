@@ -26,6 +26,14 @@ const REQUEST_KEYS = [
   "stream",
   "workspaceId",
 ];
+const IDENTITY_KEYS = [
+  "actorId",
+  "idempotencyKey",
+  "operation",
+  "payload",
+  "stream",
+  "workspaceId",
+];
 const METADATA_KEYS = [
   "actorId",
   "expectedHead",
@@ -112,7 +120,10 @@ export function validateDispatchRequest(value) {
 
 export function dispatchRequestDigest(request) {
   validateDispatchRequest(request);
-  return canonicalSha256(request);
+  const identity = Object.fromEntries(
+    IDENTITY_KEYS.map((key) => [key, request[key]]),
+  );
+  return canonicalSha256(identity);
 }
 
 export function validateDispatchReceipt(value) {

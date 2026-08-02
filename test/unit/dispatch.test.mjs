@@ -13,12 +13,16 @@ const WORKSPACE_B = `ws_${"0".repeat(25)}1`;
 const ACTOR_A = "pr_ada";
 const ACTOR_B = "pr_linus";
 
-test("dispatch canonicalizes the complete request identity", () => {
+test("dispatch canonicalizes logical identity separately from its fence", () => {
   const base = request({
     payload: { b: 2, a: ["same", true] },
   });
   const reordered = { ...base, payload: { a: ["same", true], b: 2 } };
   assert.equal(dispatchRequestDigest(base), dispatchRequestDigest(reordered));
+  assert.equal(
+    dispatchRequestDigest(base),
+    dispatchRequestDigest({ ...base, expectedHead: "offset-advanced" }),
+  );
   assert.notEqual(
     dispatchRequestDigest(base),
     dispatchRequestDigest({ ...base, payload: { a: ["same", false], b: 2 } }),

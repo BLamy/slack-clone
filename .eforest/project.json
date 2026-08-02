@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E0-T04 fourth-critic repair is implemented locally and is entering a fresh cold verification for reset ordering, receipt checkpoint integrity, and producer-duplicate mismatch.",
+  "statusReason": "E0-T04 fourth-critic repair passed the promoted cold verifier; awaiting a fresh independent critic for final verification.",
   "updatedAt": "2026-08-02T14:45:00Z"
 }

@@ -3,7 +3,7 @@ id: E0-T04
 epic: 0
 title: "Fenced dispatch and idempotent application writes"
 priority: 4
-status: in-progress
+status: implemented
 depends_on: [E0-T03]
 estimate: L
 capstone: false
@@ -233,3 +233,12 @@ key cannot be replayed for different content.
 - Preserve the raw order of live batches while emitting reset notifications at the reset record's position; do not group messages around a reset.
 - Treat a provider-reported producer duplicate as a recovery signal only when the target contains the exact requested idempotency event; otherwise fail closed without writing an idempotency receipt. Validate tail receipt checkpoints against the current target head so a forged offset cannot be accepted when the event is still at the tail.
 - Focused regression tests and a fresh cold verifier will rerun before another independent critic.
+
+### Builder — 2026-08-02 — fourth-critic repair verification handoff
+
+- Exact repaired implementation commit: `b011b67326f052951965e0afa66e657e1a6ddab7`.
+- `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t04-repair-fourth TEST_ARTIFACT_DIR=.artifacts/e0-t04/e0-t04-repair-fourth make verify-E0-T04` passed every gate from the clean exact-head tree: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (61 unit/ledger tests and 5 browser tests), `pnpm test:conformance:e0-t04`, and `pnpm build`.
+- The final conformance run still alternated 100 same-key requests across independent dispatch doors and produced one logical event. All receipts reference offset `0000000000000000_0000000000000400` and event digest `sha256:91f057a0b8a04b5142411b711fc7075e4484a9eef13b1e50b52e67273797dcd6`; the expected-head race remained one accepted append and one stale-fence refusal, lost-ack recovery remained one durable target event, and authorization/key conflicts left candidate streams unchanged.
+- Regression coverage now proves reset notifications retain their durable position inside a mixed batch, a provider duplicate without the requested target event fails with `DISPATCH_DURABILITY_GAP` before receipt persistence, and a forged tail receipt checkpoint fails closed. Replay: N/A (server dispatch concurrency contract) + mitigation: real-HTTP/browser stream proof, alternating cross-door race logs, reset-order unit coverage, producer-duplicate and receipt-integrity attacks, lost-ack/process-restart recovery, head/digest dumps, and the cold-clone verifier. No Replay upload or tunnel was attempted.
+- Promoted evidence: `evidence/cold-verification.json`, `evidence/dispatch-conformance.json`, `evidence/final-stream-dump.json`, and `evidence/request-transcript.json`.
+- Claim: reset delivery preserves authoritative event order; provider duplicate responses cannot create a receipt for an unobserved event; and a tail receipt cannot be forged by changing its checkpoint. Prior cross-door, logical retry, fence, authorization, and durable-receipt invariants remain green. A fresh critic must now verify this repaired exact diff and evidence.

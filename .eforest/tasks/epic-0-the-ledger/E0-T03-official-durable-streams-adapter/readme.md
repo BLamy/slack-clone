@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: in-progress
+status: implemented
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -131,3 +131,41 @@ VERDICT: refuted
   idle probe at the exact boundary that previously scheduled 350-millisecond polling,
   prove a targeted polling mutation makes the verifier fail, and stamp the clean
   implementation commit into every regenerated evidence artifact.
+
+### Builder resubmission — 2026-08-01
+
+- Implementation commit: `c1616398872bd2e992ffae6f669a7840cc47b2ac`; regenerated
+  evidence commit: `53d32eddccd79ae14399d49ceaf5f5e9d9c4c44c`.
+- Final cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t03-builder-resubmit make
+  verify-E0-T03`. All eight gates passed from a clean tracked implementation tree: format,
+  lint, static analysis (50 provider-access files, zero violations), unit (37/37),
+  real-emulator conformance, browser integration (5/5), concurrency (1/1), and build.
+- Every committed JSON evidence file records implementation commit
+  `c1616398872bd2e992ffae6f669a7840cc47b2ac`; `evidence/cold-verification.json` also
+  records `implementationTreeCleanAtStart: true`.
+- Idle proof: `evidence/request-budget.json` advances the injected HTTP delivery timer
+  boundary by 900,000 milliseconds. The adapter-facing request count remains 2 -> 2 while
+  90 downstream keepalive timers execute; the real-emulator official follow remains parked
+  at 7 -> 7 requests during its settle observation. Total provider requests are 19 under
+  the frozen cap of 24, with one create request and zero post-cancel growth.
+- Sensitivity proof: the same timer harness injects a 350-millisecond polling positive
+  control, observes 2,571 poll executions and 2,571 extra adapter calls, and rejects it.
+  Independently, a disposable worktree at the implementation commit restored a real
+  350-millisecond poll in `packages/http/src/index.mjs`; the focused unit verifier exited 1
+  with `2571 !== 0`. That disposable mutant worktree was then removed.
+- Protocol proof: `evidence/protocol-conformance.json` records exact-once suffixes from
+  `-1` and all five opaque checkpoints, ending at offset
+  `0000000000000000_0000000000000530` with full-stream digest
+  `sha256:4fd671201956ad222a358b99ae42ebf4c2668c80f5260a38c2bfd06ed9d1d530`.
+- Security/browser proof: `evidence/canary-scan.json` detects all positive controls and
+  finds zero raw, URL-encoded, or base64 token matches. The browser edit flow records room
+  `e0-t03-builder-resubmit-edit-1785633260610`, offset
+  `0000000000000000_0000000000000549`, digest
+  `sha256:55df6cb35cb4cf62b2184423f5ce747f8bf0a2c78c8f7c40a035cdb1995775ea`,
+  and `domMatchedApi: true`.
+- Replay: N/A (server transport adapter) + mitigation: real-emulator protocol transcript,
+  request-budget proof, canary scan, and reconnect matrix.
+- Resubmitted claim: at the cited implementation commit, the official-client adapter and
+  HTTP live-delivery path satisfy every acceptance criterion. The idle proof now advances
+  the timer boundary that owned the removed polling loop and demonstrably rejects the
+  exact 350-millisecond regression; every durable artifact is bound to the clean commit.

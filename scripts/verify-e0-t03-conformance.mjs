@@ -757,10 +757,10 @@ function verifySourceAuditSensitivity() {
     assert.deepEqual(result, ["direct-provider-network"]);
   }
   const interproceduralDetections = Object.fromEntries(
-    SOURCE_AUDIT_CASES.map(({ name, source, expectedKinds }) => {
+    SOURCE_AUDIT_CASES.map(({ name, source, filename, expectedKinds }) => {
       const observed = analyzeDurableStreamsAccess(
         source,
-        `${name}-sensitivity.mjs`,
+        filename ?? `${name}-sensitivity.mjs`,
       ).map((violation) => violation.kind);
       assert.deepEqual(observed, expectedKinds, name);
       return [name, observed];

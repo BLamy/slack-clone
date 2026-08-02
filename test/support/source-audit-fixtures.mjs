@@ -598,23 +598,285 @@ export const NETWORK_DOOR_SOURCE_AUDIT_CASES = Object.freeze([
   ),
 ]);
 
+export const STATIC_DOOR_CONTRACT_SOURCE_AUDIT_CASES = Object.freeze([
+  providerCase(
+    "window-top-fetch",
+    `
+      const streamOrigin = "http://streams.invalid";
+      await window.top.fetch(streamOrigin + "/rooms/window-top/messages");
+    `,
+  ),
+  providerCase(
+    "bare-top-fetch",
+    `
+      const streamOrigin = "http://streams.invalid";
+      await top.fetch(streamOrigin + "/rooms/bare-top/messages");
+    `,
+  ),
+  providerCase(
+    "document-default-view-fetch",
+    `
+      const streamOrigin = "http://streams.invalid";
+      await document.defaultView.fetch(
+        streamOrigin + "/rooms/default-view/messages",
+      );
+    `,
+  ),
+  providerCase(
+    "global-function-recovery",
+    `
+      const send = globalThis.Function("return globalThis.fetch")();
+      await send("http://streams.invalid/rooms/global-function/messages");
+    `,
+  ),
+  providerCase(
+    "global-eval-recovery",
+    `
+      const send = globalThis.eval("globalThis.fetch");
+      await send("http://streams.invalid/rooms/global-eval/messages");
+    `,
+  ),
+  providerCase(
+    "arrow-constructor-recovery",
+    `
+      const send = (() => {}).constructor("return globalThis.fetch")();
+      await send("http://streams.invalid/rooms/arrow-constructor/messages");
+    `,
+  ),
+  providerCase(
+    "async-constructor-recovery",
+    `
+      const AsyncFunction = (async () => {}).constructor;
+      const send = await AsyncFunction("return globalThis.fetch")();
+      await send("http://streams.invalid/rooms/async-constructor/messages");
+    `,
+  ),
+  providerCase(
+    "reflect-constructor-recovery",
+    `
+      const Constructor = Reflect.get(() => {}, "constructor");
+      const send = Constructor("return globalThis.fetch")();
+      await send("http://streams.invalid/rooms/reflect-constructor/messages");
+    `,
+  ),
+  providerCase(
+    "descriptor-constructor-recovery",
+    `
+      const descriptor = Object.getOwnPropertyDescriptor(
+        () => {},
+        "constructor",
+      );
+      const send = descriptor.value("return globalThis.fetch")();
+      await send("http://streams.invalid/rooms/descriptor-constructor/messages");
+    `,
+  ),
+  providerCase(
+    "nested-send-beacon",
+    `
+      window.navigator.sendBeacon(
+        "http://streams.invalid/rooms/send-beacon/messages",
+        "payload",
+      );
+    `,
+  ),
+  providerCase(
+    "node-dns-module",
+    `
+      import { resolve } from "node:dns";
+      await new Promise((done) => resolve("streams.invalid", done));
+    `,
+  ),
+  providerCase(
+    "node-dns-promises-module",
+    `
+      import { resolve } from "node:dns/promises";
+      await resolve("streams.invalid");
+    `,
+  ),
+  providerCase(
+    "node-child-process-module",
+    `
+      import { execFile } from "node:child_process";
+      execFile("curl", ["http://streams.invalid/rooms/process/messages"]);
+    `,
+  ),
+  providerCase(
+    "deno-network-global",
+    `
+      await globalThis.Deno.connect({ hostname: "streams.invalid", port: 80 });
+    `,
+  ),
+  providerCase(
+    "bun-network-global",
+    `
+      Bun.connect({ hostname: "streams.invalid", port: 80 });
+    `,
+  ),
+  providerCase(
+    "create-require-alias",
+    `
+      import { createRequire as makeRequire } from "node:module";
+      const load = makeRequire(import.meta.url);
+      const { request } = load("node:http");
+      export { request };
+    `,
+  ),
+  providerCase(
+    "commonjs-require-alias",
+    `
+      const load = require;
+      const { request } = load("node:http");
+      export { request };
+    `,
+  ),
+  providerCase(
+    "get-builtin-alias",
+    `
+      const load = process.getBuiltinModule;
+      const { request } = load("node:http");
+      export { request };
+    `,
+  ),
+  providerCase(
+    "get-builtin-computed",
+    `
+      const member = ["get", "BuiltinModule"].join("");
+      const { request } = process[member]("node:http");
+      export { request };
+    `,
+  ),
+  providerCase(
+    "remote-dynamic-import",
+    `
+      const transport = await import(
+        "https://streams.invalid/rooms/remote/module.js"
+      );
+      await transport.send();
+    `,
+  ),
+  providerCase(
+    "remote-static-import",
+    `
+      import { send } from "https://streams.invalid/rooms/remote/module.js";
+      await send();
+    `,
+  ),
+  violationCase(
+    "raw-named-function-export",
+    `
+      export function rawNetwork() {
+        return globalThis.fetch;
+      }
+    `,
+    ["network-capability-export"],
+    "public/application-api.js",
+  ),
+  violationCase(
+    "raw-default-function-export",
+    `
+      export default function rawNetwork() {
+        return globalThis.fetch;
+      }
+    `,
+    ["network-capability-export"],
+    "public/application-api.js",
+  ),
+  violationCase(
+    "raw-assignment-export",
+    `
+      let rawNetwork;
+      rawNetwork = globalThis.fetch;
+      export { rawNetwork };
+    `,
+    ["network-capability-export"],
+    "public/application-api.js",
+  ),
+  violationCase(
+    "raw-class-getter-export",
+    `
+      export class RawNetwork {
+        get fetch() {
+          return globalThis.fetch;
+        }
+      }
+    `,
+    ["network-capability-export"],
+    "public/application-api.js",
+  ),
+  violationCase(
+    "raw-event-source-export",
+    `
+      export function rawEvents() {
+        return globalThis.EventSource;
+      }
+    `,
+    ["network-capability-export"],
+    "public/application-api.js",
+  ),
+  violationCase(
+    "inbound-dynamic-module",
+    `
+      const { request } = await import("node:http");
+      request("http://streams.invalid");
+    `,
+    ["direct-provider-network"],
+    "src/http-server.mjs",
+  ),
+  violationCase(
+    "inbound-create-require",
+    `
+      import { createRequire } from "node:module";
+      const load = createRequire(import.meta.url);
+      load("node:http").request("http://streams.invalid");
+    `,
+    ["direct-provider-network"],
+    "src/http-server.mjs",
+  ),
+  violationCase(
+    "inbound-get-builtin-alias",
+    `
+      const load = process.getBuiltinModule;
+      load("node:http").request("http://streams.invalid");
+    `,
+    ["direct-provider-network"],
+    "src/http-server.mjs",
+  ),
+  allowCase(
+    "inbound-create-server-only",
+    `
+      import { createServer } from "node:http";
+      export function createInboundHttpServer(handler) {
+        return createServer(handler);
+      }
+    `,
+    "src/http-server.mjs",
+  ),
+]);
+
 export const SOURCE_AUDIT_CASES = Object.freeze([
   ...INTERPROCEDURAL_SOURCE_AUDIT_CASES,
   ...NETWORK_DOOR_SOURCE_AUDIT_CASES,
+  ...STATIC_DOOR_CONTRACT_SOURCE_AUDIT_CASES,
 ]);
 
-function providerCase(name, source) {
+function providerCase(name, source, filename) {
+  return violationCase(name, source, ["direct-provider-network"], filename);
+}
+
+function allowCase(name, source, filename) {
   return Object.freeze({
     name,
     source,
-    expectedKinds: Object.freeze(["direct-provider-network"]),
+    ...(filename ? { filename } : {}),
+    expectedKinds: Object.freeze([]),
   });
 }
 
-function allowCase(name, source) {
+function violationCase(name, source, expectedKinds, filename) {
   return Object.freeze({
     name,
     source,
-    expectedKinds: Object.freeze([]),
+    ...(filename ? { filename } : {}),
+    expectedKinds: Object.freeze(expectedKinds),
   });
 }

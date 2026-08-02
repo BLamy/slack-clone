@@ -44,6 +44,7 @@ const auth0Client = createAuth0Client({
   clientId: AUTH0_CLIENT_ID,
   clientSecret: AUTH0_CLIENT_SECRET,
   realm: AUTH0_REALM,
+  reservedOrigin: DURABLE_STREAMS_URL,
 });
 
 function parseCookies(request) {

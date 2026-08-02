@@ -995,10 +995,21 @@ test("source guard rejects an adapter bypass while allowing the application API"
     ),
     [],
   );
+  assert.deepEqual(
+    analyzeDurableStreamsAccess(
+      `
+        export function rawNetwork() {
+          return () => globalThis.fetch;
+        }
+      `,
+      "public/application-api.js",
+    ).map((violation) => violation.kind),
+    ["network-capability-export"],
+  );
 
-  for (const { name, source, expectedKinds } of SOURCE_AUDIT_CASES) {
+  for (const { name, source, filename, expectedKinds } of SOURCE_AUDIT_CASES) {
     assert.deepEqual(
-      analyzeDurableStreamsAccess(source, `${name}.mjs`).map(
+      analyzeDurableStreamsAccess(source, filename ?? `${name}.mjs`).map(
         (violation) => violation.kind,
       ),
       expectedKinds,

@@ -12,9 +12,17 @@ export function createAuth0Client({
   clientId,
   clientSecret,
   realm,
+  reservedOrigin,
   fetchFn = globalThis.fetch,
 }) {
   const origin = normalizeAuth0BaseUrl(baseUrl);
+  const forbiddenOrigin = normalizeReservedOrigin(reservedOrigin);
+  if (origin === forbiddenOrigin) {
+    throw new Auth0ClientError(
+      "Auth0 origin conflicts with a reserved transport role",
+      { code: "AUTH0_TRANSPORT_ROLE_CONFLICT" },
+    );
+  }
   requireNonEmptyString(clientId, "Auth0 client ID");
   requireNonEmptyString(clientSecret, "Auth0 client secret");
   requireNonEmptyString(realm, "Auth0 realm");
@@ -135,6 +143,20 @@ function normalizeAuth0BaseUrl(value) {
   url.pathname = url.pathname.replace(/\/+$/u, "");
   url.search = "";
   url.hash = "";
+  return url.origin;
+}
+
+function normalizeReservedOrigin(value) {
+  if (typeof value !== "string" && !(value instanceof URL)) {
+    throw new TypeError("Reserved transport origin is required");
+  }
+  const url = new URL(String(value));
+  if (!new Set(["http:", "https:"]).has(url.protocol)) {
+    throw new TypeError("Reserved transport origin must use HTTP or HTTPS");
+  }
+  if (url.username || url.password) {
+    throw new TypeError("Reserved transport origin must not embed credentials");
+  }
   return url.origin;
 }
 

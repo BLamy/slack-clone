@@ -49,11 +49,19 @@ official client and acquisition of ambient network capabilities outside declared
 doors. The provider door is this adapter plus the E0-T03 conformance harness. Auth0 uses an
 origin-fenced client, and browser requests use a same-origin `/api/` door that refuses
 absolute, cross-origin, credentialed, fragment, and non-API targets; neither door may
-reference the Durable Streams provider or export raw network capabilities. This boundary
-is insensitive to how a caller later wraps a capability through defaults, getters,
-inheritance, collections, proxies, reflection, or tagged selectors because acquisition is
-rejected before target-flow analysis is needed. Public assets are separately scanned for
-server credential references. The
+reference the Durable Streams provider or export raw network capabilities. The composition
+root supplies the provider origin as Auth0's required reserved role; equal origins fail
+before any credentialed request.
+
+The audit is an explicit module contract, not a general-purpose target-taint analysis.
+Runtime modules reject constructor/eval recovery, browser-global escape roots, remote
+modules, Node network and DNS builtins, CommonJS and dynamic loaders, and
+`process.getBuiltinModule` outside the provider door. The application, Auth0, and inbound
+HTTP doors have exact export surfaces; the inbound door may import only named
+`createServer`. These syntax/import/export rules reject capability acquisition before
+later defaults, getters, inheritance, collections, proxies, reflection, or tagged
+selectors can obscure it. Public assets are separately scanned for server credential
+references. The
 request-budget gate drives the HTTP delivery timer boundary through
 900,000 deterministic milliseconds and confirms that its single snapshot read and live
 follow do not grow. A 350-millisecond polling positive control executes 2,571 reads over

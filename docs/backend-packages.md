@@ -34,8 +34,10 @@ this direction or deliberately amend the contract in a ticket that owns the boun
 
 E0-T03 makes the provider boundary executable as well as architectural. The
 `durable-streams` package owns the pinned official client and all requests to room-stream
-paths. `tools/audit-durable-streams-access.mjs`, included in `pnpm typecheck`, rejects an
-official-client import or direct provider request anywhere else, while allowing browser
-calls to the authenticated `/api/rooms/...` application surface. The adapter's opaque
+paths. `tools/audit-durable-streams-access.mjs`, included in `pnpm typecheck`, enforces
+declared module doors: ambient and dynamically loaded network capabilities stay out of
+ordinary runtime source, each door has an exact export surface, browser calls cross the
+same-origin `/api/rooms/...` application surface, Auth0 cannot share the provider origin,
+and the inbound HTTP door imports only named `createServer`. The adapter's opaque
 checkpoint, live-follow, cancellation, retry, and credential rules are documented in
 [`durable-streams-adapter.md`](durable-streams-adapter.md).

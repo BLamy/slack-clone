@@ -21,6 +21,7 @@ test("application API door accepts only same-origin /api/ targets", () => {
   );
   for (const target of [
     "https://streams.invalid/rooms/demo/messages",
+    ["https://streams", ".invalid/rooms/demo/messages"].join(""),
     "//streams.invalid/rooms/demo/messages",
     "/rooms/demo/messages",
     "/api-ish/rooms/demo/messages",
@@ -50,6 +51,7 @@ test("Auth0 door fixes requests to its configured origin and refuses redirects",
     clientId: "client",
     clientSecret: "secret",
     realm: "realm",
+    reservedOrigin: "http://streams.invalid",
     fetchFn: async (input, init) => {
       requests.push({ input: String(input), init });
       return responses.shift();
@@ -73,6 +75,7 @@ test("Auth0 door fixes requests to its configured origin and refuses redirects",
     clientId: "client",
     clientSecret: "secret",
     realm: "realm",
+    reservedOrigin: "http://streams.invalid",
     fetchFn: async () =>
       new Response(null, {
         status: 307,
@@ -84,6 +87,37 @@ test("Auth0 door fixes requests to its configured origin and refuses redirects",
     (error) =>
       error instanceof Auth0ClientError &&
       error.code === "AUTH0_REDIRECT_REFUSED",
+  );
+
+  let confusedRequests = 0;
+  assert.throws(
+    () =>
+      createAuth0Client({
+        baseUrl: "http://streams.invalid/provider-role",
+        clientId: "client",
+        clientSecret: "critic-secret",
+        realm: "realm",
+        reservedOrigin: "http://streams.invalid/rooms",
+        fetchFn: async () => {
+          confusedRequests += 1;
+          return jsonResponse(200, {});
+        },
+      }),
+    (error) =>
+      error instanceof Auth0ClientError &&
+      error.code === "AUTH0_TRANSPORT_ROLE_CONFLICT",
+  );
+  assert.equal(confusedRequests, 0);
+  assert.throws(
+    () =>
+      createAuth0Client({
+        baseUrl: "http://auth.example.test",
+        clientId: "client",
+        clientSecret: "secret",
+        realm: "realm",
+        fetchFn: async () => jsonResponse(200, {}),
+      }),
+    /Reserved transport origin is required/u,
   );
 });
 
@@ -114,12 +148,37 @@ test("full repository audit rejects nested ambient acquisition and permits the a
         await applicationApiFetch(target.value);
       `,
     );
+    await writeFile(
+      path.join(repositoryRoot, "src/constructor-bypass.mjs"),
+      `
+        const send = (() => {}).constructor("return globalThis.fetch")();
+        await send("http://streams.invalid/rooms/synthetic/messages");
+      `,
+    );
+    await writeFile(
+      path.join(repositoryRoot, "src/loader-bypass.mjs"),
+      `
+        import { createRequire as makeRequire } from "node:module";
+        const load = makeRequire(import.meta.url);
+        export const request = load("node:http").request;
+      `,
+    );
 
     const result = await auditDurableStreamsAccess({ repositoryRoot });
-    assert.equal(result.filesScanned, 2);
-    assert.deepEqual(result.failures, [
-      "src/provider-bypass.mjs:4 acquires ambient network capability through globalThis.fetch",
-    ]);
+    assert.equal(result.filesScanned, 4);
+    assert.equal(result.failures.length, 3);
+    assert.match(
+      result.failures.join("\n"),
+      /constructor-bypass\.mjs:2 uses forbidden runtime capability member constructor/u,
+    );
+    assert.match(
+      result.failures.join("\n"),
+      /loader-bypass\.mjs:2 imports runtime module loader node:module/u,
+    );
+    assert.match(
+      result.failures.join("\n"),
+      /provider-bypass\.mjs:4 acquires ambient network capability through globalThis\.fetch/u,
+    );
   } finally {
     await rm(repositoryRoot, { recursive: true, force: true });
   }

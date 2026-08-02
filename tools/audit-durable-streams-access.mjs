@@ -12,6 +12,28 @@ const PROVIDER_REFERENCE =
 const BROWSER_SECRET_REFERENCE =
   /(?:DURABLE_STREAMS_ADMIN_TOKEN|EMULATE_TOKEN|test_token_admin|Authorization\s*:\s*["'`]Bearer)/u;
 const AMBIENT_NETWORK_GLOBALS = new Set([
+  "Bun",
+  "Deno",
+  "EventSource",
+  "Function",
+  "WebSocket",
+  "XMLHttpRequest",
+  "eval",
+  "fetch",
+  "require",
+]);
+const GLOBAL_CONTAINERS = new Set([
+  "document",
+  "frames",
+  "globalThis",
+  "parent",
+  "self",
+  "top",
+  "window",
+]);
+const NETWORK_MEMBER_NAMES = new Set([
+  "Bun",
+  "Deno",
   "EventSource",
   "Function",
   "WebSocket",
@@ -19,20 +41,42 @@ const AMBIENT_NETWORK_GLOBALS = new Set([
   "eval",
   "fetch",
 ]);
-const GLOBAL_CONTAINERS = new Set(["globalThis", "self", "window"]);
-const NETWORK_MEMBER_NAMES = new Set([
-  "EventSource",
-  "WebSocket",
-  "XMLHttpRequest",
-  "fetch",
+const GLOBAL_ALIAS_MEMBER_NAMES = new Set([
+  "defaultView",
+  "frames",
+  "globalThis",
+  "navigator",
+  "parent",
+  "process",
+  "self",
+  "top",
+  "window",
 ]);
 const GLOBAL_ESCAPE_MEMBER_NAMES = new Set([
   "__proto__",
   "constructor",
   "prototype",
 ]);
+const FORBIDDEN_RUNTIME_MEMBER_NAMES = new Set([
+  "constructor",
+  "getBuiltinModule",
+  "sendBeacon",
+]);
+const REFLECTION_ESCAPE_MEMBERS = new Map([
+  [
+    "Object",
+    new Set([
+      "getOwnPropertyDescriptor",
+      "getOwnPropertyDescriptors",
+      "getPrototypeOf",
+    ]),
+  ],
+  ["Reflect", new Set(["apply", "construct", "get"])],
+]);
 const NETWORK_MODULE_PATTERN =
-  /^(?:node:)?(?:dgram|http|http2|https|net|tls)$|^(?:axios|eventsource|got|ky|node-fetch|superagent|undici|ws)(?:\/|$)/u;
+  /^(?:node:)?(?:child_process|cluster|dgram|dns(?:\/promises)?|http|http2|https|net|tls|vm|worker_threads)$|^(?:axios|eventsource|got|ky|node-fetch|superagent|undici|ws)(?:\/|$)/u;
+const MODULE_LOADER_PATTERN = /^(?:node:)?module$/u;
+const REMOTE_MODULE_PATTERN = /^(?:blob|bun|data|file|https?|npm):/u;
 const NON_PROVIDER_DOOR_IMPORTS = new Set([
   "./auth0-client.mjs",
   "./application-api.js",
@@ -45,24 +89,36 @@ const NETWORK_DOORS = Object.freeze([
     allowAmbient: true,
     allowOfficialClient: true,
     provider: true,
+    allowedExports: new Set([
+      "DurableStreamsAdapterError",
+      "createDurableStreamsStore",
+      "createNodeDurableStreamsStore",
+    ]),
   }),
   Object.freeze({
     exact: "scripts/verify-e0-t03-conformance.mjs",
     allowAmbient: true,
     allowOfficialClient: false,
     provider: true,
+    allowedExports: new Set(),
   }),
   Object.freeze({
     exact: "src/auth0-client.mjs",
     allowAmbient: true,
     allowOfficialClient: false,
     provider: false,
+    allowedExports: new Set(["Auth0ClientError", "createAuth0Client"]),
   }),
   Object.freeze({
     exact: "public/application-api.js",
     allowAmbient: true,
     allowOfficialClient: false,
     provider: false,
+    allowedExports: new Set([
+      "applicationApiEvents",
+      "applicationApiFetch",
+      "resolveApplicationApiPath",
+    ]),
   }),
 ]);
 
@@ -70,6 +126,15 @@ const FILE_POLICIES = Object.freeze([
   Object.freeze({
     exact: "src/http-server.mjs",
     allowedNetworkImports: new Map([["node:http", new Set(["createServer"])]]),
+    allowedExports: new Set(["createInboundHttpServer"]),
+  }),
+  Object.freeze({
+    exact: "src/ledger/canonical-json.mjs",
+    allowReflection: true,
+  }),
+  Object.freeze({
+    exact: "src/ledger/errors.mjs",
+    allowReflection: true,
   }),
 ]);
 
@@ -86,6 +151,7 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
   const seen = new Set();
   const rawCapabilityBindings = new Set();
   const exportedBindings = new Set();
+  const exportedNames = new Map();
   let importsNonProviderDoor = false;
   let importsProviderDoor = false;
   let sourceCode;
@@ -117,6 +183,20 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
     }
     if (specifier === "@stream-slack/durable-streams") {
       importsProviderDoor = true;
+    }
+    if (REMOTE_MODULE_PATTERN.test(specifier)) {
+      report(
+        "direct-provider-network",
+        node.loc.start.line,
+        `loads remote module ${specifier} outside the pinned module graph`,
+      );
+    }
+    if (MODULE_LOADER_PATTERN.test(specifier) && !door?.provider) {
+      report(
+        "direct-provider-network",
+        node.loc.start.line,
+        `imports runtime module loader ${specifier} outside a provider door`,
+      );
     }
     const allowedImports = filePolicy.allowedNetworkImports.get(specifier);
     if (
@@ -156,6 +236,11 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
     }
   }
 
+  function captureExport(name, localName, line) {
+    exportedNames.set(name, line);
+    if (localName) exportedBindings.add(localName);
+  }
+
   const captureRule = {
     meta: { type: "problem", schema: [] },
     create(context) {
@@ -169,20 +254,46 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
           if (node.declaration?.type === "VariableDeclaration") {
             for (const declaration of node.declaration.declarations) {
               for (const name of patternIdentifiers(declaration.id)) {
-                exportedBindings.add(name);
+                captureExport(name, name, declaration.loc.start.line);
               }
             }
           }
+          if (
+            new Set(["ClassDeclaration", "FunctionDeclaration"]).has(
+              node.declaration?.type,
+            ) &&
+            node.declaration.id
+          ) {
+            captureExport(
+              node.declaration.id.name,
+              node.declaration.id.name,
+              node.declaration.loc.start.line,
+            );
+          }
           for (const specifier of node.specifiers ?? []) {
             if (specifier.local?.type === "Identifier") {
-              exportedBindings.add(specifier.local.name);
+              const exportedName =
+                specifier.exported?.type === "Identifier"
+                  ? specifier.exported.name
+                  : String(specifier.exported?.value ?? specifier.local.name);
+              captureExport(
+                exportedName,
+                specifier.local.name,
+                specifier.loc.start.line,
+              );
             }
           }
         },
         ExportAllDeclaration(node) {
           inspectModuleSource(node.source, { exported: true });
+          captureExport("*", null, node.loc.start.line);
         },
         ExportDefaultDeclaration(node) {
+          captureExport(
+            "default",
+            node.declaration?.id?.name ?? null,
+            node.loc.start.line,
+          );
           if (
             !isFunctionOrClass(node.declaration) &&
             containsAmbientAcquisition(node.declaration)
@@ -196,11 +307,11 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
         },
         ImportExpression(node) {
           inspectModuleSource(node.source);
-          if (!door?.allowAmbient && node.source.type !== "Literal") {
+          if (!door?.provider) {
             report(
               "direct-provider-network",
               node.loc.start.line,
-              "uses a dynamic module specifier outside a declared transport door",
+              "uses dynamic import outside a provider transport door",
             );
           }
         },
@@ -216,10 +327,28 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
               `allows ambient global container ${node.name} to escape static member access`,
             );
           }
+          if (
+            !door?.provider &&
+            node.name === "process" &&
+            processEscapesAllowedRuntimeAccess(node)
+          ) {
+            report(
+              "direct-provider-network",
+              node.loc.start.line,
+              "allows process to escape direct environment access",
+            );
+          }
         },
         VariableDeclarator(node) {
-          if (containsAmbientAcquisition(node.init)) {
+          if (isRawNetworkCapabilityExpression(node.init)) {
             for (const name of patternIdentifiers(node.id)) {
+              rawCapabilityBindings.add(name);
+            }
+          }
+        },
+        AssignmentExpression(node) {
+          if (isRawNetworkCapabilityExpression(node.right)) {
+            for (const name of patternIdentifiers(node.left)) {
               rawCapabilityBindings.add(name);
             }
           }
@@ -231,35 +360,45 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
             node.arguments.length === 1
           ) {
             inspectModuleSource(node.arguments[0]);
-            if (!door?.allowAmbient && node.arguments[0].type !== "Literal") {
+            if (!door?.provider) {
               report(
                 "direct-provider-network",
                 node.loc.start.line,
-                "uses a dynamic require specifier outside a declared transport door",
+                "uses CommonJS require outside a provider transport door",
               );
             }
           }
+        },
+        MemberExpression(node) {
+          const object = unwrapChain(node.object);
+          const property = memberPropertyName(node);
+          if (!door?.provider && FORBIDDEN_RUNTIME_MEMBER_NAMES.has(property)) {
+            report(
+              "direct-provider-network",
+              node.loc.start.line,
+              `uses forbidden runtime capability member ${property}`,
+            );
+          }
           if (
-            !door?.allowAmbient &&
-            node.callee.type === "MemberExpression" &&
-            memberReference(node.callee) === "process.getBuiltinModule"
+            !door?.provider &&
+            !filePolicy.allowReflection &&
+            object.type === "Identifier" &&
+            REFLECTION_ESCAPE_MEMBERS.get(object.name)?.has(property)
           ) {
             report(
               "direct-provider-network",
               node.loc.start.line,
-              "acquires a runtime built-in module outside a declared transport door",
+              `uses runtime reflection escape ${object.name}.${property}`,
             );
           }
-        },
-        MemberExpression(node) {
           if (door?.allowAmbient) return;
-          const object = unwrapChain(node.object);
           if (
             object.type === "Identifier" &&
             GLOBAL_CONTAINERS.has(object.name) &&
             (node.computed ||
-              NETWORK_MEMBER_NAMES.has(memberPropertyName(node)) ||
-              GLOBAL_ESCAPE_MEMBER_NAMES.has(memberPropertyName(node)))
+              NETWORK_MEMBER_NAMES.has(property) ||
+              GLOBAL_ALIAS_MEMBER_NAMES.has(property) ||
+              GLOBAL_ESCAPE_MEMBER_NAMES.has(property))
           ) {
             report(
               "direct-provider-network",
@@ -267,11 +406,7 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
               `acquires ambient network capability through ${sourceCode.getText(node)}`,
             );
           }
-          if (
-            object.type === "Identifier" &&
-            object.name === "navigator" &&
-            memberPropertyName(node) === "sendBeacon"
-          ) {
+          if (property === "sendBeacon") {
             report(
               "direct-provider-network",
               node.loc.start.line,
@@ -279,22 +414,49 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
             );
           }
         },
+        ReturnStatement(node) {
+          if (
+            (door?.allowedExports || filePolicy.allowedExports) &&
+            isRawNetworkCapabilityExpression(
+              node.argument,
+              rawCapabilityBindings,
+            )
+          ) {
+            report(
+              "network-capability-export",
+              node.loc.start.line,
+              "returns a raw network capability from a transport door",
+            );
+          }
+        },
         "Program:exit"(node) {
-          if (!door?.allowAmbient) {
-            for (const reference of sourceCode.scopeManager.globalScope
-              .through) {
-              const identifier = reference.identifier;
-              if (AMBIENT_NETWORK_GLOBALS.has(identifier.name)) {
-                report(
-                  "direct-provider-network",
-                  identifier.loc.start.line,
-                  `acquires ambient network capability ${identifier.name} outside a declared transport door`,
-                );
-              }
+          for (const reference of sourceCode.scopeManager.globalScope.through) {
+            const identifier = reference.identifier;
+            if (
+              (!door?.allowAmbient &&
+                AMBIENT_NETWORK_GLOBALS.has(identifier.name)) ||
+              (!door?.provider &&
+                new Set(["Function", "eval"]).has(identifier.name))
+            ) {
+              report(
+                "direct-provider-network",
+                identifier.loc.start.line,
+                `acquires ambient network capability ${identifier.name} outside a declared provider door`,
+              );
             }
           }
 
-          if (door?.allowAmbient) {
+          const allowedExports =
+            door?.allowedExports ?? filePolicy.allowedExports;
+          if (allowedExports) {
+            for (const [name, line] of exportedNames) {
+              if (allowedExports.has(name)) continue;
+              report(
+                "network-capability-export",
+                line,
+                `exports undeclared transport-door symbol ${name}`,
+              );
+            }
             for (const name of exportedBindings) {
               if (!rawCapabilityBindings.has(name)) continue;
               report(
@@ -435,7 +597,64 @@ function filePolicyFor(filename) {
   );
   return {
     allowedNetworkImports: policy?.allowedNetworkImports ?? new Map(),
+    allowedExports: policy?.allowedExports ?? null,
+    allowReflection: policy?.allowReflection ?? false,
   };
+}
+
+function isRawNetworkCapabilityExpression(node, rawBindings = new Set()) {
+  if (!node || typeof node !== "object") return false;
+  const expression = unwrapChain(node);
+  if (expression.type === "Identifier") {
+    return (
+      AMBIENT_NETWORK_GLOBALS.has(expression.name) ||
+      rawBindings.has(expression.name)
+    );
+  }
+  if (expression.type === "MemberExpression") {
+    const object = unwrapChain(expression.object);
+    return (
+      object.type === "Identifier" &&
+      GLOBAL_CONTAINERS.has(object.name) &&
+      (expression.computed ||
+        NETWORK_MEMBER_NAMES.has(memberPropertyName(expression)))
+    );
+  }
+  if (
+    new Set([
+      "ArrowFunctionExpression",
+      "ClassExpression",
+      "FunctionExpression",
+      "ObjectExpression",
+    ]).has(expression.type)
+  ) {
+    return containsAmbientAcquisition(expression);
+  }
+  if (
+    new Set(["AwaitExpression", "SpreadElement", "UnaryExpression"]).has(
+      expression.type,
+    )
+  ) {
+    return isRawNetworkCapabilityExpression(expression.argument, rawBindings);
+  }
+  if (expression.type === "ConditionalExpression") {
+    return (
+      isRawNetworkCapabilityExpression(expression.consequent, rawBindings) ||
+      isRawNetworkCapabilityExpression(expression.alternate, rawBindings)
+    );
+  }
+  if (expression.type === "LogicalExpression") {
+    return (
+      isRawNetworkCapabilityExpression(expression.left, rawBindings) ||
+      isRawNetworkCapabilityExpression(expression.right, rawBindings)
+    );
+  }
+  if (expression.type === "SequenceExpression") {
+    return expression.expressions.some((item) =>
+      isRawNetworkCapabilityExpression(item, rawBindings),
+    );
+  }
+  return false;
 }
 
 function containsAmbientAcquisition(node) {
@@ -486,6 +705,17 @@ function globalContainerEscapes(identifier) {
   return true;
 }
 
+function processEscapesAllowedRuntimeAccess(identifier) {
+  const parent = identifier.parent;
+  return !(
+    parent?.type === "MemberExpression" &&
+    parent.object === identifier &&
+    !parent.computed &&
+    parent.property.type === "Identifier" &&
+    new Set(["env", "exit", "on"]).has(parent.property.name)
+  );
+}
+
 function memberPropertyName(node) {
   if (!node.computed && node.property.type === "Identifier") {
     return node.property.name;
@@ -503,20 +733,6 @@ function memberPropertyName(node) {
     return node.property.quasis[0]?.value.cooked ?? null;
   }
   return null;
-}
-
-function memberReference(node) {
-  const parts = [];
-  let current = unwrapChain(node);
-  while (current.type === "MemberExpression") {
-    const property = memberPropertyName(current);
-    if (property === null) return null;
-    parts.unshift(property);
-    current = unwrapChain(current.object);
-  }
-  if (current.type !== "Identifier") return null;
-  parts.unshift(current.name);
-  return parts.join(".");
 }
 
 function patternIdentifiers(pattern) {

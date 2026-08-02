@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: implemented
+status: verified
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -64,6 +64,24 @@ Streams; higher layers work in domain events and checkpoints.
    guard goes red.
 
 ## Verification log
+
+### Independent critic — 2026-08-02 — final structural submission
+
+VERDICT: verified
+
+- Critic session: `019fc375-2149-7512-a798-a8479db55f4e` (Faraday), reviewing the
+  exact `c18ec6d..652ac8d` diff in a fresh read-only session.
+- The critic confirmed the prior needs-evidence gap was closed: `.cjs` enumeration,
+  public DOM loaders, named `node:process` loaders, HTML resource attributes, CSS
+  `url(...)` resources, and inline HTML scripts each have clean and mutation-sensitive
+  coverage. `pnpm test:unit` passed 46/46 and the production audit scanned 27 executable
+  files with zero violations.
+- All six promoted evidence JSON files consistently reference implementation SHA
+  `1df738ffcf827cd07113fcf94aec14205d786125`, an ancestor of the published branch.
+- Replay: N/A (server transport adapter) + mitigation: emulator transcript,
+  request-budget proof, canary scan, reconnect matrix, and browser regression.
+- The critic found the queue and project state coherent and no refutation against the
+  repaired acceptance boundary.
 
 ### Builder — 2026-08-02 — structural transport-door repair
 

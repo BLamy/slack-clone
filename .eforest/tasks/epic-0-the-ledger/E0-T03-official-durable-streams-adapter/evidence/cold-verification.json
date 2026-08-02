@@ -1,57 +1,59 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-final",
+  "runId": "e0-t03-builder-resubmit",
+  "implementationCommit": "c1616398872bd2e992ffae6f669a7840cc47b2ac",
+  "implementationTreeCleanAtStart": true,
   "result": "PASS",
-  "artifactRoot": "/Users/brettlamy/Dev/slack-clone/.artifacts/e0-t03/e0-t03-builder-final",
+  "artifactRoot": "/Users/brettlamy/Dev/slack-clone/.artifacts/e0-t03/e0-t03-builder-resubmit",
   "gates": [
     {
       "name": "format",
       "command": "pnpm format:check",
       "result": "PASS",
-      "durationMs": 5163
+      "durationMs": 2339
     },
     {
       "name": "lint",
       "command": "pnpm lint",
       "result": "PASS",
-      "durationMs": 3639
+      "durationMs": 2207
     },
     {
       "name": "static-analysis",
       "command": "pnpm typecheck",
       "result": "PASS",
-      "durationMs": 11301
+      "durationMs": 5373
     },
     {
       "name": "unit",
       "command": "pnpm test:unit",
       "result": "PASS",
-      "durationMs": 8227
+      "durationMs": 8503
     },
     {
       "name": "conformance",
       "command": "pnpm test:conformance",
       "result": "PASS",
-      "durationMs": 8087
+      "durationMs": 12499
     },
     {
       "name": "integration",
       "command": "pnpm test:integration",
       "result": "PASS",
-      "durationMs": 12538
+      "durationMs": 20366
     },
     {
       "name": "concurrency",
       "command": "pnpm test:concurrency",
       "result": "PASS",
-      "durationMs": 12760
+      "durationMs": 15766
     },
     {
       "name": "build",
       "command": "pnpm build",
       "result": "PASS",
-      "durationMs": 721
+      "durationMs": 4066
     }
   ],
   "replay": "N/A (server transport adapter) + mitigation: real-emulator protocol transcript, request-budget proof, canary scan, and reconnect matrix",
@@ -60,11 +62,11 @@
   "recordingsUnchanged": true,
   "conformance": {
     "capturedOffsets": [
-      "0000000000000000_0000000000000092",
-      "0000000000000000_0000000000000185",
-      "0000000000000000_0000000000000277",
-      "0000000000000000_0000000000000393",
-      "0000000000000000_0000000000000515"
+      "0000000000000000_0000000000000095",
+      "0000000000000000_0000000000000191",
+      "0000000000000000_0000000000000286",
+      "0000000000000000_0000000000000405",
+      "0000000000000000_0000000000000530"
     ],
     "resumeMatrix": [
       {
@@ -83,11 +85,11 @@
           "record-live",
           "record-live-2"
         ],
-        "nextOffset": "0000000000000000_0000000000000515",
-        "streamDigest": "sha256:b3f7f6af968c5a2729b25ec51c894d64cd01a2c8a5040054b0883553caed48f8"
+        "nextOffset": "0000000000000000_0000000000000530",
+        "streamDigest": "sha256:4fd671201956ad222a358b99ae42ebf4c2668c80f5260a38c2bfd06ed9d1d530"
       },
       {
-        "checkpoint": "0000000000000000_0000000000000092",
+        "checkpoint": "0000000000000000_0000000000000095",
         "expectedIds": [
           "record-2",
           "record-3",
@@ -100,11 +102,11 @@
           "record-live",
           "record-live-2"
         ],
-        "nextOffset": "0000000000000000_0000000000000515",
-        "streamDigest": "sha256:65114b9affb89b7ec2360e78a574f49ef97e4ed12ea5ce3d26dc8d2ea99e7cfe"
+        "nextOffset": "0000000000000000_0000000000000530",
+        "streamDigest": "sha256:cb83585cff726b7427a280b87aec662ceba3df378f629ec4c53b465fe5c85c6e"
       },
       {
-        "checkpoint": "0000000000000000_0000000000000185",
+        "checkpoint": "0000000000000000_0000000000000191",
         "expectedIds": [
           "record-3",
           "record-live",
@@ -115,11 +117,11 @@
           "record-live",
           "record-live-2"
         ],
-        "nextOffset": "0000000000000000_0000000000000515",
-        "streamDigest": "sha256:bf9fed4222f1ade4bf240b3eedc88f0006807aada5d13717d53627fda1ae0162"
+        "nextOffset": "0000000000000000_0000000000000530",
+        "streamDigest": "sha256:9880c31d89b64be9ba86292d046d4e05e1744fe1101b198ac1a15050455f71d6"
       },
       {
-        "checkpoint": "0000000000000000_0000000000000277",
+        "checkpoint": "0000000000000000_0000000000000286",
         "expectedIds": [
           "record-live",
           "record-live-2"
@@ -128,43 +130,72 @@
           "record-live",
           "record-live-2"
         ],
-        "nextOffset": "0000000000000000_0000000000000515",
-        "streamDigest": "sha256:2efa577b4e374aa5393c0a807510e52cba20fe6286ac16e6ea2596ac255ee1a4"
+        "nextOffset": "0000000000000000_0000000000000530",
+        "streamDigest": "sha256:58b7758bbda43f2e5f972fb9ca2207dad01bfd20eb9f730e2b9af667cef041ec"
       },
       {
-        "checkpoint": "0000000000000000_0000000000000393",
+        "checkpoint": "0000000000000000_0000000000000405",
         "expectedIds": [
           "record-live-2"
         ],
         "observedIds": [
           "record-live-2"
         ],
-        "nextOffset": "0000000000000000_0000000000000515",
-        "streamDigest": "sha256:08596e4dbb7bd609279c01decd0f1e18a9c5511c3e3ecfb1b147bd8471761289"
+        "nextOffset": "0000000000000000_0000000000000530",
+        "streamDigest": "sha256:bff856ee33093bf2cf29d0b0e2b36d3a7afcad73c6925ffb852beeed18b1452b"
       },
       {
-        "checkpoint": "0000000000000000_0000000000000515",
+        "checkpoint": "0000000000000000_0000000000000530",
         "expectedIds": [],
         "observedIds": [],
-        "nextOffset": "0000000000000000_0000000000000515",
+        "nextOffset": "0000000000000000_0000000000000530",
         "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
       }
     ],
     "requestBudget": {
       "schemaVersion": 1,
       "task": "E0-T03",
-      "runId": "e0-t03-builder-final",
+      "runId": "e0-t03-builder-resubmit",
+      "implementationCommit": "c1616398872bd2e992ffae6f669a7840cc47b2ac",
       "result": "PASS",
+      "requestCounter": "HTTP delivery to Durable Streams adapter",
       "logicalIdleDurationMs": 900000,
-      "requestsBeforeLogicalAdvance": 7,
-      "requestsAfterLogicalAdvance": 7,
+      "requestsBeforeLogicalAdvance": 2,
+      "requestsAfterLogicalAdvance": 2,
       "requestDeltaWhileIdle": 0,
       "frozenTotalRequestCap": 24,
-      "totalRequests": 20,
+      "totalRequests": 19,
       "createRequests": 1,
-      "sseRequests": 6,
-      "requestsAtCancel": 14,
-      "requestsAfterCancellationSettled": 14,
+      "sseRequests": 5,
+      "requestsAtCancel": 13,
+      "requestsAfterCancellationSettled": 13,
+      "realEmulatorIdleObservation": {
+        "requestsWhenOfficialFollowParked": 7,
+        "requestsAfterMicrotaskSettle": 7
+      },
+      "idleWindow": {
+        "schemaVersion": 1,
+        "boundary": "HTTP delivery to Durable Streams adapter",
+        "logicalIdleDurationMs": 900000,
+        "timerFinishedAtMs": 900000,
+        "callsBeforeLogicalAdvance": 2,
+        "callsAfterLogicalAdvance": 2,
+        "callDeltaWhileIdle": 0,
+        "readCallsBeforeLogicalAdvance": 1,
+        "readCallsAfterLogicalAdvance": 1,
+        "followCallsBeforeLogicalAdvance": 1,
+        "followCallsAfterLogicalAdvance": 1,
+        "keepAliveTimerExecutions": 90,
+        "pollingTimerExecutions": 0,
+        "pollingMutationMs": null
+      },
+      "pollingPositiveControl": {
+        "detectorRejected": true,
+        "logicalIdleDurationMs": 900000,
+        "pollingMutationMs": 350,
+        "pollingTimerExecutions": 2571,
+        "requestDeltaWhileIdle": 2571
+      },
       "diagnosticsAtIdle": {
         "appendCalls": 3,
         "boundedReads": 0,
@@ -204,7 +235,7 @@
           "GET": 7
         },
         "responsesByStatus": {
-          "200": 7,
+          "200": 6,
           "201": 1,
           "204": 5,
           "404": 1
@@ -219,9 +250,10 @@
     "canaryScan": {
       "schemaVersion": 1,
       "task": "E0-T03",
-      "runId": "e0-t03-builder-final",
+      "runId": "e0-t03-builder-resubmit",
+      "implementationCommit": "c1616398872bd2e992ffae6f669a7840cc47b2ac",
       "result": "PASS",
-      "canarySha256": "0d3bd955c0b5192a6c76ab55e0ae6c7098428d711ae72d3df4b041d989501d56",
+      "canarySha256": "6adf31a0aaae9621bee49fb2b4a1af5c7a69ba4467d195c5030084c69141a2f6",
       "encodingsScanned": [
         "raw",
         "url-encoded",
@@ -236,7 +268,7 @@
       "categories": {
         "browserAssetsAndApi": {
           "entries": 6,
-          "bytesScanned": 30999,
+          "bytesScanned": 31020,
           "matches": 0
         },
         "logs": {
@@ -246,12 +278,12 @@
         },
         "environmentManifests": {
           "entries": 1,
-          "bytesScanned": 301,
+          "bytesScanned": 374,
           "matches": 0
         },
         "runArtifacts": {
-          "entries": 7,
-          "bytesScanned": 31598,
+          "entries": 4,
+          "bytesScanned": 13038,
           "matches": 0
         }
       }
@@ -259,10 +291,10 @@
   },
   "browserRegression": {
     "schemaVersion": 1,
-    "room": "e0-t03-builder-final-edit-1785632319871",
-    "stream": "/rooms/e0-t03-builder-final-edit-1785632319871/messages",
-    "nextOffset": "0000000000000000_0000000000000543",
-    "streamDigest": "sha256:13c273c402a4592d19f52fa9f736dc2f278a5d9f2b6d98f1f50f4b79cd88f4eb",
+    "room": "e0-t03-builder-resubmit-edit-1785633260610",
+    "stream": "/rooms/e0-t03-builder-resubmit-edit-1785633260610/messages",
+    "nextOffset": "0000000000000000_0000000000000549",
+    "streamDigest": "sha256:55df6cb35cb4cf62b2184423f5ce747f8bf0a2c78c8f7c40a035cdb1995775ea",
     "messageCount": 1,
     "domMatchedApi": true
   }

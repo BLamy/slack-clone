@@ -1,18 +1,47 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-final",
+  "runId": "e0-t03-builder-resubmit",
+  "implementationCommit": "c1616398872bd2e992ffae6f669a7840cc47b2ac",
   "result": "PASS",
+  "requestCounter": "HTTP delivery to Durable Streams adapter",
   "logicalIdleDurationMs": 900000,
-  "requestsBeforeLogicalAdvance": 7,
-  "requestsAfterLogicalAdvance": 7,
+  "requestsBeforeLogicalAdvance": 2,
+  "requestsAfterLogicalAdvance": 2,
   "requestDeltaWhileIdle": 0,
   "frozenTotalRequestCap": 24,
-  "totalRequests": 20,
+  "totalRequests": 19,
   "createRequests": 1,
-  "sseRequests": 6,
-  "requestsAtCancel": 14,
-  "requestsAfterCancellationSettled": 14,
+  "sseRequests": 5,
+  "requestsAtCancel": 13,
+  "requestsAfterCancellationSettled": 13,
+  "realEmulatorIdleObservation": {
+    "requestsWhenOfficialFollowParked": 7,
+    "requestsAfterMicrotaskSettle": 7
+  },
+  "idleWindow": {
+    "schemaVersion": 1,
+    "boundary": "HTTP delivery to Durable Streams adapter",
+    "logicalIdleDurationMs": 900000,
+    "timerFinishedAtMs": 900000,
+    "callsBeforeLogicalAdvance": 2,
+    "callsAfterLogicalAdvance": 2,
+    "callDeltaWhileIdle": 0,
+    "readCallsBeforeLogicalAdvance": 1,
+    "readCallsAfterLogicalAdvance": 1,
+    "followCallsBeforeLogicalAdvance": 1,
+    "followCallsAfterLogicalAdvance": 1,
+    "keepAliveTimerExecutions": 90,
+    "pollingTimerExecutions": 0,
+    "pollingMutationMs": null
+  },
+  "pollingPositiveControl": {
+    "detectorRejected": true,
+    "logicalIdleDurationMs": 900000,
+    "pollingMutationMs": 350,
+    "pollingTimerExecutions": 2571,
+    "requestDeltaWhileIdle": 2571
+  },
   "diagnosticsAtIdle": {
     "appendCalls": 3,
     "boundedReads": 0,
@@ -52,7 +81,7 @@
       "GET": 7
     },
     "responsesByStatus": {
-      "200": 7,
+      "200": 6,
       "201": 1,
       "204": 5,
       "404": 1

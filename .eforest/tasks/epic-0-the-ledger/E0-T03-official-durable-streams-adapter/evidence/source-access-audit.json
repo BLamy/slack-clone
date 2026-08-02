@@ -1,9 +1,10 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-final",
+  "runId": "e0-t03-builder-resubmit",
+  "implementationCommit": "c1616398872bd2e992ffae6f669a7840cc47b2ac",
   "result": "PASS",
-  "filesScanned": 48,
+  "filesScanned": 50,
   "failures": [],
   "sensitivity": "unit fixture inserts direct fetch to a Durable Streams room and must fail"
 }

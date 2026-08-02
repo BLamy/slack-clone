@@ -626,11 +626,104 @@ test("source guard rejects an adapter bypass while allowing the application API"
     ["direct-provider-network"],
   );
 
+  const callableBypasses = [
+    [
+      "fetch-call",
+      `
+        const durableStreamsUrl = "http://streams.invalid";
+        await globalThis.fetch.call(
+          globalThis,
+          durableStreamsUrl + "/rooms/demo/messages",
+        );
+      `,
+    ],
+    [
+      "fetch-apply",
+      `
+        const streamOrigin = "http://streams.invalid";
+        await globalThis.fetch.apply(globalThis, [
+          streamOrigin + "/rooms/demo/messages",
+        ]);
+      `,
+    ],
+    [
+      "reflect-apply",
+      `
+        const streamOrigin = "http://streams.invalid";
+        await Reflect.apply(globalThis.fetch, globalThis, [
+          streamOrigin + "/rooms/demo/messages",
+        ]);
+      `,
+    ],
+    [
+      "wrapper-function",
+      `
+        const send = (...args) => globalThis.fetch(...args);
+        const durableStreamsUrl = "http://streams.invalid";
+        await send(durableStreamsUrl + "/rooms/demo/messages");
+      `,
+    ],
+    [
+      "wrapper-declaration",
+      `
+        function send(...args) {
+          return globalThis.fetch(...args);
+        }
+        const durableStreamsUrl = "http://streams.invalid";
+        await send(durableStreamsUrl + "/rooms/demo/messages");
+      `,
+    ],
+    [
+      "object-property-assignment",
+      `
+        const transport = {};
+        transport.send = globalThis.fetch;
+        const durableStreamsUrl = "http://streams.invalid";
+        await transport.send(durableStreamsUrl + "/rooms/demo/messages");
+      `,
+    ],
+    [
+      "object-literal-member",
+      `
+        const transport = { send: globalThis.fetch };
+        const durableStreamsUrl = "http://streams.invalid";
+        await transport.send(durableStreamsUrl + "/rooms/demo/messages");
+      `,
+    ],
+    [
+      "template-computed",
+      `
+        const runtime = globalThis;
+        const send = runtime[\`fetch\`];
+        const durableStreamsUrl = "http://streams.invalid";
+        await send(durableStreamsUrl + "/rooms/demo/messages");
+      `,
+    ],
+  ];
+  for (const [name, source] of callableBypasses) {
+    assert.deepEqual(
+      analyzeDurableStreamsAccess(source, `${name}.mjs`).map(
+        (violation) => violation.kind,
+      ),
+      ["direct-provider-network"],
+      name,
+    );
+  }
+
   const applicationApi = analyzeDurableStreamsAccess(
     'await fetch("/api/rooms/demo/messages");',
     "browser-client.mjs",
   );
   assert.deepEqual(applicationApi, []);
+
+  const wrappedApplicationApi = analyzeDurableStreamsAccess(
+    `
+      const send = (...args) => globalThis.fetch(...args);
+      await send("/api/rooms/demo/messages");
+    `,
+    "wrapped-browser-client.mjs",
+  );
+  assert.deepEqual(wrappedApplicationApi, []);
 });
 
 function createStore(fetchFn, backoffOptions) {

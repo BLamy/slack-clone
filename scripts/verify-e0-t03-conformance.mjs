@@ -513,6 +513,42 @@ function verifySourceAuditSensitivity() {
       const streamOrigin = "http://streams.invalid";
       dispatch(streamOrigin + "/rooms/two-step/messages");
     `,
+    fetchCall: `
+      const durableStreamsUrl = "http://streams.invalid";
+      globalThis.fetch.call(
+        globalThis,
+        durableStreamsUrl + "/rooms/fetch-call/messages",
+      );
+    `,
+    fetchApply: `
+      const streamOrigin = "http://streams.invalid";
+      globalThis.fetch.apply(globalThis, [
+        streamOrigin + "/rooms/fetch-apply/messages",
+      ]);
+    `,
+    reflectApply: `
+      const streamOrigin = "http://streams.invalid";
+      Reflect.apply(globalThis.fetch, globalThis, [
+        streamOrigin + "/rooms/reflect-apply/messages",
+      ]);
+    `,
+    wrapperFunction: `
+      const send = (...args) => globalThis.fetch(...args);
+      const durableStreamsUrl = "http://streams.invalid";
+      send(durableStreamsUrl + "/rooms/wrapper/messages");
+    `,
+    objectPropertyAssignment: `
+      const transport = {};
+      transport.send = globalThis.fetch;
+      const durableStreamsUrl = "http://streams.invalid";
+      transport.send(durableStreamsUrl + "/rooms/member/messages");
+    `,
+    templateComputed: `
+      const runtime = globalThis;
+      const send = runtime[\`fetch\`];
+      const durableStreamsUrl = "http://streams.invalid";
+      send(durableStreamsUrl + "/rooms/template/messages");
+    `,
   };
   const detections = Object.fromEntries(
     Object.entries(fixtures).map(([name, source]) => [

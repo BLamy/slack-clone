@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: in-progress
+status: implemented
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -1236,3 +1236,80 @@ VERDICT: refuted
   false-negative family plus valid application controls into the required source/runtime
   gate and prove full-gate mutations for constructor acquisition, aliased loaders, wrapped
   raw exports, inbound dynamic imports, and role-confused configuration.
+
+### Builder resubmission 8 — 2026-08-02
+
+- Implementation commit: `339aca3cb9b4d92dac30c5b1156cb7a200317aed`; regenerated
+  evidence commit: `000ecb05103e942099e13e4364ae75442fd59879`.
+- The repair replaces inferred capability-flow allowlisting with explicit syntax, import,
+  and export contracts. Runtime source now rejects constructor/dynamic-code recovery,
+  browser-global escape roots, reflective capability recovery, Deno/Bun networking,
+  Node network builtins and loaders, remote module schemes, CommonJS loading, dynamic
+  imports outside provider doors, and raw capability exports or returns. Durable Streams,
+  Auth0, application API, and inbound HTTP doors each have an exact export surface; the
+  inbound door permits only the named `node:http` `createServer` import. Auth0 startup
+  also rejects a configured origin that aliases the reserved Durable Streams origin, and
+  the browser application door remains fixed to same-origin `/api/` paths.
+- Routine exact-tree gates all exited 0 before promotion: `pnpm format:check`, `pnpm lint`,
+  `pnpm typecheck`, `pnpm test` (45 unit and 5 browser tests), `pnpm build` (33 files),
+  and `pnpm test:conformance` (20 requests, five captured offsets, zero canary matches).
+  The source verifier has 85 static door-contract cases; together with the 28 legacy
+  conformance controls, promoted sensitivity covers 113 fixtures.
+- Detector sensitivity was proven in a detached worktree at the implementation commit,
+  one defect at a time. Removing the constructor guard failed both the
+  `arrow-constructor-recovery` fixture and full synthetic repository test. Disabling the
+  runtime-loader rule failed `create-require-alias`; disabling raw `ReturnStatement`
+  handling failed the allowed `applicationApiFetch` raw-return control; and disabling
+  dynamic-import handling failed `inbound-dynamic-module`. Bypassing the Auth0 role
+  conflict made the runtime test report a missing expected exception, while widening
+  `/api/` to `/` made `/rooms/demo/messages` incorrectly pass and the door test fail.
+- Full repository sensitivity also went red for four temporary product-tree plants:
+  constructor recovery in `src/` was named as a forbidden runtime member; aliased
+  `createRequire` was named as an undeclared runtime loader; a wrapped raw fetch export
+  from the application door was rejected; and a dynamic `node:http` export from the
+  inbound door was rejected both as a dynamic import and an undeclared door symbol.
+  After byte-exact restoration, `pnpm typecheck` and the 24 focused adapter/door tests
+  passed and the disposable worktree was clean before removal.
+- Restoration provenance: auditor blob/SHA-256
+  `f45aaf1492aa8c5186f8bce5b3f8df243506d02f` /
+  `fded8be400db796247c7982a7930fcb9fdfcb144db79bab871b11d2a5fc1a2bf`;
+  Auth0 door `19175606b467069867575b8c406eebb927e534a9` /
+  `c37da49428fca647dc1fa81b7aaaf0777a2629ef6d77f55e2aa75d556b0fba40`;
+  application door `dd10a7c5ac5175aa3c4a05445fda927845e68664` /
+  `cd75ea704a6502fb9fb82d9d97f48ca090ab5c7d1ad7cbff7189c1d615a5411c`;
+  inbound HTTP door `f9aead1e0a7334f3b2a312c3fe6c6a587281204c` /
+  `5735dc2202619bed091d683e4ae03c0db74eead5e18bc6486565432c734667de`.
+  Fixtures, adapter tests, door tests, conformance verifier, and server restored to blobs
+  `761ec4ecc8dc1772811b69639e0e8f8701cb4e9b`,
+  `023601737f86d4be4ee8f7a8ee0da52e8643e3ce`,
+  `1e4404cc8ce01567fc8764f4b14db76053f77d19`,
+  `0f0a1a4590d530c72d92583a53fb5c1378468510`, and
+  `839f34832cc5142adad47a39201421f512c62221` respectively.
+- Final cold command:
+  `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t03-builder-resubmit8 E0_T03_IMPLEMENTATION_COMMIT=339aca3cb9b4d92dac30c5b1156cb7a200317aed make verify-E0-T03`.
+  The clean implementation tree installed the pinned emulator and passed all eight gates:
+  format, lint, static analysis (27 production files, zero violations; 47 syntax files),
+  unit 45/45, real-emulator conformance, browser integration 5/5, concurrency 1/1, and
+  the 33-file build. Every committed evidence JSON stamps the exact implementation SHA.
+- Real conformance created once and used 20 requests under the frozen cap of 24. The
+  900,000 ms idle boundary stayed at 2 -> 2 calls, cancellation stayed at 14 -> 14 with
+  zero retained followers/waiters, and the 350 ms polling positive control generated
+  2,571 calls. Five opaque checkpoints reproduced every exact suffix, ending at
+  `0000000000000000_0000000000000535`; the full-stream digest is
+  `sha256:1c5f785a3fe38ae9dee9a8d7cdc195857bed35d30c85108e6ffa6a15da73829a`.
+  Browser/API state matched at offset `0000000000000000_0000000000000551`, digest
+  `sha256:0519a6c427eeb36317e79319cf5bad85095af61ebd51ac824030bf866fd10b2c`.
+  Canary positive controls all fired and the clean scan found zero raw, URL-encoded, or
+  base64 matches.
+- Replay: N/A (server transport adapter) + mitigation: exact-commit real-emulator
+  transcript, request-budget proof, canary scan, static door-contract sensitivity,
+  route/origin role tests, browser/API correlation, cancellation, and reconnect matrix.
+  No Replay upload or external tunnel was attempted; recordings were unchanged.
+- Falsifiable claim: at the cited implementation commit, production network access is
+  limited to declared modules with exact syntax/import/export contracts; Durable Streams
+  traffic remains confined to its official adapter and conformance harness; Auth0 cannot
+  share the provider origin; clean browser traffic is limited to same-origin `/api/`;
+  and every remaining protocol, lifecycle, secrecy, provenance, and cold-clone criterion
+  passes. Any constructor/loader/reflection bypass, raw capability return, undeclared door
+  import/export, role-confused origin, clean `/api/` rejection, or failed exact-commit
+  cold gate refutes this claim.

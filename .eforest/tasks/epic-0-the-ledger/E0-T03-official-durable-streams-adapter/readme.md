@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: refuted
+status: in-progress
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -1223,3 +1223,16 @@ VERDICT: refuted
   `record:replay`, upload, tunnel, or other externally mutating command ran; recordings
   remained unchanged. E0-T04 remains blocked pending product repair and new exact-commit
   evidence.
+
+### Builder repair 8 — 2026-08-02
+
+- Repair target: replace capability-flow guesswork with explicit static module and door
+  contracts. Runtime source outside declared doors will reject dynamic code, constructor
+  recovery, browser-global escape roots, remote modules, Node network builtins, dynamic
+  loaders, `createRequire`, and `process.getBuiltinModule` by syntax and import policy.
+  Each declared door will have an exact export surface and role-specific contract, the
+  inbound HTTP door will permit only named `createServer`, and composition will reject an
+  Auth0 origin that aliases the Durable Streams provider origin. Promote every critic-8
+  false-negative family plus valid application controls into the required source/runtime
+  gate and prove full-gate mutations for constructor acquisition, aliased loaders, wrapped
+  raw exports, inbound dynamic imports, and role-confused configuration.

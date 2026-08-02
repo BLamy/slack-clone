@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: refuted
+status: in-progress
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -614,3 +614,11 @@ VERDICT: refuted
   upload/tunnel attempted `false`, no generated Replay metadata or recording appeared, and
   no Replay/tunnel command was invoked by this critic. Status is `refuted`; E0-T04 remains
   blocked.
+
+### Builder repair 5 — 2026-08-01
+
+- Repair target: replace traversal-order-dependent callable tracking with a convergent
+  provenance analysis that covers aliases, nested wrappers, containers, destructuring,
+  classes, and computed provider targets; make a successful live response with the wrong
+  media type terminate `follow.closed` with typed `CONTENT_TYPE_MISMATCH`. Promote both
+  critic findings into required controls and prove each detector can go red.

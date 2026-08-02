@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: refuted
+status: in-progress
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -220,3 +220,9 @@ VERDICT: refuted
   request-budget proof, canary scan, reconnect matrix, independent disconnect attacks, and
   demonstrated timer-detector sensitivity. Lifecycle remains `refuted` pending source
   alias coverage and strict malformed-retry rejection with red controls.
+
+### Builder repair 2 — 2026-08-01
+
+- Repair target: trace destructured and assigned network/provider aliases in the source
+  audit, add red fixtures for each alias form, reject malformed `Retry-After` metadata
+  before the official client's backoff coercion, and regenerate commit-bound evidence.

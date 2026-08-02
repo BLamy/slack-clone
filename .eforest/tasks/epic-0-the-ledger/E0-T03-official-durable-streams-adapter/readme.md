@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: refuted
+status: in-progress
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -337,3 +337,10 @@ VERDICT: refuted
   transcript, request-budget proof, canary scan, and reconnect matrix`; no upload or
   tunnel was attempted and recordings remained unchanged. New evidence and repairs are
   required for the two-step alias, impossible IMF date, and cross-origin redirect cases.
+
+### Builder repair 3 — 2026-08-01
+
+- Repair target: propagate trusted-global aliases through the source audit, validate IMF
+  dates without JavaScript calendar normalization, and forbid provider redirects from
+  escaping the configured Durable Streams origin. Each critic input becomes an in-gate
+  positive control plus a focused mutation that proves the detector can go red.

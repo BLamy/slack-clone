@@ -3,7 +3,7 @@ id: E0-T06
 epic: 0
 title: "Crash, duplicate-delivery, and partition sensitivity harness"
 priority: 6
-status: in-progress
+status: implemented
 depends_on: [E0-T04, E0-T05]
 estimate: L
 capstone: false
@@ -71,3 +71,27 @@ schedule, and every final claim cites a stream dump and digest.
   checkpoints, and E0-T05 replay digests. Replay: N/A (headless failure harness) +
   mitigation: deterministic schedules, process restarts, stream dumps, checkpoint proofs,
   and replay digests.
+
+### Builder — 2026-08-02 — implemented at `7a20becc6e8b50581035b914c7a95397e57ff1a9`
+
+- Cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t06-promoted-final TEST_ARTIFACT_DIR=.artifacts/e0-t06/e0-t06-promoted-final make verify-E0-T06`.
+- Result: PASS with `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`,
+  and `pnpm build`; 13 frozen schedules, zero skipped injection points, and all seven
+  named hooks covered.
+- Every schedule reran with an identical accepted/refused sequence and final replay
+  digest `sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0`.
+  The authoritative target dump contains three logical events and the receipt dump
+  contains three receipts after crash/restart and duplicate-append recovery.
+- Partition evidence records a deleted reader process, durable checkpoint offsets, and
+  convergence to the independent replay digest. The invalid causal-order attack is
+  rejected as `REDUCER_ILLEGAL_TRANSITION` at
+  `0000000000000000_0000000000000001`; slow-consumer evidence records bounded output,
+  typed cancel/catch-up policies, and five unrelated-stream progress records.
+- Evidence: `evidence/verification-summary.json`, `evidence/determinism.json`,
+  `evidence/fault-schedules.json`, `evidence/sensitivity.json`, and
+  `evidence/schedules/*.json`.
+- Claim: the deterministic harness proves crash/restart recovery, idempotent duplicate
+  delivery, offset-ordered replay, checkpoint recovery, bounded slow-consumer policy,
+  and schedule sensitivity. Replay: N/A (headless failure harness) + mitigation:
+  deterministic schedules, process restarts, stream dumps, checkpoint proofs, and replay
+  digests. Fresh critic verification remains required.

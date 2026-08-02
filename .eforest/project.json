@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E0-T06 is the sole active queue gate after E0-T05 verification; deterministic crash, duplicate, partition, and slow-consumer harness work is in progress.",
-  "updatedAt": "2026-08-02T23:35:33Z"
+  "statusReason": "E0-T06 is implemented at 7a20becc6e8b50581035b914c7a95397e57ff1a9; a fresh critic must verify the deterministic crash, duplicate, partition, checkpoint, and slow-consumer evidence.",
+  "updatedAt": "2026-08-02T23:51:12Z"
 }

@@ -1,0 +1,1668 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T06",
+  "runId": "e0-t06-promoted-final",
+  "implementationCommit": "7a20becc6e8b50581035b914c7a95397e57ff1a9",
+  "implementationTreeCleanAtStart": true,
+  "result": "PASS",
+  "zeroSkippedSchedules": true,
+  "zeroSkippedInjectionPoints": true,
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "durationMs": 1853,
+      "name": "format",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "durationMs": 1592,
+      "name": "lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "durationMs": 5984,
+      "name": "typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "durationMs": 30009,
+      "name": "tests",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm build",
+      "durationMs": 1273,
+      "name": "build",
+      "result": "PASS"
+    }
+  ],
+  "namedHooks": [
+    "validate",
+    "append",
+    "receipt",
+    "publish",
+    "consume",
+    "checkpoint",
+    "acknowledge"
+  ],
+  "scheduleCount": 13,
+  "deterministicReruns": [
+    {
+      "name": "baseline",
+      "acceptedRefusedSequence": [
+        {
+          "code": null,
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "identical": true
+    },
+    {
+      "name": "validate-crash",
+      "acceptedRefusedSequence": [
+        {
+          "code": "HARNESS_CRASH",
+          "requestIndex": 0,
+          "result": "refused"
+        },
+        {
+          "code": null,
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "identical": true
+    },
+    {
+      "name": "append-before-crash",
+      "acceptedRefusedSequence": [
+        {
+          "code": "HARNESS_CRASH",
+          "requestIndex": 0,
+          "result": "refused"
+        },
+        {
+          "code": null,
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "identical": true
+    },
+    {
+      "name": "append-after-crash",
+      "acceptedRefusedSequence": [
+        {
+          "code": "HARNESS_CRASH",
+          "requestIndex": 0,
+          "result": "refused"
+        },
+        {
+          "code": null,
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "identical": true
+    },
+    {
+      "name": "receipt-before-crash",
+      "acceptedRefusedSequence": [
+        {
+          "code": "HARNESS_CRASH",
+          "requestIndex": 0,
+          "result": "refused"
+        },
+        {
+          "code": null,
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "identical": true
+    },
+    {
+      "name": "receipt-after-crash",
+      "acceptedRefusedSequence": [
+        {
+          "code": "HARNESS_CRASH",
+          "requestIndex": 0,
+          "result": "refused"
+        },
+        {
+          "code": null,
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "identical": true
+    },
+    {
+      "name": "append-duplicate",
+      "acceptedRefusedSequence": [
+        {
+          "code": null,
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "identical": true
+    },
+    {
+      "name": "receipt-duplicate",
+      "acceptedRefusedSequence": [
+        {
+          "code": null,
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "identical": true
+    },
+    {
+      "name": "publish-duplicate-reorder",
+      "acceptedRefusedSequence": [
+        {
+          "code": null,
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "identical": true
+    },
+    {
+      "name": "consume-partition",
+      "acceptedRefusedSequence": [
+        {
+          "code": null,
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "identical": true
+    },
+    {
+      "name": "checkpoint-corrupt",
+      "acceptedRefusedSequence": [
+        {
+          "code": null,
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "identical": true
+    },
+    {
+      "name": "acknowledge-delay",
+      "acceptedRefusedSequence": [
+        {
+          "code": null,
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "identical": true
+    },
+    {
+      "name": "seeded-combination",
+      "acceptedRefusedSequence": [
+        {
+          "code": null,
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "code": null,
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "identical": true
+    }
+  ],
+  "sensitivity": [
+    {
+      "detector": "duplicate-delivery-deduplication",
+      "mutated": "disabled",
+      "code": "REDUCER_OFFSET_REUSED",
+      "offset": "0000000000000000_0000000000000001",
+      "outcome": "rejected"
+    },
+    {
+      "detector": "checkpoint-resume",
+      "mutated": "disabled",
+      "code": "HARNESS_CHECKPOINT_INVALID",
+      "offset": null,
+      "outcome": "rejected"
+    },
+    {
+      "detector": "authoritative-offset-ordering",
+      "mutated": "disabled",
+      "code": "ERR_ASSERTION",
+      "offset": null,
+      "outcome": "rejected"
+    }
+  ],
+  "replay": "N/A (headless failure harness) + mitigation: deterministic schedules, process restarts, stream dumps, checkpoint proofs, and replay digests",
+  "replayUploadAttempted": false,
+  "schedules": [
+    {
+      "name": "baseline",
+      "seed": "e0-t06-baseline",
+      "schedule": [],
+      "coveredHooks": [
+        "validate",
+        "append",
+        "receipt",
+        "publish",
+        "consume",
+        "checkpoint",
+        "acknowledge"
+      ],
+      "matchedScheduleEntries": [],
+      "operations": [
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-0",
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-1-0",
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-2-0",
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "processRestarts": [],
+      "checkpointCount": 3,
+      "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "invalidCausalOrder": {
+        "rejected": {
+          "code": "REDUCER_ILLEGAL_TRANSITION",
+          "offset": "0000000000000000_0000000000000001"
+        },
+        "citedOffset": "0000000000000000_0000000000000001"
+      },
+      "slowConsumer": {
+        "bounds": {
+          "maxBytes": 4096,
+          "maxRecords": 2,
+          "inputBytes": 1434,
+          "inputRecords": 3,
+          "observedBytes": 1434,
+          "observedRecords": 2
+        },
+        "cancel": {
+          "code": "HARNESS_SLOW_CONSUMER",
+          "policy": "cancel",
+          "result": "cancelled"
+        },
+        "catchUp": {
+          "policy": "catch-up",
+          "result": "caught-up",
+          "resumedFrom": "0000000000000000_0000000000000000"
+        },
+        "unrelatedStreamProgress": {
+          "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+          "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "independent": true,
+          "headOfLineBlocked": false,
+          "progressRecords": 5
+        }
+      }
+    },
+    {
+      "name": "validate-crash",
+      "seed": "e0-t06-validate",
+      "schedule": [
+        {
+          "action": "crash",
+          "hook": "validate",
+          "occurrence": 0,
+          "phase": "before",
+          "role": "dispatch"
+        }
+      ],
+      "coveredHooks": [
+        "validate",
+        "append",
+        "receipt",
+        "publish",
+        "consume",
+        "checkpoint",
+        "acknowledge"
+      ],
+      "matchedScheduleEntries": [
+        0
+      ],
+      "operations": [
+        {
+          "attempt": 1,
+          "code": "HARNESS_CRASH",
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-0",
+          "requestIndex": 0,
+          "result": "refused",
+          "receiptCount": 0,
+          "targetCount": 0
+        },
+        {
+          "attempt": 2,
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-1",
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-1-0",
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-2-0",
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "processRestarts": [
+        {
+          "component": "dispatch",
+          "from": "dispatch-process-0-0",
+          "reason": "HARNESS_CRASH",
+          "stateDeleted": true,
+          "to": "dispatch-process-0-1"
+        }
+      ],
+      "checkpointCount": 3,
+      "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "invalidCausalOrder": {
+        "rejected": {
+          "code": "REDUCER_ILLEGAL_TRANSITION",
+          "offset": "0000000000000000_0000000000000001"
+        },
+        "citedOffset": "0000000000000000_0000000000000001"
+      },
+      "slowConsumer": {
+        "bounds": {
+          "maxBytes": 4096,
+          "maxRecords": 2,
+          "inputBytes": 1434,
+          "inputRecords": 3,
+          "observedBytes": 1434,
+          "observedRecords": 2
+        },
+        "cancel": {
+          "code": "HARNESS_SLOW_CONSUMER",
+          "policy": "cancel",
+          "result": "cancelled"
+        },
+        "catchUp": {
+          "policy": "catch-up",
+          "result": "caught-up",
+          "resumedFrom": "0000000000000000_0000000000000000"
+        },
+        "unrelatedStreamProgress": {
+          "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+          "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "independent": true,
+          "headOfLineBlocked": false,
+          "progressRecords": 5
+        }
+      }
+    },
+    {
+      "name": "append-before-crash",
+      "seed": "e0-t06-append-before",
+      "schedule": [
+        {
+          "action": "crash",
+          "hook": "append",
+          "occurrence": 0,
+          "phase": "before",
+          "role": "target"
+        }
+      ],
+      "coveredHooks": [
+        "validate",
+        "append",
+        "receipt",
+        "publish",
+        "consume",
+        "checkpoint",
+        "acknowledge"
+      ],
+      "matchedScheduleEntries": [
+        0
+      ],
+      "operations": [
+        {
+          "attempt": 1,
+          "code": "HARNESS_CRASH",
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-0",
+          "requestIndex": 0,
+          "result": "refused",
+          "receiptCount": 0,
+          "targetCount": 0
+        },
+        {
+          "attempt": 2,
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-1",
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-1-0",
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-2-0",
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "processRestarts": [
+        {
+          "component": "dispatch",
+          "from": "dispatch-process-0-0",
+          "reason": "HARNESS_CRASH",
+          "stateDeleted": true,
+          "to": "dispatch-process-0-1"
+        }
+      ],
+      "checkpointCount": 3,
+      "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "invalidCausalOrder": {
+        "rejected": {
+          "code": "REDUCER_ILLEGAL_TRANSITION",
+          "offset": "0000000000000000_0000000000000001"
+        },
+        "citedOffset": "0000000000000000_0000000000000001"
+      },
+      "slowConsumer": {
+        "bounds": {
+          "maxBytes": 4096,
+          "maxRecords": 2,
+          "inputBytes": 1434,
+          "inputRecords": 3,
+          "observedBytes": 1434,
+          "observedRecords": 2
+        },
+        "cancel": {
+          "code": "HARNESS_SLOW_CONSUMER",
+          "policy": "cancel",
+          "result": "cancelled"
+        },
+        "catchUp": {
+          "policy": "catch-up",
+          "result": "caught-up",
+          "resumedFrom": "0000000000000000_0000000000000000"
+        },
+        "unrelatedStreamProgress": {
+          "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+          "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "independent": true,
+          "headOfLineBlocked": false,
+          "progressRecords": 5
+        }
+      }
+    },
+    {
+      "name": "append-after-crash",
+      "seed": "e0-t06-append-after",
+      "schedule": [
+        {
+          "action": "crash",
+          "hook": "append",
+          "occurrence": 0,
+          "phase": "after",
+          "role": "target"
+        }
+      ],
+      "coveredHooks": [
+        "validate",
+        "append",
+        "receipt",
+        "publish",
+        "consume",
+        "checkpoint",
+        "acknowledge"
+      ],
+      "matchedScheduleEntries": [
+        0
+      ],
+      "operations": [
+        {
+          "attempt": 1,
+          "code": "HARNESS_CRASH",
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-0",
+          "requestIndex": 0,
+          "result": "refused",
+          "receiptCount": 0,
+          "targetCount": 1
+        },
+        {
+          "attempt": 2,
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-1",
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-1-0",
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-2-0",
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "processRestarts": [
+        {
+          "component": "dispatch",
+          "from": "dispatch-process-0-0",
+          "reason": "HARNESS_CRASH",
+          "stateDeleted": true,
+          "to": "dispatch-process-0-1"
+        }
+      ],
+      "checkpointCount": 3,
+      "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "invalidCausalOrder": {
+        "rejected": {
+          "code": "REDUCER_ILLEGAL_TRANSITION",
+          "offset": "0000000000000000_0000000000000001"
+        },
+        "citedOffset": "0000000000000000_0000000000000001"
+      },
+      "slowConsumer": {
+        "bounds": {
+          "maxBytes": 4096,
+          "maxRecords": 2,
+          "inputBytes": 1434,
+          "inputRecords": 3,
+          "observedBytes": 1434,
+          "observedRecords": 2
+        },
+        "cancel": {
+          "code": "HARNESS_SLOW_CONSUMER",
+          "policy": "cancel",
+          "result": "cancelled"
+        },
+        "catchUp": {
+          "policy": "catch-up",
+          "result": "caught-up",
+          "resumedFrom": "0000000000000000_0000000000000000"
+        },
+        "unrelatedStreamProgress": {
+          "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+          "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "independent": true,
+          "headOfLineBlocked": false,
+          "progressRecords": 5
+        }
+      }
+    },
+    {
+      "name": "receipt-before-crash",
+      "seed": "e0-t06-receipt-before",
+      "schedule": [
+        {
+          "action": "crash",
+          "hook": "receipt",
+          "occurrence": 0,
+          "phase": "before",
+          "role": "receipt"
+        }
+      ],
+      "coveredHooks": [
+        "validate",
+        "append",
+        "receipt",
+        "publish",
+        "consume",
+        "checkpoint",
+        "acknowledge"
+      ],
+      "matchedScheduleEntries": [
+        0
+      ],
+      "operations": [
+        {
+          "attempt": 1,
+          "code": "HARNESS_CRASH",
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-0",
+          "requestIndex": 0,
+          "result": "refused",
+          "receiptCount": 0,
+          "targetCount": 1
+        },
+        {
+          "attempt": 2,
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-1",
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-1-0",
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-2-0",
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "processRestarts": [
+        {
+          "component": "dispatch",
+          "from": "dispatch-process-0-0",
+          "reason": "HARNESS_CRASH",
+          "stateDeleted": true,
+          "to": "dispatch-process-0-1"
+        }
+      ],
+      "checkpointCount": 3,
+      "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "invalidCausalOrder": {
+        "rejected": {
+          "code": "REDUCER_ILLEGAL_TRANSITION",
+          "offset": "0000000000000000_0000000000000001"
+        },
+        "citedOffset": "0000000000000000_0000000000000001"
+      },
+      "slowConsumer": {
+        "bounds": {
+          "maxBytes": 4096,
+          "maxRecords": 2,
+          "inputBytes": 1434,
+          "inputRecords": 3,
+          "observedBytes": 1434,
+          "observedRecords": 2
+        },
+        "cancel": {
+          "code": "HARNESS_SLOW_CONSUMER",
+          "policy": "cancel",
+          "result": "cancelled"
+        },
+        "catchUp": {
+          "policy": "catch-up",
+          "result": "caught-up",
+          "resumedFrom": "0000000000000000_0000000000000000"
+        },
+        "unrelatedStreamProgress": {
+          "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+          "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "independent": true,
+          "headOfLineBlocked": false,
+          "progressRecords": 5
+        }
+      }
+    },
+    {
+      "name": "receipt-after-crash",
+      "seed": "e0-t06-receipt-after",
+      "schedule": [
+        {
+          "action": "crash",
+          "hook": "receipt",
+          "occurrence": 0,
+          "phase": "after",
+          "role": "receipt"
+        }
+      ],
+      "coveredHooks": [
+        "validate",
+        "append",
+        "receipt",
+        "publish",
+        "consume",
+        "checkpoint",
+        "acknowledge"
+      ],
+      "matchedScheduleEntries": [
+        0
+      ],
+      "operations": [
+        {
+          "attempt": 1,
+          "code": "HARNESS_CRASH",
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-0",
+          "requestIndex": 0,
+          "result": "refused",
+          "receiptCount": 1,
+          "targetCount": 1
+        },
+        {
+          "attempt": 2,
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-1",
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-1-0",
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-2-0",
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "processRestarts": [
+        {
+          "component": "dispatch",
+          "from": "dispatch-process-0-0",
+          "reason": "HARNESS_CRASH",
+          "stateDeleted": true,
+          "to": "dispatch-process-0-1"
+        }
+      ],
+      "checkpointCount": 3,
+      "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "invalidCausalOrder": {
+        "rejected": {
+          "code": "REDUCER_ILLEGAL_TRANSITION",
+          "offset": "0000000000000000_0000000000000001"
+        },
+        "citedOffset": "0000000000000000_0000000000000001"
+      },
+      "slowConsumer": {
+        "bounds": {
+          "maxBytes": 4096,
+          "maxRecords": 2,
+          "inputBytes": 1434,
+          "inputRecords": 3,
+          "observedBytes": 1434,
+          "observedRecords": 2
+        },
+        "cancel": {
+          "code": "HARNESS_SLOW_CONSUMER",
+          "policy": "cancel",
+          "result": "cancelled"
+        },
+        "catchUp": {
+          "policy": "catch-up",
+          "result": "caught-up",
+          "resumedFrom": "0000000000000000_0000000000000000"
+        },
+        "unrelatedStreamProgress": {
+          "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+          "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "independent": true,
+          "headOfLineBlocked": false,
+          "progressRecords": 5
+        }
+      }
+    },
+    {
+      "name": "append-duplicate",
+      "seed": "e0-t06-append-duplicate",
+      "schedule": [
+        {
+          "action": "duplicate",
+          "hook": "append",
+          "occurrence": 0,
+          "phase": "after",
+          "role": "target"
+        }
+      ],
+      "coveredHooks": [
+        "validate",
+        "append",
+        "receipt",
+        "publish",
+        "consume",
+        "checkpoint",
+        "acknowledge"
+      ],
+      "matchedScheduleEntries": [
+        0
+      ],
+      "operations": [
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-0",
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-1-0",
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-2-0",
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "processRestarts": [],
+      "checkpointCount": 3,
+      "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "invalidCausalOrder": {
+        "rejected": {
+          "code": "REDUCER_ILLEGAL_TRANSITION",
+          "offset": "0000000000000000_0000000000000001"
+        },
+        "citedOffset": "0000000000000000_0000000000000001"
+      },
+      "slowConsumer": {
+        "bounds": {
+          "maxBytes": 4096,
+          "maxRecords": 2,
+          "inputBytes": 1434,
+          "inputRecords": 3,
+          "observedBytes": 1434,
+          "observedRecords": 2
+        },
+        "cancel": {
+          "code": "HARNESS_SLOW_CONSUMER",
+          "policy": "cancel",
+          "result": "cancelled"
+        },
+        "catchUp": {
+          "policy": "catch-up",
+          "result": "caught-up",
+          "resumedFrom": "0000000000000000_0000000000000000"
+        },
+        "unrelatedStreamProgress": {
+          "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+          "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "independent": true,
+          "headOfLineBlocked": false,
+          "progressRecords": 5
+        }
+      }
+    },
+    {
+      "name": "receipt-duplicate",
+      "seed": "e0-t06-receipt-duplicate",
+      "schedule": [
+        {
+          "action": "duplicate",
+          "hook": "receipt",
+          "occurrence": 0,
+          "phase": "after",
+          "role": "receipt"
+        }
+      ],
+      "coveredHooks": [
+        "validate",
+        "append",
+        "receipt",
+        "publish",
+        "consume",
+        "checkpoint",
+        "acknowledge"
+      ],
+      "matchedScheduleEntries": [
+        0
+      ],
+      "operations": [
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-0",
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-1-0",
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-2-0",
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "processRestarts": [],
+      "checkpointCount": 3,
+      "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "invalidCausalOrder": {
+        "rejected": {
+          "code": "REDUCER_ILLEGAL_TRANSITION",
+          "offset": "0000000000000000_0000000000000001"
+        },
+        "citedOffset": "0000000000000000_0000000000000001"
+      },
+      "slowConsumer": {
+        "bounds": {
+          "maxBytes": 4096,
+          "maxRecords": 2,
+          "inputBytes": 1434,
+          "inputRecords": 3,
+          "observedBytes": 1434,
+          "observedRecords": 2
+        },
+        "cancel": {
+          "code": "HARNESS_SLOW_CONSUMER",
+          "policy": "cancel",
+          "result": "cancelled"
+        },
+        "catchUp": {
+          "policy": "catch-up",
+          "result": "caught-up",
+          "resumedFrom": "0000000000000000_0000000000000000"
+        },
+        "unrelatedStreamProgress": {
+          "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+          "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "independent": true,
+          "headOfLineBlocked": false,
+          "progressRecords": 5
+        }
+      }
+    },
+    {
+      "name": "publish-duplicate-reorder",
+      "seed": "e0-t06-publish",
+      "schedule": [
+        {
+          "action": "duplicate",
+          "hook": "publish",
+          "occurrence": 0,
+          "phase": "before",
+          "role": "reader"
+        },
+        {
+          "action": "reorder",
+          "hook": "publish",
+          "occurrence": 0,
+          "phase": "after",
+          "role": "reader"
+        }
+      ],
+      "coveredHooks": [
+        "validate",
+        "append",
+        "receipt",
+        "publish",
+        "consume",
+        "checkpoint",
+        "acknowledge"
+      ],
+      "matchedScheduleEntries": [
+        0,
+        1
+      ],
+      "operations": [
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-0",
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-1-0",
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-2-0",
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "processRestarts": [],
+      "checkpointCount": 3,
+      "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "invalidCausalOrder": {
+        "rejected": {
+          "code": "REDUCER_ILLEGAL_TRANSITION",
+          "offset": "0000000000000000_0000000000000001"
+        },
+        "citedOffset": "0000000000000000_0000000000000001"
+      },
+      "slowConsumer": {
+        "bounds": {
+          "maxBytes": 4096,
+          "maxRecords": 2,
+          "inputBytes": 1434,
+          "inputRecords": 3,
+          "observedBytes": 1434,
+          "observedRecords": 2
+        },
+        "cancel": {
+          "code": "HARNESS_SLOW_CONSUMER",
+          "policy": "cancel",
+          "result": "cancelled"
+        },
+        "catchUp": {
+          "policy": "catch-up",
+          "result": "caught-up",
+          "resumedFrom": "0000000000000000_0000000000000000"
+        },
+        "unrelatedStreamProgress": {
+          "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+          "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "independent": true,
+          "headOfLineBlocked": false,
+          "progressRecords": 5
+        }
+      }
+    },
+    {
+      "name": "consume-partition",
+      "seed": "e0-t06-consume",
+      "schedule": [
+        {
+          "action": "partition",
+          "hook": "consume",
+          "occurrence": 1,
+          "phase": "before",
+          "role": "reader"
+        }
+      ],
+      "coveredHooks": [
+        "validate",
+        "append",
+        "receipt",
+        "publish",
+        "consume",
+        "checkpoint",
+        "acknowledge"
+      ],
+      "matchedScheduleEntries": [
+        0
+      ],
+      "operations": [
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-0",
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-1-0",
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-2-0",
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "processRestarts": [
+        {
+          "component": "reader",
+          "reason": "HARNESS_PARTITIONED",
+          "stateDeleted": true,
+          "to": "reader-process-1"
+        }
+      ],
+      "checkpointCount": 3,
+      "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "invalidCausalOrder": {
+        "rejected": {
+          "code": "REDUCER_ILLEGAL_TRANSITION",
+          "offset": "0000000000000000_0000000000000001"
+        },
+        "citedOffset": "0000000000000000_0000000000000001"
+      },
+      "slowConsumer": {
+        "bounds": {
+          "maxBytes": 4096,
+          "maxRecords": 2,
+          "inputBytes": 1434,
+          "inputRecords": 3,
+          "observedBytes": 1434,
+          "observedRecords": 2
+        },
+        "cancel": {
+          "code": "HARNESS_SLOW_CONSUMER",
+          "policy": "cancel",
+          "result": "cancelled"
+        },
+        "catchUp": {
+          "policy": "catch-up",
+          "result": "caught-up",
+          "resumedFrom": "0000000000000000_0000000000000000"
+        },
+        "unrelatedStreamProgress": {
+          "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+          "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "independent": true,
+          "headOfLineBlocked": false,
+          "progressRecords": 5
+        }
+      }
+    },
+    {
+      "name": "checkpoint-corrupt",
+      "seed": "e0-t06-checkpoint",
+      "schedule": [
+        {
+          "action": "corrupt",
+          "hook": "checkpoint",
+          "occurrence": 0,
+          "phase": "load",
+          "role": "reader"
+        }
+      ],
+      "coveredHooks": [
+        "validate",
+        "append",
+        "receipt",
+        "publish",
+        "consume",
+        "checkpoint",
+        "acknowledge"
+      ],
+      "matchedScheduleEntries": [
+        0
+      ],
+      "operations": [
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-0",
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-1-0",
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-2-0",
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "processRestarts": [],
+      "checkpointCount": 3,
+      "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "invalidCausalOrder": {
+        "rejected": {
+          "code": "REDUCER_ILLEGAL_TRANSITION",
+          "offset": "0000000000000000_0000000000000001"
+        },
+        "citedOffset": "0000000000000000_0000000000000001"
+      },
+      "slowConsumer": {
+        "bounds": {
+          "maxBytes": 4096,
+          "maxRecords": 2,
+          "inputBytes": 1434,
+          "inputRecords": 3,
+          "observedBytes": 1434,
+          "observedRecords": 2
+        },
+        "cancel": {
+          "code": "HARNESS_SLOW_CONSUMER",
+          "policy": "cancel",
+          "result": "cancelled"
+        },
+        "catchUp": {
+          "policy": "catch-up",
+          "result": "caught-up",
+          "resumedFrom": "0000000000000000_0000000000000000"
+        },
+        "unrelatedStreamProgress": {
+          "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+          "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "independent": true,
+          "headOfLineBlocked": false,
+          "progressRecords": 5
+        }
+      }
+    },
+    {
+      "name": "acknowledge-delay",
+      "seed": "e0-t06-ack",
+      "schedule": [
+        {
+          "action": "delay",
+          "hook": "acknowledge",
+          "occurrence": 0,
+          "phase": "before",
+          "role": "dispatch"
+        }
+      ],
+      "coveredHooks": [
+        "validate",
+        "append",
+        "receipt",
+        "publish",
+        "consume",
+        "checkpoint",
+        "acknowledge"
+      ],
+      "matchedScheduleEntries": [
+        0
+      ],
+      "operations": [
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-0",
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-1-0",
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-2-0",
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "processRestarts": [],
+      "checkpointCount": 3,
+      "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "invalidCausalOrder": {
+        "rejected": {
+          "code": "REDUCER_ILLEGAL_TRANSITION",
+          "offset": "0000000000000000_0000000000000001"
+        },
+        "citedOffset": "0000000000000000_0000000000000001"
+      },
+      "slowConsumer": {
+        "bounds": {
+          "maxBytes": 4096,
+          "maxRecords": 2,
+          "inputBytes": 1434,
+          "inputRecords": 3,
+          "observedBytes": 1434,
+          "observedRecords": 2
+        },
+        "cancel": {
+          "code": "HARNESS_SLOW_CONSUMER",
+          "policy": "cancel",
+          "result": "cancelled"
+        },
+        "catchUp": {
+          "policy": "catch-up",
+          "result": "caught-up",
+          "resumedFrom": "0000000000000000_0000000000000000"
+        },
+        "unrelatedStreamProgress": {
+          "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+          "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "independent": true,
+          "headOfLineBlocked": false,
+          "progressRecords": 5
+        }
+      }
+    },
+    {
+      "name": "seeded-combination",
+      "seed": "e0-t06-combination",
+      "schedule": [
+        {
+          "action": "delay",
+          "hook": "validate",
+          "occurrence": 0,
+          "phase": "before",
+          "role": "dispatch"
+        },
+        {
+          "action": "duplicate",
+          "hook": "append",
+          "occurrence": 0,
+          "phase": "after",
+          "role": "target"
+        },
+        {
+          "action": "duplicate",
+          "hook": "receipt",
+          "occurrence": 0,
+          "phase": "after",
+          "role": "receipt"
+        },
+        {
+          "action": "duplicate",
+          "hook": "publish",
+          "occurrence": 0,
+          "phase": "before",
+          "role": "reader"
+        },
+        {
+          "action": "reorder",
+          "hook": "publish",
+          "occurrence": 0,
+          "phase": "after",
+          "role": "reader"
+        },
+        {
+          "action": "partition",
+          "hook": "consume",
+          "occurrence": 1,
+          "phase": "before",
+          "role": "reader"
+        },
+        {
+          "action": "corrupt",
+          "hook": "checkpoint",
+          "occurrence": 0,
+          "phase": "load",
+          "role": "reader"
+        },
+        {
+          "action": "delay",
+          "hook": "acknowledge",
+          "occurrence": 0,
+          "phase": "before",
+          "role": "dispatch"
+        }
+      ],
+      "coveredHooks": [
+        "validate",
+        "append",
+        "receipt",
+        "publish",
+        "consume",
+        "checkpoint",
+        "acknowledge"
+      ],
+      "matchedScheduleEntries": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "operations": [
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-0-0",
+          "requestIndex": 0,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-1-0",
+          "requestIndex": 1,
+          "result": "accepted"
+        },
+        {
+          "attempt": 1,
+          "operation": "dispatch",
+          "processId": "dispatch-process-2-0",
+          "requestIndex": 2,
+          "result": "accepted"
+        }
+      ],
+      "processRestarts": [
+        {
+          "component": "reader",
+          "reason": "HARNESS_PARTITIONED",
+          "stateDeleted": true,
+          "to": "reader-process-1"
+        }
+      ],
+      "checkpointCount": 3,
+      "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+      "invalidCausalOrder": {
+        "rejected": {
+          "code": "REDUCER_ILLEGAL_TRANSITION",
+          "offset": "0000000000000000_0000000000000001"
+        },
+        "citedOffset": "0000000000000000_0000000000000001"
+      },
+      "slowConsumer": {
+        "bounds": {
+          "maxBytes": 4096,
+          "maxRecords": 2,
+          "inputBytes": 1434,
+          "inputRecords": 3,
+          "observedBytes": 1434,
+          "observedRecords": 2
+        },
+        "cancel": {
+          "code": "HARNESS_SLOW_CONSUMER",
+          "policy": "cancel",
+          "result": "cancelled"
+        },
+        "catchUp": {
+          "policy": "catch-up",
+          "result": "caught-up",
+          "resumedFrom": "0000000000000000_0000000000000000"
+        },
+        "unrelatedStreamProgress": {
+          "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+          "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "independent": true,
+          "headOfLineBlocked": false,
+          "progressRecords": 5
+        }
+      }
+    }
+  ]
+}

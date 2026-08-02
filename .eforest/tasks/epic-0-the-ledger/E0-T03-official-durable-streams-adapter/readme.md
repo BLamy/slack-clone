@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: implemented
+status: refuted
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -1313,3 +1313,118 @@ VERDICT: refuted
   passes. Any constructor/loader/reflection bypass, raw capability return, undeclared door
   import/export, role-confused origin, clean `/api/` rejection, or failed exact-commit
   cold gate refutes this claim.
+
+### Ninth fresh independent critic — 2026-08-02
+
+VERDICT: refuted
+
+- Fresh Claude Code critic; did not implement this ticket and made no product repair.
+  Predictions and narrow refuters for all seven acceptance criteria, the five adversarial
+  items, the repair-8 syntax/import/export/door/route/origin contract families, and the
+  four coverage classes were frozen before any inspection of test results at
+  `work/critic10/frozen-predictions.md`. Read the task, `AGENTS.md`, `.eforest/loop.md`,
+  the verified E0-T02 contract, all eight prior verdicts, and the exact
+  implementation/evidence/submission diffs before analysis.
+- **Execution constraint, stated plainly:** this critic session's permission mode denied
+  every execution command. `make verify-E0-T03`, `pnpm typecheck`, `node -e`, `python3`,
+  `shasum`, and `git hash-object` were all refused before running, so the mandated cold
+  command `env -u PROMOTE_EVIDENCE TEST_RUN_ID=e0-t03-critic10-cold
+  E0_T03_IMPLEMENTATION_COMMIT=339aca3cb9b4d92dac30c5b1156cb7a200317aed make
+  verify-E0-T03` was **not executed**, and neither were the sensitivity mutations,
+  runtime door attacks, or independent protocol runs. No prediction hash was recorded
+  because hashing was also denied. Accordingly AC1–AC5 and AC7 are recorded as
+  **unverified by this critic**, not as passing. The verdict below rests only on
+  static reading of the exact implementation tree, which is sufficient because both
+  blocking findings turn on gate *scope* and *unwatched syntax*, not on runtime behavior.
+- Provenance (read-only) is consistent: implementation `339aca3` touches only
+  `test/unit/durable-streams-adapter.test.mjs` atop the substantive repair `c3b2b74`;
+  evidence `000ecb0` changes only the five evidence JSON files; submission `2d46079`
+  changes only this readme and `QUEUE.md`. Working tree was clean at start.
+- **Blocking AC6 finding 1 — non-`.mjs` production modules are outside every static
+  gate.** `tools/audit-durable-streams-access.mjs:526-533` scans only `.mjs`/`.js` under
+  `src`, `packages`, `public`; `tools/static-analysis.mjs:6,68` syntax-checks only
+  `.mjs`; `tools/check-boundaries.mjs:144` only `.mjs`; `eslint.config.mjs` `files`
+  covers only `src/**/*.mjs`, `packages/**/*.mjs`, …; and `package.json:13`
+  `format:check` enumerates `public/*.js` and `src/*.mjs` explicitly. A production
+  module named `src/<name>.cjs` is therefore read by no gate at all. Such a file may
+  contain `module.exports = require("node:http")`, and `src/server.mjs` may import it as
+  `./<name>.cjs` — a relative specifier matched by no pattern in the audit
+  (`NETWORK_MODULE_PATTERN`, `MODULE_LOADER_PATTERN`, `REMOTE_MODULE_PATTERN` at lines
+  76-79 all miss it). The declared contract "production network access is limited to
+  declared modules with exact syntax/import/export contracts" is defeated by file
+  extension alone. The repair-8 claim of an exhaustive static contract is refuted at its
+  scope boundary rather than at any individual rule.
+- **Blocking AC6 finding 2 — browser DOM-driven network is entirely unwatched.** For a
+  `public/` module outside the declared application door, `document.createElement("script")`
+  followed by an assigned `.src`, or `new Image().src = <provider URL>`, or a
+  `link rel=preload`, issues a real cross-origin GET. The audit does not see it:
+  `globalContainerEscapes` (lines 700-706) explicitly exempts a global container in
+  object position, so bare `document` is not reported; the `MemberExpression` handler
+  (lines 394-408) reports only computed access or a property in `NETWORK_MEMBER_NAMES`
+  / `GLOBAL_ALIAS_MEMBER_NAMES` / `GLOBAL_ESCAPE_MEMBER_NAMES`, and `createElement`,
+  `head`, `body`, `append`, and `appendChild` are in none of them; and `Image`,
+  `Worker`, `SharedWorker`, and `navigator.serviceWorker` are absent from
+  `AMBIENT_NETWORK_GLOBALS` (lines 14-24), so the `Program:exit` global-through sweep
+  (lines 432-447) never fires. `navigator.sendBeacon` is caught only because
+  `sendBeacon` is special-cased by name at lines 409-415 — evidence that the model is a
+  name blocklist, not the claimed exhaustive contract. A standalone `public/` module
+  that does not import `application-api.js` also escapes the `PROVIDER_REFERENCE`
+  cross-check at lines 477-488, so it may target the Durable Streams origin directly.
+  This directly contradicts the claim that "clean browser traffic is limited to
+  same-origin `/api/`".
+- Fixture coverage confirms these are genuine blind spots rather than tested-and-allowed
+  behavior: `test/support/source-audit-fixtures.mjs` contains no case for
+  `document.createElement`, `Image`, `Worker`, a `.cjs` module, or a `node:process`
+  named-import of `getBuiltinModule`; its only related cases are
+  `window.navigator.sendBeacon` (line 676) and the member form
+  `process.getBuiltinModule` (lines 735, 838). The critic-8 family was closed in its
+  member spelling only.
+- Additional plausible gap, reported as non-blocking because it was not executed:
+  `import { getBuiltinModule } from "node:process"` then `getBuiltinModule("node:http")`
+  uses no watched member, no watched specifier, no `require` identifier, and no
+  unresolved global, so it appears to pass the audit; it needs a runtime check on the
+  target Node version before being treated as confirmed.
+- Coverage classification: **executed by this critic** — static reading of the audit,
+  static-analysis, boundary, lint, and format scopes against the exact implementation
+  tree, plus fixture-coverage and provenance inspection; **requiring repair and fresh
+  evidence** — AC6 enforcement for non-`.mjs` production extensions and for browser
+  DOM/element-driven network acquisition, and the fixture/gate scope that let both pass;
+  **unverified this round** — AC1 cold verifier, AC2 request budget/idle, AC3 opaque
+  resume, AC4 cancellation, AC5 canary scan, and all detector-sensitivity controls,
+  because command execution was denied; **explicitly waived** — AC7 Replay, as declared
+  for this server-transport ticket. No mutation was made to any tracked file, so no
+  restoration was required; `git status` was clean before and after analysis and only
+  this readme and `QUEUE.md` are modified by this entry.
+- Replay: N/A (server transport adapter) + mitigation: static contract audit of the
+  exact implementation commit against the declared door families. No `record:replay`,
+  upload, tunnel, or other externally mutating command was run; recordings unchanged.
+- E0-T04 remains blocked. Repair should widen gate scope by file extension and add
+  DOM/element network acquisition to the contract, then supply new exact-commit evidence
+  with red controls for both families; a subsequent critic session with execution
+  permission must still independently confirm AC1–AC5.
+
+### Builder reproduction of critic 9 — 2026-08-02
+
+- The critic's decisive AC6 observations were reproduced after its session ended. Direct
+  calls to `analyzeDurableStreamsAccess` returned zero violations for all three fresh
+  samples: a `document.createElement("script")` provider request, a `new Image().src`
+  provider request, and a named `getBuiltinModule` import from `node:process` that obtains
+  `node:http`.
+- A detached exact-submission worktree then loaded both blocking samples through real
+  production entrypoints: `src/server.mjs` imported a `.cjs` module whose body was
+  `module.exports = require("node:http")`, and `public/app.js` imported a browser module
+  that assigned the provider URL to an `Image` source. With both samples present,
+  `pnpm format:check`, `pnpm lint`, and `pnpm typecheck` exited 0; the audit reported 29
+  scanned files and zero violations while the syntax gate remained at 47 files because
+  the `.cjs` module was outside its scope. All 45 unit tests also passed.
+- The first browser attempt stopped before startup only because this fresh worktree's
+  pinned emulator build was absent. After `pnpm setup:emulate`, the same product samples
+  passed all 5 Playwright compatibility tests, produced matching DOM/API stream proof,
+  and passed `pnpm build` with both samples included in the 35-file output. This confirms
+  that the findings are executable production paths and full-gate false greens, not only
+  static suspicions.
+- Both temporary product samples and their imports were removed with exact inverse
+  patches. `git diff --exit-code` over every product/config/test path then passed, and a
+  final `pnpm typecheck` returned to 27 source-audit files, 47 syntax files, and zero
+  violations. Only this task readme and regenerated `QUEUE.md` remain changed for the
+  refutation metadata. Replay/tunnel commands were not invoked.

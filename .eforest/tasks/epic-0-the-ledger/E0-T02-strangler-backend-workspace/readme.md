@@ -3,7 +3,7 @@ id: E0-T02
 epic: 0
 title: "Strangler backend workspace around the working chat demo"
 priority: 2
-status: in-progress
+status: implemented
 depends_on: [E0-T01]
 estimate: L
 capstone: false
@@ -482,3 +482,37 @@ green is sufficient to refute the ticket.
 Lifecycle is `refuted`, keeping E0-T02 the sole gate and E0-T03 blocked. Replay: N/A
 (server/static-analysis critique with unchanged browser behavior) + mitigation: exact-head
 no-hardlink inert-source reproduction; no upload or tunnel was invoked.
+
+### Builder legacy-reflection rework — 2026-08-01
+
+- Exact implementation commit: `988be9208f1327cf4d39bcb9c1e34ec4a391d853`.
+- The strict pure-source property policy now rejects all four legacy getter/setter
+  reflection methods plus prototype and property-descriptor introspection methods. Direct,
+  static-computed, destructured, and synthesized-computed spellings are covered by the
+  existing property classifier.
+- Regression suite: 21/21 unit tests with zero skips. The new case includes the critic's
+  exact `__lookupGetter__("__proto__")` form, the full legacy accessor family, descriptor
+  reflection, and concatenated computed access while prior static-data controls stay green.
+- Detector sensitivity: the never-called critic fixture passed format and lint, then made
+  both `pnpm typecheck` and a cold composed `pnpm verify` exit 1 with
+  `reads forbidden prototype reflection capability`. It made no request and was removed.
+- Local composed proof: `TEST_RUN_ID=builder-legacy-reflection-local pnpm verify` passed all
+  seven gates, including 21/21 unit, 5/5 browser, 1/1 forced-collision concurrency, and the
+  28-file build. DOM/API matched offset `0000000000000000_0000000000000565`, digest
+  `sha256:a13bf1d5467c5400e9392463a7f60fdb76914b6b0d568b35321fefdd7526b0b0`.
+- Cold proof: a fresh no-hardlinks clone detached at the implementation commit proved all
+  warm state absent before `TEST_RUN_ID=cold-legacy-988be92 make verify-E0-T02`. Frozen
+  root/emulator installs, pinned emulator build, all seven gates, 21/21 unit, 5/5 browser,
+  1/1 concurrency, and the 28-file build passed with zero skips. Cold DOM/API matched
+  offset `0000000000000000_0000000000000541`, digest
+  `sha256:5c61f9e32361ba3fc8edc1b7b1da03962cbe94a587d289d4ec3fd318e8e93810`.
+- Evidence: `evidence/builder-legacy-reflection-rework-verification.json`; cold summary,
+  stream proof, and build manifest hashes are `f737244a…9dab26`, `92637e48…48cf2`, and
+  `429463ef…b7e132`.
+- Replay: N/A (server/static-analysis rework with unchanged browser behavior) +
+  mitigation: inherited Playwright compatibility, strict pure-source reflection audit,
+  exact-head cold clone, and cold legacy-reflection sensitivity failure.
+- Claim: at the exact implementation commit, direct, computed, and destructured
+  constructor/prototype access plus the full legacy getter/setter and property-descriptor
+  reflection family are rejected. The critic's exact fixture makes the full verifier go
+  red, and the unmutated exact-head cold clone passes every gate.

@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T02",
+  "role": "builder-legacy-reflection-rework",
+  "recordedAt": "2026-08-01T23:58:35Z",
+  "implementationCommit": "988be9208f1327cf4d39bcb9c1e34ec4a391d853",
+  "priorCriticCommit": "0058353b433fcdc31b369704d0e3f387dd0a1a34",
+  "findingAddressed": "The inherited __lookupGetter__ method could recover the __proto__ getter while the dangerous prototype name appeared only as a call argument, leaving static analysis green.",
+  "implementation": {
+    "forbiddenLegacyAccessors": [
+      "__defineGetter__",
+      "__defineSetter__",
+      "__lookupGetter__",
+      "__lookupSetter__"
+    ],
+    "forbiddenReflectionMethods": [
+      "getPrototypeOf",
+      "setPrototypeOf",
+      "getOwnPropertyDescriptor",
+      "getOwnPropertyDescriptors"
+    ],
+    "coverage": "Direct, static-computed, destructured, and synthesized-computed spellings are classified through the existing static-property and dynamic-property rules.",
+    "sourceHashes": {
+      "tools/import-analysis.mjs": "sha256:fc7a4ca49fcba2956d57720880cf2bd9984f245deed8142a77b6f142c9e10f8d",
+      "test/unit/backend-packages.test.mjs": "sha256:79d8ffbd6b75ca7ee6ad5e723ac05526098962635e31baf1279d77febcdb1e44",
+      "docs/backend-packages.md": "sha256:c5a1c0d681fa994605fe6102435b64407f884eb9eb0596bd4be8be837c37b6ac"
+    }
+  },
+  "regressions": {
+    "command": "pnpm test:unit",
+    "result": "PASS",
+    "tests": 21,
+    "passed": 21,
+    "failed": 0,
+    "skipped": 0,
+    "newCase": "The exact __lookupGetter__(\"__proto__\") fixture, all four legacy getter/setter accessors, descriptor introspection, and a concatenated computed accessor spelling are rejected; prior valid static property/index controls stay green."
+  },
+  "detectorSensitivity": {
+    "fixture": [
+      "export function lookupPrototypeWithoutDirectKey(value) {",
+      "  const protoGetter = value.__lookupGetter__(\"__proto__\");",
+      "  return protoGetter.call(value);",
+      "}"
+    ],
+    "called": false,
+    "externalRequestMade": false,
+    "localSequence": {
+      "format": "PASS",
+      "lint": "PASS",
+      "staticAnalysis": "FAIL as required: reads forbidden prototype reflection capability"
+    },
+    "coldCommand": "TEST_RUN_ID=cold-legacy-reflection-sensitivity pnpm verify",
+    "coldExitCode": 1,
+    "coldObservation": "Format and lint passed; the composed verifier stopped at static analysis with the prototype-reflection violation before later gates.",
+    "restoredClean": true
+  },
+  "localVerification": {
+    "command": "TEST_RUN_ID=builder-legacy-reflection-local pnpm verify",
+    "result": "PASS",
+    "gates": [
+      "format PASS",
+      "lint PASS",
+      "static analysis PASS: layers=5 violations=0; syntax files=36",
+      "unit PASS: 21/21; zero skipped",
+      "integration PASS: 5/5 browser tests",
+      "concurrency PASS: 1/1 forced-collision two-stack test",
+      "build PASS: 28 files"
+    ],
+    "summarySha256": "4814590f422497d0dc56b01d1e5840b54ff8f059a4443826367a15512a3ecaf6",
+    "streamProofSha256": "889c0b2e92a0b8fb07836dafb06233751211517d6e2718e6496e48ea4bc4615a",
+    "buildManifestSha256": "c79135d5571649ec63de8cedf5bc4f984bd4f67c1db9d0f120ac762e46214db9",
+    "streamProof": {
+      "nextOffset": "0000000000000000_0000000000000565",
+      "streamDigest": "sha256:a13bf1d5467c5400e9392463a7f60fdb76914b6b0d568b35321fefdd7526b0b0",
+      "messageCount": 1,
+      "domMatchedApi": true
+    }
+  },
+  "coldVerification": {
+    "clone": {
+      "kind": "git clone --no-hardlinks --no-checkout followed by detached checkout",
+      "relativePath": ".eforest/tasks/epic-0-the-ledger/E0-T02-strangler-backend-workspace/work/cold-legacy-988be92.J9Z5He/repo",
+      "head": "988be9208f1327cf4d39bcb9c1e34ec4a391d853",
+      "alternatesPresent": false,
+      "trackedStatusAfterSensitivityRestore": "clean"
+    },
+    "preflightAbsent": [
+      "node_modules",
+      "emulate/node_modules",
+      "emulate/packages/emulate/dist",
+      ".env",
+      "recordings/latest.json",
+      ".artifacts"
+    ],
+    "command": "TEST_RUN_ID=cold-legacy-988be92 make verify-E0-T02",
+    "result": "PASS",
+    "runtime": {
+      "node": "v23.11.0",
+      "pnpm": "11.2.2",
+      "emulatorCommit": "8b88027535e4ea6a18c3ce92a13af706382a451f",
+      "emulatorNodeEngineWarning": "emulate declares Node >=24; frozen install, build, and runtime completed under Node 23.11.0"
+    },
+    "gates": [
+      "frozen root install PASS",
+      "pinned submodule checkout and frozen emulator install/build PASS",
+      "format PASS",
+      "lint PASS",
+      "static analysis PASS: layers=5 violations=0; syntax files=36",
+      "unit PASS: 21/21; zero skipped",
+      "integration PASS: 5/5 browser tests",
+      "concurrency PASS: 1/1; disjoint blocks 45418/45419/45420 and 37499/37500/37501",
+      "build PASS: 28 files"
+    ],
+    "summarySha256": "f737244aaa64f35e591163acd947f488cec20a8798c6bd9b8060940fb79dab26",
+    "streamProofSha256": "92637e482e50c1ffc702370838b6377ebb5c07ad56e71b385542bfc214a48cf2",
+    "buildManifestSha256": "429463ef351a66b4a6f5ae699f79785e54db8a511c50334f0e043b4296b7e132",
+    "buildManifestEntries": 28,
+    "streamProof": {
+      "nextOffset": "0000000000000000_0000000000000541",
+      "streamDigest": "sha256:5c61f9e32361ba3fc8edc1b7b1da03962cbe94a587d289d4ec3fd318e8e93810",
+      "messageCount": 1,
+      "domMatchedApi": true
+    },
+    "replayUploadAttempted": false,
+    "externalTunnelAttempted": false,
+    "recordingsUnchanged": true
+  },
+  "replay": "Replay: N/A (server/static-analysis rework with unchanged browser behavior) + mitigation: inherited Playwright compatibility, strict pure-source reflection audit, exact-head cold clone, and cold legacy-reflection sensitivity failure",
+  "redaction": {
+    "containsRawSecret": false,
+    "containsSessionCookie": false,
+    "containsProviderToken": false,
+    "containsCustomerContent": false,
+    "externalHostContactedByFixture": false
+  },
+  "claim": "At exact commit 988be9208f1327cf4d39bcb9c1e34ec4a391d853, the strict pure-source subset rejects direct, computed, and destructured constructor/prototype access plus the complete legacy getter/setter and property-descriptor reflection family. The critic's exact __lookupGetter__ fixture makes the full verifier exit nonzero at static analysis, while the unmutated exact-head cold clone passes every gate."
+}

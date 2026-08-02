@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E0-T04 was refuted by an independent critic; retry determinism, reset dispatch fencing, and orphan receipt handling are being repaired before re-verification.",
-  "updatedAt": "2026-08-02T12:00:00Z"
+  "statusReason": "E0-T04 retry, reset, and orphan-receipt repairs pass the exact cold verifier and await a fresh independent critic.",
+  "updatedAt": "2026-08-02T12:45:00Z"
 }

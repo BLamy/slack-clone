@@ -1,30 +1,30 @@
 {
   "schemaVersion": 1,
   "task": "E0-T04",
-  "runId": "e0-t04-final",
-  "implementationCommit": "0923df1ea4e7829a44582b6a6aabd36a20ee1606",
+  "runId": "e0-t04-repair",
+  "implementationCommit": "57a19eba516fb4f4f0883833ecced3da3122bfcb",
   "result": "PASS",
   "replay": "N/A (server dispatch concurrency contract) + mitigation: real-HTTP race logs, lost-ack recovery, head dumps, and cold-clone verifier",
   "requestDigestEvidence": {
-    "accepted": "sha256:a4f16ac753603c7504fbc60a0d15d73a027779d8e8394eb4e10d0b2885339e15",
+    "accepted": "sha256:0a2f53eb5764eaa252a8081d21a2573089d52505e69965f3559517eada16f310",
     "conflictRefusals": [
-      "sha256:a3d4cedb52b3a9df9fcc6a816fa44f341760da7814268c114f9e484ed356a6ec",
-      "sha256:280b9b8c1f4f84c6c03c6f83784e41d100a6130c7996354c0c2041102085db59",
-      "sha256:f3a17ab1c083102d8ec3884252724f644e0671bb545372096876c41d7d978f55",
-      "sha256:c8943b6c7f04bea41612d9a8c92296a44c2e4d1eeb66995619a39ac65eb31c4d",
-      "sha256:05a95faee4c4447ae1c7ecbb0ed39f263f90d537d2b4f69133d556a0254fe870"
+      "sha256:a2fff5ae67aff3b677cfe9c51a59a7aa28af0481fb832fa60441a5494f13c2e7",
+      "sha256:6e5a29086273eb28e3a800a69de1bdc54a624a9199de0a2b54a0e4b37f6dcdf9",
+      "sha256:d3f3df547dbe5cf6c714a35c48fe2a7632803b5d898200f356cb8e874385d49c",
+      "sha256:0ffdc901bd72715d8c86f0a7f46ab58121ba29937f9a7d8b4d4e0b2603be556b",
+      "sha256:08dac25868b029db3202f14a39ab0466ef61c2b3cb7a74a787ec435d2f1c5b2c"
     ],
-    "staleFence": "sha256:520bc25efd9dce124f4e730392cfca4f8746b7a49477187b898571da1db3be97",
-    "lostAckRecovery": "sha256:7d34dc6d3bd2dd75267855fd4642975c58bbccf7839c865662750e0012d35e0a"
+    "staleFence": "sha256:67446ba7f746fe5addf440f43f9365434dda5e7db51f53ff3e785fc14e958c19",
+    "lostAckRecovery": "sha256:f136c2d43ac81d2eea8e115a585ad4912963f2e2f56a7238437942b83748af26"
   },
   "concurrency": {
     "requests": 100,
     "logicalEvents": 1,
     "receiptOffsets": [
-      "0000000000000000_0000000000000392"
+      "0000000000000000_0000000000000393"
     ],
     "receiptDigests": [
-      "sha256:da1ad185afc631a2f3b6b0df52b3b31a96fd4f5752b7501fdcb9e673d346101f"
+      "sha256:89f3b31bc09cef7d50edd4c9cd963bbadc258e0716eb89e983a3da80e5cbe0e7"
     ]
   },
   "conflicts": {
@@ -53,7 +53,7 @@
     "noCandidateMutation": true
   },
   "finalStreams": {
-    "e0-t04-final-same-key": {
+    "e0-t04-repair-same-key": {
       "records": [
         {
           "logical": "one-event",
@@ -63,17 +63,17 @@
             "expectedHead": "0000000000000000_0000000000000000",
             "idempotencyKey": "ik_00000000000000000000000001",
             "operation": "chat.message.create",
-            "requestDigest": "sha256:a4f16ac753603c7504fbc60a0d15d73a027779d8e8394eb4e10d0b2885339e15",
+            "requestDigest": "sha256:0a2f53eb5764eaa252a8081d21a2573089d52505e69965f3559517eada16f310",
             "schemaVersion": 1,
-            "stream": "e0-t04-final-same-key",
+            "stream": "e0-t04-repair-same-key",
             "workspaceId": "ws_00000000000000000000000001"
           }
         }
       ],
-      "nextOffset": "0000000000000000_0000000000000392",
-      "streamDigest": "sha256:fc96d6571bbc6e7fd0e35765d6202defa9afc15895d5c9259e36762ccc204c75"
+      "nextOffset": "0000000000000000_0000000000000393",
+      "streamDigest": "sha256:196b936487fdb23ee3a3593cf674b87f8dd362ecc0b71acc03a3d7b467fcc2e6"
     },
-    "e0-t04-final-conflicts": {
+    "e0-t04-repair-conflicts": {
       "records": [
         {
           "value": "original",
@@ -82,41 +82,41 @@
             "expectedHead": "0000000000000000_0000000000000000",
             "idempotencyKey": "ik_00000000000000000000000002",
             "operation": "chat.message.create",
-            "requestDigest": "sha256:805bf557555ebee1b1c253d104711a481eafe696d4f145349d7836494c529388",
+            "requestDigest": "sha256:ae37c26a8152db987a863a74fde7d5b8caaa082158a3dd3e55aad4301b84e8d1",
             "schemaVersion": 1,
-            "stream": "e0-t04-final-conflicts",
+            "stream": "e0-t04-repair-conflicts",
             "workspaceId": "ws_00000000000000000000000001"
           }
         }
       ],
-      "nextOffset": "0000000000000000_0000000000000380",
-      "streamDigest": "sha256:2b3fa4c42ff4fe85cec6ac02c419321410cf1ba0e7c362dba813f720bd2ce64b"
+      "nextOffset": "0000000000000000_0000000000000381",
+      "streamDigest": "sha256:29e2bc255fb972f91b7846a5b19d6f9f2b7317ca11ba82a23510568792890ada"
     },
-    "e0-t04-final-conflict-candidate": {
+    "e0-t04-repair-conflict-candidate": {
       "records": [],
       "nextOffset": "0000000000000000_0000000000000000",
       "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
-    "e0-t04-final-race": {
+    "e0-t04-repair-race": {
       "records": [
         {
-          "writer": "b",
+          "writer": "a",
           "dispatch": {
             "actorId": "pr_ada",
             "expectedHead": "0000000000000000_0000000000000000",
-            "idempotencyKey": "ik_00000000000000000000000004",
+            "idempotencyKey": "ik_00000000000000000000000003",
             "operation": "chat.message.create",
-            "requestDigest": "sha256:782ac36a7d0764e43b8a649742f7ef41cbe4eb0bbaa4932c57399f914f17700c",
+            "requestDigest": "sha256:76d740438ab0b5a1638819753bcbd75784508e315824e415e9a23d77ec57db38",
             "schemaVersion": 1,
-            "stream": "e0-t04-final-race",
+            "stream": "e0-t04-repair-race",
             "workspaceId": "ws_00000000000000000000000001"
           }
         }
       ],
-      "nextOffset": "0000000000000000_0000000000000369",
-      "streamDigest": "sha256:5ac03907886f4c8fa24faec6814a3e898456dbc8d32a04c80367ff4a17c43682"
+      "nextOffset": "0000000000000000_0000000000000370",
+      "streamDigest": "sha256:da4d75d30891dfe79bdc8f63e64b5d93747c17bfdb70e4f4779b27bece3fe13e"
     },
-    "e0-t04-final-lost-ack": {
+    "e0-t04-repair-lost-ack": {
       "records": [
         {
           "recovery": "durable",
@@ -125,17 +125,17 @@
             "expectedHead": "0000000000000000_0000000000000000",
             "idempotencyKey": "ik_00000000000000000000000005",
             "operation": "chat.message.create",
-            "requestDigest": "sha256:7d34dc6d3bd2dd75267855fd4642975c58bbccf7839c865662750e0012d35e0a",
+            "requestDigest": "sha256:f136c2d43ac81d2eea8e115a585ad4912963f2e2f56a7238437942b83748af26",
             "schemaVersion": 1,
-            "stream": "e0-t04-final-lost-ack",
+            "stream": "e0-t04-repair-lost-ack",
             "workspaceId": "ws_00000000000000000000000001"
           }
         }
       ],
-      "nextOffset": "0000000000000000_0000000000000381",
-      "streamDigest": "sha256:e82dc4fe29547aa3ddf3106384ff032a32bf07089febe3233d453545c11c8c0f"
+      "nextOffset": "0000000000000000_0000000000000382",
+      "streamDigest": "sha256:0adf6cc98370182fbc1d24e4d73d399d55c9be4592ac727fb4d5e36161dd1ede"
     },
-    "e0-t04-final-captured": {
+    "e0-t04-repair-captured": {
       "records": [
         {
           "advance": true,
@@ -144,22 +144,22 @@
             "expectedHead": "0000000000000000_0000000000000000",
             "idempotencyKey": "ik_00000000000000000000000007",
             "operation": "chat.message.create",
-            "requestDigest": "sha256:2f6215a9d3a3f7b2855129c01db6751b38a959ff79247c0dcb8d473b2cdb086f",
+            "requestDigest": "sha256:649170ea380711af6f566a8b3f94b59fd5e4d20d5f8d43e33d291d6d1345bacf",
             "schemaVersion": 1,
-            "stream": "e0-t04-final-captured",
+            "stream": "e0-t04-repair-captured",
             "workspaceId": "ws_00000000000000000000000001"
           }
         }
       ],
-      "nextOffset": "0000000000000000_0000000000000375",
-      "streamDigest": "sha256:62f0e461668c115a5c6e549e924b829607df3e7da65e9ff0cf536dca85b2bc6b"
+      "nextOffset": "0000000000000000_0000000000000376",
+      "streamDigest": "sha256:b44e3423cc363965fbb29915b1d2adf310b623a9386a2b30f461905340330242"
     },
-    "e0-t04-final-revoked": {
+    "e0-t04-repair-revoked": {
       "records": [],
       "nextOffset": "0000000000000000_0000000000000000",
       "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
-    "e0-t04-final-deleted": {
+    "e0-t04-repair-deleted": {
       "records": [],
       "nextOffset": "0000000000000000_0000000000000000",
       "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
@@ -170,13 +170,13 @@
           "kind": "dispatch.accepted",
           "receipt": {
             "actorId": "pr_ada",
-            "eventDigest": "sha256:da1ad185afc631a2f3b6b0df52b3b31a96fd4f5752b7501fdcb9e673d346101f",
+            "eventDigest": "sha256:89f3b31bc09cef7d50edd4c9cd963bbadc258e0716eb89e983a3da80e5cbe0e7",
             "idempotencyKey": "ik_00000000000000000000000001",
-            "nextOffset": "0000000000000000_0000000000000392",
+            "nextOffset": "0000000000000000_0000000000000393",
             "operation": "chat.message.create",
-            "requestDigest": "sha256:a4f16ac753603c7504fbc60a0d15d73a027779d8e8394eb4e10d0b2885339e15",
+            "requestDigest": "sha256:0a2f53eb5764eaa252a8081d21a2573089d52505e69965f3559517eada16f310",
             "status": "accepted",
-            "stream": "e0-t04-final-same-key",
+            "stream": "e0-t04-repair-same-key",
             "workspaceId": "ws_00000000000000000000000001"
           }
         },
@@ -184,41 +184,13 @@
           "kind": "dispatch.accepted",
           "receipt": {
             "actorId": "pr_ada",
-            "eventDigest": "sha256:2956263a90a35b6aa8c7b63f374e56ec235064af975fdac001881bd568c025a8",
+            "eventDigest": "sha256:4726edf1739afbd9d0ed28d7ba4591dd51f166e1f7d5ad7d6c50a7cec41549c6",
             "idempotencyKey": "ik_00000000000000000000000002",
-            "nextOffset": "0000000000000000_0000000000000380",
-            "operation": "chat.message.create",
-            "requestDigest": "sha256:805bf557555ebee1b1c253d104711a481eafe696d4f145349d7836494c529388",
-            "status": "accepted",
-            "stream": "e0-t04-final-conflicts",
-            "workspaceId": "ws_00000000000000000000000001"
-          }
-        },
-        {
-          "kind": "dispatch.accepted",
-          "receipt": {
-            "actorId": "pr_ada",
-            "eventDigest": "sha256:e7f6cc2f809121ba290ccd8fdd97fcbe9f771f947a5c6fb9cd9e2093f24dd561",
-            "idempotencyKey": "ik_00000000000000000000000004",
-            "nextOffset": "0000000000000000_0000000000000369",
-            "operation": "chat.message.create",
-            "requestDigest": "sha256:782ac36a7d0764e43b8a649742f7ef41cbe4eb0bbaa4932c57399f914f17700c",
-            "status": "accepted",
-            "stream": "e0-t04-final-race",
-            "workspaceId": "ws_00000000000000000000000001"
-          }
-        },
-        {
-          "kind": "dispatch.accepted",
-          "receipt": {
-            "actorId": "pr_ada",
-            "eventDigest": "sha256:49b822025302dbae9036a2f11102cd15295ea3db36f143c35239d9c4c5df08c1",
-            "idempotencyKey": "ik_00000000000000000000000005",
             "nextOffset": "0000000000000000_0000000000000381",
             "operation": "chat.message.create",
-            "requestDigest": "sha256:7d34dc6d3bd2dd75267855fd4642975c58bbccf7839c865662750e0012d35e0a",
+            "requestDigest": "sha256:ae37c26a8152db987a863a74fde7d5b8caaa082158a3dd3e55aad4301b84e8d1",
             "status": "accepted",
-            "stream": "e0-t04-final-lost-ack",
+            "stream": "e0-t04-repair-conflicts",
             "workspaceId": "ws_00000000000000000000000001"
           }
         },
@@ -226,19 +198,47 @@
           "kind": "dispatch.accepted",
           "receipt": {
             "actorId": "pr_ada",
-            "eventDigest": "sha256:6fc62f6b9ebadbf05efc5815607002bbee79b5722ba1a01367680c713aed1f53",
-            "idempotencyKey": "ik_00000000000000000000000007",
-            "nextOffset": "0000000000000000_0000000000000375",
+            "eventDigest": "sha256:229d52a46471f4ce4c2c519650ac03b56279467213b489784fea0f8d4071dfb1",
+            "idempotencyKey": "ik_00000000000000000000000003",
+            "nextOffset": "0000000000000000_0000000000000370",
             "operation": "chat.message.create",
-            "requestDigest": "sha256:2f6215a9d3a3f7b2855129c01db6751b38a959ff79247c0dcb8d473b2cdb086f",
+            "requestDigest": "sha256:76d740438ab0b5a1638819753bcbd75784508e315824e415e9a23d77ec57db38",
             "status": "accepted",
-            "stream": "e0-t04-final-captured",
+            "stream": "e0-t04-repair-race",
+            "workspaceId": "ws_00000000000000000000000001"
+          }
+        },
+        {
+          "kind": "dispatch.accepted",
+          "receipt": {
+            "actorId": "pr_ada",
+            "eventDigest": "sha256:999bf2371854df5f38944e958a6074c21ab9eae70e4c09add902cac5522f78ac",
+            "idempotencyKey": "ik_00000000000000000000000005",
+            "nextOffset": "0000000000000000_0000000000000382",
+            "operation": "chat.message.create",
+            "requestDigest": "sha256:f136c2d43ac81d2eea8e115a585ad4912963f2e2f56a7238437942b83748af26",
+            "status": "accepted",
+            "stream": "e0-t04-repair-lost-ack",
+            "workspaceId": "ws_00000000000000000000000001"
+          }
+        },
+        {
+          "kind": "dispatch.accepted",
+          "receipt": {
+            "actorId": "pr_ada",
+            "eventDigest": "sha256:9861d103261eed5888e7aef080b0ce491c8d4253b6e33d42ffad751ba3144911",
+            "idempotencyKey": "ik_00000000000000000000000007",
+            "nextOffset": "0000000000000000_0000000000000376",
+            "operation": "chat.message.create",
+            "requestDigest": "sha256:649170ea380711af6f566a8b3f94b59fd5e4d20d5f8d43e33d291d6d1345bacf",
+            "status": "accepted",
+            "stream": "e0-t04-repair-captured",
             "workspaceId": "ws_00000000000000000000000001"
           }
         }
       ],
-      "nextOffset": "0000000000000000_0000000000002367",
-      "streamDigest": "sha256:0b4397b5cc2004864ad7e779c336d7c5f07950c6d77cf1c8768e2bdd7daf5f6c"
+      "nextOffset": "0000000000000000_0000000000002372",
+      "streamDigest": "sha256:c090271a3d928cf79eddb74a77200d350cb392afa74bd1491c8434698e9700b5"
     }
   },
   "providerCoordination": {
@@ -249,7 +249,7 @@
   "requestTranscript": [
     {
       "method": "HEAD",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -258,7 +258,7 @@
     },
     {
       "method": "PUT",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -267,7 +267,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -303,7 +303,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -312,9 +312,9 @@
     },
     {
       "method": "POST",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": "0",
-      "producerId": "e0-t04-door-a-e0-t04-final",
+      "producerId": "e0-t04-door-a-e0-t04-repair",
       "producerSeq": "0",
       "status": 200,
       "streamSeq": "0000000000000000_0000000000000000"
@@ -332,7 +332,7 @@
       "method": "POST",
       "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
       "producerEpoch": "0",
-      "producerId": "e0-t04-door-a-e0-t04-final",
+      "producerId": "e0-t04-door-a-e0-t04-repair",
       "producerSeq": "0",
       "status": 200,
       "streamSeq": "0000000000000000_0000000000000000"
@@ -348,7 +348,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -366,7 +366,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -384,7 +384,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -402,7 +402,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -420,7 +420,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -438,7 +438,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -456,7 +456,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -474,7 +474,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -492,7 +492,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -510,7 +510,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -528,7 +528,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -546,7 +546,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -564,7 +564,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -582,7 +582,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -600,7 +600,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -618,7 +618,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -636,7 +636,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -654,7 +654,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -672,7 +672,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -690,7 +690,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -708,7 +708,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -726,7 +726,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -744,7 +744,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -762,7 +762,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -780,7 +780,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -798,7 +798,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -816,7 +816,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -834,7 +834,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -852,7 +852,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -870,7 +870,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -888,7 +888,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -906,7 +906,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -924,7 +924,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -942,7 +942,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -960,7 +960,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -978,7 +978,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -996,7 +996,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1014,7 +1014,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1032,7 +1032,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1050,7 +1050,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1068,7 +1068,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1086,7 +1086,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1104,7 +1104,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1122,7 +1122,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1140,7 +1140,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1158,7 +1158,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1176,7 +1176,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1194,7 +1194,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1212,7 +1212,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1230,7 +1230,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1248,7 +1248,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1266,7 +1266,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1284,7 +1284,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1302,7 +1302,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1320,7 +1320,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1338,7 +1338,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1356,7 +1356,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1374,7 +1374,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1392,7 +1392,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1410,7 +1410,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1428,7 +1428,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1446,7 +1446,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1464,7 +1464,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1482,7 +1482,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1500,7 +1500,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1518,7 +1518,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1536,7 +1536,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1554,7 +1554,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1572,7 +1572,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1590,7 +1590,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1608,7 +1608,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1626,7 +1626,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1644,7 +1644,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1662,7 +1662,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1680,7 +1680,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1698,7 +1698,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1716,7 +1716,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1734,7 +1734,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1752,7 +1752,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1770,7 +1770,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1788,7 +1788,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1806,7 +1806,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1824,7 +1824,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1842,7 +1842,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1860,7 +1860,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1878,7 +1878,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1896,7 +1896,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1914,7 +1914,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1932,7 +1932,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1950,7 +1950,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1968,7 +1968,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -1986,7 +1986,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2004,7 +2004,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2022,7 +2022,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2040,7 +2040,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2058,7 +2058,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2076,7 +2076,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2094,7 +2094,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2112,7 +2112,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2121,7 +2121,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2130,7 +2130,7 @@
     },
     {
       "method": "HEAD",
-      "path": "/rooms/e0-t04-final-conflicts/messages",
+      "path": "/rooms/e0-t04-repair-conflicts/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2139,7 +2139,7 @@
     },
     {
       "method": "PUT",
-      "path": "/rooms/e0-t04-final-conflicts/messages",
+      "path": "/rooms/e0-t04-repair-conflicts/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2148,7 +2148,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-conflicts/messages",
+      "path": "/rooms/e0-t04-repair-conflicts/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2157,7 +2157,7 @@
     },
     {
       "method": "HEAD",
-      "path": "/rooms/e0-t04-final-conflict-candidate/messages",
+      "path": "/rooms/e0-t04-repair-conflict-candidate/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2166,7 +2166,7 @@
     },
     {
       "method": "PUT",
-      "path": "/rooms/e0-t04-final-conflict-candidate/messages",
+      "path": "/rooms/e0-t04-repair-conflict-candidate/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2175,7 +2175,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-conflict-candidate/messages",
+      "path": "/rooms/e0-t04-repair-conflict-candidate/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2193,7 +2193,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-conflicts/messages",
+      "path": "/rooms/e0-t04-repair-conflicts/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2202,9 +2202,9 @@
     },
     {
       "method": "POST",
-      "path": "/rooms/e0-t04-final-conflicts/messages",
+      "path": "/rooms/e0-t04-repair-conflicts/messages",
       "producerEpoch": "0",
-      "producerId": "e0-t04-door-a-e0-t04-final",
+      "producerId": "e0-t04-door-a-e0-t04-repair",
       "producerSeq": "0",
       "status": 200,
       "streamSeq": "0000000000000000_0000000000000000"
@@ -2222,14 +2222,14 @@
       "method": "POST",
       "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
       "producerEpoch": "0",
-      "producerId": "e0-t04-door-a-e0-t04-final",
+      "producerId": "e0-t04-door-a-e0-t04-repair",
       "producerSeq": "1",
       "status": 200,
-      "streamSeq": "0000000000000000_0000000000000474"
+      "streamSeq": "0000000000000000_0000000000000475"
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-conflicts/messages",
+      "path": "/rooms/e0-t04-repair-conflicts/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2238,16 +2238,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-conflict-candidate/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "path": "/rooms/e0-t04-repair-conflict-candidate/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2292,7 +2283,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-conflicts/messages",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2301,7 +2292,16 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-conflict-candidate/messages",
+      "path": "/rooms/e0-t04-repair-conflicts/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-conflict-candidate/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2310,7 +2310,7 @@
     },
     {
       "method": "HEAD",
-      "path": "/rooms/e0-t04-final-race/messages",
+      "path": "/rooms/e0-t04-repair-race/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2319,7 +2319,7 @@
     },
     {
       "method": "PUT",
-      "path": "/rooms/e0-t04-final-race/messages",
+      "path": "/rooms/e0-t04-repair-race/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2328,7 +2328,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-race/messages",
+      "path": "/rooms/e0-t04-repair-race/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2355,7 +2355,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-race/messages",
+      "path": "/rooms/e0-t04-repair-race/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2364,7 +2364,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-race/messages",
+      "path": "/rooms/e0-t04-repair-race/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2373,9 +2373,9 @@
     },
     {
       "method": "POST",
-      "path": "/rooms/e0-t04-final-race/messages",
+      "path": "/rooms/e0-t04-repair-race/messages",
       "producerEpoch": "0",
-      "producerId": "e0-t04-door-b-e0-t04-final",
+      "producerId": "e0-t04-door-a-e0-t04-repair",
       "producerSeq": "0",
       "status": 200,
       "streamSeq": "0000000000000000_0000000000000000"
@@ -2391,9 +2391,9 @@
     },
     {
       "method": "POST",
-      "path": "/rooms/e0-t04-final-race/messages",
+      "path": "/rooms/e0-t04-repair-race/messages",
       "producerEpoch": "0",
-      "producerId": "e0-t04-door-a-e0-t04-final",
+      "producerId": "e0-t04-door-b-e0-t04-repair",
       "producerSeq": "0",
       "status": 409,
       "streamSeq": "0000000000000000_0000000000000000"
@@ -2402,131 +2402,32 @@
       "method": "POST",
       "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
       "producerEpoch": "0",
-      "producerId": "e0-t04-door-b-e0-t04-final",
-      "producerSeq": "0",
-      "status": 200,
-      "streamSeq": "0000000000000000_0000000000000949"
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/e0-t04-final-race/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/e0-t04-final-race/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "HEAD",
-      "path": "/rooms/e0-t04-final-lost-ack/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 404,
-      "streamSeq": null
-    },
-    {
-      "method": "PUT",
-      "path": "/rooms/e0-t04-final-lost-ack/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 201,
-      "streamSeq": null
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/e0-t04-final-lost-ack/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/e0-t04-final-lost-ack/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "POST",
-      "path": "/rooms/e0-t04-final-lost-ack/messages",
-      "producerEpoch": "0",
-      "producerId": "e0-t04-door-a-e0-t04-final",
-      "producerSeq": "0",
-      "status": 200,
-      "streamSeq": "0000000000000000_0000000000000000"
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/e0-t04-final-lost-ack/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "POST",
-      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
-      "producerEpoch": "0",
-      "producerId": "e0-t04-door-a-e0-t04-final",
+      "producerId": "e0-t04-door-a-e0-t04-repair",
       "producerSeq": "2",
       "status": 200,
-      "streamSeq": "0000000000000000_0000000000001419"
+      "streamSeq": "0000000000000000_0000000000000951"
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-lost-ack/messages",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-race/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-race/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2535,7 +2436,7 @@
     },
     {
       "method": "HEAD",
-      "path": "/rooms/e0-t04-final-captured/messages",
+      "path": "/rooms/e0-t04-repair-lost-ack/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2544,7 +2445,7 @@
     },
     {
       "method": "PUT",
-      "path": "/rooms/e0-t04-final-captured/messages",
+      "path": "/rooms/e0-t04-repair-lost-ack/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2553,7 +2454,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-captured/messages",
+      "path": "/rooms/e0-t04-repair-lost-ack/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2571,7 +2472,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-captured/messages",
+      "path": "/rooms/e0-t04-repair-lost-ack/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2580,9 +2481,108 @@
     },
     {
       "method": "POST",
-      "path": "/rooms/e0-t04-final-captured/messages",
+      "path": "/rooms/e0-t04-repair-lost-ack/messages",
       "producerEpoch": "0",
-      "producerId": "e0-t04-door-a-e0-t04-final",
+      "producerId": "e0-t04-door-a-e0-t04-repair",
+      "producerSeq": "0",
+      "status": 200,
+      "streamSeq": "0000000000000000_0000000000000000"
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-lost-ack/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": "0",
+      "producerId": "e0-t04-door-a-e0-t04-repair",
+      "producerSeq": "3",
+      "status": 200,
+      "streamSeq": "0000000000000000_0000000000001422"
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-lost-ack/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "HEAD",
+      "path": "/rooms/e0-t04-repair-captured/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 404,
+      "streamSeq": null
+    },
+    {
+      "method": "PUT",
+      "path": "/rooms/e0-t04-repair-captured/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 201,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-captured/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-captured/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/rooms/e0-t04-repair-captured/messages",
+      "producerEpoch": "0",
+      "producerId": "e0-t04-door-a-e0-t04-repair",
       "producerSeq": "0",
       "status": 200,
       "streamSeq": "0000000000000000_0000000000000000"
@@ -2600,10 +2600,10 @@
       "method": "POST",
       "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
       "producerEpoch": "0",
-      "producerId": "e0-t04-door-a-e0-t04-final",
-      "producerSeq": "3",
+      "producerId": "e0-t04-door-a-e0-t04-repair",
+      "producerSeq": "4",
       "status": 200,
-      "streamSeq": "0000000000000000_0000000000001893"
+      "streamSeq": "0000000000000000_0000000000001897"
     },
     {
       "method": "GET",
@@ -2616,7 +2616,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-captured/messages",
+      "path": "/rooms/e0-t04-repair-captured/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2625,7 +2625,7 @@
     },
     {
       "method": "HEAD",
-      "path": "/rooms/e0-t04-final-revoked/messages",
+      "path": "/rooms/e0-t04-repair-revoked/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2634,7 +2634,7 @@
     },
     {
       "method": "PUT",
-      "path": "/rooms/e0-t04-final-revoked/messages",
+      "path": "/rooms/e0-t04-repair-revoked/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2643,7 +2643,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-revoked/messages",
+      "path": "/rooms/e0-t04-repair-revoked/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2652,7 +2652,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-revoked/messages",
+      "path": "/rooms/e0-t04-repair-revoked/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2661,7 +2661,7 @@
     },
     {
       "method": "HEAD",
-      "path": "/rooms/e0-t04-final-deleted/messages",
+      "path": "/rooms/e0-t04-repair-deleted/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2670,7 +2670,7 @@
     },
     {
       "method": "PUT",
-      "path": "/rooms/e0-t04-final-deleted/messages",
+      "path": "/rooms/e0-t04-repair-deleted/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2679,7 +2679,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-deleted/messages",
+      "path": "/rooms/e0-t04-repair-deleted/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2688,25 +2688,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-deleted/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
+      "path": "/rooms/e0-t04-repair-deleted/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2724,70 +2706,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-same-key/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/e0-t04-final-conflicts/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/e0-t04-final-conflict-candidate/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/e0-t04-final-race/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/e0-t04-final-lost-ack/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/e0-t04-final-captured/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/e0-t04-final-revoked/messages",
-      "producerEpoch": null,
-      "producerId": null,
-      "producerSeq": null,
-      "status": 200,
-      "streamSeq": null
-    },
-    {
-      "method": "GET",
-      "path": "/rooms/e0-t04-final-deleted/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2805,7 +2724,7 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-race/messages",
+      "path": "/rooms/e0-t04-repair-same-key/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,
@@ -2814,7 +2733,88 @@
     },
     {
       "method": "GET",
-      "path": "/rooms/e0-t04-final-lost-ack/messages",
+      "path": "/rooms/e0-t04-repair-conflicts/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-conflict-candidate/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-race/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-lost-ack/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-captured/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-revoked/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-deleted/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-race/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-lost-ack/messages",
       "producerEpoch": null,
       "producerId": null,
       "producerSeq": null,

@@ -3,7 +3,7 @@ id: E0-T04
 epic: 0
 title: "Fenced dispatch and idempotent application writes"
 priority: 4
-status: in-progress
+status: implemented
 depends_on: [E0-T03]
 estimate: L
 capstone: false
@@ -124,3 +124,23 @@ key cannot be replayed for different content.
   canonical event digest match; otherwise fail closed with `DISPATCH_DURABILITY_GAP`.
 - Added focused tests for explicit-key retry reuse, reset idempotency, and orphan-receipt
   refusal. A fresh critic must re-run the exact cold evidence after this repair.
+
+### Builder — 2026-08-02 — repaired cold verification
+
+- Exact repaired implementation commit: `57a19eba516fb4f4f0883833ecced3da3122bfcb`.
+- `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t04-repair TEST_ARTIFACT_DIR=.artifacts/e0-t04/e0-t04-repair make verify-E0-T04` passed every gate from a clean exact-head tree: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (55 unit/ledger tests and 5 browser tests), `pnpm test:conformance:e0-t04`, and `pnpm build`.
+- The repaired run produced one logical event for 100 concurrent requests with receipt
+  offset `0000000000000000_0000000000000393` and event digest
+  `sha256:89f3b31bc09cef7d50edd4c9cd963bbadc258e0716eb89e983a3da80e5cbe0e7`; the
+  expected-head race remained one accepted/one stale, lost-ack recovery remained one
+  target event, and authorization/key conflict candidate streams stayed unchanged.
+- Promoted evidence: `evidence/cold-verification.json`,
+  `evidence/dispatch-conformance.json`, `evidence/final-stream-dump.json`, and
+  `evidence/request-transcript.json`. Replay: N/A (server dispatch concurrency contract)
+  + mitigation: real HTTP retry/reset tests, race logs, provider headers, lost-ack
+  recovery, head/digest dumps, and the cold-clone verifier. No Replay upload or tunnel
+  was attempted.
+- Claim: explicit-key message and edit retries recover the original durable payload,
+  reset is an idempotent dispatch event rather than a stream bypass, and an orphan or
+  mismatched receipt fails closed; the original dispatch fence/idempotency invariants
+  remain intact. A fresh critic must now verify this repaired claim.

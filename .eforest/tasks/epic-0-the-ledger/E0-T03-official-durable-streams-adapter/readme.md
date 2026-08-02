@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: pending
+status: in-progress
 depends_on: [E0-T02]
 estimate: L
 capstone: false

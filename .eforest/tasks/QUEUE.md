@@ -8,17 +8,21 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-No task is currently in progress, awaiting verification, or refuted.
+1. **E0-T03** — Official Durable Streams adapter with resumable reads *(builder working)*
 
 ## Next up (dependencies satisfied)
 
-1. **E0-T03** — Official Durable Streams adapter with resumable reads
+No new task may start until **E0-T03** clears the gate.
+
+## Unlocks when E0-T03 verifies
+
+1. **E0-T04** — Fenced dispatch and idempotent application writes
 
 ## Epic 0 — `epic-0-the-ledger`
 
 - [x] `   1` [E0-T01](epic-0-the-ledger/E0-T01-versioned-event-envelope-and-stream-topology/readme.md) — Versioned event envelope and authoritative stream topology *(deps: —)*
 - [x] `   2` [E0-T02](epic-0-the-ledger/E0-T02-strangler-backend-workspace/readme.md) — Strangler backend workspace around the working chat demo *(deps: E0-T01)*
-- [ ] `   3` [E0-T03](epic-0-the-ledger/E0-T03-official-durable-streams-adapter/readme.md) — Official Durable Streams adapter with resumable reads *(deps: E0-T02)*
+- [~] `   3` [E0-T03](epic-0-the-ledger/E0-T03-official-durable-streams-adapter/readme.md) — Official Durable Streams adapter with resumable reads *(deps: E0-T02)*
 - [ ] `   4` [E0-T04](epic-0-the-ledger/E0-T04-fenced-dispatch-and-idempotency/readme.md) — Fenced dispatch and idempotent application writes *(deps: E0-T03)*
 - [ ] `   5` [E0-T05](epic-0-the-ledger/E0-T05-reducers-digests-and-replay-cli/readme.md) — Pure reducers, canonical state digests, and replay CLI *(deps: E0-T01, E0-T04)*
 - [ ] `   6` [E0-T06](epic-0-the-ledger/E0-T06-crash-duplicate-partition-harness/readme.md) — Crash, duplicate-delivery, and partition sensitivity harness *(deps: E0-T04, E0-T05)*

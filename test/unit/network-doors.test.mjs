@@ -214,6 +214,14 @@ test("full repository audit covers CommonJS and browser loader files", async () 
       path.join(repositoryRoot, "public/index.html"),
       '<script src="https://streams.invalid/rooms/html/messages"></script>\n',
     );
+    await writeFile(
+      path.join(repositoryRoot, "public/styles.css"),
+      '.avatar { background: url("https://streams.invalid/rooms/css/messages"); }\n',
+    );
+    await writeFile(
+      path.join(repositoryRoot, "public/inline.html"),
+      '<script>new Worker("https://streams.invalid/rooms/inline/messages");</script>\n',
+    );
 
     const result = await auditDurableStreamsAccess({ repositoryRoot });
     assert.ok(result.filesScanned >= 5);
@@ -232,6 +240,14 @@ test("full repository audit covers CommonJS and browser loader files", async () 
     assert.match(
       result.failures.join("\n"),
       /index\.html:1 contains browser network URL in a resource attribute/u,
+    );
+    assert.match(
+      result.failures.join("\n"),
+      /styles\.css:1 contains browser network URL in a stylesheet resource/u,
+    );
+    assert.match(
+      result.failures.join("\n"),
+      /inline\.html:1 acquires ambient network capability Worker outside a declared provider door/u,
     );
   } finally {
     await rm(repositoryRoot, { recursive: true, force: true });

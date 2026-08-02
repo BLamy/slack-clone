@@ -3,7 +3,7 @@ id: E0-T04
 epic: 0
 title: "Fenced dispatch and idempotent application writes"
 priority: 4
-status: pending
+status: in-progress
 depends_on: [E0-T03]
 estimate: L
 capstone: false
@@ -61,3 +61,9 @@ key cannot be replayed for different content.
 5. Disable the expected-head check in a scratch worktree; the race verifier must go red.
 
 ## Verification log
+
+### Builder — 2026-08-02 — activated after E0-T03 verification
+
+- E0-T03 is verified at the exact published queue head, so E0-T04 is now the sole
+  eligible gate. This ticket owns the dispatch door, idempotency identity, producer
+  fencing, lost-ack recovery, and real-HTTP race harness; E0-T05 remains blocked.

@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: in-progress
+status: implemented
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -47,7 +47,7 @@ Streams; higher layers work in domain events and checkpoints.
 - [x] A source scan permits network calls to the Durable Streams origin only inside the
       adapter package and its conformance harness.
 - [x] Replay is declared `Replay: N/A (server transport adapter) + mitigation: real-emulator
-      protocol transcript, request-budget proof, canary scan, and reconnect matrix`.
+  protocol transcript, request-budget proof, canary scan, and reconnect matrix`.
 
 ## Adversarial verification
 
@@ -137,7 +137,7 @@ VERDICT: refuted
 - Implementation commit: `c1616398872bd2e992ffae6f669a7840cc47b2ac`; regenerated
   evidence commit: `53d32eddccd79ae14399d49ceaf5f5e9d9c4c44c`.
 - Final cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t03-builder-resubmit make
-  verify-E0-T03`. All eight gates passed from a clean tracked implementation tree: format,
+verify-E0-T03`. All eight gates passed from a clean tracked implementation tree: format,
   lint, static analysis (50 provider-access files, zero violations), unit (37/37),
   real-emulator conformance, browser integration (5/5), concurrency (1/1), and build.
 - Every committed JSON evidence file records implementation commit
@@ -192,7 +192,7 @@ VERDICT: refuted
   responses, so the pinned client silently maps the malformed header to zero and retries;
   this contradicts the strict malformed-retry requirement at task lines 57-58.
 - Cold command `env -u PROMOTE_EVIDENCE
-  TEST_RUN_ID=e0-t03-critic2-cold-d321-8f4c make verify-E0-T03` started with no
+TEST_RUN_ID=e0-t03-critic2-cold-d321-8f4c make verify-E0-T03` started with no
   `node_modules` or emulator build and exited 0: all eight gates, unit 37/37, browser 5/5,
   concurrency 1/1, and 30-file build passed. Five opaque resume suffixes matched exactly,
   ending offset `0000000000000000_0000000000000560`, digest
@@ -232,7 +232,7 @@ VERDICT: refuted
 - Implementation commit: `993e75412d10601acb016224b3e9ef09c3418257`; regenerated
   evidence commit: `6fbe7896d6d85984fc6f9a61716920f8a3889690`.
 - Final cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t03-builder-resubmit2 make
-  verify-E0-T03`. From a clean tracked implementation tree, all eight gates passed:
+verify-E0-T03`. From a clean tracked implementation tree, all eight gates passed:
   format, lint, static analysis, unit (38/38), real-emulator conformance, browser
   integration (5/5), concurrency (1/1), and the 30-file build.
 - Strict retry proof: `evidence/protocol-conformance.json` records malformed
@@ -277,7 +277,7 @@ VERDICT: refuted
 - **Blocking AC6 source-guard false green:** direct, destructured, assigned, bound,
   chained/optional, computed-static, and conditional spellings were detected. The
   plausible two-step alias `const runtime = globalThis; const dispatch = runtime.fetch;
-  await dispatch(providerUrl)` was not. A real `src/critic3-provider-alias-bypass.mjs`
+await dispatch(providerUrl)` was not. A real `src/critic3-provider-alias-bypass.mjs`
   fixture then made `pnpm exec prettier --check ...`, `pnpm lint`, and `pnpm typecheck`
   all exit 0; the audit reported `files=51 violations=0`. The missed propagation is in
   `tools/audit-durable-streams-access.mjs:230-279`. The fixture was removed.
@@ -290,13 +290,13 @@ VERDICT: refuted
 - **Blocking configured-origin/redirect failure (extra attack):** two independent
   loopback servers showed a configured-origin 307 redirect was followed to a different
   origin. `store.ensure()` fulfilled and the target received one `HEAD
-  /redirect-target-k7m9`; `Authorization` was stripped, but no `ORIGIN_VIOLATION` occurred.
+/redirect-target-k7m9`; `Authorization` was stripped, but no `ORIGIN_VIOLATION` occurred.
   `packages/durable-streams/src/index.mjs:87-105` validates only the initial URL, not the
   redirect destination/response URL.
 - Cold reproduction used `env -u PROMOTE_EVIDENCE
-  TEST_RUN_ID=e0-t03-critic3-cold-36067f8-k7m9
-  E0_T03_IMPLEMENTATION_COMMIT=993e75412d10601acb016224b3e9ef09c3418257 make
-  verify-E0-T03` from absent root dependencies, absent emulator build, absent `.env`, and
+TEST_RUN_ID=e0-t03-critic3-cold-36067f8-k7m9
+E0_T03_IMPLEMENTATION_COMMIT=993e75412d10601acb016224b3e9ef09c3418257 make
+verify-E0-T03` from absent root dependencies, absent emulator build, absent `.env`, and
   absent artifacts. It exited 0 across all eight gates: unit 38/38, browser 5/5,
   concurrency 1/1, and build 30 files. Conformance used 19 requests under cap 24, one
   create, cancellation stayed 13 -> 13, and real parked requests stayed 7 -> 7. Five
@@ -311,7 +311,7 @@ VERDICT: refuted
   headers/after headers/between batches, committed-header error handling, partial-frame
   rejection, and upstream cleanup. A deterministic raw/URL/base64 canary planted in an
   ignored sandbox artifact made conformance exit 1 with `Durable Streams token canary
-  leaked`; a browser token-name fixture made typecheck exit 1. The clean cold scan had
+leaked`; a browser token-name fixture made typecheck exit 1. The clean cold scan had
   zero leaks with all three controls detected.
 - Required sensitivity was demonstrated and restored byte-exact: real 350 ms polling made
   the focused timer test exit 1 with `2571 !== 0`; disabling strict malformed-header
@@ -334,7 +334,7 @@ VERDICT: refuted
   concurrency, and build were executed. Declarations/docs and unused long-poll were
   explicitly waived as non-runtime; no changed behavior was classified dead. Replay was
   correctly declared `N/A (server transport adapter) + mitigation: real-emulator protocol
-  transcript, request-budget proof, canary scan, and reconnect matrix`; no upload or
+transcript, request-budget proof, canary scan, and reconnect matrix`; no upload or
   tunnel was attempted and recordings remained unchanged. New evidence and repairs are
   required for the two-step alias, impossible IMF date, and cross-origin redirect cases.
 
@@ -350,8 +350,8 @@ VERDICT: refuted
 - Implementation commit: `226e51eee32037d2208e52a1254ed8bab7e57007`; regenerated
   evidence commit: `2977993d6903c22addcae5113e657e82e87bafd9`.
 - Final cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t03-builder-resubmit3
-  E0_T03_IMPLEMENTATION_COMMIT=226e51eee32037d2208e52a1254ed8bab7e57007 make
-  verify-E0-T03`. From a clean tracked implementation tree, all eight gates passed:
+E0_T03_IMPLEMENTATION_COMMIT=226e51eee32037d2208e52a1254ed8bab7e57007 make
+verify-E0-T03`. From a clean tracked implementation tree, all eight gates passed:
   format, lint, static analysis, unit (41/41), real-emulator conformance, browser
   integration (5/5), concurrency (1/1), and the 30-file build.
 - Source-boundary proof: the audit now propagates aliases of `globalThis`, `self`, and
@@ -398,7 +398,7 @@ VERDICT: refuted
   exact diff, and all five committed evidence JSON files.
 - **Blocking AC6 source-guard false green:** all eleven required controls were detected,
   including direct/prior aliases, `root = globalThis; runtime = root;
-  send = runtime["fetch"]`, declaration and assignment forms, conditional/logical aliases,
+send = runtime["fetch"]`, declaration and assignment forms, conditional/logical aliases,
   optional static-computed access, and provider-URL alias chains. However, the
   formatter-valid and ESLint-valid call
   `globalThis.fetch.call(globalThis, durableStreamsUrl + "/rooms/critic4/messages")`
@@ -408,9 +408,9 @@ VERDICT: refuted
   recognize `call`, so a non-adapter module can issue a provider request while the claimed
   source boundary stays green. A plausible bypass is blocking by the frozen criterion.
 - The exact non-promoting cold command, `env -u PROMOTE_EVIDENCE
-  TEST_RUN_ID=e0-t03-critic4-cold
-  E0_T03_IMPLEMENTATION_COMMIT=226e51eee32037d2208e52a1254ed8bab7e57007 make
-  verify-E0-T03`, began with dependencies, emulator build, `.env`, artifacts, test results,
+TEST_RUN_ID=e0-t03-critic4-cold
+E0_T03_IMPLEMENTATION_COMMIT=226e51eee32037d2208e52a1254ed8bab7e57007 make
+verify-E0-T03`, began with dependencies, emulator build, `.env`, artifacts, test results,
   and Replay metadata absent and exited 0. All eight gates passed: unit 41/41,
   real-emulator conformance, browser 5/5, concurrency 1/1, and a 30-file build. Conformance
   used 20 requests under cap 24, one create, cancellation held 14 -> 14, the 900,000 ms
@@ -457,8 +457,8 @@ VERDICT: refuted
   source/canary boundaries, cold emulator, browser, concurrency, and build. Declarations,
   documentation, and the unused long-poll mode were explicitly waived as non-runtime; dead
   behavior: none. Replay remains correctly declared `N/A (server transport adapter) +
-  mitigation: real-emulator protocol transcript, request-budget proof, canary scan, and
-  reconnect matrix`. Status is `refuted`; E0-T04 remains blocked until the source guard
+mitigation: real-emulator protocol transcript, request-budget proof, canary scan, and
+reconnect matrix`. Status is `refuted`; E0-T04 remains blocked until the source guard
   rejects ordinary provider-capable call indirections and proves that repair sensitive.
 
 ### Builder repair 4 — 2026-08-01
@@ -473,8 +473,8 @@ VERDICT: refuted
 - Implementation commit: `88a4fec7ce8c35b7aaff49f06051734f770c08d6`; regenerated
   evidence commit: `65be25bfc244722b3446eae9ccc60aba8c8de6df`.
 - Final cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t03-builder-resubmit4
-  E0_T03_IMPLEMENTATION_COMMIT=88a4fec7ce8c35b7aaff49f06051734f770c08d6 make
-  verify-E0-T03`. From a clean tracked implementation tree, all eight gates passed:
+E0_T03_IMPLEMENTATION_COMMIT=88a4fec7ce8c35b7aaff49f06051734f770c08d6 make
+verify-E0-T03`. From a clean tracked implementation tree, all eight gates passed:
   format, lint, static analysis, unit (41/41), real-emulator conformance, browser
   integration (5/5), concurrency (1/1), and the 30-file build.
 - Source-boundary proof: callable provenance now rejects direct invocation, `.call`,
@@ -549,8 +549,8 @@ VERDICT: refuted
   `MALFORMED_SSE_FRAME`, so the refuter is specific to the wrong-media path.
 - The required non-promoting cold command was run exactly as specified:
   `env -u PROMOTE_EVIDENCE TEST_RUN_ID=e0-t03-critic5-cold
-  E0_T03_IMPLEMENTATION_COMMIT=88a4fec7ce8c35b7aaff49f06051734f770c08d6 make
-  verify-E0-T03`. Root dependencies, emulator dependencies/build, `.env`, prior artifacts,
+E0_T03_IMPLEMENTATION_COMMIT=88a4fec7ce8c35b7aaff49f06051734f770c08d6 make
+verify-E0-T03`. Root dependencies, emulator dependencies/build, `.env`, prior artifacts,
   test results, Playwright report, generated recordings, and `recordings/latest.json` were
   absent first; tracked `.replay/config.json` and `.replay/browser-session.json` were
   preserved. The run initialized and built the pinned emulator and exited 0 across all
@@ -610,7 +610,7 @@ VERDICT: refuted
   this is a server transport adapter; dead — none; requiring new evidence/repair — AC6
   callable provenance and AC4 wrong-live-media terminalization. Replay remains honestly
   `N/A (server transport adapter) + mitigation: real-emulator transcript, request-budget,
-  canary, redirect, source-control, and reconnect proofs`; both verification summaries say
+canary, redirect, source-control, and reconnect proofs`; both verification summaries say
   upload/tunnel attempted `false`, no generated Replay metadata or recording appeared, and
   no Replay/tunnel command was invoked by this critic. Status is `refuted`; E0-T04 remains
   blocked.
@@ -628,8 +628,8 @@ VERDICT: refuted
 - Implementation commit: `330687fe13bbc142f0ce85ec58f5295a644e77d9`; regenerated
   evidence commit: `d545485d56e6bbb71d504c864af54f169f8b4ce4`.
 - Final cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t03-builder-resubmit5
-  E0_T03_IMPLEMENTATION_COMMIT=330687fe13bbc142f0ce85ec58f5295a644e77d9 make
-  verify-E0-T03`. The tracked implementation tree was clean at start and all eight gates
+E0_T03_IMPLEMENTATION_COMMIT=330687fe13bbc142f0ce85ec58f5295a644e77d9 make
+verify-E0-T03`. The tracked implementation tree was clean at start and all eight gates
   passed: format, lint, static analysis, unit (42/42), real-emulator conformance, browser
   integration (5/5), concurrency (1/1), and the 30-file build.
 - Source-boundary proof: the audit now converges callable and provider-target provenance
@@ -724,8 +724,8 @@ VERDICT: refuted
   `06afba5f...7219`, proving the cold run could not promote or mutate committed evidence.
 - The required cold command was run exactly:
   `env -u PROMOTE_EVIDENCE TEST_RUN_ID=e0-t03-critic6-cold
-  E0_T03_IMPLEMENTATION_COMMIT=330687fe13bbc142f0ce85ec58f5295a644e77d9 make
-  verify-E0-T03`. Only disposable generated state was absent first; tracked
+E0_T03_IMPLEMENTATION_COMMIT=330687fe13bbc142f0ce85ec58f5295a644e77d9 make
+verify-E0-T03`. Only disposable generated state was absent first; tracked
   `.replay/config.json` and `.replay/browser-session.json` were preserved. The pinned
   emulator initialized and built from cold state, and all eight gates exited 0: format
   (1,882 ms), lint (1,743 ms), static analysis (3,525 ms), unit 42/42 (7,518 ms), real
@@ -796,8 +796,8 @@ VERDICT: refuted
   server-transport ticket; dead — none identified; requiring repair — the executed and
   refuted AC6 interprocedural provider-call and application-API provenance boundary.
   Replay remains honestly `N/A (server transport adapter) + mitigation: real-emulator
-  protocol transcript, request-budget proof, canary scan, redirect-origin proof,
-  cloned-response proof, source controls, and reconnect matrix`; upload and tunnel flags
+protocol transcript, request-budget proof, canary scan, redirect-origin proof,
+cloned-response proof, source controls, and reconnect matrix`; upload and tunnel flags
   were false, recordings were unchanged, and no Replay command was run. E0-T04 remains
   blocked.
 
@@ -810,3 +810,69 @@ VERDICT: refuted
   and all-application conditional targets stay allowed while any provider-capable branch
   is rejected. Promote the sixth critic's complete 22-case matrix and full-gate
   higher-order bypass into required red/green controls.
+
+### Builder resubmission 6 — 2026-08-01
+
+- Implementation commit: `f815d7fae0b6626b69d7dcf1bd857e0b6244eee9`. Promoted
+  evidence commit: `2c4496f6d6f69d96b836abba483b7a5fc83ff0c1`, its direct
+  child. The repair adds fixed-point argument-to-parameter capability flow, including
+  default and rest parameters; callback, collection, factory, and class propagation;
+  reflective, descriptor, and borrowed invocation; and structural application-API
+  provenance across bound, returned, conditional, logical, and sequence targets.
+- Normal gates passed before evidence promotion: `pnpm format:check`, `pnpm lint`,
+  `pnpm typecheck`, `pnpm test` (42/42 unit and 5/5 browser), and `pnpm build` (30
+  files). Static analysis scanned 51 production files with zero Durable Streams access
+  violations and 44 files for syntax.
+- The sixth critic's 22-case matrix is now shared by the unit and conformance verifiers.
+  Six additional controls cover partially bound and returned provider/application
+  targets, Set iterator extraction, and `Object.assign` factories. Together with the 28
+  prior cases, `evidence/source-access-audit.json` records 56 fixtures: every provider
+  case detects `direct-provider-network`, while all five structural application-API
+  cases remain allowed.
+- Detector sensitivity was proven in a disposable worktree at the exact implementation
+  commit. Removing `propagateNetworkParameters(...)` made the focused source guard exit
+  1 on `higher-order-parameter-dispatch`, actual `[]`. Discarding structural identifier
+  provenance made it exit 1 on `application-api-variable`, actual
+  `["direct-provider-network"]`. A temporary formatter-valid source file that called
+  `globalThis.fetch` through a higher-order helper made the complete `pnpm typecheck`
+  gate exit 1 at that file with `calls Durable Streams directly via invoke`. After each
+  mutation was removed, the focused guard and full typecheck returned green and the
+  disposable worktree was clean.
+- Byte-exact restoration provenance: source audit blob/SHA-256
+  `d7b3e583af718011232adcf110c9d12a9a6d4f9d` /
+  `c0967d8bba58735dbd2fd28cc3c7401548958ab24bfd6c341691cf338c73f13b`;
+  shared fixture blob/SHA-256 `ecda02a22f30a8924566305944da8c3b4d3d360d` /
+  `23c7b47d62a282ffd9dfe41c7abefaf11f1ab4fd4926249886b9c8832217c199`;
+  unit test blob/SHA-256 `14303f0c041a9a1b4a131085c42da2ef6f131925` /
+  `c6acb6ed887a050eee7be466da02f41196795d6345e650b1334efeab5dd54d68`;
+  conformance verifier blob/SHA-256
+  `0b7edef141ee7cc8e86866be0ed78f8070c53d15` /
+  `4dcc6a4b5f25f3ea7e8038dc42ed64d968012d3dfa111da80dfb1d9f439b85a0`.
+- Final cold command:
+  `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t03-builder-resubmit6 E0_T03_IMPLEMENTATION_COMMIT=f815d7fae0b6626b69d7dcf1bd857e0b6244eee9 make verify-E0-T03`.
+  The pinned emulator was installed and built from cold state, then all eight gates
+  passed: format, lint, static analysis, unit 42/42, real-emulator conformance, browser
+  integration 5/5, concurrency 1/1, and the 30-file build.
+- Real conformance used 20 requests under cap 24, created once, held cancellation at
+  14 -> 14, and left no active follower or idle waiter. The exact 900,000 ms idle window
+  stayed at 2 -> 2 calls; its 350 ms polling control generated 2,571 calls. A wrong-media
+  live response rejected as typed `CONTENT_TYPE_MISMATCH` after one request and its
+  terminal promise settled.
+- Opaque resume proof captured five checkpoints and every expected suffix, ending at
+  offset `0000000000000000_0000000000000535`; the full-stream digest is
+  `sha256:42b16cc7fd2bd96cea2b9ec766da526e5a3935587867b58d0f5c83aff3609e53`.
+  Browser/API state matched at offset `0000000000000000_0000000000000551`, digest
+  `sha256:d71d4ba75294253f2bd29a160050f2a0c22ab22aa5b5f17df5552031b8622472`.
+  The canary scan detected all three positive-control encodings and found zero output
+  matches.
+- Replay: N/A (server transport adapter) + mitigation: real-emulator protocol transcript,
+  request-budget proof, canary scan, redirect-origin proof, interprocedural source controls,
+  cloned-response terminalization proof, and reconnect matrix. No upload or tunnel was
+  attempted and recordings were unchanged.
+- Falsifiable claim: ordinary higher-order, reflective, container, factory, class,
+  default/rest, bound, returned, and mixed-expression provider capabilities can no longer
+  cross the adapter-only source boundary, while structurally proven application API calls
+  remain allowed; all other E0-T03 transport, lifecycle, security, provenance, and
+  cold-clone criteria still pass at the cited implementation commit. One formatter-valid
+  provider-capable call accepted by the complete source gate, one clean application call
+  rejected by it, or any failed exact-commit cold gate refutes this claim.

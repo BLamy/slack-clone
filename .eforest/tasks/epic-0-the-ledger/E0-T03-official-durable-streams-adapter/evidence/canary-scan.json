@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-resubmit",
-  "implementationCommit": "c1616398872bd2e992ffae6f669a7840cc47b2ac",
+  "runId": "e0-t03-builder-resubmit2",
+  "implementationCommit": "993e75412d10601acb016224b3e9ef09c3418257",
   "result": "PASS",
-  "canarySha256": "6adf31a0aaae9621bee49fb2b4a1af5c7a69ba4467d195c5030084c69141a2f6",
+  "canarySha256": "3a51a083c2ca7bc118cfe91dd556d5f5a8114c553c0c7ecde8fdc7e14b0debf6",
   "encodingsScanned": [
     "raw",
     "url-encoded",
@@ -19,7 +19,7 @@
   "categories": {
     "browserAssetsAndApi": {
       "entries": 6,
-      "bytesScanned": 31020,
+      "bytesScanned": 31027,
       "matches": 0
     },
     "logs": {
@@ -29,12 +29,12 @@
     },
     "environmentManifests": {
       "entries": 1,
-      "bytesScanned": 374,
+      "bytesScanned": 375,
       "matches": 0
     },
     "runArtifacts": {
       "entries": 4,
-      "bytesScanned": 13038,
+      "bytesScanned": 14001,
       "matches": 0
     }
   }

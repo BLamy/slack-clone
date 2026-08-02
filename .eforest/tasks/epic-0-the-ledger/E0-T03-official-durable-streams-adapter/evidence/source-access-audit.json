@@ -1,10 +1,32 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-resubmit",
-  "implementationCommit": "c1616398872bd2e992ffae6f669a7840cc47b2ac",
+  "runId": "e0-t03-builder-resubmit2",
+  "implementationCommit": "993e75412d10601acb016224b3e9ef09c3418257",
   "result": "PASS",
   "filesScanned": 50,
   "failures": [],
-  "sensitivity": "unit fixture inserts direct fetch to a Durable Streams room and must fail"
+  "sensitivity": {
+    "result": "PASS",
+    "fixtures": [
+      "direct",
+      "destructured",
+      "assigned",
+      "bound"
+    ],
+    "detections": {
+      "direct": [
+        "direct-provider-network"
+      ],
+      "destructured": [
+        "direct-provider-network"
+      ],
+      "assigned": [
+        "direct-provider-network"
+      ],
+      "bound": [
+        "direct-provider-network"
+      ]
+    }
+  }
 }

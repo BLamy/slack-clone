@@ -3,7 +3,13 @@ export function materializeMessages(records) {
   for (const record of records) {
     if (!record || typeof record !== "object" || typeof record.id !== "string")
       continue;
-    messages.set(record.id, record);
+    if (record.dispatch !== undefined) {
+      const projected = { ...record };
+      delete projected.dispatch;
+      messages.set(record.id, projected);
+    } else {
+      messages.set(record.id, record);
+    }
   }
   return [...messages.values()];
 }

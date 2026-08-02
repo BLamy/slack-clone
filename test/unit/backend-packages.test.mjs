@@ -358,7 +358,11 @@ test("chat service preserves append and owner-only edit behavior", async () => {
   const streamStore = {
     ensure: async () => {},
     remove: async () => {},
-    read: async () => ({ records, messages: materializeMessages(records) }),
+    read: async () => ({
+      records,
+      messages: materializeMessages(records),
+      nextOffset: `offset-${records.length}`,
+    }),
     append: async (_room, record) => {
       records.push(record);
       appended.push(record);
@@ -367,9 +371,17 @@ test("chat service preserves append and owner-only edit behavior", async () => {
   };
   const timestamps = ["2026-08-01T00:00:00.000Z", "2026-08-01T00:01:00.000Z"];
   const service = createChatService({
+    dispatch: async ({ payload, stream }) => {
+      const result = await streamStore.append(stream, payload);
+      return {
+        event: result.message,
+        receipt: { nextOffset: result.nextOffset },
+      };
+    },
     streamStore,
     randomId: () => "message-1",
     now: () => timestamps.shift(),
+    workspaceId: "ws_00000000000000000000000000",
   });
 
   const created = await service.appendMessage("demo", { text: "before" }, ada);

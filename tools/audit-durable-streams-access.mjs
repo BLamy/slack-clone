@@ -139,6 +139,13 @@ const NETWORK_DOORS = Object.freeze([
     allowedExports: new Set(),
   }),
   Object.freeze({
+    exact: "scripts/verify-e0-t04-conformance.mjs",
+    allowAmbient: true,
+    allowOfficialClient: false,
+    provider: true,
+    allowedExports: new Set(),
+  }),
+  Object.freeze({
     exact: "src/auth0-client.mjs",
     allowAmbient: true,
     allowOfficialClient: false,

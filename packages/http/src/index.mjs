@@ -274,11 +274,13 @@ export function createChatHttpDelivery({
     }
 
     if (resource === "messages" && request.method === "POST") {
-      const result = await chatService.appendMessage(
-        room,
-        await readJson(request),
-        user,
-      );
+      const input = await readJson(request);
+      const result = await chatService.appendMessage(room, input, user, {
+        idempotencyKey:
+          typeof request.headers["idempotency-key"] === "string"
+            ? request.headers["idempotency-key"]
+            : undefined,
+      });
       startFollowing(roomState(room));
       sendJson(response, 201, {
         ok: true,
@@ -290,11 +292,18 @@ export function createChatHttpDelivery({
     }
 
     if (resource === "messages" && messageId && request.method === "PATCH") {
+      const input = await readJson(request);
       const result = await chatService.updateMessage(
         room,
         messageId,
-        await readJson(request),
+        input,
         user,
+        {
+          idempotencyKey:
+            typeof request.headers["idempotency-key"] === "string"
+              ? request.headers["idempotency-key"]
+              : undefined,
+        },
       );
       startFollowing(roomState(room));
       sendJson(response, 200, {

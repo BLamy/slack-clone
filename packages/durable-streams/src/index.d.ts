@@ -40,8 +40,16 @@ export interface DurableStreamsStore<TRecord = unknown, TMessage = TRecord> {
   append(
     roomId: string,
     record: TRecord,
-    options?: { signal?: AbortSignal },
-  ): Promise<{ message: TRecord; nextOffset: string }>;
+    options?: {
+      signal?: AbortSignal;
+      streamSeq?: string;
+      producer?: {
+        id: string;
+        epoch: number;
+        seq: number;
+      };
+    },
+  ): Promise<{ message: TRecord; nextOffset: string; duplicate?: boolean }>;
   read(
     roomId: string,
     offset?: string,

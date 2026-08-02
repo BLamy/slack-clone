@@ -16,6 +16,7 @@ import { createChatService } from "@stream-slack/services";
 import { createAuth0Client } from "./auth0-client.mjs";
 import { createInboundHttpServer } from "./http-server.mjs";
 import { canonicalSha256 } from "./ledger/canonical-json.mjs";
+import { createDispatchDoor } from "./ledger/dispatch.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
@@ -37,6 +38,7 @@ const AUTH0_CLIENT_SECRET =
 const AUTH0_REALM =
   process.env.AUTH0_REALM ?? "Username-Password-Authentication";
 const SESSION_COOKIE = "slack_clone_session";
+const CHAT_WORKSPACE_ID = "ws_00000000000000000000000000";
 
 const sessions = new Map();
 const auth0Client = createAuth0Client({
@@ -219,10 +221,19 @@ const streamStore = createNodeDurableStreamsStore({
   token: DURABLE_STREAMS_ADMIN_TOKEN,
   digestRecords: canonicalSha256,
 });
+const dispatchDoor = createDispatchDoor({
+  authorize: ({ actorId }) =>
+    [...sessions.values()].some((session) => session.user.sub === actorId),
+  producerEpoch: 0,
+  producerId: `slack-clone-${crypto.randomUUID()}`,
+  streamStore,
+});
 const chatService = createChatService({
+  dispatch: dispatchDoor.dispatch,
   streamStore,
   randomId: () => crypto.randomUUID(),
   now: () => new Date().toISOString(),
+  workspaceId: CHAT_WORKSPACE_ID,
 });
 const chatHttp = createChatHttpDelivery({
   auth0Health: auth0Client.health,
@@ -338,6 +349,7 @@ server.listen(PORT, HOST, () => {
 
 function shutdown() {
   chatHttp.close();
+  dispatchDoor.close();
   chatService.closeStreams();
   server.close(() => process.exit(0));
 }

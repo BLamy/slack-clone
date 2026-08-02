@@ -57,6 +57,79 @@ test("official adapter creates once and preserves opaque checkpoints across boun
   store.close();
 });
 
+test("coordinated append forwards expected-head and producer fencing, including duplicate recovery", async () => {
+  const records = [];
+  let exists = false;
+  let postRequests = 0;
+  const fetchFn = async (input, init = {}) => {
+    const method = String(init.method ?? "GET").toUpperCase();
+    if (method === "HEAD") {
+      return exists
+        ? existsHead(
+            records.length === 0 ? ZERO : `opaque-checkpoint-${records.length}`,
+          )
+        : new Response("not found", { status: 404 });
+    }
+    if (method === "PUT") {
+      exists = true;
+      return new Response(null, {
+        status: 201,
+        headers: streamHeaders(ZERO),
+      });
+    }
+    if (method === "GET") {
+      const offset =
+        records.length === 0 ? ZERO : `opaque-checkpoint-${records.length}`;
+      return jsonResponse(JSON.stringify(records), offset);
+    }
+    assert.equal(method, "POST");
+    const headers = new Headers(init.headers);
+    assert.equal(headers.get("Stream-Seq"), "opaque-expected-head");
+    assert.equal(headers.get("Producer-Id"), "producer-one");
+    assert.equal(headers.get("Producer-Epoch"), "3");
+    assert.equal(headers.get("Producer-Seq"), "0");
+    postRequests += 1;
+    if (postRequests === 1) {
+      records.push(...JSON.parse(String(init.body)));
+      return new Response(null, {
+        status: 200,
+        headers: {
+          "Producer-Epoch": "3",
+          "Producer-Seq": "0",
+          "Stream-Next-Offset": "opaque-checkpoint-1",
+        },
+      });
+    }
+    return new Response(null, {
+      status: 204,
+      headers: { "Producer-Epoch": "3", "Producer-Seq": "0" },
+    });
+  };
+  const store = createStore(fetchFn);
+  const first = await store.append(
+    "coordinated-room",
+    { id: "coordinated-record" },
+    {
+      producer: { epoch: 3, id: "producer-one", seq: 0 },
+      streamSeq: "opaque-expected-head",
+    },
+  );
+  const duplicate = await store.append(
+    "coordinated-room",
+    { id: "coordinated-record" },
+    {
+      producer: { epoch: 3, id: "producer-one", seq: 0 },
+      streamSeq: "opaque-expected-head",
+    },
+  );
+  assert.equal(first.nextOffset, "opaque-checkpoint-1");
+  assert.equal(duplicate.duplicate, true);
+  assert.equal(duplicate.nextOffset, "opaque-checkpoint-1");
+  assert.equal(records.length, 1);
+  assert.equal(postRequests, 2);
+  store.close();
+});
+
 test("official SSE follow stays request-constant while idle, wakes on append, and cancels cleanly", async () => {
   const protocol = createProtocolDouble();
   const store = createStore(protocol.fetch);

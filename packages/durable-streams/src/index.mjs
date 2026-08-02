@@ -2,6 +2,10 @@ import {
   DurableStream,
   DurableStreamError,
   FetchError,
+  PRODUCER_EPOCH_HEADER,
+  PRODUCER_ID_HEADER,
+  PRODUCER_SEQ_HEADER,
+  STREAM_SEQ_HEADER,
   StreamClosedError,
   stream as openStream,
 } from "@durable-streams/client";
@@ -160,10 +164,11 @@ export function createDurableStreamsStore({
           return protocolErrorResponse(error);
         }
         if (method === "POST") {
-          entry.appendOffset = requireCheckpoint(
-            response.headers.get("Stream-Next-Offset"),
-            "append response",
-          );
+          const appendOffset = response.headers.get("Stream-Next-Offset");
+          entry.appendOffset =
+            appendOffset === null
+              ? null
+              : requireCheckpoint(appendOffset, "append response");
         }
         if (method === "GET" && url.searchParams.get("live") === "sse") {
           response = strictSseResponse(response);
@@ -260,23 +265,69 @@ export function createDurableStreamsStore({
     }
   }
 
-  async function append(roomId, record, { signal } = {}) {
+  async function append(roomId, record, { signal, streamSeq, producer } = {}) {
     metrics.appendCalls += 1;
     const entry = entryFor(roomId);
     return serializeWrite(entry, async () => {
       const handle = await ensure(entry.room);
       entry.appendOffset = null;
       try {
-        await handle.append(JSON.stringify(record), {
-          contentType: JSON_CONTENT_TYPE,
-          signal,
-        });
-        const nextOffset = requireCheckpoint(
-          entry.appendOffset,
-          "append response",
-        );
+        let duplicate = false;
+        if (streamSeq !== undefined || producer !== undefined) {
+          validateAppendCoordination({ streamSeq, producer });
+          const response = await entry.streamOptions.fetch(
+            entry.streamOptions.url,
+            {
+              method: "POST",
+              headers: {
+                ...entry.streamOptions.headers,
+                "Content-Type": JSON_CONTENT_TYPE,
+                ...(streamSeq === undefined
+                  ? {}
+                  : { [STREAM_SEQ_HEADER]: streamSeq }),
+                ...(producer === undefined
+                  ? {}
+                  : {
+                      [PRODUCER_ID_HEADER]: producer.id,
+                      [PRODUCER_EPOCH_HEADER]: String(producer.epoch),
+                      [PRODUCER_SEQ_HEADER]: String(producer.seq),
+                    }),
+              },
+              body: `[${JSON.stringify(record)}]`,
+              signal,
+            },
+          );
+          if (!response.ok) {
+            const status = response.status;
+            await discardResponse(response);
+            throw new DurableStreamsAdapterError(
+              `Durable Streams coordinated append was refused for ${entry.room}`,
+              {
+                code:
+                  status === 403
+                    ? "PRODUCER_FENCED"
+                    : status === 409
+                      ? "APPEND_CONFLICT"
+                      : "APPEND_REJECTED",
+                status,
+              },
+            );
+          }
+          duplicate = response.status === 204 && entry.appendOffset === null;
+          await discardResponse(response);
+        } else {
+          await handle.append(JSON.stringify(record), {
+            contentType: JSON_CONTENT_TYPE,
+            signal,
+          });
+        }
+
+        let nextOffset = entry.appendOffset;
+        if (nextOffset === null) {
+          nextOffset = (await read(entry.room, "-1", { signal })).nextOffset;
+        }
         entry.gate.wake("append");
-        return { message: record, nextOffset };
+        return { message: record, nextOffset, duplicate };
       } catch (error) {
         throw asAdapterError(
           error,
@@ -494,6 +545,37 @@ export function createDurableStreamsStore({
   });
 }
 
+function validateAppendCoordination({ streamSeq, producer }) {
+  if (streamSeq !== undefined) {
+    if (typeof streamSeq !== "string" || streamSeq.length === 0) {
+      throw new DurableStreamsAdapterError(
+        "Durable Streams Stream-Seq must be a non-empty opaque string",
+        { code: "INVALID_STREAM_SEQUENCE" },
+      );
+    }
+  }
+  if (producer === undefined) return;
+  if (!producer || typeof producer !== "object" || Array.isArray(producer)) {
+    throw new DurableStreamsAdapterError(
+      "Durable Streams producer coordination must be an object",
+      { code: "INVALID_PRODUCER" },
+    );
+  }
+  if (
+    typeof producer.id !== "string" ||
+    producer.id.length === 0 ||
+    !Number.isSafeInteger(producer.epoch) ||
+    producer.epoch < 0 ||
+    !Number.isSafeInteger(producer.seq) ||
+    producer.seq < 0
+  ) {
+    throw new DurableStreamsAdapterError(
+      "Durable Streams producer coordination requires a non-empty id and non-negative safe integers",
+      { code: "INVALID_PRODUCER" },
+    );
+  }
+}
+
 async function validateSuccessfulResponse({ method, response, url }) {
   const live = url.searchParams.get("live");
   const contentType = mediaType(response.headers.get("content-type"));
@@ -519,6 +601,14 @@ async function validateSuccessfulResponse({ method, response, url }) {
   }
 
   if (["GET", "HEAD", "POST", "PUT"].includes(method)) {
+    if (
+      method === "POST" &&
+      response.status === 204 &&
+      response.headers.has(PRODUCER_SEQ_HEADER) &&
+      !response.headers.has("Stream-Next-Offset")
+    ) {
+      return;
+    }
     requireCheckpoint(
       response.headers.get("Stream-Next-Offset"),
       `${method} response`,

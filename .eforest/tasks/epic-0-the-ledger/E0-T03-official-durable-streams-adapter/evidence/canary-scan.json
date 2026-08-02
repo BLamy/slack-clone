@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-resubmit7",
-  "implementationCommit": "4afa3d7fe45398e466b21a541298a21026173d2a",
+  "runId": "e0-t03-builder-resubmit8",
+  "implementationCommit": "339aca3cb9b4d92dac30c5b1156cb7a200317aed",
   "result": "PASS",
-  "canarySha256": "16f80be8dad15646a8c56ebd37c5779c62366343ad6791ff5cfe5a69cb7342df",
+  "canarySha256": "e52de83b08c4c79c62f731e3158944d786f69e3121afa44331b7e597d80f1e84",
   "encodingsScanned": [
     "raw",
     "url-encoded",
@@ -34,7 +34,7 @@
     },
     "runArtifacts": {
       "entries": 4,
-      "bytesScanned": 23803,
+      "bytesScanned": 27053,
       "matches": 0
     }
   }

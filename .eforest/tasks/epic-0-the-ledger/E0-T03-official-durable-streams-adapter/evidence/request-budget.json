@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-resubmit7",
-  "implementationCommit": "4afa3d7fe45398e466b21a541298a21026173d2a",
+  "runId": "e0-t03-builder-resubmit8",
+  "implementationCommit": "339aca3cb9b4d92dac30c5b1156cb7a200317aed",
   "result": "PASS",
   "requestCounter": "HTTP delivery to Durable Streams adapter",
   "logicalIdleDurationMs": 900000,
@@ -16,8 +16,8 @@
   "requestsAtCancel": 14,
   "requestsAfterCancellationSettled": 14,
   "realEmulatorIdleObservation": {
-    "requestsWhenOfficialFollowParked": 8,
-    "requestsAfterMicrotaskSettle": 8
+    "requestsWhenOfficialFollowParked": 7,
+    "requestsAfterMicrotaskSettle": 7
   },
   "idleWindow": {
     "schemaVersion": 1,
@@ -56,7 +56,7 @@
       "GET": 3
     },
     "responsesByStatus": {
-      "200": 3,
+      "200": 2,
       "201": 1,
       "204": 3,
       "404": 1

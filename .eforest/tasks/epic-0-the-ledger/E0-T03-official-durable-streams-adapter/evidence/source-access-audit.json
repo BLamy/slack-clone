@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-resubmit7",
-  "implementationCommit": "4afa3d7fe45398e466b21a541298a21026173d2a",
+  "runId": "e0-t03-builder-resubmit8",
+  "implementationCommit": "339aca3cb9b4d92dac30c5b1156cb7a200317aed",
   "result": "PASS",
   "filesScanned": 27,
   "failures": [],
@@ -91,7 +91,37 @@
       "application-inherited-getter",
       "application-tagged-stream-url",
       "application-conditional-targets",
-      "declared-application-events-door"
+      "declared-application-events-door",
+      "window-top-fetch",
+      "bare-top-fetch",
+      "document-default-view-fetch",
+      "global-function-recovery",
+      "global-eval-recovery",
+      "arrow-constructor-recovery",
+      "async-constructor-recovery",
+      "reflect-constructor-recovery",
+      "descriptor-constructor-recovery",
+      "nested-send-beacon",
+      "node-dns-module",
+      "node-dns-promises-module",
+      "node-child-process-module",
+      "deno-network-global",
+      "bun-network-global",
+      "create-require-alias",
+      "commonjs-require-alias",
+      "get-builtin-alias",
+      "get-builtin-computed",
+      "remote-dynamic-import",
+      "remote-static-import",
+      "raw-named-function-export",
+      "raw-default-function-export",
+      "raw-assignment-export",
+      "raw-class-getter-export",
+      "raw-event-source-export",
+      "inbound-dynamic-module",
+      "inbound-create-require",
+      "inbound-get-builtin-alias",
+      "inbound-create-server-only"
     ],
     "detections": {
       "direct": [
@@ -318,7 +348,95 @@
       "application-inherited-getter": [],
       "application-tagged-stream-url": [],
       "application-conditional-targets": [],
-      "declared-application-events-door": []
+      "declared-application-events-door": [],
+      "window-top-fetch": [
+        "direct-provider-network"
+      ],
+      "bare-top-fetch": [
+        "direct-provider-network"
+      ],
+      "document-default-view-fetch": [
+        "direct-provider-network"
+      ],
+      "global-function-recovery": [
+        "direct-provider-network"
+      ],
+      "global-eval-recovery": [
+        "direct-provider-network"
+      ],
+      "arrow-constructor-recovery": [
+        "direct-provider-network"
+      ],
+      "async-constructor-recovery": [
+        "direct-provider-network"
+      ],
+      "reflect-constructor-recovery": [
+        "direct-provider-network"
+      ],
+      "descriptor-constructor-recovery": [
+        "direct-provider-network"
+      ],
+      "nested-send-beacon": [
+        "direct-provider-network"
+      ],
+      "node-dns-module": [
+        "direct-provider-network"
+      ],
+      "node-dns-promises-module": [
+        "direct-provider-network"
+      ],
+      "node-child-process-module": [
+        "direct-provider-network"
+      ],
+      "deno-network-global": [
+        "direct-provider-network"
+      ],
+      "bun-network-global": [
+        "direct-provider-network"
+      ],
+      "create-require-alias": [
+        "direct-provider-network"
+      ],
+      "commonjs-require-alias": [
+        "direct-provider-network"
+      ],
+      "get-builtin-alias": [
+        "direct-provider-network"
+      ],
+      "get-builtin-computed": [
+        "direct-provider-network"
+      ],
+      "remote-dynamic-import": [
+        "direct-provider-network"
+      ],
+      "remote-static-import": [
+        "direct-provider-network"
+      ],
+      "raw-named-function-export": [
+        "network-capability-export"
+      ],
+      "raw-default-function-export": [
+        "network-capability-export"
+      ],
+      "raw-assignment-export": [
+        "network-capability-export"
+      ],
+      "raw-class-getter-export": [
+        "network-capability-export"
+      ],
+      "raw-event-source-export": [
+        "network-capability-export"
+      ],
+      "inbound-dynamic-module": [
+        "direct-provider-network"
+      ],
+      "inbound-create-require": [
+        "direct-provider-network"
+      ],
+      "inbound-get-builtin-alias": [
+        "direct-provider-network"
+      ],
+      "inbound-create-server-only": []
     }
   }
 }

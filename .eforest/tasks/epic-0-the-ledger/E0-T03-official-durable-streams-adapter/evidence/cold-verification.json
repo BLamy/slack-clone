@@ -1,59 +1,59 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-resubmit7",
-  "implementationCommit": "4afa3d7fe45398e466b21a541298a21026173d2a",
+  "runId": "e0-t03-builder-resubmit8",
+  "implementationCommit": "339aca3cb9b4d92dac30c5b1156cb7a200317aed",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
-  "artifactRoot": "/Users/brettlamy/Dev/slack-clone/.artifacts/e0-t03/e0-t03-builder-resubmit7",
+  "artifactRoot": "/Users/brettlamy/Dev/slack-clone/.artifacts/e0-t03/e0-t03-builder-resubmit8",
   "gates": [
     {
       "name": "format",
       "command": "pnpm format:check",
       "result": "PASS",
-      "durationMs": 999
+      "durationMs": 1173
     },
     {
       "name": "lint",
       "command": "pnpm lint",
       "result": "PASS",
-      "durationMs": 968
+      "durationMs": 1076
     },
     {
       "name": "static-analysis",
       "command": "pnpm typecheck",
       "result": "PASS",
-      "durationMs": 2265
+      "durationMs": 2728
     },
     {
       "name": "unit",
       "command": "pnpm test:unit",
       "result": "PASS",
-      "durationMs": 7338
+      "durationMs": 7600
     },
     {
       "name": "conformance",
       "command": "pnpm test:conformance",
       "result": "PASS",
-      "durationMs": 6196
+      "durationMs": 6822
     },
     {
       "name": "integration",
       "command": "pnpm test:integration",
       "result": "PASS",
-      "durationMs": 10686
+      "durationMs": 11155
     },
     {
       "name": "concurrency",
       "command": "pnpm test:concurrency",
       "result": "PASS",
-      "durationMs": 9713
+      "durationMs": 11010
     },
     {
       "name": "build",
       "command": "pnpm build",
       "result": "PASS",
-      "durationMs": 400
+      "durationMs": 522
     }
   ],
   "replay": "N/A (server transport adapter) + mitigation: real-emulator protocol transcript, request-budget proof, canary scan, and reconnect matrix",
@@ -86,7 +86,7 @@
           "record-live-2"
         ],
         "nextOffset": "0000000000000000_0000000000000535",
-        "streamDigest": "sha256:034d96e94708b37c6c84cae2ad7a8c8ea170b26f7993348d416d1c21e7906c8a"
+        "streamDigest": "sha256:1c5f785a3fe38ae9dee9a8d7cdc195857bed35d30c85108e6ffa6a15da73829a"
       },
       {
         "checkpoint": "0000000000000000_0000000000000096",
@@ -103,7 +103,7 @@
           "record-live-2"
         ],
         "nextOffset": "0000000000000000_0000000000000535",
-        "streamDigest": "sha256:08855726ed5196bb1aa24f78f50b0d308284f1634b79f17ca93ed46fc5ed4396"
+        "streamDigest": "sha256:9c40564d0ee9290d605dc5f66a29ee13b0564cc4bf143561c80452c17958c116"
       },
       {
         "checkpoint": "0000000000000000_0000000000000193",
@@ -118,7 +118,7 @@
           "record-live-2"
         ],
         "nextOffset": "0000000000000000_0000000000000535",
-        "streamDigest": "sha256:94f0d44708ff74bef604644f0e59b15b963ca1f6342e78818172b05da0050833"
+        "streamDigest": "sha256:6c4469771040d0398030b3e40932d79fe9d112e6e0c67c6d7a90e9b1b09a0d74"
       },
       {
         "checkpoint": "0000000000000000_0000000000000289",
@@ -131,7 +131,7 @@
           "record-live-2"
         ],
         "nextOffset": "0000000000000000_0000000000000535",
-        "streamDigest": "sha256:dd55ece09413aa6e3d1b697bc3db5f3d07e635d37f35b359088239d205dcf0ff"
+        "streamDigest": "sha256:1a49de0ac6c3ca8a190ef0a7b72ccf51e75fd6c4c817659f4cb600f3b2d71ab4"
       },
       {
         "checkpoint": "0000000000000000_0000000000000409",
@@ -142,7 +142,7 @@
           "record-live-2"
         ],
         "nextOffset": "0000000000000000_0000000000000535",
-        "streamDigest": "sha256:57a8c64ea9ee4fbb01526e5f162c29e8032da04189b63d52fc691735e9da1b28"
+        "streamDigest": "sha256:21256c0b85b376bac6827c8b97c54408b974ad23b6a87f7a7c6b11c04909f2de"
       },
       {
         "checkpoint": "0000000000000000_0000000000000535",
@@ -155,8 +155,8 @@
     "requestBudget": {
       "schemaVersion": 1,
       "task": "E0-T03",
-      "runId": "e0-t03-builder-resubmit7",
-      "implementationCommit": "4afa3d7fe45398e466b21a541298a21026173d2a",
+      "runId": "e0-t03-builder-resubmit8",
+      "implementationCommit": "339aca3cb9b4d92dac30c5b1156cb7a200317aed",
       "result": "PASS",
       "requestCounter": "HTTP delivery to Durable Streams adapter",
       "logicalIdleDurationMs": 900000,
@@ -170,8 +170,8 @@
       "requestsAtCancel": 14,
       "requestsAfterCancellationSettled": 14,
       "realEmulatorIdleObservation": {
-        "requestsWhenOfficialFollowParked": 8,
-        "requestsAfterMicrotaskSettle": 8
+        "requestsWhenOfficialFollowParked": 7,
+        "requestsAfterMicrotaskSettle": 7
       },
       "idleWindow": {
         "schemaVersion": 1,
@@ -210,7 +210,7 @@
           "GET": 3
         },
         "responsesByStatus": {
-          "200": 3,
+          "200": 2,
           "201": 1,
           "204": 3,
           "404": 1
@@ -250,10 +250,10 @@
     "canaryScan": {
       "schemaVersion": 1,
       "task": "E0-T03",
-      "runId": "e0-t03-builder-resubmit7",
-      "implementationCommit": "4afa3d7fe45398e466b21a541298a21026173d2a",
+      "runId": "e0-t03-builder-resubmit8",
+      "implementationCommit": "339aca3cb9b4d92dac30c5b1156cb7a200317aed",
       "result": "PASS",
-      "canarySha256": "16f80be8dad15646a8c56ebd37c5779c62366343ad6791ff5cfe5a69cb7342df",
+      "canarySha256": "e52de83b08c4c79c62f731e3158944d786f69e3121afa44331b7e597d80f1e84",
       "encodingsScanned": [
         "raw",
         "url-encoded",
@@ -283,7 +283,7 @@
         },
         "runArtifacts": {
           "entries": 4,
-          "bytesScanned": 23803,
+          "bytesScanned": 27053,
           "matches": 0
         }
       }
@@ -291,10 +291,10 @@
   },
   "browserRegression": {
     "schemaVersion": 1,
-    "room": "e0-t03-builder-resubmit7-edit-1785648447203",
-    "stream": "/rooms/e0-t03-builder-resubmit7-edit-1785648447203/messages",
+    "room": "e0-t03-builder-resubmit8-edit-1785651561200",
+    "stream": "/rooms/e0-t03-builder-resubmit8-edit-1785651561200/messages",
     "nextOffset": "0000000000000000_0000000000000551",
-    "streamDigest": "sha256:73b2d864591e49ee6fe00a84f0bdb20af3fc49da0c8b2bd750460019fa1b9a7b",
+    "streamDigest": "sha256:0519a6c427eeb36317e79319cf5bad85095af61ebd51ac824030bf866fd10b2c",
     "messageCount": 1,
     "domMatchedApi": true
   }

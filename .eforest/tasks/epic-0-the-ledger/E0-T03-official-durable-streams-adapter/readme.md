@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: implemented
+status: refuted
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -504,3 +504,113 @@ VERDICT: refuted
   by a provenance-aware source guard with committed positive controls and four independent
   red/green mutations; all adapter, lifecycle, security, provenance, and cold-clone
   acceptance criteria are satisfied at the cited implementation commit.
+
+VERDICT: refuted
+
+### Fifth fresh independent critic — 2026-08-01
+
+- Fresh Codex critic; did not implement E0-T03 and made no product repair. Predictions and
+  narrow refuters for all seven acceptance criteria were frozen before execution at
+  `work/critic5-frozen-predictions.md` (SHA-256
+  `4c49b8664a1577a62743620c9b60372dc2357b0d58cab33fcadaed666d54f839`). Reviewed
+  `AGENTS.md`, the complete E0-T03 task and E0-T02 dependency contract, baseline
+  `c542f4b202995caf09579701db8bf29b375d23ad`, implementation
+  `88a4fec7ce8c35b7aaff49f06051734f770c08d6`, promoted evidence
+  `65be25bfc244722b3446eae9ccc60aba8c8de6df`, submission
+  `5ab1080c3c69c251e2210a09031e5b5380469bd3`, both exact diffs, every committed evidence
+  file, and the complete prior verification log.
+- **Blocking AC6 source-boundary false greens:**
+  `node work/critic5-source-audit-matrix.mjs` exited 1 after the exact exported analyzer
+  detected every one of the 13 committed controls and correctly allowed direct and wrapped
+  application-API controls, but returned `[]` for 17 ordinary provider-capable variants:
+  forward nested and higher-order wrappers; aliases of `Reflect.apply`, `.call`, and
+  `.apply`; aliased member containers; nested object literals; array storage and
+  destructuring; object destructuring; class static fields, static methods, and instance
+  fields; and dynamic computed fetch/provider targets. Direct `.bind(...)(url)`, member
+  extraction after assignment, logical/conditional provenance, and optional static and
+  template-computed forms were caught. The smallest blocking case was
+  `const invoke = Reflect.apply; invoke(globalThis.fetch, globalThis, [providerUrl])`.
+  A temporary real `src/` fixture containing that call passed Prettier, ESLint, and the
+  complete static gate (`PASS Durable Streams adapter-only access files=51 violations=0`).
+  `tools/audit-durable-streams-access.mjs:28-106` performs one traversal while mutating
+  shallow provenance sets; `:213-245` recognizes direct `Reflect.apply`/`call`/`apply`,
+  and `:344-399` captures only the modeled alias/object shapes. Thus non-adapter code can
+  call the provider while the claimed mandatory gate stays green. One plausible bypass is
+  blocking under the frozen AC6 refuter.
+- **Blocking AC4 live-media failure:**
+  `node work/critic5-protocol-attacks.mjs` exited 1 because a successful live request with
+  `Content-Type: application/json` did not become the required typed
+  `CONTENT_TYPE_MISMATCH`. Exactly one live request occurred, but `follow.closed` remained
+  unsettled for the three-second observation window (`rejected:false`, `timedOut:true`).
+  The adapter converts successful-response validation failures into a synthetic 400 at
+  `packages/durable-streams/src/index.mjs:139-145`; through the official client's live SSE
+  transition that response did not surface through the returned follow's terminal promise
+  (`:386-405`). Missing SSE bodies and partial frames did reject as typed
+  `MALFORMED_SSE_FRAME`, so the refuter is specific to the wrong-media path.
+- The required non-promoting cold command was run exactly as specified:
+  `env -u PROMOTE_EVIDENCE TEST_RUN_ID=e0-t03-critic5-cold
+  E0_T03_IMPLEMENTATION_COMMIT=88a4fec7ce8c35b7aaff49f06051734f770c08d6 make
+  verify-E0-T03`. Root dependencies, emulator dependencies/build, `.env`, prior artifacts,
+  test results, Playwright report, generated recordings, and `recordings/latest.json` were
+  absent first; tracked `.replay/config.json` and `.replay/browser-session.json` were
+  preserved. The run initialized and built the pinned emulator and exited 0 across all
+  eight gates: unit 41/41, browser 5/5, concurrency 1/1, and build 30 files. Conformance
+  used 20 requests under cap 24, one create, cancellation stayed 14 -> 14, and left zero
+  followers/waiters. The exact 900,000 ms boundary held calls 2 -> 2, reads 1 -> 1, follows
+  1 -> 1 with 90 keepalives; the 350 ms control produced 2,571 calls.
+- Cold protocol proof preserved all five opaque suffixes exactly, ending at offset
+  `0000000000000000_0000000000000510`, with full-stream digest
+  `sha256:5238f165770f13f030dfba31780c7b02fe525cc517009c7da78a6b0b935f2390`.
+  Browser/API state matched at offset `0000000000000000_0000000000000541`, digest
+  `sha256:569fcae34da06dc05e008b0c8901df47c1379f4fb26f4730ad0f7dcbd9cac5de`.
+  A fresh `critic5-m7q4` independent run also preserved every suffix from `-1` and each
+  captured checkpoint, delivered both live records exactly once, tolerated triple cancel,
+  and finished at 20 requests, one create, zero followers, and zero idle waiters. A
+  two-adapter race produced three HEADs, two PUT attempts, one successful create, and both
+  callers fulfilled.
+- Independent lifecycle and protocol attacks otherwise passed: disconnect before headers,
+  after headers, and between records; repeated cancellation and in-flight upstream abort;
+  malformed/non-string/oversized checkpoints, missing response checkpoints, malformed
+  JSON, missing content types, partial frames, and committed-stream errors. The full
+  21-case Retry-After matrix accepted zero/leading-zero delta seconds and canonical 1994
+  and leap-day 2000 IMF dates, while signs, decimals, exponent/overflow, malformed text,
+  impossible/non-leap dates, weekday mismatch, time overflow, RFC850, and asctime forms
+  all stopped after one GET with typed `INVALID_RETRY_AFTER`. Same-origin and cross-origin
+  301/302/303/307/308 attacks all fenced correctly; the foreign target received zero
+  requests and no Authorization value crossed origins.
+- Canary controls passed and were sensitive. The clean random canary scan detected its
+  raw, URL-encoded, and base64 positive controls and found zero output matches. Planting
+  the run canary in the environment manifest made conformance exit 1 with two matches and
+  `Durable Streams token canary leaked`; a temporary public browser token-name fixture
+  made `pnpm typecheck` exit 1 with the expected server-credential finding. Both mutations
+  were removed.
+- Required detector sensitivity went red one defect at a time and every product/verifier
+  file was restored byte-exact: disabling direct `Reflect.apply` provenance failed the
+  focused source test with actual `[]`; installing a real 350 ms HTTP polling call failed
+  with `2571 !== 0`; bypassing strict Retry-After validation failed both malformed-date
+  tests with `Missing expected rejection`; changing provider fetches from manual to
+  followed redirects made the cross-origin detector fail after the foreign hop. Restored
+  SHA-256 values are `d106d3cb5b6d4d6c49ef6a46e37feb705c14d979d9a28a63e472f6ded00c1bd4`
+  (source audit), `89da961c9a38ae769a7263cb8f80a75c534004cdefc9145a7f9c0d59ec0cfe9d`
+  (HTTP), `434c0d3f92afbb933f92f1e2d0d4e7cd3cff62ff6f438b71fa95d208b8dd5a42`
+  (adapter), and `3e0800f5200439c68aa6a7dc1378e343bb750c1daa6c78d09ec0a14121d430e0`
+  (conformance verifier). After restoration, all five focused tests, typecheck/source audit,
+  and a fresh non-promoting conformance run passed.
+- Provenance is intact. `65be25b` is the immediate child of `88a4fec`; `5ab1080` is the
+  immediate child of `65be25b`; every evidence JSON names the full implementation SHA;
+  implementation-to-submission changes only five promoted evidence JSONs plus task/queue
+  metadata, with no product behavior change. Repeated non-promoting runs left committed
+  evidence byte-identical at SHA-256 `9594b1a0...d54f839`, `3ce2ce48...30475b`,
+  `20cb0f5b...ab575`, `5d7207df...f569`, and `4e22a358...3422`.
+- Coverage classification: executed — official create/append/read/SSE follow, every opaque
+  resume suffix, create races, cancellation/cleanup, HTTP disconnect timing, malformed
+  protocol inputs, Retry-After, redirects, request/timer budgets, canary/browser controls,
+  source provenance, cold emulator, browser integration, concurrency, and build; waived —
+  declarations/docs as non-runtime (still format/build checked) and Replay recording because
+  this is a server transport adapter; dead — none; requiring new evidence/repair — AC6
+  callable provenance and AC4 wrong-live-media terminalization. Replay remains honestly
+  `N/A (server transport adapter) + mitigation: real-emulator transcript, request-budget,
+  canary, redirect, source-control, and reconnect proofs`; both verification summaries say
+  upload/tunnel attempted `false`, no generated Replay metadata or recording appeared, and
+  no Replay/tunnel command was invoked by this critic. Status is `refuted`; E0-T04 remains
+  blocked.

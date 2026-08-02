@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: refuted
+status: in-progress
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -124,3 +124,10 @@ VERDICT: refuted
   denied command execution and the detached worktree had no installed dependencies. The
   code-level idle-window refutation is sufficient for this verdict; all other criteria
   remain unverified rather than failed.
+
+### Builder repair — 2026-08-01
+
+- Repair target: replace the disconnected counter with a deterministic timer-driven HTTP
+  idle probe at the exact boundary that previously scheduled 350-millisecond polling,
+  prove a targeted polling mutation makes the verifier fail, and stamp the clean
+  implementation commit into every regenerated evidence artifact.

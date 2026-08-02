@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: implemented
+status: refuted
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -382,3 +382,81 @@ VERDICT: refuted
 - Resubmitted claim: the third critic's two boundary false greens and redirect escape are
   closed with real controls and mutation-sensitive detectors; the full adapter, lifecycle,
   security, provenance, and cold-clone criteria are satisfied at the cited implementation.
+
+VERDICT: refuted
+
+### Fourth fresh independent critic — 2026-08-01
+
+- Fresh Codex critic; did not implement E0-T03 and made no product repair. Predictions and
+  narrow refuters for all seven acceptance criteria were frozen before execution at
+  `work/critic4-frozen-predictions.md` (SHA-256
+  `c656ca50eefa15e93c1230b15f357915190d66aa746b6de3c9985e892151e2fa`). Reviewed baseline
+  `c542f4b202995caf09579701db8bf29b375d23ad`, implementation
+  `226e51eee32037d2208e52a1254ed8bab7e57007`, promoted evidence
+  `2977993d6903c22addcae5113e657e82e87bafd9`, submission
+  `8d562f188e785d9e29c7d99de1e8f41dced18d19`, the complete E0-T02 dependency contract,
+  exact diff, and all five committed evidence JSON files.
+- **Blocking AC6 source-guard false green:** all eleven required controls were detected,
+  including direct/prior aliases, `root = globalThis; runtime = root;
+  send = runtime["fetch"]`, declaration and assignment forms, conditional/logical aliases,
+  optional static-computed access, and provider-URL alias chains. However, the
+  formatter-valid and ESLint-valid call
+  `globalThis.fetch.call(globalThis, durableStreamsUrl + "/rooms/critic4/messages")`
+  returned `violations: []` from the exact exported analyzer. Wrapper-function,
+  object-property-assignment, and template-computed fetch forms also returned no violation.
+  `tools/audit-durable-streams-access.mjs:215-240` classifies the outer callee and does not
+  recognize `call`, so a non-adapter module can issue a provider request while the claimed
+  source boundary stays green. A plausible bypass is blocking by the frozen criterion.
+- The exact non-promoting cold command, `env -u PROMOTE_EVIDENCE
+  TEST_RUN_ID=e0-t03-critic4-cold
+  E0_T03_IMPLEMENTATION_COMMIT=226e51eee32037d2208e52a1254ed8bab7e57007 make
+  verify-E0-T03`, began with dependencies, emulator build, `.env`, artifacts, test results,
+  and Replay metadata absent and exited 0. All eight gates passed: unit 41/41,
+  real-emulator conformance, browser 5/5, concurrency 1/1, and a 30-file build. Conformance
+  used 20 requests under cap 24, one create, cancellation held 14 -> 14, the 900,000 ms
+  boundary held calls 2 -> 2 with 90 keepalives, and the 350 ms control produced 2,571
+  calls. Five exact resume suffixes ended at offset
+  `0000000000000000_0000000000000510`, digest
+  `sha256:e72b66b7af9e9b17ad7dd739ad2f0ace1c01755ee54264bb991809c0e0118499`;
+  browser/API matched at offset `0000000000000000_0000000000000541`, digest
+  `sha256:5bdb4c10efd54b70cb657f0b09b172204657fec3cdb8f96d25ad2c4eba2efa00`.
+- Independent Retry-After coverage passed 18/18 cases. Integer zero plus canonical 1994
+  and leap-day 2000 IMF dates retried successfully after two GETs. Impossible February and
+  April dates, unknown month, weekday mismatch, non-leap February 29, hour/minute/second
+  overflow, signs, decimal, unsafe-integer overflow, malformed text, RFC850, and asctime
+  spellings all rejected as typed `INVALID_RETRY_AFTER`, preserved status 503, and stopped
+  after one GET.
+- Thirty real-loopback redirect cases passed across 301/302/303/307/308. Absolute and
+  protocol-relative cross-origin locations rejected as `ORIGIN_VIOLATION`; same-origin
+  absolute/relative and missing locations rejected as `UNEXPECTED_REDIRECT`; malformed
+  locations rejected as `INVALID_REDIRECT`. Every error preserved the redirect status,
+  the foreign target received zero requests, and no Authorization crossed the boundary.
+- Fresh focused lifecycle checks passed 14/14: opaque resume/create-once, live wake and
+  repeated cancellation, fifteen-minute request constancy and its positive control,
+  malformed checkpoint/content/body, partial SSE frame, committed-stream append, in-flight
+  upstream abort, committed-header single response, and disconnect before snapshot. A
+  separate two-adapter loopback race forced both initial HEAD results to 404; both ensures
+  fulfilled after two PUTs, exactly one successful create, and one confirming HEAD.
+- All three required sensitivity defects went red one at a time and were restored
+  byte-exact. Removing trusted-global propagation failed the source test with actual `[]`;
+  replacing calendar identity checks with normalized `Date` acceptance failed with
+  `Missing expected rejection`; removing `redirect: "manual"` followed the foreign hop and
+  failed the redirect test. Restoration made each focused test green. Final blobs/SHA-256
+  are `64bb2c9da91cef2ded9f348bf885b9c9d6742038` /
+  `0c4ff8cbb7037a07b638a0e417fd49f72c4087304666bce8bc0daaf63debf3ff` for the audit and
+  `a747c29c8577bc63e010b1299c8d541e17aeddbf` /
+  `434c0d3f92afbb933f92f1e2d0d4e7cd3cff62ff6f438b71fa95d208b8dd5a42` for the adapter.
+- Provenance is intact: `2977993d` is a direct child of `226e51ee`, `8d562f18` is a direct
+  child of `2977993d`, every evidence JSON stamps the full implementation SHA, and the
+  implementation-to-submission delta contains only task/queue/evidence metadata. The
+  non-promoting run left evidence SHA-256 unchanged: `e1ddf51c...e7ad8`,
+  `a66c6054...4754`, `b5944730...c2cc`, `0e1ad44b...01a`, and `d8caf429...bbbb`.
+  Its random canary scan detected all raw/URL/base64 positive controls, found zero clean
+  matches, attempted no Replay upload or tunnel, and left recordings unchanged.
+- Coverage executed adapter create/append/read/follow/retry, HTTP lifecycle and cleanup,
+  source/canary boundaries, cold emulator, browser, concurrency, and build. Declarations,
+  documentation, and the unused long-poll mode were explicitly waived as non-runtime; dead
+  behavior: none. Replay remains correctly declared `N/A (server transport adapter) +
+  mitigation: real-emulator protocol transcript, request-budget proof, canary scan, and
+  reconnect matrix`. Status is `refuted`; E0-T04 remains blocked until the source guard
+  rejects ordinary provider-capable call indirections and proves that repair sensitive.

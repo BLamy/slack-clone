@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: implemented
+status: refuted
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -261,3 +261,79 @@ VERDICT: refuted
   controls and independent source mutations that make their detectors fail; the full
   adapter, lifecycle, security, and provenance criteria remain satisfied at the cited
   implementation commit.
+
+VERDICT: refuted
+
+### Third fresh independent critic — 2026-08-01
+
+- Fresh Codex critic; did not implement E0-T03 and made no product repair. Before testing,
+  predictions and narrow refuters for all seven acceptance criteria were frozen at
+  `work/critic3-frozen-predictions.md` (SHA-256
+  `e0d3baeff42a2a2281f2ed3a3e18da45a12e142c45c65a8e9f479fa1d7d768a1`). Reviewed E0-T03,
+  E0-T02, both prior refutations, baseline `c542f4b202995caf09579701db8bf29b375d23ad`,
+  implementation `993e75412d10601acb016224b3e9ef09c3418257`, evidence
+  `6fbe7896d6d85984fc6f9a61716920f8a3889690`, submission
+  `36067f81b9c8e51f735cc75cdf16bf11dd63de41`, their exact diff, and every evidence JSON.
+- **Blocking AC6 source-guard false green:** direct, destructured, assigned, bound,
+  chained/optional, computed-static, and conditional spellings were detected. The
+  plausible two-step alias `const runtime = globalThis; const dispatch = runtime.fetch;
+  await dispatch(providerUrl)` was not. A real `src/critic3-provider-alias-bypass.mjs`
+  fixture then made `pnpm exec prettier --check ...`, `pnpm lint`, and `pnpm typecheck`
+  all exit 0; the audit reported `files=51 violations=0`. The missed propagation is in
+  `tools/audit-durable-streams-access.mjs:230-279`. The fixture was removed.
+- **Blocking strict Retry-After false green:** independent protocol doubles correctly
+  accepted `0` and an IMF epoch date, and rejected alphabetic, signed, decimal, overflow,
+  and malformed-syntax values before retry with `INVALID_RETRY_AFTER`, one GET, and the
+  original 503. But `Mon, 31 Feb 2026 00:00:00 GMT` fulfilled after two GETs because
+  `packages/durable-streams/src/index.mjs:491-506` accepts JavaScript's normalization to
+  `Tue, 03 Mar 2026 00:00:00 GMT`; it is not a valid IMF date.
+- **Blocking configured-origin/redirect failure (extra attack):** two independent
+  loopback servers showed a configured-origin 307 redirect was followed to a different
+  origin. `store.ensure()` fulfilled and the target received one `HEAD
+  /redirect-target-k7m9`; `Authorization` was stripped, but no `ORIGIN_VIOLATION` occurred.
+  `packages/durable-streams/src/index.mjs:87-105` validates only the initial URL, not the
+  redirect destination/response URL.
+- Cold reproduction used `env -u PROMOTE_EVIDENCE
+  TEST_RUN_ID=e0-t03-critic3-cold-36067f8-k7m9
+  E0_T03_IMPLEMENTATION_COMMIT=993e75412d10601acb016224b3e9ef09c3418257 make
+  verify-E0-T03` from absent root dependencies, absent emulator build, absent `.env`, and
+  absent artifacts. It exited 0 across all eight gates: unit 38/38, browser 5/5,
+  concurrency 1/1, and build 30 files. Conformance used 19 requests under cap 24, one
+  create, cancellation stayed 13 -> 13, and real parked requests stayed 7 -> 7. Five
+  exact opaque suffix checks ended at offset `0000000000000000_0000000000000575`, digest
+  `sha256:62582409add2c5673938d31c328d47edb5e4a3694a0b55671cbe1c9e0bd31a09`;
+  browser/API matched offset `0000000000000000_0000000000000567`, digest
+  `sha256:2ea508fe43645ee07344bb19fe48c52b2eeaabc856eb6ff63506f542753f0458`.
+  The exact 900,000 ms window held calls 2 -> 2, reads 1 -> 1, follows 1 -> 1 with 90
+  keepalives and zero polls; its 350 ms positive control produced 2,571 calls.
+- Independent `k7m9` lifecycle attacks passed opaque nonnumeric resume, concurrent create
+  convergence (two adapters, one successful create), cancellation, disconnect before
+  headers/after headers/between batches, committed-header error handling, partial-frame
+  rejection, and upstream cleanup. A deterministic raw/URL/base64 canary planted in an
+  ignored sandbox artifact made conformance exit 1 with `Durable Streams token canary
+  leaked`; a browser token-name fixture made typecheck exit 1. The clean cold scan had
+  zero leaks with all three controls detected.
+- Required sensitivity was demonstrated and restored byte-exact: real 350 ms polling made
+  the focused timer test exit 1 with `2571 !== 0`; disabling strict malformed-header
+  validation made its focused test exit 1 with `Missing expected rejection`; disabling
+  destructured alias capture made its focused source-guard test exit 1 (actual `[]`).
+  After inverse patches those tests passed. Final blobs/SHA-256 were
+  `dd91cfa0a5ae731e801547522c893212d1dee88d` /
+  `89da961c9a38ae769a7263cb8f80a75c534004cdefc9145a7f9c0d59ec0cfe9d` for
+  `packages/http/src/index.mjs`, `2902bcea69cd680b5ec7b56cd6f13e4d357b8a25` /
+  `bba6df0e954dca58cc2a0155eede207a57a74ca91f558518033631f12475546a` for the adapter,
+  and `432b6a5f58eca3212e565db621535dafee31cf70` /
+  `2cf9902bbe950be7913e7617ef4997de247de33d001176002f3878bbaee62bc2` for the audit.
+- Provenance passed: `6fbe7896` is a direct child of `993e7541`; every evidence JSON names
+  the full implementation SHA; `993e7541..36067f81` changes no product file. Evidence
+  SHA-256 remained `dc4f71a7...e6c263`, `b2265525...3bd51`, `6c11bbf2...90275`,
+  `c5eacc64...6189c`, and `33fb2d06...9f6bd` before and after the non-promoting cold run.
+  Final tracked product diff was empty; format, lint, typecheck, and unit 38/38 passed.
+- Coverage: adapter create/append/read/follow/retry, HTTP lifecycle, cancellation,
+  reconnect/resume, origin and canary boundaries, source audits, cold emulator, browser,
+  concurrency, and build were executed. Declarations/docs and unused long-poll were
+  explicitly waived as non-runtime; no changed behavior was classified dead. Replay was
+  correctly declared `N/A (server transport adapter) + mitigation: real-emulator protocol
+  transcript, request-budget proof, canary scan, and reconnect matrix`; no upload or
+  tunnel was attempted and recordings remained unchanged. New evidence and repairs are
+  required for the two-step alias, impossible IMF date, and cross-origin redirect cases.

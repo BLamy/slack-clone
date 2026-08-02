@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: in-progress
+status: implemented
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -997,3 +997,69 @@ VERDICT: refuted
   a new module network-capable through those forms, valid application calls use the
   declared door without false positives, and mutation proves both sides of the boundary
   can go red.
+
+### Builder resubmission 7 — 2026-08-02
+
+- Implementation commit: `4afa3d7fe45398e466b21a541298a21026173d2a`; regenerated
+  evidence commit: `faa476f6ad0fe224f26d534a083e051073398cc4`, its direct child.
+  The repair replaces open-ended provider-target taint inference with explicit transport
+  doors: only the Durable Streams adapter and conformance harness may acquire provider
+  network capability; the browser uses a same-origin `/api/` door; Auth0 uses a
+  configured-origin door that refuses redirects; and the HTTP server imports only the
+  bounded inbound `createServer` capability. Doors cannot export raw network capability.
+- Normal gates passed before promotion: `pnpm format:check`, `pnpm lint`,
+  `pnpm typecheck`, `pnpm test` (45/45 unit and 5/5 browser), and `pnpm build` (33 files).
+  Static analysis scanned 27 production files with zero access violations and 47 files
+  for syntax. The promoted source evidence contains 83 controls: all provider-capable
+  cases are rejected and all declared application-door cases are accepted.
+- Detector sensitivity was proven in a disposable worktree at the exact implementation
+  commit, one defect at a time. Removing member acquisition tracking made both the
+  focused alias control and full synthetic repository's nested-default provider control
+  fail. Removing `application-api.js` from the declared-door set made the clean app-door
+  control fail. Exporting `globalThis.fetch` from that door made full `pnpm typecheck`
+  reject the raw capability. Widening its route prefix from `/api/` to `/` made the
+  runtime door test accept a forbidden non-API path and fail. Finally, a real tracked
+  `src/` module using a nested default of `globalThis.fetch` made full `pnpm typecheck`
+  exit 1 at that file. Every mutation was removed before evidence promotion.
+- Byte-exact restoration provenance: auditor blob/SHA-256
+  `b7cff6089a4611c936c417408498fb8bbe38e7cf` /
+  `13b4bce4fbee8a8693ecdb4556d832491e7df8c711cebe740c36c2eb337fe22d`;
+  application door `dd10a7c5ac5175aa3c4a05445fda927845e68664` /
+  `cd75ea704a6502fb9fb82d9d97f48ca090ab5c7d1ad7cbff7189c1d615a5411c`;
+  Auth0 door `5ee68a3c720a8a06231d1c5706533b809132a14a` /
+  `4647b481689aea8272990e7be4e104a2d7b1f217a458d85780c33be232ef4cd3`;
+  inbound HTTP door `f9aead1e0a7334f3b2a312c3fe6c6a587281204c` /
+  `5735dc2202619bed091d683e4ae03c0db74eead5e18bc6486565432c734667de`.
+  The shared fixtures, door tests, and conformance verifier likewise returned to blobs
+  `cab261997ce4e24ea769a6694d90b025295cca5d`,
+  `81c4dafcfe302e6a97c519c580acacdd48da28fa`, and
+  `a102a619a0a72487831a499bb85b0b7b801af7a6`; the restored worktree was clean and removed.
+- Final cold command:
+  `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t03-builder-resubmit7 E0_T03_IMPLEMENTATION_COMMIT=4afa3d7fe45398e466b21a541298a21026173d2a make verify-E0-T03`.
+  The tracked implementation tree was clean at start; the pinned emulator installed and
+  built from cold state; and all eight gates passed: format, lint, static analysis, unit
+  45/45, real-emulator conformance, browser integration 5/5, concurrency 1/1, and build.
+- Real conformance created once and made 20 requests under the cap of 24, including six
+  SSE requests. The 900,000 ms idle boundary stayed at 2 -> 2 calls, cancellation stayed
+  at 14 -> 14 requests with zero retained followers/waiters, and the 350 ms polling
+  positive control generated 2,571 calls. Wrong live media rejected as typed
+  `CONTENT_TYPE_MISMATCH` after one request and settled its terminal promise.
+- Five opaque checkpoints produced every exact suffix without offset parsing, ending at
+  `0000000000000000_0000000000000535`; the full-stream digest is
+  `sha256:034d96e94708b37c6c84cae2ad7a8c8ea170b26f7993348d416d1c21e7906c8a`.
+  Browser/API state matched at offset `0000000000000000_0000000000000551`, digest
+  `sha256:73b2d864591e49ee6fe00a84f0bdb20af3fc49da0c8b2bd750460019fa1b9a7b`.
+  The canary scan detected all three encoded positive controls and found zero output
+  matches across browser/API assets, logs, environment manifests, and run artifacts.
+- Replay: N/A (server transport adapter) + mitigation: real-emulator protocol transcript,
+  request-budget proof, canary scan, redirect/origin-fenced door tests, full synthetic
+  repository audit, browser/API stream correlation, and reconnect matrix. No Replay
+  upload or tunnel was attempted and recordings were unchanged.
+- Falsifiable claim: at the cited implementation commit, a production module can reach
+  network only through a declared, route/origin-fenced transport door; Durable Streams
+  provider traffic remains confined to the official adapter and conformance harness;
+  clean application traffic passes through `/api/`; and all remaining protocol,
+  lifecycle, security, provenance, and cold-clone criteria still pass. Any ambient
+  capability acquisition outside a door, raw capability export, provider target through
+  an application/Auth0 door, clean `/api/` rejection, or failed exact-commit cold gate
+  refutes this claim.

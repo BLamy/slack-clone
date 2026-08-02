@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: implemented
+status: refuted
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -876,3 +876,110 @@ cloned-response proof, source controls, and reconnect matrix`; upload and tunnel
   cold-clone criteria still pass at the cited implementation commit. One formatter-valid
   provider-capable call accepted by the complete source gate, one clean application call
   rejected by it, or any failed exact-commit cold gate refutes this claim.
+
+### Seventh fresh independent critic — 2026-08-02
+
+VERDICT: refuted
+
+- Fresh Codex critic; did not implement this ticket and made no product repair. Before
+  executing tests, predictions and narrow refuters for every acceptance criterion,
+  applicable adversarial item, requested AC6 family, provenance check, sensitivity
+  control, and coverage class were frozen at
+  `work/critic7/frozen-predictions.md` (SHA-256
+  `626031428244312f8b1687a9a1a029afe9c604278e15f5d1ffdfcae79fbc37d5`).
+  The complete task history, E0-T02 dependency contract, exact three diffs after baseline,
+  and all five evidence JSON files were inspected before execution.
+- Provenance passed. Baseline `c542f4b202995caf09579701db8bf29b375d23ad` is an ancestor;
+  repair-6 implementation `f815d7fae0b6626b69d7dcf1bd857e0b6244eee9` has tree
+  `a4e1b2f80b8248abf24ef5fff55079571acaeb30`; promoted evidence
+  `2c4496f6d6f69d96b836abba483b7a5fc83ff0c1` is its direct child; and submission
+  `39c97f25459240aa41043a80df1aa38cdbe8f156` (tree
+  `b5c20c26222f86d01d2c90311e1884b8be8581cb`) is the evidence commit's direct child.
+  Implementation-to-evidence changed only the five evidence JSON files, and
+  evidence-to-submission changed only this readme and `QUEUE.md`; no product path changed
+  after the implementation commit. Every evidence file names the exact implementation.
+- **Blocking AC6 refutation:** the independent, formatter-valid matrix at
+  `work/critic7/source-audit-matrix.mjs` exercised both exported
+  `analyzeDurableStreamsAccess` snippet analysis and a full 27-file synthetic-repository
+  audit. It contained 20 provider-capable cases and seven clean application cases using
+  nested and mutually recursive higher-order functions, closures returning functions,
+  async/generator and argument-forwarding wrappers, inheritance, Proxy traps,
+  `Reflect.construct`, getters, weak collections, destructuring defaults, optional
+  chaining, tagged/callable wrappers, and mixed application/provider flow. The analyzer
+  missed five ordinary provider paths: prototype-method inheritance through
+  `Object.setPrototypeOf`, a `defineProperty` getter, late `WeakMap.set/get`, nested
+  destructuring defaulting to `globalThis.fetch`, and a tagged callable selector. It also
+  rejected three clean application paths: literal and inherited getters returning
+  `/api/rooms/...`, and a tagged `streamUrl` selector. The full repository audit reproduced
+  both classes, including provider bypass `src/nested-destructuring-default.mjs` and clean
+  application control `src/application-literal-getter-stream-url.mjs`, so these are
+  complete source-gate outcomes rather than snippet-only parser artifacts.
+- The narrowest product-tree refuter was canonical and formatter-valid:
+  `src/critic7-nested-default-provider.mjs` defaulted a nested transport binding to
+  `globalThis.fetch` and invoked a Durable Streams provider URL. `pnpm lint` exited 0 and
+  the complete `pnpm typecheck` gate exited 0 with `files=52 violations=0` and syntax
+  `files=45`. The temporary source was then removed. Conversely, the clean application
+  getter control was reported as `direct-provider-network`. One ordinary provider call
+  accepted by the complete gate and one clean application API call rejected by it each
+  independently refute AC6.
+- The exact non-promoting cold command exited 0:
+  `env -u PROMOTE_EVIDENCE TEST_RUN_ID=e0-t03-critic7-cold-r7x2
+  E0_T03_IMPLEMENTATION_COMMIT=f815d7fae0b6626b69d7dcf1bd857e0b6244eee9 make
+  verify-E0-T03`. Dependencies, generated artifacts, and the emulator build were absent,
+  and the pinned emulator submodule was uninitialized before the run. All eight gates
+  passed: format, lint, static analysis, unit 42/42, real-emulator conformance, browser
+  integration 5/5, concurrency 1/1, and the 30-file build. The emulator's Node >=24
+  engine warning under Node 23.11.0 was nonfatal and all actual gates passed.
+- The cold run made 20 requests under cap 24, one create, and six SSE requests; cancellation
+  held at 14 -> 14 with zero retained followers/waiters. The 900,000 ms idle probe held at
+  2 -> 2 calls with 90 keepalives, while its polling positive control made 2,571 calls.
+  Five resume suffixes matched exactly and the cold full-stream digest was
+  `sha256:f8317cf0182bbc7f13b9ea5669e1d4731b7fcd33b5218ad2ce21d486b59bb92c`.
+  Browser/API state matched for room
+  `e0-t03-critic7-cold-r7x2-edit-1785646352426` at offset `...0551`, digest
+  `sha256:0feeac9eaa936c19dddcc1872e6d1205c88c09a80b9dea1be64788dc02932e50`.
+  Canary matches were zero.
+- `PROMOTE_EVIDENCE` was explicitly absent. Before and after the cold run, committed
+  evidence SHA-256 values were byte-identical: canary
+  `af3b1d833fe7328966929820c0c665aafc29a63309a5a868fd42280726fcf4a5`, cold
+  `2a81dc3b00fe900a087cfdc712e43a273fbf40ce16b0137b667f08907fc5ebf1`, protocol
+  `d43172bc89070e2ed884f9b8e6ddb08f42957fd2b800466cba005fc8bf1ccf52`, request
+  `1609dcde2ae07d4bcf084e3e76e1f0c18256c1ce4fc64b9a549f431a0b80bdfe`, and source
+  `5994a8d699976f36e700dfc5bd075550f365e7e0e7f3d8318f470bd451455f8f`.
+  `git diff --exit-code` over evidence passed.
+- Required sensitivity was independently proven one defect at a time. Removing
+  `propagateNetworkParameters(...)` made the focused source guard exit 1 on
+  `higher-order-parameter-dispatch`, actual `[]`. Disabling identifier application
+  provenance made it exit 1 on `application-api-variable`, actual
+  `["direct-provider-network"]`. Planting a real formatter-valid higher-order provider
+  source made full `pnpm typecheck` exit 1 at
+  `src/critic7-higher-order-detector-control.mjs:6`. As a non-source control, disabling
+  cross-origin redirect classification made its focused protocol test exit 1 because it
+  observed `UNEXPECTED_REDIRECT` instead of required `ORIGIN_VIOLATION`.
+- Every mutation was restored byte-exact. The source auditor returned to Git blob
+  `d7b3e583af718011232adcf110c9d12a9a6d4f9d`, SHA-256
+  `c0967d8bba58735dbd2fd28cc3c7401548958ab24bfd6c341691cf338c73f13b`; the adapter
+  returned to blob `c514717a80bd2c9f40b0454beb6088aa5997c93a`, SHA-256
+  `e6d37efbeb9953004ce161be15ef18dcb9198c17ba56188b10ba36d42b6ac0ee`.
+  A final clean `pnpm typecheck` passed with 51 audited files, zero violations, and 44
+  syntax files before metadata edits.
+- A bounded independent protocol/security sample passed 14 assertions: create-once with
+  nonnumeric opaque checkpoint semantics, request-constant official SSE follow,
+  malformed checkpoint/body/content-type/partial-frame/closed-stream rejection, malformed
+  Retry-After rejection, cross-origin redirect fencing, upstream abort/waiter release,
+  and downstream disconnect before header commit. The unique cold run additionally
+  executed cleanup, canary scanning, browser/API stream correlation, concurrency, and
+  build. These green nonblocking results do not cure AC6.
+- Coverage classification: executed — create/append/read/follow, official live semantics,
+  create race, opaque resumes, protocol status/body/media/partial-frame/Retry-After and
+  redirect behavior, cancellation and HTTP disconnects, resource cleanup, request budget,
+  canary/source boundaries, browser/API proof, concurrency, cold verifier, and build;
+  explicitly waived — declarations, package/lock metadata, Makefile wiring, docs, and
+  committed evidence serialization as non-runtime changes (their format/type/build,
+  provenance, schema, and hashes were still checked), plus Replay for this server-transport
+  ticket; dead — none identified; requiring repair and fresh evidence — AC6's executed
+  provider and application-target provenance boundary. Replay remains honestly
+  `N/A (server transport adapter) + mitigation: real-emulator transcript, request-budget
+  proof, canary scan, redirect-origin test, source controls, browser/API correlation, and
+  reconnect matrix`; no `record:replay`, tunnel, or external upload was run. E0-T04 remains
+  blocked.

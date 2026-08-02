@@ -489,7 +489,7 @@ async function validateSuccessfulResponse({ method, response, url }) {
   const contentType = mediaType(response.headers.get("content-type"));
   if (method === "GET" && live === "sse") {
     if (contentType !== "text/event-stream") {
-      await discardResponse(response);
+      await discardResponse(response, { awaitCancellation: false });
       throw new DurableStreamsAdapterError(
         `Durable Streams SSE response used unexpected content type ${contentType || "<missing>"}`,
         { code: "CONTENT_TYPE_MISMATCH", status: response.status },
@@ -714,9 +714,12 @@ function mediaType(value) {
     .toLowerCase();
 }
 
-async function discardResponse(response) {
+async function discardResponse(response, { awaitCancellation = true } = {}) {
   try {
-    await response.body?.cancel();
+    const cancellation = response.body?.cancel();
+    if (!cancellation) return;
+    if (awaitCancellation) await cancellation;
+    else cancellation.catch(() => {});
   } catch {
     // The caller still receives the typed protocol error below.
   }

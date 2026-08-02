@@ -201,6 +201,10 @@ test("adapter rejects malformed offsets, bodies, content types, and committed-st
 
   await t.test("wrong live content type terminates the follow", async () => {
     let liveRequests = 0;
+    const liveResponse = new Response("event: control\ndata: {}\n\n", {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
     const fetchFn = async (input, init = {}) => {
       if (init.method === "HEAD") return existsHead();
       const url = new URL(String(input));
@@ -208,10 +212,7 @@ test("adapter rejects malformed offsets, bodies, content types, and committed-st
         return jsonResponse("[]", ZERO);
       }
       liveRequests += 1;
-      return new Response("[]", {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      });
+      return liveResponse.clone();
     };
     const store = createStore(fetchFn, {
       initialDelay: 0,
@@ -237,6 +238,7 @@ test("adapter rejects malformed offsets, bodies, content types, and committed-st
     } finally {
       clearTimeout(timeout);
       store.close();
+      await liveResponse.body?.cancel();
     }
     assert.equal(liveRequests, 1);
   });

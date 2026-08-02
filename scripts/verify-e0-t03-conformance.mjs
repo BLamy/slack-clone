@@ -444,6 +444,10 @@ function createRetryStore({ checkpoint, retryAfter, onGet }) {
 async function verifyWrongLiveMedia() {
   const checkpoint = "opaque-live-media-checkpoint";
   let liveRequests = 0;
+  const liveResponse = new Response("event: control\ndata: {}\n\n", {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
   const mediaStore = createDurableStreamsStore({
     baseUrl: "http://streams.invalid",
     token: "protocol-double-token",
@@ -473,10 +477,7 @@ async function verifyWrongLiveMedia() {
         });
       }
       liveRequests += 1;
-      return new Response("[]", {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      });
+      return liveResponse.clone();
     },
   });
   let timeout;
@@ -511,6 +512,7 @@ async function verifyWrongLiveMedia() {
   } finally {
     clearTimeout(timeout);
     mediaStore.close();
+    await liveResponse.body?.cancel();
   }
 }
 

@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "name": "stream-slack",
   "description": "A Slack-shaped human and agent workspace whose source of truth is Durable Streams",
-  "status": "building",
+  "status": "invalid_loop",
   "statusValues": ["building", "complete", "paused", "invalid_loop"],
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "Initial server-first E0-E11 backlog planned; no task has started.",
-  "updatedAt": "2026-07-31T00:00:00Z"
+  "statusReason": "E0-T03 AC6 source-access enforcement was independently refuted for the ninth consecutive submission. Full-gate counterexamples show the static name blocklist does not establish the claimed exhaustive production network-door boundary across executable module extensions and browser DOM request surfaces. E0-T04 remains blocked pending a human decision to narrow or reframe E0-T03, or replace the enforcement model.",
+  "updatedAt": "2026-08-02T07:04:05Z"
 }

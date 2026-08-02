@@ -127,25 +127,33 @@ export function createChatHttpDelivery({
           if (generation !== state.followGeneration) return;
           state.nextOffset = batch.nextOffset;
           let resetSeen = false;
+          const messageRecords = [];
           for (const record of batch.records) {
             if (record?.dispatch?.operation === "chat.room.reset") {
               resetSeen = true;
             } else {
-              broadcast(state, "message", record);
+              messageRecords.push(record);
             }
           }
-          if (batch.records.length > 0) {
+          if (resetSeen && batch.records.length > 0) {
             const snapshot = await chatService.readMessages(state.room, "-1");
             if (generation !== state.followGeneration) return;
             state.nextOffset = snapshot.nextOffset;
             state.streamDigest = snapshot.streamDigest;
-          }
-          if (resetSeen) {
             broadcast(state, "reset", {
               room: state.room,
               nextOffset: state.nextOffset,
               streamDigest: state.streamDigest,
             });
+          }
+          for (const record of messageRecords) {
+            broadcast(state, "message", record);
+          }
+          if (!resetSeen && batch.records.length > 0) {
+            const snapshot = await chatService.readMessages(state.room, "-1");
+            if (generation !== state.followGeneration) return;
+            state.nextOffset = snapshot.nextOffset;
+            state.streamDigest = snapshot.streamDigest;
           }
           broadcastStatus(state);
         },

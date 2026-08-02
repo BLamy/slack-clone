@@ -3,7 +3,7 @@ id: E0-T05
 epic: 0
 title: "Pure reducers, canonical state digests, and replay CLI"
 priority: 5
-status: pending
+status: in-progress
 depends_on: [E0-T01, E0-T04]
 estimate: M
 capstone: false
@@ -62,3 +62,13 @@ database to fill gaps.
 5. Make a reducer read `Date.now()` in a scratch worktree; purity or digest tests must fail.
 
 ## Verification log
+
+### Builder — 2026-08-02 — activated after E0-T04 verification
+
+- E0-T04 is verified at the exact repaired product commit and the queue has no other
+  active gate. E0-T05 now owns the pure reducer registry, canonical state/digest contract,
+  replay/validation CLI, golden logs, purity audit, mutation tests, and cold-clone verifier.
+- The implementation will keep all fold dependencies injected or immutable and will use
+  only committed stream fixtures as authority; Replay: N/A (CLI replay apparatus, not
+  browser behavior) + mitigation: golden event logs, per-prefix digests, purity audit, and
+  mutation tests.

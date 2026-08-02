@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E0-T04 is verified at the exact repaired product commit; E0-T05 is the next eligible queue gate.",
-  "updatedAt": "2026-08-02T19:22:00Z"
+  "statusReason": "E0-T05 is the sole active queue gate after E0-T04 verification; pure reducer, digest, and replay CLI implementation is in progress.",
+  "updatedAt": "2026-08-02T19:25:00Z"
 }

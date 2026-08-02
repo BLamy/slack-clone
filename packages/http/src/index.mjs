@@ -126,30 +126,26 @@ export function createChatHttpDelivery({
         onBatch: async (batch) => {
           if (generation !== state.followGeneration) return;
           state.nextOffset = batch.nextOffset;
-          let resetSeen = false;
-          const messageRecords = [];
+          let resetSnapshot = null;
           for (const record of batch.records) {
             if (record?.dispatch?.operation === "chat.room.reset") {
-              resetSeen = true;
+              resetSnapshot ??= await chatService.readMessages(
+                state.room,
+                "-1",
+              );
+              if (generation !== state.followGeneration) return;
+              state.nextOffset = resetSnapshot.nextOffset;
+              state.streamDigest = resetSnapshot.streamDigest;
+              broadcast(state, "reset", {
+                room: state.room,
+                nextOffset: state.nextOffset,
+                streamDigest: state.streamDigest,
+              });
             } else {
-              messageRecords.push(record);
+              broadcast(state, "message", record);
             }
           }
-          if (resetSeen && batch.records.length > 0) {
-            const snapshot = await chatService.readMessages(state.room, "-1");
-            if (generation !== state.followGeneration) return;
-            state.nextOffset = snapshot.nextOffset;
-            state.streamDigest = snapshot.streamDigest;
-            broadcast(state, "reset", {
-              room: state.room,
-              nextOffset: state.nextOffset,
-              streamDigest: state.streamDigest,
-            });
-          }
-          for (const record of messageRecords) {
-            broadcast(state, "message", record);
-          }
-          if (!resetSeen && batch.records.length > 0) {
+          if (!resetSnapshot && batch.records.length > 0) {
             const snapshot = await chatService.readMessages(state.room, "-1");
             if (generation !== state.followGeneration) return;
             state.nextOffset = snapshot.nextOffset;

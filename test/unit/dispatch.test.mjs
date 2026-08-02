@@ -218,6 +218,78 @@ test("a lost acknowledgement recovers from the durable event without a second ta
   door.close();
 });
 
+test("a provider duplicate without the requested target event fails closed", async () => {
+  const store = createMemoryStore({ providerDuplicateBeforeStreamSeq: true });
+  const firstDoor = createDispatchDoor({
+    producerEpoch: 0,
+    producerId: "unit-reused-producer-door",
+    streamStore: store,
+  });
+  const original = request({
+    idempotencyKey: idempotencyKey(14),
+    payload: { value: "original" },
+    stream: "producer-reuse-room",
+  });
+  await firstDoor.dispatch(original);
+  firstDoor.close();
+
+  const restartedDoor = createDispatchDoor({
+    producerEpoch: 0,
+    producerId: "unit-reused-producer-door",
+    streamStore: store,
+  });
+  const different = request({
+    expectedHead: "offset-1",
+    idempotencyKey: idempotencyKey(15),
+    payload: { value: "different" },
+    stream: original.stream,
+  });
+  await assert.rejects(
+    restartedDoor.dispatch(different),
+    (error) => error.code === DISPATCH_REFUSAL_CODES.DURABILITY_GAP,
+  );
+  const target = await store.read(original.stream);
+  const index = await store.read("__stream_slack_dispatch_idempotency__");
+  assert.equal(
+    target.records.filter(
+      (record) => record.dispatch?.idempotencyKey === different.idempotencyKey,
+    ).length,
+    0,
+  );
+  assert.equal(
+    index.records.some(
+      (record) => record.receipt?.idempotencyKey === different.idempotencyKey,
+    ),
+    false,
+  );
+  restartedDoor.close();
+});
+
+test("a forged tail receipt checkpoint fails closed", async () => {
+  const store = createMemoryStore();
+  const door = createDispatchDoor({
+    producerEpoch: 0,
+    producerId: "unit-forged-receipt-door",
+    streamStore: store,
+  });
+  const input = request({ stream: "forged-receipt-room" });
+  await door.dispatch(input);
+  const index = await store.read("__stream_slack_dispatch_idempotency__");
+  index.records[0].receipt.nextOffset = "offset-999";
+  door.close();
+
+  const restartedDoor = createDispatchDoor({
+    producerEpoch: 0,
+    producerId: "unit-forged-receipt-restart-door",
+    streamStore: store,
+  });
+  await assert.rejects(
+    restartedDoor.dispatch(input),
+    (error) => error.code === DISPATCH_REFUSAL_CODES.DURABILITY_GAP,
+  );
+  restartedDoor.close();
+});
+
 test("an indexed receipt without its target event fails closed", async () => {
   const store = createMemoryStore();
   const input = request({ stream: "orphan-receipt-room" });
@@ -321,6 +393,7 @@ function createMemoryStore({
   appendDelayMs = 0,
   enforceStreamSeq = true,
   failAfterAppendFor = null,
+  providerDuplicateBeforeStreamSeq = false,
 } = {}) {
   const streams = new Map();
   const producers = new Map();
@@ -334,6 +407,23 @@ function createMemoryStore({
       if (appendDelayMs > 0) await delay(appendDelayMs);
       const records = streams.get(stream) ?? [];
       const expectedHead = `offset-${records.length}`;
+      if (
+        providerDuplicateBeforeStreamSeq &&
+        options.producer &&
+        producers.has(`${stream}:${options.producer.id}`)
+      ) {
+        const last = producers.get(`${stream}:${options.producer.id}`);
+        if (
+          options.producer.epoch === last.epoch &&
+          options.producer.seq <= last.seq
+        ) {
+          return {
+            duplicate: true,
+            message: record,
+            nextOffset: expectedHead,
+          };
+        }
+      }
       if (
         enforceStreamSeq &&
         options.streamSeq !== undefined &&

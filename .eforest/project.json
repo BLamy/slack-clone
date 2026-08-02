@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E0-T04 was refuted by the fourth critic for reset ordering, forged tail receipt offsets, and producer-duplicate mismatch; repair is in progress.",
+  "statusReason": "E0-T04 fourth-critic repair is implemented locally and is entering a fresh cold verification for reset ordering, receipt checkpoint integrity, and producer-duplicate mismatch.",
   "updatedAt": "2026-08-02T14:45:00Z"
 }

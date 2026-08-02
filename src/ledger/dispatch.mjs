@@ -290,6 +290,27 @@ export function createDispatchDoor({
       throw refusal;
     }
 
+    if (appendResult?.duplicate) {
+      const targetSnapshot = await readStream(request.stream, signal);
+      const recovered = findTargetEvent(
+        targetSnapshot.records,
+        request.idempotencyKey,
+      );
+      if (recovered) {
+        return recoverTargetReceipt({
+          request,
+          requestDigest,
+          signal,
+          snapshot: targetSnapshot,
+          event: recovered,
+        });
+      }
+      throw durabilityGap(
+        requestDigest,
+        `provider reported a duplicate append without the requested target event for ${request.idempotencyKey}`,
+      );
+    }
+
     const receipt = createReceipt({
       request,
       requestDigest,
@@ -325,7 +346,7 @@ export function createDispatchDoor({
 
       const sequence = producerSequence(idempotencyStream);
       try {
-        await streamStore.append(
+        const appendResult = await streamStore.append(
           idempotencyStream,
           { kind: INDEX_RECORD_KIND, receipt },
           {
@@ -339,6 +360,25 @@ export function createDispatchDoor({
           },
         );
         producerSequences.set(idempotencyStream, sequence + 1);
+        if (appendResult?.duplicate) {
+          const refreshed = await readStream(idempotencyStream, signal);
+          const indexed = findIndexedReceipt(
+            refreshed.records,
+            receipt.idempotencyKey,
+          );
+          if (indexed) {
+            assertReceiptMatchesRequest(
+              indexed,
+              receiptRequest(receipt),
+              receipt.requestDigest,
+            );
+            return indexed;
+          }
+          throw durabilityGap(
+            receipt.requestDigest,
+            `provider reported a duplicate receipt append without the requested idempotency record for ${receipt.idempotencyKey}`,
+          );
+        }
       } catch (error) {
         const refusal = mapAppendError(error, receipt.requestDigest);
         if (
@@ -440,6 +480,16 @@ function resultFromReceipt(receipt, snapshot, recoveredEvent) {
     throw durabilityGap(
       receipt.requestDigest,
       `target event for ${receipt.idempotencyKey} does not match its receipt`,
+    );
+  }
+  const eventIndex = snapshot.records.indexOf(event);
+  if (
+    eventIndex === snapshot.records.length - 1 &&
+    receipt.nextOffset !== snapshot.nextOffset
+  ) {
+    throw durabilityGap(
+      receipt.requestDigest,
+      `tail target event for ${receipt.idempotencyKey} does not match its receipt checkpoint`,
     );
   }
   return Object.freeze({

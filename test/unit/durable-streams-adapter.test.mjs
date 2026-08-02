@@ -616,6 +616,63 @@ test("HTTP delivery never attempts a second JSON response after SSE headers comm
   delivery.close();
 });
 
+test("HTTP delivery preserves reset position inside a same-batch stream update", async () => {
+  const timers = createFakeTimers();
+  let onBatch;
+  const chatService = {
+    normalizeRoomId: (room) => room,
+    readMessages: async () => ({
+      records: [],
+      messages: [],
+      nextOffset: "offset-3",
+      streamDigest: "digest-after-reset",
+    }),
+    followMessages: async (_room, _offset, options) => {
+      onBatch = options.onBatch;
+      return { cancel() {}, closed: Promise.resolve() };
+    },
+  };
+  const delivery = createChatHttpDelivery({
+    auth0Health: async () => true,
+    auth0EmulatorUrl: "http://auth.invalid",
+    chatService,
+    currentSession: () => ({ user: { sub: "ada" } }),
+    durableStreamsUrl: "http://streams.invalid",
+    emptyDigest: "digest:empty",
+    sessionUser: () => ({ sub: "ada" }),
+    timers,
+  });
+  const request = new EventEmitter();
+  request.method = "GET";
+  const response = createFakeResponse();
+
+  await delivery.handleApi(
+    request,
+    response,
+    new URL("http://app.invalid/api/rooms/reset-order/events"),
+  );
+  await eventually(() => typeof onBatch === "function");
+  await onBatch({
+    nextOffset: "offset-3",
+    records: [
+      { id: "before", text: "before reset" },
+      { dispatch: { operation: "chat.room.reset" } },
+      { id: "after", text: "after reset" },
+    ],
+  });
+
+  const eventNames = response.output
+    .join("")
+    .split("event: ")
+    .slice(1)
+    .map((entry) => entry.split("\n", 1)[0]);
+  assert.deepEqual(
+    eventNames.filter((event) => event !== "status" && event !== "snapshot"),
+    ["message", "reset", "message"],
+  );
+  delivery.close();
+});
+
 test("a downstream disconnect before snapshot completion never commits SSE headers", async () => {
   let resolveSnapshot;
   let followCalls = 0;

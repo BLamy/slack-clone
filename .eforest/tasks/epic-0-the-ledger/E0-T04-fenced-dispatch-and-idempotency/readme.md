@@ -3,7 +3,7 @@ id: E0-T04
 epic: 0
 title: "Fenced dispatch and idempotent application writes"
 priority: 4
-status: refuted
+status: in-progress
 depends_on: [E0-T03]
 estimate: L
 capstone: false

@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: implemented
+status: refuted
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -169,3 +169,54 @@ VERDICT: refuted
   HTTP live-delivery path satisfy every acceptance criterion. The idle proof now advances
   the timer boundary that owned the removed polling loop and demonstrably rejects the
   exact 350-millisecond regression; every durable artifact is bound to the clean commit.
+
+### Fresh independent critic — 2026-08-01
+
+VERDICT: refuted
+
+- Fresh Codex critic; did not implement E0-T03 or fix product code. Predictions for all
+  seven criteria were frozen before test execution in `work/critic2-frozen-predictions.md`
+  (SHA-256 `bc38748c...84bc67`). Reviewed submission `d321361`, implementation `c161639`,
+  evidence `53d32ed`, and baseline `c542f4b` in the required detached worktree.
+- **Blocking AC6 false green:** the required direct `fetch` scratch control passed lint
+  then made `pnpm typecheck` exit 1 and name the provider call. An inert replacement using
+  `const { fetch: send } = globalThis` followed by a `send` call to the interpolated
+  provider room URL made both commands exit 0; the full audit printed
+  `files=51 violations=0`. The new analyzer only records
+  identifier declarators at `tools/audit-durable-streams-access.mjs:52-66`, skips the
+  `ObjectPattern`, then does not classify `send` at lines 201-206. A non-adapter source can
+  therefore call the Durable Streams origin while the claimed guard stays green.
+- **Blocking adversarial-2 false green:** a protocol double returned `503` with malformed
+  `Retry-After: critic2-not-a-delay`, then a valid response. The read fulfilled after two
+  GET attempts. `packages/durable-streams/src/index.mjs:103-136` validates only successful
+  responses, so the pinned client silently maps the malformed header to zero and retries;
+  this contradicts the strict malformed-retry requirement at task lines 57-58.
+- Cold command `env -u PROMOTE_EVIDENCE
+  TEST_RUN_ID=e0-t03-critic2-cold-d321-8f4c make verify-E0-T03` started with no
+  `node_modules` or emulator build and exited 0: all eight gates, unit 37/37, browser 5/5,
+  concurrency 1/1, and 30-file build passed. Five opaque resume suffixes matched exactly,
+  ending offset `0000000000000000_0000000000000560`, digest
+  `sha256:f806df9f0fc21f04e2e7952ebf255e4a8b2d3b95e28f2ab520a3c5dff6eefb08`.
+  Browser/API matched offset `0000000000000000_0000000000000561`, digest
+  `sha256:8d39c5600eeddab0216c3b49d5e82ec60f3308a7ef85e52ab8ad97c072d63c8e`.
+- The repaired timer proof is sensitive: clean 900,000 ms stayed at 2 -> 2 adapter calls
+  with 90 keepalives; the 350 ms control made 2,571 extra calls. The required real polling
+  mutation in `packages/http/src/index.mjs` made the focused detector exit 1 with
+  `2571 !== 0`; byte-exact restoration returned blob `dd91cfa...e88d`, and the same command
+  exited 0. Independent disconnect-before/after/between/during tests had one delivery,
+  zero leaked timers/waiters, one response head, upstream abort, and requests 3 -> 3.
+- Canary controls were sensitive: browser-visible configuration made the source audit
+  exit 1; a deterministic canary in a sandbox/run artifact made real conformance exit 1
+  at `scripts/verify-e0-t03-conformance.mjs:406` with one match. The clean cold run had
+  zero matches, 20 requests under cap 24, one create, and no post-cancel growth (14 -> 14).
+  A concurrent two-adapter create race converged with one successful create.
+- Provenance passed: `53d32ed` is a direct child of `c161639`; every committed artifact
+  stamps the full implementation SHA and is unchanged through `d321361`; product diff
+  after `c161639` is empty. Final pristine format, lint, typecheck, and 37/37 unit gates
+  passed. Executed coverage includes create/append/read/SSE/resume/cancel/error paths,
+  HTTP lifecycle, audits, cold gates, browser, concurrency, and build; optional unused
+  long-poll, declarations/docs, and separately authorized Replay were explicitly waived.
+- Replay: N/A (server transport adapter) + mitigation: real-emulator protocol transcript,
+  request-budget proof, canary scan, reconnect matrix, independent disconnect attacks, and
+  demonstrated timer-detector sensitivity. Lifecycle remains `refuted` pending source
+  alias coverage and strict malformed-retry rejection with red controls.

@@ -998,6 +998,17 @@ test("source guard rejects an adapter bypass while allowing the application API"
   assert.deepEqual(
     analyzeDurableStreamsAccess(
       `
+        export function applicationApiFetch() {
+          return globalThis.fetch;
+        }
+      `,
+      "public/application-api.js",
+    ).map((violation) => violation.kind),
+    ["network-capability-export"],
+  );
+  assert.deepEqual(
+    analyzeDurableStreamsAccess(
+      `
         export function rawNetwork() {
           return () => globalThis.fetch;
         }

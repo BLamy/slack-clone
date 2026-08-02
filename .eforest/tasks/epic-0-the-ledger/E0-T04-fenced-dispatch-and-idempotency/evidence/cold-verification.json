@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T04",
+  "runId": "e0-t04-final",
+  "implementationCommit": "0923df1ea4e7829a44582b6a6aabd36a20ee1606",
+  "implementationTreeCleanAtStart": true,
+  "result": "PASS",
+  "artifactRoot": "/Users/brettlamy/Dev/slack-clone/.artifacts/e0-t04/e0-t04-final",
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "durationMs": 1452,
+      "name": "format",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "durationMs": 1377,
+      "name": "lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "durationMs": 3672,
+      "name": "static-analysis",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "durationMs": 18371,
+      "name": "tests",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test:conformance:e0-t04",
+      "durationMs": 6195,
+      "name": "conformance",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm build",
+      "durationMs": 478,
+      "name": "build",
+      "result": "PASS"
+    }
+  ],
+  "replay": "N/A (server dispatch concurrency contract) + mitigation: real-HTTP race logs, lost-ack recovery, head dumps, and cold-clone verifier",
+  "replayUploadAttempted": false,
+  "externalTunnelAttempted": false,
+  "recordingsUnchanged": true,
+  "conformance": {
+    "concurrency": {
+      "requests": 100,
+      "logicalEvents": 1,
+      "receiptOffsets": [
+        "0000000000000000_0000000000000392"
+      ],
+      "receiptDigests": [
+        "sha256:da1ad185afc631a2f3b6b0df52b3b31a96fd4f5752b7501fdcb9e673d346101f"
+      ]
+    },
+    "conflicts": {
+      "refusalCodes": [
+        "DISPATCH_IDEMPOTENCY_CONFLICT",
+        "DISPATCH_IDEMPOTENCY_CONFLICT",
+        "DISPATCH_IDEMPOTENCY_CONFLICT",
+        "DISPATCH_IDEMPOTENCY_CONFLICT",
+        "DISPATCH_IDEMPOTENCY_CONFLICT"
+      ],
+      "candidateStreamsUnchanged": true
+    },
+    "expectedHeadRace": {
+      "accepted": 1,
+      "staleFenceRefusals": 1,
+      "finalLogicalEvents": 1
+    },
+    "lostAcknowledgement": {
+      "firstRequestReturnedError": true,
+      "recovered": true,
+      "logicalEvents": 1
+    },
+    "authorization": {
+      "revokedActorRefused": "DISPATCH_UNAUTHORIZED",
+      "deletedWorkspaceRefused": "DISPATCH_UNAUTHORIZED",
+      "noCandidateMutation": true
+    },
+    "requestDigestEvidence": {
+      "accepted": "sha256:a4f16ac753603c7504fbc60a0d15d73a027779d8e8394eb4e10d0b2885339e15",
+      "conflictRefusals": [
+        "sha256:a3d4cedb52b3a9df9fcc6a816fa44f341760da7814268c114f9e484ed356a6ec",
+        "sha256:280b9b8c1f4f84c6c03c6f83784e41d100a6130c7996354c0c2041102085db59",
+        "sha256:f3a17ab1c083102d8ec3884252724f644e0671bb545372096876c41d7d978f55",
+        "sha256:c8943b6c7f04bea41612d9a8c92296a44c2e4d1eeb66995619a39ac65eb31c4d",
+        "sha256:05a95faee4c4447ae1c7ecbb0ed39f263f90d537d2b4f69133d556a0254fe870"
+      ],
+      "staleFence": "sha256:520bc25efd9dce124f4e730392cfca4f8746b7a49477187b898571da1db3be97",
+      "lostAckRecovery": "sha256:7d34dc6d3bd2dd75267855fd4642975c58bbccf7839c865662750e0012d35e0a"
+    }
+  }
+}

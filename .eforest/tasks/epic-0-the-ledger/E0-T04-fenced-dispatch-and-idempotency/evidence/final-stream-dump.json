@@ -1,0 +1,189 @@
+{
+  "e0-t04-final-same-key": {
+    "records": [
+      {
+        "logical": "one-event",
+        "value": 7,
+        "dispatch": {
+          "actorId": "pr_ada",
+          "expectedHead": "0000000000000000_0000000000000000",
+          "idempotencyKey": "ik_00000000000000000000000001",
+          "operation": "chat.message.create",
+          "requestDigest": "sha256:a4f16ac753603c7504fbc60a0d15d73a027779d8e8394eb4e10d0b2885339e15",
+          "schemaVersion": 1,
+          "stream": "e0-t04-final-same-key",
+          "workspaceId": "ws_00000000000000000000000001"
+        }
+      }
+    ],
+    "nextOffset": "0000000000000000_0000000000000392",
+    "streamDigest": "sha256:fc96d6571bbc6e7fd0e35765d6202defa9afc15895d5c9259e36762ccc204c75"
+  },
+  "e0-t04-final-conflicts": {
+    "records": [
+      {
+        "value": "original",
+        "dispatch": {
+          "actorId": "pr_ada",
+          "expectedHead": "0000000000000000_0000000000000000",
+          "idempotencyKey": "ik_00000000000000000000000002",
+          "operation": "chat.message.create",
+          "requestDigest": "sha256:805bf557555ebee1b1c253d104711a481eafe696d4f145349d7836494c529388",
+          "schemaVersion": 1,
+          "stream": "e0-t04-final-conflicts",
+          "workspaceId": "ws_00000000000000000000000001"
+        }
+      }
+    ],
+    "nextOffset": "0000000000000000_0000000000000380",
+    "streamDigest": "sha256:2b3fa4c42ff4fe85cec6ac02c419321410cf1ba0e7c362dba813f720bd2ce64b"
+  },
+  "e0-t04-final-conflict-candidate": {
+    "records": [],
+    "nextOffset": "0000000000000000_0000000000000000",
+    "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "e0-t04-final-race": {
+    "records": [
+      {
+        "writer": "b",
+        "dispatch": {
+          "actorId": "pr_ada",
+          "expectedHead": "0000000000000000_0000000000000000",
+          "idempotencyKey": "ik_00000000000000000000000004",
+          "operation": "chat.message.create",
+          "requestDigest": "sha256:782ac36a7d0764e43b8a649742f7ef41cbe4eb0bbaa4932c57399f914f17700c",
+          "schemaVersion": 1,
+          "stream": "e0-t04-final-race",
+          "workspaceId": "ws_00000000000000000000000001"
+        }
+      }
+    ],
+    "nextOffset": "0000000000000000_0000000000000369",
+    "streamDigest": "sha256:5ac03907886f4c8fa24faec6814a3e898456dbc8d32a04c80367ff4a17c43682"
+  },
+  "e0-t04-final-lost-ack": {
+    "records": [
+      {
+        "recovery": "durable",
+        "dispatch": {
+          "actorId": "pr_ada",
+          "expectedHead": "0000000000000000_0000000000000000",
+          "idempotencyKey": "ik_00000000000000000000000005",
+          "operation": "chat.message.create",
+          "requestDigest": "sha256:7d34dc6d3bd2dd75267855fd4642975c58bbccf7839c865662750e0012d35e0a",
+          "schemaVersion": 1,
+          "stream": "e0-t04-final-lost-ack",
+          "workspaceId": "ws_00000000000000000000000001"
+        }
+      }
+    ],
+    "nextOffset": "0000000000000000_0000000000000381",
+    "streamDigest": "sha256:e82dc4fe29547aa3ddf3106384ff032a32bf07089febe3233d453545c11c8c0f"
+  },
+  "e0-t04-final-captured": {
+    "records": [
+      {
+        "advance": true,
+        "dispatch": {
+          "actorId": "pr_ada",
+          "expectedHead": "0000000000000000_0000000000000000",
+          "idempotencyKey": "ik_00000000000000000000000007",
+          "operation": "chat.message.create",
+          "requestDigest": "sha256:2f6215a9d3a3f7b2855129c01db6751b38a959ff79247c0dcb8d473b2cdb086f",
+          "schemaVersion": 1,
+          "stream": "e0-t04-final-captured",
+          "workspaceId": "ws_00000000000000000000000001"
+        }
+      }
+    ],
+    "nextOffset": "0000000000000000_0000000000000375",
+    "streamDigest": "sha256:62f0e461668c115a5c6e549e924b829607df3e7da65e9ff0cf536dca85b2bc6b"
+  },
+  "e0-t04-final-revoked": {
+    "records": [],
+    "nextOffset": "0000000000000000_0000000000000000",
+    "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "e0-t04-final-deleted": {
+    "records": [],
+    "nextOffset": "0000000000000000_0000000000000000",
+    "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "__stream_slack_dispatch_idempotency__": {
+    "records": [
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_ada",
+          "eventDigest": "sha256:da1ad185afc631a2f3b6b0df52b3b31a96fd4f5752b7501fdcb9e673d346101f",
+          "idempotencyKey": "ik_00000000000000000000000001",
+          "nextOffset": "0000000000000000_0000000000000392",
+          "operation": "chat.message.create",
+          "requestDigest": "sha256:a4f16ac753603c7504fbc60a0d15d73a027779d8e8394eb4e10d0b2885339e15",
+          "status": "accepted",
+          "stream": "e0-t04-final-same-key",
+          "workspaceId": "ws_00000000000000000000000001"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_ada",
+          "eventDigest": "sha256:2956263a90a35b6aa8c7b63f374e56ec235064af975fdac001881bd568c025a8",
+          "idempotencyKey": "ik_00000000000000000000000002",
+          "nextOffset": "0000000000000000_0000000000000380",
+          "operation": "chat.message.create",
+          "requestDigest": "sha256:805bf557555ebee1b1c253d104711a481eafe696d4f145349d7836494c529388",
+          "status": "accepted",
+          "stream": "e0-t04-final-conflicts",
+          "workspaceId": "ws_00000000000000000000000001"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_ada",
+          "eventDigest": "sha256:e7f6cc2f809121ba290ccd8fdd97fcbe9f771f947a5c6fb9cd9e2093f24dd561",
+          "idempotencyKey": "ik_00000000000000000000000004",
+          "nextOffset": "0000000000000000_0000000000000369",
+          "operation": "chat.message.create",
+          "requestDigest": "sha256:782ac36a7d0764e43b8a649742f7ef41cbe4eb0bbaa4932c57399f914f17700c",
+          "status": "accepted",
+          "stream": "e0-t04-final-race",
+          "workspaceId": "ws_00000000000000000000000001"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_ada",
+          "eventDigest": "sha256:49b822025302dbae9036a2f11102cd15295ea3db36f143c35239d9c4c5df08c1",
+          "idempotencyKey": "ik_00000000000000000000000005",
+          "nextOffset": "0000000000000000_0000000000000381",
+          "operation": "chat.message.create",
+          "requestDigest": "sha256:7d34dc6d3bd2dd75267855fd4642975c58bbccf7839c865662750e0012d35e0a",
+          "status": "accepted",
+          "stream": "e0-t04-final-lost-ack",
+          "workspaceId": "ws_00000000000000000000000001"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_ada",
+          "eventDigest": "sha256:6fc62f6b9ebadbf05efc5815607002bbee79b5722ba1a01367680c713aed1f53",
+          "idempotencyKey": "ik_00000000000000000000000007",
+          "nextOffset": "0000000000000000_0000000000000375",
+          "operation": "chat.message.create",
+          "requestDigest": "sha256:2f6215a9d3a3f7b2855129c01db6751b38a959ff79247c0dcb8d473b2cdb086f",
+          "status": "accepted",
+          "stream": "e0-t04-final-captured",
+          "workspaceId": "ws_00000000000000000000000001"
+        }
+      }
+    ],
+    "nextOffset": "0000000000000000_0000000000002367",
+    "streamDigest": "sha256:0b4397b5cc2004864ad7e779c336d7c5f07950c6d77cf1c8768e2bdd7daf5f6c"
+  }
+}

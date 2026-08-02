@@ -3,7 +3,7 @@ id: E0-T04
 epic: 0
 title: "Fenced dispatch and idempotent application writes"
 priority: 4
-status: in-progress
+status: implemented
 depends_on: [E0-T03]
 estimate: L
 capstone: false
@@ -67,3 +67,35 @@ key cannot be replayed for different content.
 - E0-T03 is verified at the exact published queue head, so E0-T04 is now the sole
   eligible gate. This ticket owns the dispatch door, idempotency identity, producer
   fencing, lost-ack recovery, and real-HTTP race harness; E0-T05 remains blocked.
+
+### Builder — 2026-08-02 — fenced dispatch implementation
+
+- Exact implementation commit: `0923df1ea4e7829a44582b6a6aabd36a20ee1606`.
+- The new `src/ledger/dispatch.mjs` validates strict request and receipt schemas,
+  computes the canonical request digest, re-authorizes every attempt, persists accepted
+  receipts to the durable idempotency stream, and recovers target events when the local
+  acknowledgement is lost. Chat message and edit writes are composed through this door.
+- The official adapter now exposes coordinated appends. It sends the exact expected head
+  through `Stream-Seq` and producer `(id, epoch, seq)` headers, maps provider conflicts to
+  typed adapter errors, and treats a producer duplicate `204` as a durable-head recovery.
+- `make verify-E0-T04` passed from the clean exact-head tree with zero skipped gates:
+  `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (53 unit tests and 5
+  browser tests), `pnpm test:conformance:e0-t04`, and `pnpm build`.
+- Real HTTP/emulator evidence is committed in `evidence/cold-verification.json`,
+  `evidence/dispatch-conformance.json`, `evidence/final-stream-dump.json`, and
+  `evidence/request-transcript.json`. One hundred concurrent requests produced one
+  logical event with shared receipt offset
+  `0000000000000000_0000000000000392` and event digest
+  `sha256:da1ad185afc631a2f3b6b0df52b3b31a96fd4f5752b7501fdcb9e673d346101f`; the race
+  harness observed one accepted append and one stable stale-fence refusal; lost-ack
+  recovery observed one durable target event; validation, revocation, deletion, and key
+  conflicts left candidate heads unchanged. Provider transcript records expected-head and
+  producer headers on every coordinated POST.
+- Replay: N/A (server dispatch concurrency contract) + mitigation: real-HTTP race logs,
+  provider header transcript, lost-ack recovery, byte-level head/digest dumps, and the
+  cold-clone verifier. No Replay upload, tunnel, or existing recording mutation occurred.
+- Claim: at the exact implementation commit, no application message or edit append can
+  bypass dispatch; canonical scope/payload reuse is idempotent, conflicting reuse and
+  stale expected heads fail closed, provider fencing prevents the losing writer from
+  mutating later, and a lost local acknowledgement can be reconstructed from durable
+  stream facts. A fresh critic must now test that claim against the exact diff and evidence.

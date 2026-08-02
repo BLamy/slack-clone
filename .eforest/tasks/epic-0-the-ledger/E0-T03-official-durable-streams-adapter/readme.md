@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: refuted
+status: in-progress
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -800,3 +800,13 @@ VERDICT: refuted
   cloned-response proof, source controls, and reconnect matrix`; upload and tunnel flags
   were false, recordings were unchanged, and no Replay command was run. E0-T04 remains
   blocked.
+
+### Builder repair 6 — 2026-08-01
+
+- Repair target: add interprocedural capability flow for higher-order parameters,
+  callback and collection extraction, object/class factories, reflective and borrowed
+  invocation, default/rest parameters, and mixed target expressions. Replace the
+  literal-only application-API exemption with structural target provenance so variable
+  and all-application conditional targets stay allowed while any provider-capable branch
+  is rejected. Promote the sixth critic's complete 22-case matrix and full-gate
+  higher-order bypass into required red/green controls.

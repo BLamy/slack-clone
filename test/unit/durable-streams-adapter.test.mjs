@@ -199,6 +199,48 @@ test("adapter rejects malformed offsets, bodies, content types, and committed-st
     store.close();
   });
 
+  await t.test("wrong live content type terminates the follow", async () => {
+    let liveRequests = 0;
+    const fetchFn = async (input, init = {}) => {
+      if (init.method === "HEAD") return existsHead();
+      const url = new URL(String(input));
+      if (url.searchParams.get("live") !== "sse") {
+        return jsonResponse("[]", ZERO);
+      }
+      liveRequests += 1;
+      return new Response("[]", {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    };
+    const store = createStore(fetchFn, {
+      initialDelay: 0,
+      maxDelay: 0,
+      multiplier: 1,
+      maxRetries: 0,
+    });
+    const follow = await store.follow("bad-live-content-type", ZERO, {
+      onBatch() {},
+    });
+    let timeout;
+    const terminal = Promise.race([
+      follow.closed,
+      new Promise((_, reject) => {
+        timeout = setTimeout(
+          () => reject(new Error("follow.closed did not settle")),
+          500,
+        );
+      }),
+    ]);
+    try {
+      await assert.rejects(terminal, adapterError("CONTENT_TYPE_MISMATCH"));
+    } finally {
+      clearTimeout(timeout);
+      store.close();
+    }
+    assert.equal(liveRequests, 1);
+  });
+
   await t.test("malformed JSON body", async () => {
     const fetchFn = sequenceFetch([
       existsHead(),
@@ -699,6 +741,175 @@ test("source guard rejects an adapter bypass while allowing the application API"
         await send(durableStreamsUrl + "/rooms/demo/messages");
       `,
     ],
+    [
+      "reflect-apply-alias",
+      `
+        const invoke = Reflect.apply;
+        const durableStreamsUrl = "http://streams.invalid";
+        await invoke(globalThis.fetch, globalThis, [
+          durableStreamsUrl + "/rooms/demo/messages",
+        ]);
+      `,
+    ],
+    [
+      "bound-reflect-apply-alias",
+      `
+        const invoke = Reflect.apply.bind(Reflect);
+        const streamOrigin = "http://streams.invalid";
+        await invoke(globalThis.fetch, globalThis, [
+          streamOrigin + "/rooms/demo/messages",
+        ]);
+      `,
+    ],
+    [
+      "call-alias",
+      `
+        const invoke = Function.prototype.call.bind(globalThis.fetch);
+        const streamOrigin = "http://streams.invalid";
+        await invoke(streamOrigin + "/rooms/demo/messages");
+      `,
+    ],
+    [
+      "apply-alias",
+      `
+        const invoke = Function.prototype.apply.bind(
+          globalThis.fetch,
+          globalThis,
+        );
+        const streamOrigin = "http://streams.invalid";
+        await invoke([streamOrigin + "/rooms/demo/messages"]);
+      `,
+    ],
+    [
+      "forward-nested-wrapper",
+      `
+        function send(...args) {
+          return nested(...args);
+        }
+        function nested(...args) {
+          return globalThis.fetch(...args);
+        }
+        const durableStreamsUrl = "http://streams.invalid";
+        await send(durableStreamsUrl + "/rooms/demo/messages");
+      `,
+    ],
+    [
+      "higher-order-wrapper",
+      `
+        const wrap = (callable) => (...args) => callable(...args);
+        const send = wrap(globalThis.fetch);
+        const durableStreamsUrl = "http://streams.invalid";
+        await send(durableStreamsUrl + "/rooms/demo/messages");
+      `,
+    ],
+    [
+      "aliased-member-container",
+      `
+        const transport = { send: globalThis.fetch };
+        const alias = transport;
+        const durableStreamsUrl = "http://streams.invalid";
+        await alias.send(durableStreamsUrl + "/rooms/demo/messages");
+      `,
+    ],
+    [
+      "reverse-aliased-member-container",
+      `
+        const transport = {};
+        const alias = transport;
+        alias.send = globalThis.fetch;
+        const durableStreamsUrl = "http://streams.invalid";
+        await transport.send(durableStreamsUrl + "/rooms/demo/messages");
+      `,
+    ],
+    [
+      "nested-object-member",
+      `
+        const transport = {
+          nested: { send: globalThis.fetch },
+        };
+        const streamOrigin = "http://streams.invalid";
+        await transport.nested.send(streamOrigin + "/rooms/demo/messages");
+      `,
+    ],
+    [
+      "array-member",
+      `
+        const transports = [globalThis.fetch];
+        const streamOrigin = "http://streams.invalid";
+        await transports[0](streamOrigin + "/rooms/demo/messages");
+      `,
+    ],
+    [
+      "array-destructuring",
+      `
+        const transports = [globalThis.fetch];
+        const [send] = transports;
+        const streamOrigin = "http://streams.invalid";
+        await send(streamOrigin + "/rooms/demo/messages");
+      `,
+    ],
+    [
+      "object-destructuring",
+      `
+        const transport = { send: globalThis.fetch };
+        const { send } = transport;
+        const streamOrigin = "http://streams.invalid";
+        await send(streamOrigin + "/rooms/demo/messages");
+      `,
+    ],
+    [
+      "class-static-field",
+      `
+        class Transport {
+          static send = globalThis.fetch;
+        }
+        const streamOrigin = "http://streams.invalid";
+        await Transport.send(streamOrigin + "/rooms/demo/messages");
+      `,
+    ],
+    [
+      "class-static-method",
+      `
+        class Transport {
+          static send(...args) {
+            return globalThis.fetch(...args);
+          }
+        }
+        const streamOrigin = "http://streams.invalid";
+        await Transport.send(streamOrigin + "/rooms/demo/messages");
+      `,
+    ],
+    [
+      "class-instance-field",
+      `
+        class Transport {
+          send = globalThis.fetch;
+        }
+        const transport = new Transport();
+        const streamOrigin = "http://streams.invalid";
+        await transport.send(streamOrigin + "/rooms/demo/messages");
+      `,
+    ],
+    [
+      "dynamic-computed-fetch",
+      `
+        const method = Math.random() > -1 ? "fetch" : "request";
+        const durableStreamsUrl = "http://streams.invalid";
+        await globalThis[method](
+          durableStreamsUrl + "/rooms/demo/messages",
+        );
+      `,
+    ],
+    [
+      "dynamic-computed-provider",
+      `
+        const config = {
+          endpoint: "http://streams.invalid/rooms/demo/messages",
+        };
+        const key = "endpoint";
+        await globalThis.fetch(config[key]);
+      `,
+    ],
   ];
   for (const [name, source] of callableBypasses) {
     assert.deepEqual(
@@ -724,6 +935,20 @@ test("source guard rejects an adapter bypass while allowing the application API"
     "wrapped-browser-client.mjs",
   );
   assert.deepEqual(wrappedApplicationApi, []);
+
+  const declaredApplicationApi = analyzeDurableStreamsAccess(
+    `
+      await sendMessage("hello");
+      async function sendMessage(text) {
+        return fetch(\`/api/rooms/demo/messages\`, {
+          method: "POST",
+          body: JSON.stringify({ text }),
+        });
+      }
+    `,
+    "declared-browser-client.mjs",
+  );
+  assert.deepEqual(declaredApplicationApi, []);
 });
 
 function createStore(fetchFn, backoffOptions) {

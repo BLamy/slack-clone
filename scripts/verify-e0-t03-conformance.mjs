@@ -191,6 +191,7 @@ try {
   assert.equal(pollingPositiveControl.pollingTimerExecutions, 2_571);
   const malformedRetryAfter = await verifyMalformedRetryAfter();
   const redirectBoundary = await verifyRedirectBoundary();
+  const wrongLiveMedia = await verifyWrongLiveMedia();
 
   const allAccepted = [...accepted, liveRecord, secondLiveRecord];
   const allOffsets = [
@@ -249,7 +250,11 @@ try {
       activeFollowers: diagnosticsAfterCancel.activeFollowers,
       pendingIdleWaiters: diagnosticsAfterCancel.pendingIdleWaiters,
     },
-    strictTransport: { malformedRetryAfter, redirectBoundary },
+    strictTransport: {
+      malformedRetryAfter,
+      redirectBoundary,
+      wrongLiveMedia,
+    },
     requestTranscript: transcript,
   };
   requestBudget = {
@@ -436,6 +441,79 @@ function createRetryStore({ checkpoint, retryAfter, onGet }) {
   });
 }
 
+async function verifyWrongLiveMedia() {
+  const checkpoint = "opaque-live-media-checkpoint";
+  let liveRequests = 0;
+  const mediaStore = createDurableStreamsStore({
+    baseUrl: "http://streams.invalid",
+    token: "protocol-double-token",
+    digestRecords: canonicalSha256,
+    backoffOptions: {
+      initialDelay: 0,
+      maxDelay: 0,
+      multiplier: 1,
+      maxRetries: 0,
+    },
+    fetchFn: async (input, init = {}) => {
+      if (init.method === "HEAD") {
+        return new Response(null, {
+          status: 200,
+          headers: { "Stream-Next-Offset": checkpoint },
+        });
+      }
+      const url = new URL(String(input));
+      if (url.searchParams.get("live") !== "sse") {
+        return new Response("[]", {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+            "Stream-Next-Offset": checkpoint,
+            "Stream-Up-To-Date": "true",
+          },
+        });
+      }
+      liveRequests += 1;
+      return new Response("[]", {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    },
+  });
+  let timeout;
+  try {
+    const follow = await mediaStore.follow("strict-live-media", checkpoint, {
+      onBatch() {},
+    });
+    let observed;
+    try {
+      await Promise.race([
+        follow.closed,
+        new Promise((_, reject) => {
+          timeout = setTimeout(
+            () => reject(new Error("follow.closed did not settle")),
+            1_000,
+          );
+        }),
+      ]);
+    } catch (error) {
+      observed = error;
+    }
+    assert.equal(observed?.code, "CONTENT_TYPE_MISMATCH");
+    assert.equal(observed?.status, 200);
+    assert.equal(liveRequests, 1);
+    return {
+      responseContentType: "application/json",
+      rejectionCode: observed.code,
+      responseStatus: observed.status,
+      liveRequests,
+      closedSettled: true,
+    };
+  } finally {
+    clearTimeout(timeout);
+    mediaStore.close();
+  }
+}
+
 async function verifyRedirectBoundary() {
   let sourceRequests = 0;
   let targetRequests = 0;
@@ -548,6 +626,120 @@ function verifySourceAuditSensitivity() {
       const send = runtime[\`fetch\`];
       const durableStreamsUrl = "http://streams.invalid";
       send(durableStreamsUrl + "/rooms/template/messages");
+    `,
+    reflectApplyAlias: `
+      const invoke = Reflect.apply;
+      const streamOrigin = "http://streams.invalid";
+      invoke(globalThis.fetch, globalThis, [
+        streamOrigin + "/rooms/reflect-alias/messages",
+      ]);
+    `,
+    boundReflectApplyAlias: `
+      const invoke = Reflect.apply.bind(Reflect);
+      const streamOrigin = "http://streams.invalid";
+      invoke(globalThis.fetch, globalThis, [
+        streamOrigin + "/rooms/bound-reflect/messages",
+      ]);
+    `,
+    callAlias: `
+      const invoke = Function.prototype.call.bind(globalThis.fetch);
+      const streamOrigin = "http://streams.invalid";
+      invoke(streamOrigin + "/rooms/call-alias/messages");
+    `,
+    applyAlias: `
+      const invoke = Function.prototype.apply.bind(
+        globalThis.fetch,
+        globalThis,
+      );
+      const streamOrigin = "http://streams.invalid";
+      invoke([streamOrigin + "/rooms/apply-alias/messages"]);
+    `,
+    forwardNestedWrapper: `
+      function send(...args) {
+        return nested(...args);
+      }
+      function nested(...args) {
+        return globalThis.fetch(...args);
+      }
+      const streamOrigin = "http://streams.invalid";
+      send(streamOrigin + "/rooms/forward-wrapper/messages");
+    `,
+    higherOrderWrapper: `
+      const wrap = (callable) => (...args) => callable(...args);
+      const send = wrap(globalThis.fetch);
+      const streamOrigin = "http://streams.invalid";
+      send(streamOrigin + "/rooms/higher-order/messages");
+    `,
+    aliasedMemberContainer: `
+      const transport = { send: globalThis.fetch };
+      const alias = transport;
+      const streamOrigin = "http://streams.invalid";
+      alias.send(streamOrigin + "/rooms/aliased-member/messages");
+    `,
+    reverseAliasedMemberContainer: `
+      const transport = {};
+      const alias = transport;
+      alias.send = globalThis.fetch;
+      const streamOrigin = "http://streams.invalid";
+      transport.send(streamOrigin + "/rooms/reverse-alias/messages");
+    `,
+    nestedObjectMember: `
+      const transport = { nested: { send: globalThis.fetch } };
+      const streamOrigin = "http://streams.invalid";
+      transport.nested.send(streamOrigin + "/rooms/nested-member/messages");
+    `,
+    arrayMember: `
+      const transports = [globalThis.fetch];
+      const streamOrigin = "http://streams.invalid";
+      transports[0](streamOrigin + "/rooms/array-member/messages");
+    `,
+    arrayDestructuring: `
+      const transports = [globalThis.fetch];
+      const [send] = transports;
+      const streamOrigin = "http://streams.invalid";
+      send(streamOrigin + "/rooms/array-destructuring/messages");
+    `,
+    objectDestructuring: `
+      const transport = { send: globalThis.fetch };
+      const { send } = transport;
+      const streamOrigin = "http://streams.invalid";
+      send(streamOrigin + "/rooms/object-destructuring/messages");
+    `,
+    classStaticField: `
+      class Transport {
+        static send = globalThis.fetch;
+      }
+      const streamOrigin = "http://streams.invalid";
+      Transport.send(streamOrigin + "/rooms/static-field/messages");
+    `,
+    classStaticMethod: `
+      class Transport {
+        static send(...args) {
+          return globalThis.fetch(...args);
+        }
+      }
+      const streamOrigin = "http://streams.invalid";
+      Transport.send(streamOrigin + "/rooms/static-method/messages");
+    `,
+    classInstanceField: `
+      class Transport {
+        send = globalThis.fetch;
+      }
+      const transport = new Transport();
+      const streamOrigin = "http://streams.invalid";
+      transport.send(streamOrigin + "/rooms/instance-field/messages");
+    `,
+    dynamicComputedFetch: `
+      const method = Math.random() > -1 ? "fetch" : "request";
+      const streamOrigin = "http://streams.invalid";
+      globalThis[method](streamOrigin + "/rooms/dynamic-fetch/messages");
+    `,
+    dynamicComputedProvider: `
+      const config = {
+        endpoint: "http://streams.invalid/rooms/dynamic-provider/messages",
+      };
+      const key = "endpoint";
+      globalThis.fetch(config[key]);
     `,
   };
   const detections = Object.fromEntries(

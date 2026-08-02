@@ -27,17 +27,21 @@ const NETWORK_METHODS = new Set([
 
 export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
   const violations = [];
-  const providerIdentifiers = new Set();
+  const providerReferences = new Set();
   const network = {
     containers: new Set(["globalThis", "self", "window"]),
     identifiers: new Set(["fetch"]),
+    invokers: new Set(["Reflect.apply"]),
     members: new Set(),
+    taintedContainers: new Set(),
   };
   let sourceCode;
   const captureRule = {
     meta: { type: "problem", schema: [] },
     create(context) {
       sourceCode = context.sourceCode;
+      const aliases = [];
+      const calls = [];
       return {
         ImportDeclaration(node) {
           captureOfficialClientImport(node.source, node.loc.start.line);
@@ -54,32 +58,58 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
           captureOfficialClientImport(node.source, node.loc.start.line);
         },
         VariableDeclarator(node) {
-          captureAliases(node.id, node.init, node);
+          aliases.push({
+            pattern: node.id,
+            value: node.init,
+            expression: node,
+          });
         },
         FunctionDeclaration(node) {
-          if (node.id && isNetworkReference(node, sourceCode, network)) {
-            network.identifiers.add(node.id.name);
+          if (node.id) {
+            aliases.push({ pattern: node.id, value: node, expression: node });
+          }
+        },
+        ClassDeclaration(node) {
+          if (node.id) {
+            aliases.push({ pattern: node.id, value: node, expression: node });
           }
         },
         AssignmentExpression(node) {
           if (node.operator === "=") {
-            captureAliases(node.left, node.right, node);
+            aliases.push({
+              pattern: node.left,
+              value: node.right,
+              expression: node,
+            });
           }
         },
         CallExpression(node) {
-          const invocation = describeNetworkCall(node, sourceCode, network);
-          if (!invocation) return;
-          for (const target of networkCallTargets(node, invocation)) {
-            if (
-              referencesProvider(target, sourceCode, providerIdentifiers) &&
-              !isApplicationApiReference(target, sourceCode)
-            ) {
-              violations.push({
-                kind: "direct-provider-network",
-                line: node.loc.start.line,
-                message: `calls Durable Streams directly via ${sourceCode.getText(node.callee)}`,
-              });
-              break;
+          calls.push(node);
+        },
+        "Program:exit"() {
+          let previousFactCount = -1;
+          while (previousFactCount !== factCount()) {
+            previousFactCount = factCount();
+            for (const { pattern, value, expression } of aliases) {
+              captureAliases(pattern, value, expression);
+            }
+          }
+
+          for (const node of calls) {
+            const invocation = describeNetworkCall(node, sourceCode, network);
+            if (!invocation) continue;
+            for (const target of networkCallTargets(node, invocation)) {
+              if (
+                referencesProvider(target, sourceCode, providerReferences) &&
+                !isApplicationApiReference(target, sourceCode)
+              ) {
+                violations.push({
+                  kind: "direct-provider-network",
+                  line: node.loc.start.line,
+                  message: `calls Durable Streams directly via ${sourceCode.getText(node.callee)}`,
+                });
+                break;
+              }
             }
           }
         },
@@ -96,13 +126,22 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
 
       function captureAliases(pattern, value, expression) {
         if (!value) return;
-        if (referencesProvider(expression, sourceCode, providerIdentifiers)) {
-          for (const identifier of patternIdentifiers(pattern)) {
-            providerIdentifiers.add(identifier);
-          }
+        if (referencesProvider(expression, sourceCode, providerReferences)) {
+          captureProviderAliases(pattern, providerReferences);
         }
         captureNetworkContainerAliases(pattern, value, network.containers);
         captureNetworkAliases(pattern, value, sourceCode, network);
+      }
+
+      function factCount() {
+        return (
+          providerReferences.size +
+          network.containers.size +
+          network.identifiers.size +
+          network.invokers.size +
+          network.members.size +
+          network.taintedContainers.size
+        );
       }
     },
   };
@@ -197,11 +236,23 @@ export async function auditDurableStreamsAccess({
   };
 }
 
-function referencesProvider(node, sourceCode, providerIdentifiers) {
+function captureProviderAliases(pattern, providerReferences) {
+  for (const identifier of patternIdentifiers(pattern)) {
+    providerReferences.add(identifier);
+  }
+  const target = unwrapChain(pattern);
+  if (target.type !== "MemberExpression") return;
+  const reference = memberReference(target);
+  const container = memberReference(target.object);
+  if (reference) providerReferences.add(reference);
+  if (container) providerReferences.add(container);
+}
+
+function referencesProvider(node, sourceCode, providerReferences) {
   const text = sourceCode.getText(node);
   if (PROVIDER_REFERENCE.test(text)) return true;
-  return [...providerIdentifiers].some((identifier) =>
-    new RegExp(`\\b${escapeRegExp(identifier)}\\b`, "u").test(text),
+  return [...providerReferences].some((reference) =>
+    new RegExp(`\\b${escapeRegExp(reference)}\\b`, "u").test(text),
   );
 }
 
@@ -229,6 +280,9 @@ function describeNetworkCall(node, sourceCode, network) {
       return method;
     }
   }
+  if (isNetworkInvokerReference(callee, sourceCode, network)) {
+    return "indirect";
+  }
   return isNetworkReference(callee, sourceCode, network) ? "direct" : null;
 }
 
@@ -241,6 +295,9 @@ function networkCallTargets(node, invocation) {
   }
   if (invocation === "reflect-apply") {
     return appliedTargets(node.arguments[2]);
+  }
+  if (invocation === "indirect") {
+    return node.arguments;
   }
   return node.arguments[0] ? [node.arguments[0]] : [];
 }
@@ -276,17 +333,46 @@ function isNetworkReference(node, sourceCode, network) {
   if (
     expression.type === "ArrowFunctionExpression" ||
     expression.type === "FunctionExpression" ||
-    expression.type === "FunctionDeclaration"
+    expression.type === "FunctionDeclaration" ||
+    expression.type === "ClassExpression" ||
+    expression.type === "ClassDeclaration"
   ) {
-    return containsNetworkInvocation(expression.body, sourceCode, network);
+    return containsProviderCapableNetworkUse(
+      expression.body,
+      sourceCode,
+      network,
+    );
   }
   if (expression.type === "CallExpression") {
     const callee = unwrapChain(expression.callee);
-    return (
+    if (
       callee.type === "MemberExpression" &&
       memberPropertyName(callee) === "bind" &&
       isNetworkReference(callee.object, sourceCode, network)
+    ) {
+      return true;
+    }
+    return (
+      expression.arguments.some((argument) =>
+        isNetworkReference(argument, sourceCode, network),
+      ) ||
+      (expression.arguments.length === 0 &&
+        isNetworkReference(callee, sourceCode, network))
     );
+  }
+  if (expression.type === "NewExpression") {
+    return (
+      isNetworkReference(expression.callee, sourceCode, network) ||
+      expression.arguments.some((argument) =>
+        isNetworkReference(argument, sourceCode, network),
+      )
+    );
+  }
+  if (
+    expression.type === "ObjectExpression" ||
+    expression.type === "ArrayExpression"
+  ) {
+    return containsNetworkReference(expression, sourceCode, network);
   }
   if (expression.type === "Identifier") {
     return (
@@ -296,11 +382,23 @@ function isNetworkReference(node, sourceCode, network) {
   }
   if (expression.type !== "MemberExpression") return false;
   const reference = memberReference(expression);
-  if (reference && network.members.has(reference)) return true;
+  if (
+    reference &&
+    (network.members.has(reference) || network.invokers.has(reference))
+  ) {
+    return true;
+  }
   const property = memberPropertyName(expression);
+  if (isTaintedNetworkContainer(expression.object, network)) return true;
+  if (
+    (property === "bind" || property === "call" || property === "apply") &&
+    isNetworkReference(expression.object, sourceCode, network)
+  ) {
+    return true;
+  }
   return (
-    typeof property === "string" &&
-    /^(?:fetch|request)$/iu.test(property) &&
+    ((typeof property === "string" && /^(?:fetch|request)$/iu.test(property)) ||
+      (expression.computed && property === null)) &&
     (isNetworkContainerReference(expression.object, network.containers) ||
       /(?:axios|client|fetch|globalThis|http|request|undici)/iu.test(
         sourceCode.getText(expression.object),
@@ -308,13 +406,58 @@ function isNetworkReference(node, sourceCode, network) {
   );
 }
 
-function containsNetworkInvocation(node, sourceCode, network) {
+function containsNetworkReference(node, sourceCode, network) {
+  if (!node || typeof node !== "object") return false;
+  for (const [key, value] of Object.entries(node)) {
+    if (
+      key === "parent" ||
+      key === "loc" ||
+      key === "range" ||
+      key === "tokens" ||
+      key === "comments"
+    ) {
+      continue;
+    }
+    if (Array.isArray(value)) {
+      if (
+        value.some(
+          (item) =>
+            item &&
+            (isNetworkReference(item, sourceCode, network) ||
+              containsNetworkReference(item, sourceCode, network)),
+        )
+      ) {
+        return true;
+      }
+    } else if (
+      value &&
+      typeof value === "object" &&
+      (isNetworkReference(value, sourceCode, network) ||
+        containsNetworkReference(value, sourceCode, network))
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function containsProviderCapableNetworkUse(node, sourceCode, network) {
   if (!node || typeof node !== "object") return false;
   if (
-    node.type === "CallExpression" &&
-    describeNetworkCall(node, sourceCode, network)
+    (node.type === "Identifier" || node.type === "MemberExpression") &&
+    isNetworkReference(node, sourceCode, network)
   ) {
     return true;
+  }
+  if (node.type === "CallExpression") {
+    const invocation = describeNetworkCall(node, sourceCode, network);
+    if (invocation) {
+      const targets = networkCallTargets(node, invocation);
+      return (
+        targets.length === 0 ||
+        targets.some((target) => !isApplicationApiReference(target, sourceCode))
+      );
+    }
   }
   for (const [key, value] of Object.entries(node)) {
     if (
@@ -329,36 +472,121 @@ function containsNetworkInvocation(node, sourceCode, network) {
     if (Array.isArray(value)) {
       if (
         value.some((item) =>
-          containsNetworkInvocation(item, sourceCode, network),
+          containsProviderCapableNetworkUse(item, sourceCode, network),
         )
       ) {
         return true;
       }
-    } else if (containsNetworkInvocation(value, sourceCode, network)) {
+    } else if (
+      value &&
+      typeof value === "object" &&
+      containsProviderCapableNetworkUse(value, sourceCode, network)
+    ) {
       return true;
     }
   }
   return false;
 }
 
+function isNetworkInvokerReference(node, sourceCode, network) {
+  const expression = unwrapChain(node);
+  if (expression.type === "AwaitExpression") {
+    return isNetworkInvokerReference(expression.argument, sourceCode, network);
+  }
+  if (expression.type === "SequenceExpression") {
+    return expression.expressions.some((item) =>
+      isNetworkInvokerReference(item, sourceCode, network),
+    );
+  }
+  if (expression.type === "ConditionalExpression") {
+    return (
+      isNetworkInvokerReference(expression.consequent, sourceCode, network) ||
+      isNetworkInvokerReference(expression.alternate, sourceCode, network)
+    );
+  }
+  if (expression.type === "LogicalExpression") {
+    return (
+      isNetworkInvokerReference(expression.left, sourceCode, network) ||
+      isNetworkInvokerReference(expression.right, sourceCode, network)
+    );
+  }
+  if (expression.type === "CallExpression") {
+    const callee = unwrapChain(expression.callee);
+    return (
+      callee.type === "MemberExpression" &&
+      memberPropertyName(callee) === "bind" &&
+      isNetworkInvokerReference(callee.object, sourceCode, network)
+    );
+  }
+  const reference = memberReference(expression);
+  if (reference && network.invokers.has(reference)) return true;
+  if (expression.type === "Identifier") {
+    return network.invokers.has(expression.name);
+  }
+  if (expression.type !== "MemberExpression") return false;
+  const method = memberPropertyName(expression);
+  return (
+    (method === "call" || method === "apply") &&
+    isNetworkReference(expression.object, sourceCode, network)
+  );
+}
+
 function captureNetworkAliases(pattern, value, sourceCode, network) {
   const target = unwrapChain(pattern);
+  const networkValue = isNetworkReference(value, sourceCode, network);
+  const invokerValue = isNetworkInvokerReference(value, sourceCode, network);
+  const containerValue = isNetworkContainerValue(value, sourceCode, network);
   if (target.type === "Identifier") {
     captureObjectNetworkMembers(target.name, value, sourceCode, network);
-    if (isNetworkReference(value, sourceCode, network)) {
+    if (networkValue) {
       network.identifiers.add(target.name);
+    }
+    if (invokerValue) network.invokers.add(target.name);
+    if (containerValue) {
+      network.containers.add(target.name);
+      network.taintedContainers.add(target.name);
+    }
+    if (network.taintedContainers.has(target.name)) {
+      const sourceContainer = memberReference(value);
+      if (sourceContainer) {
+        network.containers.add(sourceContainer);
+        network.taintedContainers.add(sourceContainer);
+        if (value.type === "Identifier") {
+          network.identifiers.add(value.name);
+        }
+      }
     }
     return;
   }
   if (target.type === "MemberExpression") {
     const reference = memberReference(target);
-    if (reference && isNetworkReference(value, sourceCode, network)) {
+    const container = memberReference(target.object);
+    if (reference && networkValue) {
       network.members.add(reference);
+    }
+    if (reference && invokerValue) network.invokers.add(reference);
+    if (container && (networkValue || containerValue)) {
+      network.containers.add(container);
+      network.taintedContainers.add(container);
     }
     return;
   }
   if (target.type === "AssignmentPattern") {
     captureNetworkAliases(target.left, value, sourceCode, network);
+    return;
+  }
+  if (
+    (target.type === "ObjectPattern" || target.type === "ArrayPattern") &&
+    (networkValue || containerValue)
+  ) {
+    for (const identifier of patternIdentifiers(target)) {
+      network.identifiers.add(identifier);
+      if (containerValue) {
+        network.containers.add(identifier);
+        network.taintedContainers.add(identifier);
+      }
+      if (invokerValue) network.invokers.add(identifier);
+    }
     return;
   }
   if (target.type !== "ObjectPattern") return;
@@ -382,6 +610,33 @@ function captureNetworkAliases(pattern, value, sourceCode, network) {
       network.identifiers.add(identifier);
     }
   }
+}
+
+function isNetworkContainerValue(node, sourceCode, network) {
+  const expression = unwrapChain(node);
+  if (
+    expression.type === "ObjectExpression" ||
+    expression.type === "ArrayExpression" ||
+    expression.type === "ClassExpression" ||
+    expression.type === "ClassDeclaration"
+  ) {
+    return isNetworkReference(expression, sourceCode, network);
+  }
+  if (expression.type === "NewExpression") {
+    return isTaintedNetworkContainer(expression.callee, network);
+  }
+  return isTaintedNetworkContainer(expression, network);
+}
+
+function isTaintedNetworkContainer(node, network) {
+  const reference = memberReference(node);
+  if (!reference) return false;
+  for (const container of network.taintedContainers) {
+    if (reference === container || reference.startsWith(`${container}.`)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function captureObjectNetworkMembers(name, value, sourceCode, network) {

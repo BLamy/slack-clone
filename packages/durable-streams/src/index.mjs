@@ -141,7 +141,12 @@ export function createDurableStreamsStore({
           await validateSuccessfulResponse({ method, response, url });
         } catch (error) {
           if (!(error instanceof DurableStreamsAdapterError)) throw error;
-          if (method === "HEAD") throw error;
+          if (
+            method === "HEAD" ||
+            (method === "GET" && url.searchParams.get("live") === "sse")
+          ) {
+            throw error;
+          }
           return protocolErrorResponse(error);
         }
         if (method === "POST") {

@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: refuted
+status: in-progress
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -64,6 +64,14 @@ Streams; higher layers work in domain events and checkpoints.
    guard goes red.
 
 ## Verification log
+
+### Builder — 2026-08-02 — human-directed structural repair reopened
+
+- The ninth independent critic refuted the prior static name-blocklist model because
+  executable `.cjs` files and browser DOM request surfaces were outside the enforced
+  source boundary. This repair reopens E0-T03 to make the audit scope structural and
+  aligned with the files shipped by the build; E0-T04 remains blocked until a fresh
+  critic verifies the repaired boundary.
 
 ### Builder — 2026-08-01
 

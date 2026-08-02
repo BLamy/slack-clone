@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-repair9-cold",
-  "implementationCommit": "fd7fbecf99753f89a2f22d0be366e0b7adb4b4a1",
+  "runId": "e0-t03-repair9-resources",
+  "implementationCommit": "1df738ffcf827cd07113fcf94aec14205d786125",
   "result": "PASS",
   "requestCounter": "HTTP delivery to Durable Streams adapter",
   "logicalIdleDurationMs": 900000,
@@ -10,11 +10,11 @@
   "requestsAfterLogicalAdvance": 2,
   "requestDeltaWhileIdle": 0,
   "frozenTotalRequestCap": 24,
-  "totalRequests": 20,
+  "totalRequests": 19,
   "createRequests": 1,
-  "sseRequests": 6,
-  "requestsAtCancel": 14,
-  "requestsAfterCancellationSettled": 14,
+  "sseRequests": 5,
+  "requestsAtCancel": 13,
+  "requestsAfterCancellationSettled": 13,
   "realEmulatorIdleObservation": {
     "requestsWhenOfficialFollowParked": 7,
     "requestsAfterMicrotaskSettle": 7
@@ -81,7 +81,7 @@
       "GET": 7
     },
     "responsesByStatus": {
-      "200": 7,
+      "200": 6,
       "201": 1,
       "204": 5,
       "404": 1

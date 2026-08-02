@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "implementationCommit": "fd7fbecf99753f89a2f22d0be366e0b7adb4b4a1",
+  "implementationCommit": "1df738ffcf827cd07113fcf94aec14205d786125",
   "result": "PASS",
   "mutations": [
     {
@@ -24,6 +24,20 @@
       "observedExit": 1,
       "detectorWentRed": true,
       "refutation": "source guard rejects the named-process-loader fixture and the full repository audit loses its loader failure"
+    },
+    {
+      "name": "disable-css-resource-regex",
+      "command": "pnpm test:unit",
+      "observedExit": 1,
+      "detectorWentRed": true,
+      "refutation": "the full repository audit loses its stylesheet resource failure"
+    },
+    {
+      "name": "disable-inline-html-script-extraction",
+      "command": "pnpm test:unit",
+      "observedExit": 1,
+      "detectorWentRed": true,
+      "refutation": "the full repository audit loses its inline Worker script failure"
     }
   ],
   "cleanImplementationGates": [

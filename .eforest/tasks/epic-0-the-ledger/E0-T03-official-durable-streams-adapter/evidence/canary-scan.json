@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-repair9-cold",
-  "implementationCommit": "fd7fbecf99753f89a2f22d0be366e0b7adb4b4a1",
+  "runId": "e0-t03-repair9-resources",
+  "implementationCommit": "1df738ffcf827cd07113fcf94aec14205d786125",
   "result": "PASS",
-  "canarySha256": "0506c55621cd2a8f8ddd860333c1f6731be347906b991aa2380d1ce5231b9620",
+  "canarySha256": "c30ec86e16e06604a6af5cb662f04ed142b0af7ce8bd5a72bee225bf64f3aa1c",
   "encodingsScanned": [
     "raw",
     "url-encoded",
@@ -19,7 +19,7 @@
   "categories": {
     "browserAssetsAndApi": {
       "entries": 7,
-      "bytesScanned": 32821,
+      "bytesScanned": 32856,
       "matches": 0
     },
     "logs": {
@@ -29,12 +29,12 @@
     },
     "environmentManifests": {
       "entries": 1,
-      "bytesScanned": 370,
+      "bytesScanned": 375,
       "matches": 0
     },
     "runArtifacts": {
       "entries": 4,
-      "bytesScanned": 27636,
+      "bytesScanned": 27370,
       "matches": 0
     }
   }

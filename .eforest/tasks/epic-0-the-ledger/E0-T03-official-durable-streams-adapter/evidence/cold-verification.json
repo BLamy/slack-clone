@@ -1,59 +1,59 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-repair9-cold",
-  "implementationCommit": "fd7fbecf99753f89a2f22d0be366e0b7adb4b4a1",
+  "runId": "e0-t03-repair9-resources",
+  "implementationCommit": "1df738ffcf827cd07113fcf94aec14205d786125",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
-  "artifactRoot": "/Users/brettlamy/Dev/slack-clone/.artifacts/e0-t03/e0-t03-repair9-cold",
+  "artifactRoot": "/Users/brettlamy/Dev/slack-clone/.artifacts/e0-t03/e0-t03-repair9-resources",
   "gates": [
     {
       "name": "format",
       "command": "pnpm format:check",
       "result": "PASS",
-      "durationMs": 1611
+      "durationMs": 3803
     },
     {
       "name": "lint",
       "command": "pnpm lint",
       "result": "PASS",
-      "durationMs": 1234
+      "durationMs": 4251
     },
     {
       "name": "static-analysis",
       "command": "pnpm typecheck",
       "result": "PASS",
-      "durationMs": 3426
+      "durationMs": 9963
     },
     {
       "name": "unit",
       "command": "pnpm test:unit",
       "result": "PASS",
-      "durationMs": 7595
+      "durationMs": 8438
     },
     {
       "name": "conformance",
       "command": "pnpm test:conformance",
       "result": "PASS",
-      "durationMs": 6757
+      "durationMs": 10404
     },
     {
       "name": "integration",
       "command": "pnpm test:integration",
       "result": "PASS",
-      "durationMs": 15588
+      "durationMs": 14472
     },
     {
       "name": "concurrency",
       "command": "pnpm test:concurrency",
       "result": "PASS",
-      "durationMs": 19035
+      "durationMs": 11925
     },
     {
       "name": "build",
       "command": "pnpm build",
       "result": "PASS",
-      "durationMs": 1564
+      "durationMs": 1027
     }
   ],
   "replay": "N/A (server transport adapter) + mitigation: real-emulator protocol transcript, request-budget proof, canary scan, and reconnect matrix",
@@ -62,11 +62,11 @@
   "recordingsUnchanged": true,
   "conformance": {
     "capturedOffsets": [
-      "0000000000000000_0000000000000091",
-      "0000000000000000_0000000000000183",
-      "0000000000000000_0000000000000274",
-      "0000000000000000_0000000000000389",
-      "0000000000000000_0000000000000510"
+      "0000000000000000_0000000000000096",
+      "0000000000000000_0000000000000193",
+      "0000000000000000_0000000000000289",
+      "0000000000000000_0000000000000409",
+      "0000000000000000_0000000000000535"
     ],
     "resumeMatrix": [
       {
@@ -85,11 +85,11 @@
           "record-live",
           "record-live-2"
         ],
-        "nextOffset": "0000000000000000_0000000000000510",
-        "streamDigest": "sha256:1ab8832942f2a9ecd400ce1ea9c85014e2492c739ede160e4984ed7251dbc3f7"
+        "nextOffset": "0000000000000000_0000000000000535",
+        "streamDigest": "sha256:b806fa177276e46105e866fc41b756e4a3f81d12edd1cc0d1fc3ae4bdbbbd178"
       },
       {
-        "checkpoint": "0000000000000000_0000000000000091",
+        "checkpoint": "0000000000000000_0000000000000096",
         "expectedIds": [
           "record-2",
           "record-3",
@@ -102,11 +102,11 @@
           "record-live",
           "record-live-2"
         ],
-        "nextOffset": "0000000000000000_0000000000000510",
-        "streamDigest": "sha256:7803ce562d5dd1e645db8e961c3549195b96c45c35e877e7d6b247e192b62689"
+        "nextOffset": "0000000000000000_0000000000000535",
+        "streamDigest": "sha256:83cac8b0577b3f6fe20209f6d65774d395713900c021f8adcbefb9d08962e4de"
       },
       {
-        "checkpoint": "0000000000000000_0000000000000183",
+        "checkpoint": "0000000000000000_0000000000000193",
         "expectedIds": [
           "record-3",
           "record-live",
@@ -117,11 +117,11 @@
           "record-live",
           "record-live-2"
         ],
-        "nextOffset": "0000000000000000_0000000000000510",
-        "streamDigest": "sha256:5678d50492cb5c6a12ede5fc3bbd91e8cbf17e1ba1b8b7811b2985039f1df67f"
+        "nextOffset": "0000000000000000_0000000000000535",
+        "streamDigest": "sha256:c0f14151f3e7e13aed2db567e6997809a912f01d37898f74c19cdd5a99d68dd6"
       },
       {
-        "checkpoint": "0000000000000000_0000000000000274",
+        "checkpoint": "0000000000000000_0000000000000289",
         "expectedIds": [
           "record-live",
           "record-live-2"
@@ -130,33 +130,33 @@
           "record-live",
           "record-live-2"
         ],
-        "nextOffset": "0000000000000000_0000000000000510",
-        "streamDigest": "sha256:8b121fd7b2694d427a7bf3e2700f6c6b871af92752e262ddaa63d6c3e4d5372f"
+        "nextOffset": "0000000000000000_0000000000000535",
+        "streamDigest": "sha256:0e3c55f6e35610532cf138b0ddaf566415cd08f5dcea4b02527b315850602d4e"
       },
       {
-        "checkpoint": "0000000000000000_0000000000000389",
+        "checkpoint": "0000000000000000_0000000000000409",
         "expectedIds": [
           "record-live-2"
         ],
         "observedIds": [
           "record-live-2"
         ],
-        "nextOffset": "0000000000000000_0000000000000510",
-        "streamDigest": "sha256:808a0547efd961e24ff0a27008484cb9f4d2402245f5a20c6fc1c96d265401e7"
+        "nextOffset": "0000000000000000_0000000000000535",
+        "streamDigest": "sha256:e8969b669234d2882be251a94f03b1da05d97087872c8ab80263b8ec5d93c2c7"
       },
       {
-        "checkpoint": "0000000000000000_0000000000000510",
+        "checkpoint": "0000000000000000_0000000000000535",
         "expectedIds": [],
         "observedIds": [],
-        "nextOffset": "0000000000000000_0000000000000510",
+        "nextOffset": "0000000000000000_0000000000000535",
         "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
       }
     ],
     "requestBudget": {
       "schemaVersion": 1,
       "task": "E0-T03",
-      "runId": "e0-t03-repair9-cold",
-      "implementationCommit": "fd7fbecf99753f89a2f22d0be366e0b7adb4b4a1",
+      "runId": "e0-t03-repair9-resources",
+      "implementationCommit": "1df738ffcf827cd07113fcf94aec14205d786125",
       "result": "PASS",
       "requestCounter": "HTTP delivery to Durable Streams adapter",
       "logicalIdleDurationMs": 900000,
@@ -164,11 +164,11 @@
       "requestsAfterLogicalAdvance": 2,
       "requestDeltaWhileIdle": 0,
       "frozenTotalRequestCap": 24,
-      "totalRequests": 20,
+      "totalRequests": 19,
       "createRequests": 1,
-      "sseRequests": 6,
-      "requestsAtCancel": 14,
-      "requestsAfterCancellationSettled": 14,
+      "sseRequests": 5,
+      "requestsAtCancel": 13,
+      "requestsAfterCancellationSettled": 13,
       "realEmulatorIdleObservation": {
         "requestsWhenOfficialFollowParked": 7,
         "requestsAfterMicrotaskSettle": 7
@@ -235,7 +235,7 @@
           "GET": 7
         },
         "responsesByStatus": {
-          "200": 7,
+          "200": 6,
           "201": 1,
           "204": 5,
           "404": 1
@@ -250,10 +250,10 @@
     "canaryScan": {
       "schemaVersion": 1,
       "task": "E0-T03",
-      "runId": "e0-t03-repair9-cold",
-      "implementationCommit": "fd7fbecf99753f89a2f22d0be366e0b7adb4b4a1",
+      "runId": "e0-t03-repair9-resources",
+      "implementationCommit": "1df738ffcf827cd07113fcf94aec14205d786125",
       "result": "PASS",
-      "canarySha256": "0506c55621cd2a8f8ddd860333c1f6731be347906b991aa2380d1ce5231b9620",
+      "canarySha256": "c30ec86e16e06604a6af5cb662f04ed142b0af7ce8bd5a72bee225bf64f3aa1c",
       "encodingsScanned": [
         "raw",
         "url-encoded",
@@ -268,7 +268,7 @@
       "categories": {
         "browserAssetsAndApi": {
           "entries": 7,
-          "bytesScanned": 32821,
+          "bytesScanned": 32856,
           "matches": 0
         },
         "logs": {
@@ -278,12 +278,12 @@
         },
         "environmentManifests": {
           "entries": 1,
-          "bytesScanned": 370,
+          "bytesScanned": 375,
           "matches": 0
         },
         "runArtifacts": {
           "entries": 4,
-          "bytesScanned": 27636,
+          "bytesScanned": 27370,
           "matches": 0
         }
       }
@@ -291,10 +291,10 @@
   },
   "browserRegression": {
     "schemaVersion": 1,
-    "room": "e0-t03-repair9-cold-edit-1785689628602",
-    "stream": "/rooms/e0-t03-repair9-cold-edit-1785689628602/messages",
-    "nextOffset": "0000000000000000_0000000000000541",
-    "streamDigest": "sha256:b760c166cce918c31d000f7e7f90585b023e2c55b8f3d1bfcf6ae741c0c69a0e",
+    "room": "e0-t03-repair9-resources-edit-1785690602887",
+    "stream": "/rooms/e0-t03-repair9-resources-edit-1785690602887/messages",
+    "nextOffset": "0000000000000000_0000000000000551",
+    "streamDigest": "sha256:03fff90be7e0dd5bca0212ba6cbbb39478412c2b2d5c2422d0ebd885431e32cc",
     "messageCount": 1,
     "domMatchedApi": true
   }

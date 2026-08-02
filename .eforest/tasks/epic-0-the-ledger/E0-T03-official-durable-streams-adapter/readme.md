@@ -67,8 +67,8 @@ Streams; higher layers work in domain events and checkpoints.
 
 ### Builder — 2026-08-02 — structural transport-door repair
 
-- Implementation commit: `fd7fbecf99753f89a2f22d0be366e0b7adb4b4a1`.
-- Final cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t03-repair9-cold make
+- Implementation commit: `1df738ffcf827cd07113fcf94aec14205d786125`.
+- Final cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t03-repair9-resources make
   verify-E0-T03`; the clean implementation tree passed format, lint, typecheck,
   46/46 unit tests, real-emulator conformance, browser integration (5/5), concurrency
   (1/1), and build. The cold verifier recorded Node 23.11.0 with the emulator's Node
@@ -83,19 +83,20 @@ Streams; higher layers work in domain events and checkpoints.
   `evidence/request-budget.json`, `evidence/canary-scan.json`,
   `evidence/source-access-audit.json`, and `evidence/structural-sensitivity.json`.
   The conformance run captured opaque offsets
-  `0000000000000000_0000000000000091`,
-  `0000000000000000_0000000000000183`,
-  `0000000000000000_0000000000000274`,
-  `0000000000000000_0000000000000389`, and
-  `0000000000000000_0000000000000510`; the terminal digest was
+  `0000000000000000_0000000000000096`,
+  `0000000000000000_0000000000000193`,
+  `0000000000000000_0000000000000289`,
+  `0000000000000000_0000000000000409`, and
+  `0000000000000000_0000000000000535`; the terminal digest was
   `sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`.
   The browser regression recorded offset
-  `0000000000000000_0000000000000541`, digest
-  `sha256:b760c166cce918c31d000f7e7f90585b023e2c55b8f3d1bfcf6ae741c0c69a0e`, and
+  `0000000000000000_0000000000000551`, digest
+  `sha256:03fff90be7e0dd5bca0212ba6cbbb39478412c2b2d5c2422d0ebd885431e32cc`, and
   `domMatchedApi: true`.
 - Sensitivity: removing `.cjs` coverage, disabling browser request-member coverage,
-  or disabling the named `node:process` policy each made `pnpm test:unit` exit 1;
-  the clean audit scanned 27 executable files with zero violations.
+  disabling the named `node:process` policy, disabling CSS resource matching, or
+  disabling inline HTML script extraction each made `pnpm test:unit` exit 1; the clean
+  audit scanned 27 executable files with zero violations.
 - Replay: N/A (server transport adapter) + mitigation: real-emulator protocol transcript,
   request-budget proof, canary scan, reconnect matrix, and browser regression.
 - Claim: the enforcement boundary now covers every executable file type shipped from

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-resubmit2",
-  "implementationCommit": "993e75412d10601acb016224b3e9ef09c3418257",
+  "runId": "e0-t03-builder-resubmit3",
+  "implementationCommit": "226e51eee32037d2208e52a1254ed8bab7e57007",
   "result": "PASS",
   "filesScanned": 50,
   "failures": [],
@@ -12,7 +12,8 @@
       "direct",
       "destructured",
       "assigned",
-      "bound"
+      "bound",
+      "twoStepGlobal"
     ],
     "detections": {
       "direct": [
@@ -25,6 +26,9 @@
         "direct-provider-network"
       ],
       "bound": [
+        "direct-provider-network"
+      ],
+      "twoStepGlobal": [
         "direct-provider-network"
       ]
     }

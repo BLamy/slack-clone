@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: in-progress
+status: implemented
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -344,3 +344,41 @@ VERDICT: refuted
   dates without JavaScript calendar normalization, and forbid provider redirects from
   escaping the configured Durable Streams origin. Each critic input becomes an in-gate
   positive control plus a focused mutation that proves the detector can go red.
+
+### Builder resubmission 3 — 2026-08-01
+
+- Implementation commit: `226e51eee32037d2208e52a1254ed8bab7e57007`; regenerated
+  evidence commit: `2977993d6903c22addcae5113e657e82e87bafd9`.
+- Final cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t03-builder-resubmit3
+  E0_T03_IMPLEMENTATION_COMMIT=226e51eee32037d2208e52a1254ed8bab7e57007 make
+  verify-E0-T03`. From a clean tracked implementation tree, all eight gates passed:
+  format, lint, static analysis, unit (41/41), real-emulator conformance, browser
+  integration (5/5), concurrency (1/1), and the 30-file build.
+- Source-boundary proof: the audit now propagates aliases of `globalThis`, `self`, and
+  `window`; committed evidence detects the critic's two-step `runtime.fetch` bypass in
+  addition to direct, destructured, assigned, and bound controls. Removing the propagation
+  in a disposable worktree made the focused detector exit 1 with actual `[]`; byte-exact
+  restoration made it pass.
+- Strict transport proof: an impossible `Mon, 31 Feb 2026` Retry-After date is rejected as
+  `INVALID_RETRY_AFTER` after one GET while a canonical epoch date retries successfully.
+  Replacing calendar validation with JavaScript `Date.parse` normalization made the
+  focused detector exit 1 with `Missing expected rejection`; restoration made it pass.
+- Redirect proof: real loopback origins record one configured-origin request, zero target
+  requests, and `ORIGIN_VIOLATION` status 307 because provider fetches force manual redirect
+  handling. Removing that fence made the target hop occur and the focused test exit 1;
+  restoration made it pass.
+- The 900,000 ms timer proof remained request-constant at 2 -> 2 while its 350 ms positive
+  control generated 2,571 calls. Real conformance used 20 requests under cap 24, created
+  once, and held cancellation at 14 -> 14 with no follower or waiter leaks.
+- Opaque resume proof ends at offset `0000000000000000_0000000000000535`; the full-stream
+  digest is `sha256:c630d0b73541d1cfd2d8229112b739983b509029eb519249c3b10b5f27906899`.
+  Browser/API state matched at offset `0000000000000000_0000000000000551`, digest
+  `sha256:e8d7f309441ff79552c6f471deb0302e59d376ace3a015553bf7f3866993a2db`.
+- Every evidence JSON names implementation `226e51eee32037d2208e52a1254ed8bab7e57007`;
+  the cold summary records a clean tree, zero canary matches with all controls detected,
+  no Replay/tunnel attempt, and unchanged recordings.
+- Replay: N/A (server transport adapter) + mitigation: real-emulator protocol transcript,
+  request-budget proof, canary scan, redirect-origin proof, and reconnect matrix.
+- Resubmitted claim: the third critic's two boundary false greens and redirect escape are
+  closed with real controls and mutation-sensitive detectors; the full adapter, lifecycle,
+  security, provenance, and cold-clone criteria are satisfied at the cited implementation.

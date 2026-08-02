@@ -3,7 +3,7 @@ id: E0-T02
 epic: 0
 title: "Strangler backend workspace around the working chat demo"
 priority: 2
-status: implemented
+status: verified
 depends_on: [E0-T01]
 estimate: L
 capstone: false
@@ -516,3 +516,107 @@ no-hardlink inert-source reproduction; no upload or tunnel was invoked.
   constructor/prototype access plus the full legacy getter/setter and property-descriptor
   reflection family are rejected. The critic's exact fixture makes the full verifier go
   red, and the unmutated exact-head cold clone passes every gate.
+
+### Fresh independent critic — 2026-08-01
+
+VERDICT: verified
+
+Fresh independent critic did not implement E0-T02 and made no product-code fix.
+Predictions P1–P10 were frozen before any project state, task text, diff, or builder
+evidence was read, in `work/critic-2-frozen-predictions.md`, and were not edited
+afterwards. Submitted head `bd4cd4db9d4daf8992a188cb8bd33ab65402f895`; implementation
+`988be9208f1327cf4d39bcb9c1e34ec4a391d853`; prior refutation
+`0058353b433fcdc31b369704d0e3f387dd0a1a34`. Full redacted results are in
+`evidence/critic-legacy-reflection-verification.json`.
+
+**Clone and provenance.** A `git clone --no-hardlinks` detached at the exact submitted
+head had no `.git/objects/info/alternates` and proved `node_modules`, the built emulator
+CLI, `.env`, `recordings/latest.json`, `.artifacts`, and `test-results` absent; the
+`emulate` pointer is `8b880275…`. `pnpm install --frozen-lockfile` reused 154 packages and
+downloaded zero. All three builder-claimed source hashes rehash exactly against the
+submitted head: `tools/import-analysis.mjs` `fc7a4ca4…`, `test/unit/backend-packages.test.mjs`
+`79d8ffbd…`, `docs/backend-packages.md` `c5a1c0d6…`. The implementation diff touches only
+those three files; `bd4cd4d` adds only readme, QUEUE, and evidence. No UI, auth, or
+`emulate` submodule change (AC6).
+
+**Required matrix — every forbidden fixture rejected.** Nineteen inert, unimported,
+never-called pure-protocol fixtures passed `format:check` (0) and `lint` (0), then made
+`pnpm typecheck` exit 1 and name each file individually. The prior critic's exact value
+`value.__lookupGetter__("__proto__")` with `protoGetter.call(value)` is now
+`prototype reflection`. All four legacy accessors, `__proto__`, and `prototype` are
+rejected in direct, static-computed, and destructured spellings; the
+concatenated-computed spellings are rejected as `dynamic property access`.
+`getPrototypeOf`, `setPrototypeOf`, `getOwnPropertyDescriptor`, and
+`getOwnPropertyDescriptors` are each rejected. The prior escapes stay closed:
+`(() => {}).constructor` → `dynamic code`; `globalThis` + `["fe" + "tch"]` → both
+`dynamic property access` and `ambient global globalThis`; direct `fetch` → `network`.
+Eight further spellings I added were all rejected: optional chaining, template-literal
+computed key, unicode-escape identifier, hex-escape string key, computed destructuring,
+object-literal `__proto__` key, class static computed `["constructor"]`, and `__proto__`
+as an assignment target. The unicode-escape fixture also failed `format:check`, so its
+Prettier-canonical rewrite was re-run separately and still failed static analysis with
+`format:check` exit 0. Valid controls — static dot/string properties, numeric literal
+index, deterministic allowlisted globals, an injected parameter named `fetch`, and a local
+helper — passed all three gates with `layers=5 violations=0`.
+
+**Independent bounded attack and its adjudication (non-blocking).** The eight new entries
+forbid reflection method *names* regardless of receiver, so I probed the sibling verbs
+that are absent from the map: `defineProperty`, `defineProperties`, `create`,
+`getOwnPropertyNames`, `preventExtensions`, `seal`, and the `Reflect` verbs `apply`,
+`construct`, `ownKeys`. Five fixtures spelling these on an injected `host` passed format,
+lint, and typecheck (`layers=5 violations=0`, `syntax files=41`). I judge this **not** a
+refutation. It yields nothing unless a caller deliberately injects `Object` or `Reflect`,
+which is the same explicitly documented and permitted category as the builder's own valid
+negative control — an injected parameter named `fetch` — and AC3 governs reachability of
+HTTP, filesystem, network, environment, clock, and provider modules. I separately searched
+the class that produced all three prior refutations, authority derivable from values a
+pure module already holds: `value.propertyIsEnumerable/hasOwnProperty/isPrototypeOf` is
+stopped at the lint gate by `no-prototype-builtins` (3 errors, exit 1), while a self-made
+function's `bind`/`call`/`toString`, `RegExp` legacy statics, and `super.toString()` are
+green but confer no prototype, dynamic-code, or capability authority. No ordinary-value
+route to a prototype object, dynamic code, or a capability survives at this head. The
+verb-name asymmetry is recorded as a hardening recommendation for a later ticket that owns
+the boundary contract, not as an AC3 failure.
+
+**Detector sensitivity (went red).** Baseline in the clone: 21/21 unit tests, zero skips;
+typecheck `layers=5 violations=0`, `syntax files=36`. Deleting the eight entries added by
+`988be92` made `pnpm test:unit` exit 1 — `boundary parser rejects legacy prototype accessor
+reflection` failed at `test/unit/backend-packages.test.mjs:208` with actual
+`['dynamic property access']` against expected
+`['dynamic property access', 'prototype reflection']`. The clone was restored clean.
+
+**Cold verification at the exact submitted head.** From the unmutated clone (0 dirty
+files), `TEST_RUN_ID=critic2-cold-bd4cd4d make verify-E0-T02` exited 0 with all seven
+gates PASS and zero skips: format, lint, static analysis, unit, integration, concurrency,
+and a 28-file build. `replayUploadAttempted` and `externalTunnelAttempted` are false and
+`recordingsUnchanged` is true; no `recordings/` directory was created (AC5). Stream proof
+at offset `0000000000000000_0000000000000543`, digest
+`sha256:15000a749e5deb1f7a445cd0c1fa956df7ea12e795ea69d824530bcc96fa5482`, `domMatchedApi`
+true. Artifact hashes: summary `bfdedf59…`, stream proof `5d3e98fa…`, isolation
+`fd277f66…`, build manifest `3572d4a6…` with 28 entries.
+
+**Isolation and browser compatibility.** The forced-collision concurrency test gave stack
+A `37501/37500/37499` and stack B `45420/45419/45418` — disjoint blocks — with distinct
+artifact roots, a refused foreign session, isolated same-name room streams, children
+stopped, and recordings untouched (AC4). A separate independent browser run,
+`TEST_RUN_ID=critic2-browser-bd4cd4d pnpm test:integration`, passed 5/5 with zero skips:
+homepage login, stable login error, two-session convergence, owner edit persisted across
+sessions, and legacy display-name-only messages readable but not editable (AC2). Its
+independent stream proof is offset `0000000000000000_0000000000000549`, digest
+`sha256:08c9cca21cad6110e13d22972ba7822dc8d6b31c9b18043ae29ae8ed8a393223`, `domMatchedApi`
+true. The working tree stayed clean after both runs.
+
+**Coverage.** Executed: all eight new map entries individually, the static/computed/
+destructured property classifier paths, the dynamic-property fallback, the new unit case in
+both green and mutated-red states, all seven composed gates cold, the inherited browser
+suite, and the two-stack concurrency test. Explicitly waived: the `docs/backend-packages.md`
+prose change (documentation, read and confirmed consistent with the implemented policy) and
+the task/queue/evidence metadata in `bd4cd4d`. Dead: none. Requiring evidence: none. No raw
+secret, session cookie, provider token, or customer content appears in E0-T02 evidence, and
+no fixture contacted an external host.
+
+Status is `verified`; E0-T02 clears the gate and E0-T03 is unlocked. Replay: N/A
+(server/static-analysis critique with unchanged browser behavior) + mitigation: exact-head
+no-hardlink cold clone, full pure-source reflection matrix, inherited browser compatibility
+with DOM/API stream correlation, forced-collision two-stack isolation, and a targeted
+detector-sensitivity failure.

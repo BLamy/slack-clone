@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T02",
+  "role": "critic",
+  "recordedAt": "2026-08-01T00:00:00Z",
+  "verdict": "verified",
+  "submittedHead": "bd4cd4db9d4daf8992a188cb8bd33ab65402f895",
+  "implementationCommit": "988be9208f1327cf4d39bcb9c1e34ec4a391d853",
+  "priorCriticCommit": "0058353b433fcdc31b369704d0e3f387dd0a1a34",
+  "independence": {
+    "implementedTicket": false,
+    "productCodeFixed": false,
+    "predictionsFrozenBeforeOrientation": true,
+    "predictionsPath": "work/critic-2-frozen-predictions.md",
+    "predictionsUnchangedAfterFreeze": true
+  },
+  "clone": {
+    "kind": "git clone --no-hardlinks then detached checkout",
+    "relativePath": ".eforest/tasks/epic-0-the-ledger/E0-T02-strangler-backend-workspace/work/critic2-bd4cd4d/repo",
+    "head": "bd4cd4db9d4daf8992a188cb8bd33ab65402f895",
+    "alternatesPresent": false,
+    "preflightAbsent": [
+      "node_modules",
+      "emulate/packages/emulate/dist/index.js",
+      ".env",
+      "recordings/latest.json",
+      ".artifacts",
+      "test-results"
+    ],
+    "emulateSubmodulePointer": "8b88027535e4ea6a18c3ce92a13af706382a451f",
+    "frozenInstall": "pnpm install --frozen-lockfile; 154 packages reused, 0 downloaded, exit 0"
+  },
+  "provenance": {
+    "claimedSourceHashesMatchSubmittedHead": true,
+    "checked": {
+      "tools/import-analysis.mjs": "sha256:fc7a4ca49fcba2956d57720880cf2bd9984f245deed8142a77b6f142c9e10f8d",
+      "test/unit/backend-packages.test.mjs": "sha256:79d8ffbd6b75ca7ee6ad5e723ac05526098962635e31baf1279d77febcdb1e44",
+      "docs/backend-packages.md": "sha256:c5a1c0d681fa994605fe6102435b64407f884eb9eb0596bd4be8be837c37b6ac"
+    },
+    "diffScope": {
+      "988be92": [
+        "docs/backend-packages.md",
+        "test/unit/backend-packages.test.mjs",
+        "tools/import-analysis.mjs"
+      ],
+      "bd4cd4d": [
+        ".eforest/tasks/QUEUE.md",
+        "evidence/builder-legacy-reflection-rework-verification.json",
+        "readme.md"
+      ],
+      "visibleUiOrAuthRedesign": false,
+      "emulateSubmoduleTouched": false
+    }
+  },
+  "fixtureMatrix": {
+    "method": "Inert, never-imported, never-called fixture modules written into packages/protocol/src (pure leaf) in the disposable critic clone; format:check, lint, typecheck run per set; fixtures removed afterwards.",
+    "controlsGreen": {
+      "result": "PASS",
+      "formatCheck": 0,
+      "lint": 0,
+      "typecheck": 0,
+      "observed": "layers=5 violations=0; syntax files=39",
+      "fixtures": [
+        "static dot/string record properties and numeric literal index",
+        "deterministic allowlisted globals JSON/Array/Set/Number/String",
+        "injected parameter named fetch plus a local helper function"
+      ]
+    },
+    "forbiddenAllRejected": {
+      "formatCheck": 0,
+      "lint": 0,
+      "typecheck": 1,
+      "eachFixtureNamedIndividually": true,
+      "results": {
+        "f01 exact prior fixture value.__lookupGetter__(\"__proto__\") + protoGetter.call(value)": "prototype reflection",
+        "f02 __lookupSetter__ direct": "prototype reflection",
+        "f03 __defineGetter__ direct": "prototype reflection",
+        "f04 __defineSetter__ direct": "prototype reflection",
+        "f05 __lookupGetter__ static-computed": "prototype reflection",
+        "f06 __lookupGetter__ destructured": "prototype reflection",
+        "f07 __lookupGetter__ concatenated-computed": "dynamic property access",
+        "f08 __proto__ direct": "prototype reflection",
+        "f09 __proto__ static-computed": "prototype reflection",
+        "f10 __proto__ destructured": "prototype reflection",
+        "f11 __proto__ concatenated-computed": "dynamic property access",
+        "f12 getPrototypeOf": "prototype reflection",
+        "f13 setPrototypeOf": "prototype reflection",
+        "f14 getOwnPropertyDescriptor": "prototype reflection",
+        "f15 getOwnPropertyDescriptors": "prototype reflection",
+        "f16 prior constructor escape (() => {}).constructor": "dynamic code",
+        "f17 prior ambient escape globalThis + [\"fe\" + \"tch\"]": "dynamic property access + ambient global globalThis",
+        "f18 direct fetch ambient": "network",
+        "f19 prototype direct": "prototype reflection"
+      }
+    },
+    "additionalSpellingsAllRejected": {
+      "typecheck": 1,
+      "results": {
+        "s01 optional chaining value?.__proto__": "prototype reflection",
+        "s02 template-literal computed key": "dynamic property access",
+        "s03 unicode-escape identifier \\u005f\\u005fproto\\u005f\\u005f": "prototype reflection (also failed format:check; the Prettier-canonical rewrite was re-run separately and still failed static analysis with format:check exit 0)",
+        "s04 hex-escape string key \"\\x5f\\x5fproto\\x5f\\x5f\"": "prototype reflection",
+        "s05 computed destructuring with literal key": "prototype reflection",
+        "s06 object-literal __proto__ key": "prototype reflection",
+        "s07 class static computed [\"constructor\"] key": "dynamic code",
+        "s08 assignment target value.__proto__ = parent": "prototype reflection"
+      }
+    },
+    "ordinaryValueEscapeRoutes": {
+      "intent": "Search for authority derivable from values a pure module already legitimately holds, which is the class that produced all three prior refutations.",
+      "o01 value.propertyIsEnumerable / hasOwnProperty / isPrototypeOf": "BLOCKED at lint gate by no-prototype-builtins (3 errors, exit 1)",
+      "o02 self-made arrow function .bind/.call/.toString": "green; confers no prototype, dynamic-code, or capability authority beyond the function the module wrote itself",
+      "o03 RegExp legacy statics $1/lastMatch/input": "green; read-only process-wide regex state, outside the AC3 capability list and not a route to a prototype or capability object",
+      "o04 class extends Array with super.toString()": "green; no reflection authority",
+      "conclusion": "No route from an ordinary value to a prototype object, dynamic code, or a capability was found at the submitted head."
+    }
+  },
+  "novelBoundedAttack": {
+    "lead": "The eight new entries forbid reflection method NAMES regardless of receiver, yet sibling reflection/metaprogramming verbs are absent from FORBIDDEN_PROPERTY_CAPABILITIES.",
+    "fixtures": [
+      "n01 host.defineProperty(value, \"x\", descriptor)",
+      "n02 host.create(parent)",
+      "n03 host.getOwnPropertyNames(value)",
+      "n04 host.apply / host.construct / host.ownKeys",
+      "n05 host.defineProperties / host.preventExtensions / host.seal"
+    ],
+    "observed": {
+      "formatCheck": 0,
+      "lint": 0,
+      "typecheck": 0,
+      "output": "layers=5 violations=0; syntax files=41"
+    },
+    "adjudication": "NON-BLOCKING. These fixtures obtain nothing unless the caller deliberately injects Object or Reflect as an argument. That is the same explicitly documented and permitted category as the builder's own valid negative control, an injected parameter named fetch; the documented contract places injected values under caller responsibility. No ordinary value exposes these verbs (o01 shows the ordinary Object.prototype route is stopped at the lint gate). This is therefore an asymmetry in a self-imposed stricter policy, not a capability escape and not a failure of AC3, which governs imports of HTTP, filesystem, network, environment, clock, and provider modules. Recorded as a hardening recommendation for a later ticket that owns the boundary contract.",
+    "refutes": false
+  },
+  "detectorSensitivity": {
+    "baseline": {
+      "unit": "21/21 pass, 0 skipped",
+      "typecheck": "PASS layers=5 violations=0; syntax files=36"
+    },
+    "mutation": "Deleted the eight new forbidden-property entries added by 988be92 from tools/import-analysis.mjs in the disposable clone.",
+    "result": "RED as required",
+    "observation": "pnpm test:unit exit 1; test/unit/backend-packages.test.mjs:189 'boundary parser rejects legacy prototype accessor reflection' failed with actual ['dynamic property access'] vs expected ['dynamic property access', 'prototype reflection'] at line 208.",
+    "restoredClean": true
+  },
+  "coldVerification": {
+    "command": "TEST_RUN_ID=critic2-cold-bd4cd4d make verify-E0-T02",
+    "head": "bd4cd4db9d4daf8992a188cb8bd33ab65402f895",
+    "dirtyBeforeRun": 0,
+    "result": "PASS",
+    "gates": [
+      "format PASS 1143ms",
+      "lint PASS 1207ms",
+      "static-analysis PASS 1919ms",
+      "unit PASS 7515ms",
+      "integration PASS 13328ms",
+      "concurrency PASS 12231ms",
+      "build PASS 587ms files=28"
+    ],
+    "zeroSkips": true,
+    "replayUploadAttempted": false,
+    "externalTunnelAttempted": false,
+    "recordingsUnchanged": true,
+    "streamProof": {
+      "room": "critic2-cold-bd4cd4d-edit-1785629604313",
+      "nextOffset": "0000000000000000_0000000000000543",
+      "streamDigest": "sha256:15000a749e5deb1f7a445cd0c1fa956df7ea12e795ea69d824530bcc96fa5482",
+      "messageCount": 1,
+      "domMatchedApi": true
+    },
+    "artifactHashes": {
+      "verification-summary.json": "sha256:bfdedf59c0ba0d010e622d82646e8b5696a71643d8d4b0c47c4f9dada456f40a",
+      "stream-proof.json": "sha256:5d3e98fa196a104507359728483da44e530de96636fb31cc4e190b58574e1a40",
+      "isolation-summary.json": "sha256:fd277f66ca0e0722d1783d8523e62e33c76543a5e501862ddd148ff9a8f7efaa",
+      "build/build-manifest.json": "sha256:3572d4a67fc520e5b4de28e60c325ff3c7e3de902d5ad5f8249f18a531cefd35"
+    }
+  },
+  "isolation": {
+    "source": "critic cold run isolation-summary.json",
+    "stackA": "app 37501 / auth0 37500 / durable-streams 37499",
+    "stackB": "app 45420 / auth0 45419 / durable-streams 45418",
+    "portBlocksDisjoint": true,
+    "artifactRootsDistinct": true,
+    "foreignSessionRefused": true,
+    "sameRoomNameStreamsIsolated": true,
+    "childrenStopped": true,
+    "recordingsUnchanged": true
+  },
+  "independentBrowserRun": {
+    "command": "TEST_RUN_ID=critic2-browser-bd4cd4d pnpm test:integration",
+    "result": "5 passed, 0 skipped",
+    "tests": [
+      "homepage sends a user through the emulator login into the chat",
+      "login errors do not move the form",
+      "two authenticated sessions in the same room see messages from each other",
+      "a user can edit their message and the update persists across sessions",
+      "legacy display-name-only messages stay readable but cannot be edited"
+    ],
+    "streamProof": {
+      "room": "critic2-browser-bd4cd4d-edit-1785629662342",
+      "nextOffset": "0000000000000000_0000000000000549",
+      "streamDigest": "sha256:08c9cca21cad6110e13d22972ba7822dc8d6b31c9b18043ae29ae8ed8a393223",
+      "messageCount": 1,
+      "domMatchedApi": true
+    },
+    "recordingsDirectoryCreated": false,
+    "treeCleanAfterRun": true
+  },
+  "coverageAudit": {
+    "executed": [
+      "all eight new FORBIDDEN_PROPERTY_CAPABILITIES entries, each individually named by a dedicated fixture",
+      "the property classifier paths for MemberExpression, Property, MethodDefinition, and computed/static keys",
+      "the dynamic-property-access fallback for non-literal computed keys",
+      "the new unit case at test/unit/backend-packages.test.mjs:189 in both green and mutated-red states",
+      "all seven composed gates from a cold clone",
+      "the inherited browser compatibility suite and the forced-collision two-stack concurrency test"
+    ],
+    "waived": [
+      "docs/backend-packages.md prose change (documentation only; read and confirmed consistent with the implemented policy)",
+      "task readme, QUEUE.md, and evidence JSON in bd4cd4d (task metadata)"
+    ],
+    "dead": [],
+    "requiringNewEvidence": []
+  },
+  "acceptanceCriteria": {
+    "AC1 cold clone make verify-E0-T02 all gates zero skips": "MET",
+    "AC2 homepage/login/error/two sessions/owner-only edit unchanged": "MET",
+    "AC3 pure packages cannot reach HTTP/fs/network/env/clock/provider": "MET at the submitted head against the full required matrix and eight additional spellings",
+    "AC4 concurrent assigned ports without shared sessions/streams/output/teardown": "MET",
+    "AC5 routine verification performs no Replay upload, tunnel, or out-of-run deletion": "MET",
+    "AC6 no opportunistic UI or auth redesign in the diff": "MET",
+    "AC7 Replay N/A declaration present and accurate": "MET"
+  },
+  "replay": "Replay: N/A (server/static-analysis critique with unchanged browser behavior) + mitigation: exact-head no-hardlink cold clone, full 30-fixture pure-source reflection matrix, inherited browser compatibility suite with DOM/API stream correlation, forced-collision two-stack isolation, and a targeted detector-sensitivity failure",
+  "redaction": {
+    "containsRawSecret": false,
+    "containsSessionCookie": false,
+    "containsProviderToken": false,
+    "containsCustomerContent": false,
+    "externalHostContactedByFixture": false
+  }
+}

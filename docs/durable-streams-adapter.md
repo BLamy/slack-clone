@@ -37,13 +37,17 @@ checkpoint before application code sees them. The SSE body wrapper also rejects 
 that ends with a partial frame instead of allowing the official parser to discard it.
 Malformed JSON, missing checkpoints, unexpected media types, exhausted retries,
 cancellation, and append-after-close failures become `DurableStreamsAdapterError` values
-with stable codes. HTTP delivery checks whether headers have committed before sending
-JSON, preventing a late live-read failure from causing a second response write.
+with stable codes. A present `Retry-After` must be non-negative integer seconds or an IMF
+HTTP date; malformed values become `INVALID_RETRY_AFTER` before the official client's
+backoff layer can silently coerce them. HTTP delivery checks whether headers have committed
+before sending JSON, preventing a late live-read failure from causing a second response
+write.
 
 `pnpm typecheck` runs `tools/audit-durable-streams-access.mjs`. It rejects imports of the
 official client and direct requests to provider room streams outside this adapter and the
-E0-T03 conformance harness; it separately scans public assets for server credential
-references. The request-budget gate drives the HTTP delivery timer boundary through
+E0-T03 conformance harness, including destructured, assigned, bound, and chained fetch
+aliases; it separately scans public assets for server credential references. The
+request-budget gate drives the HTTP delivery timer boundary through
 900,000 deterministic milliseconds and confirms that its single snapshot read and live
 follow do not grow. A 350-millisecond polling positive control executes 2,571 reads over
 the same clock and must be rejected, proving the detector can go red.

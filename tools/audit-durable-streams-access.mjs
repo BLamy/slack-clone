@@ -50,19 +50,11 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
           captureOfficialClientImport(node.source, node.loc.start.line);
         },
         VariableDeclarator(node) {
-          if (
-            node.id.type === "Identifier" &&
-            node.init &&
-            referencesProvider(node.init, sourceCode, providerIdentifiers)
-          ) {
-            providerIdentifiers.add(node.id.name);
-          }
-          if (
-            node.id.type === "Identifier" &&
-            node.init &&
-            isNetworkReference(node.init, sourceCode, networkIdentifiers)
-          ) {
-            networkIdentifiers.add(node.id.name);
+          captureAliases(node.id, node.init, node);
+        },
+        AssignmentExpression(node) {
+          if (node.operator === "=") {
+            captureAliases(node.left, node.right, node);
           }
         },
         CallExpression(node) {
@@ -91,6 +83,16 @@ export function analyzeDurableStreamsAccess(source, filename = "module.mjs") {
           line,
           message: `imports ${OFFICIAL_CLIENT}`,
         });
+      }
+
+      function captureAliases(pattern, value, expression) {
+        if (!value) return;
+        if (referencesProvider(expression, sourceCode, providerIdentifiers)) {
+          for (const identifier of patternIdentifiers(pattern)) {
+            providerIdentifiers.add(identifier);
+          }
+        }
+        captureNetworkAliases(pattern, value, sourceCode, networkIdentifiers);
       }
     },
   };
@@ -199,6 +201,9 @@ function isApplicationApiReference(node, sourceCode) {
 }
 
 function isNetworkCall(callee, sourceCode, networkIdentifiers) {
+  if (callee.type === "ChainExpression") {
+    return isNetworkCall(callee.expression, sourceCode, networkIdentifiers);
+  }
   if (callee.type === "Identifier") {
     return (
       networkIdentifiers.has(callee.name) ||
@@ -223,19 +228,47 @@ function isNetworkCall(callee, sourceCode, networkIdentifiers) {
 }
 
 function isNetworkReference(node, sourceCode, networkIdentifiers) {
+  if (node.type === "ChainExpression") {
+    return isNetworkReference(node.expression, sourceCode, networkIdentifiers);
+  }
+  if (node.type === "AwaitExpression") {
+    return isNetworkReference(node.argument, sourceCode, networkIdentifiers);
+  }
+  if (node.type === "SequenceExpression") {
+    return node.expressions.some((expression) =>
+      isNetworkReference(expression, sourceCode, networkIdentifiers),
+    );
+  }
+  if (node.type === "ConditionalExpression") {
+    return (
+      isNetworkReference(node.consequent, sourceCode, networkIdentifiers) ||
+      isNetworkReference(node.alternate, sourceCode, networkIdentifiers)
+    );
+  }
+  if (node.type === "LogicalExpression") {
+    return (
+      isNetworkReference(node.left, sourceCode, networkIdentifiers) ||
+      isNetworkReference(node.right, sourceCode, networkIdentifiers)
+    );
+  }
+  if (node.type === "CallExpression") {
+    const callee =
+      node.callee.type === "ChainExpression"
+        ? node.callee.expression
+        : node.callee;
+    return (
+      callee.type === "MemberExpression" &&
+      memberPropertyName(callee) === "bind" &&
+      isNetworkReference(callee.object, sourceCode, networkIdentifiers)
+    );
+  }
   if (node.type === "Identifier") {
     return (
       networkIdentifiers.has(node.name) || /(?:fetch|request)/iu.test(node.name)
     );
   }
   if (node.type !== "MemberExpression") return false;
-  const property = node.computed
-    ? node.property.type === "Literal"
-      ? node.property.value
-      : null
-    : node.property.type === "Identifier"
-      ? node.property.name
-      : null;
+  const property = memberPropertyName(node);
   return (
     typeof property === "string" &&
     /^(?:fetch|request)$/iu.test(property) &&
@@ -243,6 +276,77 @@ function isNetworkReference(node, sourceCode, networkIdentifiers) {
       sourceCode.getText(node.object),
     )
   );
+}
+
+function captureNetworkAliases(pattern, value, sourceCode, networkIdentifiers) {
+  if (pattern.type === "Identifier") {
+    if (isNetworkReference(value, sourceCode, networkIdentifiers)) {
+      networkIdentifiers.add(pattern.name);
+    }
+    return;
+  }
+  if (pattern.type === "AssignmentPattern") {
+    captureNetworkAliases(pattern.left, value, sourceCode, networkIdentifiers);
+    return;
+  }
+  if (pattern.type !== "ObjectPattern") return;
+
+  const networkContainer =
+    /(?:axios|client|fetch|globalThis|http|request|self|undici|window)/iu.test(
+      sourceCode.getText(value),
+    );
+  for (const property of pattern.properties) {
+    if (property.type !== "Property") continue;
+    const propertyName = patternPropertyName(property);
+    if (
+      typeof propertyName !== "string" ||
+      (!/^(?:fetch|request)$/iu.test(propertyName) &&
+        !(networkContainer && NETWORK_METHODS.has(propertyName.toLowerCase())))
+    ) {
+      continue;
+    }
+    for (const identifier of patternIdentifiers(property.value)) {
+      networkIdentifiers.add(identifier);
+    }
+  }
+}
+
+function patternIdentifiers(pattern) {
+  if (!pattern) return [];
+  if (pattern.type === "Identifier") return [pattern.name];
+  if (pattern.type === "AssignmentPattern") {
+    return patternIdentifiers(pattern.left);
+  }
+  if (pattern.type === "RestElement") {
+    return patternIdentifiers(pattern.argument);
+  }
+  if (pattern.type === "ObjectPattern") {
+    return pattern.properties.flatMap((property) =>
+      property.type === "Property"
+        ? patternIdentifiers(property.value)
+        : patternIdentifiers(property.argument),
+    );
+  }
+  if (pattern.type === "ArrayPattern") {
+    return pattern.elements.flatMap((element) => patternIdentifiers(element));
+  }
+  return [];
+}
+
+function patternPropertyName(property) {
+  if (!property.computed && property.key.type === "Identifier") {
+    return property.key.name;
+  }
+  if (property.key.type === "Literal") return property.key.value;
+  return null;
+}
+
+function memberPropertyName(member) {
+  if (!member.computed && member.property.type === "Identifier") {
+    return member.property.name;
+  }
+  if (member.property.type === "Literal") return member.property.value;
+  return null;
 }
 
 async function listFiles(directory, include) {

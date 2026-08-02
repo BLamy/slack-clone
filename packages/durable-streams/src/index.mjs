@@ -12,6 +12,8 @@ import { materializeMessages } from "@stream-slack/reducers";
 const JSON_CONTENT_TYPE = "application/json";
 const MAX_CHECKPOINT_BYTES = 512;
 const PROTOCOL_ERROR_HEADER = "x-stream-slack-protocol-error";
+const RETRY_AFTER_HTTP_DATE =
+  /^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} GMT$/u;
 const DEFAULT_BACKOFF = Object.freeze({
   initialDelay: 25,
   maxDelay: 1_000,
@@ -102,26 +104,22 @@ export function createDurableStreamsStore({
 
       let response = await fetchFn(input, init);
       increment(metrics.responsesByStatus, String(response.status));
+      if (!response.ok) {
+        try {
+          validateRetryAfter(response);
+        } catch (error) {
+          if (!(error instanceof DurableStreamsAdapterError)) throw error;
+          await discardResponse(response);
+          return protocolErrorResponse(error);
+        }
+      }
       if (response.ok) {
         try {
           await validateSuccessfulResponse({ method, response, url });
         } catch (error) {
           if (!(error instanceof DurableStreamsAdapterError)) throw error;
           if (method === "HEAD") throw error;
-          return new Response(
-            JSON.stringify({
-              kind: "stream-slack-protocol",
-              code: error.code,
-              message: error.message,
-            }),
-            {
-              status: 400,
-              headers: {
-                "Content-Type": "application/json; charset=utf-8",
-                [PROTOCOL_ERROR_HEADER]: error.code,
-              },
-            },
-          );
+          return protocolErrorResponse(error);
         }
         if (method === "POST") {
           entry.appendOffset = requireCheckpoint(
@@ -490,6 +488,42 @@ async function validateSuccessfulResponse({ method, response, url }) {
   }
 }
 
+function validateRetryAfter(response) {
+  const retryAfter = response.headers.get("retry-after");
+  if (retryAfter === null) return;
+  if (/^\d+$/u.test(retryAfter)) {
+    const seconds = Number(retryAfter);
+    if (Number.isSafeInteger(seconds)) return;
+  } else if (
+    RETRY_AFTER_HTTP_DATE.test(retryAfter) &&
+    Number.isFinite(Date.parse(retryAfter))
+  ) {
+    return;
+  }
+  throw new DurableStreamsAdapterError(
+    "Durable Streams response used a malformed Retry-After header",
+    { code: "INVALID_RETRY_AFTER", status: response.status },
+  );
+}
+
+function protocolErrorResponse(error) {
+  return new Response(
+    JSON.stringify({
+      kind: "stream-slack-protocol",
+      code: error.code,
+      message: error.message,
+      status: error.status,
+    }),
+    {
+      status: 400,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        [PROTOCOL_ERROR_HEADER]: error.code,
+      },
+    },
+  );
+}
+
 function createWakeGate() {
   let version = 0;
   const waiters = new Set();
@@ -674,7 +708,7 @@ function asAdapterError(error, message, { signal } = {}) {
         protocol?.message ?? error.text ?? message,
         {
           code: protocolCode,
-          status: error.status,
+          status: protocolStatus(protocol, error.status),
           cause: error,
         },
       );
@@ -702,7 +736,7 @@ function asAdapterError(error, message, { signal } = {}) {
     if (protocol) {
       return new DurableStreamsAdapterError(protocol.message, {
         code: protocol.code,
-        status: error.status,
+        status: protocolStatus(protocol, error.status),
         cause: error,
       });
     }
@@ -726,4 +760,12 @@ function protocolErrorDetails(value) {
     return value;
   }
   return null;
+}
+
+function protocolStatus(protocol, fallback) {
+  return Number.isInteger(protocol?.status) &&
+    protocol.status >= 100 &&
+    protocol.status <= 599
+    ? protocol.status
+    : fallback;
 }

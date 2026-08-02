@@ -11,7 +11,10 @@ import {
   assertIdleWindowRequestConstant,
   observeHttpIdleWindow,
 } from "../test/support/http-idle-probe.mjs";
-import { auditDurableStreamsAccess } from "../tools/audit-durable-streams-access.mjs";
+import {
+  analyzeDurableStreamsAccess,
+  auditDurableStreamsAccess,
+} from "../tools/audit-durable-streams-access.mjs";
 import { createRunContext } from "./run-context.mjs";
 import { startStack } from "./test-stack.mjs";
 
@@ -185,6 +188,7 @@ try {
     /additional Durable Streams adapter calls/u,
   );
   assert.equal(pollingPositiveControl.pollingTimerExecutions, 2_571);
+  const malformedRetryAfter = await verifyMalformedRetryAfter();
 
   const allAccepted = [...accepted, liveRecord, secondLiveRecord];
   const allOffsets = [
@@ -243,6 +247,7 @@ try {
       activeFollowers: diagnosticsAfterCancel.activeFollowers,
       pendingIdleWaiters: diagnosticsAfterCancel.pendingIdleWaiters,
     },
+    strictTransport: { malformedRetryAfter },
     requestTranscript: transcript,
   };
   requestBudget = {
@@ -284,6 +289,7 @@ try {
   await collectBrowserAndApiPayloads(room);
   const sourceAudit = await auditDurableStreamsAccess();
   assert.deepEqual(sourceAudit.failures, []);
+  const sourceAuditSensitivity = verifySourceAuditSensitivity();
   await writeEvidence("source-access-audit.json", {
     schemaVersion: 1,
     task: "E0-T03",
@@ -291,8 +297,7 @@ try {
     implementationCommit,
     result: "PASS",
     ...sourceAudit,
-    sensitivity:
-      "unit fixture inserts direct fetch to a Durable Streams room and must fail",
+    sensitivity: sourceAuditSensitivity,
   });
 } finally {
   store.close();
@@ -321,6 +326,107 @@ await writeArtifact("e0-t03-conformance-summary.json", summary);
 console.log(
   `PASS E0-T03 conformance requests=${transcript.length} offsets=${protocolConformance.capturedOffsets.length} canaryMatches=0`,
 );
+
+async function verifyMalformedRetryAfter() {
+  const checkpoint = "opaque-retry-checkpoint";
+  let getAttempts = 0;
+  const retryStore = createDurableStreamsStore({
+    baseUrl: "http://streams.invalid",
+    token: "protocol-double-token",
+    digestRecords: canonicalSha256,
+    backoffOptions: {
+      initialDelay: 0,
+      maxDelay: 0,
+      multiplier: 1,
+      maxRetries: 2,
+    },
+    fetchFn: async (_input, init = {}) => {
+      if (init.method === "HEAD") {
+        return new Response(null, {
+          status: 200,
+          headers: { "Stream-Next-Offset": checkpoint },
+        });
+      }
+      getAttempts += 1;
+      if (getAttempts === 1) {
+        return new Response("busy", {
+          status: 503,
+          headers: { "Retry-After": "conformance-not-a-delay" },
+        });
+      }
+      return new Response("[]", {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          "Stream-Next-Offset": checkpoint,
+          "Stream-Up-To-Date": "true",
+        },
+      });
+    },
+  });
+  try {
+    let observed;
+    try {
+      await retryStore.read("strict-retry", "-1");
+    } catch (error) {
+      observed = error;
+    }
+    assert.equal(observed?.code, "INVALID_RETRY_AFTER");
+    assert.equal(observed?.status, 503);
+    assert.equal(getAttempts, 1);
+    return {
+      malformedValue: "[MALFORMED]",
+      rejectionCode: observed.code,
+      responseStatus: observed.status,
+      getAttempts,
+      silentlyRetried: false,
+    };
+  } finally {
+    retryStore.close();
+  }
+}
+
+function verifySourceAuditSensitivity() {
+  const fixtures = {
+    direct: `
+      const durableStreamsUrl = "http://streams.invalid";
+      fetch(durableStreamsUrl + "/rooms/direct/messages");
+    `,
+    destructured: `
+      const { fetch: send } = globalThis;
+      const durableStreamsUrl = "http://streams.invalid";
+      send(durableStreamsUrl + "/rooms/destructured/messages");
+    `,
+    assigned: `
+      let send;
+      ({ fetch: send } = globalThis);
+      const config = { durableStreamsUrl: "http://streams.invalid" };
+      const { durableStreamsUrl: provider } = config;
+      send(provider + "/rooms/assigned/messages");
+    `,
+    bound: `
+      const send = globalThis.fetch.bind(globalThis);
+      const streamOrigin = "http://streams.invalid";
+      send(streamOrigin + "/rooms/bound/messages");
+    `,
+  };
+  const detections = Object.fromEntries(
+    Object.entries(fixtures).map(([name, source]) => [
+      name,
+      analyzeDurableStreamsAccess(source, `${name}-sensitivity.mjs`).map(
+        (violation) => violation.kind,
+      ),
+    ]),
+  );
+  for (const result of Object.values(detections)) {
+    assert.deepEqual(result, ["direct-provider-network"]);
+  }
+  return {
+    result: "PASS",
+    fixtures: Object.keys(fixtures),
+    detections,
+  };
+}
 
 async function collectBrowserAndApiPayloads(room) {
   for (const pathname of ["/", "/app.js", "/styles.css", "/api/health"]) {

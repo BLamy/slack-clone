@@ -293,6 +293,36 @@ test("official client honors bounded Retry-After recovery without hiding termina
   store.close();
 });
 
+test("adapter rejects malformed Retry-After before the official client can coerce it", async () => {
+  let getAttempts = 0;
+  const fetchFn = async (_input, init = {}) => {
+    if (init.method === "HEAD") return existsHead();
+    getAttempts += 1;
+    if (getAttempts === 1) {
+      return new Response("busy", {
+        status: 503,
+        headers: { "Retry-After": "critic-malformed-delay" },
+      });
+    }
+    return jsonResponse("[]", ZERO);
+  };
+  const store = createStore(fetchFn, {
+    initialDelay: 0,
+    maxDelay: 0,
+    multiplier: 1,
+    maxRetries: 2,
+  });
+  await assert.rejects(
+    store.read("malformed-retry-room", "-1"),
+    (error) =>
+      error instanceof DurableStreamsAdapterError &&
+      error.code === "INVALID_RETRY_AFTER" &&
+      error.status === 503,
+  );
+  assert.equal(getAttempts, 1);
+  store.close();
+});
+
 test("follow cancellation aborts an in-flight upstream body and releases every waiter", async () => {
   let upstreamAborted = false;
   let reads = 0;
@@ -446,6 +476,47 @@ test("source guard rejects an adapter bypass while allowing the application API"
   assert.deepEqual(
     aliasedBypass.map((violation) => violation.kind),
     ["official-client-import", "direct-provider-network"],
+  );
+
+  const destructuredBypass = analyzeDurableStreamsAccess(
+    `
+      const { fetch: send } = globalThis;
+      const durableStreamsUrl = "http://streams.invalid";
+      await send(durableStreamsUrl + "/rooms/demo/messages");
+    `,
+    "scratch-destructured-bypass.mjs",
+  );
+  assert.deepEqual(
+    destructuredBypass.map((violation) => violation.kind),
+    ["direct-provider-network"],
+  );
+
+  const assignedBypass = analyzeDurableStreamsAccess(
+    `
+      let send;
+      ({ fetch: send } = globalThis);
+      const config = { durableStreamsUrl: "http://streams.invalid" };
+      const { durableStreamsUrl: provider } = config;
+      await send(provider + "/rooms/demo/messages");
+    `,
+    "scratch-assigned-bypass.mjs",
+  );
+  assert.deepEqual(
+    assignedBypass.map((violation) => violation.kind),
+    ["direct-provider-network"],
+  );
+
+  const boundBypass = analyzeDurableStreamsAccess(
+    `
+      const send = globalThis.fetch.bind(globalThis);
+      const streamOrigin = "http://streams.invalid";
+      await send(streamOrigin + "/rooms/demo/messages");
+    `,
+    "scratch-bound-bypass.mjs",
+  );
+  assert.deepEqual(
+    boundBypass.map((violation) => violation.kind),
+    ["direct-provider-network"],
   );
 
   const applicationApi = analyzeDurableStreamsAccess(

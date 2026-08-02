@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: implemented
+status: refuted
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -1063,3 +1063,163 @@ VERDICT: refuted
   capability acquisition outside a door, raw capability export, provider target through
   an application/Auth0 door, clean `/api/` rejection, or failed exact-commit cold gate
   refutes this claim.
+
+### Eighth fresh independent critic — 2026-08-02
+
+VERDICT: refuted
+
+- Fresh Codex critic; did not implement this ticket and made no product repair. Before
+  executing any verifier, predictions and narrow refuters were frozen for all seven
+  acceptance criteria, five adversarial items, the repair-7 network-door families,
+  exact-diff/provenance and evidence-sensitivity claims, mutation controls, and the four
+  coverage classes at `work/critic8/frozen-predictions.md` (SHA-256
+  `fa40c5e122f7d943dfcd6191d917242582b7c5d726c67522db5ae1e95c29ecc4`). The full
+  task, verified E0-T02 dependency contract, repository/loop instructions, implementation
+  diff, evidence manifest, submission diff, and every committed evidence JSON were read
+  before execution.
+- Provenance passed. Implementation `4afa3d7fe45398e466b21a541298a21026173d2a`
+  (tree `d224003b58137725be674306390085b891aac097`) has parent
+  `2799ce28b957cb092ba74d22507be42eb8a4f3b9`; evidence
+  `faa476f6ad0fe224f26d534a083e051073398cc4` (tree
+  `b3dbaa90105af11296bf233237cf2efec635e728`) is its direct child; submission
+  `563896e7029bbf7b54c146c730a5fe41682e0620` (tree
+  `7a7f4d9e06daed81915e4b182a4552b1836dbd85`) is the evidence commit's direct
+  child. Implementation-to-evidence changed only the five evidence JSON files;
+  evidence-to-submission changed only this readme and `QUEUE.md`. Every evidence JSON
+  stamps the exact implementation commit.
+- The exact required non-promoting command ran from genuinely cold generated/dependency
+  state and exited 0:
+  `env -u PROMOTE_EVIDENCE TEST_RUN_ID=e0-t03-critic8-cold
+  E0_T03_IMPLEMENTATION_COMMIT=4afa3d7fe45398e466b21a541298a21026173d2a make
+  verify-E0-T03`. Root dependencies, emulator dependencies/build, generated artifacts,
+  test reports, recordings metadata, and environment files were absent; the pinned
+  emulator submodule was uninitialized. The run installed the frozen dependencies and
+  built emulator commit `8b88027535e4ea6a18c3ce92a13af706382a451f`; its Node >=24
+  preference under Node 23.11.0 was a nonfatal warning. All eight actual gates passed:
+  format, lint, static analysis, unit 45/45, real-emulator conformance, browser integration
+  5/5, concurrency 1/1, and the 33-file build.
+- Cold evidence was not promoted or altered. Pre/post SHA-256 values remained byte-identical:
+  canary `840e5cfbeea580c369e336102815b0b2d44a3511817faa961d707c386828f159`,
+  cold `e2c8dcf5ef6a8f29e599b1f3071a7a0726edea5f2926c02c1413d66712b37c65`,
+  protocol `6b0f8187c009d3e45308d7d01dc1a79239dd65b0884ebff5f113db75d7225a83`,
+  request `57ed0959333e26594f57b3797e9e35d5fe529e06edfdc670f0be9bf03b4b57bf`,
+  and source `fa56d638922a039fce3eab8f1fbb15f6ee7ac41faabda0a6d182ff37e3b7a499`.
+  Their Git blobs are respectively `feb45befa751703d06e0b67e1d1b4bd562b2f1af`,
+  `3ffbc0fe4275a10418003ea3bd92cc4c11a67817`,
+  `b925df37f246f1c7d48359e0e8a849d03a92761e`,
+  `46721d02df747cdedecb39e14e18b0f0b18a0657`, and
+  `e6aa1de1f4e1cbcb5b6c2a079b258d7da1aab439`; `git diff --exit-code` over evidence
+  passed.
+- Criterion map: AC1 passed the exact cold verifier and provenance checks. AC2 passed with
+  20 requests under cap 24, one create, six SSE requests, cancellation fixed at 14 -> 14,
+  zero retained followers/waiters, and a 900,000 ms idle interval fixed at 2 -> 2 calls;
+  its 350 ms positive control made 2,571 calls. AC3 passed five accepted records and six
+  exact suffix resumes using byte-preserved nonnumeric checkpoints. AC4 passed upstream
+  abort, downstream disconnect before headers, disconnect after headers/between records,
+  zero active timers, and no late JSON/second response. AC5 passed with all three promoted
+  canary positive controls detected and zero clean-output matches, plus independent
+  server-artifact and browser-source red controls. AC6 is refuted by the complete source
+  gate false negatives below. AC7 remains honestly waived as declared for this
+  server-transport ticket, with its required non-browser mitigations executed.
+- **Blocking AC6/repair-7 refutation:** the independent formatter-idempotent matrix at
+  `work/critic8/critic8-source-matrix.mjs` (SHA-256
+  `7be1912d0f7e95ebd4a7c47eca928cbf09132bf8bccef6fe231d72b7b4f183cd`) ran 51
+  snippets through both exported snippet analysis and a complete synthetic-repository
+  audit. Only 27 matched expectation; there were zero false positives but 24 false
+  negatives in both modes. Missed ambient paths included `window.top.fetch`, bare `top`,
+  `document.defaultView`, `globalThis.Function`, `globalThis.eval`, arrow/async function
+  constructors, and nested `navigator.sendBeacon`. Missed Node/loader paths included
+  `node:dns`, aliased `createRequire`, aliased/computed `process.getBuiltinModule`, and
+  remote static/dynamic imports. Five raw-capability function/default/assignment/getter/
+  EventSource export forms, three inbound-door dynamic-loader forms, and two split-role
+  door-confusion forms were also accepted. Results are in
+  `work/critic8/source-matrix-results.json` (SHA-256
+  `ca239882de95ead6780fb3501a22f55eebcc461a4524e98257c176522bba6adc`).
+- The matrix result was reproduced against the actual product tree with narrower complete-
+  gate refuters, not left as a parser-only concern. A temporary
+  `src/critic8-constructor-network-bypass.mjs` obtained fetch through
+  `(() => {}).constructor`; `pnpm format:check`, `pnpm lint`, and full `pnpm typecheck`
+  all exited 0 with 28 audited files, zero violations, and 48 syntax files. A temporary
+  `src/critic8-loader-network-bypass.mjs` used aliased `createRequire(import.meta.url)` to
+  export `node:http.request`; the same three gates exited 0 and runtime import confirmed
+  the exported capability was a function. Their planted SHA-256 identities were
+  `15fa79f5f2ad8130df0e7feb3aa42735ee971f9e1ff5b33bea68989592c86518` and
+  `d8986e2810ad802bc7192ca920959a30c3ef7050d6c8b5e08fa3488aac5550aa`.
+- Door-specific full-gate refuters also remained green. Adding an exported function to
+  `public/application-api.js` that returns `globalThis.fetch` passed format, lint, and
+  full typecheck with zero violations, so the door can export a usable raw capability
+  despite the claim. Adding `await import("node:http")` and exporting its `request` from
+  `src/http-server.mjs` likewise passed all three gates and runtime import returned a
+  function, refuting the inbound-only named-`createServer` enforcement claim. Direct
+  `export const ... = globalThis.fetch` is detected, but that narrower positive control
+  does not cure the function-return escape.
+- Runtime door controls separate real fences from the blocker. The application door
+  accepted five same-origin `/api/` controls, rejected nine non-API/cross-origin/
+  credential/hash controls, forced `credentials: "same-origin"`, `redirect: "error"`,
+  and credentialed EventSource. The Auth0 client fixed token/userinfo calls to its
+  configured origin, used manual redirect handling, rejected all five redirect classes
+  and an escaped final response URL, cancelled the escaped body, and exported no raw
+  capability. However, configuring that unrestricted Auth0 origin to a local provider-
+  role endpoint made it issue `POST /oauth/token` there and disclose the fresh dummy
+  `critic8-door-confusion-secret`; the corresponding computed-env synthetic repository
+  remained violation-free. Thus Auth0's local origin/redirect fence passes, while the
+  declared-door role-confusion claim remains independently refuted. The application
+  split-provider matrix case was stopped by its runtime cross-origin fence and is not
+  counted as an additional blocker. Runtime results are in
+  `work/critic8/door-runtime-results.json` (SHA-256
+  `dd5abd39464bb087815e14060c8952a21dadbb8b11284936073c01014ecd10ff`).
+- Independent protocol/lifecycle execution with namespace `critic8-c8n4` passed. It
+  preserved six deliberately nonnumeric checkpoints containing braces, encoded slashes,
+  percent signs, plus signs, and query-like text; delivered the two live records exactly
+  once; and produced every expected resume suffix including an empty terminal suffix.
+  Four malformed checkpoints failed pretransport as `INVALID_CHECKPOINT`; wrong live
+  media failed after one request as `CONTENT_TYPE_MISMATCH` and settled; a partial frame
+  delivered zero records and failed as `MALFORMED_SSE_FRAME`. Eight malformed Retry-After
+  values made one attempt and failed, while three valid controls made two attempts.
+  Cross-origin 308 produced `ORIGIN_VIOLATION`, zero target requests, and no forwarded
+  authorization. Cancellation aborted upstream with requests fixed at 3 -> 3 and no
+  followers/waiters. HTTP disconnect controls observed 0 heads/0 follows before headers
+  and 1 head/1 cancel/0 timers after headers, with only the first record delivered and no
+  late JSON. Results are in `work/critic8/protocol-lifecycle-results.json` (SHA-256
+  `f532e4dc90fc85752b885e335a736125bf546d4214d1143382c938305d935e55`).
+- Detector sensitivity was proven one isolated defect at a time. A runtime canary preload
+  made `pnpm test:conformance` exit 1 with three forbidden token matches. A browser source
+  containing `DURABLE_STREAMS_ADMIN_TOKEN` made full `pnpm typecheck` exit 1 as a server-
+  credential reference. A real outside-door `globalThis.fetch` source made full typecheck
+  exit 1 at line 2. Removing `public/application-api.js` from the declared door set made
+  full typecheck exit 1 on its ambient fetch. Widening `API_PREFIX` from `/api/` to `/`
+  made the complete 45-test unit gate fail 44/45 because `/rooms/demo/messages` was
+  accepted. Directly exporting `globalThis.fetch` from the door made full typecheck exit
+  1 as `exports raw network capability`. These positive controls show the intended gates
+  can turn red; the nearby function/constructor/loader false greens prove insufficient
+  coverage rather than an inert verifier.
+- Every mutation was restored byte-exact before this metadata edit. The auditor returned
+  to blob/SHA-256 `b7cff6089a4611c936c417408498fb8bbe38e7cf` /
+  `13b4bce4fbee8a8693ecdb4556d832491e7df8c711cebe740c36c2eb337fe22d`;
+  application door `dd10a7c5ac5175aa3c4a05445fda927845e68664` /
+  `cd75ea704a6502fb9fb82d9d97f48ca090ab5c7d1ad7cbff7189c1d615a5411c`;
+  Auth0 door `5ee68a3c720a8a06231d1c5706533b809132a14a` /
+  `4647b481689aea8272990e7be4e104a2d7b1f217a458d85780c33be232ef4cd3`;
+  inbound HTTP door `f9aead1e0a7334f3b2a312c3fe6c6a587281204c` /
+  `5735dc2202619bed091d683e4ae03c0db74eead5e18bc6486565432c734667de`;
+  adapter `066e0beecbc9b0da17c48a8367b4087c8de8ba89` /
+  `9c1dbbd974d744aec4989e50f61cba116259d8083bb1be1fa88aac86ddce23bd`.
+  All temporary tracked-path files were absent, `git diff --exit-code` against submission
+  passed, and final restored `pnpm format:check`, `pnpm lint`, `pnpm typecheck` (27 files,
+  zero violations; 47 syntax files), and `pnpm test:unit` (45/45) all exited 0.
+- Coverage classification: executed — create/append/bounded read/official follow,
+  create-once, opaque resume, retry/media/frame/redirect strictness, request budget,
+  cancellation, all requested HTTP disconnect points, canary and source controls,
+  application/Auth0 runtime fences, browser/API correlation, concurrency, cold setup,
+  build, provenance, and detector sensitivity; explicitly waived — declarations,
+  package/lock/config metadata, docs, task metadata, and committed evidence serialization
+  as non-runtime behavior (their format, provenance, schema/stamps, and hashes were still
+  checked), plus Replay as declared; dead — none identified; requiring repair and fresh
+  evidence — AC6 enforcement for ambient global/constructor/reflection paths, Node
+  builtins and dynamic loaders, raw function/getter exports, inbound-door imports, and
+  cross-role Auth0/provider configuration. Replay: N/A (server transport adapter) +
+  mitigation: exact-commit real-emulator transcript, request-budget proof, canary scan,
+  door runtime matrix, browser/API correlation, cancellation, and reconnect matrix. No
+  `record:replay`, upload, tunnel, or other externally mutating command ran; recordings
+  remained unchanged. E0-T04 remains blocked pending product repair and new exact-commit
+  evidence.

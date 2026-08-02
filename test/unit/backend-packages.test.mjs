@@ -304,10 +304,21 @@ await context.releasePortLease();
 test("Durable Streams adapter receives provider capabilities through injection", async () => {
   const requests = [];
   const responses = [
-    new Response(null, { status: 201 }),
+    new Response("Stream not found", { status: 404 }),
+    new Response(null, {
+      status: 201,
+      headers: {
+        "Content-Type": "application/json",
+        "Stream-Next-Offset": "offset-0",
+      },
+    }),
     new Response(JSON.stringify([{ id: "one", text: "hello" }]), {
       status: 200,
-      headers: { "Stream-Next-Offset": "offset-1" },
+      headers: {
+        "Content-Type": "application/json",
+        "Stream-Next-Offset": "offset-1",
+        "Stream-Up-To-Date": "true",
+      },
     }),
   ];
   const store = createDurableStreamsStore({
@@ -325,12 +336,17 @@ test("Durable Streams adapter receives provider capabilities through injection",
     requests[0].url,
     "http://streams.invalid/rooms/demo-room/messages",
   );
-  assert.equal(requests[0].init.method, "PUT");
+  assert.equal(requests[0].init.method, "HEAD");
   assert.equal(
     requests[1].url,
+    "http://streams.invalid/rooms/demo-room/messages",
+  );
+  assert.equal(requests[1].init.method, "PUT");
+  assert.equal(
+    requests[2].url,
     "http://streams.invalid/rooms/demo-room/messages?offset=-1",
   );
-  assert.equal(requests[1].init.headers.Authorization, "Bearer fixture-token");
+  assert.equal(requests[2].init.headers.Authorization, "Bearer fixture-token");
   assert.deepEqual(result.messages, [{ id: "one", text: "hello" }]);
   assert.equal(result.nextOffset, "offset-1");
   assert.equal(result.streamDigest, "digest:1");

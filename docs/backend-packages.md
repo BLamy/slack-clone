@@ -31,3 +31,11 @@ descriptor introspection, call-stack, dynamic-code, metaprogramming, and non-sta
 computed-property escape hatches are forbidden; static record properties and numeric
 literal indices remain available. A later provider or framework migration must preserve
 this direction or deliberately amend the contract in a ticket that owns the boundary.
+
+E0-T03 makes the provider boundary executable as well as architectural. The
+`durable-streams` package owns the pinned official client and all requests to room-stream
+paths. `tools/audit-durable-streams-access.mjs`, included in `pnpm typecheck`, rejects an
+official-client import or direct provider request anywhere else, while allowing browser
+calls to the authenticated `/api/rooms/...` application surface. The adapter's opaque
+checkpoint, live-follow, cancellation, retry, and credential rules are documented in
+[`durable-streams-adapter.md`](durable-streams-adapter.md).

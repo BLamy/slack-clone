@@ -34,12 +34,16 @@ async (page) => {
   await page.getByTestId("password-input").fill("incorrect-password");
   await page.getByTestId("login-button").click();
   await page.getByTestId("login-error").waitFor();
-  const loginError = (await page.getByTestId("login-error").textContent()).trim();
+  const loginError = (
+    await page.getByTestId("login-error").textContent()
+  ).trim();
   await page.getByTestId("login-button").click();
   await page.waitForURL(/\/app\?room=demo/);
   await page.getByTestId("message-input").waitFor();
   await page.waitForFunction(
-    () => document.querySelector("[data-testid='connection-state']")?.textContent === "live",
+    () =>
+      document.querySelector("[data-testid='connection-state']")
+        ?.textContent === "live",
   );
 
   const runId = Date.now().toString(36);
@@ -60,7 +64,8 @@ async (page) => {
       };
       const api = await page.evaluate(async () => {
         const response = await fetch("/api/rooms/demo/messages");
-        if (!response.ok) throw new Error(`stream API returned ${response.status}`);
+        if (!response.ok)
+          throw new Error(`stream API returned ${response.status}`);
         return response.json();
       });
       if (dom.offset === api.nextOffset && dom.digest === api.streamDigest) {
@@ -74,13 +79,17 @@ async (page) => {
       }
       await page.waitForTimeout(100);
     }
-    throw new Error("DOM stream offset/digest did not converge with the authenticated API");
+    throw new Error(
+      "DOM stream offset/digest did not converge with the authenticated API",
+    );
   }
 
   const afterAppend = await compareStreamState();
 
   await message.getByRole("button", { name: "Edit message" }).click();
-  await page.getByTestId("edit-message-input").fill(`Cancelled Replay draft ${runId}`);
+  await page
+    .getByTestId("edit-message-input")
+    .fill(`Cancelled Replay draft ${runId}`);
   await page.getByRole("button", { name: "Cancel" }).click();
   await page.getByText(original, { exact: true }).waitFor();
 
@@ -98,10 +107,12 @@ async (page) => {
   await page.getByRole("button", { name: "Save" }).click();
   await page.waitForFunction(
     () =>
-      document.querySelector("[data-testid='connection-state']")?.textContent ===
-      "simulated edit failure",
+      document.querySelector("[data-testid='connection-state']")
+        ?.textContent === "simulated edit failure",
   );
-  const preservedFailedDraft = await page.getByTestId("edit-message-input").inputValue();
+  const preservedFailedDraft = await page
+    .getByTestId("edit-message-input")
+    .inputValue();
   await page.unroute(patchPattern);
   await page.getByRole("button", { name: "Cancel" }).click();
 
@@ -111,43 +122,40 @@ async (page) => {
   await page.getByText(updated, { exact: true }).waitFor();
   await page.getByTestId("message-edited").waitFor();
   await page.waitForFunction(
-    () => document.querySelector("[data-testid='connection-state']")?.textContent === "live",
+    () =>
+      document.querySelector("[data-testid='connection-state']")
+        ?.textContent === "live",
   );
   const afterEdit = await compareStreamState();
 
-  const legacyId = `legacy-${runId}`;
-  const legacyText = `Readable legacy record ${runId} with colliding Ada display name`;
-  const streamUrl = "http://127.0.0.1:4100/rooms/demo/messages";
-  const seeded = await page.context().request.post(streamUrl, {
-    headers: { Authorization: "Bearer test_token_admin" },
-    data: {
-      id: legacyId,
-      room: "demo",
-      user: "Ada Lovelace",
-      text: legacyText,
-      createdAt: new Date().toISOString(),
-    },
-  });
-  if (![200, 204].includes(seeded.status())) {
-    throw new Error(`legacy seed failed with ${seeded.status()}`);
-  }
-  const legacyMessage = page.getByTestId("message").filter({ hasText: legacyText });
-  await legacyMessage.waitFor();
-  const legacyEditButtons = await legacyMessage
+  await page.goto("/logout");
+  await page.waitForURL(/\/login/);
+  await page.getByTestId("email-input").fill("linus@example.test");
+  await page.getByTestId("password-input").fill("DemoPass123");
+  await page.getByTestId("login-button").click();
+  await page.waitForURL(/\/app\?room=demo/);
+  await page.getByText(updated, { exact: true }).waitFor();
+  const editButtonsAsLinus = await page
+    .getByTestId("message")
+    .filter({ hasText: updated })
     .getByRole("button", { name: "Edit message" })
     .count();
-  if (legacyEditButtons !== 0) {
-    throw new Error("legacy display-name record exposed an edit control");
+  const denied = await page.evaluate(async (id) => {
+    const response = await fetch(
+      `/api/rooms/demo/messages/${encodeURIComponent(id)}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: "Cross-principal edit must be denied" }),
+      },
+    );
+    return response.status;
+  }, messageId);
+  if (denied !== 403 || editButtonsAsLinus !== 0) {
+    throw new Error(
+      `cross-principal edit status=${denied} buttons=${editButtonsAsLinus}`,
+    );
   }
-
-  const denied = await page.context().request.patch(
-    `http://127.0.0.1:5175/api/rooms/demo/messages/${encodeURIComponent(legacyId)}`,
-    { data: { text: "Display-name collision must not grant ownership" } },
-  );
-  if (denied.status() !== 403) {
-    throw new Error(`legacy spoof PATCH returned ${denied.status()}, expected 403`);
-  }
-  await page.getByText(legacyText, { exact: true }).waitFor();
   const finalState = await compareStreamState();
 
   await page.waitForTimeout(500);
@@ -164,7 +172,9 @@ async (page) => {
     throw new Error(`request failures: ${JSON.stringify(requestFailures)}`);
   }
   if (responseFailures.length > 0) {
-    throw new Error(`non-success page responses: ${JSON.stringify(responseFailures)}`);
+    throw new Error(
+      `non-success page responses: ${JSON.stringify(responseFailures)}`,
+    );
   }
 
   return {
@@ -183,10 +193,10 @@ async (page) => {
       await page.getByTestId("connection-state").textContent()
     ).trim(),
     afterEdit,
-    legacyIdentityAttack: {
-      id: legacyId,
-      editButtons: legacyEditButtons,
-      patchStatus: denied.status(),
+    crossPrincipalIdentityAttack: {
+      id: messageId,
+      editButtons: editButtonsAsLinus,
+      patchStatus: denied,
     },
     finalState,
     consoleErrors,
@@ -195,4 +205,4 @@ async (page) => {
     responseFailures,
     responseStatuses: [...responseStatuses].sort((left, right) => left - right),
   };
-}
+};

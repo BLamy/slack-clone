@@ -41,7 +41,9 @@ export function createChatService({ streamStore, randomId, now }) {
 
   return {
     appendMessage,
+    closeStreams: streamStore.close,
     ensureStream: streamStore.ensure,
+    followMessages: streamStore.follow,
     normalizeRoomId,
     readMessages: streamStore.read,
     resetRoom,

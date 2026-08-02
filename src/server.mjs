@@ -24,7 +24,10 @@ const PORT = Number(process.env.PORT ?? 5175);
 const HOST = process.env.HOST ?? "127.0.0.1";
 const DURABLE_STREAMS_URL =
   process.env.DURABLE_STREAMS_URL ?? "http://127.0.0.1:4100";
-const EMULATE_TOKEN = process.env.EMULATE_TOKEN ?? "test_token_admin";
+const DURABLE_STREAMS_ADMIN_TOKEN =
+  process.env.DURABLE_STREAMS_ADMIN_TOKEN ??
+  process.env.EMULATE_TOKEN ??
+  "test_token_admin";
 const AUTH0_EMULATOR_URL =
   process.env.AUTH0_EMULATOR_URL ?? "http://127.0.0.1:4101";
 const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID ?? "slack-clone-auth0";
@@ -253,7 +256,7 @@ async function handleAuth(request, response, url) {
 
 const streamStore = createDurableStreamsStore({
   baseUrl: DURABLE_STREAMS_URL,
-  token: EMULATE_TOKEN,
+  token: DURABLE_STREAMS_ADMIN_TOKEN,
   fetchFn: globalThis.fetch,
   digestRecords: canonicalSha256,
 });
@@ -376,6 +379,7 @@ server.listen(PORT, HOST, () => {
 
 function shutdown() {
   chatHttp.close();
+  chatService.closeStreams();
   server.close(() => process.exit(0));
 }
 

@@ -2,8 +2,8 @@ import { run } from "./process-utils.mjs";
 
 await run("pnpm", ["install", "--frozen-lockfile"], { name: "root-install" });
 await run("node", ["scripts/setup-emulator.mjs"], { name: "emulator-setup" });
-await run("node", ["scripts/verify-e0-t02.mjs"], {
-  name: "verify-E0-T02",
+await run("node", ["scripts/verify-e0-t03.mjs"], {
+  name: "verify-E0-T03",
   env: {
     ...process.env,
     TEST_RUN_ID:

@@ -1,12 +1,25 @@
 import { expect, test } from "@playwright/test";
 import { writeFile } from "node:fs/promises";
 
+import { createDurableStreamsStore } from "@stream-slack/durable-streams";
+
 const APP_BASE_URL = process.env.APP_BASE_URL ?? "http://127.0.0.1:5175";
 const AUTH0_EMULATOR_URL =
   process.env.AUTH0_EMULATOR_URL ?? "http://127.0.0.1:4101";
 const DURABLE_STREAMS_URL =
   process.env.DURABLE_STREAMS_URL ?? "http://127.0.0.1:4100";
 const ROOM_PREFIX = process.env.TEST_ROOM_PREFIX ?? "playwright";
+const fixtureStreamStore = createDurableStreamsStore({
+  baseUrl: DURABLE_STREAMS_URL,
+  token:
+    process.env.DURABLE_STREAMS_ADMIN_TOKEN ??
+    process.env.EMULATE_TOKEN ??
+    "test_token_admin",
+  fetchFn: globalThis.fetch,
+  digestRecords: () => "fixture-digest-not-used",
+});
+
+test.afterAll(() => fixtureStreamStore.close());
 
 async function signIn(page, room, email) {
   await page.goto(`/app?room=${room}`);
@@ -22,19 +35,7 @@ async function signIn(page, room, email) {
 }
 
 async function seedLegacyMessage(room, record) {
-  const url = `${DURABLE_STREAMS_URL}/rooms/${encodeURIComponent(room)}/messages`;
-  const headers = {
-    Authorization: "Bearer test_token_admin",
-    "Content-Type": "application/json",
-  };
-  const create = await fetch(url, { method: "PUT", headers, body: "[]" });
-  expect([200, 201]).toContain(create.status);
-  const append = await fetch(url, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(record),
-  });
-  expect([200, 204]).toContain(append.status);
+  await fixtureStreamStore.append(room, record);
 }
 
 test("homepage sends a user through the emulator login into the chat", async ({

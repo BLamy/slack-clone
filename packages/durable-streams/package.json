@@ -3,8 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "exports": "./src/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.mjs"
+    }
+  },
   "dependencies": {
+    "@durable-streams/client": "0.2.6",
     "@stream-slack/protocol": "workspace:*",
     "@stream-slack/reducers": "workspace:*"
   }

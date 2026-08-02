@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T03",
+  "runId": "e0-t03-builder-final",
+  "result": "PASS",
+  "canarySha256": "0d3bd955c0b5192a6c76ab55e0ae6c7098428d711ae72d3df4b041d989501d56",
+  "encodingsScanned": [
+    "raw",
+    "url-encoded",
+    "base64"
+  ],
+  "positiveControlDetections": [
+    1,
+    1,
+    1
+  ],
+  "totalMatches": 0,
+  "categories": {
+    "browserAssetsAndApi": {
+      "entries": 6,
+      "bytesScanned": 30999,
+      "matches": 0
+    },
+    "logs": {
+      "entries": 1,
+      "bytesScanned": 288,
+      "matches": 0
+    },
+    "environmentManifests": {
+      "entries": 1,
+      "bytesScanned": 301,
+      "matches": 0
+    },
+    "runArtifacts": {
+      "entries": 7,
+      "bytesScanned": 31598,
+      "matches": 0
+    }
+  }
+}

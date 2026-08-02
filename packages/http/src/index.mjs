@@ -8,16 +8,24 @@ export async function readJson(request) {
 }
 
 export function sendJson(response, statusCode, value) {
+  if (response.headersSent || response.writableEnded || response.destroyed) {
+    return false;
+  }
   response.writeHead(statusCode, {
     "Content-Type": "application/json; charset=utf-8",
     "Cache-Control": "no-store",
   });
   response.end(JSON.stringify(value));
+  return true;
 }
 
 export function sendError(response, error) {
+  if (response.headersSent || response.writableEnded || response.destroyed) {
+    if (!response.writableEnded && !response.destroyed) response.end();
+    return false;
+  }
   const statusCode = Number(error?.statusCode ?? 500);
-  sendJson(response, statusCode, {
+  return sendJson(response, statusCode, {
     ok: false,
     error: error instanceof Error ? error.message : String(error),
   });
@@ -44,8 +52,9 @@ export function createChatHttpDelivery({
         clients: new Set(),
         nextOffset: null,
         streamDigest: emptyDigest,
-        timer: null,
-        polling: false,
+        follow: null,
+        followGeneration: 0,
+        starting: null,
       };
       rooms.set(room, state);
     }
@@ -53,58 +62,150 @@ export function createChatHttpDelivery({
   }
 
   function writeSse(response, event, data) {
-    response.write(`event: ${event}\n`);
-    response.write(`data: ${JSON.stringify(data)}\n\n`);
+    if (response.destroyed || response.writableEnded) return false;
+    try {
+      response.write(`event: ${event}\n`);
+      response.write(`data: ${JSON.stringify(data)}\n\n`);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function removeClient(state, client) {
+    if (!state.clients.delete(client)) return;
+    timers.clearInterval(client.keepAlive);
+    if (state.clients.size === 0) stopFollowing(state, "last client left");
   }
 
   function broadcast(state, event, data) {
-    for (const client of state.clients) writeSse(client, event, data);
-  }
-
-  async function pollRoom(state) {
-    if (state.polling) return;
-    state.polling = true;
-    try {
-      if (state.nextOffset === null) {
-        const initial = await chatService.readMessages(state.room, "now");
-        state.nextOffset = initial.nextOffset;
-      }
-      const result = await chatService.readMessages(
-        state.room,
-        state.nextOffset,
-      );
-      state.nextOffset = result.nextOffset;
-      for (const message of result.records)
-        broadcast(state, "message", message);
-      if (result.records.length > 0) {
-        state.streamDigest = (
-          await chatService.readMessages(state.room, "-1")
-        ).streamDigest;
-      }
-      broadcast(state, "status", {
-        durableStreamsUrl,
-        stream: `/rooms/${state.room}/messages`,
-        nextOffset: state.nextOffset,
-        streamDigest: state.streamDigest,
-        clients: state.clients.size,
-      });
-    } catch (error) {
-      broadcast(state, "error", {
-        message: error instanceof Error ? error.message : String(error),
-      });
-    } finally {
-      state.polling = false;
-      if (state.clients.size > 0) {
-        state.timer = timers.setTimeout(() => void pollRoom(state), 350);
-      } else {
-        state.timer = null;
-        state.nextOffset = null;
+    for (const client of [...state.clients]) {
+      if (!writeSse(client.response, event, data)) {
+        removeClient(state, client);
       }
     }
   }
 
-  function startPolling(state) {
-    if (!state.timer && !state.polling) void pollRoom(state);
+  function broadcastStatus(state) {
+    broadcast(state, "status", {
+      durableStreamsUrl,
+      stream: `/rooms/${state.room}/messages`,
+      nextOffset: state.nextOffset ?? ZERO_OFFSET,
+      streamDigest: state.streamDigest,
+      clients: state.clients.size,
+    });
+  }
+
+  function stopFollowing(state, reason) {
+    state.followGeneration += 1;
+    state.follow?.cancel(reason);
+    state.follow = null;
+    state.starting = null;
+  }
+
+  function startFollowing(state) {
+    if (
+      state.clients.size === 0 ||
+      state.follow ||
+      state.starting ||
+      state.nextOffset === null
+    ) {
+      return;
+    }
+
+    const generation = state.followGeneration + 1;
+    state.followGeneration = generation;
+    state.starting = chatService
+      .followMessages(state.room, state.nextOffset, {
+        live: "sse",
+        onBatch: async (batch) => {
+          if (generation !== state.followGeneration) return;
+          state.nextOffset = batch.nextOffset;
+          for (const record of batch.records) {
+            broadcast(state, "message", record);
+          }
+          if (batch.records.length > 0) {
+            const snapshot = await chatService.readMessages(state.room, "-1");
+            if (generation !== state.followGeneration) return;
+            state.nextOffset = snapshot.nextOffset;
+            state.streamDigest = snapshot.streamDigest;
+          }
+          broadcastStatus(state);
+        },
+      })
+      .then((follow) => {
+        state.starting = null;
+        if (generation !== state.followGeneration || state.clients.size === 0) {
+          follow.cancel("room follow superseded");
+          return;
+        }
+        state.follow = follow;
+        follow.closed
+          .catch((error) => {
+            if (generation !== state.followGeneration) return;
+            broadcast(state, "error", {
+              message: error instanceof Error ? error.message : String(error),
+            });
+          })
+          .finally(() => {
+            if (generation === state.followGeneration) state.follow = null;
+          });
+      })
+      .catch((error) => {
+        if (generation !== state.followGeneration) return;
+        state.starting = null;
+        broadcast(state, "error", {
+          message: error instanceof Error ? error.message : String(error),
+        });
+      });
+  }
+
+  async function handleEvents(request, response, room) {
+    const state = roomState(room);
+    const disconnect = new AbortController();
+    const abortBeforeHeaders = () => disconnect.abort("client disconnected");
+    request.once("aborted", abortBeforeHeaders);
+
+    let snapshot;
+    try {
+      snapshot = await chatService.readMessages(room, "-1", {
+        signal: disconnect.signal,
+      });
+    } finally {
+      request.removeListener("aborted", abortBeforeHeaders);
+    }
+    if (disconnect.signal.aborted || response.destroyed) return true;
+
+    response.writeHead(200, {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache, no-store",
+      Connection: "keep-alive",
+      "X-Accel-Buffering": "no",
+    });
+    const client = {
+      response,
+      keepAlive: null,
+    };
+    state.clients.add(client);
+    state.nextOffset = snapshot.nextOffset;
+    state.streamDigest = snapshot.streamDigest;
+    writeSse(response, "snapshot", {
+      messages: snapshot.messages,
+      durableStreamsUrl,
+      stream: `/rooms/${room}/messages`,
+      nextOffset: snapshot.nextOffset,
+      streamDigest: snapshot.streamDigest,
+    });
+    client.keepAlive = timers.setInterval(() => {
+      if (response.destroyed || response.writableEnded) {
+        removeClient(state, client);
+        return;
+      }
+      response.write(": keep-alive\n\n");
+    }, 10_000);
+    response.once("close", () => removeClient(state, client));
+    startFollowing(state);
+    return true;
   }
 
   async function handleApi(request, response, url) {
@@ -152,35 +253,7 @@ export function createChatHttpDelivery({
     const messageId = match[3] ? decodeURIComponent(match[3]) : null;
 
     if (resource === "events" && request.method === "GET") {
-      const state = roomState(room);
-      response.writeHead(200, {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache, no-store",
-        Connection: "keep-alive",
-        "X-Accel-Buffering": "no",
-      });
-      state.clients.add(response);
-      const snapshot = await chatService.readMessages(room, "-1");
-      writeSse(response, "snapshot", {
-        messages: snapshot.messages,
-        durableStreamsUrl,
-        stream: `/rooms/${room}/messages`,
-        nextOffset: snapshot.nextOffset,
-        streamDigest: snapshot.streamDigest,
-      });
-      state.streamDigest = snapshot.streamDigest;
-      if (state.nextOffset === null) state.nextOffset = snapshot.nextOffset;
-      startPolling(state);
-
-      const keepAlive = timers.setInterval(
-        () => response.write(": keep-alive\n\n"),
-        10000,
-      );
-      request.on("close", () => {
-        timers.clearInterval(keepAlive);
-        state.clients.delete(response);
-      });
-      return true;
+      return handleEvents(request, response, room);
     }
 
     if (resource === "messages" && request.method === "GET") {
@@ -203,6 +276,7 @@ export function createChatHttpDelivery({
         await readJson(request),
         user,
       );
+      startFollowing(roomState(room));
       sendJson(response, 201, {
         ok: true,
         room,
@@ -219,6 +293,7 @@ export function createChatHttpDelivery({
         await readJson(request),
         user,
       );
+      startFollowing(roomState(room));
       sendJson(response, 200, {
         ok: true,
         room,
@@ -229,15 +304,17 @@ export function createChatHttpDelivery({
     }
 
     if (resource === "messages" && request.method === "DELETE") {
-      await chatService.resetRoom(room);
       const state = roomState(room);
-      state.nextOffset = null;
+      stopFollowing(state, "room reset");
+      await chatService.resetRoom(room);
+      state.nextOffset = ZERO_OFFSET;
       state.streamDigest = emptyDigest;
       broadcast(state, "reset", {
         room,
         nextOffset: ZERO_OFFSET,
         streamDigest: emptyDigest,
       });
+      startFollowing(state);
       sendJson(response, 200, { ok: true, room });
       return true;
     }
@@ -247,8 +324,13 @@ export function createChatHttpDelivery({
 
   function close() {
     for (const state of rooms.values()) {
-      if (state.timer) timers.clearTimeout(state.timer);
-      for (const client of state.clients) client.end();
+      stopFollowing(state, "HTTP delivery closed");
+      for (const client of [...state.clients]) {
+        timers.clearInterval(client.keepAlive);
+        if (!client.response.writableEnded && !client.response.destroyed) {
+          client.response.end();
+        }
+      }
       state.clients.clear();
     }
     rooms.clear();

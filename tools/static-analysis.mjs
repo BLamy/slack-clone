@@ -37,6 +37,20 @@ const boundary = spawnSync(
 process.stdout.write(boundary.stdout);
 process.stderr.write(boundary.stderr);
 if (boundary.status !== 0) process.exit(boundary.status ?? 1);
+
+const streamAccessAudit = spawnSync(
+  process.execPath,
+  [path.join(root, "tools/audit-durable-streams-access.mjs")],
+  {
+    cwd: root,
+    encoding: "utf8",
+  },
+);
+process.stdout.write(streamAccessAudit.stdout);
+process.stderr.write(streamAccessAudit.stderr);
+if (streamAccessAudit.status !== 0) {
+  process.exit(streamAccessAudit.status ?? 1);
+}
 console.log(`PASS static syntax analysis files=${files.length}`);
 
 async function listModules(directory) {

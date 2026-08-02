@@ -4,6 +4,11 @@
     "offset": "0000000000000002_0000000000000006",
     "path": "$.event.data.messageId"
   },
+  "invalid-offset.json": {
+    "code": "REDUCER_INVALID_OFFSET",
+    "offset": "not-an-offset",
+    "path": "$.records[0].offset"
+  },
   "illegal-transition.json": {
     "code": "REDUCER_ILLEGAL_TRANSITION",
     "offset": "0000000000000002_0000000000000004",

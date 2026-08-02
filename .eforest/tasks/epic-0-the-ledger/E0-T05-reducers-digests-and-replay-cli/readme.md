@@ -3,7 +3,7 @@ id: E0-T05
 epic: 0
 title: "Pure reducers, canonical state digests, and replay CLI"
 priority: 5
-status: in-progress
+status: implemented
 depends_on: [E0-T01, E0-T04]
 estimate: M
 capstone: false
@@ -118,3 +118,35 @@ VERDICT: refuted
   the next builder pass must retain canonical envelope provenance and add independent
   metadata/source-reference mutation tests. The critic did not edit product code or task
   metadata.
+
+### Builder — 2026-08-02 — provenance repair and cold evidence
+
+- Repair commit: `a23b4962eddf1e413aa76c211a0032d2b2397c7e`. Replay state now retains each
+  applied envelope and its canonical Durable Streams offset in `eventProvenance`, so source
+  metadata is part of every prefix and final digest. Replay also rejects non-canonical
+  offsets with `REDUCER_INVALID_OFFSET` at the offending record.
+- Repair cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t05-repair-provenance TEST_ARTIFACT_DIR=.artifacts/e0-t05/e0-t05-repair-provenance make verify-E0-T05`.
+- The clean cold target reinstalled and rebuilt the emulator, then passed every gate with
+  zero skips: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (71 unit tests
+  plus 5 browser tests), and `pnpm build`.
+- Replaying `ledger-log.v1.json` twice in fresh processes produced final digest
+  `sha256:5462e5c9d9d93fa56ae173a15d49ea3c931db073a2ee3da0dd2083ebeb99b79e` across ten
+  prefixes. Replaying `message-and-run-log.v1.json` twice produced final digest
+  `sha256:abe1b4ab514e5b182efd0e509efef3f42b4b8ae7bf843361b18b991c7d9522ef` across four
+  prefixes. Full replay bytes and prefix digest output remained identical under the two
+  locale/timezone environments.
+- The verifier independently changed `serverTimestamp`, `correlationId`, `idempotencyKey`,
+  `actorId`, `eventId`, and the stream offset for both valid logs; each valid mutation
+  changed the final digest. Schema-version mutations failed typed validation, and paired
+  `causation.digest` mutations changed the final digest. Invalid-offset evidence reports
+  `REDUCER_INVALID_OFFSET` at `not-an-offset`; query-store and build-cache paths remained
+  absent under network-disabled replay settings.
+- Promoted evidence: `evidence/verification-summary.json`,
+  `evidence/prefix-digests.json`, `evidence/invalid-results.json`,
+  `evidence/mutation-results.json`, `evidence/provenance-results.json`,
+  `evidence/purity-audit.json`, and committed `evidence/valid/` plus
+  `evidence/invalid/` fixture copies. Replay: N/A (CLI replay apparatus, not browser
+  behavior) + mitigation: golden event logs, per-prefix digests, purity audit, and
+  mutation tests.
+- Repair claim: the critic’s provenance sensitivity finding is addressed at the state
+  contract, and the repaired implementation is ready for a fresh independent critic.

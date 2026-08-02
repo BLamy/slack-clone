@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-resubmit5",
-  "implementationCommit": "330687fe13bbc142f0ce85ec58f5295a644e77d9",
+  "runId": "e0-t03-builder-resubmit6",
+  "implementationCommit": "f815d7fae0b6626b69d7dcf1bd857e0b6244eee9",
   "result": "PASS",
-  "room": "e0-t03-builder-resubmit5-adapter",
+  "room": "e0-t03-builder-resubmit6-adapter",
   "officialClient": "@durable-streams/client@0.2.6",
   "createOnce": {
     "ensureCalls": 3,
@@ -42,7 +42,7 @@
         "record-live-2"
       ],
       "nextOffset": "0000000000000000_0000000000000535",
-      "streamDigest": "sha256:0fb8233c9dc98d18c3c3b4cdc5d691dd9ae4d80b24425e5cfc8203a4421c5cfa"
+      "streamDigest": "sha256:42b16cc7fd2bd96cea2b9ec766da526e5a3935587867b58d0f5c83aff3609e53"
     },
     {
       "checkpoint": "0000000000000000_0000000000000096",
@@ -59,7 +59,7 @@
         "record-live-2"
       ],
       "nextOffset": "0000000000000000_0000000000000535",
-      "streamDigest": "sha256:ba4d93875ba4e33162053769da485f7f282c9399de07f54e756c3568fbaba412"
+      "streamDigest": "sha256:0b6c1d430a143d0e11b8d3254a8c8e33d4beeae73984f3b72f02c4d62b39e9d6"
     },
     {
       "checkpoint": "0000000000000000_0000000000000193",
@@ -74,7 +74,7 @@
         "record-live-2"
       ],
       "nextOffset": "0000000000000000_0000000000000535",
-      "streamDigest": "sha256:844c4a43f428330817a21fd53ec265af1960f1bfa555b9a6d3db4b722cbb4e88"
+      "streamDigest": "sha256:8e772d8d2b801b2731cecf02b7be4302dd8f6968442b097817826fc59f87d42e"
     },
     {
       "checkpoint": "0000000000000000_0000000000000289",
@@ -87,7 +87,7 @@
         "record-live-2"
       ],
       "nextOffset": "0000000000000000_0000000000000535",
-      "streamDigest": "sha256:39168289b5df326e1060f7892420cb4644d108500da80c5f1320e420a120752e"
+      "streamDigest": "sha256:357e7f1941b8e47bd44b2e80a4abd55de37772cea1f196c0a8ff5f5cb3b95876"
     },
     {
       "checkpoint": "0000000000000000_0000000000000409",
@@ -98,7 +98,7 @@
         "record-live-2"
       ],
       "nextOffset": "0000000000000000_0000000000000535",
-      "streamDigest": "sha256:a07c5deacc5d55e87e23d12efd8822d50d1c118284d3fecf97677091f8cc6074"
+      "streamDigest": "sha256:269f35d014252b5e8fb20b0f8ad2f5f462f71ed0e885e9fb71df0030d1a50fb0"
     },
     {
       "checkpoint": "0000000000000000_0000000000000535",
@@ -171,29 +171,29 @@
     {
       "sequence": 1,
       "method": "HEAD",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {},
       "status": 404,
       "contentType": "text/plain; charset=UTF-8",
       "nextOffset": null,
       "streamClosed": null,
-      "durationMs": 5
+      "durationMs": 6
     },
     {
       "sequence": 2,
       "method": "PUT",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {},
       "status": 201,
       "contentType": "application/json",
       "nextOffset": "0000000000000000_0000000000000000",
       "streamClosed": null,
-      "durationMs": 6
+      "durationMs": 5
     },
     {
       "sequence": 3,
       "method": "POST",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {},
       "status": 204,
       "contentType": null,
@@ -204,29 +204,29 @@
     {
       "sequence": 4,
       "method": "POST",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {},
       "status": 204,
       "contentType": null,
       "nextOffset": "0000000000000000_0000000000000193",
       "streamClosed": null,
-      "durationMs": 2
+      "durationMs": 3
     },
     {
       "sequence": 5,
       "method": "POST",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {},
       "status": 204,
       "contentType": null,
       "nextOffset": "0000000000000000_0000000000000289",
       "streamClosed": null,
-      "durationMs": 14
+      "durationMs": 37
     },
     {
       "sequence": 6,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {
         "offset": "0000000000000000_0000000000000289"
       },
@@ -234,12 +234,12 @@
       "contentType": "application/json",
       "nextOffset": "0000000000000000_0000000000000289",
       "streamClosed": null,
-      "durationMs": 4
+      "durationMs": 14
     },
     {
       "sequence": 7,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {
         "offset": "0000000000000000_0000000000000289",
         "live": "sse"
@@ -248,109 +248,109 @@
       "contentType": "text/event-stream",
       "nextOffset": null,
       "streamClosed": null,
-      "durationMs": 2
+      "durationMs": 11
     },
     {
       "sequence": 8,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {
         "offset": "0000000000000000_0000000000000289",
         "live": "sse",
-        "cursor": "1785642412"
+        "cursor": "1785645595"
       },
       "status": 200,
       "contentType": "text/event-stream",
       "nextOffset": null,
       "streamClosed": null,
-      "durationMs": 5
+      "durationMs": 40
     },
     {
       "sequence": 8,
       "method": "POST",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {},
       "status": 204,
       "contentType": null,
       "nextOffset": "0000000000000000_0000000000000409",
       "streamClosed": null,
-      "durationMs": 3
+      "durationMs": 41
     },
     {
       "sequence": 10,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {
         "offset": "0000000000000000_0000000000000289",
         "live": "sse",
-        "cursor": "1785642412"
+        "cursor": "1785645595"
       },
       "status": 200,
       "contentType": "text/event-stream",
       "nextOffset": null,
       "streamClosed": null,
-      "durationMs": 1
+      "durationMs": 4
     },
     {
       "sequence": 11,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {
         "offset": "0000000000000000_0000000000000409",
         "live": "sse",
-        "cursor": "1785642412"
+        "cursor": "1785645595"
       },
       "status": 200,
       "contentType": "text/event-stream",
       "nextOffset": null,
       "streamClosed": null,
-      "durationMs": 1
+      "durationMs": 3
     },
     {
       "sequence": 12,
       "method": "POST",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {},
       "status": 204,
       "contentType": null,
       "nextOffset": "0000000000000000_0000000000000535",
       "streamClosed": null,
-      "durationMs": 1
+      "durationMs": 5
     },
     {
       "sequence": 13,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {
         "offset": "0000000000000000_0000000000000409",
         "live": "sse",
-        "cursor": "1785642412"
+        "cursor": "1785645595"
       },
       "status": 200,
       "contentType": "text/event-stream",
       "nextOffset": null,
       "streamClosed": null,
-      "durationMs": 1
+      "durationMs": 3
     },
     {
       "sequence": 14,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {
         "offset": "0000000000000000_0000000000000535",
         "live": "sse",
-        "cursor": "1785642412"
+        "cursor": "1785645595"
       },
       "status": 200,
       "contentType": "text/event-stream",
       "nextOffset": null,
       "streamClosed": null,
-      "durationMs": 1
+      "durationMs": 3
     },
     {
       "sequence": 15,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {
         "offset": "-1"
       },
@@ -358,12 +358,12 @@
       "contentType": "application/json",
       "nextOffset": "0000000000000000_0000000000000535",
       "streamClosed": null,
-      "durationMs": 1
+      "durationMs": 2
     },
     {
       "sequence": 16,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {
         "offset": "0000000000000000_0000000000000096"
       },
@@ -376,7 +376,7 @@
     {
       "sequence": 17,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {
         "offset": "0000000000000000_0000000000000193"
       },
@@ -389,7 +389,7 @@
     {
       "sequence": 18,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {
         "offset": "0000000000000000_0000000000000289"
       },
@@ -397,12 +397,12 @@
       "contentType": "application/json",
       "nextOffset": "0000000000000000_0000000000000535",
       "streamClosed": null,
-      "durationMs": 1
+      "durationMs": 2
     },
     {
       "sequence": 19,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {
         "offset": "0000000000000000_0000000000000409"
       },
@@ -410,12 +410,12 @@
       "contentType": "application/json",
       "nextOffset": "0000000000000000_0000000000000535",
       "streamClosed": null,
-      "durationMs": 1
+      "durationMs": 2
     },
     {
       "sequence": 20,
       "method": "GET",
-      "path": "/rooms/e0-t03-builder-resubmit5-adapter/messages",
+      "path": "/rooms/e0-t03-builder-resubmit6-adapter/messages",
       "query": {
         "offset": "0000000000000000_0000000000000535"
       },

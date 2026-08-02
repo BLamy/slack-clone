@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "task": "E0-T03",
-  "runId": "e0-t03-builder-resubmit5",
-  "implementationCommit": "330687fe13bbc142f0ce85ec58f5295a644e77d9",
+  "runId": "e0-t03-builder-resubmit6",
+  "implementationCommit": "f815d7fae0b6626b69d7dcf1bd857e0b6244eee9",
   "result": "PASS",
-  "filesScanned": 50,
+  "filesScanned": 51,
   "failures": [],
   "sensitivity": {
     "result": "PASS",
@@ -36,7 +36,35 @@
       "classStaticMethod",
       "classInstanceField",
       "dynamicComputedFetch",
-      "dynamicComputedProvider"
+      "dynamicComputedProvider",
+      "declaration-order-three-hop",
+      "higher-order-parameter-dispatch",
+      "higher-order-object-factory",
+      "literal-array-callback-container",
+      "array-at-extraction",
+      "map-get-extraction",
+      "class-constructor-injection",
+      "reflect-get-member-extraction",
+      "descriptor-member-extraction",
+      "borrowed-call-prototype",
+      "borrowed-apply-prototype",
+      "reflect-get-bind",
+      "default-parameter-provider-second-argument",
+      "rest-parameter-provider-third-argument",
+      "conditional-mixed-application-provider-target",
+      "logical-mixed-application-provider-target",
+      "sequence-mixed-application-provider-target",
+      "computed-symbol-member-extraction",
+      "member-extraction-after-alias-cycle",
+      "partially-bound-provider-target",
+      "returned-provider-target",
+      "iterator-chain-extraction",
+      "object-assign-factory",
+      "application-api-variable",
+      "application-api-conditional",
+      "application-api-wrapper-options",
+      "partially-bound-application-api",
+      "returned-application-api-target"
     ],
     "detections": {
       "direct": [
@@ -122,7 +150,81 @@
       ],
       "dynamicComputedProvider": [
         "direct-provider-network"
-      ]
+      ],
+      "declaration-order-three-hop": [
+        "direct-provider-network"
+      ],
+      "higher-order-parameter-dispatch": [
+        "direct-provider-network"
+      ],
+      "higher-order-object-factory": [
+        "direct-provider-network"
+      ],
+      "literal-array-callback-container": [
+        "direct-provider-network"
+      ],
+      "array-at-extraction": [
+        "direct-provider-network"
+      ],
+      "map-get-extraction": [
+        "direct-provider-network"
+      ],
+      "class-constructor-injection": [
+        "direct-provider-network"
+      ],
+      "reflect-get-member-extraction": [
+        "direct-provider-network"
+      ],
+      "descriptor-member-extraction": [
+        "direct-provider-network"
+      ],
+      "borrowed-call-prototype": [
+        "direct-provider-network"
+      ],
+      "borrowed-apply-prototype": [
+        "direct-provider-network"
+      ],
+      "reflect-get-bind": [
+        "direct-provider-network"
+      ],
+      "default-parameter-provider-second-argument": [
+        "direct-provider-network"
+      ],
+      "rest-parameter-provider-third-argument": [
+        "direct-provider-network"
+      ],
+      "conditional-mixed-application-provider-target": [
+        "direct-provider-network"
+      ],
+      "logical-mixed-application-provider-target": [
+        "direct-provider-network"
+      ],
+      "sequence-mixed-application-provider-target": [
+        "direct-provider-network"
+      ],
+      "computed-symbol-member-extraction": [
+        "direct-provider-network"
+      ],
+      "member-extraction-after-alias-cycle": [
+        "direct-provider-network"
+      ],
+      "partially-bound-provider-target": [
+        "direct-provider-network"
+      ],
+      "returned-provider-target": [
+        "direct-provider-network"
+      ],
+      "iterator-chain-extraction": [
+        "direct-provider-network"
+      ],
+      "object-assign-factory": [
+        "direct-provider-network"
+      ],
+      "application-api-variable": [],
+      "application-api-conditional": [],
+      "application-api-wrapper-options": [],
+      "partially-bound-application-api": [],
+      "returned-application-api-target": []
     }
   }
 }

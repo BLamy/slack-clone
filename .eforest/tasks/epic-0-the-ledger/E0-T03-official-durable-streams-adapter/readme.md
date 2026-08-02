@@ -3,7 +3,7 @@ id: E0-T03
 epic: 0
 title: "Official Durable Streams adapter with resumable reads"
 priority: 3
-status: refuted
+status: in-progress
 depends_on: [E0-T02]
 estimate: L
 capstone: false
@@ -983,3 +983,17 @@ VERDICT: refuted
   proof, canary scan, redirect-origin test, source controls, browser/API correlation, and
   reconnect matrix`; no `record:replay`, tunnel, or external upload was run. E0-T04 remains
   blocked.
+
+### Builder repair 7 — 2026-08-02
+
+- Repair target: replace the open-ended call-target taint claim with an enforceable
+  network-door boundary. Production and browser modules outside explicit transport doors
+  may not acquire ambient network capabilities at all; application API traffic moves
+  through a same-origin `/api/` door, while Durable Streams provider access remains
+  confined to the official adapter and conformance harness. Promote the seventh critic's
+  provider and clean-application cases as architecture-boundary controls, including nested
+  defaults, inheritance/getters, weak collections, tagged selectors, and reflective
+  construction. The repair is complete only when a full synthetic repository cannot make
+  a new module network-capable through those forms, valid application calls use the
+  declared door without false positives, and mutation proves both sides of the boundary
+  can go red.

@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E0-T04 fourth-critic repair passed the promoted cold verifier; awaiting a fresh independent critic for final verification.",
+  "statusReason": "E0-T04 repair passed the promoted cold verifier; the replacement critic needs evidence after using an invalid task-local build path and will resume with a valid .artifacts path.",
   "updatedAt": "2026-08-02T14:45:00Z"
 }

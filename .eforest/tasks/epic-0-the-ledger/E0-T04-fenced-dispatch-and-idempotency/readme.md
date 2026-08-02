@@ -242,3 +242,9 @@ key cannot be replayed for different content.
 - Regression coverage now proves reset notifications retain their durable position inside a mixed batch, a provider duplicate without the requested target event fails with `DISPATCH_DURABILITY_GAP` before receipt persistence, and a forged tail receipt checkpoint fails closed. Replay: N/A (server dispatch concurrency contract) + mitigation: real-HTTP/browser stream proof, alternating cross-door race logs, reset-order unit coverage, producer-duplicate and receipt-integrity attacks, lost-ack/process-restart recovery, head/digest dumps, and the cold-clone verifier. No Replay upload or tunnel was attempted.
 - Promoted evidence: `evidence/cold-verification.json`, `evidence/dispatch-conformance.json`, `evidence/final-stream-dump.json`, and `evidence/request-transcript.json`.
 - Claim: reset delivery preserves authoritative event order; provider duplicate responses cannot create a receipt for an unobserved event; and a tail receipt cannot be forged by changing its checkpoint. Prior cross-door, logical retry, fence, authorization, and durable-receipt invariants remain green. A fresh critic must now verify this repaired exact diff and evidence.
+
+### Critic — 2026-08-02 — replacement critic needs evidence
+
+- Verdict: `VERDICT: needs-evidence`.
+- The replacement critic confirmed the promoted cold evidence is tied to the exact repaired implementation, but its independent rerun stopped before the attack and sensitivity audit because it selected a task-local build artifact path rejected by `scripts/build.mjs`; no product, task metadata, evidence, or commits were changed.
+- The queue remains at E0-T04 awaiting an independent critic. The same fresh critic will resume with a repository-valid `.artifacts/` path and must complete the essential attack set before any verification status changes.

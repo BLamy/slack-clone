@@ -1,11 +1,10 @@
 import crypto from "node:crypto";
 import { createReadStream } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
-import http from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { createDurableStreamsStore } from "@stream-slack/durable-streams";
+import { createNodeDurableStreamsStore } from "@stream-slack/durable-streams";
 import {
   createChatHttpDelivery,
   sendError,
@@ -14,6 +13,8 @@ import {
 import { DEFAULT_CHAT_PATH } from "@stream-slack/protocol";
 import { createChatService } from "@stream-slack/services";
 
+import { createAuth0Client } from "./auth0-client.mjs";
+import { createInboundHttpServer } from "./http-server.mjs";
 import { canonicalSha256 } from "./ledger/canonical-json.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -38,6 +39,12 @@ const AUTH0_REALM =
 const SESSION_COOKIE = "slack_clone_session";
 
 const sessions = new Map();
+const auth0Client = createAuth0Client({
+  baseUrl: AUTH0_EMULATOR_URL,
+  clientId: AUTH0_CLIENT_ID,
+  clientSecret: AUTH0_CLIENT_SECRET,
+  realm: AUTH0_REALM,
+});
 
 function parseCookies(request) {
   const header = request.headers.cookie ?? "";
@@ -157,54 +164,6 @@ async function readForm(request) {
   return new URLSearchParams(Buffer.concat(chunks).toString("utf8"));
 }
 
-async function exchangePassword(username, password) {
-  const tokenResponse = await fetch(`${AUTH0_EMULATOR_URL}/oauth/token`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      grant_type: "http://auth0.com/oauth/grant-type/password-realm",
-      username,
-      password,
-      realm: AUTH0_REALM,
-      scope: "openid profile email",
-      client_id: AUTH0_CLIENT_ID,
-      client_secret: AUTH0_CLIENT_SECRET,
-    }),
-  });
-
-  if (!tokenResponse.ok) {
-    const body = await tokenResponse
-      .json()
-      .catch(async () => ({ error_description: await tokenResponse.text() }));
-    throw new Error(
-      body.error_description ??
-        body.error ??
-        `Auth0 emulator token exchange failed: ${tokenResponse.status}`,
-    );
-  }
-
-  const token = await tokenResponse.json();
-  const userInfoResponse = await fetch(`${AUTH0_EMULATOR_URL}/userinfo`, {
-    headers: { Authorization: `Bearer ${token.access_token}` },
-  });
-  if (!userInfoResponse.ok) {
-    throw new Error(
-      `Auth0 emulator userinfo failed: ${userInfoResponse.status} ${await userInfoResponse.text()}`,
-    );
-  }
-
-  const profile = await userInfoResponse.json();
-  return {
-    token,
-    user: {
-      sub: profile.sub,
-      name: profile.name ?? profile.email ?? "Authenticated User",
-      email: profile.email ?? "",
-      preferredUsername: profile.nickname ?? profile.email ?? "",
-    },
-  };
-}
-
 async function handleAuth(request, response, url) {
   if (url.pathname === "/login" && request.method === "GET") {
     sendHtml(
@@ -219,7 +178,7 @@ async function handleAuth(request, response, url) {
     const form = await readForm(request);
     const returnTo = safeReturnTo(form.get("returnTo") ?? "/");
     try {
-      const { user, token } = await exchangePassword(
+      const { user, token } = await auth0Client.exchangePassword(
         form.get("email") ?? "",
         form.get("password") ?? "",
       );
@@ -254,10 +213,9 @@ async function handleAuth(request, response, url) {
   return false;
 }
 
-const streamStore = createDurableStreamsStore({
+const streamStore = createNodeDurableStreamsStore({
   baseUrl: DURABLE_STREAMS_URL,
   token: DURABLE_STREAMS_ADMIN_TOKEN,
-  fetchFn: globalThis.fetch,
   digestRecords: canonicalSha256,
 });
 const chatService = createChatService({
@@ -266,12 +224,12 @@ const chatService = createChatService({
   now: () => new Date().toISOString(),
 });
 const chatHttp = createChatHttpDelivery({
+  auth0Health: auth0Client.health,
   auth0EmulatorUrl: AUTH0_EMULATOR_URL,
   chatService,
   currentSession,
   durableStreamsUrl: DURABLE_STREAMS_URL,
   emptyDigest: canonicalSha256([]),
-  fetchFn: globalThis.fetch,
   sessionUser,
 });
 
@@ -344,7 +302,7 @@ async function serveStatic(request, response, url) {
   }
 }
 
-const server = http.createServer(async (request, response) => {
+const server = createInboundHttpServer(async (request, response) => {
   const url = new URL(
     request.url ?? "/",
     `http://${request.headers.host ?? `${HOST}:${PORT}`}`,

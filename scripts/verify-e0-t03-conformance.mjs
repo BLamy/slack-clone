@@ -12,7 +12,7 @@ import {
   assertIdleWindowRequestConstant,
   observeHttpIdleWindow,
 } from "../test/support/http-idle-probe.mjs";
-import { INTERPROCEDURAL_SOURCE_AUDIT_CASES } from "../test/support/source-audit-fixtures.mjs";
+import { SOURCE_AUDIT_CASES } from "../test/support/source-audit-fixtures.mjs";
 import {
   analyzeDurableStreamsAccess,
   auditDurableStreamsAccess,
@@ -757,22 +757,20 @@ function verifySourceAuditSensitivity() {
     assert.deepEqual(result, ["direct-provider-network"]);
   }
   const interproceduralDetections = Object.fromEntries(
-    INTERPROCEDURAL_SOURCE_AUDIT_CASES.map(
-      ({ name, source, expectedKinds }) => {
-        const observed = analyzeDurableStreamsAccess(
-          source,
-          `${name}-sensitivity.mjs`,
-        ).map((violation) => violation.kind);
-        assert.deepEqual(observed, expectedKinds, name);
-        return [name, observed];
-      },
-    ),
+    SOURCE_AUDIT_CASES.map(({ name, source, expectedKinds }) => {
+      const observed = analyzeDurableStreamsAccess(
+        source,
+        `${name}-sensitivity.mjs`,
+      ).map((violation) => violation.kind);
+      assert.deepEqual(observed, expectedKinds, name);
+      return [name, observed];
+    }),
   );
   return {
     result: "PASS",
     fixtures: [
       ...Object.keys(fixtures),
-      ...INTERPROCEDURAL_SOURCE_AUDIT_CASES.map(({ name }) => name),
+      ...SOURCE_AUDIT_CASES.map(({ name }) => name),
     ],
     detections: { ...detections, ...interproceduralDetections },
   };
@@ -800,7 +798,13 @@ async function listenOnLoopback(handler) {
 }
 
 async function collectBrowserAndApiPayloads(room) {
-  for (const pathname of ["/", "/app.js", "/styles.css", "/api/health"]) {
+  for (const pathname of [
+    "/",
+    "/app.js",
+    "/application-api.js",
+    "/styles.css",
+    "/api/health",
+  ]) {
     const response = await fetch(`${context.appBaseUrl}${pathname}`);
     const body = await response.text();
     assert.ok(response.ok);

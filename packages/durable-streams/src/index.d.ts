@@ -82,3 +82,18 @@ export function createDurableStreamsStore<
     maxRetries?: number;
   };
 }): DurableStreamsStore<TRecord, TMessage>;
+
+export function createNodeDurableStreamsStore<
+  TRecord = unknown,
+  TMessage = TRecord,
+>(options: {
+  baseUrl: string | URL;
+  token: string;
+  digestRecords(records: TRecord[]): string;
+  backoffOptions?: {
+    initialDelay: number;
+    maxDelay: number;
+    multiplier: number;
+    maxRetries?: number;
+  };
+}): DurableStreamsStore<TRecord, TMessage>;

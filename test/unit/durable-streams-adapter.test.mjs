@@ -14,7 +14,7 @@ import {
   assertIdleWindowRequestConstant,
   observeHttpIdleWindow,
 } from "../support/http-idle-probe.mjs";
-import { INTERPROCEDURAL_SOURCE_AUDIT_CASES } from "../support/source-audit-fixtures.mjs";
+import { SOURCE_AUDIT_CASES } from "../support/source-audit-fixtures.mjs";
 
 const ZERO = "opaque-checkpoint-zero";
 
@@ -513,12 +513,12 @@ test("HTTP delivery never attempts a second JSON response after SSE headers comm
     }),
   };
   const delivery = createChatHttpDelivery({
+    auth0Health: async () => true,
     auth0EmulatorUrl: "http://auth.invalid",
     chatService,
     currentSession: () => ({ user: { sub: "ada" } }),
     durableStreamsUrl: "http://streams.invalid",
     emptyDigest: "digest:empty",
-    fetchFn: async () => new Response(null, { status: 200 }),
     sessionUser: () => ({ sub: "ada" }),
     timers,
   });
@@ -550,6 +550,7 @@ test("a downstream disconnect before snapshot completion never commits SSE heade
     resolveSnapshot = resolve;
   });
   const delivery = createChatHttpDelivery({
+    auth0Health: async () => true,
     auth0EmulatorUrl: "http://auth.invalid",
     chatService: {
       normalizeRoomId: (room) => room,
@@ -562,7 +563,6 @@ test("a downstream disconnect before snapshot completion never commits SSE heade
     currentSession: () => ({ user: { sub: "ada" } }),
     durableStreamsUrl: "http://streams.invalid",
     emptyDigest: "digest:empty",
-    fetchFn: async () => new Response(null, { status: 200 }),
     sessionUser: () => ({ sub: "ada" }),
     timers: createFakeTimers(),
   });
@@ -925,14 +925,18 @@ test("source guard rejects an adapter bypass while allowing the application API"
   }
 
   const applicationApi = analyzeDurableStreamsAccess(
-    'await fetch("/api/rooms/demo/messages");',
+    `
+      import { applicationApiFetch } from "./application-api.js";
+      await applicationApiFetch("/api/rooms/demo/messages");
+    `,
     "browser-client.mjs",
   );
   assert.deepEqual(applicationApi, []);
 
   const wrappedApplicationApi = analyzeDurableStreamsAccess(
     `
-      const send = (...args) => globalThis.fetch(...args);
+      import { applicationApiFetch } from "./application-api.js";
+      const send = (...args) => applicationApiFetch(...args);
       await send("/api/rooms/demo/messages");
     `,
     "wrapped-browser-client.mjs",
@@ -941,9 +945,10 @@ test("source guard rejects an adapter bypass while allowing the application API"
 
   const declaredApplicationApi = analyzeDurableStreamsAccess(
     `
+      import { applicationApiFetch } from "./application-api.js";
       await sendMessage("hello");
       async function sendMessage(text) {
-        return fetch(\`/api/rooms/demo/messages\`, {
+        return applicationApiFetch(\`/api/rooms/demo/messages\`, {
           method: "POST",
           body: JSON.stringify({ text }),
         });
@@ -953,11 +958,45 @@ test("source guard rejects an adapter bypass while allowing the application API"
   );
   assert.deepEqual(declaredApplicationApi, []);
 
-  for (const {
-    name,
-    source,
-    expectedKinds,
-  } of INTERPROCEDURAL_SOURCE_AUDIT_CASES) {
+  assert.deepEqual(
+    analyzeDurableStreamsAccess(
+      'await globalThis.fetch("/api/rooms/demo/messages");',
+      "undeclared-browser-client.mjs",
+    ).map((violation) => violation.kind),
+    ["direct-provider-network"],
+  );
+  assert.deepEqual(
+    analyzeDurableStreamsAccess(
+      `
+        import { applicationApiFetch } from "./application-api.js";
+        await applicationApiFetch(
+          "http://streams.invalid/rooms/demo/messages",
+        );
+      `,
+      "confused-application-door.mjs",
+    ).map((violation) => violation.kind),
+    ["direct-provider-network"],
+  );
+  assert.deepEqual(
+    analyzeDurableStreamsAccess(
+      "export const rawNetwork = globalThis.fetch;",
+      "public/application-api.js",
+    ).map((violation) => violation.kind),
+    ["network-capability-export"],
+  );
+  assert.deepEqual(
+    analyzeDurableStreamsAccess(
+      `
+        export function applicationApiFetch(pathname) {
+          return globalThis.fetch(pathname);
+        }
+      `,
+      "public/application-api.js",
+    ),
+    [],
+  );
+
+  for (const { name, source, expectedKinds } of SOURCE_AUDIT_CASES) {
     assert.deepEqual(
       analyzeDurableStreamsAccess(source, `${name}.mjs`).map(
         (violation) => violation.kind,

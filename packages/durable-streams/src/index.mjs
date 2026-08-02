@@ -48,6 +48,16 @@ export class DurableStreamsAdapterError extends Error {
   }
 }
 
+export function createNodeDurableStreamsStore(options) {
+  if (!options || typeof options !== "object" || Array.isArray(options)) {
+    throw new TypeError("Durable Streams adapter options are required");
+  }
+  return createDurableStreamsStore({
+    ...options,
+    fetchFn: globalThis.fetch,
+  });
+}
+
 export function createDurableStreamsStore({
   baseUrl,
   token,

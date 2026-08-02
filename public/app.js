@@ -1,9 +1,16 @@
+import {
+  applicationApiEvents,
+  applicationApiFetch,
+} from "./application-api.js";
+
 const params = new URLSearchParams(window.location.search);
 const room = normalizeRoom(params.get("room") || "durable-streams-demo");
 const autopilot = params.get("autopilot") === "1";
 const closeWhenDone = params.get("close") === "1";
 const expectedCount = Number(params.get("expect") || "0");
-const autopilotMessage = params.get("message") || `Replay check-in at ${new Date().toLocaleTimeString()}`;
+const autopilotMessage =
+  params.get("message") ||
+  `Replay check-in at ${new Date().toLocaleTimeString()}`;
 
 const state = {
   editingDraft: "",
@@ -17,7 +24,9 @@ const messagesEl = document.querySelector("[data-testid='messages']");
 const formEl = document.querySelector("[data-testid='composer']");
 const inputEl = document.querySelector("[data-testid='message-input']");
 const sendButton = document.querySelector("[data-testid='send-button']");
-const connectionStateEl = document.querySelector("[data-testid='connection-state']");
+const connectionStateEl = document.querySelector(
+  "[data-testid='connection-state']",
+);
 const personaLabelEl = document.querySelector("[data-testid='persona-label']");
 const authProviderEl = document.querySelector("[data-testid='auth-provider']");
 const authUserEl = document.querySelector("[data-testid='auth-user']");
@@ -53,7 +62,8 @@ messagesEl.addEventListener("click", (event) => {
 });
 
 messagesEl.addEventListener("input", (event) => {
-  const target = event.target instanceof HTMLTextAreaElement ? event.target : null;
+  const target =
+    event.target instanceof HTMLTextAreaElement ? event.target : null;
   if (target?.dataset.testid === "edit-message-input") {
     state.editingDraft = target.value;
   }
@@ -70,7 +80,13 @@ messagesEl.addEventListener("submit", (event) => {
 init();
 
 function normalizeRoom(value) {
-  return value.trim().toLowerCase().replace(/[^a-z0-9_-]+/g, "-").replace(/^-+|-+$/g, "") || "durable-streams-demo";
+  return (
+    value
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9_-]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "durable-streams-demo"
+  );
 }
 
 function initials(name) {
@@ -85,13 +101,17 @@ function initials(name) {
 async function sendMessage(text) {
   sendButton.disabled = true;
   try {
-    const res = await fetch(`/api/rooms/${encodeURIComponent(room)}/messages`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text }),
-    });
+    const res = await applicationApiFetch(
+      `/api/rooms/${encodeURIComponent(room)}/messages`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      },
+    );
     const body = await res.json();
-    if (!res.ok || !body.ok) throw new Error(body.error || "Failed to send message");
+    if (!res.ok || !body.ok)
+      throw new Error(body.error || "Failed to send message");
     setConnectionState("live");
   } catch (err) {
     setConnectionState(err instanceof Error ? err.message : String(err));
@@ -102,7 +122,7 @@ async function sendMessage(text) {
 }
 
 async function init() {
-  const res = await fetch("/api/session", { credentials: "include" });
+  const res = await applicationApiFetch("/api/session");
   if (res.status === 401) {
     window.location.href = `/login?returnTo=${encodeURIComponent(window.location.pathname + window.location.search)}`;
     return;
@@ -122,7 +142,9 @@ async function init() {
 
 function connect() {
   setConnectionState("connecting");
-  const events = new EventSource(`/api/rooms/${encodeURIComponent(room)}/events`);
+  const events = applicationApiEvents(
+    `/api/rooms/${encodeURIComponent(room)}/events`,
+  );
 
   events.addEventListener("open", () => {
     setConnectionState("live");
@@ -179,7 +201,9 @@ function setConnectionState(value) {
 }
 
 function render() {
-  const messages = [...state.messages.values()].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+  const messages = [...state.messages.values()].sort((a, b) =>
+    a.createdAt.localeCompare(b.createdAt),
+  );
 
   if (messages.length === 0) {
     messagesEl.innerHTML = `<div class="empty">No messages yet. Start the durable stream by sending the first one.</div>`;
@@ -191,16 +215,22 @@ function render() {
 }
 
 function renderMessage(message) {
-  const time = new Date(message.createdAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  const time = new Date(message.createdAt).toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit",
+  });
   const isEditing = state.editingMessageId === message.id;
   const isSaving = state.savingMessageId === message.id;
   const isOwn = isOwnMessage(message);
-  const editedLabel = message.editedAt ? `<span class="message__edited" data-testid="message-edited">(edited)</span>` : "";
-  const actions = isOwn && !isEditing
-    ? `<div class="message__actions">
+  const editedLabel = message.editedAt
+    ? `<span class="message__edited" data-testid="message-edited">(edited)</span>`
+    : "";
+  const actions =
+    isOwn && !isEditing
+      ? `<div class="message__actions">
         <button class="message__action" type="button" data-message-action="edit" aria-label="Edit message">Edit</button>
       </div>`
-    : "";
+      : "";
   const content = isEditing
     ? `<form class="message__edit-form" data-message-edit-form data-message-id="${escapeAttr(message.id)}">
         <label class="visually-hidden" for="edit-message-input">Edit message</label>
@@ -241,7 +271,9 @@ function startEditing(messageId) {
   state.editingMessageId = messageId;
   state.editingDraft = message.text;
   render();
-  const editInput = document.querySelector("[data-testid='edit-message-input']");
+  const editInput = document.querySelector(
+    "[data-testid='edit-message-input']",
+  );
   editInput?.focus();
   editInput?.select();
 }
@@ -260,13 +292,17 @@ async function saveMessage(messageId) {
   state.savingMessageId = messageId;
   render();
   try {
-    const res = await fetch(`/api/rooms/${encodeURIComponent(room)}/messages/${encodeURIComponent(messageId)}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text }),
-    });
+    const res = await applicationApiFetch(
+      `/api/rooms/${encodeURIComponent(room)}/messages/${encodeURIComponent(messageId)}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      },
+    );
     const body = await res.json();
-    if (!res.ok || !body.ok) throw new Error(body.error || "Failed to edit message");
+    if (!res.ok || !body.ok)
+      throw new Error(body.error || "Failed to edit message");
     if (body.message) state.messages.set(body.message.id, body.message);
     state.editingMessageId = null;
     state.editingDraft = "";
@@ -283,18 +319,25 @@ async function saveMessage(messageId) {
 function maybeRunAutopilot() {
   if (!autopilot || state.sentAutopilot) return;
   state.sentAutopilot = true;
-  setTimeout(() => {
-    void sendMessage(autopilotMessage).then(maybeFinishAutopilot);
-  }, Number(params.get("delay") || "500"));
+  setTimeout(
+    () => {
+      void sendMessage(autopilotMessage).then(maybeFinishAutopilot);
+    },
+    Number(params.get("delay") || "500"),
+  );
 }
 
 function maybeFinishAutopilot() {
   if (!autopilot) return;
 
   const messages = [...state.messages.values()];
-  const userName = state.session?.user?.name || state.session?.user?.email || "";
-  const hasOwnMessage = messages.some((message) => message.user === userName && message.text === autopilotMessage);
-  const hasExpectedCount = expectedCount > 0 ? messages.length >= expectedCount : hasOwnMessage;
+  const userName =
+    state.session?.user?.name || state.session?.user?.email || "";
+  const hasOwnMessage = messages.some(
+    (message) => message.user === userName && message.text === autopilotMessage,
+  );
+  const hasExpectedCount =
+    expectedCount > 0 ? messages.length >= expectedCount : hasOwnMessage;
 
   if (hasOwnMessage && hasExpectedCount) {
     window.__demoComplete = true;

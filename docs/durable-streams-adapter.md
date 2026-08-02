@@ -6,8 +6,9 @@ exposes a server-side store contract: create once, append, bounded read, live fo
 cancel, delete, and diagnostics. Services consume records and opaque checkpoints; they do
 not construct provider URLs or issue provider requests.
 
-The composition root supplies three capabilities: the provider base URL, a server-only
-administration token, and `fetch`. `DURABLE_STREAMS_ADMIN_TOKEN` is preferred, with
+The composition root supplies the provider base URL and a server-only administration
+token through `createNodeDurableStreamsStore`; the adapter package captures the Node
+`fetch` capability inside its own network door. `DURABLE_STREAMS_ADMIN_TOKEN` is preferred, with
 `EMULATE_TOKEN` retained only as a local compatibility fallback. The token is used only in
 the adapter's authorization header. It is never returned in API payloads, rendered into
 browser assets, logged, or copied into evidence. Verification starts the app with a unique
@@ -44,9 +45,15 @@ before sending JSON, preventing a late live-read failure from causing a second r
 write.
 
 `pnpm typecheck` runs `tools/audit-durable-streams-access.mjs`. It rejects imports of the
-official client and direct requests to provider room streams outside this adapter and the
-E0-T03 conformance harness, including destructured, assigned, bound, and chained fetch
-aliases; it separately scans public assets for server credential references. The
+official client and acquisition of ambient network capabilities outside declared transport
+doors. The provider door is this adapter plus the E0-T03 conformance harness. Auth0 uses an
+origin-fenced client, and browser requests use a same-origin `/api/` door that refuses
+absolute, cross-origin, credentialed, fragment, and non-API targets; neither door may
+reference the Durable Streams provider or export raw network capabilities. This boundary
+is insensitive to how a caller later wraps a capability through defaults, getters,
+inheritance, collections, proxies, reflection, or tagged selectors because acquisition is
+rejected before target-flow analysis is needed. Public assets are separately scanned for
+server credential references. The
 request-budget gate drives the HTTP delivery timer boundary through
 900,000 deterministic milliseconds and confirms that its single snapshot read and live
 follow do not grow. A 350-millisecond polling positive control executes 2,571 reads over

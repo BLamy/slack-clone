@@ -1,5 +1,10 @@
 import { ZERO_OFFSET } from "@stream-slack/protocol";
 
+const DEFAULT_TIMERS = Object.freeze({
+  clearInterval: (timer) => globalThis.clearInterval(timer),
+  setInterval: (callback, delay) => globalThis.setInterval(callback, delay),
+});
+
 export async function readJson(request) {
   const chunks = [];
   for await (const chunk of request) chunks.push(chunk);
@@ -32,14 +37,14 @@ export function sendError(response, error) {
 }
 
 export function createChatHttpDelivery({
+  auth0Health,
   auth0EmulatorUrl,
   chatService,
   currentSession,
   durableStreamsUrl,
   emptyDigest,
-  fetchFn,
   sessionUser,
-  timers = globalThis,
+  timers = DEFAULT_TIMERS,
 }) {
   const rooms = new Map();
 
@@ -211,15 +216,13 @@ export function createChatHttpDelivery({
   async function handleApi(request, response, url) {
     if (url.pathname === "/api/health") {
       await chatService.ensureStream("healthcheck");
-      const authResponse = await fetchFn(
-        `${auth0EmulatorUrl}/.well-known/openid-configuration`,
-      );
+      const authHealthy = await auth0Health();
       sendJson(response, 200, {
         ok: true,
         app: "slack-clone",
         durableStreamsUrl,
         auth0EmulatorUrl,
-        auth0: authResponse.ok,
+        auth0: authHealthy,
       });
       return true;
     }

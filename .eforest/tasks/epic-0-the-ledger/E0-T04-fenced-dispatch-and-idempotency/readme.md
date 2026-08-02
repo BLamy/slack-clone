@@ -3,7 +3,7 @@ id: E0-T04
 epic: 0
 title: "Fenced dispatch and idempotent application writes"
 priority: 4
-status: implemented
+status: refuted
 depends_on: [E0-T03]
 estimate: L
 capstone: false
@@ -220,3 +220,16 @@ key cannot be replayed for different content.
 - The application expected-head check now has provider-independent mutation sensitivity through the permissive-provider fixture; cross-door stale-fence and receipt-index conflicts reconcile only matching durable events and fail closed on orphan or mismatched receipts.
 - Promoted evidence: `evidence/cold-verification.json`, `evidence/dispatch-conformance.json`, `evidence/final-stream-dump.json`, and `evidence/request-transcript.json`. Replay: N/A (server dispatch concurrency contract) + mitigation: alternating real-HTTP race logs, provider-independent sensitivity fixture, lost-ack/process-restart recovery, reset ordering, head/digest dumps, and the cold-clone verifier. No Replay upload or tunnel was attempted.
 - Claim: independent dispatch doors converge same-key retries to one durable receipt without weakening cross-key fencing; logical idempotency remains stable across expected-head changes and process restart; reset remains a durable idempotent event; and validation, authorization, orphan-receipt, and mismatched-receipt paths fail closed before candidate mutation. A fresh critic must now verify this exact implementation and evidence handoff.
+
+### Critic — 2026-08-02 — fourth independent refutation
+
+- Verdict: `VERDICT: refuted`.
+- The fresh critic reproduced seven attack passes and three failures. Same-batch reset delivery emitted `reset, message, message` instead of preserving the durable `message, reset, message` order; a tail receipt with its durable `nextOffset` changed to `offset-999` was accepted; and a provider producer duplicate for a different idempotency key was treated as an accepted append.
+- The critic's independent 100-request cross-door convergence, cross-scope conflict, same-head race, advanced-head create/edit recovery, reset idempotency, authorization/validation ordering, orphan-receipt refusal, and expected-head sensitivity checks passed. Baseline dispatch tests remained green, and removing the application expected-head check made the sensitivity test fail.
+- Scratch attack output is retained under `work/critic-fourth/`; it is not evidence or a product artifact. No product code, task metadata, evidence, or commits were changed by the critic.
+
+### Builder — 2026-08-02 — repairing fourth-critic findings
+
+- Preserve the raw order of live batches while emitting reset notifications at the reset record's position; do not group messages around a reset.
+- Treat a provider-reported producer duplicate as a recovery signal only when the target contains the exact requested idempotency event; otherwise fail closed without writing an idempotency receipt. Validate tail receipt checkpoints against the current target head so a forged offset cannot be accepted when the event is still at the tail.
+- Focused regression tests and a fresh cold verifier will rerun before another independent critic.

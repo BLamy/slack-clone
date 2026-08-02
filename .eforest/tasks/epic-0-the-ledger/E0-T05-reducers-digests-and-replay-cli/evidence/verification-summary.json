@@ -1,0 +1,198 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T05",
+  "runId": "e0-t05-cold-final",
+  "implementationCommit": "bbc24c1562a8e5cf4982a6a93438c7e3749a28a4",
+  "implementationTreeCleanAtStart": true,
+  "result": "PASS",
+  "artifactRoot": "/Users/brettlamy/Dev/slack-clone/.artifacts/e0-t05/e0-t05-cold-final",
+  "zeroSkippedGates": true,
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "durationMs": 2329,
+      "name": "format",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "durationMs": 3208,
+      "name": "lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "durationMs": 14392,
+      "name": "typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "durationMs": 24123,
+      "name": "tests",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm build",
+      "durationMs": 636,
+      "name": "build",
+      "result": "PASS"
+    }
+  ],
+  "replay": "N/A (CLI replay apparatus, not browser behavior) + mitigation: golden event logs, per-prefix digests, purity audit, and mutation tests",
+  "replayUploadAttempted": false,
+  "networkDisabled": true,
+  "queryStorePathAbsent": true,
+  "buildCachePathAbsent": true,
+  "validFixtures": {
+    "ledger-log.v1.json": {
+      "bytesIdenticalAcrossFreshProcesses": true,
+      "finalStateDigest": "sha256:62bccd2874d1473c699b37e6837e269dda5ceabcc34666cdd6481c169ad0fbc0",
+      "finalStateJson": "{\"appliedEventIds\":[\"ev_aaaaaaaaaaaaaaaaaaaaaaaaaa\",\"ev_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"ev_cccccccccccccccccccccccccc\",\"ev_dddddddddddddddddddddddddd\",\"ev_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"ev_ffffffffffffffffffffffffff\",\"ev_gggggggggggggggggggggggggg\",\"ev_hhhhhhhhhhhhhhhhhhhhhhhhhh\",\"ev_jjjjjjjjjjjjjjjjjjjjjjjjjj\",\"ev_mmmmmmmmmmmmmmmmmmmmmmmmmm\"],\"audits\":{\"audit-alpha\":{\"action\":\"replay.completed\",\"auditId\":\"audit-alpha\",\"detail\":{\"source\":\"golden-log\"},\"subjectId\":\"run-alpha\"}},\"entities\":{\"agents\":{\"ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd\":{\"agentId\":\"ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd\",\"config\":{\"harness\":\"codex\",\"name\":\"Ada\"},\"revision\":1}},\"connections\":{\"cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff\":{\"connectionId\":\"cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff\",\"metadata\":{\"destination\":\"github\",\"policyRevision\":1},\"revision\":1}},\"directory\":{\"channel-alpha\":{\"entityType\":\"channel\",\"id\":\"channel-alpha\",\"revision\":1,\"value\":{\"name\":\"general\",\"private\":false}}},\"fixtures\":{\"fixture-alpha\":{\"value\":\"alpha\"}},\"invocations\":{\"invocation-alpha\":{\"agentId\":\"ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd\",\"channelId\":\"ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc\",\"invocationId\":\"invocation-alpha\",\"prompt\":\"summarize the fixture\"}},\"messages\":{\"message-alpha\":{\"authorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"channelId\":\"ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc\",\"messageId\":\"message-alpha\",\"text\":\"hello from the replay fixture\"}},\"projections\":{\"px_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg\":{\"projectionId\":\"px_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg\",\"sequence\":1,\"sourceOffset\":\"0000000000000000_0000000000000009\",\"sourceStream\":\"workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory\",\"stateDigest\":\"sha256:1111111111111111111111111111111111111111111111111111111111111111\"}},\"runs\":{\"rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee\":{\"from\":\"queued\",\"history\":[{\"from\":null,\"to\":\"queued\"},{\"from\":\"queued\",\"to\":\"running\"}],\"invocationId\":\"invocation-alpha\",\"runId\":\"rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"to\":\"running\"}}},\"schemaVersion\":1}",
+      "replayOutputBytes": 4848,
+      "validation": {
+        "finalStateDigest": "sha256:62bccd2874d1473c699b37e6837e269dda5ceabcc34666cdd6481c169ad0fbc0",
+        "records": 10,
+        "result": "PASS",
+        "task": "E0-T05"
+      }
+    },
+    "message-and-run-log.v1.json": {
+      "bytesIdenticalAcrossFreshProcesses": true,
+      "finalStateDigest": "sha256:65f065ca02bd8e8358dec0110a7243817e754f57bd0c78c86d2166c9a4c363b9",
+      "finalStateJson": "{\"appliedEventIds\":[\"ev_qqqqqqqqqqqqqqqqqqqqqqqqqq\",\"ev_rrrrrrrrrrrrrrrrrrrrrrrrrr\",\"ev_ssssssssssssssssssssssssss\",\"ev_tttttttttttttttttttttttttt\"],\"audits\":{},\"entities\":{\"agents\":{},\"connections\":{},\"directory\":{},\"fixtures\":{},\"invocations\":{},\"messages\":{\"message-beta\":{\"authorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"channelId\":\"ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc\",\"messageId\":\"message-beta\",\"text\":\"a second deterministic message\"}},\"projections\":{},\"runs\":{\"rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee\":{\"from\":\"running\",\"history\":[{\"from\":null,\"to\":\"queued\"},{\"from\":\"queued\",\"to\":\"running\"},{\"from\":\"running\",\"to\":\"succeeded\"}],\"invocationId\":null,\"runId\":\"rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"to\":\"succeeded\"}}},\"schemaVersion\":1}",
+      "replayOutputBytes": 1907,
+      "validation": {
+        "finalStateDigest": "sha256:65f065ca02bd8e8358dec0110a7243817e754f57bd0c78c86d2166c9a4c363b9",
+        "records": 4,
+        "result": "PASS",
+        "task": "E0-T05"
+      }
+    }
+  },
+  "invalidFixtures": {
+    "duplicate-logical-id.json": {
+      "code": "REDUCER_DUPLICATE_LOGICAL_ID",
+      "offset": "0000000000000002_0000000000000006",
+      "path": "$.event.data.messageId"
+    },
+    "illegal-transition.json": {
+      "code": "REDUCER_ILLEGAL_TRANSITION",
+      "offset": "0000000000000002_0000000000000004",
+      "path": "$.event.data.to"
+    },
+    "malformed-envelope.json": {
+      "code": "REPLAY_INVALID_ENVELOPE",
+      "offset": "0000000000000002_0000000000000002",
+      "path": "$.records[0].event"
+    },
+    "unknown-event-type.json": {
+      "code": "REPLAY_INVALID_ENVELOPE",
+      "offset": "0000000000000002_0000000000000001",
+      "path": "$.records[0].event"
+    }
+  },
+  "prefixDigests": {
+    "ledger-log.v1.json": [
+      {
+        "index": 1,
+        "offset": "0000000000000000_0000000000000001",
+        "stateDigest": "sha256:39c23429d665c1fa9027628bdd2e4ac6f378a27c89f0f295c25472c13c1d4e09"
+      },
+      {
+        "index": 2,
+        "offset": "0000000000000000_0000000000000002",
+        "stateDigest": "sha256:52021cd8c9caf6a24f0f8926618b723b399fe826f0bd97ad27161b37e5545ab4"
+      },
+      {
+        "index": 3,
+        "offset": "0000000000000000_0000000000000003",
+        "stateDigest": "sha256:68433c7cb35a130fcc2b63e100570a647c36706622800903825326d2240c331e"
+      },
+      {
+        "index": 4,
+        "offset": "0000000000000000_0000000000000004",
+        "stateDigest": "sha256:d5fc91271a1e1b988fbb3361fc76f07be2a8bc4f8949d0755a09a11284ef61a2"
+      },
+      {
+        "index": 5,
+        "offset": "0000000000000000_0000000000000005",
+        "stateDigest": "sha256:7438291df7f2d50ad79b65bb6f851ce9ccd1159b64c9d888bd82f81672d0afa8"
+      },
+      {
+        "index": 6,
+        "offset": "0000000000000000_0000000000000006",
+        "stateDigest": "sha256:1af46d49f93af2339769172d41f8b01c3f0737c30dc825a79585b8f4e7004335"
+      },
+      {
+        "index": 7,
+        "offset": "0000000000000000_0000000000000007",
+        "stateDigest": "sha256:93f5fdc6514b0bb5b560b9ae471bc6c8ac22c66a6a0b004bc5850685e3f14496"
+      },
+      {
+        "index": 8,
+        "offset": "0000000000000000_0000000000000008",
+        "stateDigest": "sha256:b1498bcb60d1cbf5b7d617a4b596b8438fb339db9f43721ee159d28aca0dff06"
+      },
+      {
+        "index": 9,
+        "offset": "0000000000000000_0000000000000009",
+        "stateDigest": "sha256:87074bd3869da61269de424c48147f6dccd3f0243d50d44b5e6d11575f1a24e5"
+      },
+      {
+        "index": 10,
+        "offset": "0000000000000000_0000000000000010",
+        "stateDigest": "sha256:62bccd2874d1473c699b37e6837e269dda5ceabcc34666cdd6481c169ad0fbc0"
+      }
+    ],
+    "message-and-run-log.v1.json": [
+      {
+        "index": 1,
+        "offset": "0000000000000001_0000000000000001",
+        "stateDigest": "sha256:5419bdbf30d6878fe41c28277a1dd85ed8b014504cc8332b638ea413f48a018f"
+      },
+      {
+        "index": 2,
+        "offset": "0000000000000001_0000000000000002",
+        "stateDigest": "sha256:8a3f38785c9b9bdb904078230ed757325b1ae87a35e7f2356abf0b35ff8b4430"
+      },
+      {
+        "index": 3,
+        "offset": "0000000000000001_0000000000000003",
+        "stateDigest": "sha256:f651eab137917dae95ace3718fc9f60b4ec37478638a28192d5eca9b371d6648"
+      },
+      {
+        "index": 4,
+        "offset": "0000000000000001_0000000000000004",
+        "stateDigest": "sha256:65f065ca02bd8e8358dec0110a7243817e754f57bd0c78c86d2166c9a4c363b9"
+      }
+    ]
+  },
+  "mutationSensitivity": {
+    "ledger-log.v1.json": {
+      "changedBytes": 1,
+      "outcome": "digest-changed",
+      "finalStateDigest": "sha256:0f3bc07ad7bd092db661369d4e59ccd17b03f34dad8b8f1c47489d1a474ad0e3"
+    },
+    "message-and-run-log.v1.json": {
+      "changedBytes": 1,
+      "outcome": "digest-changed",
+      "finalStateDigest": "sha256:0e1aa9d21efa7d32516d81a87c1230ab25efffef204be22338a75232cbdcc154"
+    }
+  },
+  "purityAudit": [
+    {
+      "ambientCapabilities": [],
+      "imports": [
+        "./canonical-state.mjs",
+        "./canonical-state.mjs"
+      ],
+      "path": "packages/reducers/src/index.mjs"
+    },
+    {
+      "ambientCapabilities": [],
+      "imports": [],
+      "path": "packages/reducers/src/canonical-state.mjs"
+    }
+  ]
+}

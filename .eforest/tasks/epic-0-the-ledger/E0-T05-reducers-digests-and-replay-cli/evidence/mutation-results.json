@@ -1,0 +1,12 @@
+{
+  "ledger-log.v1.json": {
+    "changedBytes": 1,
+    "outcome": "digest-changed",
+    "finalStateDigest": "sha256:0f3bc07ad7bd092db661369d4e59ccd17b03f34dad8b8f1c47489d1a474ad0e3"
+  },
+  "message-and-run-log.v1.json": {
+    "changedBytes": 1,
+    "outcome": "digest-changed",
+    "finalStateDigest": "sha256:0e1aa9d21efa7d32516d81a87c1230ab25efffef204be22338a75232cbdcc154"
+  }
+}

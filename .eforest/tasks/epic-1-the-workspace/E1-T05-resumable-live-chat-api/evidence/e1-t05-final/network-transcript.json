@@ -1,25 +1,37 @@
 {
-  "room": "e1-t05-promoted-e1-t05-resume",
+  "room": "e1-t05-promoted-e1-t05-repair-resume",
   "clients": 2,
-  "firstCheckpoint": "0000000000000000_0000000000000694",
-  "secondCheckpoint": "0000000000000000_0000000000001398",
+  "firstCheckpoint": "0000000000000000_0000000000000708",
+  "secondCheckpoint": "0000000000000000_0000000000001426",
   "acceptedMessageIds": [
-    "e966840b-3fbf-4031-88ef-c9861362a16d",
-    "45699286-5f5c-423f-9010-a422f194930c"
+    "3a99f152-ec32-46ec-9db2-8fffa99007fb",
+    "76a7501b-20ad-4a91-8aa9-b2c6b2ed55e5"
   ],
   "resumedMessageIds": [
-    "45699286-5f5c-423f-9010-a422f194930c"
+    "76a7501b-20ad-4a91-8aa9-b2c6b2ed55e5"
   ],
-  "finalDigest": "sha256:183cdaae419b2dffafd80d94b3661cc53c0f778f575df80d6baa2a7dcab42421",
+  "finalDigest": "sha256:0e7d26ed4c3cf2cf161236ef335a503599c66fd93e523255e13ce562c93ea84b",
   "finalOffsets": {
-    "ada": "0000000000000000_0000000000001398",
-    "linus": "0000000000000000_0000000000001398"
+    "ada": "0000000000000000_0000000000001426",
+    "linus": "0000000000000000_0000000000001426"
   },
   "noDuplicateLogicalEffects": true,
+  "crossRoomIsolation": {
+    "isolatedRoom": "e1-t05-promoted-e1-t05-repair-isolation",
+    "idleRoom": "e1-t05-promoted-e1-t05-repair-idle",
+    "acceptedMessageId": "cc58c82e-a21a-4f78-9a02-b525f7978f55",
+    "otherClientReceivedMessage": false
+  },
+  "logout": {
+    "responseStatus": 302,
+    "terminalCode": "LIVE_SESSION_REVOKED"
+  },
   "reconnectMatrix": [
     "after acknowledged status before next append",
     "append while one client disconnected",
-    "resume from opaque Last-Event-ID-equivalent query checkpoint"
+    "resume from opaque Last-Event-ID-equivalent query checkpoint",
+    "independent room remains idle while a sibling room receives an event",
+    "logout before the next queued event"
   ],
   "typedRefusal": {
     "status": 400,
@@ -44,57 +56,98 @@
       "checkpoint": null,
       "label": "ada-initial",
       "method": "GET",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-resume/events",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-resume/events",
       "status": 200
     },
     {
       "checkpoint": null,
       "label": "linus-initial",
       "method": "GET",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-resume/events",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-resume/events",
       "status": 200
     },
     {
       "bodyCode": null,
       "label": "post-ik_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "method": "POST",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-resume/messages",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-resume/messages",
       "status": 201
     },
     {
       "bodyCode": null,
       "label": "post-ik_bbbbbbbbbbbbbbbbbbbbbbbbbb",
       "method": "POST",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-resume/messages",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-resume/messages",
       "status": 201
     },
     {
-      "checkpoint": "0000000000000000_0000000000000694",
+      "checkpoint": "0000000000000000_0000000000000708",
       "label": "ada-resumed",
       "method": "GET",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-resume/events?offset=0000000000000000_0000000000000694",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-resume/events?offset=0000000000000000_0000000000000708",
       "status": 200
     },
     {
       "bodyCode": null,
       "label": "ada-final",
       "method": "GET",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-resume/messages",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-resume/messages",
       "status": 200
     },
     {
       "bodyCode": null,
       "label": "linus-final",
       "method": "GET",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-resume/messages",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-resume/messages",
       "status": 200
     },
     {
       "bodyCode": "LIVE_CHECKPOINT_INVALID",
       "label": "malformed-checkpoint",
       "method": "GET",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-resume/events?offset=%00",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-resume/events?offset=%00",
       "status": 400
+    },
+    {
+      "checkpoint": null,
+      "label": "ada-isolation",
+      "method": "GET",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-isolation/events",
+      "status": 200
+    },
+    {
+      "checkpoint": null,
+      "label": "linus-isolation",
+      "method": "GET",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-idle/events",
+      "status": 200
+    },
+    {
+      "bodyCode": null,
+      "label": "post-ik_cccccccccccccccccccccccccc",
+      "method": "POST",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-isolation/messages",
+      "status": 201
+    },
+    {
+      "checkpoint": null,
+      "label": "ada-logout",
+      "method": "GET",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-logout/events",
+      "status": 200
+    },
+    {
+      "label": "ada-logout",
+      "method": "GET",
+      "path": "/logout",
+      "status": 302
+    },
+    {
+      "bodyCode": null,
+      "label": "post-ik_dddddddddddddddddddddddddd",
+      "method": "POST",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-logout/messages",
+      "status": 201
     }
   ]
 }

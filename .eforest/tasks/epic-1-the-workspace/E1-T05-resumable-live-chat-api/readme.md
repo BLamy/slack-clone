@@ -95,3 +95,31 @@ verification, while the server remains responsible for reduction and authorizati
   shutdown/cancellation paths do not issue a second JSON response. Replay: N/A (server
   live-delivery API) + mitigation: real-emulator network transcript, reconnect matrix,
   request counts, and digest convergence.
+
+### Builder — 2026-08-03 — needs-evidence repair complete
+
+- Repair commit: `2d30a94118d0df72c7b1aa45757de517b47e7f2e` (`E1-T05: close live delivery
+  evidence gaps`). Snapshot failures now preserve the provider error before client cleanup,
+  so stale provider checkpoints return typed `LIVE_CHECKPOINT_INVALID` 409 responses;
+  session revocation retains `LIVE_SESSION_REVOKED` through queued delivery.
+- The idle harness now wires the real workspace authorization core: one subscription
+  directory read, 90 heartbeat revalidation reads, one bounded snapshot read, and one live
+  follow across 900,000 deterministic milliseconds. The polling positive control remains
+  sensitive. Focused tests add stale checkpoint scope, logout revocation, and slow-reader
+  cross-room isolation.
+- Exact promoted cold target: `PROMOTE_EVIDENCE=1
+  E1_T05_IMPLEMENTATION_COMMIT=2d30a94118d0df72c7b1aa45757de517b47e7f2e
+  TEST_RUN_ID=promoted-e1-t05-repair make verify-E1-T05`. Format, lint, typecheck, 107 unit
+  tests, 5 Playwright tests, build, fresh emulator, and real two-client scenario passed.
+  The final digest is `sha256:0e7d26ed4c3cf2cf161236ef335a503599c66fd93e523255e13ce562c93ea84b`; both
+  clients converged at `0000000000000000_0000000000001426`, and the reconnect delivered
+  only the missed second message. The cold bootstrap transcript is committed in
+  `evidence/e1-t05-final/cold-clone-transcript.json`.
+- Additional live evidence: an idle sibling room received no cross-room event, and a
+  logged-out Ada connection terminated with `LIVE_SESSION_REVOKED`. Promoted files are
+  `verification-summary.json`, `network-transcript.json`, `idle-request-budget.json`, and
+  `cold-clone-transcript.json` under `evidence/e1-t05-final/`. Replay: N/A (server
+  live-delivery API) + mitigation: real-emulator network transcript, reconnect matrix,
+  request counts, digest convergence, and focused authorization/backpressure tests.
+- Claim: the prior evidence gap is closed and the typed stale-checkpoint and logout paths
+  are now proven against the implementation commit; awaiting a fresh independent critic.

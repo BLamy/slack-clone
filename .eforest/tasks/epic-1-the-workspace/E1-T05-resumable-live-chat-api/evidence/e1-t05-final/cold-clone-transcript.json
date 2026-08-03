@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "runId": "promoted-e1-t05-repair",
+  "result": "PASS",
+  "commands": [
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm setup:emulate",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/verify-e1-t05.mjs",
+      "exitCode": 0
+    }
+  ]
+}

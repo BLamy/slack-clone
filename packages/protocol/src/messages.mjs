@@ -85,6 +85,7 @@ export function normalizeConversationText(value, path = "$.text") {
     const codePoint = character.codePointAt(0);
     if (
       codePoint <= 31 ||
+      (codePoint >= 128 && codePoint <= 159) ||
       codePoint === 127 ||
       BIDI_CONTROL_PATTERN.test(character)
     ) {
@@ -138,6 +139,7 @@ export function normalizeReactionName(value, path = "$.emoji") {
       const codePoint = character.codePointAt(0);
       return (
         codePoint <= 31 ||
+        (codePoint >= 128 && codePoint <= 159) ||
         codePoint === 127 ||
         BIDI_CONTROL_PATTERN.test(character)
       );

@@ -421,6 +421,7 @@ function reduceMessageCreated(state, data, context) {
       context,
     );
   }
+  assertConversationMessageIdentity(state, data, context);
   assertUnique(state.entities.messages, data.messageId, "messageId", context);
   state.entities.messages = setKey(
     state.entities.messages,

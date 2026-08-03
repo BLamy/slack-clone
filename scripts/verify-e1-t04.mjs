@@ -90,6 +90,7 @@ const replayEvidence = verifyReplay(
 const refusalEvidence = await verifyInvalidFixtures();
 const schemaEvidence = await verifySchemas();
 const authorizationEvidence = verifyAuthorization();
+const legacyCompatibilityEvidence = verifyLegacyCompactScope();
 const boundaryEvidence = verifyBoundaries();
 const idempotencyEvidence = await verifyIdempotency();
 const propertyEvidence = verifyProperties();
@@ -148,6 +149,7 @@ const summary = {
   replayEvidence,
   refusalEvidence,
   authorizationEvidence,
+  legacyCompatibilityEvidence,
   boundaryEvidence,
   idempotencyEvidence,
   propertyEvidence,
@@ -170,6 +172,10 @@ await writeJson(
 await writeJson(
   path.join(evidenceDirectory, "authorization-matrix.json"),
   authorizationEvidence,
+);
+await writeJson(
+  path.join(evidenceDirectory, "legacy-compatibility.json"),
+  legacyCompatibilityEvidence,
 );
 await writeJson(
   path.join(evidenceDirectory, "boundary-matrix.json"),
@@ -442,6 +448,7 @@ function verifyBoundaries() {
     ["html-content", { ...command, contentType: "text/html" }],
     ["nfc-drift", { ...command, text: "Cafe\u0301" }],
     ["control-character", { ...command, text: "bad\ntext" }],
+    ["c1-control-character", { ...command, text: "bad\u0085text" }],
     ["bidi-control", { ...command, text: "bad\u202Etext" }],
     ["unpaired-surrogate", { ...command, text: "bad\ud800" }],
     [
@@ -464,6 +471,73 @@ function verifyBoundaries() {
     normalization: "NFC required before append",
     storedTextIsPlainData: true,
     htmlInterpretation: false,
+  };
+}
+
+function verifyLegacyCompactScope() {
+  const compact = conversationEvent(
+    "channel.message.created",
+    AUTHOR_ID,
+    eventToken(800),
+    {
+      authorId: AUTHOR_ID,
+      channelId: CHANNEL_ID,
+      messageId: "legacy-root",
+      text: "legacy text",
+    },
+  );
+  assert.throws(
+    () =>
+      replayRecords([
+        {
+          event: {
+            ...compact,
+            data: {
+              ...compact.data,
+              channelId:
+                "ch_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+            },
+          },
+          offset: nextOffset(1),
+        },
+      ]),
+    (error) => {
+      assert.equal(error.code, REDUCER_ERROR_CODES.CHANNEL_SCOPE_MISMATCH);
+      return true;
+    },
+  );
+  assert.throws(
+    () =>
+      replayRecords([
+        {
+          event: {
+            ...conversationEvent(
+              "channel.message.created",
+              AUTHOR_ID,
+              eventToken(801),
+              compact.data,
+            ),
+            data: { ...compact.data, authorId: MEMBER_ID },
+          },
+          offset: nextOffset(1),
+        },
+      ]),
+    (error) => {
+      assert.equal(error.code, REDUCER_ERROR_CODES.MESSAGE_AUTHOR_MISMATCH);
+      return true;
+    },
+  );
+  const replayed = replayRecords([{ event: compact, offset: nextOffset(1) }]);
+  assert.deepEqual(
+    replayed.finalState.entities.messages["legacy-root"],
+    compact.data,
+  );
+  return {
+    compactMessageAcceptedWithoutShapeChange: true,
+    foreignWorkspaceChannelRefused: true,
+    forgedAuthorRefused: true,
+    legacyProjectionPreserved: true,
+    result: "PASS",
   };
 }
 

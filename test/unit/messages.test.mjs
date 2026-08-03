@@ -26,6 +26,8 @@ const WORKSPACE_ID = "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa";
 const CHANNEL_ID = "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc";
 const OTHER_CHANNEL_ID =
   "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd";
+const FOREIGN_CHANNEL_ID =
+  "ch_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc";
 const AUTHOR_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb";
 const MEMBER_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc";
 const ADMIN_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd";
@@ -177,11 +179,46 @@ test("thread roots reject missing, cross-channel, deleted, and reply-to-reply re
   );
 });
 
-test("text boundary rejects non-NFC, controls, bidi formatting, markup content types, and unpaired surrogates", () => {
+test("legacy compact messages retain actor and workspace scope", () => {
+  const compact = event("channel.message.created", AUTHOR_ID, "a", {
+    authorId: AUTHOR_ID,
+    channelId: CHANNEL_ID,
+    messageId: "legacy-root",
+    text: "legacy text",
+  });
+  assertReducerFailure(
+    () =>
+      reduceEnvelope(
+        createInitialState(),
+        {
+          ...compact,
+          data: { ...compact.data, channelId: FOREIGN_CHANNEL_ID },
+        },
+        { offset: offset(1) },
+      ),
+    REDUCER_ERROR_CODES.CHANNEL_SCOPE_MISMATCH,
+  );
+  assertReducerFailure(
+    () =>
+      reduceEnvelope(
+        createInitialState(),
+        { ...compact, data: { ...compact.data, authorId: MEMBER_ID } },
+        { offset: offset(1) },
+      ),
+    REDUCER_ERROR_CODES.MESSAGE_AUTHOR_MISMATCH,
+  );
+  const replayed = reduceEnvelope(createInitialState(), compact, {
+    offset: offset(1),
+  });
+  assert.deepEqual(replayed.entities.messages["legacy-root"], compact.data);
+});
+
+test("text boundary rejects non-NFC, C0/C1 controls, bidi formatting, markup content types, and unpaired surrogates", () => {
   assert.equal(normalizeConversationText("Cafe\u0301"), "Café");
   for (const value of [
     "Cafe\u0301",
     "bad\ntext",
+    "bad\u0085text",
     "bad\u202Etext",
     "bad\ud800",
   ]) {

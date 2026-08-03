@@ -3,7 +3,7 @@ id: E0-T07
 epic: 0
 title: "Capstone: two writers, one authoritative log"
 priority: 7
-status: in-progress
+status: implemented
 depends_on: [E0-T03, E0-T06]
 estimate: M
 capstone: true
@@ -69,3 +69,11 @@ pre-existing streams, caches, sessions, or build artifacts invalidate the eviden
   E0-T07 is now the sole active capstone gate. The implementation will compose the
   official Durable Streams emulator, two independent dispatch writers, the E0-T06
   deterministic fault seams, and offline reducer replay without adding domain semantics.
+
+### Builder — 2026-08-03 — implemented at `b5ab9bcdcdfec1e9e8598b5f50b9774b77030f2a`
+
+- Added independent writer and follower processes, durable receipt/checkpoint evidence,
+  deterministic partition/restart choreography, and offline replay/tamper detectors.
+- Added cold `make verify-E0-T07` and composed `make verify-E0` targets. The final clean
+  promoted run is the critic handoff evidence; Replay: N/A (server/CLI protocol capstone)
+  + mitigation is recorded by the verifier.

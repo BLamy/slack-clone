@@ -112,12 +112,15 @@ test("every valid golden log replays with stable per-prefix state", async () => 
 test("replay is invariant across chunk boundaries", async () => {
   const dump = await readJson(path.join(validDirectory, "ledger-log.v1.json"));
   const normalized = normalizeDump(dump);
-  const expected = replayRecords(normalized);
+  const expected = replayRecords(normalized, {
+    allowLegacyCompactMessages: true,
+  });
   let state = createInitialState();
   const chunkedPrefixes = [];
 
   for (let index = 0; index < normalized.length; index += 1) {
     state = reduceEnvelope(state, normalized.at(index).event, {
+      allowLegacyCompactMessages: true,
       offset: normalized.at(index).offset,
     });
     chunkedPrefixes.push({

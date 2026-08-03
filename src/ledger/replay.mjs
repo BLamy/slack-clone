@@ -34,7 +34,9 @@ export class ReplayError extends Error {
 
 export function validateAndReplayDump(value) {
   const records = normalizeDump(value);
-  return replayRecords(records);
+  return replayRecords(records, {
+    allowLegacyCompactMessages: value?.task === "E0-T05",
+  });
 }
 
 export function normalizeDump(value) {

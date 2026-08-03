@@ -160,7 +160,11 @@ export function createInitialState() {
   };
 }
 
-export function reduceEnvelope(state, envelope, { offset = null } = {}) {
+export function reduceEnvelope(
+  state,
+  envelope,
+  { allowLegacyCompactMessages = false, offset = null } = {},
+) {
   assertEnvelope(envelope, offset);
   if (state?.schemaVersion !== REDUCER_SCHEMA_VERSION) {
     throw reducerError(
@@ -179,7 +183,11 @@ export function reduceEnvelope(state, envelope, { offset = null } = {}) {
 
   const next = cloneState(state);
   const reducer = registryReducer(envelope.eventType);
-  reducer(next, envelope.data, { envelope, offset });
+  reducer(next, envelope.data, {
+    allowLegacyCompactMessages,
+    envelope,
+    offset,
+  });
   next.appliedEventIds.push(envelope.eventId);
   next.eventProvenance.push({
     envelope: copyJson(envelope),
@@ -188,7 +196,13 @@ export function reduceEnvelope(state, envelope, { offset = null } = {}) {
   return next;
 }
 
-export function replayRecords(records) {
+export function replayRecords(
+  records,
+  {
+    allowLegacyCompactMessages = false,
+    initialState = createInitialState(),
+  } = {},
+) {
   if (!Array.isArray(records)) {
     throw reducerError(
       REDUCER_ERROR_CODES.MALFORMED_ENVELOPE,
@@ -197,7 +211,7 @@ export function replayRecords(records) {
     );
   }
 
-  let state = createInitialState();
+  let state = cloneState(initialState);
   const seenOffsets = new Set();
   const prefixes = [];
   for (let index = 0; index < records.length; index += 1) {
@@ -226,7 +240,10 @@ export function replayRecords(records) {
     }
     seenOffsets.add(offset);
     const envelope = record?.event ?? record?.envelope ?? record;
-    state = reduceEnvelope(state, envelope, { offset });
+    state = reduceEnvelope(state, envelope, {
+      allowLegacyCompactMessages,
+      offset,
+    });
     prefixes.push({
       index: index + 1,
       offset,
@@ -422,7 +439,9 @@ function reduceMessageCreated(state, data, context) {
     );
   }
   assertConversationText(data.text, context);
-  assertConversationMessageIdentity(state, data, context);
+  assertConversationMessageIdentity(state, data, context, {
+    allowUnprojected: true,
+  });
   assertUnique(state.entities.messages, data.messageId, "messageId", context);
   state.entities.messages = setKey(
     state.entities.messages,
@@ -683,7 +702,12 @@ function isConversationMessageData(data) {
   );
 }
 
-function assertConversationMessageIdentity(state, data, context) {
+function assertConversationMessageIdentity(
+  state,
+  data,
+  context,
+  { allowUnprojected = false } = {},
+) {
   assertConversationTargetIdentity(data, context);
   if (data.authorId !== context.envelope.actorId) {
     failMessage(
@@ -695,6 +719,7 @@ function assertConversationMessageIdentity(state, data, context) {
   }
   assertConversationChannelAccess(state, data.channelId, context, {
     allowArchived: false,
+    allowUnprojected,
   });
 }
 
@@ -821,10 +846,18 @@ function assertConversationChannelAccess(
   state,
   channelId,
   context,
-  { allowArchived },
+  { allowArchived, allowUnprojected = false },
 ) {
   const channels = channelMap(state);
-  if (Object.keys(channels).length === 0) return;
+  if (Object.keys(channels).length === 0) {
+    if (allowUnprojected && context.allowLegacyCompactMessages) return;
+    failMessage(
+      REDUCER_ERROR_CODES.CHANNEL_NOT_FOUND,
+      "conversation channel projection is required before message append",
+      "channelId",
+      context,
+    );
+  }
   const channel = getKey(channels, channelId);
   if (!channel) {
     failMessage(

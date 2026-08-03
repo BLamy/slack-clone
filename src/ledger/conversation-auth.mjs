@@ -204,24 +204,43 @@ export function createConversationAuthorization({
 
   async function authorizeDispatch(request, context = {}) {
     const channelId = request?.payload?.channelId;
-    return fence(
+    let operationStarted = false;
+    let operationCompleted = false;
+    let operationResult;
+    let operationPromise;
+    await fence(
       {
         channelId,
         principalId: request.actorId,
         workspaceId: request.workspaceId,
         ...context,
       },
-      async () => {
-        const state = await lookupState(request.workspaceId, channelId);
-        return authorizeConversationCommand({
-          actorId: request.actorId,
-          operation: request.operation,
-          payload: request.payload,
-          state,
-          workspaceId: request.workspaceId,
-        });
+      () => {
+        operationStarted = true;
+        operationPromise = (async () => {
+          const state = await lookupState(request.workspaceId, channelId);
+          operationResult = authorizeConversationCommand({
+            actorId: request.actorId,
+            operation: request.operation,
+            payload: request.payload,
+            state,
+            workspaceId: request.workspaceId,
+          });
+          operationCompleted = true;
+          return operationResult;
+        })();
+        return operationPromise;
       },
     );
+    if (!operationStarted || !operationCompleted) {
+      operationPromise?.catch(() => {});
+      throw new ConversationAuthorizationError(
+        CONVERSATION_AUTH_ERROR_CODES.FENCE_REQUIRED,
+        "conversation fence must execute and await its authorization callback",
+        { statusCode: 503 },
+      );
+    }
+    return operationResult;
   }
 
   return Object.freeze({ authorizeDispatch });

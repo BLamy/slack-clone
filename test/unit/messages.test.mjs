@@ -29,6 +29,8 @@ const OTHER_CHANNEL_ID =
   "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd";
 const FOREIGN_CHANNEL_ID =
   "ch_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc";
+const UNKNOWN_CHANNEL_ID =
+  "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee";
 const AUTHOR_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb";
 const MEMBER_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc";
 const ADMIN_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd";
@@ -80,7 +82,7 @@ test("conversation events retain revisions, actor attribution, tombstones, and r
     }),
   ];
 
-  let state = createInitialState();
+  let state = conversationProjectionState();
   for (const [index, conversationEvent] of events.entries()) {
     state = reduceEnvelope(state, conversationEvent, {
       offset: offset(index + 1),
@@ -134,7 +136,7 @@ test("thread roots reject missing, cross-channel, deleted, and reply-to-reply re
     rootMessageId: "root",
     text: "reply",
   });
-  const stateWithRoot = reduceEnvelope(createInitialState(), root, {
+  const stateWithRoot = reduceEnvelope(conversationProjectionState(), root, {
     offset: offset(1),
   });
   assertReducerFailure(
@@ -190,7 +192,7 @@ test("legacy compact messages retain actor and workspace scope", () => {
   assertReducerFailure(
     () =>
       reduceEnvelope(
-        createInitialState(),
+        conversationProjectionState(),
         {
           ...compact,
           data: { ...compact.data, channelId: FOREIGN_CHANNEL_ID },
@@ -202,7 +204,19 @@ test("legacy compact messages retain actor and workspace scope", () => {
   assertReducerFailure(
     () =>
       reduceEnvelope(
-        createInitialState(),
+        conversationProjectionState(),
+        {
+          ...compact,
+          data: { ...compact.data, channelId: UNKNOWN_CHANNEL_ID },
+        },
+        { offset: offset(1) },
+      ),
+    REDUCER_ERROR_CODES.CHANNEL_NOT_FOUND,
+  );
+  assertReducerFailure(
+    () =>
+      reduceEnvelope(
+        conversationProjectionState(),
         { ...compact, data: { ...compact.data, authorId: MEMBER_ID } },
         { offset: offset(1) },
       ),
@@ -212,14 +226,14 @@ test("legacy compact messages retain actor and workspace scope", () => {
     assertReducerFailure(
       () =>
         reduceEnvelope(
-          createInitialState(),
+          conversationProjectionState(),
           { ...compact, data: { ...compact.data, text } },
           { offset: offset(1) },
         ),
       REDUCER_ERROR_CODES.MESSAGE_TEXT,
     );
   }
-  const replayed = reduceEnvelope(createInitialState(), compact, {
+  const replayed = reduceEnvelope(conversationProjectionState(), compact, {
     offset: offset(1),
   });
   assert.deepEqual(replayed.entities.messages["legacy-root"], compact.data);
@@ -375,7 +389,69 @@ test("conversation dispatch refuses to run without a linearizable fence", async 
       return true;
     },
   );
+  let lookupCalls = 0;
+  const skippedAuthorization = createConversationAuthorization({
+    lookupState: async () => {
+      lookupCalls += 1;
+      return conversationState();
+    },
+    withChannelFence: async () => "not-authorized",
+  });
+  await assert.rejects(
+    () =>
+      skippedAuthorization.authorizeDispatch({
+        actorId: AUTHOR_ID,
+        operation: "channel.message.create",
+        payload: {
+          channelId: CHANNEL_ID,
+          contentType: "text/plain",
+          messageId: "skipped-root",
+          rootMessageId: null,
+          text: "skipped",
+        },
+        workspaceId: WORKSPACE_ID,
+      }),
+    (error) => {
+      assert.ok(error instanceof ConversationAuthorizationError);
+      assert.equal(error.code, CONVERSATION_AUTH_ERROR_CODES.FENCE_REQUIRED);
+      return true;
+    },
+  );
+  assert.equal(lookupCalls, 0);
 });
+
+function conversationProjectionState() {
+  const state = createInitialState();
+  state.entities.channels = {};
+  state.entities.channelMemberships = {};
+  state.entities.memberships = {};
+  for (const channelId of [CHANNEL_ID, OTHER_CHANNEL_ID]) {
+    state.entities.channels[channelId] = {
+      channelId,
+      creatorId: AUTHOR_ID,
+      status: "active",
+      workspaceId: WORKSPACE_ID,
+    };
+    for (const principalId of [AUTHOR_ID, MEMBER_ID]) {
+      state.entities.channelMemberships[`${channelId}\u0000${principalId}`] = {
+        channelId,
+        principalId,
+        status: "active",
+        workspaceId: WORKSPACE_ID,
+      };
+    }
+  }
+  for (const principalId of [AUTHOR_ID, MEMBER_ID]) {
+    state.entities.memberships[
+      `mb_${WORKSPACE_ID.slice(3)}_${principalId.slice(30)}`
+    ] = {
+      principalId,
+      status: "active",
+      workspaceId: WORKSPACE_ID,
+    };
+  }
+  return state;
+}
 
 function conversationState() {
   return {

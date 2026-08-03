@@ -254,27 +254,27 @@ async function verifyInvalidFixtures() {
   const expected = {
     "cross-channel-reply.v1.json": {
       code: REDUCER_ERROR_CODES.MESSAGE_REPLY_ROOT,
-      offset: "0000000000000000_0000000000000002",
+      offset: "0000000000000000_000000000000000d",
     },
     "invalid-text.v1.json": {
       code: REDUCER_ERROR_CODES.MESSAGE_TEXT,
-      offset: "0000000000000000_0000000000000001",
+      offset: "0000000000000000_000000000000000c",
     },
     "missing-root.v1.json": {
       code: REDUCER_ERROR_CODES.MESSAGE_REPLY_ROOT,
-      offset: "0000000000000000_0000000000000001",
+      offset: "0000000000000000_000000000000000c",
     },
     "reply-to-reply.v1.json": {
       code: REDUCER_ERROR_CODES.MESSAGE_REPLY_ROOT,
-      offset: "0000000000000000_0000000000000003",
+      offset: "0000000000000000_000000000000000e",
     },
     "stale-edit.v1.json": {
       code: REDUCER_ERROR_CODES.MESSAGE_REVISION_CONFLICT,
-      offset: "0000000000000000_0000000000000002",
+      offset: "0000000000000000_000000000000000d",
     },
     "unauthorized-edit.v1.json": {
       code: REDUCER_ERROR_CODES.MESSAGE_AUTHOR_MISMATCH,
-      offset: "0000000000000000_0000000000000002",
+      offset: "0000000000000000_000000000000000d",
     },
   };
   const observed = {};
@@ -501,14 +501,47 @@ async function verifyFenceRequirement() {
       return true;
     },
   );
+  let lookupCalls = 0;
+  const skippedAuthorization = createConversationAuthorization({
+    lookupState: async () => {
+      lookupCalls += 1;
+      return authState();
+    },
+    withChannelFence: async () => "not-authorized",
+  });
+  await assert.rejects(
+    () =>
+      skippedAuthorization.authorizeDispatch({
+        actorId: AUTHOR_ID,
+        operation: "channel.message.create",
+        payload: {
+          channelId: CHANNEL_ID,
+          contentType: "text/plain",
+          messageId: "skipped-root",
+          rootMessageId: null,
+          text: "skipped",
+        },
+        workspaceId: WORKSPACE_ID,
+      }),
+    (error) => {
+      assert.ok(error instanceof ConversationAuthorizationError);
+      assert.equal(error.code, "CONVERSATION_FENCE_REQUIRED");
+      return true;
+    },
+  );
+  assert.equal(lookupCalls, 0);
   return {
     omittedFenceRefused: true,
+    skippedCallbackRefused: true,
+    skippedCallbackLookupCalls: lookupCalls,
     code: "CONVERSATION_FENCE_REQUIRED",
     result: "PASS",
   };
 }
 
 function verifyLegacyCompactScope() {
+  const initialState = authState();
+  delete initialState.entities.messages.root;
   const compact = conversationEvent(
     "channel.message.created",
     AUTHOR_ID,
@@ -522,19 +555,22 @@ function verifyLegacyCompactScope() {
   );
   assert.throws(
     () =>
-      replayRecords([
-        {
-          event: {
-            ...compact,
-            data: {
-              ...compact.data,
-              channelId:
-                "ch_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+      replayRecords(
+        [
+          {
+            event: {
+              ...compact,
+              data: {
+                ...compact.data,
+                channelId:
+                  "ch_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+              },
             },
+            offset: nextOffset(1),
           },
-          offset: nextOffset(1),
-        },
-      ]),
+        ],
+        { initialState },
+      ),
     (error) => {
       assert.equal(error.code, REDUCER_ERROR_CODES.CHANNEL_SCOPE_MISMATCH);
       return true;
@@ -542,22 +578,48 @@ function verifyLegacyCompactScope() {
   );
   assert.throws(
     () =>
-      replayRecords([
-        {
-          event: {
-            ...conversationEvent(
-              "channel.message.created",
-              AUTHOR_ID,
-              eventToken(801),
-              compact.data,
-            ),
-            data: { ...compact.data, authorId: MEMBER_ID },
+      replayRecords(
+        [
+          {
+            event: {
+              ...conversationEvent(
+                "channel.message.created",
+                AUTHOR_ID,
+                eventToken(801),
+                compact.data,
+              ),
+              data: { ...compact.data, authorId: MEMBER_ID },
+            },
+            offset: nextOffset(1),
           },
-          offset: nextOffset(1),
-        },
-      ]),
+        ],
+        { initialState },
+      ),
     (error) => {
       assert.equal(error.code, REDUCER_ERROR_CODES.MESSAGE_AUTHOR_MISMATCH);
+      return true;
+    },
+  );
+  assert.throws(
+    () =>
+      replayRecords(
+        [
+          {
+            event: {
+              ...compact,
+              data: {
+                ...compact.data,
+                channelId:
+                  "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+              },
+            },
+            offset: nextOffset(1),
+          },
+        ],
+        { initialState },
+      ),
+    (error) => {
+      assert.equal(error.code, REDUCER_ERROR_CODES.CHANNEL_NOT_FOUND);
       return true;
     },
   );
@@ -573,7 +635,10 @@ function verifyLegacyCompactScope() {
       data: { ...compact.data, text },
     };
     assert.throws(
-      () => replayRecords([{ event: invalid, offset: nextOffset(1) }]),
+      () =>
+        replayRecords([{ event: invalid, offset: nextOffset(1) }], {
+          initialState,
+        }),
       (error) => {
         assert.equal(error.code, REDUCER_ERROR_CODES.MESSAGE_TEXT);
         return true;
@@ -581,7 +646,9 @@ function verifyLegacyCompactScope() {
     );
     refusedLegacyControls.push(index === 802 ? "C0" : "C1");
   }
-  const replayed = replayRecords([{ event: compact, offset: nextOffset(1) }]);
+  const replayed = replayRecords([{ event: compact, offset: nextOffset(1) }], {
+    initialState,
+  });
   assert.deepEqual(
     replayed.finalState.entities.messages["legacy-root"],
     compact.data,
@@ -589,6 +656,7 @@ function verifyLegacyCompactScope() {
   return {
     compactMessageAcceptedWithoutShapeChange: true,
     foreignWorkspaceChannelRefused: true,
+    unknownSameWorkspaceChannelRefused: true,
     forgedAuthorRefused: true,
     compactControlsRefused: refusedLegacyControls,
     legacyProjectionPreserved: true,
@@ -703,18 +771,20 @@ function verifyProperties() {
       offset: nextOffset(records.length + 1),
     });
   }
-  const replay = replayRecords(records);
+  const initialState = authState();
+  delete initialState.entities.messages.root;
+  const replay = replayRecords(records, { initialState });
   assert.equal(Object.keys(replay.finalState.entities.messages).length, 64);
   assert.equal(replay.prefixes.length, records.length);
   const mutated = structuredClone(records);
   mutated[3].event.data.rootMessageId = "property-reply-0";
   assert.throws(
-    () => replayRecords(mutated),
+    () => replayRecords(mutated, { initialState }),
     (error) => error.code === REDUCER_ERROR_CODES.MESSAGE_REPLY_ROOT,
   );
   const permuted = [records[1], records[0], ...records.slice(2)];
   assert.throws(
-    () => replayRecords(permuted),
+    () => replayRecords(permuted, { initialState }),
     (error) => error.code === REDUCER_ERROR_CODES.MESSAGE_REPLY_ROOT,
   );
   return {
@@ -768,6 +838,9 @@ function verifyOfflineReplay(dump) {
 
 function authState() {
   return {
+    schemaVersion: 1,
+    appliedEventIds: [],
+    eventProvenance: [],
     entities: {
       channels: {
         [CHANNEL_ID]: {
@@ -800,6 +873,7 @@ function authState() {
         },
       },
     },
+    audits: {},
   };
 }
 

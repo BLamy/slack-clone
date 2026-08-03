@@ -72,7 +72,7 @@ references. The
 request-budget gate drives the HTTP delivery timer boundary through
 900,000 deterministic milliseconds and confirms that its single snapshot read and live
 follow do not grow. The production-shaped authorization path is included: one subscription
-membership read, one connection-open channel-status read, and one workspace/channel
+membership read, one connection-open workspace/channel revalidation, and one workspace/channel
 revalidation per ten-second heartbeat (90 over the window), with no additional chat
 snapshot/follow calls. A 350-millisecond polling positive control executes 2,571 reads over
 the same clock and must be rejected, proving the detector can go red.

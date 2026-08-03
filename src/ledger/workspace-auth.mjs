@@ -219,10 +219,8 @@ export function createWorkspaceAuthorization({
     }
     const trusted = assertWorkspaceContext(context);
     const boundRequest = bindWorkspaceRequest(request, trusted.workspaceId);
-    return fence(trusted, async () => {
-      await currentMembership(trusted, capability);
-      return register(boundRequest, trusted);
-    });
+    await fence(trusted, () => currentMembership(trusted, capability));
+    return register(boundRequest, trusted);
   }
 
   return Object.freeze({

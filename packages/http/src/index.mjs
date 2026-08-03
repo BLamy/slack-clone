@@ -44,10 +44,8 @@ export function createLiveChatSubscriptionRevalidator({
   if (typeof readRoomStatus !== "function") {
     throw new TypeError("live chat revalidator requires readRoomStatus");
   }
-  return async ({ context, room, skipWorkspaceAuthorization = false }) => {
-    if (!skipWorkspaceAuthorization) {
-      await authorizeRead(context, { capability: "workspace.subscribe" });
-    }
+  return async ({ context, room }) => {
+    await authorizeRead(context, { capability: "workspace.subscribe" });
     const status = await readRoomStatus(room);
     if (status?.archived === true) {
       return {
@@ -327,10 +325,7 @@ export function createChatHttpDelivery({
     return client.terminalPromise;
   }
 
-  async function revalidateClient(
-    client,
-    { skipWorkspaceAuthorization = false } = {},
-  ) {
+  async function revalidateClient(client) {
     if (
       typeof currentSession === "function" &&
       !currentSession(client.request)
@@ -347,7 +342,6 @@ export function createChatHttpDelivery({
       context: client.context,
       request: client.request,
       room: client.state.room,
-      skipWorkspaceAuthorization,
     });
     if (result?.code && result.ok === false) {
       throw new LiveChatDeliveryError(
@@ -549,9 +543,7 @@ export function createChatHttpDelivery({
     request.once("aborted", abortBeforeHeaders);
     response.once("close", () => removeClient(state, client));
     try {
-      await revalidateClient(client, {
-        skipWorkspaceAuthorization: context !== null,
-      });
+      await revalidateClient(client);
     } catch (error) {
       request.removeListener("aborted", abortBeforeHeaders);
       removeClient(state, client);

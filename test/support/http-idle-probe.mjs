@@ -212,8 +212,8 @@ export function assertIdleWindowRequestConstant(observation) {
   );
   assert.equal(
     observation.authorizeReadCalls,
-    observation.keepAliveTimerExecutions,
-    "idle HTTP delivery must revalidate workspace membership on each heartbeat",
+    observation.keepAliveTimerExecutions + 1,
+    "idle HTTP delivery must revalidate workspace membership at open and on each heartbeat",
   );
   assert.equal(
     observation.directoryReadCalls,

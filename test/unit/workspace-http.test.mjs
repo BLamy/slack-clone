@@ -162,6 +162,49 @@ test("a current member reaches the read and mutation handlers after the fence", 
   delivery.close();
 });
 
+test("a non-draining SSE client cannot hold the workspace authorization fence", async () => {
+  const { delivery } = createDelivery({ principalId: OWNER_A });
+  let unblockSnapshot;
+  const snapshotBlocked = new Promise((resolve) => {
+    void (unblockSnapshot = resolve);
+  });
+  const slowResponse = createFakeResponse({
+    onWrite: () => unblockSnapshot(),
+    writeResult: false,
+  });
+  const slowRequest = createRequest({
+    method: "GET",
+    path: "/api/rooms/slow-reader/events",
+  });
+  const slowHandling = delivery.handleApi(
+    slowRequest,
+    slowResponse,
+    new URL("http://app.test/api/rooms/slow-reader/events"),
+  );
+  await snapshotBlocked;
+
+  const readResponse = createFakeResponse();
+  const readHandling = delivery.handleApi(
+    createRequest({ method: "GET", path: "/api/rooms/other/messages" }),
+    readResponse,
+    new URL("http://app.test/api/rooms/other/messages"),
+  );
+  const result = await Promise.race([
+    readHandling.then(() => "completed"),
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve("blocked");
+      }, 100);
+    }),
+  ]);
+  assert.equal(result, "completed");
+  assert.equal(readResponse.status, 200);
+
+  slowResponse.emit("close");
+  await slowHandling;
+  delivery.close();
+});
+
 function createDelivery({ principalId }) {
   const calls = {
     append: 0,
@@ -259,7 +302,7 @@ function createRequest({ body = null, headers = {}, method = "GET", path }) {
   return request;
 }
 
-function createFakeResponse() {
+function createFakeResponse({ onWrite = null, writeResult = true } = {}) {
   const response = new EventEmitter();
   response.destroyed = false;
   response.headersSent = false;
@@ -274,7 +317,8 @@ function createFakeResponse() {
   };
   response.write = (value) => {
     response.output.push(String(value));
-    return true;
+    onWrite?.(String(value));
+    return writeResult;
   };
   response.end = (value) => {
     if (value !== undefined) response.output.push(String(value));

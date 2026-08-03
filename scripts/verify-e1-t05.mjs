@@ -62,8 +62,8 @@ assert.equal(idleObservation.readCallsAfterLogicalAdvance, 1);
 assert.equal(idleObservation.followCallsAfterLogicalAdvance, 1);
 assert.equal(idleObservation.authorizeSubscriptionCalls, 1);
 assert.equal(idleObservation.keepAliveTimerExecutions, 90);
-assert.equal(idleObservation.authorizeReadCalls, 90);
-assert.equal(idleObservation.directoryReadCalls, 91);
+assert.equal(idleObservation.authorizeReadCalls, 91);
+assert.equal(idleObservation.directoryReadCalls, 92);
 assert.equal(idleObservation.roomStatusReadCalls, 91);
 
 const summary = {
@@ -109,7 +109,7 @@ const summary = {
     ...idleObservation,
     result: "PASS",
     productionAuthorizationWiring:
-      "shared live revalidator performs workspace and channel checks at connection open and on every 10-second heartbeat",
+      "workspace subscription plus shared live revalidator perform workspace and channel checks at connection open and on every 10-second heartbeat",
     pollingPositiveControl:
       "covered by test/unit/durable-streams-adapter.test.mjs",
   },

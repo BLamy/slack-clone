@@ -25,6 +25,15 @@ export const REDUCER_EVENT_TYPES_V1 = Object.freeze([
   "principal.profile.updated",
   "principal.suspended",
   "principal.deactivated",
+  "channel.created",
+  "channel.renamed",
+  "channel.archived",
+  "channel.unarchived",
+  "channel.membership.invited",
+  "channel.membership.joined",
+  "channel.membership.left",
+  "channel.membership.removed",
+  "channel.direct.created",
   "workspace.created",
   "workspace.membership.invited",
   "workspace.membership.accepted",
@@ -67,6 +76,21 @@ export const REDUCER_ERROR_CODES = Object.freeze({
   WORKSPACE_ROLE_KIND_MISMATCH: "REDUCER_WORKSPACE_ROLE_KIND_MISMATCH",
   WORKSPACE_SELF_ESCALATION: "REDUCER_WORKSPACE_SELF_ESCALATION",
   WORKSPACE_SCOPE_MISMATCH: "REDUCER_WORKSPACE_SCOPE_MISMATCH",
+  CHANNEL_ARCHIVED: "REDUCER_CHANNEL_ARCHIVED",
+  CHANNEL_DIRECT_DUPLICATE: "REDUCER_CHANNEL_DIRECT_DUPLICATE",
+  CHANNEL_DIRECT_PARTICIPANTS: "REDUCER_CHANNEL_DIRECT_PARTICIPANTS",
+  CHANNEL_INVALID_DISPLAY_NAME: "REDUCER_CHANNEL_INVALID_DISPLAY_NAME",
+  CHANNEL_INVALID_ID: "REDUCER_CHANNEL_INVALID_ID",
+  CHANNEL_INVALID_KIND: "REDUCER_CHANNEL_INVALID_KIND",
+  CHANNEL_INVALID_MEMBERSHIP: "REDUCER_CHANNEL_INVALID_MEMBERSHIP",
+  CHANNEL_INVALID_STATUS: "REDUCER_CHANNEL_INVALID_STATUS",
+  CHANNEL_MEMBERSHIP_DUPLICATE: "REDUCER_CHANNEL_MEMBERSHIP_DUPLICATE",
+  CHANNEL_MEMBERSHIP_INACTIVE: "REDUCER_CHANNEL_MEMBERSHIP_INACTIVE",
+  CHANNEL_MEMBERSHIP_NOT_FOUND: "REDUCER_CHANNEL_MEMBERSHIP_NOT_FOUND",
+  CHANNEL_NOT_FOUND: "REDUCER_CHANNEL_NOT_FOUND",
+  CHANNEL_PARTICIPANT_SERVICE: "REDUCER_CHANNEL_PARTICIPANT_SERVICE",
+  CHANNEL_REVISION_CONFLICT: "REDUCER_CHANNEL_REVISION_CONFLICT",
+  CHANNEL_SCOPE_MISMATCH: "REDUCER_CHANNEL_SCOPE_MISMATCH",
   UNKNOWN_EVENT_TYPE: "REDUCER_UNKNOWN_EVENT_TYPE",
   UNSUPPORTED_SCHEMA_VERSION: "REDUCER_UNSUPPORTED_SCHEMA_VERSION",
 });
@@ -213,6 +237,15 @@ export const REDUCER_REGISTRY_V1 = Object.freeze({
   "principal.profile.updated": reducePrincipalProfileUpdated,
   "principal.suspended": reducePrincipalSuspended,
   "principal.deactivated": reducePrincipalDeactivated,
+  "channel.created": reduceChannelCreated,
+  "channel.renamed": reduceChannelRenamed,
+  "channel.archived": reduceChannelArchived,
+  "channel.unarchived": reduceChannelUnarchived,
+  "channel.membership.invited": reduceChannelMembershipInvited,
+  "channel.membership.joined": reduceChannelMembershipJoined,
+  "channel.membership.left": reduceChannelMembershipLeft,
+  "channel.membership.removed": reduceChannelMembershipRemoved,
+  "channel.direct.created": reduceDirectChannelCreated,
   "workspace.created": reduceWorkspaceCreated,
   "workspace.membership.invited": reduceWorkspaceMembershipInvited,
   "workspace.membership.accepted": reduceWorkspaceMembershipAccepted,
@@ -631,6 +664,727 @@ function reducePrincipalLifecycle(state, data, nextStatus, context) {
   state.entities.principals = setKey(principalMap(state), data.principalId, {
     ...current,
     status: nextStatus,
+  });
+}
+
+function reduceChannelCreated(state, data, context) {
+  assertData(
+    data,
+    ["channelId", "creatorId", "displayName", "kind"],
+    [],
+    context,
+  );
+  assertChannelId(data.channelId, "channelId", context);
+  assertPrincipalId(data.creatorId, "creatorId", context);
+  assertChannelKind(data.kind, context);
+  assertChannelDisplayName(data.displayName, context);
+  if (data.kind === "direct") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_INVALID_KIND,
+      "direct channels require channel.direct.created",
+      "kind",
+      context,
+    );
+  }
+  if (data.creatorId !== context.envelope.actorId) {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_SCOPE_MISMATCH,
+      "channel creator must be the event actor",
+      "creatorId",
+      context,
+    );
+  }
+  requireActiveWorkspacePrincipal(state, data.creatorId, context);
+  const creator = getPrincipal(state, data.creatorId);
+  if (creator.kind === "service") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_PARTICIPANT_SERVICE,
+      "service principals may not create conversations",
+      "creatorId",
+      context,
+    );
+  }
+  assertUnique(channelMap(state), data.channelId, "channelId", context);
+  const membershipKey = channelMembershipKeyForReducer(
+    data.channelId,
+    data.creatorId,
+  );
+  assertUnique(
+    channelMembershipMap(state),
+    membershipKey,
+    "creatorId",
+    context,
+  );
+  state.entities.channels = setKey(channelMap(state), data.channelId, {
+    channelId: data.channelId,
+    creatorId: data.creatorId,
+    displayName: data.displayName,
+    kind: data.kind,
+    participantIds: null,
+    revision: 1,
+    status: "active",
+    workspaceId: context.envelope.workspaceId,
+  });
+  state.entities.channelMemberships = setKey(
+    channelMembershipMap(state),
+    membershipKey,
+    {
+      channelId: data.channelId,
+      principalId: data.creatorId,
+      revision: 1,
+      status: "active",
+      workspaceId: context.envelope.workspaceId,
+    },
+  );
+}
+
+function reduceDirectChannelCreated(state, data, context) {
+  assertData(data, ["channelId", "creatorId", "participantIds"], [], context);
+  assertChannelId(data.channelId, "channelId", context);
+  assertPrincipalId(data.creatorId, "creatorId", context);
+  const participantIds = canonicalPrincipalIds(data.participantIds, context);
+  if (!participantIds.includes(data.creatorId)) {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_DIRECT_PARTICIPANTS,
+      "direct channel creator must be a participant",
+      "creatorId",
+      context,
+    );
+  }
+  for (const principalId of participantIds) {
+    const principal = requireActiveWorkspacePrincipal(
+      state,
+      principalId,
+      context,
+    );
+    if (principal.kind === "service") {
+      failChannel(
+        REDUCER_ERROR_CODES.CHANNEL_PARTICIPANT_SERVICE,
+        "service principals may not join direct conversations",
+        "participantIds",
+        context,
+      );
+    }
+  }
+  if (data.creatorId !== context.envelope.actorId) {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_SCOPE_MISMATCH,
+      "direct channel creator must be the event actor",
+      "creatorId",
+      context,
+    );
+  }
+  assertUnique(channelMap(state), data.channelId, "channelId", context);
+  const participantKey = participantSetKeyForReducer(participantIds);
+  if (hasKey(directChannelMap(state), participantKey)) {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_DIRECT_DUPLICATE,
+      "an equivalent direct channel already exists",
+      "participantIds",
+      context,
+    );
+  }
+  state.entities.channels = setKey(channelMap(state), data.channelId, {
+    channelId: data.channelId,
+    creatorId: data.creatorId,
+    displayName: "",
+    kind: "direct",
+    participantIds: copyJson(participantIds),
+    revision: 1,
+    status: "active",
+    workspaceId: context.envelope.workspaceId,
+  });
+  state.entities.directChannels = setKey(
+    directChannelMap(state),
+    participantKey,
+    data.channelId,
+  );
+  for (const principalId of participantIds) {
+    const membershipKey = channelMembershipKeyForReducer(
+      data.channelId,
+      principalId,
+    );
+    state.entities.channelMemberships = setKey(
+      channelMembershipMap(state),
+      membershipKey,
+      {
+        channelId: data.channelId,
+        principalId,
+        revision: 1,
+        status: "active",
+        workspaceId: context.envelope.workspaceId,
+      },
+    );
+  }
+}
+
+function reduceChannelRenamed(state, data, context) {
+  assertData(
+    data,
+    ["channelId", "displayName", "expectedChannelRevision"],
+    [],
+    context,
+  );
+  const channel = requireChannel(state, data.channelId, context);
+  assertChannelRevision(data.expectedChannelRevision, channel, context);
+  assertChannelDisplayName(data.displayName, context);
+  if (channel.kind === "direct") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_INVALID_KIND,
+      "direct participant sets are immutable",
+      "channelId",
+      context,
+    );
+  }
+  if (channel.status !== "active") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_ARCHIVED,
+      "archived channels do not accept renames",
+      "channelId",
+      context,
+    );
+  }
+  requireChannelManager(state, channel, context);
+  advanceChannel(state, channel, {
+    displayName: data.displayName,
+    status: channel.status,
+  });
+}
+
+function reduceChannelArchived(state, data, context) {
+  reduceChannelStatus(state, data, "archived", context);
+}
+
+function reduceChannelUnarchived(state, data, context) {
+  reduceChannelStatus(state, data, "active", context);
+}
+
+function reduceChannelStatus(state, data, nextStatus, context) {
+  assertData(
+    data,
+    ["channelId", "expectedChannelRevision"],
+    ["reason"],
+    context,
+  );
+  const channel = requireChannel(state, data.channelId, context);
+  assertChannelRevision(data.expectedChannelRevision, channel, context);
+  requireChannelManager(state, channel, context);
+  if (channel.status === nextStatus) {
+    failChannel(
+      REDUCER_ERROR_CODES.ILLEGAL_TRANSITION,
+      `channel is already ${nextStatus}`,
+      "channelId",
+      context,
+    );
+  }
+  if (Object.hasOwn(data, "reason")) {
+    assertChannelReason(data.reason, context);
+  }
+  advanceChannel(state, channel, {
+    reason: data.reason ?? null,
+    status: nextStatus,
+  });
+}
+
+function reduceChannelMembershipInvited(state, data, context) {
+  assertData(
+    data,
+    ["channelId", "expectedChannelRevision", "inviteId", "principalId"],
+    [],
+    context,
+  );
+  const channel = requireChannel(state, data.channelId, context);
+  assertChannelRevision(data.expectedChannelRevision, channel, context);
+  assertInviteId(data.inviteId, "inviteId", context);
+  assertPrincipalId(data.principalId, "principalId", context);
+  requireChannelManager(state, channel, context);
+  if (channel.status !== "active") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_ARCHIVED,
+      "archived channels do not accept membership changes",
+      "channelId",
+      context,
+    );
+  }
+  const principal = requireActiveWorkspacePrincipal(
+    state,
+    data.principalId,
+    context,
+  );
+  if (principal.kind === "service") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_PARTICIPANT_SERVICE,
+      "service principals may not join conversations",
+      "principalId",
+      context,
+    );
+  }
+  const membershipKey = channelMembershipKeyForReducer(
+    data.channelId,
+    data.principalId,
+  );
+  const current = getKey(channelMembershipMap(state), membershipKey);
+  if (current?.status === "active" || current?.status === "removed") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_MEMBERSHIP_DUPLICATE,
+      "principal already has a non-rejoinable channel membership",
+      "principalId",
+      context,
+    );
+  }
+  for (const invite of Object.values(channelInviteMap(state))) {
+    if (
+      invite.channelId === data.channelId &&
+      invite.principalId === data.principalId &&
+      invite.status === "pending"
+    ) {
+      failChannel(
+        REDUCER_ERROR_CODES.CHANNEL_MEMBERSHIP_DUPLICATE,
+        "principal already has a pending channel invite",
+        "principalId",
+        context,
+      );
+    }
+  }
+  if (hasKey(channelInviteMap(state), data.inviteId)) {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_MEMBERSHIP_DUPLICATE,
+      "channel invite id is already in use",
+      "inviteId",
+      context,
+    );
+  }
+  state.entities.channelInvites = setKey(
+    channelInviteMap(state),
+    data.inviteId,
+    {
+      channelId: data.channelId,
+      inviteId: data.inviteId,
+      invitedBy: context.envelope.actorId,
+      principalId: data.principalId,
+      revision: 1,
+      status: "pending",
+      workspaceId: context.envelope.workspaceId,
+    },
+  );
+  advanceChannel(state, channel, {});
+}
+
+function reduceChannelMembershipJoined(state, data, context) {
+  assertData(
+    data,
+    ["channelId", "expectedChannelRevision", "principalId"],
+    ["inviteId"],
+    context,
+  );
+  const channel = requireChannel(state, data.channelId, context);
+  assertChannelRevision(data.expectedChannelRevision, channel, context);
+  assertPrincipalId(data.principalId, "principalId", context);
+  requireActiveWorkspacePrincipal(state, data.principalId, context);
+  if (data.principalId !== context.envelope.actorId) {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_SCOPE_MISMATCH,
+      "only the joining principal may accept a channel membership",
+      "principalId",
+      context,
+    );
+  }
+  if (channel.kind === "direct") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_INVALID_KIND,
+      "direct channel participants are fixed at creation",
+      "channelId",
+      context,
+    );
+  }
+  if (channel.status !== "active") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_ARCHIVED,
+      "archived channels do not accept membership changes",
+      "channelId",
+      context,
+    );
+  }
+  const membershipKey = channelMembershipKeyForReducer(
+    data.channelId,
+    data.principalId,
+  );
+  const current = getKey(channelMembershipMap(state), membershipKey);
+  if (current?.status === "active" || current?.status === "removed") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_MEMBERSHIP_DUPLICATE,
+      "principal is already an active or removed channel member",
+      "principalId",
+      context,
+    );
+  }
+  let invite = null;
+  if (channel.kind === "private" || Object.hasOwn(data, "inviteId")) {
+    if (!Object.hasOwn(data, "inviteId")) {
+      failChannel(
+        REDUCER_ERROR_CODES.CHANNEL_MEMBERSHIP_NOT_FOUND,
+        "private channel membership requires an invite",
+        "inviteId",
+        context,
+      );
+    }
+    assertInviteId(data.inviteId, "inviteId", context);
+    invite = getKey(channelInviteMap(state), data.inviteId);
+    if (
+      !invite ||
+      invite.channelId !== data.channelId ||
+      invite.principalId !== data.principalId ||
+      invite.status !== "pending"
+    ) {
+      failChannel(
+        REDUCER_ERROR_CODES.CHANNEL_MEMBERSHIP_NOT_FOUND,
+        "channel invite is not valid for this principal",
+        "inviteId",
+        context,
+      );
+    }
+  }
+  state.entities.channelMemberships = setKey(
+    channelMembershipMap(state),
+    membershipKey,
+    {
+      channelId: data.channelId,
+      principalId: data.principalId,
+      revision: (current?.revision ?? 0) + 1,
+      status: "active",
+      workspaceId: context.envelope.workspaceId,
+    },
+  );
+  if (invite) {
+    state.entities.channelInvites = setKey(
+      channelInviteMap(state),
+      invite.inviteId,
+      {
+        ...invite,
+        revision: invite.revision + 1,
+        status: "accepted",
+      },
+    );
+  }
+  advanceChannel(state, channel, {});
+}
+
+function reduceChannelMembershipLeft(state, data, context) {
+  assertData(
+    data,
+    ["channelId", "expectedChannelRevision", "principalId"],
+    [],
+    context,
+  );
+  const channel = requireChannel(state, data.channelId, context);
+  assertChannelRevision(data.expectedChannelRevision, channel, context);
+  assertPrincipalId(data.principalId, "principalId", context);
+  if (data.principalId !== context.envelope.actorId) {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_SCOPE_MISMATCH,
+      "only the leaving principal may leave a channel",
+      "principalId",
+      context,
+    );
+  }
+  if (channel.kind === "direct") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_INVALID_KIND,
+      "direct channel participants are immutable",
+      "channelId",
+      context,
+    );
+  }
+  if (channel.status !== "active") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_ARCHIVED,
+      "archived channels do not accept membership changes",
+      "channelId",
+      context,
+    );
+  }
+  const membershipKey = channelMembershipKeyForReducer(
+    data.channelId,
+    data.principalId,
+  );
+  const current = getKey(channelMembershipMap(state), membershipKey);
+  if (!current || current.status !== "active") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_MEMBERSHIP_INACTIVE,
+      "principal is not an active channel member",
+      "principalId",
+      context,
+    );
+  }
+  state.entities.channelMemberships = setKey(
+    channelMembershipMap(state),
+    membershipKey,
+    { ...current, revision: current.revision + 1, status: "left" },
+  );
+  advanceChannel(state, channel, {});
+}
+
+function reduceChannelMembershipRemoved(state, data, context) {
+  assertData(
+    data,
+    ["channelId", "expectedChannelRevision", "principalId"],
+    ["reason"],
+    context,
+  );
+  const channel = requireChannel(state, data.channelId, context);
+  assertChannelRevision(data.expectedChannelRevision, channel, context);
+  assertPrincipalId(data.principalId, "principalId", context);
+  requireChannelManager(state, channel, context);
+  if (channel.kind === "direct") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_INVALID_KIND,
+      "direct channel participants are immutable",
+      "channelId",
+      context,
+    );
+  }
+  if (channel.status !== "active") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_ARCHIVED,
+      "archived channels do not accept membership changes",
+      "channelId",
+      context,
+    );
+  }
+  if (data.principalId === channel.creatorId) {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_MEMBERSHIP_INACTIVE,
+      "channel creator may not be removed",
+      "principalId",
+      context,
+    );
+  }
+  if (Object.hasOwn(data, "reason")) {
+    assertChannelReason(data.reason, context);
+  }
+  const membershipKey = channelMembershipKeyForReducer(
+    data.channelId,
+    data.principalId,
+  );
+  const current = getKey(channelMembershipMap(state), membershipKey);
+  if (!current || current.status !== "active") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_MEMBERSHIP_INACTIVE,
+      "principal is not an active channel member",
+      "principalId",
+      context,
+    );
+  }
+  state.entities.channelMemberships = setKey(
+    channelMembershipMap(state),
+    membershipKey,
+    {
+      ...current,
+      reason: data.reason ?? null,
+      revision: current.revision + 1,
+      status: "removed",
+    },
+  );
+  advanceChannel(state, channel, {});
+}
+
+function assertChannelId(value, field, context) {
+  const match =
+    typeof value === "string"
+      ? value.match(/^ch_([0-9a-hjkmnp-tv-z]{26})_([0-9a-hjkmnp-tv-z]{26})$/u)
+      : null;
+  if (!match || `ws_${match[1]}` !== context.envelope.workspaceId) {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_SCOPE_MISMATCH,
+      "channel id belongs to a different workspace",
+      field,
+      context,
+    );
+  }
+}
+
+function assertChannelKind(value, context) {
+  if (!new Set(["public", "private", "direct"]).has(value)) {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_INVALID_KIND,
+      "channel kind must be public, private, or direct",
+      "kind",
+      context,
+    );
+  }
+}
+
+function assertChannelDisplayName(value, context) {
+  if (
+    typeof value !== "string" ||
+    value.length === 0 ||
+    value.length > 80 ||
+    hasControlCharacter(value)
+  ) {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_INVALID_DISPLAY_NAME,
+      "display name must be 1-80 characters without control characters",
+      "displayName",
+      context,
+    );
+  }
+}
+
+function assertChannelReason(value, context) {
+  if (
+    typeof value !== "string" ||
+    value.length === 0 ||
+    value.length > 240 ||
+    hasControlCharacter(value)
+  ) {
+    failChannel(
+      REDUCER_ERROR_CODES.INVALID_EVENT_DATA,
+      "reason must be a bounded string without control characters",
+      "reason",
+      context,
+    );
+  }
+}
+
+function assertChannelRevision(expected, channel, context) {
+  assertRevision(expected, "expectedChannelRevision", context);
+  if (expected !== channel.revision) {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_REVISION_CONFLICT,
+      `channel revision ${expected} is not current`,
+      "expectedChannelRevision",
+      context,
+    );
+  }
+}
+
+function canonicalPrincipalIds(value, context) {
+  if (!Array.isArray(value) || value.length < 2) {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_DIRECT_PARTICIPANTS,
+      "direct channel requires at least two participants",
+      "participantIds",
+      context,
+    );
+  }
+  const canonical = [...value].sort();
+  for (let index = 0; index < canonical.length; index += 1) {
+    assertPrincipalId(canonical.at(index), `participantIds[${index}]`, context);
+    if (index > 0 && canonical.at(index) === canonical.at(index - 1)) {
+      failChannel(
+        REDUCER_ERROR_CODES.CHANNEL_DIRECT_PARTICIPANTS,
+        "direct channel participants must be unique",
+        "participantIds",
+        context,
+      );
+    }
+  }
+  return canonical;
+}
+
+function requireChannel(state, channelId, context) {
+  assertChannelId(channelId, "channelId", context);
+  const channel = getKey(channelMap(state), channelId);
+  if (!channel) {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_NOT_FOUND,
+      "channel does not exist",
+      "channelId",
+      context,
+    );
+  }
+  return channel;
+}
+
+function requireActiveWorkspacePrincipal(state, principalId, context) {
+  const membershipId = membershipIdForReducer(
+    context.envelope.workspaceId,
+    principalId,
+  );
+  const membership = getKey(membershipMap(state), membershipId);
+  const principal = getPrincipal(state, principalId);
+  if (
+    !membership ||
+    membership.status !== "active" ||
+    !principal ||
+    principal.status !== "active"
+  ) {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_MEMBERSHIP_INACTIVE,
+      "principal must have an active workspace membership",
+      "principalId",
+      context,
+    );
+  }
+  return principal;
+}
+
+function requireChannelManager(state, channel, context) {
+  const workspaceMembership = getKey(
+    membershipMap(state),
+    membershipIdForReducer(
+      context.envelope.workspaceId,
+      context.envelope.actorId,
+    ),
+  );
+  const channelMembership = getKey(
+    channelMembershipMap(state),
+    channelMembershipKeyForReducer(channel.channelId, context.envelope.actorId),
+  );
+  if (
+    !workspaceMembership ||
+    workspaceMembership.status !== "active" ||
+    !channelMembership ||
+    channelMembership.status !== "active" ||
+    (channel.creatorId !== context.envelope.actorId &&
+      !["owner", "admin"].includes(workspaceMembership.role))
+  ) {
+    failChannel(
+      REDUCER_ERROR_CODES.WORKSPACE_CAPABILITY_DENIED,
+      "active channel membership or workspace administration is required",
+      "actorId",
+      context,
+    );
+  }
+  return workspaceMembership;
+}
+
+function advanceChannel(state, channel, updates) {
+  state.entities.channels = setKey(channelMap(state), channel.channelId, {
+    ...channel,
+    ...updates,
+    revision: channel.revision + 1,
+  });
+}
+
+function channelMap(state) {
+  return state.entities.channels ?? {};
+}
+
+function channelMembershipMap(state) {
+  return state.entities.channelMemberships ?? {};
+}
+
+function channelInviteMap(state) {
+  return state.entities.channelInvites ?? {};
+}
+
+function directChannelMap(state) {
+  return state.entities.directChannels ?? {};
+}
+
+function channelMembershipKeyForReducer(channelId, principalId) {
+  return `${channelId}\u0000${principalId}`;
+}
+
+function participantSetKeyForReducer(participantIds) {
+  return participantIds.join("\u0000");
+}
+
+function failChannel(code, detail, field, context) {
+  throw reducerError(code, detail, {
+    offset: context.offset,
+    path: `$.event.data.${field}`,
   });
 }
 

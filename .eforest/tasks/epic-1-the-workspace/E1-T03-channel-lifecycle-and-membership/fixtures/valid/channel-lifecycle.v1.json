@@ -1,0 +1,624 @@
+{
+  "records": [
+    {
+      "offset": "0000000000000000_0000000000000001",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000001",
+        "data": {
+          "kind": "human",
+          "ownedBy": null,
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "profile": {
+            "displayName": "Ada Lovelace",
+            "email": "ada@a.example",
+            "handle": "ada"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "channel-a-ada"
+          }
+        },
+        "eventId": "ev_00000000000000000000000001",
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_00000000000000000000000001",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:01.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000002",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000002",
+        "data": {
+          "kind": "human",
+          "ownedBy": null,
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "profile": {
+            "displayName": "Linus Torvalds",
+            "email": "linus@a.example",
+            "handle": "linus"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "channel-a-linus"
+          }
+        },
+        "eventId": "ev_00000000000000000000000002",
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_00000000000000000000000002",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:02.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000003",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000003",
+        "data": {
+          "kind": "service",
+          "ownedBy": null,
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "profile": {
+            "displayName": "Audit Bot",
+            "email": "",
+            "handle": "audit-bot"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "channel-a-audit-bot"
+          }
+        },
+        "eventId": "ev_00000000000000000000000003",
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_00000000000000000000000003",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:03.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000004",
+      "event": {
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000004",
+        "data": {
+          "kind": "human",
+          "ownedBy": null,
+          "principalId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+          "profile": {
+            "displayName": "Grace Hopper",
+            "email": "grace@b.example",
+            "handle": "grace"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "channel-b-grace"
+          }
+        },
+        "eventId": "ev_00000000000000000000000004",
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_00000000000000000000000004",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:04.000Z",
+        "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000005",
+      "event": {
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000005",
+        "data": {
+          "kind": "human",
+          "ownedBy": null,
+          "principalId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd",
+          "profile": {
+            "displayName": "Alan Turing",
+            "email": "alan@b.example",
+            "handle": "alan"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "channel-b-alan"
+          }
+        },
+        "eventId": "ev_00000000000000000000000005",
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_00000000000000000000000005",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:05.000Z",
+        "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000006",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000006",
+        "data": {
+          "displayName": "Workspace A",
+          "ownerPrincipalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "eventId": "ev_00000000000000000000000006",
+        "eventType": "workspace.created",
+        "idempotencyKey": "ik_00000000000000000000000006",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:06.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000007",
+      "event": {
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000007",
+        "data": {
+          "displayName": "Workspace B",
+          "ownerPrincipalId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+          "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "eventId": "ev_00000000000000000000000007",
+        "eventType": "workspace.created",
+        "idempotencyKey": "ik_00000000000000000000000007",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:07.000Z",
+        "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000008",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000008",
+        "data": {
+          "expectedWorkspaceRevision": 1,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "role": "member"
+        },
+        "eventId": "ev_00000000000000000000000008",
+        "eventType": "workspace.membership.invited",
+        "idempotencyKey": "ik_00000000000000000000000008",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:08.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000009",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000009",
+        "data": {
+          "expectedWorkspaceRevision": 2,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+        },
+        "eventId": "ev_00000000000000000000000009",
+        "eventType": "workspace.membership.accepted",
+        "idempotencyKey": "ik_00000000000000000000000009",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:09.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000010",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000010",
+        "data": {
+          "expectedWorkspaceRevision": 3,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeef",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "role": "service"
+        },
+        "eventId": "ev_00000000000000000000000010",
+        "eventType": "workspace.membership.invited",
+        "idempotencyKey": "ik_00000000000000000000000010",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:10.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000011",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000011",
+        "data": {
+          "expectedWorkspaceRevision": 4,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeef",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
+        },
+        "eventId": "ev_00000000000000000000000011",
+        "eventType": "workspace.membership.accepted",
+        "idempotencyKey": "ik_00000000000000000000000011",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:11.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000012",
+      "event": {
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000012",
+        "data": {
+          "expectedWorkspaceRevision": 1,
+          "inviteId": "iv_bbbbbbbbbbbbbbbbbbbbbbbbbb_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "principalId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd",
+          "role": "member"
+        },
+        "eventId": "ev_00000000000000000000000012",
+        "eventType": "workspace.membership.invited",
+        "idempotencyKey": "ik_00000000000000000000000012",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:12.000Z",
+        "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000013",
+      "event": {
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000013",
+        "data": {
+          "expectedWorkspaceRevision": 2,
+          "inviteId": "iv_bbbbbbbbbbbbbbbbbbbbbbbbbb_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "principalId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd"
+        },
+        "eventId": "ev_00000000000000000000000013",
+        "eventType": "workspace.membership.accepted",
+        "idempotencyKey": "ik_00000000000000000000000013",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:13.000Z",
+        "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000014",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000014",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+          "creatorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "displayName": "general",
+          "kind": "public"
+        },
+        "eventId": "ev_00000000000000000000000014",
+        "eventType": "channel.created",
+        "idempotencyKey": "ik_00000000000000000000000014",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:14.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000015",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000015",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+          "creatorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "displayName": "incident-room",
+          "kind": "private"
+        },
+        "eventId": "ev_00000000000000000000000015",
+        "eventType": "channel.created",
+        "idempotencyKey": "ik_00000000000000000000000015",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:15.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000016",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000016",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+          "expectedChannelRevision": 1,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+        },
+        "eventId": "ev_00000000000000000000000016",
+        "eventType": "channel.membership.invited",
+        "idempotencyKey": "ik_00000000000000000000000016",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:16.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000017",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000017",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+          "expectedChannelRevision": 2,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+        },
+        "eventId": "ev_00000000000000000000000017",
+        "eventType": "channel.membership.joined",
+        "idempotencyKey": "ik_00000000000000000000000017",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:17.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000018",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000018",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+          "displayName": "town-square",
+          "expectedChannelRevision": 1
+        },
+        "eventId": "ev_00000000000000000000000018",
+        "eventType": "channel.renamed",
+        "idempotencyKey": "ik_00000000000000000000000018",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:18.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000019",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000019",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+          "expectedChannelRevision": 2,
+          "reason": "maintenance"
+        },
+        "eventId": "ev_00000000000000000000000019",
+        "eventType": "channel.archived",
+        "idempotencyKey": "ik_00000000000000000000000019",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:19.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000020",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000020",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+          "expectedChannelRevision": 3,
+          "reason": "maintenance-complete"
+        },
+        "eventId": "ev_00000000000000000000000020",
+        "eventType": "channel.unarchived",
+        "idempotencyKey": "ik_00000000000000000000000020",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:20.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000021",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000021",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+          "expectedChannelRevision": 3,
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+        },
+        "eventId": "ev_00000000000000000000000021",
+        "eventType": "channel.membership.left",
+        "idempotencyKey": "ik_00000000000000000000000021",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:21.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000022",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000022",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+          "expectedChannelRevision": 4,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+        },
+        "eventId": "ev_00000000000000000000000022",
+        "eventType": "channel.membership.invited",
+        "idempotencyKey": "ik_00000000000000000000000022",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:22.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000023",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000023",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+          "expectedChannelRevision": 5,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+        },
+        "eventId": "ev_00000000000000000000000023",
+        "eventType": "channel.membership.joined",
+        "idempotencyKey": "ik_00000000000000000000000023",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:23.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000024",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000024",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cmm44m4mm44mm4m44mm44m4mm4",
+          "creatorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "participantIds": [
+            "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+            "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          ]
+        },
+        "eventId": "ev_00000000000000000000000024",
+        "eventType": "channel.direct.created",
+        "idempotencyKey": "ik_00000000000000000000000024",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:24.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000025",
+      "event": {
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000025",
+        "data": {
+          "channelId": "ch_bbbbbbbbbbbbbbbbbbbbbbbbbb_33333333333333333333333333",
+          "creatorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+          "displayName": "general",
+          "kind": "public"
+        },
+        "eventId": "ev_00000000000000000000000025",
+        "eventType": "channel.created",
+        "idempotencyKey": "ik_00000000000000000000000025",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:25.000Z",
+        "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000026",
+      "event": {
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000026",
+        "data": {
+          "channelId": "ch_bbbbbbbbbbbbbbbbbbbbbbbbbb_44444444444444444444444444",
+          "creatorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+          "displayName": "launch-room",
+          "kind": "private"
+        },
+        "eventId": "ev_00000000000000000000000026",
+        "eventType": "channel.created",
+        "idempotencyKey": "ik_00000000000000000000000026",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:26.000Z",
+        "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000027",
+      "event": {
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000027",
+        "data": {
+          "channelId": "ch_bbbbbbbbbbbbbbbbbbbbbbbbbb_44444444444444444444444444",
+          "expectedChannelRevision": 1,
+          "inviteId": "iv_bbbbbbbbbbbbbbbbbbbbbbbbbb_ffffffffffffffffffffffffff",
+          "principalId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd"
+        },
+        "eventId": "ev_00000000000000000000000027",
+        "eventType": "channel.membership.invited",
+        "idempotencyKey": "ik_00000000000000000000000027",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:27.000Z",
+        "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000028",
+      "event": {
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000028",
+        "data": {
+          "channelId": "ch_bbbbbbbbbbbbbbbbbbbbbbbbbb_44444444444444444444444444",
+          "expectedChannelRevision": 2,
+          "inviteId": "iv_bbbbbbbbbbbbbbbbbbbbbbbbbb_ffffffffffffffffffffffffff",
+          "principalId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd"
+        },
+        "eventId": "ev_00000000000000000000000028",
+        "eventType": "channel.membership.joined",
+        "idempotencyKey": "ik_00000000000000000000000028",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:28.000Z",
+        "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000029",
+      "event": {
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000029",
+        "data": {
+          "channelId": "ch_bbbbbbbbbbbbbbbbbbbbbbbbbb_cmm4wwcc444mccwwmmm4wwcc44",
+          "creatorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+          "participantIds": [
+            "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd",
+            "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc"
+          ]
+        },
+        "eventId": "ev_00000000000000000000000029",
+        "eventType": "channel.direct.created",
+        "idempotencyKey": "ik_00000000000000000000000029",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:29.000Z",
+        "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    }
+  ]
+}

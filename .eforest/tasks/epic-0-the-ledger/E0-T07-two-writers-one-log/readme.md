@@ -94,3 +94,23 @@ pre-existing streams, caches, sessions, or build artifacts invalidate the eviden
 - Independent binding checks matched canonical stream digests, all seven receipt event-digest/offset bindings, prefix digests, checkpoint facts, replay digests, and the final head for both `evidence/e0-t07-final/` and `evidence/e0-t07-composed/`. Four separate event, receipt, checkpoint, and claimed-final-digest tamper checks rejected their mutations. A targeted checkpoint-validator defect in a disposable worktree made the verifier exit 1 with `E0_T07_CHECKPOINT_INVALID`; that worktree was removed and the product tree remains clean.
 - The implementation files are unchanged from the promoted implementation commit `ba09eb96d89c604370548ae812d3000537f1e9ed` through `c9c596b`; the committed final and composed reports cite that implementation commit. `src/ledger/dispatch.mjs` local maps are only in-process serialization/sequence guards; accepted state is read from and appended to Durable Streams, with no local database/map authority.
 - The composed `make verify-E0` PASS is audited from `evidence/e0-t07-composed/verifier-report.json` and the Makefile composition; it was not rerun in this bounded critic turn after the user-directed stop. Replay: N/A (server/CLI protocol capstone) + mitigation: real emulator, independent reverse-order race, deterministic fault manifest, stream bindings, offline replay, and detector sensitivity proof.
+
+### Critic — 2026-08-02 — verified (fresh bounded evidence audit)
+
+- Audited the implementation/evidence baseline at `c9c596b` (the checkout also contains
+  the metadata-only prior critic commit `92e27e8`; implementation code is unchanged from
+  `ba09eb96d89c604370548ae812d3000537f1e9ed`). The independent raw-binding audit passed
+  for both `evidence/e0-t07-final/` and `evidence/e0-t07-composed/`: summary/report,
+  authoritative/auxiliary/receipt stream digests and offsets, all receipt event/request
+  bindings, checkpoint digests and head, prefix digests, replay dump, fault manifest,
+  and state-byte/digest convergence.
+- `E0_T07_SKIP_GATES=1 E0_T07_IMPLEMENTATION_COMMIT=ba09eb96d89c604370548ae812d3000537f1e9ed TEST_RUN_ID=e0-t07-critic-fresh-0802 TEST_ARTIFACT_DIR=.eforest/tasks/epic-0-the-ledger/E0-T07-two-writers-one-log/work/e0-t07-critic-fresh-0802 node scripts/verify-e0-t07.mjs` exited 0. Fresh namespace artifacts are in `work/e0-t07-critic-fresh-0802/`; they record five conflict races with one accepted result plus one `DISPATCH_STALE_FENCE` refusal each, reverse `ab`/`ba` schedules, follower `SIGSTOP`/`SIGKILL`, two writes during partition, six-record restart replay, seven authoritative records, eight receipts, and identical follower/live/offline/clean-offline digests.
+- After confirming no cache/database/projection files in the fresh work directory,
+  `E0_T07_NETWORK_DISABLED=1 node scripts/replay-ledger.mjs replay work/e0-t07-critic-fresh-0802/final-replay-dump.json` passed with the fresh final digest. An independent copied-event tamper made the existing replay compare exit 1 with a claimed-final-digest mismatch, and a copied checkpoint was rejected as `E0_T07_CHECKPOINT_INVALID`; tampered artifacts remain only under the task `work/` directory.
+- Source inspection confirms accepted mutations append/read through Durable Streams;
+  `dispatch.mjs` maps are in-process serialization/sequence guards, not state authority,
+  and the follower reconstructs state from source and receipt streams. Promoted evidence
+  reports five passing gates and zero skips. Replay: N/A (server/CLI protocol capstone)
+  + mitigation: real emulator, fresh two-writer run, raw stream bindings, network-disabled
+  offline replay, and independent tamper sensitivity. Limitation: the fresh bounded run
+  intentionally skipped repository gates and did not rerun composed `make verify-E0`.

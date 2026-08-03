@@ -1,0 +1,75 @@
+{
+  "allow": [
+    "current-member message read",
+    "current-member message mutation"
+  ],
+  "refusalCount": 8,
+  "refusals": [
+    {
+      "action": "non-member-read",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeAppendOrRegister": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "non-member-mutation",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeAppendOrRegister": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "non-member-subscription",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeAppendOrRegister": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "non-member-reset",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeAppendOrRegister": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "sibling-principal-path",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeAppendOrRegister": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "sibling-workspace-header",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeAppendOrRegister": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "sibling-workspace-body",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeAppendOrRegister": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "sibling-workspace-stream",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeAppendOrRegister": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    }
+  ],
+  "serviceCallbacks": {
+    "append": 1,
+    "follow": 0,
+    "normalize": 9,
+    "read": 1,
+    "reset": 0,
+    "update": 0
+  },
+  "targetHeadsUnchangedForRefusals": true,
+  "result": "PASS"
+}

@@ -264,3 +264,32 @@ same authorized channel.
   `packages/reducers/src/index.mjs:851-860`; the compact branch itself still proceeded
   through projected channel checks. Repair must require explicit E0-T05 compatibility for
   every compact event, even when a projection happens to be present.
+
+### Builder — 2026-08-02 — explicit legacy replay repair published
+
+- Repair commit: `697b8f3f8e5549386a5dae602c3fc3ed58116bbd` (`E1-T04: require explicit
+  legacy replay mode`). The compact E0 message reducer branch now fails with
+  `REDUCER_LEGACY_COMPACT_REPLAY_REQUIRED` unless the caller explicitly opts into
+  `allowLegacyCompactMessages`; the opt-in remains wired only to the E0-T05 replay dump
+  marker. Unit and verifier regressions prove a compact event is refused without the
+  marker even when an E1 channel projection exists, while the opted-in historical shape
+  and scope/text checks remain unchanged.
+- Focused commands passed: `E1_T04_SKIP_GATES=1 E1_T04_NETWORK_DISABLED=1
+  TEST_RUN_ID=repair-explicit-compact node scripts/verify-e1-t04.mjs` and `pnpm test:unit`
+  (99/99 tests). Cold command:
+  `TEST_RUN_ID=repair-explicit-compact-cold make verify-E1-T04`; exit code 0. Frozen
+  install and all five gates passed: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`,
+  `pnpm test`, and `pnpm build`.
+- Promoted command:
+  `PROMOTE_EVIDENCE=1 E1_T04_IMPLEMENTATION_COMMIT=697b8f3f8e5549386a5dae602c3fc3ed58116bbd
+  E1_T04_NETWORK_DISABLED=1 TEST_RUN_ID=promoted-e1-t04-explicit-compact node scripts/verify-e1-t04.mjs`
+  passed from a clean implementation tree. The 23-record replay retains final digest
+  `sha256:57f7e79e68667d6e74de4852393cd1ed78f676ed4dac44942ec64431fffc1e34`; all six
+  invalid fixtures, fence checks, property checks, and sensitivity checks pass. The
+  promoted `legacy-compatibility.json` now records
+  `compactMessageRequiresExplicitE0Compatibility: true`. Replay: N/A (server
+  conversation event contract) + mitigation: golden logs, authorization refusals,
+  property tests, and per-prefix digest evidence.
+- Claim: the legacy compact shape is a deliberately marked E0 compatibility mode rather
+  than an implicit alternate E1 append path; unmarked compact events cannot bypass the
+  explicit conversation contract even when projections are present.

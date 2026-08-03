@@ -1,5 +1,6 @@
 {
   "compactMessageAcceptedWithoutShapeChange": true,
+  "compactMessageRequiresExplicitE0Compatibility": true,
   "foreignWorkspaceChannelRefused": true,
   "unknownSameWorkspaceChannelRefused": true,
   "forgedAuthorRefused": true,

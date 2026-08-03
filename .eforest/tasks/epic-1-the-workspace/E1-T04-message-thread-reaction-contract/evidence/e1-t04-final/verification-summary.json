@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E1-T04",
-  "runId": "promoted-e1-t04-projection",
-  "implementationCommit": "7e8b9bc4d578eb6bb06e91bb9c7205a9ccee3d07",
+  "runId": "promoted-e1-t04-explicit-compact",
+  "implementationCommit": "697b8f3f8e5549386a5dae602c3fc3ed58116bbd",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "fixtureCount": 1,
@@ -12,31 +12,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 1858,
+      "durationMs": 3766,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 1651,
+      "durationMs": 2967,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 5296,
+      "durationMs": 7374,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 18673,
+      "durationMs": 25633,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 550,
+      "durationMs": 1069,
       "name": "build",
       "result": "PASS"
     }
@@ -312,6 +312,7 @@
   },
   "legacyCompatibilityEvidence": {
     "compactMessageAcceptedWithoutShapeChange": true,
+    "compactMessageRequiresExplicitE0Compatibility": true,
     "foreignWorkspaceChannelRefused": true,
     "unknownSameWorkspaceChannelRefused": true,
     "forgedAuthorRefused": true,

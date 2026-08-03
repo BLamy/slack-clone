@@ -60,7 +60,10 @@ const idleObservation = await observeHttpIdleWindow();
 assert.equal(idleObservation.callDeltaWhileIdle, 0);
 assert.equal(idleObservation.readCallsAfterLogicalAdvance, 1);
 assert.equal(idleObservation.followCallsAfterLogicalAdvance, 1);
+assert.equal(idleObservation.authorizeSubscriptionCalls, 1);
 assert.equal(idleObservation.keepAliveTimerExecutions, 90);
+assert.equal(idleObservation.authorizeReadCalls, 90);
+assert.equal(idleObservation.directoryReadCalls, 91);
 
 const summary = {
   schemaVersion: 1,
@@ -72,10 +75,36 @@ const summary = {
   replay:
     "Replay: N/A (server live-delivery API) + mitigation: real-emulator network transcript, reconnect matrix, request counts, and digest convergence",
   replayUploadAttempted: false,
+  adversarialCoverage: {
+    focusedTestFile: "test/unit/live-chat-http.test.mjs",
+    cases: [
+      "provider-rejected stale checkpoint is typed 409 before headers",
+      "session logout terminates queued delivery without leaking a message",
+      "slow reader on one channel cannot block another channel",
+      "membership revalidation runs before batches and heartbeats",
+      "delivery.close terminates every client exactly once",
+    ],
+    pollingSensitivity:
+      "test/unit/durable-streams-adapter.test.mjs rejects a 350 ms polling positive control",
+  },
+  coldClone:
+    process.env.E1_T05_COLD_CLONE === "1"
+      ? {
+          result: "PASS",
+          bootstrapCommands: [
+            "pnpm install --frozen-lockfile",
+            "pnpm setup:emulate",
+            "node scripts/verify-e1-t05.mjs",
+          ],
+          transcript: "cold-clone-transcript.json",
+        }
+      : null,
   gates,
   idleRequestBudget: {
     ...idleObservation,
     result: "PASS",
+    productionAuthorizationWiring:
+      "workspaceAuthorization.authorizeSubscription plus workspaceAuthorization.authorizeRead on every 10-second heartbeat",
     pollingPositiveControl:
       "covered by test/unit/durable-streams-adapter.test.mjs",
   },
@@ -257,6 +286,74 @@ async function verifyRealEmulatorScenario() {
     assert.equal(malformed.response.status, 400);
     assert.equal(malformed.body.code, "LIVE_CHECKPOINT_INVALID");
 
+    const isolationRoom = `${context.roomPrefix}-isolation`;
+    const isolatedAda = await openSse(
+      context.appBaseUrl,
+      isolationRoom,
+      adaCookie,
+      transcript,
+      "ada-isolation",
+    );
+    const isolatedLinus = await openSse(
+      context.appBaseUrl,
+      `${context.roomPrefix}-idle`,
+      linusCookie,
+      transcript,
+      "linus-isolation",
+    );
+    clients.push(isolatedAda, isolatedLinus);
+    await isolatedAda.next("snapshot");
+    await isolatedAda.next("status");
+    await isolatedLinus.next("snapshot");
+    await isolatedLinus.next("status");
+    const isolatedPost = await postMessage(
+      context.appBaseUrl,
+      isolationRoom,
+      adaCookie,
+      "e1-t05 isolated channel event",
+      "ik_cccccccccccccccccccccccccc",
+      transcript,
+    );
+    assert.equal(
+      (await isolatedAda.next("message")).data.id,
+      isolatedPost.message.id,
+    );
+    await nextStatus(isolatedAda, isolatedPost.nextOffset);
+    await assertNoEvent(isolatedLinus, "message", 250);
+
+    const logoutRoom = `${context.roomPrefix}-logout`;
+    const logoutAda = await openSse(
+      context.appBaseUrl,
+      logoutRoom,
+      adaCookie,
+      transcript,
+      "ada-logout",
+    );
+    clients.push(logoutAda);
+    await logoutAda.next("snapshot");
+    await logoutAda.next("status");
+    const logoutResponse = await fetch(`${context.appBaseUrl}/logout`, {
+      headers: { Cookie: adaCookie },
+      redirect: "manual",
+    });
+    transcript.push({
+      label: "ada-logout",
+      method: "GET",
+      path: "/logout",
+      status: logoutResponse.status,
+    });
+    assert.equal(logoutResponse.status, 302);
+    await postMessage(
+      context.appBaseUrl,
+      logoutRoom,
+      linusCookie,
+      "e1-t05 post after ada logout",
+      "ik_dddddddddddddddddddddddddd",
+      transcript,
+    );
+    const logoutTerminal = await logoutAda.next("terminal");
+    assert.equal(logoutTerminal.data.code, "LIVE_SESSION_REVOKED");
+
     const summary = {
       room,
       clients: 2,
@@ -271,10 +368,22 @@ async function verifyRealEmulatorScenario() {
       },
       noDuplicateLogicalEffects:
         new Set(adaState.messages.map((message) => message.id)).size === 2,
+      crossRoomIsolation: {
+        isolatedRoom: isolationRoom,
+        idleRoom: `${context.roomPrefix}-idle`,
+        acceptedMessageId: isolatedPost.message.id,
+        otherClientReceivedMessage: false,
+      },
+      logout: {
+        responseStatus: logoutResponse.status,
+        terminalCode: logoutTerminal.data.code,
+      },
       reconnectMatrix: [
         "after acknowledged status before next append",
         "append while one client disconnected",
         "resume from opaque Last-Event-ID-equivalent query checkpoint",
+        "independent room remains idle while a sibling room receives an event",
+        "logout before the next queued event",
       ],
       typedRefusal: {
         status: malformed.response.status,
@@ -484,6 +593,10 @@ async function nextStatus(client, expectedOffset) {
     const status = await client.next("status");
     if (status.data.nextOffset === expectedOffset) return status;
   }
+}
+
+async function assertNoEvent(client, name, timeoutMs) {
+  await assert.rejects(client.next(name, timeoutMs));
 }
 
 function parseSseFrame(frame) {

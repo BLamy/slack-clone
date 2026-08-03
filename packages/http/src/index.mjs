@@ -408,18 +408,22 @@ export function createChatHttpDelivery({
             if (client.closed) return;
             const code =
               error instanceof LiveChatDeliveryError &&
-              (error.code === LIVE_CHAT_ERROR_CODES.SESSION_REVOKED ||
-                error.code === LIVE_CHAT_ERROR_CODES.AUTHORIZATION_REVOKED)
-                ? LIVE_CHAT_ERROR_CODES.AUTHORIZATION_REVOKED
-                : (error?.code ?? LIVE_CHAT_ERROR_CODES.UPSTREAM_FAILURE);
+              error.code === LIVE_CHAT_ERROR_CODES.SESSION_REVOKED
+                ? LIVE_CHAT_ERROR_CODES.SESSION_REVOKED
+                : error instanceof LiveChatDeliveryError &&
+                    error.code === LIVE_CHAT_ERROR_CODES.AUTHORIZATION_REVOKED
+                  ? LIVE_CHAT_ERROR_CODES.AUTHORIZATION_REVOKED
+                  : (error?.code ?? LIVE_CHAT_ERROR_CODES.UPSTREAM_FAILURE);
             await terminateClient(client.state, client, {
               code,
               detail:
-                code === LIVE_CHAT_ERROR_CODES.AUTHORIZATION_REVOKED
-                  ? "live chat authorization is no longer valid"
-                  : error instanceof Error
-                    ? error.message
-                    : String(error),
+                code === LIVE_CHAT_ERROR_CODES.SESSION_REVOKED
+                  ? "live chat session is no longer authenticated"
+                  : code === LIVE_CHAT_ERROR_CODES.AUTHORIZATION_REVOKED
+                    ? "live chat authorization is no longer valid"
+                    : error instanceof Error
+                      ? error.message
+                      : String(error),
               checkpoint: client.lastAckedOffset,
               resync: code === LIVE_CHAT_ERROR_CODES.BACKPRESSURE_TIMEOUT,
             });
@@ -511,8 +515,9 @@ export function createChatHttpDelivery({
         signal: disconnect.signal,
       });
     } catch (error) {
+      const disconnected = disconnect.signal.aborted || response.destroyed;
       removeClient(state, client);
-      if (disconnect.signal.aborted || response.destroyed) return true;
+      if (disconnected) return true;
       if (resumeOffset !== INITIAL_CHECKPOINT) {
         throw new LiveChatDeliveryError(
           LIVE_CHAT_ERROR_CODES.CHECKPOINT_INVALID,

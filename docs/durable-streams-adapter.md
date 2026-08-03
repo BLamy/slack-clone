@@ -69,8 +69,11 @@ selectors can obscure it. Public assets are separately scanned for server creden
 references. The
 request-budget gate drives the HTTP delivery timer boundary through
 900,000 deterministic milliseconds and confirms that its single snapshot read and live
-follow do not grow. A 350-millisecond polling positive control executes 2,571 reads over
-the same clock and must be rejected, proving the detector can go red.
+follow do not grow. The production-shaped authorization path is included: one subscription
+membership read and one membership revalidation per ten-second heartbeat (90 over the
+window), with no additional chat snapshot/follow calls. A 350-millisecond polling positive
+control executes 2,571 reads over the same clock and must be rejected, proving the detector
+can go red.
 
 `make verify-E0-T03` performs the cold install and emulator build before the format, lint,
 static, unit, real-emulator conformance, browser integration, concurrency, and build gates.

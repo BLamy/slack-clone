@@ -89,6 +89,42 @@ test("live chat rejects conflicting and malformed opaque checkpoints", async () 
   harness.delivery.close();
 });
 
+test("live chat types provider-rejected stale checkpoints without leaking records", async () => {
+  const harness = createHarness({
+    readMessages: async (room, offset) => {
+      if (room === "channel-b" && offset === "channel-a-head") {
+        throw new Error(
+          "Durable Streams rejected a checkpoint from another channel",
+        );
+      }
+      return {
+        messages: [],
+        nextOffset: offset === "-1" ? "offset-0" : offset,
+        records: [],
+        streamDigest: EMPTY_DIGEST,
+      };
+    },
+  });
+  const request = createRequest({
+    url: "/api/rooms/channel-b/events?offset=channel-a-head",
+  });
+  const response = createResponse();
+
+  await assert.rejects(
+    harness.delivery.handleApi(
+      request,
+      response,
+      new URL(`http://app.test${request.url}`),
+    ),
+    (error) =>
+      error.code === LIVE_CHAT_ERROR_CODES.CHECKPOINT_INVALID &&
+      error.statusCode === 409,
+  );
+  assert.equal(response.writeHeadCalls, 0);
+  assert.equal(response.output.length, 0);
+  harness.delivery.close();
+});
+
 test("live chat revalidates membership before delivery and heartbeat", async () => {
   let allowed = true;
   const timers = createTimers();
@@ -120,6 +156,73 @@ test("live chat revalidates membership before delivery and heartbeat", async () 
   assert.equal(
     eventData(second.response, "terminal").at(-1).code,
     LIVE_CHAT_ERROR_CODES.AUTHORIZATION_REVOKED,
+  );
+  harness.delivery.close();
+});
+
+test("live chat preserves a typed session-revocation terminal on queued delivery", async () => {
+  let sessionActive = true;
+  const harness = createHarness({
+    currentSession: () => (sessionActive ? { user: { sub: "ada" } } : null),
+  });
+  const client = await harness.open();
+  sessionActive = false;
+
+  await harness.followers[0].onBatch({
+    nextOffset: "offset-1",
+    records: [{ id: "logout-leak", text: "must not leak after logout" }],
+    upToDate: false,
+    streamClosed: false,
+  });
+  await eventually(() => client.response.writableEnded);
+  assert.equal(eventData(client.response, "message").length, 0);
+  assert.equal(
+    eventData(client.response, "terminal").at(-1).code,
+    LIVE_CHAT_ERROR_CODES.SESSION_REVOKED,
+  );
+  harness.delivery.close();
+});
+
+test("a slow reader on one channel cannot block a live reader on another", async () => {
+  const timers = createTimers();
+  const harness = createHarness({ timers });
+  const slow = await harness.openWithResponse(
+    createResponse(),
+    null,
+    "channel-hot",
+  );
+  slow.response.writeResult = false;
+  const idle = await harness.openWithResponse(
+    createResponse(),
+    null,
+    "channel-idle",
+  );
+
+  const slowDelivery = harness.followers[0].onBatch({
+    nextOffset: "hot-offset-1",
+    records: [{ id: "hot", text: "flooded" }],
+    upToDate: false,
+    streamClosed: false,
+  });
+  await harness.followers[1].onBatch({
+    nextOffset: "idle-offset-1",
+    records: [{ id: "idle", text: "still live" }],
+    upToDate: false,
+    streamClosed: false,
+  });
+  assert.deepEqual(eventData(idle.response, "message"), [
+    { id: "idle", text: "still live" },
+  ]);
+  assert.equal(idle.response.writableEnded, false);
+  assert.equal(slow.response.writableEnded, false);
+
+  timers.runTimeouts();
+  await eventually(() => timers.pendingTimeouts.length > 0);
+  timers.runTimeouts();
+  await slowDelivery;
+  assert.equal(
+    eventData(slow.response, "terminal").at(-1).code,
+    LIVE_CHAT_ERROR_CODES.BACKPRESSURE_TIMEOUT,
   );
   harness.delivery.close();
 });
@@ -165,6 +268,13 @@ test("live chat close terminates every client without a second response", async 
 });
 
 function createHarness({
+  currentSession = () => ({ user: { sub: "ada" } }),
+  readMessages = async (_room, offset) => ({
+    records: offset === "offset-1" ? [] : [],
+    messages: [],
+    nextOffset: offset === "-1" ? "offset-0" : offset,
+    streamDigest: EMPTY_DIGEST,
+  }),
   revalidateSubscription = null,
   timers = createTimers(),
 } = {}) {
@@ -176,12 +286,7 @@ function createHarness({
     auth0EmulatorUrl: "http://auth.test",
     chatService: {
       normalizeRoomId: (room) => room,
-      readMessages: async (_room, offset) => ({
-        records: offset === "offset-1" ? [] : [],
-        messages: [],
-        nextOffset: offset === "-1" ? "offset-0" : offset,
-        streamDigest: EMPTY_DIGEST,
-      }),
+      readMessages,
       followMessages: async (_room, offset, options) => {
         followOffsets.push(offset);
         const follower = {
@@ -195,7 +300,7 @@ function createHarness({
         return follower;
       },
     },
-    currentSession: () => ({ user: { sub: "ada" } }),
+    currentSession,
     durableStreamsUrl: "http://streams.test",
     emptyDigest: EMPTY_DIGEST,
     revalidateSubscription: revalidateSubscription ?? undefined,
@@ -209,13 +314,15 @@ function createHarness({
     delivery,
     followOffsets,
     followers,
-    async open(offset = null) {
-      return this.openWithResponse(createResponse(), offset);
+    async open(offset = null, room = "demo") {
+      return this.openWithResponse(createResponse(), offset, room);
     },
-    async openWithResponse(response, offset = null) {
+    async openWithResponse(response, offset = null, room = "demo") {
       const suffix =
         offset === null ? "" : `?offset=${encodeURIComponent(offset)}`;
-      const request = createRequest({ url: `/api/rooms/demo/events${suffix}` });
+      const request = createRequest({
+        url: `/api/rooms/${encodeURIComponent(room)}/events${suffix}`,
+      });
       await delivery.handleApi(
         request,
         response,
@@ -241,6 +348,7 @@ function createResponse({ writeResult = true } = {}) {
   response.headersSent = false;
   response.output = [];
   response.status = null;
+  response.writeResult = writeResult;
   response.writableEnded = false;
   response.writeHeadCalls = 0;
   response.writeHead = (status, headers) => {
@@ -251,7 +359,7 @@ function createResponse({ writeResult = true } = {}) {
   };
   response.write = (value) => {
     response.output.push(String(value));
-    return writeResult;
+    return response.writeResult;
   };
   response.end = (value) => {
     if (value !== undefined) response.output.push(String(value));

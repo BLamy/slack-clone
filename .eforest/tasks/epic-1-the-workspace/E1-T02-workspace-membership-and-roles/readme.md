@@ -3,7 +3,7 @@ id: E1-T02
 epic: 1
 title: "Workspace membership, roles, and tenant boundary"
 priority: 102
-status: implemented
+status: refuted
 depends_on: [E1-T01]
 estimate: L
 capstone: false
@@ -106,3 +106,23 @@ the matrix without treating a role name as ambient authority.
   mutation, and subscription rechecks current membership under one workspace fence. `Replay:
   N/A (server tenancy and RBAC contract) + mitigation: two-workspace negative matrix,
   before/after dumps, and deterministic membership replay`.
+
+### Critic — 2026-08-03 — live handler refutation
+
+VERDICT: refuted
+
+- Fresh managed critic `Parfit` audited commit `c6e81f1` and the promoted evidence without
+  modifying the checkout. The focused verifier passed, but the live HTTP boundary was not
+  wired to the new authorization middleware: `src/server.mjs:225` still authorized only by
+  session presence, while `packages/http/src/index.mjs:264-337` called message reads,
+  subscriptions, mutations, and resets directly. An independent handler probe observed a
+  non-member receiving `200/201/200/200` with `membershipLookupCalls: 0`.
+- The same probe found that `bindWorkspaceRequest` only rejected exact `workspaceId` keys;
+  sibling principal IDs, `workspace:ws_...` streams, and raw `x-workspace-id` headers could
+  pass through. This refutes the live tenant boundary even though the unit and replay-only
+  matrices were green.
+- Required repair: establish trusted workspace context at the live HTTP entrypoint, route all
+  chat reads/subscriptions/mutations/resets through the workspace authorization fence, bind
+  headers/query/path/body hints before handler input is used, and add handler-level negative
+  evidence with unchanged target heads. The implementation is returned to `in-progress` after
+  this verdict is recorded.

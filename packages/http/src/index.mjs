@@ -15,6 +15,7 @@ const INITIAL_CHECKPOINT = "-1";
 export const LIVE_CHAT_ERROR_CODES = Object.freeze({
   AUTHORIZATION_REVOKED: "LIVE_AUTHORIZATION_REVOKED",
   BACKPRESSURE_TIMEOUT: "LIVE_BACKPRESSURE_TIMEOUT",
+  CHANNEL_ARCHIVED: "LIVE_CHANNEL_ARCHIVED",
   CHECKPOINT_CONFLICT: "LIVE_CHECKPOINT_CONFLICT",
   CHECKPOINT_INVALID: "LIVE_CHECKPOINT_INVALID",
   FRAME_TOO_LARGE: "LIVE_FRAME_TOO_LARGE",
@@ -271,7 +272,8 @@ export function createChatHttpDelivery({
         ? "resync"
         : code === LIVE_CHAT_ERROR_CODES.SERVER_SHUTDOWN ||
             code === LIVE_CHAT_ERROR_CODES.SESSION_REVOKED ||
-            code === LIVE_CHAT_ERROR_CODES.AUTHORIZATION_REVOKED
+            code === LIVE_CHAT_ERROR_CODES.AUTHORIZATION_REVOKED ||
+            code === LIVE_CHAT_ERROR_CODES.CHANNEL_ARCHIVED
           ? "close"
           : "reconnect",
       code,
@@ -316,6 +318,13 @@ export function createChatHttpDelivery({
       request: client.request,
       room: client.state.room,
     });
+    if (result?.code && result.ok === false) {
+      throw new LiveChatDeliveryError(
+        result.code,
+        result.detail ?? "live chat authorization is no longer valid",
+        { statusCode: result.statusCode ?? 404 },
+      );
+    }
     if (result === false || (result && result.ok === false)) {
       throw new LiveChatDeliveryError(
         LIVE_CHAT_ERROR_CODES.AUTHORIZATION_REVOKED,
@@ -338,6 +347,7 @@ export function createChatHttpDelivery({
     } = {},
   ) {
     if (revalidate) await revalidateClient(client);
+    const channelArchived = records.some(isArchivedRecord);
     for (const record of records) {
       if (record?.dispatch?.operation === "chat.room.reset") {
         await enqueueSse(client, "reset", {
@@ -345,6 +355,8 @@ export function createChatHttpDelivery({
           nextOffset,
           streamDigest: client.streamDigest,
         });
+      } else if (isArchivedRecord(record)) {
+        continue;
       } else {
         await enqueueSse(client, "message", record);
       }
@@ -362,7 +374,13 @@ export function createChatHttpDelivery({
       client.lastAckedOffset = validateLiveCheckpoint(nextOffset);
       if (streamDigest !== undefined) client.streamDigest = streamDigest;
     }
-    if (streamClosed && !client.closed) {
+    if (channelArchived && !client.closed) {
+      await terminateClient(client.state, client, {
+        code: LIVE_CHAT_ERROR_CODES.CHANNEL_ARCHIVED,
+        detail: "the live chat channel is archived",
+        checkpoint: client.lastAckedOffset,
+      });
+    } else if (streamClosed && !client.closed) {
       await terminateClient(client.state, client, {
         code: LIVE_CHAT_ERROR_CODES.STREAM_CLOSED,
         detail: "the durable chat stream is closed",
@@ -537,6 +555,8 @@ export function createChatHttpDelivery({
       removeClient(state, client);
       return true;
     }
+    const channelArchived =
+      snapshot.roomArchived === true || snapshot.records.some(isArchivedRecord);
     try {
       response.writeHead(200, {
         "Content-Type": "text/event-stream",
@@ -576,6 +596,13 @@ export function createChatHttpDelivery({
           upToDate: true,
         });
       }
+      if (channelArchived && !client.closed) {
+        await terminateClient(state, client, {
+          code: LIVE_CHAT_ERROR_CODES.CHANNEL_ARCHIVED,
+          detail: "the live chat channel is archived",
+          checkpoint: client.lastAckedOffset,
+        });
+      }
     } catch (error) {
       if (client.closed || disconnect.signal.aborted || response.destroyed) {
         removeClient(state, client);
@@ -597,6 +624,7 @@ export function createChatHttpDelivery({
       });
       return true;
     }
+    if (client.closed) return true;
     client.keepAlive = clock.setInterval(() => {
       if (client.closed || response.destroyed || response.writableEnded) {
         removeClient(state, client);
@@ -609,7 +637,9 @@ export function createChatHttpDelivery({
             code:
               error?.code === LIVE_CHAT_ERROR_CODES.SESSION_REVOKED
                 ? LIVE_CHAT_ERROR_CODES.SESSION_REVOKED
-                : LIVE_CHAT_ERROR_CODES.AUTHORIZATION_REVOKED,
+                : error?.code === LIVE_CHAT_ERROR_CODES.CHANNEL_ARCHIVED
+                  ? LIVE_CHAT_ERROR_CODES.CHANNEL_ARCHIVED
+                  : LIVE_CHAT_ERROR_CODES.AUTHORIZATION_REVOKED,
             detail:
               error instanceof Error
                 ? error.message
@@ -651,7 +681,7 @@ export function createChatHttpDelivery({
     }
 
     const match = url.pathname.match(
-      /^\/api\/rooms\/([^/]+)\/(messages|events)(?:\/([^/]+))?$/,
+      /^\/api\/rooms\/([^/]+)\/(archive|messages|events)(?:\/([^/]+))?$/,
     );
     if (!match) return false;
     const user = sessionUser(request);
@@ -691,6 +721,30 @@ export function createChatHttpDelivery({
             }),
         },
       );
+    }
+
+    if (resource === "archive" && request.method === "POST") {
+      const archiveRoom = () =>
+        chatService.archiveRoom(room, user, {
+          idempotencyKey: idempotencyKey(request),
+        });
+      const result = workspaceAuthorization
+        ? await workspaceAuthorization.authorizeDispatch(
+            requestMetadata(request, url, { room }),
+            workspaceContext,
+            {
+              capability: "workspace.message.mutate",
+              dispatch: archiveRoom,
+            },
+          )
+        : await archiveRoom();
+      sendJson(response, 200, {
+        archived: true,
+        nextOffset: result.nextOffset,
+        ok: true,
+        room,
+      });
+      return true;
     }
 
     if (resource === "messages" && request.method === "GET") {
@@ -841,6 +895,10 @@ function parseResumeCheckpoint(request, url) {
   return validateLiveCheckpoint(
     queryOffset ?? headerOffset ?? INITIAL_CHECKPOINT,
   );
+}
+
+function isArchivedRecord(record) {
+  return record?.dispatch?.operation === "chat.room.archived";
 }
 
 function idempotencyKey(request) {

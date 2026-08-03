@@ -482,6 +482,19 @@ test("chat service reuses explicit idempotency payloads and dispatches room rese
     records.filter((record) => record.kind === "room.reset").length,
     1,
   );
+
+  const archive = await service.archiveRoom("demo", ada, {
+    idempotencyKey: "ik_00000000000000000000000003",
+  });
+  const archiveRetry = await service.archiveRoom("demo", ada, {
+    idempotencyKey: "ik_00000000000000000000000003",
+  });
+  assert.equal(archive.nextOffset, archiveRetry.nextOffset);
+  assert.equal(
+    records.filter((record) => record.kind === "room.archived").length,
+    1,
+  );
+  assert.equal((await service.readMessages("demo", "-1")).roomArchived, true);
 });
 
 test("chat service recovers explicit create and edit keys after a process restart", async () => {

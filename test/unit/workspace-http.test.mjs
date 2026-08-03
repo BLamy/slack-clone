@@ -116,6 +116,25 @@ test("live HTTP binding refuses sibling IDs, headers, streams, and body fields",
   delivery.close();
 });
 
+test("live event checkpoints cannot cross the trusted workspace binding", async () => {
+  const { delivery, calls } = createDelivery({ principalId: OWNER_A });
+  const path = `/api/rooms/${SIBLING_PRINCIPAL}/events?offset=opaque-head`;
+  const response = createFakeResponse();
+
+  await assert.rejects(
+    delivery.handleApi(
+      createRequest({ path }),
+      response,
+      new URL(`http://app.test${path}`),
+    ),
+    genericWorkspaceRefusal,
+  );
+  assert.equal(response.writeHeadCalls, 0);
+  assert.equal(calls.follow, 0);
+  assert.equal(calls.read, 0);
+  delivery.close();
+});
+
 test("a current member reaches the read and mutation handlers after the fence", async () => {
   const { delivery, calls } = createDelivery({ principalId: OWNER_A });
   const readResponse = createFakeResponse();

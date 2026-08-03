@@ -31,6 +31,7 @@ export async function observeHttpIdleWindow({
   let authorizeReadCalls = 0;
   let authorizeSubscriptionCalls = 0;
   let directoryReadCalls = 0;
+  let roomStatusReadCalls = 0;
   let pollingTimer = null;
   const followClosed = new Promise(() => {});
   const chatService = {
@@ -91,6 +92,17 @@ export async function observeHttpIdleWindow({
       return IDLE_PROBE_CONTEXT;
     },
   };
+  const revalidateSubscription = async ({ context, room }) => {
+    assertIdleProbeContext(context);
+    if (room !== "idle-probe") {
+      throw new Error("idle probe received an unexpected room");
+    }
+    await workspaceAuthorization.authorizeRead(context, {
+      capability: "workspace.subscribe",
+    });
+    roomStatusReadCalls += 1;
+    return true;
+  };
   const delivery = createChatHttpDelivery({
     auth0EmulatorUrl: "http://auth.invalid",
     chatService,
@@ -98,6 +110,7 @@ export async function observeHttpIdleWindow({
     durableStreamsUrl: "http://streams.invalid",
     emptyDigest: EMPTY_DIGEST,
     fetchFn: async () => new Response(null, { status: 200 }),
+    revalidateSubscription,
     sessionUser: () => ({ sub: "idle-probe" }),
     workspaceAuthorization,
     timers,
@@ -149,6 +162,7 @@ export async function observeHttpIdleWindow({
     authorizeReadCalls,
     authorizeSubscriptionCalls,
     directoryReadCalls,
+    roomStatusReadCalls,
     keepAliveTimerExecutions: timers.executionCount(10_000),
     pollingTimerExecutions:
       pollingMutationMs === null ? 0 : timers.executionCount(pollingMutationMs),
@@ -199,6 +213,11 @@ export function assertIdleWindowRequestConstant(observation) {
     observation.directoryReadCalls,
     observation.authorizeReadCalls + observation.authorizeSubscriptionCalls,
     "idle authorization must read the directory only for subscription and heartbeat checks",
+  );
+  assert.equal(
+    observation.roomStatusReadCalls,
+    observation.keepAliveTimerExecutions,
+    "idle authorization must inspect channel status only on its bounded heartbeat",
   );
   assert.equal(
     observation.pollingTimerExecutions,

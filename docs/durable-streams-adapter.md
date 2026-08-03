@@ -32,7 +32,9 @@ emulator emits finite SSE responses, so each adapter follow parks an up-to-date 
 abortable wake gate instead of recreating the former 350 ms PUT/GET loop. An append wakes
 the relevant readers. Slow readers are serialized behind bounded per-client buffers and
 receive typed terminal/resync events; membership and session authorization are revalidated
-before delivery and heartbeat. Losing a downstream client, resetting a room, shutting down
+before delivery and heartbeat. A durable `chat.room.archived` source record is treated as a
+channel-status revocation rather than a message and terminates the affected client with its
+last acknowledged checkpoint. Losing a downstream client, resetting a room, shutting down
 HTTP delivery, or closing the adapter cancels only the affected upstream session and drains
 its in-flight requests.
 

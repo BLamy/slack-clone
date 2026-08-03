@@ -64,6 +64,7 @@ assert.equal(idleObservation.authorizeSubscriptionCalls, 1);
 assert.equal(idleObservation.keepAliveTimerExecutions, 90);
 assert.equal(idleObservation.authorizeReadCalls, 90);
 assert.equal(idleObservation.directoryReadCalls, 91);
+assert.equal(idleObservation.roomStatusReadCalls, 90);
 
 const summary = {
   schemaVersion: 1,
@@ -80,9 +81,12 @@ const summary = {
     cases: [
       "provider-rejected stale checkpoint is typed 409 before headers",
       "session logout terminates queued delivery without leaking a message",
+      "durable channel archive terminates live delivery at the last acknowledged checkpoint",
       "slow reader on one channel cannot block another channel",
       "membership revalidation runs before batches and heartbeats",
       "delivery.close terminates every client exactly once",
+      "disconnect after message write and during heartbeat does not advance the checkpoint",
+      "sibling-workspace event checkpoints are refused before the stream opens",
     ],
     pollingSensitivity:
       "test/unit/durable-streams-adapter.test.mjs rejects a 350 ms polling positive control",
@@ -104,7 +108,7 @@ const summary = {
     ...idleObservation,
     result: "PASS",
     productionAuthorizationWiring:
-      "workspaceAuthorization.authorizeSubscription plus workspaceAuthorization.authorizeRead on every 10-second heartbeat",
+      "workspaceAuthorization.authorizeSubscription plus workspace and channel revalidation on every 10-second heartbeat",
     pollingPositiveControl:
       "covered by test/unit/durable-streams-adapter.test.mjs",
   },
@@ -320,6 +324,15 @@ async function verifyRealEmulatorScenario() {
     );
     await nextStatus(isolatedAda, isolatedPost.nextOffset);
     await assertNoEvent(isolatedLinus, "message", 250);
+    const archiveResult = await archiveRoom(
+      context.appBaseUrl,
+      isolationRoom,
+      adaCookie,
+      transcript,
+    );
+    assert.equal(archiveResult.archived, true);
+    const archiveTerminal = await isolatedAda.next("terminal");
+    assert.equal(archiveTerminal.data.code, "LIVE_CHANNEL_ARCHIVED");
 
     const logoutRoom = `${context.roomPrefix}-logout`;
     const logoutAda = await openSse(
@@ -374,6 +387,11 @@ async function verifyRealEmulatorScenario() {
         acceptedMessageId: isolatedPost.message.id,
         otherClientReceivedMessage: false,
       },
+      archive: {
+        responseStatus: archiveResult.responseStatus,
+        terminalCode: archiveTerminal.data.code,
+        checkpoint: archiveTerminal.data.nextOffset,
+      },
       logout: {
         responseStatus: logoutResponse.status,
         terminalCode: logoutTerminal.data.code,
@@ -383,6 +401,7 @@ async function verifyRealEmulatorScenario() {
         "append while one client disconnected",
         "resume from opaque Last-Event-ID-equivalent query checkpoint",
         "independent room remains idle while a sibling room receives an event",
+        "archive event terminates the hot room at its acknowledged checkpoint",
         "logout before the next queued event",
       ],
       typedRefusal: {
@@ -451,6 +470,23 @@ async function postMessage(
   );
   assert.equal(result.response.status, 201);
   return result.body;
+}
+
+async function archiveRoom(baseUrl, room, cookie, transcript) {
+  const result = await fetchJson(
+    `${baseUrl}/api/rooms/${encodeURIComponent(room)}/archive`,
+    {
+      headers: {
+        Cookie: cookie,
+        "Idempotency-Key": "ik_eeeeeeeeeeeeeeeeeeeeeeeeee",
+      },
+      method: "POST",
+    },
+    transcript,
+    "archive-room",
+  );
+  assert.equal(result.response.status, 200);
+  return { ...result.body, responseStatus: result.response.status };
 }
 
 async function readState(baseUrl, room, cookie, transcript, label) {

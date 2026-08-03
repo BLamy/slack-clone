@@ -77,6 +77,43 @@ export function createChatService({
     }
   }
 
+  async function archiveRoom(roomId, user, { idempotencyKey } = {}) {
+    const stream = normalizeRoomId(roomId);
+    const snapshot = await streamStore.read(stream, "-1");
+    const requestKey = idempotencyKey ?? toIdempotencyKey(randomId());
+    const result = await dispatch({
+      actorId: String(user?.sub ?? ""),
+      expectedHead: snapshot.nextOffset,
+      idempotencyKey: requestKey,
+      operation: "chat.room.archived",
+      payload: { kind: "room.archived", room: stream },
+      stream,
+      workspaceId,
+    });
+    return {
+      archived: true,
+      nextOffset: result.receipt.nextOffset,
+      receipt: result.receipt,
+    };
+  }
+
+  async function readMessages(roomId, offset = "-1", options) {
+    const result = await streamStore.read(roomId, offset, options);
+    return {
+      ...result,
+      roomArchived: result.records.some(isRoomArchivedRecord),
+    };
+  }
+
+  async function readRoomStatus(roomId, options) {
+    const result = await streamStore.read(roomId, "-1", options);
+    return {
+      archived: result.records.some(isRoomArchivedRecord),
+      nextOffset: result.nextOffset,
+      streamDigest: result.streamDigest,
+    };
+  }
+
   async function updateMessage(
     roomId,
     rawMessageId,
@@ -170,14 +207,20 @@ export function createChatService({
 
   return {
     appendMessage,
+    archiveRoom,
     closeStreams: streamStore.close,
     ensureStream: streamStore.ensure,
     followMessages: streamStore.follow,
     normalizeRoomId,
-    readMessages: streamStore.read,
+    readMessages,
+    readRoomStatus,
     resetRoom,
     updateMessage,
   };
+}
+
+function isRoomArchivedRecord(record) {
+  return record?.dispatch?.operation === "chat.room.archived";
 }
 
 function projectMessage(record) {

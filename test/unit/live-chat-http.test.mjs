@@ -160,6 +160,37 @@ test("live chat revalidates membership before delivery and heartbeat", async () 
   harness.delivery.close();
 });
 
+test("live chat terminates at the acknowledged checkpoint when a channel is archived", async () => {
+  let archived = false;
+  const harness = createHarness({
+    revalidateSubscription: async ({ room }) =>
+      archived
+        ? {
+            code: LIVE_CHAT_ERROR_CODES.CHANNEL_ARCHIVED,
+            detail: `${room} is archived`,
+            ok: false,
+            statusCode: 409,
+          }
+        : true,
+  });
+  const client = await harness.open(null, "archived-channel");
+  archived = true;
+
+  await harness.followers[0].onBatch({
+    nextOffset: "offset-archived",
+    records: [{ id: "archived-leak", text: "must not leak" }],
+    upToDate: false,
+    streamClosed: false,
+  });
+  await eventually(() => client.response.writableEnded);
+  assert.equal(eventData(client.response, "message").length, 0);
+  const terminal = eventData(client.response, "terminal").at(-1);
+  assert.equal(terminal.code, LIVE_CHAT_ERROR_CODES.CHANNEL_ARCHIVED);
+  assert.equal(terminal.action, "close");
+  assert.equal(terminal.nextOffset, "offset-0");
+  harness.delivery.close();
+});
+
 test("live chat preserves a typed session-revocation terminal on queued delivery", async () => {
   let sessionActive = true;
   const harness = createHarness({
@@ -224,6 +255,40 @@ test("a slow reader on one channel cannot block a live reader on another", async
     eventData(slow.response, "terminal").at(-1).code,
     LIVE_CHAT_ERROR_CODES.BACKPRESSURE_TIMEOUT,
   );
+  harness.delivery.close();
+});
+
+test("disconnect after message write but before status ack preserves the prior checkpoint", async () => {
+  let response;
+  response = createResponse({
+    onWrite: (value) => {
+      if (value.includes("event: message\n")) response.emit("close");
+    },
+  });
+  const harness = createHarness();
+  await harness.openWithResponse(response);
+
+  await harness.followers[0].onBatch({
+    nextOffset: "offset-1",
+    records: [{ id: "mid-event", text: "connection closes before ack" }],
+    upToDate: false,
+    streamClosed: false,
+  });
+  await eventually(() => harness.cancelCalls === 1);
+  assert.equal(lastEventId(response), "offset-0");
+  assert.equal(eventData(response, "status").length, 0);
+  harness.delivery.close();
+});
+
+test("disconnect during heartbeat cancels the client without a terminal write", async () => {
+  const timers = createTimers();
+  const harness = createHarness({ timers });
+  const client = await harness.open();
+  client.response.emit("close");
+  timers.runIntervals();
+  await eventually(() => harness.cancelCalls === 1);
+  assert.equal(eventData(client.response, "terminal").length, 0);
+  assert.equal(client.response.output.join("").includes(": keep-alive"), false);
   harness.delivery.close();
 });
 
@@ -342,7 +407,7 @@ function createRequest({ headers = {}, url }) {
   return request;
 }
 
-function createResponse({ writeResult = true } = {}) {
+function createResponse({ onWrite = null, writeResult = true } = {}) {
   const response = new EventEmitter();
   response.destroyed = false;
   response.headersSent = false;
@@ -359,6 +424,7 @@ function createResponse({ writeResult = true } = {}) {
   };
   response.write = (value) => {
     response.output.push(String(value));
+    onWrite?.(String(value));
     return response.writeResult;
   };
   response.end = (value) => {

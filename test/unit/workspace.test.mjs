@@ -132,6 +132,8 @@ test("role capabilities are explicit and deny unlisted actions", () => {
     roleHasCapability("member", "workspace.membership.remove"),
     false,
   );
+  assert.equal(roleHasCapability("member", "workspace.channel.manage"), false);
+  assert.equal(roleHasCapability("agent", "workspace.channel.manage"), false);
   assert.equal(roleHasCapability("guest", "workspace.message.mutate"), false);
   assert.equal(roleHasCapability("service", "workspace.subscribe"), false);
 });

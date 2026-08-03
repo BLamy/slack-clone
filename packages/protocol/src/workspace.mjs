@@ -37,6 +37,7 @@ export const WORKSPACE_CAPABILITIES = Object.freeze([
   "workspace.directory.mutate",
   "workspace.subscribe",
   "workspace.message.mutate",
+  "workspace.channel.manage",
   "workspace.membership.invite",
   "workspace.membership.accept",
   "workspace.membership.role.change",

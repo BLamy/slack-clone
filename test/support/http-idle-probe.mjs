@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import { EventEmitter } from "node:events";
 
-import { createChatHttpDelivery } from "@stream-slack/http";
+import {
+  createChatHttpDelivery,
+  createLiveChatSubscriptionRevalidator,
+} from "@stream-slack/http";
 
 import {
   createDeterministicTimers,
@@ -45,6 +48,13 @@ export async function observeHttpIdleWindow({
         nextOffset: ZERO_OFFSET,
         streamDigest: EMPTY_DIGEST,
       };
+    },
+    readRoomStatus: async (room) => {
+      if (room !== "idle-probe") {
+        throw new Error("idle probe received an unexpected room");
+      }
+      roomStatusReadCalls += 1;
+      return { archived: false };
     },
     followMessages: async () => {
       followCalls += 1;
@@ -92,17 +102,13 @@ export async function observeHttpIdleWindow({
       return IDLE_PROBE_CONTEXT;
     },
   };
-  const revalidateSubscription = async ({ context, room }) => {
-    assertIdleProbeContext(context);
-    if (room !== "idle-probe") {
-      throw new Error("idle probe received an unexpected room");
-    }
-    await workspaceAuthorization.authorizeRead(context, {
-      capability: "workspace.subscribe",
-    });
-    roomStatusReadCalls += 1;
-    return true;
-  };
+  const revalidateSubscription = createLiveChatSubscriptionRevalidator({
+    authorizeRead: async (context, options) => {
+      assertIdleProbeContext(context);
+      return workspaceAuthorization.authorizeRead(context, options);
+    },
+    readRoomStatus: chatService.readRoomStatus,
+  });
   const delivery = createChatHttpDelivery({
     auth0EmulatorUrl: "http://auth.invalid",
     chatService,
@@ -207,7 +213,7 @@ export function assertIdleWindowRequestConstant(observation) {
   assert.equal(
     observation.authorizeReadCalls,
     observation.keepAliveTimerExecutions,
-    "idle HTTP delivery must revalidate only on its bounded heartbeat",
+    "idle HTTP delivery must revalidate workspace membership on each heartbeat",
   );
   assert.equal(
     observation.directoryReadCalls,
@@ -216,8 +222,8 @@ export function assertIdleWindowRequestConstant(observation) {
   );
   assert.equal(
     observation.roomStatusReadCalls,
-    observation.keepAliveTimerExecutions,
-    "idle authorization must inspect channel status only on its bounded heartbeat",
+    observation.keepAliveTimerExecutions + 1,
+    "idle authorization must inspect channel status at open and on each heartbeat",
   );
   assert.equal(
     observation.pollingTimerExecutions,

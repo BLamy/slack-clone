@@ -495,6 +495,10 @@ test("chat service reuses explicit idempotency payloads and dispatches room rese
     1,
   );
   assert.equal((await service.readMessages("demo", "-1")).roomArchived, true);
+  await assert.rejects(
+    service.appendMessage("demo", { text: "must stay archived" }, ada),
+    (error) => error.statusCode === 409 && error.code === "CHAT_ROOM_ARCHIVED",
+  );
 });
 
 test("chat service recovers explicit create and edit keys after a process restart", async () => {

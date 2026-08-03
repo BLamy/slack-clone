@@ -37,6 +37,7 @@ test("live HTTP handlers recheck membership before every chat capability", async
       path: "/api/rooms/demo/messages",
     },
     { method: "GET", path: "/api/rooms/demo/events" },
+    { method: "POST", path: "/api/rooms/demo/archive" },
     { method: "DELETE", path: "/api/rooms/demo/messages" },
   ]) {
     const response = createFakeResponse();
@@ -54,7 +55,7 @@ test("live HTTP handlers recheck membership before every chat capability", async
   assert.deepEqual(calls, {
     append: 0,
     follow: 0,
-    normalize: 4,
+    normalize: 5,
     read: 0,
     reset: 0,
     update: 0,

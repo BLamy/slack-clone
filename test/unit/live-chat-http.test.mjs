@@ -4,6 +4,7 @@ import test from "node:test";
 
 import {
   createChatHttpDelivery,
+  createLiveChatSubscriptionRevalidator,
   LIVE_CHAT_ERROR_CODES,
 } from "@stream-slack/http";
 
@@ -189,6 +190,81 @@ test("live chat terminates at the acknowledged checkpoint when a channel is arch
   assert.equal(terminal.action, "close");
   assert.equal(terminal.nextOffset, "offset-0");
   harness.delivery.close();
+});
+
+test("live chat refuses a resumed connection after archive before opening SSE", async () => {
+  const context = Object.freeze({
+    principalId: "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+    source: "trusted",
+    workspaceId: "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+  });
+  let readCalls = 0;
+  let followCalls = 0;
+  let roomStatusReadCalls = 0;
+  const authorizeRead = async (receivedContext, options) => {
+    assert.equal(receivedContext, context);
+    assert.equal(options.capability, "workspace.subscribe");
+  };
+  const revalidateSubscription = createLiveChatSubscriptionRevalidator({
+    authorizeRead,
+    readRoomStatus: async (room) => {
+      assert.equal(room, "archived-channel");
+      roomStatusReadCalls += 1;
+      return { archived: true };
+    },
+  });
+  const delivery = createChatHttpDelivery({
+    auth0Health: async () => true,
+    auth0EmulatorUrl: "http://auth.test",
+    chatService: {
+      followMessages: async () => {
+        followCalls += 1;
+        return { cancel() {}, closed: new Promise(() => {}) };
+      },
+      normalizeRoomId: (room) => room,
+      readMessages: async () => {
+        readCalls += 1;
+        return {
+          messages: [],
+          nextOffset: "after-archive",
+          records: [],
+          streamDigest: EMPTY_DIGEST,
+        };
+      },
+    },
+    currentSession: () => ({ user: { sub: context.principalId } }),
+    durableStreamsUrl: "http://streams.test",
+    emptyDigest: EMPTY_DIGEST,
+    revalidateSubscription,
+    sessionUser: () => ({ sub: context.principalId }),
+    workspaceAuthorization: {
+      authorizeDispatch: async () => {},
+      authorizeRead,
+      authorizeSubscription: async (request, receivedContext, { register }) =>
+        register(request, receivedContext),
+      contextForRequest: async () => context,
+    },
+  });
+  const request = createRequest({
+    url: "/api/rooms/archived-channel/events?offset=after-archive",
+  });
+  const response = createResponse();
+
+  await assert.rejects(
+    delivery.handleApi(
+      request,
+      response,
+      new URL(`http://app.test${request.url}`),
+    ),
+    (error) =>
+      error.code === LIVE_CHAT_ERROR_CODES.CHANNEL_ARCHIVED &&
+      error.statusCode === 409,
+  );
+  assert.equal(roomStatusReadCalls, 1);
+  assert.equal(readCalls, 0);
+  assert.equal(followCalls, 0);
+  assert.equal(response.writeHeadCalls, 0);
+  delivery.close();
 });
 
 test("live chat preserves a typed session-revocation terminal on queued delivery", async () => {

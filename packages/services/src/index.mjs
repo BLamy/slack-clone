@@ -28,6 +28,7 @@ export function createChatService({
     const messageId = randomId();
     const requestKey = idempotencyKey ?? toIdempotencyKey(messageId);
     const snapshot = await streamStore.read(roomId, "-1");
+    assertRoomActive(snapshot.records);
     const existing = idempotencyKey
       ? findExistingMessage(snapshot.records, {
           actorId,
@@ -80,6 +81,13 @@ export function createChatService({
   async function archiveRoom(roomId, user, { idempotencyKey } = {}) {
     const stream = normalizeRoomId(roomId);
     const snapshot = await streamStore.read(stream, "-1");
+    if (snapshot.records.some(isRoomArchivedRecord)) {
+      return {
+        archived: true,
+        nextOffset: snapshot.nextOffset,
+        receipt: { nextOffset: snapshot.nextOffset, replayed: true },
+      };
+    }
     const requestKey = idempotencyKey ?? toIdempotencyKey(randomId());
     const result = await dispatch({
       actorId: String(user?.sub ?? ""),
@@ -126,6 +134,7 @@ export function createChatService({
     const actorId = String(user.sub ?? "");
     const text = normalizeMessageText(input.text);
     const snapshot = await streamStore.read(roomId, "-1");
+    assertRoomActive(snapshot.records);
     const current = snapshot.records.findLast(
       (record) => record?.id === messageId,
     );
@@ -187,6 +196,7 @@ export function createChatService({
   async function resetRoom(roomId, user, { idempotencyKey } = {}) {
     const stream = normalizeRoomId(roomId);
     const snapshot = await streamStore.read(stream, "-1");
+    assertRoomActive(snapshot.records);
     const requestKey = idempotencyKey ?? toIdempotencyKey(randomId());
     const result = await dispatch({
       actorId: String(user?.sub ?? ""),
@@ -221,6 +231,14 @@ export function createChatService({
 
 function isRoomArchivedRecord(record) {
   return record?.dispatch?.operation === "chat.room.archived";
+}
+
+function assertRoomActive(records) {
+  if (records.some(isRoomArchivedRecord)) {
+    const error = httpError(409, "chat channel is archived");
+    error.code = "CHAT_ROOM_ARCHIVED";
+    throw error;
+  }
 }
 
 function projectMessage(record) {

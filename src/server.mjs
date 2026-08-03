@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import { createNodeDurableStreamsStore } from "@stream-slack/durable-streams";
 import {
   createChatHttpDelivery,
-  LIVE_CHAT_ERROR_CODES,
+  createLiveChatSubscriptionRevalidator,
   sendError,
   sendJson,
 } from "@stream-slack/http";
@@ -350,21 +350,10 @@ const chatHttp = createChatHttpDelivery({
   currentSession,
   durableStreamsUrl: DURABLE_STREAMS_URL,
   emptyDigest: canonicalSha256([]),
-  revalidateSubscription: async ({ context, room }) => {
-    await workspaceAuthorization.authorizeRead(context, {
-      capability: "workspace.subscribe",
-    });
-    const status = await chatService.readRoomStatus(room);
-    if (status.archived) {
-      return {
-        code: LIVE_CHAT_ERROR_CODES.CHANNEL_ARCHIVED,
-        detail: "live chat channel is archived",
-        ok: false,
-        statusCode: 409,
-      };
-    }
-    return true;
-  },
+  revalidateSubscription: createLiveChatSubscriptionRevalidator({
+    authorizeRead: workspaceAuthorization.authorizeRead,
+    readRoomStatus: chatService.readRoomStatus,
+  }),
   sessionUser,
   workspaceAuthorization,
 });

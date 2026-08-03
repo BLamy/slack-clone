@@ -64,7 +64,7 @@ assert.equal(idleObservation.authorizeSubscriptionCalls, 1);
 assert.equal(idleObservation.keepAliveTimerExecutions, 90);
 assert.equal(idleObservation.authorizeReadCalls, 90);
 assert.equal(idleObservation.directoryReadCalls, 91);
-assert.equal(idleObservation.roomStatusReadCalls, 90);
+assert.equal(idleObservation.roomStatusReadCalls, 91);
 
 const summary = {
   schemaVersion: 1,
@@ -80,6 +80,7 @@ const summary = {
     focusedTestFile: "test/unit/live-chat-http.test.mjs",
     cases: [
       "provider-rejected stale checkpoint is typed 409 before headers",
+      "reconnect after a durable channel archive is refused before headers",
       "session logout terminates queued delivery without leaking a message",
       "durable channel archive terminates live delivery at the last acknowledged checkpoint",
       "slow reader on one channel cannot block another channel",
@@ -108,7 +109,7 @@ const summary = {
     ...idleObservation,
     result: "PASS",
     productionAuthorizationWiring:
-      "workspaceAuthorization.authorizeSubscription plus workspace and channel revalidation on every 10-second heartbeat",
+      "shared live revalidator performs workspace and channel checks at connection open and on every 10-second heartbeat",
     pollingPositiveControl:
       "covered by test/unit/durable-streams-adapter.test.mjs",
   },
@@ -333,6 +334,30 @@ async function verifyRealEmulatorScenario() {
     assert.equal(archiveResult.archived, true);
     const archiveTerminal = await isolatedAda.next("terminal");
     assert.equal(archiveTerminal.data.code, "LIVE_CHANNEL_ARCHIVED");
+    const archivedReconnect = await fetchJson(
+      `${context.appBaseUrl}/api/rooms/${encodeURIComponent(isolationRoom)}/events?offset=${encodeURIComponent(archiveResult.nextOffset)}`,
+      { headers: { Cookie: adaCookie } },
+      transcript,
+      "archive-reconnect-after-status",
+    );
+    assert.equal(archivedReconnect.response.status, 409);
+    assert.equal(archivedReconnect.body.code, "LIVE_CHANNEL_ARCHIVED");
+    const archivedWrite = await fetchJson(
+      `${context.appBaseUrl}/api/rooms/${encodeURIComponent(isolationRoom)}/messages`,
+      {
+        body: JSON.stringify({ text: "must not write after archive" }),
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: adaCookie,
+          "Idempotency-Key": "ik_ffffffffffffffffffffffffff",
+        },
+        method: "POST",
+      },
+      transcript,
+      "archive-write-after-status",
+    );
+    assert.equal(archivedWrite.response.status, 409);
+    assert.equal(archivedWrite.body.code, "CHAT_ROOM_ARCHIVED");
 
     const logoutRoom = `${context.roomPrefix}-logout`;
     const logoutAda = await openSse(
@@ -391,6 +416,15 @@ async function verifyRealEmulatorScenario() {
         responseStatus: archiveResult.responseStatus,
         terminalCode: archiveTerminal.data.code,
         checkpoint: archiveTerminal.data.nextOffset,
+        reconnectAfterArchive: {
+          status: archivedReconnect.response.status,
+          code: archivedReconnect.body.code,
+          checkpoint: archiveResult.nextOffset,
+        },
+        writeAfterArchive: {
+          status: archivedWrite.response.status,
+          code: archivedWrite.body.code,
+        },
       },
       logout: {
         responseStatus: logoutResponse.status,
@@ -402,6 +436,8 @@ async function verifyRealEmulatorScenario() {
         "resume from opaque Last-Event-ID-equivalent query checkpoint",
         "independent room remains idle while a sibling room receives an event",
         "archive event terminates the hot room at its acknowledged checkpoint",
+        "reconnect from a post-archive checkpoint is refused before SSE headers",
+        "message mutation after archive is refused by the durable room authority",
         "logout before the next queued event",
       ],
       typedRefusal: {

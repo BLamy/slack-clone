@@ -205,7 +205,7 @@ test("HTTP delivery stays adapter-request constant across fifteen virtual idle m
   assert.equal(observation.authorizeSubscriptionCalls, 1);
   assert.equal(observation.authorizeReadCalls, 90);
   assert.equal(observation.directoryReadCalls, 91);
-  assert.equal(observation.roomStatusReadCalls, 90);
+  assert.equal(observation.roomStatusReadCalls, 91);
   assert.equal(observation.keepAliveTimerExecutions, 90);
 });
 

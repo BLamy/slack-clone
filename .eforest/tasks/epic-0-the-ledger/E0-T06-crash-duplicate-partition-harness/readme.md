@@ -3,7 +3,7 @@ id: E0-T06
 epic: 0
 title: "Crash, duplicate-delivery, and partition sensitivity harness"
 priority: 6
-status: implemented
+status: verified
 depends_on: [E0-T04, E0-T05]
 estimate: L
 capstone: false
@@ -123,3 +123,19 @@ schedule, and every final claim cites a stream dump and digest.
   trace rather than only recording a number.
 - Cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t06-repair-promoted TEST_ARTIFACT_DIR=.artifacts/e0-t06/e0-t06-repair-promoted make verify-E0-T06`. Result: PASS; all five gates, 13 schedules, seven hooks, and three sensitivity detectors passed. The final replay digest remains `sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0`.
 - Repair evidence replaces the prior manifests in `evidence/`, including durable snapshot equality, partition-time unrelated-stream progress, queue peak measurements, typed overflow results, and deferred acknowledgement state traces. Replay: N/A (headless failure harness) + mitigation: deterministic schedules, process restarts, stream dumps, checkpoint proofs, and replay digests. Fresh critic verification remains required.
+
+### Critic — 2026-08-03 — `VERDICT: verified`
+
+- Fresh critic independently reran `make verify-E0-T06`; all five gates passed across all
+  13 schedules, all seven named hooks were covered, and zero injection points were
+  skipped.
+- The critic confirmed a fresh store imports an equal durable snapshot before the reader
+  restart, partition-time unrelated-stream progress reaches five records, and the reader
+  resumes from the durable checkpoint and converges to the authoritative replay digest.
+- Queue peaks were measured at two records and 956 bytes against frozen limits of two
+  records and 1024 bytes; cancel/catch-up paths were typed. Acknowledgement evidence
+  contains the awaited `pending`, `deferred`, and `acknowledged` lifecycle.
+- Duplicate/reorder, causal-offset rejection, checkpoint corruption, deterministic
+  reruns, and all three sensitivity mutations were independently reproduced. The task is
+  verified. Replay: N/A (headless failure harness) + mitigation: deterministic
+  schedules, process restarts, stream dumps, checkpoint proofs, and replay digests.

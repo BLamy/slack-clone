@@ -3,7 +3,7 @@ id: E1-T02
 epic: 1
 title: "Workspace membership, roles, and tenant boundary"
 priority: 102
-status: in-progress
+status: implemented
 depends_on: [E1-T01]
 estimate: L
 capstone: false
@@ -192,3 +192,34 @@ VERDICT: refuted
   to a trusted workspace context and linearizable membership authorization, preserves the
   working demo's seeded users, and expands scoped-value binding so sibling identifiers and
   workspace streams cannot cross the boundary through alternate field or header names.
+
+### Builder — 2026-08-03 — subject authority and evidence binding repaired
+
+- Implementation commit: `579a97f313b3d6cd99c1e759cbe26b6c4f39a3a5` (`E1-T02: bind login to
+  replayed subject authority`). Login now resolves the authenticated principal only by the exact
+  issuer/audience/subject binding replayed from the Durable Streams workspace directory; profile
+  email and nickname values are not authorization inputs. The evidence verifier now requires the
+  claimed implementation commit to resolve exactly, be an ancestor of the checkout, and have no
+  later changes to the implementation file set.
+- Cold command:
+  `PROMOTE_EVIDENCE=1 E1_T02_IMPLEMENTATION_COMMIT=579a97f313b3d6cd99c1e759cbe26b6c4f39a3a5 TEST_RUN_ID=e1-t02-subject-authority-final-20260803 make verify-E1-T02`.
+  Frozen install, `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and
+  `pnpm build` all passed; the full test gate passed 86 unit tests and five Playwright tests.
+- The replay fixture remains byte-stable across 13 offsets with final digest
+  `sha256:b89894bc917a4d355b9582cd40cce01cbcf81c519c405bbda83df4a5ae62432d`. The promoted
+  summary records 14 deterministic authorization refusals, eight live-handler refusals, unchanged
+  refused heads, projection deletion with replay-derived authorization, and a sensitivity run that
+  goes red when trusted workspace comparison is disabled.
+- Evidence: `evidence/e1-t02-final/verification-summary.json`,
+  `evidence/e1-t02-final/live-handler-refusal-matrix.json`,
+  `evidence/e1-t02-final/workspace-replay-evidence.json`,
+  `evidence/e1-t02-final/tenant-refusal-matrix.json`,
+  `evidence/e1-t02-final/lifecycle-refusal-matrix.json`,
+  `evidence/e1-t02-final/sensitivity.json`, and
+  `evidence/e1-t02-final/offline-replay.json`.
+- Claim: the live boundary establishes trusted tenant context before handler input, rechecks
+  replayed membership for every chat capability, rejects sibling identifiers and streams across
+  request fields, resolves login identity from authoritative subject bindings only, binds evidence
+  to the exact implementation tree, and preserves the seeded two-user demo. `Replay: N/A (server
+  tenancy and RBAC contract) + mitigation: two-workspace negative matrix, live handler refusal
+  matrix, before/after heads, and deterministic membership replay`.

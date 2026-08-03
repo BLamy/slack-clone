@@ -4,6 +4,12 @@ import { canonicalStateJson } from "@stream-slack/reducers";
 
 import { validateAndReplayDump } from "../src/ledger/replay.mjs";
 
+if (process.env.E0_T07_NETWORK_DISABLED === "1") {
+  globalThis.fetch = async () => {
+    throw new Error("E0-T07 network is disabled during offline replay");
+  };
+}
+
 const [command, dumpPath, expectedArgument] = process.argv.slice(2);
 
 if (

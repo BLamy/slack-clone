@@ -3,7 +3,7 @@ id: E1-T03
 epic: 1
 title: "Channel lifecycle, membership, and private-read isolation"
 priority: 103
-status: pending
+status: in-progress
 depends_on: [E1-T02]
 estimate: L
 capstone: false
@@ -61,3 +61,11 @@ set contract; service principals do not join conversations.
 5. Disable the live-read membership check in a scratch worktree; the verifier must fail.
 
 ## Verification log
+
+### Builder — 2026-08-03 — activated after E1-T02 verification
+
+- E1-T02 is verified at `2b8373e222e846bee3c46d1343e4467e473ca67a`; E1-T03 is now the sole
+  active queue gate. The implementation will add workspace-scoped public, private, and direct
+  message channel events, replayable membership state, and authorization shared by snapshot,
+  live, projection, and future search paths, with private-channel metadata refused before any
+  source or projection access.

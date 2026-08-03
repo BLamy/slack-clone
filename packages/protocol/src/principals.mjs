@@ -58,14 +58,6 @@ const RECORD_KEYS = [
 ];
 
 export class PrincipalValidationError extends Error {
-  constructor(code, path, detail) {
-    super(`${code} at ${path}: ${detail}`);
-    this.name = "PrincipalValidationError";
-    this.code = code;
-    this.path = path;
-    this.detail = detail;
-  }
-
   toJSON() {
     return {
       code: this.code,
@@ -151,7 +143,7 @@ export function validateAuthenticatedSubject(value) {
     return validateSubjectBinding(value, "$.authenticatedSubject");
   } catch (error) {
     if (error instanceof PrincipalValidationError) {
-      throw new PrincipalValidationError(
+      throw principalError(
         PRINCIPAL_ERROR_CODES.INVALID_AUTHENTICATION,
         error.path,
         error.detail,
@@ -302,7 +294,12 @@ export function assertPrincipalSubject(principal, authenticatedSubject) {
 }
 
 export function principalError(code, path, detail) {
-  return new PrincipalValidationError(code, path, detail);
+  const error = new PrincipalValidationError(`${code} at ${path}: ${detail}`);
+  error.name = "PrincipalValidationError";
+  error.code = code;
+  error.path = path;
+  error.detail = detail;
+  return error;
 }
 
 function assertExactKeys(value, expectedKeys, path) {

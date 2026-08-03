@@ -1,0 +1,5 @@
+{
+  "authorGuard": "present and mutation-sensitive",
+  "revisionGuard": "present and mutation-sensitive",
+  "result": "PASS"
+}

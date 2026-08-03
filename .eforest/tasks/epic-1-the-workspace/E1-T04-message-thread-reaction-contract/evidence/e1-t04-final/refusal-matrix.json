@@ -1,0 +1,30 @@
+{
+  "fixtureCount": 6,
+  "observed": {
+    "cross-channel-reply.v1.json": {
+      "code": "REDUCER_MESSAGE_REPLY_ROOT",
+      "offset": "0000000000000000_0000000000000002"
+    },
+    "invalid-text.v1.json": {
+      "code": "REDUCER_MESSAGE_TEXT",
+      "offset": "0000000000000000_0000000000000001"
+    },
+    "missing-root.v1.json": {
+      "code": "REDUCER_MESSAGE_REPLY_ROOT",
+      "offset": "0000000000000000_0000000000000001"
+    },
+    "reply-to-reply.v1.json": {
+      "code": "REDUCER_MESSAGE_REPLY_ROOT",
+      "offset": "0000000000000000_0000000000000003"
+    },
+    "stale-edit.v1.json": {
+      "code": "REDUCER_MESSAGE_REVISION_CONFLICT",
+      "offset": "0000000000000000_0000000000000002"
+    },
+    "unauthorized-edit.v1.json": {
+      "code": "REDUCER_MESSAGE_AUTHOR_MISMATCH",
+      "offset": "0000000000000000_0000000000000002"
+    }
+  },
+  "allRefusedAtCitedOffsets": true
+}

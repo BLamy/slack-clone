@@ -1,0 +1,6 @@
+{
+  "targetEvents": 1,
+  "durableReceipts": 1,
+  "concurrentRetries": 2,
+  "sameReceipt": true
+}

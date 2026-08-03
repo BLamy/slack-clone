@@ -3,7 +3,7 @@ id: E1-T04
 epic: 1
 title: "Message, thread, edit, delete, and reaction event contract"
 priority: 104
-status: in-progress
+status: implemented
 depends_on: [E1-T03]
 estimate: L
 capstone: false
@@ -70,3 +70,35 @@ same authorized channel.
   will add immutable message, thread, edit, delete, and reaction events with deterministic
   replay, explicit author/moderator authorization, same-channel visible-root validation,
   idempotent reaction effects, and bounded text handling before append.
+
+### Builder — 2026-08-03 — implementation complete
+
+- Implementation commit: `d19ef5f0507765b373191c85ddc8d413f15eeb6f` (`E1-T04: implement
+  message thread reaction contract`). The implementation adds six registered conversation
+  event types, a text/plain/NFC/control-character boundary, immutable message revision
+  history and delete tombstones, same-channel visible-root validation, author and active
+  moderator policy, reaction toggle projection, and a server-side command/idempotency door.
+  The compact E0 message shape remains backward-compatible so earlier ledger digests do not
+  change.
+- Cold command: `make verify-E1-T04`. Frozen install, `pnpm format:check`, `pnpm lint`,
+  `pnpm typecheck`, `pnpm test`, and `pnpm build` all passed with zero skips. The promoted
+  run was `PROMOTE_EVIDENCE=1 E1_T04_IMPLEMENTATION_COMMIT=d19ef5f0507765b373191c85ddc8d413f15eeb6f
+  E1_T04_NETWORK_DISABLED=1 TEST_RUN_ID=promoted-e1-t04 node scripts/verify-e1-t04.mjs` from
+  a clean implementation tree.
+- The golden conversation log replays 12 offsets twice with stable per-prefix digests and
+  final digest `sha256:b0634cfd50db4f167aa5199815a70ab80d93b4acb5af7dfaeb9e57903e2502cc`.
+  Six invalid fixtures refuse at cited offsets with typed author, revision, root, and text
+  errors. Authorization evidence covers author-only edits, active moderator deletes, stale
+  revisions, archived channels, inactive members, root scope, Unicode/control limits, and
+  two concurrent retries producing one target event and one durable receipt. A generated
+  64-record property log, offline replay, credential scan, and guard sensitivity checks also
+  pass. Replay: N/A (server conversation event contract) + mitigation: golden logs,
+  authorization refusals, property tests, and per-prefix digest evidence.
+- Evidence: `evidence/e1-t04-final/verification-summary.json`,
+  `conversation-replay-evidence.json`, `refusal-matrix.json`, `authorization-matrix.json`,
+  `boundary-matrix.json`, `idempotency.json`, `property-results.json`, `sensitivity.json`,
+  and `offline-replay.json`.
+- Claim: conversation source events now preserve authorship, revisions, tombstones, thread
+  root relationships, and reaction effects deterministically; command validation and
+  channel-scoped authorization refuse unauthorized or malformed mutations before the
+  durable append door, while same-id retries converge to one logical effect.

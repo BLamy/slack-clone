@@ -1,0 +1,278 @@
+{
+  "schemaVersion": 1,
+  "task": "E1-T04",
+  "runId": "promoted-e1-t04",
+  "implementationCommit": "d19ef5f0507765b373191c85ddc8d413f15eeb6f",
+  "implementationTreeCleanAtStart": true,
+  "result": "PASS",
+  "fixtureCount": 1,
+  "invalidFixtureCount": 6,
+  "replay": "Replay: N/A (server conversation event contract) + mitigation: golden logs, authorization refusals, property tests, and per-prefix digest evidence",
+  "replayUploadAttempted": false,
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "durationMs": 4710,
+      "name": "format",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "durationMs": 3302,
+      "name": "lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "durationMs": 22207,
+      "name": "typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "durationMs": 18786,
+      "name": "tests",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm build",
+      "durationMs": 521,
+      "name": "build",
+      "result": "PASS"
+    }
+  ],
+  "canaryScan": {
+    "forbiddenCredentialPatterns": 0,
+    "result": "PASS"
+  },
+  "schema": {
+    "envelopeEventTypes": [
+      "ledger.fixture-recorded",
+      "workspace.directory.updated",
+      "channel.message.created",
+      "channel.message.replied",
+      "channel.message.edited",
+      "channel.message.deleted",
+      "channel.message.reaction.added",
+      "channel.message.reaction.removed",
+      "agent.config.revised",
+      "workspace.invocation.requested",
+      "run.lifecycle.changed",
+      "connection.config.revised",
+      "workspace.audit.recorded",
+      "projection.checkpointed",
+      "principal.created",
+      "principal.profile.updated",
+      "principal.suspended",
+      "principal.deactivated",
+      "channel.created",
+      "channel.renamed",
+      "channel.archived",
+      "channel.unarchived",
+      "channel.membership.invited",
+      "channel.membership.joined",
+      "channel.membership.left",
+      "channel.membership.removed",
+      "channel.direct.created",
+      "workspace.created",
+      "workspace.membership.invited",
+      "workspace.membership.accepted",
+      "workspace.membership.role.changed",
+      "workspace.membership.suspended",
+      "workspace.membership.removed"
+    ],
+    "messageEventVariants": 5,
+    "result": "PASS"
+  },
+  "replayEvidence": {
+    "finalStateDigest": "sha256:b0634cfd50db4f167aa5199815a70ab80d93b4acb5af7dfaeb9e57903e2502cc",
+    "offsets": [
+      "0000000000000000_0000000000000001",
+      "0000000000000000_0000000000000002",
+      "0000000000000000_0000000000000003",
+      "0000000000000000_0000000000000004",
+      "0000000000000000_0000000000000005",
+      "0000000000000000_0000000000000006",
+      "0000000000000000_0000000000000007",
+      "0000000000000000_0000000000000008",
+      "0000000000000000_0000000000000009",
+      "0000000000000000_0000000000000010",
+      "0000000000000000_0000000000000011",
+      "0000000000000000_0000000000000012"
+    ],
+    "perPrefixDigests": [
+      {
+        "index": 1,
+        "offset": "0000000000000000_0000000000000001",
+        "stateDigest": "sha256:21c929f7e37a645d9bb1c085129f34134c54d0eea0eaf51a872492bc5d3512e7"
+      },
+      {
+        "index": 2,
+        "offset": "0000000000000000_0000000000000002",
+        "stateDigest": "sha256:5c7dee86822981cb6a60e1f92e3bc4f3638905f2c92a6a099373108f03fb8e76"
+      },
+      {
+        "index": 3,
+        "offset": "0000000000000000_0000000000000003",
+        "stateDigest": "sha256:7869fe896034ddd60eea5678dd1faf3788c7185ab907699d2057bb761cc008a1"
+      },
+      {
+        "index": 4,
+        "offset": "0000000000000000_0000000000000004",
+        "stateDigest": "sha256:7cc18bb9b0e42530c6c528a935a18f3e8938eea2e36a27e2800b15cb125b1cf8"
+      },
+      {
+        "index": 5,
+        "offset": "0000000000000000_0000000000000005",
+        "stateDigest": "sha256:ecab3f618281ed56a1f312cccccfc19251bd6bb9f37104a4272b0082bfa7039c"
+      },
+      {
+        "index": 6,
+        "offset": "0000000000000000_0000000000000006",
+        "stateDigest": "sha256:1d90a1613b99da1fa73b6e60be8adad7eafd69a8c9990f799974431f800f7a61"
+      },
+      {
+        "index": 7,
+        "offset": "0000000000000000_0000000000000007",
+        "stateDigest": "sha256:d92e0a687e8a2e13e8ed6db28d6c4f0ffd790a67f3bc29bfe147f4092c68c7b2"
+      },
+      {
+        "index": 8,
+        "offset": "0000000000000000_0000000000000008",
+        "stateDigest": "sha256:ddd7cee8da9321533daf1dc39619ec449555ee20d23dd3516131c1cb0f295a8d"
+      },
+      {
+        "index": 9,
+        "offset": "0000000000000000_0000000000000009",
+        "stateDigest": "sha256:5ac4549824b6b90fb3b31473dae5b6d96be4b1693f631746f89606937a221c61"
+      },
+      {
+        "index": 10,
+        "offset": "0000000000000000_0000000000000010",
+        "stateDigest": "sha256:3fdaa5701a803566cb9aedd354ecb72fd315936d4584d68727e88b261820fc4e"
+      },
+      {
+        "index": 11,
+        "offset": "0000000000000000_0000000000000011",
+        "stateDigest": "sha256:3145c1684cbcee7745d426f5c5aa8bcc3bc51e758c7eaa8fa5853b7e6bf5d5a2"
+      },
+      {
+        "index": 12,
+        "offset": "0000000000000000_0000000000000012",
+        "stateDigest": "sha256:b0634cfd50db4f167aa5199815a70ab80d93b4acb5af7dfaeb9e57903e2502cc"
+      }
+    ],
+    "records": 12,
+    "replayedTwiceWithIdenticalBytes": true
+  },
+  "refusalEvidence": {
+    "fixtureCount": 6,
+    "observed": {
+      "cross-channel-reply.v1.json": {
+        "code": "REDUCER_MESSAGE_REPLY_ROOT",
+        "offset": "0000000000000000_0000000000000002"
+      },
+      "invalid-text.v1.json": {
+        "code": "REDUCER_MESSAGE_TEXT",
+        "offset": "0000000000000000_0000000000000001"
+      },
+      "missing-root.v1.json": {
+        "code": "REDUCER_MESSAGE_REPLY_ROOT",
+        "offset": "0000000000000000_0000000000000001"
+      },
+      "reply-to-reply.v1.json": {
+        "code": "REDUCER_MESSAGE_REPLY_ROOT",
+        "offset": "0000000000000000_0000000000000003"
+      },
+      "stale-edit.v1.json": {
+        "code": "REDUCER_MESSAGE_REVISION_CONFLICT",
+        "offset": "0000000000000000_0000000000000002"
+      },
+      "unauthorized-edit.v1.json": {
+        "code": "REDUCER_MESSAGE_AUTHOR_MISMATCH",
+        "offset": "0000000000000000_0000000000000002"
+      }
+    },
+    "allRefusedAtCitedOffsets": true
+  },
+  "authorizationEvidence": {
+    "observed": [
+      {
+        "name": "member-edit-other-author",
+        "expected": "MESSAGE_NOT_AUTHOR",
+        "result": "refused"
+      },
+      {
+        "name": "admin-delete-with-membership",
+        "expected": "allowed",
+        "result": "allowed"
+      },
+      {
+        "name": "member-delete-other-author",
+        "expected": "MODERATOR_REQUIRED",
+        "result": "refused"
+      },
+      {
+        "name": "author-edit",
+        "expected": "allowed",
+        "result": "allowed"
+      },
+      {
+        "name": "stale-edit",
+        "expected": "REVISION_CONFLICT",
+        "result": "refused"
+      },
+      {
+        "name": "archived-create",
+        "expected": "CHANNEL_ARCHIVED",
+        "result": "refused"
+      },
+      {
+        "name": "inactive-member-reply",
+        "expected": "MEMBERSHIP_INACTIVE",
+        "result": "refused"
+      }
+    ],
+    "authorEditOnly": true,
+    "moderatorDeleteRequiresActiveMembership": true,
+    "refusalLeavesSourceHeadUnchanged": true
+  },
+  "boundaryEvidence": {
+    "refused": [
+      "actor-spoof",
+      "html-content",
+      "nfc-drift",
+      "control-character",
+      "bidi-control",
+      "unpaired-surrogate",
+      "oversized"
+    ],
+    "contentType": "text/plain",
+    "normalization": "NFC required before append",
+    "storedTextIsPlainData": true,
+    "htmlInterpretation": false
+  },
+  "idempotencyEvidence": {
+    "targetEvents": 1,
+    "durableReceipts": 1,
+    "concurrentRetries": 2,
+    "sameReceipt": true
+  },
+  "propertyEvidence": {
+    "generatedRoots": 32,
+    "generatedReplies": 32,
+    "validRecords": 64,
+    "mutationAndPermutationRefused": true
+  },
+  "sensitivityEvidence": {
+    "authorGuard": "present and mutation-sensitive",
+    "revisionGuard": "present and mutation-sensitive",
+    "result": "PASS"
+  },
+  "networkEvidence": {
+    "networkDisabled": true,
+    "firstDigest": "sha256:b0634cfd50db4f167aa5199815a70ab80d93b4acb5af7dfaeb9e57903e2502cc",
+    "secondDigest": "sha256:b0634cfd50db4f167aa5199815a70ab80d93b4acb5af7dfaeb9e57903e2502cc",
+    "result": "PASS"
+  }
+}

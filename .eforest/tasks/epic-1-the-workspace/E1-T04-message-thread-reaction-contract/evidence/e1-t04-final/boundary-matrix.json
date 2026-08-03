@@ -1,0 +1,15 @@
+{
+  "refused": [
+    "actor-spoof",
+    "html-content",
+    "nfc-drift",
+    "control-character",
+    "bidi-control",
+    "unpaired-surrogate",
+    "oversized"
+  ],
+  "contentType": "text/plain",
+  "normalization": "NFC required before append",
+  "storedTextIsPlainData": true,
+  "htmlInterpretation": false
+}

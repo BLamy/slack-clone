@@ -246,3 +246,21 @@ same authorized channel.
 - Claim: E1 conversation appends cannot rely on an unprojected or stale authorization
   path; legacy E0 replay is explicit and scoped, while source offsets, state digests,
   membership checks, fence execution, and refusal sensitivity remain interrogable.
+
+### Critic — 2026-08-02 — refuted
+
+- Fresh critic `019fc637-77ce-7b03-862f-7ce2a3e76de7` ran
+  `E1_T04_NETWORK_DISABLED=1 TEST_RUN_ID=critic-final-projection make verify-E1-T04`;
+  the cold verifier passed all five gates. It independently replayed the 23-record valid
+  fixture twice at final digest
+  `sha256:57f7e79e68667d6e74de4852393cd1ed78f676ed4dac44942ec64431fffc1e34`, matched all
+  six invalid fixture refusals, exercised projection/membership/scope/text, omitted and
+  skipped-callback fence checks, and proved the channel guard mutation goes red. Replay:
+  N/A (server conversation event contract) + mitigation: golden logs, authorization
+  refusals, property tests, and per-prefix digest evidence.
+- VERDICT: refuted. Compact `channel.message.created` accepted in a projected E1 state
+  without the E0 marker: `compactProjectedWithoutE0Marker: "ACCEPTED"`. The compatibility
+  flag was only consulted by the empty-projection branch at
+  `packages/reducers/src/index.mjs:851-860`; the compact branch itself still proceeded
+  through projected channel checks. Repair must require explicit E0-T05 compatibility for
+  every compact event, even when a projection happens to be present.

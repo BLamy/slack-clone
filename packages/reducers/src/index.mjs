@@ -60,6 +60,7 @@ export const REDUCER_ERROR_CODES = Object.freeze({
   ILLEGAL_TRANSITION: "REDUCER_ILLEGAL_TRANSITION",
   INVALID_EVENT_DATA: "REDUCER_INVALID_EVENT_DATA",
   INVALID_OFFSET: "REDUCER_INVALID_OFFSET",
+  LEGACY_COMPACT_REPLAY_REQUIRED: "REDUCER_LEGACY_COMPACT_REPLAY_REQUIRED",
   MALFORMED_ENVELOPE: "REDUCER_MALFORMED_ENVELOPE",
   OFFSET_REUSED: "REDUCER_OFFSET_REUSED",
   PRINCIPAL_DUPLICATE_SUBJECT: "REDUCER_PRINCIPAL_DUPLICATE_SUBJECT",
@@ -426,6 +427,14 @@ function reduceMessageCreated(state, data, context) {
   // E0's compact message event remains readable so old source streams retain
   // their historical state digests while the explicit v1 conversation shape
   // below carries revision and thread semantics.
+  if (!context.allowLegacyCompactMessages) {
+    failReducer(
+      REDUCER_ERROR_CODES.LEGACY_COMPACT_REPLAY_REQUIRED,
+      "compact message events require explicit E0-T05 replay compatibility",
+      "messageId",
+      context,
+    );
+  }
   assertData(data, ["messageId", "channelId", "authorId", "text"], [], context);
   assertToken(data.messageId, "messageId", context);
   assertToken(data.channelId, "channelId", context);

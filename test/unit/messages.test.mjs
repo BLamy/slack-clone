@@ -197,7 +197,7 @@ test("legacy compact messages retain actor and workspace scope", () => {
           ...compact,
           data: { ...compact.data, channelId: FOREIGN_CHANNEL_ID },
         },
-        { offset: offset(1) },
+        { allowLegacyCompactMessages: true, offset: offset(1) },
       ),
     REDUCER_ERROR_CODES.CHANNEL_SCOPE_MISMATCH,
   );
@@ -209,7 +209,7 @@ test("legacy compact messages retain actor and workspace scope", () => {
           ...compact,
           data: { ...compact.data, channelId: UNKNOWN_CHANNEL_ID },
         },
-        { offset: offset(1) },
+        { allowLegacyCompactMessages: true, offset: offset(1) },
       ),
     REDUCER_ERROR_CODES.CHANNEL_NOT_FOUND,
   );
@@ -218,7 +218,7 @@ test("legacy compact messages retain actor and workspace scope", () => {
       reduceEnvelope(
         conversationProjectionState(),
         { ...compact, data: { ...compact.data, authorId: MEMBER_ID } },
-        { offset: offset(1) },
+        { allowLegacyCompactMessages: true, offset: offset(1) },
       ),
     REDUCER_ERROR_CODES.MESSAGE_AUTHOR_MISMATCH,
   );
@@ -228,12 +228,20 @@ test("legacy compact messages retain actor and workspace scope", () => {
         reduceEnvelope(
           conversationProjectionState(),
           { ...compact, data: { ...compact.data, text } },
-          { offset: offset(1) },
+          { allowLegacyCompactMessages: true, offset: offset(1) },
         ),
       REDUCER_ERROR_CODES.MESSAGE_TEXT,
     );
   }
+  assertReducerFailure(
+    () =>
+      reduceEnvelope(conversationProjectionState(), compact, {
+        offset: offset(1),
+      }),
+    REDUCER_ERROR_CODES.LEGACY_COMPACT_REPLAY_REQUIRED,
+  );
   const replayed = reduceEnvelope(conversationProjectionState(), compact, {
+    allowLegacyCompactMessages: true,
     offset: offset(1),
   });
   assert.deepEqual(replayed.entities.messages["legacy-root"], compact.data);

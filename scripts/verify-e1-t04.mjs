@@ -555,6 +555,19 @@ function verifyLegacyCompactScope() {
   );
   assert.throws(
     () =>
+      replayRecords([{ event: compact, offset: nextOffset(1) }], {
+        initialState,
+      }),
+    (error) => {
+      assert.equal(
+        error.code,
+        REDUCER_ERROR_CODES.LEGACY_COMPACT_REPLAY_REQUIRED,
+      );
+      return true;
+    },
+  );
+  assert.throws(
+    () =>
       replayRecords(
         [
           {
@@ -569,7 +582,7 @@ function verifyLegacyCompactScope() {
             offset: nextOffset(1),
           },
         ],
-        { initialState },
+        { allowLegacyCompactMessages: true, initialState },
       ),
     (error) => {
       assert.equal(error.code, REDUCER_ERROR_CODES.CHANNEL_SCOPE_MISMATCH);
@@ -593,7 +606,7 @@ function verifyLegacyCompactScope() {
             offset: nextOffset(1),
           },
         ],
-        { initialState },
+        { allowLegacyCompactMessages: true, initialState },
       ),
     (error) => {
       assert.equal(error.code, REDUCER_ERROR_CODES.MESSAGE_AUTHOR_MISMATCH);
@@ -616,7 +629,7 @@ function verifyLegacyCompactScope() {
             offset: nextOffset(1),
           },
         ],
-        { initialState },
+        { allowLegacyCompactMessages: true, initialState },
       ),
     (error) => {
       assert.equal(error.code, REDUCER_ERROR_CODES.CHANNEL_NOT_FOUND);
@@ -637,6 +650,7 @@ function verifyLegacyCompactScope() {
     assert.throws(
       () =>
         replayRecords([{ event: invalid, offset: nextOffset(1) }], {
+          allowLegacyCompactMessages: true,
           initialState,
         }),
       (error) => {
@@ -647,6 +661,7 @@ function verifyLegacyCompactScope() {
     refusedLegacyControls.push(index === 802 ? "C0" : "C1");
   }
   const replayed = replayRecords([{ event: compact, offset: nextOffset(1) }], {
+    allowLegacyCompactMessages: true,
     initialState,
   });
   assert.deepEqual(
@@ -655,6 +670,7 @@ function verifyLegacyCompactScope() {
   );
   return {
     compactMessageAcceptedWithoutShapeChange: true,
+    compactMessageRequiresExplicitE0Compatibility: true,
     foreignWorkspaceChannelRefused: true,
     unknownSameWorkspaceChannelRefused: true,
     forgedAuthorRefused: true,

@@ -3,7 +3,7 @@ id: E1-T04
 epic: 1
 title: "Message, thread, edit, delete, and reaction event contract"
 priority: 104
-status: pending
+status: in-progress
 depends_on: [E1-T03]
 estimate: L
 capstone: false
@@ -63,3 +63,10 @@ same authorized channel.
 5. Disable author checking or revision validation in a scratch worktree; tests must fail.
 
 ## Verification log
+
+### Builder — 2026-08-03 — activated after E1-T03 verification
+
+- E1-T03 is verified at `a551a3a`; E1-T04 is now the sole active queue gate. This ticket
+  will add immutable message, thread, edit, delete, and reaction events with deterministic
+  replay, explicit author/moderator authorization, same-channel visible-root validation,
+  idempotent reaction effects, and bounded text handling before append.

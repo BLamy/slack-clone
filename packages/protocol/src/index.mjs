@@ -1,6 +1,8 @@
 export const ZERO_OFFSET = "0000000000000000_0000000000000000";
 export const DEFAULT_CHAT_PATH = "/app?room=demo";
 
+export * from "./principals.mjs";
+
 export function normalizeRoomId(roomId) {
   const normalized = String(roomId)
     .trim()

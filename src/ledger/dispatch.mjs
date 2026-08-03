@@ -1,4 +1,13 @@
-import { ZERO_OFFSET } from "@stream-slack/protocol";
+import {
+  assertPrincipalCanMutate,
+  assertPrincipalSubject,
+  principalError,
+  PRINCIPAL_ERROR_CODES,
+  PrincipalValidationError,
+  validateAuthenticatedSubject,
+  validatePrincipalRecord,
+  ZERO_OFFSET,
+} from "@stream-slack/protocol";
 
 import { canonicalJson, canonicalSha256 } from "./canonical-json.mjs";
 import { assertExactKeys } from "./errors.mjs";
@@ -15,6 +24,19 @@ export const DISPATCH_REFUSAL_CODES = Object.freeze({
   STALE_FENCE: "DISPATCH_STALE_FENCE",
   PRODUCER_FENCED: "DISPATCH_PRODUCER_FENCED",
   DURABILITY_GAP: "DISPATCH_DURABILITY_GAP",
+});
+
+export const PRINCIPAL_DISPATCH_REFUSAL_CODES = Object.freeze({
+  ACTOR_FIELD_FORBIDDEN: PRINCIPAL_ERROR_CODES.ACTOR_FIELD_FORBIDDEN,
+  AUTHENTICATION_REQUIRED: PRINCIPAL_ERROR_CODES.AUTHENTICATION_REQUIRED,
+  DEACTIVATED: PRINCIPAL_ERROR_CODES.DEACTIVATED,
+  INVALID_AUTHENTICATION: PRINCIPAL_ERROR_CODES.INVALID_AUTHENTICATION,
+  INVALID_REQUEST: "PRINCIPAL_INVALID_DISPATCH_REQUEST",
+  INVALID_RECORD: PRINCIPAL_ERROR_CODES.INVALID_RECORD,
+  NOT_FOUND: PRINCIPAL_ERROR_CODES.NOT_FOUND,
+  SCOPE_MISMATCH: PRINCIPAL_ERROR_CODES.SCOPE_MISMATCH,
+  SUBJECT_MISMATCH: PRINCIPAL_ERROR_CODES.SUBJECT_MISMATCH,
+  SUSPENDED: PRINCIPAL_ERROR_CODES.SUSPENDED,
 });
 
 const REQUEST_KEYS = [
@@ -52,6 +74,14 @@ const RECEIPT_KEYS = [
   "operation",
   "requestDigest",
   "status",
+  "stream",
+  "workspaceId",
+];
+const PRINCIPAL_REQUEST_KEYS = [
+  "expectedHead",
+  "idempotencyKey",
+  "operation",
+  "payload",
   "stream",
   "workspaceId",
 ];
@@ -172,11 +202,15 @@ export function createDispatchDoor({
     return producerSequences.get(stream) ?? 0;
   }
 
-  async function dispatch(request, { signal } = {}) {
+  async function dispatch(request, { signal, context = null } = {}) {
     validateDispatchRequest(request);
     const requestDigest = dispatchRequestDigest(request);
     const idempotencyKey = request.idempotencyKey;
-    const authorization = await authorize(request);
+    const authorization = await authorize(request, {
+      context,
+      requestDigest,
+      signal,
+    });
     if (authorization !== true && authorization?.ok !== true) {
       throw new DispatchRefusalError(
         DISPATCH_REFUSAL_CODES.UNAUTHORIZED,
@@ -445,6 +479,145 @@ export function createDispatchDoor({
   return Object.freeze({ close, dispatch });
 }
 
+export function validatePrincipalDispatchRequest(value) {
+  try {
+    if (value && typeof value === "object" && Object.hasOwn(value, "actorId")) {
+      throw principalError(
+        PRINCIPAL_ERROR_CODES.ACTOR_FIELD_FORBIDDEN,
+        "$.request.actorId",
+        "client requests may not provide actorId",
+      );
+    }
+    assertExactKeys(value, PRINCIPAL_REQUEST_KEYS, "$.request");
+    if (
+      value.payload &&
+      typeof value.payload === "object" &&
+      !Array.isArray(value.payload)
+    ) {
+      if (Object.hasOwn(value.payload, "actorId")) {
+        throw principalError(
+          PRINCIPAL_ERROR_CODES.ACTOR_FIELD_FORBIDDEN,
+          "$.request.payload.actorId",
+          "payload may not provide the authenticated actor",
+        );
+      }
+    }
+    return value;
+  } catch (error) {
+    if (error instanceof DispatchRefusalError) throw error;
+    if (error instanceof PrincipalValidationError) {
+      throw principalDispatchRefusal(error, { statusCode: 400 });
+    }
+    throw new DispatchRefusalError(
+      PRINCIPAL_DISPATCH_REFUSAL_CODES.INVALID_REQUEST,
+      error instanceof Error ? error.message : String(error),
+      { statusCode: 400 },
+    );
+  }
+}
+
+export function stampAuthenticatedPrincipalRequest(
+  request,
+  authenticatedSubject,
+  principal,
+) {
+  validatePrincipalDispatchRequest(request);
+  if (Object.hasOwn(request, "actorId")) {
+    throw new DispatchRefusalError(
+      PRINCIPAL_DISPATCH_REFUSAL_CODES.ACTOR_FIELD_FORBIDDEN,
+      "client requests may not provide actorId",
+      { statusCode: 400 },
+    );
+  }
+
+  try {
+    const expectedWorkspaceId = request.workspaceId;
+    const subject = validateAuthenticatedSubject(authenticatedSubject);
+    validatePrincipalRecord(principal, { expectedWorkspaceId });
+    assertPrincipalSubject(principal, subject);
+    assertPrincipalCanMutate(principal);
+    return { ...request, actorId: principal.principalId };
+  } catch (error) {
+    throw principalDispatchRefusal(error);
+  }
+}
+
+export function createPrincipalDispatchDoor({
+  streamStore,
+  resolvePrincipal,
+  lookupPrincipal = resolvePrincipal,
+  authorize = () => true,
+  ...dispatchOptions
+}) {
+  if (typeof resolvePrincipal !== "function") {
+    throw new TypeError("principal dispatch requires resolvePrincipal");
+  }
+  if (typeof lookupPrincipal !== "function") {
+    throw new TypeError("principal dispatch requires lookupPrincipal");
+  }
+  if (typeof authorize !== "function") {
+    throw new TypeError("principal dispatch authorization must be a function");
+  }
+
+  const door = createDispatchDoor({
+    ...dispatchOptions,
+    authorize: async (request, { context } = {}) => {
+      const current = await lookupPrincipal(
+        request.actorId,
+        request.workspaceId,
+      );
+      if (!current) {
+        throw new DispatchRefusalError(
+          PRINCIPAL_DISPATCH_REFUSAL_CODES.NOT_FOUND,
+          "authenticated principal is no longer present",
+          { statusCode: 401 },
+        );
+      }
+      try {
+        validatePrincipalRecord(current, {
+          expectedWorkspaceId: request.workspaceId,
+        });
+        assertPrincipalSubject(current, context?.authenticatedSubject);
+        assertPrincipalCanMutate(current);
+      } catch (error) {
+        throw principalDispatchRefusal(error);
+      }
+      return authorize(request, current);
+    },
+    streamStore,
+  });
+
+  async function dispatch(request, authenticatedSubject, options) {
+    validatePrincipalDispatchRequest(request);
+    let principal;
+    try {
+      const subject = validateAuthenticatedSubject(authenticatedSubject);
+      principal = await resolvePrincipal(subject, request.workspaceId);
+      if (!principal) {
+        throw principalError(
+          PRINCIPAL_ERROR_CODES.AUTHENTICATION_REQUIRED,
+          "$.authenticatedSubject",
+          "authenticated subject is not bound to a principal",
+        );
+      }
+    } catch (error) {
+      throw principalDispatchRefusal(error, { statusCode: 401 });
+    }
+
+    const stamped = stampAuthenticatedPrincipalRequest(
+      request,
+      authenticatedSubject,
+      principal,
+    );
+    return door.dispatch(stamped, {
+      ...(options ?? {}),
+      context: { authenticatedSubject },
+    });
+  }
+
+  return Object.freeze({ close: door.close, dispatch });
+}
+
 function createReceipt({ request, requestDigest, eventDigest, nextOffset }) {
   assertOpaqueCheckpoint(nextOffset, "$.receipt.nextOffset");
   const receipt = {
@@ -628,6 +801,22 @@ function mapAppendError(error, requestDigest) {
     );
   }
   return error;
+}
+
+function principalDispatchRefusal(error, { statusCode } = {}) {
+  if (error instanceof DispatchRefusalError) return error;
+  if (!(error instanceof PrincipalValidationError)) return error;
+  const codeStatus =
+    error.code === PRINCIPAL_ERROR_CODES.ACTOR_FIELD_FORBIDDEN
+      ? 400
+      : error.code === PRINCIPAL_ERROR_CODES.AUTHENTICATION_REQUIRED ||
+          error.code === PRINCIPAL_ERROR_CODES.INVALID_AUTHENTICATION ||
+          error.code === PRINCIPAL_ERROR_CODES.NOT_FOUND
+        ? 401
+        : 403;
+  return new DispatchRefusalError(error.code, error.detail, {
+    statusCode: statusCode ?? codeStatus,
+  });
 }
 
 function durabilityGap(requestDigest, detail) {

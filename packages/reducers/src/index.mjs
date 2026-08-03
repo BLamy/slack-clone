@@ -21,6 +21,10 @@ export const REDUCER_EVENT_TYPES_V1 = Object.freeze([
   "connection.config.revised",
   "workspace.audit.recorded",
   "projection.checkpointed",
+  "principal.created",
+  "principal.profile.updated",
+  "principal.suspended",
+  "principal.deactivated",
 ]);
 
 export const REDUCER_ERROR_CODES = Object.freeze({
@@ -31,6 +35,17 @@ export const REDUCER_ERROR_CODES = Object.freeze({
   INVALID_OFFSET: "REDUCER_INVALID_OFFSET",
   MALFORMED_ENVELOPE: "REDUCER_MALFORMED_ENVELOPE",
   OFFSET_REUSED: "REDUCER_OFFSET_REUSED",
+  PRINCIPAL_DUPLICATE_SUBJECT: "REDUCER_PRINCIPAL_DUPLICATE_SUBJECT",
+  PRINCIPAL_INVALID_KIND: "REDUCER_PRINCIPAL_INVALID_KIND",
+  PRINCIPAL_INVALID_OWNER: "REDUCER_PRINCIPAL_INVALID_OWNER",
+  PRINCIPAL_INVALID_PROFILE: "REDUCER_PRINCIPAL_INVALID_PROFILE",
+  PRINCIPAL_INVALID_RECORD: "REDUCER_PRINCIPAL_INVALID_RECORD",
+  PRINCIPAL_INVALID_STATUS: "REDUCER_PRINCIPAL_INVALID_STATUS",
+  PRINCIPAL_INVALID_SUBJECT: "REDUCER_PRINCIPAL_INVALID_SUBJECT",
+  PRINCIPAL_LIFECYCLE: "REDUCER_PRINCIPAL_LIFECYCLE",
+  PRINCIPAL_NOT_FOUND: "REDUCER_PRINCIPAL_NOT_FOUND",
+  PRINCIPAL_PROFILE_REVISION: "REDUCER_PRINCIPAL_PROFILE_REVISION",
+  PRINCIPAL_SCOPE_MISMATCH: "REDUCER_PRINCIPAL_SCOPE_MISMATCH",
   UNKNOWN_EVENT_TYPE: "REDUCER_UNKNOWN_EVENT_TYPE",
   UNSUPPORTED_SCHEMA_VERSION: "REDUCER_UNSUPPORTED_SCHEMA_VERSION",
 });
@@ -173,6 +188,10 @@ export const REDUCER_REGISTRY_V1 = Object.freeze({
   "connection.config.revised": reduceConnectionConfigRevised,
   "workspace.audit.recorded": reduceAuditRecorded,
   "projection.checkpointed": reduceProjectionCheckpointed,
+  "principal.created": reducePrincipalCreated,
+  "principal.profile.updated": reducePrincipalProfileUpdated,
+  "principal.suspended": reducePrincipalSuspended,
+  "principal.deactivated": reducePrincipalDeactivated,
 });
 
 export function materializeMessages(records) {
@@ -431,14 +450,380 @@ function reduceProjectionCheckpointed(state, data, context) {
   );
 }
 
-function assertData(data, required, optional, context) {
+function reducePrincipalCreated(state, data, context) {
+  assertData(
+    data,
+    ["kind", "ownedBy", "principalId", "profile", "subjectBinding"],
+    [],
+    context,
+  );
+  assertPrincipalId(data.principalId, "principalId", context);
+  assertPrincipalKind(data.kind, context);
+  assertPrincipalProfile(data.profile, context);
+  assertSubjectBinding(data.subjectBinding, context);
+
+  if (data.kind === "agent") {
+    if (data.ownedBy === null) {
+      failPrincipal(
+        REDUCER_ERROR_CODES.PRINCIPAL_INVALID_OWNER,
+        "agent principals require a human owner",
+        "ownedBy",
+        context,
+      );
+    }
+    assertPrincipalId(data.ownedBy, "ownedBy", context);
+    if (data.ownedBy === data.principalId) {
+      failPrincipal(
+        REDUCER_ERROR_CODES.PRINCIPAL_INVALID_OWNER,
+        "an agent cannot own itself",
+        "ownedBy",
+        context,
+      );
+    }
+    const owner = getPrincipal(state, data.ownedBy);
+    if (!owner) {
+      failPrincipal(
+        REDUCER_ERROR_CODES.PRINCIPAL_INVALID_OWNER,
+        "agent owner must already exist in the workspace",
+        "ownedBy",
+        context,
+      );
+    }
+    if (owner.kind !== "human" || owner.status !== "active") {
+      failPrincipal(
+        REDUCER_ERROR_CODES.PRINCIPAL_INVALID_OWNER,
+        "agent owner must be an active human principal",
+        "ownedBy",
+        context,
+      );
+    }
+  } else if (data.ownedBy !== null) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_INVALID_OWNER,
+      "only agent principals may carry an owner reference",
+      "ownedBy",
+      context,
+    );
+  }
+
+  const principals = principalMap(state);
+  assertUnique(principals, data.principalId, "principalId", context);
+  for (const principal of Object.values(principals)) {
+    if (
+      principalSubjectKey(principal.subjectBinding) ===
+      principalSubjectKey(data.subjectBinding)
+    ) {
+      failPrincipal(
+        REDUCER_ERROR_CODES.PRINCIPAL_DUPLICATE_SUBJECT,
+        "subject binding is already assigned to another principal",
+        "subjectBinding",
+        context,
+      );
+    }
+  }
+
+  state.entities.principals = setKey(principals, data.principalId, {
+    kind: data.kind,
+    ownedBy: data.ownedBy,
+    principalId: data.principalId,
+    profile: copyJson(data.profile),
+    profileRevision: 1,
+    status: "active",
+    subjectBinding: copyJson(data.subjectBinding),
+  });
+}
+
+function reducePrincipalProfileUpdated(state, data, context) {
+  assertData(data, ["principalId", "profile", "revision"], [], context);
+  assertPrincipalId(data.principalId, "principalId", context);
+  assertPrincipalProfile(data.profile, context);
+  assertRevision(data.revision, "revision", context);
+
+  const current = getPrincipal(state, data.principalId);
+  if (!current) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_NOT_FOUND,
+      "principal profile update references an unknown principal",
+      "principalId",
+      context,
+    );
+  }
+  if (data.revision !== current.profileRevision + 1) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_PROFILE_REVISION,
+      `profile revision must advance from ${current.profileRevision} to ${current.profileRevision + 1}`,
+      "revision",
+      context,
+    );
+  }
+
+  state.entities.principals = setKey(principalMap(state), data.principalId, {
+    ...current,
+    profile: copyJson(data.profile),
+    profileRevision: data.revision,
+  });
+}
+
+function reducePrincipalSuspended(state, data, context) {
+  reducePrincipalLifecycle(state, data, "suspended", context);
+}
+
+function reducePrincipalDeactivated(state, data, context) {
+  reducePrincipalLifecycle(state, data, "deactivated", context);
+}
+
+function reducePrincipalLifecycle(state, data, nextStatus, context) {
+  assertData(data, ["principalId"], ["reason"], context);
+  assertPrincipalId(data.principalId, "principalId", context);
+  if (Object.hasOwn(data, "reason")) {
+    assertReason(data.reason, context);
+  }
+
+  const current = getPrincipal(state, data.principalId);
+  if (!current) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_NOT_FOUND,
+      `principal ${data.principalId} does not exist`,
+      "principalId",
+      context,
+    );
+  }
+  const allowed =
+    nextStatus === "suspended"
+      ? current.status === "active"
+      : current.status === "active" || current.status === "suspended";
+  if (!allowed) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_LIFECYCLE,
+      `principal cannot transition from ${current.status} to ${nextStatus}`,
+      "principalId",
+      context,
+    );
+  }
+
+  state.entities.principals = setKey(principalMap(state), data.principalId, {
+    ...current,
+    status: nextStatus,
+  });
+}
+
+const PRINCIPAL_WORKSPACE_TOKEN = "[0-9a-hjkmnp-tv-z]{26}";
+const PRINCIPAL_ID_PATTERN = new RegExp(
+  `^pr_(${PRINCIPAL_WORKSPACE_TOKEN})_(${PRINCIPAL_WORKSPACE_TOKEN})$`,
+  "u",
+);
+const PRINCIPAL_KINDS = new Set(["human", "agent", "service"]);
+const PRINCIPAL_ISSUER_PATTERN = /^[a-z][a-z0-9._:-]{1,63}$/u;
+const PRINCIPAL_HANDLE_PATTERN = /^[a-z0-9][a-z0-9._-]{0,63}$/u;
+const PRINCIPAL_EMAIL_PATTERN = /^[^\s@]+@[^\s@]+$/u;
+const PRINCIPAL_SUBJECT_FORBIDDEN_PATTERN =
+  /^(?:bearer\s|basic\s|password[=:]|secret[=:]|session[=:]|token[=:])/iu;
+
+function assertPrincipalId(value, field, context) {
+  if (typeof value !== "string") {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_SCOPE_MISMATCH,
+      "principal id must be a string",
+      field,
+      context,
+    );
+  }
+  const match = value.match(PRINCIPAL_ID_PATTERN);
+  if (!match) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_SCOPE_MISMATCH,
+      "principal id must be a lowercase workspace-scoped identifier",
+      field,
+      context,
+    );
+  }
+  if (`ws_${match[1]}` !== context.envelope.workspaceId) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_SCOPE_MISMATCH,
+      "principal id belongs to a different workspace",
+      field,
+      context,
+    );
+  }
+}
+
+function assertPrincipalKind(value, context) {
+  if (typeof value !== "string" || !PRINCIPAL_KINDS.has(value)) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_INVALID_KIND,
+      "kind must be human, agent, or service",
+      "kind",
+      context,
+    );
+  }
+}
+
+function assertPrincipalProfile(value, context) {
+  if (!isRecord(value)) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_INVALID_PROFILE,
+      "profile must be an object",
+      "profile",
+      context,
+    );
+  }
+  assertData(value, ["displayName", "email", "handle"], [], context, "profile");
+  assertBoundPrincipalString(
+    value.displayName,
+    160,
+    "profile.displayName",
+    context,
+  );
+  assertBoundPrincipalString(value.handle, 64, "profile.handle", context);
+  if (!PRINCIPAL_HANDLE_PATTERN.test(value.handle)) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_INVALID_PROFILE,
+      "handle must be lowercase and use only letters, digits, dot, underscore, or hyphen",
+      "profile.handle",
+      context,
+    );
+  }
+  if (
+    typeof value.email !== "string" ||
+    value.email.length > 320 ||
+    hasControlCharacter(value.email)
+  ) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_INVALID_PROFILE,
+      "email must be a bounded string without control characters",
+      "profile.email",
+      context,
+    );
+  }
+  if (value.email && !PRINCIPAL_EMAIL_PATTERN.test(value.email)) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_INVALID_PROFILE,
+      "email must be an address or an empty service value",
+      "profile.email",
+      context,
+    );
+  }
+}
+
+function assertSubjectBinding(value, context) {
+  if (!isRecord(value)) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_INVALID_SUBJECT,
+      "subjectBinding must be an object",
+      "subjectBinding",
+      context,
+    );
+  }
+  assertData(
+    value,
+    ["audience", "issuer", "subject"],
+    [],
+    context,
+    "subjectBinding",
+  );
+  assertBoundPrincipalString(
+    value.issuer,
+    64,
+    "subjectBinding.issuer",
+    context,
+  );
+  if (!PRINCIPAL_ISSUER_PATTERN.test(value.issuer)) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_INVALID_SUBJECT,
+      "issuer must be a lowercase provider name",
+      "subjectBinding.issuer",
+      context,
+    );
+  }
+  assertBoundPrincipalString(
+    value.audience,
+    128,
+    "subjectBinding.audience",
+    context,
+  );
+  assertBoundPrincipalString(
+    value.subject,
+    256,
+    "subjectBinding.subject",
+    context,
+  );
+  if (PRINCIPAL_SUBJECT_FORBIDDEN_PATTERN.test(value.subject)) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_INVALID_SUBJECT,
+      "subject binding must not contain a bearer or secret credential",
+      "subjectBinding.subject",
+      context,
+    );
+  }
+}
+
+function assertReason(value, context) {
+  if (
+    typeof value !== "string" ||
+    value.length === 0 ||
+    value.length > 240 ||
+    hasControlCharacter(value)
+  ) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_INVALID_STATUS,
+      "reason must be a bounded string without control characters",
+      "reason",
+      context,
+    );
+  }
+}
+
+function assertBoundPrincipalString(value, maxLength, field, context) {
+  if (
+    typeof value !== "string" ||
+    value.length === 0 ||
+    value.length > maxLength ||
+    hasControlCharacter(value)
+  ) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_INVALID_RECORD,
+      "value must be a non-empty bounded string without control characters",
+      field,
+      context,
+    );
+  }
+}
+
+function failPrincipal(code, detail, field, context) {
+  throw reducerError(code, detail, {
+    offset: context.offset,
+    path: `$.event.data.${field}`,
+  });
+}
+
+function principalMap(state) {
+  return state.entities.principals ?? {};
+}
+
+function getPrincipal(state, principalId) {
+  return getKey(principalMap(state), principalId);
+}
+
+function principalSubjectKey(value) {
+  return `${value.issuer}\u0000${value.audience}\u0000${value.subject}`;
+}
+
+function hasControlCharacter(value) {
+  for (const character of value) {
+    const codePoint = character.codePointAt(0);
+    if (codePoint <= 31 || codePoint === 127) return true;
+  }
+  return false;
+}
+
+function assertData(data, required, optional, context, pathPrefix = "") {
   const allowed = new Set([...required, ...optional]);
   for (const key of required) {
     if (!Object.hasOwn(data, key)) {
       failReducer(
         REDUCER_ERROR_CODES.INVALID_EVENT_DATA,
         `${key} is required`,
-        key,
+        pathPrefix ? `${pathPrefix}.${key}` : key,
         context,
       );
     }
@@ -448,7 +833,7 @@ function assertData(data, required, optional, context) {
       failReducer(
         REDUCER_ERROR_CODES.INVALID_EVENT_DATA,
         `${key} is not allowed`,
-        key,
+        pathPrefix ? `${pathPrefix}.${key}` : key,
         context,
       );
     }

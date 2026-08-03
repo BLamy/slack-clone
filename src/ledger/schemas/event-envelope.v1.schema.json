@@ -48,7 +48,11 @@
         "run.lifecycle.changed",
         "connection.config.revised",
         "workspace.audit.recorded",
-        "projection.checkpointed"
+        "projection.checkpointed",
+        "principal.created",
+        "principal.profile.updated",
+        "principal.suspended",
+        "principal.deactivated"
       ]
     },
     "idempotencyKey": {

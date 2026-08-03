@@ -17,6 +17,10 @@ export const EVENT_TYPES_V1 = Object.freeze([
   "connection.config.revised",
   "workspace.audit.recorded",
   "projection.checkpointed",
+  "principal.created",
+  "principal.profile.updated",
+  "principal.suspended",
+  "principal.deactivated",
 ]);
 
 const EVENT_TYPE_SET = new Set(EVENT_TYPES_V1);

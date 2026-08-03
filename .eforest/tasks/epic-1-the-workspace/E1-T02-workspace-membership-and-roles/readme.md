@@ -3,7 +3,7 @@ id: E1-T02
 epic: 1
 title: "Workspace membership, roles, and tenant boundary"
 priority: 102
-status: implemented
+status: verified
 depends_on: [E1-T01]
 estimate: L
 capstone: false
@@ -278,3 +278,21 @@ VERDICT: refuted
   to the complete tracked implementation tree, and preserves the seeded two-user demo. `Replay:
   N/A (server tenancy and RBAC contract) + mitigation: two-workspace negative matrix, live handler
   refusal matrix, before/after heads, and deterministic membership replay`.
+
+### Critic — 2026-08-03 — full-tree binding verification
+
+VERDICT: verified
+
+- Fresh managed critic `Zeno` audited implementation commit
+  `706d8fb4a5aa6c68ec0e90bcc25f17407d6145be` and promoted metadata commit
+  `51ab718c87dadff1aff048e2470aadcb25649d1b` read-only. Only this task's readme, queue, and
+  evidence descendants differ after the implementation commit.
+- Exact replayed issuer/audience/subject login resolution, profile-field rejection, live tenancy
+  refusals, alternate-field sibling probes, lifecycle/revocation checks, projection deletion, and
+  the 13-offset replay digest all passed. The all-zero commit control exited 1.
+- The disposable frozen-install sensitivity clone committed an omitted
+  `src/auth0-client.mjs` mutation and the verifier exited nonzero, proving full-tree binding is
+  sensitive. `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (86 unit and five
+  Playwright tests), and `pnpm build` all passed. Replay: N/A (server tenancy and RBAC contract) +
+  mitigation: two-workspace negative matrix, live handler refusal matrix, before/after heads,
+  deterministic replay, and full-tree binding sensitivity.

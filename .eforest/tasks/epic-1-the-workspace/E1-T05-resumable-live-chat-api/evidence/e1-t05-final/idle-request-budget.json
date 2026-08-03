@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "boundary": "HTTP delivery to Durable Streams adapter",
+  "logicalIdleDurationMs": 900000,
+  "timerFinishedAtMs": 900000,
+  "callsBeforeLogicalAdvance": 2,
+  "callsAfterLogicalAdvance": 2,
+  "callDeltaWhileIdle": 0,
+  "readCallsBeforeLogicalAdvance": 1,
+  "readCallsAfterLogicalAdvance": 1,
+  "followCallsBeforeLogicalAdvance": 1,
+  "followCallsAfterLogicalAdvance": 1,
+  "keepAliveTimerExecutions": 90,
+  "pollingTimerExecutions": 0,
+  "pollingMutationMs": null,
+  "result": "PASS",
+  "pollingPositiveControl": "covered by test/unit/durable-streams-adapter.test.mjs"
+}

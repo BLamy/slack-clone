@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "task": "E1-T05",
+  "runId": "promoted-e1-t05",
+  "implementationCommit": "7370d35c99035bff3e979ac8e3c1f7c0a0f5cb90",
+  "implementationTreeCleanAtStart": true,
+  "result": "PASS",
+  "replay": "Replay: N/A (server live-delivery API) + mitigation: real-emulator network transcript, reconnect matrix, request counts, and digest convergence",
+  "replayUploadAttempted": false,
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "durationMs": 7417,
+      "name": "format",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "durationMs": 7410,
+      "name": "lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "durationMs": 5613,
+      "name": "typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "durationMs": 19254,
+      "name": "tests",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm build",
+      "durationMs": 630,
+      "name": "build",
+      "result": "PASS"
+    }
+  ],
+  "idleRequestBudget": {
+    "schemaVersion": 1,
+    "boundary": "HTTP delivery to Durable Streams adapter",
+    "logicalIdleDurationMs": 900000,
+    "timerFinishedAtMs": 900000,
+    "callsBeforeLogicalAdvance": 2,
+    "callsAfterLogicalAdvance": 2,
+    "callDeltaWhileIdle": 0,
+    "readCallsBeforeLogicalAdvance": 1,
+    "readCallsAfterLogicalAdvance": 1,
+    "followCallsBeforeLogicalAdvance": 1,
+    "followCallsAfterLogicalAdvance": 1,
+    "keepAliveTimerExecutions": 90,
+    "pollingTimerExecutions": 0,
+    "pollingMutationMs": null,
+    "result": "PASS",
+    "pollingPositiveControl": "covered by test/unit/durable-streams-adapter.test.mjs"
+  },
+  "networkEvidence": {
+    "room": "e1-t05-promoted-e1-t05-resume",
+    "clients": 2,
+    "firstCheckpoint": "0000000000000000_0000000000000694",
+    "secondCheckpoint": "0000000000000000_0000000000001398",
+    "acceptedMessageIds": [
+      "e966840b-3fbf-4031-88ef-c9861362a16d",
+      "45699286-5f5c-423f-9010-a422f194930c"
+    ],
+    "resumedMessageIds": [
+      "45699286-5f5c-423f-9010-a422f194930c"
+    ],
+    "finalDigest": "sha256:183cdaae419b2dffafd80d94b3661cc53c0f778f575df80d6baa2a7dcab42421",
+    "finalOffsets": {
+      "ada": "0000000000000000_0000000000001398",
+      "linus": "0000000000000000_0000000000001398"
+    },
+    "noDuplicateLogicalEffects": true,
+    "reconnectMatrix": [
+      "after acknowledged status before next append",
+      "append while one client disconnected",
+      "resume from opaque Last-Event-ID-equivalent query checkpoint"
+    ],
+    "typedRefusal": {
+      "status": 400,
+      "code": "LIVE_CHECKPOINT_INVALID"
+    },
+    "transcript": [
+      {
+        "bodyCode": null,
+        "label": "ada-session",
+        "method": "GET",
+        "path": "/api/session",
+        "status": 200
+      },
+      {
+        "bodyCode": null,
+        "label": "linus-session",
+        "method": "GET",
+        "path": "/api/session",
+        "status": 200
+      },
+      {
+        "checkpoint": null,
+        "label": "ada-initial",
+        "method": "GET",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-resume/events",
+        "status": 200
+      },
+      {
+        "checkpoint": null,
+        "label": "linus-initial",
+        "method": "GET",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-resume/events",
+        "status": 200
+      },
+      {
+        "bodyCode": null,
+        "label": "post-ik_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "method": "POST",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-resume/messages",
+        "status": 201
+      },
+      {
+        "bodyCode": null,
+        "label": "post-ik_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "method": "POST",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-resume/messages",
+        "status": 201
+      },
+      {
+        "checkpoint": "0000000000000000_0000000000000694",
+        "label": "ada-resumed",
+        "method": "GET",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-resume/events?offset=0000000000000000_0000000000000694",
+        "status": 200
+      },
+      {
+        "bodyCode": null,
+        "label": "ada-final",
+        "method": "GET",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-resume/messages",
+        "status": 200
+      },
+      {
+        "bodyCode": null,
+        "label": "linus-final",
+        "method": "GET",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-resume/messages",
+        "status": 200
+      },
+      {
+        "bodyCode": "LIVE_CHECKPOINT_INVALID",
+        "label": "malformed-checkpoint",
+        "method": "GET",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-resume/events?offset=%00",
+        "status": 400
+      }
+    ]
+  }
+}

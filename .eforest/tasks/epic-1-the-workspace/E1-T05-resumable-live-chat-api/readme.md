@@ -3,7 +3,7 @@ id: E1-T05
 epic: 1
 title: "Resumable live chat API without polling"
 priority: 105
-status: in-progress
+status: implemented
 depends_on: [E1-T04]
 estimate: L
 capstone: false
@@ -61,3 +61,37 @@ verification, while the server remains responsible for reduction and authorizati
 5. Restore the old polling loop in a scratch worktree; the request-budget gate must fail.
 
 ## Verification log
+
+### Builder — 2026-08-02 — implementation complete
+
+- Implementation commit: `7370d35c99035bff3e979ac8e3c1f7c0a0f5cb90` (`E1-T05: implement
+  resumable live chat API`). The live HTTP path now uses per-client official Durable Streams
+  follows from opaque acknowledged checkpoints, emits typed resume/status/terminal SSE
+  frames, serializes bounded writes with drain timeouts, and revalidates session/workspace
+  authorization before batches and heartbeats. The browser reconnects from its last
+  acknowledged status checkpoint. The old shared room cursor, reset stop/restart path, and
+  350 ms polling shape are gone.
+- Focused evidence: `test/unit/live-chat-http.test.mjs` covers independent client follows,
+  reconnect suffix delivery, checkpoint conflict/refusal, membership and heartbeat
+  revocation, bounded slow-reader resync, and shutdown closure. The existing request-budget
+  fixture covers a 900,000 ms idle window with one bounded read, one follow, 90 heartbeats,
+  and zero additional adapter calls; its 350 ms polling positive control remains sensitive.
+- Exact full verifier: `E1_T05_IMPLEMENTATION_COMMIT=7370d35c99035bff3e979ac8e3c1f7c0a0f5cb90
+  TEST_RUN_ID=promoted-e1-t05 node scripts/verify-e1-t05.mjs`. Fresh emulator and browser
+  gates passed: format, lint, typecheck, 104 unit tests, 5 Playwright integration tests,
+  and build. Promoted evidence is under `evidence/e1-t05-final/`.
+- Real-emulator two-client transcript resumed Ada from
+  `0000000000000000_0000000000000694` to
+  `0000000000000000_0000000000001398` with no duplicate logical effects. Ada and Linus
+  converged on final digest
+  `sha256:183cdaae419b2dffafd80d94b3661cc53c0f778f575df80d6baa2a7dcab42421`; malformed
+  checkpoints returned typed `LIVE_CHECKPOINT_INVALID` status 400. Evidence:
+  `evidence/e1-t05-final/verification-summary.json`,
+  `evidence/e1-t05-final/network-transcript.json`, and
+  `evidence/e1-t05-final/idle-request-budget.json`.
+- Claim: authenticated live chat now preserves ordered logical effects across disconnect and
+  reconnect without hot polling; slow clients are isolated behind bounded delivery and typed
+  resync/closure policy; live authorization is rechecked throughout each connection; and
+  shutdown/cancellation paths do not issue a second JSON response. Replay: N/A (server
+  live-delivery API) + mitigation: real-emulator network transcript, reconnect matrix,
+  request counts, and digest convergence.

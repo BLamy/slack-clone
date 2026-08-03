@@ -5,6 +5,7 @@ import {
   createChatHttpDelivery,
   createLiveChatSubscriptionRevalidator,
 } from "@stream-slack/http";
+import { createChatService } from "@stream-slack/services";
 
 import {
   createDeterministicTimers,
@@ -35,28 +36,13 @@ export async function observeHttpIdleWindow({
   let authorizeSubscriptionCalls = 0;
   let directoryReadCalls = 0;
   let roomStatusReadCalls = 0;
+  let durableStreamReadCalls = 0;
   let pollingTimer = null;
   const followClosed = new Promise(() => {});
-  const chatService = {
-    normalizeRoomId: (room) => room,
-    ensureStream: async () => {},
-    readMessages: async () => {
-      readCalls += 1;
-      return {
-        records: [],
-        messages: [],
-        nextOffset: ZERO_OFFSET,
-        streamDigest: EMPTY_DIGEST,
-      };
-    },
-    readRoomStatus: async (room) => {
-      if (room !== "idle-probe") {
-        throw new Error("idle probe received an unexpected room");
-      }
-      roomStatusReadCalls += 1;
-      return { archived: false };
-    },
-    followMessages: async () => {
+  const streamStore = {
+    close() {},
+    ensure: async () => {},
+    follow: async () => {
       followCalls += 1;
       return {
         cancel() {
@@ -64,6 +50,35 @@ export async function observeHttpIdleWindow({
         },
         closed: followClosed,
       };
+    },
+    read: async () => {
+      durableStreamReadCalls += 1;
+      return {
+        records: [],
+        messages: [],
+        nextOffset: ZERO_OFFSET,
+        streamDigest: EMPTY_DIGEST,
+      };
+    },
+  };
+  const baseChatService = createChatService({
+    dispatch: async () => {
+      throw new Error("idle probe does not dispatch mutations");
+    },
+    now: () => "2026-08-03T00:00:00.000Z",
+    randomId: () => "idle-probe-message",
+    streamStore,
+    workspaceId: IDLE_PROBE_CONTEXT.workspaceId,
+  });
+  const chatService = {
+    ...baseChatService,
+    readMessages: async (...args) => {
+      readCalls += 1;
+      return baseChatService.readMessages(...args);
+    },
+    readRoomStatus: async (...args) => {
+      roomStatusReadCalls += 1;
+      return baseChatService.readRoomStatus(...args);
     },
   };
   const authorizationCore = createWorkspaceAuthorization({
@@ -142,6 +157,7 @@ export async function observeHttpIdleWindow({
   const callsBeforeAdvance = readCalls + followCalls;
   const readsBeforeAdvance = readCalls;
   const followsBeforeAdvance = followCalls;
+  const durableReadsBeforeAdvance = durableStreamReadCalls;
 
   if (pollingMutationMs !== null) {
     const poll = async () => {
@@ -155,7 +171,8 @@ export async function observeHttpIdleWindow({
   const callsAfterAdvance = readCalls + followCalls;
   const observation = {
     schemaVersion: 1,
-    boundary: "HTTP delivery to Durable Streams adapter",
+    boundary:
+      "HTTP message-delivery reads/follows; authorization stream reads are reported separately",
     logicalIdleDurationMs: advance.durationMs,
     timerFinishedAtMs: advance.finishedAtMs,
     callsBeforeLogicalAdvance: callsBeforeAdvance,
@@ -165,6 +182,10 @@ export async function observeHttpIdleWindow({
     readCallsAfterLogicalAdvance: readCalls,
     followCallsBeforeLogicalAdvance: followsBeforeAdvance,
     followCallsAfterLogicalAdvance: followCalls,
+    durableStreamReadCallsBeforeLogicalAdvance: durableReadsBeforeAdvance,
+    durableStreamReadCallsAfterLogicalAdvance: durableStreamReadCalls,
+    durableStreamReadCallDeltaWhileIdle:
+      durableStreamReadCalls - durableReadsBeforeAdvance,
     authorizeReadCalls,
     authorizeSubscriptionCalls,
     directoryReadCalls,
@@ -193,7 +214,12 @@ export function assertIdleWindowRequestConstant(observation) {
   assert.equal(
     observation.callDeltaWhileIdle,
     0,
-    "idle HTTP delivery made additional Durable Streams adapter calls",
+    "idle HTTP delivery made additional message-delivery adapter calls",
+  );
+  assert.equal(
+    observation.durableStreamReadCallDeltaWhileIdle,
+    observation.keepAliveTimerExecutions,
+    "idle authorization performed only its bounded room-status reads",
   );
   assert.equal(
     observation.readCallsAfterLogicalAdvance,

@@ -215,7 +215,7 @@ test("idle request detector rejects a 350-millisecond polling positive control",
   });
   assert.throws(
     () => assertIdleWindowRequestConstant(observation),
-    /additional Durable Streams adapter calls/u,
+    /additional message-delivery adapter calls/u,
   );
   assert.equal(observation.pollingTimerExecutions, 2_571);
   assert.equal(observation.callDeltaWhileIdle, 2_571);

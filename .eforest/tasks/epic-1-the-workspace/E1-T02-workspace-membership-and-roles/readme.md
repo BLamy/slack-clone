@@ -3,7 +3,7 @@ id: E1-T02
 epic: 1
 title: "Workspace membership, roles, and tenant boundary"
 priority: 102
-status: implemented
+status: refuted
 depends_on: [E1-T01]
 estimate: L
 capstone: false
@@ -223,3 +223,21 @@ VERDICT: refuted
   to the exact implementation tree, and preserves the seeded two-user demo. `Replay: N/A (server
   tenancy and RBAC contract) + mitigation: two-workspace negative matrix, live handler refusal
   matrix, before/after heads, and deterministic membership replay`.
+
+### Critic — 2026-08-03 — incomplete exact-tree binding refutation
+
+VERDICT: refuted
+
+- Fresh managed critic `Ramanujan` audited implementation commit
+  `579a97f313b3d6cd99c1e759cbe26b6c4f39a3a5` and promoted metadata commit `a4a716d`. The cold
+  verifier exited 0, the 86 unit and five Playwright gates passed, and all-zero and non-ancestor
+  commit controls exited 1.
+- Blocking finding: `scripts/verify-e1-t02.mjs:55-64` binds only eight named implementation paths.
+  Identity and replay behavior also depends on omitted files such as `src/auth0-client.mjs`,
+  `packages/protocol/src/principals.mjs`, reducer modules, and replay code. The comparison at
+  `scripts/verify-e1-t02.mjs:1218-1228` would therefore allow a later change to one of those files
+  while still accepting evidence for the older implementation commit.
+- The current `579a97f..a4a716d` range contains only task metadata and evidence, so the finding is a
+  detector-coverage defect rather than evidence of a current product regression. The ticket is
+  returned to `in-progress` after this verdict is recorded. `Replay: N/A (server tenancy and RBAC
+  contract) + mitigation: deterministic replay, live negative matrix, and exact-tree binding audit`.

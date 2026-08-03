@@ -1,0 +1,71 @@
+{
+  "accepted": [
+    {
+      "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "stream": "human-identity"
+    },
+    {
+      "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+      "stream": "agent-identity"
+    }
+  ],
+  "ownerBoundary": {
+    "agentId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+    "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "ownerKind": "human",
+    "inheritedPermissionFields": false
+  },
+  "refusalMatrix": [
+    {
+      "label": "other-human",
+      "code": "PRINCIPAL_ACTOR_FIELD_FORBIDDEN",
+      "targetUnchanged": true
+    },
+    {
+      "label": "owned-agent",
+      "code": "PRINCIPAL_ACTOR_FIELD_FORBIDDEN",
+      "targetUnchanged": true
+    },
+    {
+      "label": "service",
+      "code": "PRINCIPAL_ACTOR_FIELD_FORBIDDEN",
+      "targetUnchanged": true
+    },
+    {
+      "label": "sibling-workspace",
+      "code": "PRINCIPAL_ACTOR_FIELD_FORBIDDEN",
+      "targetUnchanged": true
+    },
+    {
+      "label": "payload-actor",
+      "code": "PRINCIPAL_ACTOR_FIELD_FORBIDDEN",
+      "targetUnchanged": true
+    },
+    {
+      "label": "sibling-workspace-request",
+      "code": "PRINCIPAL_SCOPE_MISMATCH",
+      "targetUnchanged": true
+    },
+    {
+      "label": "subject-mismatch",
+      "code": "PRINCIPAL_SUBJECT_MISMATCH",
+      "targetUnchanged": true
+    },
+    {
+      "label": "suspended-principal",
+      "code": "PRINCIPAL_SUSPENDED",
+      "targetUnchanged": true
+    },
+    {
+      "label": "deactivated-principal",
+      "code": "PRINCIPAL_DEACTIVATED",
+      "targetUnchanged": true
+    },
+    {
+      "label": "missing-principal-fence",
+      "code": "PRINCIPAL_FENCE_REQUIRED",
+      "targetUnchanged": true
+    }
+  ],
+  "allRefusedTargetsUnchanged": true
+}

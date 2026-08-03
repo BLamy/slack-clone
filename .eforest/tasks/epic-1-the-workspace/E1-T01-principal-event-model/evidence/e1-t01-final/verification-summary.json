@@ -1,0 +1,254 @@
+{
+  "schemaVersion": 1,
+  "task": "E1-T01",
+  "runId": "e1-t01-final-39095",
+  "implementationCommit": "39095c6dc3a7e04bab7b1bf13068826fdaf0e7a0",
+  "implementationTreeCleanAtStart": true,
+  "result": "PASS",
+  "fixtureCount": 2,
+  "replay": "Replay: N/A (server identity event model) + mitigation: golden logs, impersonation refusal matrix, canary scan, and deterministic reducer digests",
+  "replayUploadAttempted": false,
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "durationMs": 3546,
+      "name": "format",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "durationMs": 2529,
+      "name": "lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "durationMs": 6773,
+      "name": "typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "durationMs": 21209,
+      "name": "tests",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm build",
+      "durationMs": 629,
+      "name": "build",
+      "result": "PASS"
+    }
+  ],
+  "canaryScan": {
+    "fixtureCount": 2,
+    "forbiddenCredentialPatterns": 0,
+    "result": "PASS"
+  },
+  "dispatch": {
+    "accepted": [
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "stream": "human-identity"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "stream": "agent-identity"
+      }
+    ],
+    "ownerBoundary": {
+      "agentId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+      "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "ownerKind": "human",
+      "inheritedPermissionFields": false
+    },
+    "refusalMatrix": [
+      {
+        "label": "other-human",
+        "code": "PRINCIPAL_ACTOR_FIELD_FORBIDDEN",
+        "targetUnchanged": true
+      },
+      {
+        "label": "owned-agent",
+        "code": "PRINCIPAL_ACTOR_FIELD_FORBIDDEN",
+        "targetUnchanged": true
+      },
+      {
+        "label": "service",
+        "code": "PRINCIPAL_ACTOR_FIELD_FORBIDDEN",
+        "targetUnchanged": true
+      },
+      {
+        "label": "sibling-workspace",
+        "code": "PRINCIPAL_ACTOR_FIELD_FORBIDDEN",
+        "targetUnchanged": true
+      },
+      {
+        "label": "payload-actor",
+        "code": "PRINCIPAL_ACTOR_FIELD_FORBIDDEN",
+        "targetUnchanged": true
+      },
+      {
+        "label": "sibling-workspace-request",
+        "code": "PRINCIPAL_SCOPE_MISMATCH",
+        "targetUnchanged": true
+      },
+      {
+        "label": "subject-mismatch",
+        "code": "PRINCIPAL_SUBJECT_MISMATCH",
+        "targetUnchanged": true
+      },
+      {
+        "label": "suspended-principal",
+        "code": "PRINCIPAL_SUSPENDED",
+        "targetUnchanged": true
+      },
+      {
+        "label": "deactivated-principal",
+        "code": "PRINCIPAL_DEACTIVATED",
+        "targetUnchanged": true
+      },
+      {
+        "label": "missing-principal-fence",
+        "code": "PRINCIPAL_FENCE_REQUIRED",
+        "targetUnchanged": true
+      }
+    ],
+    "allRefusedTargetsUnchanged": true
+  },
+  "sensitivity": [
+    {
+      "name": "kind-mutation",
+      "outcome": "rejected",
+      "code": "REDUCER_PRINCIPAL_INVALID_OWNER",
+      "offset": "0000000000000000_0000000000000001",
+      "workPath": ".artifacts/e1-t01/e1-t01-final-39095/kind-mutation.json"
+    },
+    {
+      "name": "owner-scope-mutation",
+      "outcome": "rejected",
+      "code": "REDUCER_PRINCIPAL_SCOPE_MISMATCH",
+      "offset": "0000000000000000_0000000000000003",
+      "workPath": ".artifacts/e1-t01/e1-t01-final-39095/owner-scope-mutation.json"
+    },
+    {
+      "name": "subject-reuse-mutation",
+      "outcome": "rejected",
+      "code": "REDUCER_PRINCIPAL_DUPLICATE_SUBJECT",
+      "offset": "0000000000000000_0000000000000002",
+      "workPath": ".artifacts/e1-t01/e1-t01-final-39095/subject-reuse-mutation.json"
+    },
+    {
+      "name": "profile-authority-mutation",
+      "outcome": "rejected",
+      "code": "REDUCER_PRINCIPAL_INVALID_PROFILE",
+      "offset": "0000000000000000_0000000000000001",
+      "workPath": ".artifacts/e1-t01/e1-t01-final-39095/profile-authority-mutation.json"
+    }
+  ],
+  "networkReplay": {
+    "command": "node scripts/replay-ledger.mjs replay <principal-directory-offline.json>",
+    "networkDisabled": true,
+    "queryStoreWritten": false,
+    "finalStateDigest": "sha256:1069cdf0c97b7f1456a5b2cbcd2846d790723610f8832cb250e99fe6323181e8",
+    "result": "PASS"
+  },
+  "replayEvidence": {
+    "principal-directory.v1.json": {
+      "finalStateDigest": "sha256:1069cdf0c97b7f1456a5b2cbcd2846d790723610f8832cb250e99fe6323181e8",
+      "offsets": [
+        "0000000000000000_0000000000000001",
+        "0000000000000000_0000000000000002",
+        "0000000000000000_0000000000000003",
+        "0000000000000000_0000000000000004",
+        "0000000000000000_0000000000000005",
+        "0000000000000000_0000000000000006",
+        "0000000000000000_0000000000000007",
+        "0000000000000000_0000000000000008",
+        "0000000000000000_0000000000000009"
+      ],
+      "perPrefixDigests": [
+        {
+          "index": 1,
+          "offset": "0000000000000000_0000000000000001",
+          "stateDigest": "sha256:58a3bbdfb1aecff202ff27394471ca219107e0f2d26e703a01ffd122a868cca8"
+        },
+        {
+          "index": 2,
+          "offset": "0000000000000000_0000000000000002",
+          "stateDigest": "sha256:1c815340d63397246b9efadfa2f85b1f76e743092e10720a4f37450de8177401"
+        },
+        {
+          "index": 3,
+          "offset": "0000000000000000_0000000000000003",
+          "stateDigest": "sha256:750819fa4c9670bb5f881ec106d0f67f671bdc681f28c7b4f45164a4cbec63da"
+        },
+        {
+          "index": 4,
+          "offset": "0000000000000000_0000000000000004",
+          "stateDigest": "sha256:764dc4364a9b16d088b34c71cec598ce5967683efc0d47e07b7afa4b35e2b043"
+        },
+        {
+          "index": 5,
+          "offset": "0000000000000000_0000000000000005",
+          "stateDigest": "sha256:a46b196c5ae0898eca6ee505b12456797af8fc0fa3c38d5aef9226b566528d63"
+        },
+        {
+          "index": 6,
+          "offset": "0000000000000000_0000000000000006",
+          "stateDigest": "sha256:d22d595f984cae9b380377128c479d40aab0da154f04851e6ddcebf07e91c8ba"
+        },
+        {
+          "index": 7,
+          "offset": "0000000000000000_0000000000000007",
+          "stateDigest": "sha256:686df620879ee7a6ff58f584a0b034c7cbcf1ea364a56f2506e6d9dab6a091c0"
+        },
+        {
+          "index": 8,
+          "offset": "0000000000000000_0000000000000008",
+          "stateDigest": "sha256:78bbd423e629b4729c4aa55716179f7ac7ecce2bb3f4fc34edbddb9835c70c5f"
+        },
+        {
+          "index": 9,
+          "offset": "0000000000000000_0000000000000009",
+          "stateDigest": "sha256:1069cdf0c97b7f1456a5b2cbcd2846d790723610f8832cb250e99fe6323181e8"
+        }
+      ],
+      "records": 9,
+      "replayedTwiceWithIdenticalBytes": true
+    },
+    "principal-lifecycle.v1.json": {
+      "finalStateDigest": "sha256:a83a8deaa47c05b59da9087e63326059d21b7457ad7b71a04caf5772303447bb",
+      "offsets": [
+        "0000000000000001_0000000000000001",
+        "0000000000000001_0000000000000002",
+        "0000000000000001_0000000000000003",
+        "0000000000000001_0000000000000004"
+      ],
+      "perPrefixDigests": [
+        {
+          "index": 1,
+          "offset": "0000000000000001_0000000000000001",
+          "stateDigest": "sha256:8bb11376e5e75a7400b92ee5f783dd3591d47591f11f82c803ba93ab6a2802dd"
+        },
+        {
+          "index": 2,
+          "offset": "0000000000000001_0000000000000002",
+          "stateDigest": "sha256:44d551ad5a2253d908a68f844b0968603a2b0c04d2fb0d895ed0bc35234857cd"
+        },
+        {
+          "index": 3,
+          "offset": "0000000000000001_0000000000000003",
+          "stateDigest": "sha256:5aa45ece27e1ed318fceeda072802c55b3aac1c48add374d9a5d65676ae5d45d"
+        },
+        {
+          "index": 4,
+          "offset": "0000000000000001_0000000000000004",
+          "stateDigest": "sha256:a83a8deaa47c05b59da9087e63326059d21b7457ad7b71a04caf5772303447bb"
+        }
+      ],
+      "records": 4,
+      "replayedTwiceWithIdenticalBytes": true
+    }
+  }
+}

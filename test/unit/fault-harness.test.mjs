@@ -51,6 +51,21 @@ test("every frozen fault schedule reaches every named boundary and converges", a
       result.invalidCausalOrder.rejected.offset,
       result.invalidCausalOrder.citedOffset,
     );
+    assert.ok(
+      result.slowConsumer.bounds.cancelPeakRecords <=
+        result.slowConsumer.bounds.maxRecords,
+    );
+    assert.ok(
+      result.slowConsumer.bounds.cancelPeakBytes <=
+        result.slowConsumer.bounds.maxBytes,
+    );
+    if (schedule.name === "consume-partition") {
+      assert.equal(
+        result.slowConsumer.unrelatedStreamProgress.partitionedDuringProbe,
+        true,
+      );
+      assert.equal(result.reader.durableAuthorityRestarts.length, 1);
+    }
   }
 });
 

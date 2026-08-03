@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E0-T06 was refuted by the fresh critic at 2026-08-02T23:57:22Z; repair durable authority restart, actual bounded slow-consumer isolation, and deferred acknowledgement before resubmission.",
-  "updatedAt": "2026-08-02T23:57:22Z"
+  "statusReason": "E0-T06 rework is in progress after the 2026-08-02T23:57:22Z refutation; durable authority restart, actual bounded slow-consumer isolation, and deferred acknowledgement are being repaired.",
+  "updatedAt": "2026-08-03T00:01:23Z"
 }

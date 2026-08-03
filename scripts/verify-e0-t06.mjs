@@ -90,13 +90,22 @@ for (const schedule of FROZEN_FAULT_SCHEDULES) {
     first.invalidCausalOrder.citedOffset,
   );
   assert.ok(
-    first.slowConsumer.bounds.observedRecords <=
+    first.slowConsumer.bounds.cancelPeakRecords <=
       first.slowConsumer.bounds.maxRecords,
   );
   assert.ok(
-    first.slowConsumer.bounds.observedBytes <=
+    first.slowConsumer.bounds.cancelPeakBytes <=
       first.slowConsumer.bounds.maxBytes,
   );
+  assert.ok(
+    first.slowConsumer.bounds.catchUpPeakRecords <=
+      first.slowConsumer.bounds.maxRecords,
+  );
+  assert.ok(
+    first.slowConsumer.bounds.catchUpPeakBytes <=
+      first.slowConsumer.bounds.maxBytes,
+  );
+  assert.equal(first.slowConsumer.cancel.code, "HARNESS_SLOW_CONSUMER");
   assert.equal(first.slowConsumer.cancel.policy, "cancel");
   assert.equal(first.slowConsumer.catchUp.policy, "catch-up");
   assert.equal(
@@ -142,12 +151,31 @@ for (const schedule of FROZEN_FAULT_SCHEDULES) {
       "0000000000000000_0000000000000000",
     );
     assert.equal(first.reader.sourceReplayCount, first.targetDump.length);
+    assert.equal(
+      first.slowConsumer.unrelatedStreamProgress.partitionedDuringProbe,
+      true,
+    );
+    assert.equal(first.reader.durableAuthorityRestarts.length, 1);
+    assert.equal(
+      first.reader.durableAuthorityRestarts[0].exportedStreamCount,
+      first.reader.durableAuthorityRestarts[0].importedStreamCount,
+    );
   }
   if (
     schedule.name === "checkpoint-corrupt" ||
     schedule.name === "seeded-combination"
   ) {
     assert.equal(first.reader.checkpointRecovery.result, "recovered-from-zero");
+  }
+  if (
+    schedule.name === "acknowledge-delay" ||
+    schedule.name === "seeded-combination"
+  ) {
+    assert.ok(first.delayedAcknowledgements.length > 0);
+    assert.equal(
+      first.delayedAcknowledgements[0].stateTrace.at(-1),
+      "acknowledged",
+    );
   }
 
   await writeJson(path.join(scheduleDirectory, `${schedule.name}.json`), first);

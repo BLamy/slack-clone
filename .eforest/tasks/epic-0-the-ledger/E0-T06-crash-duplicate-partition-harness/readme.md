@@ -3,7 +3,7 @@ id: E0-T06
 epic: 0
 title: "Crash, duplicate-delivery, and partition sensitivity harness"
 priority: 6
-status: refuted
+status: in-progress
 depends_on: [E0-T04, E0-T05]
 estimate: L
 capstone: false

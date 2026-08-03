@@ -355,7 +355,64 @@ export function createHarnessStore({
     );
   }
 
-  return Object.freeze({ append, dump, read, replace, seed });
+  function exportState() {
+    return structuredClone({
+      producerSequences: [...producerSequences.entries()],
+      streams: [...streams.entries()].map(([stream, entries]) => ({
+        entries,
+        stream,
+      })),
+    });
+  }
+
+  function importState(snapshot) {
+    if (
+      !snapshot ||
+      !Array.isArray(snapshot.producerSequences) ||
+      !Array.isArray(snapshot.streams)
+    ) {
+      throw new FaultHarnessError(
+        FAULT_ERROR_CODES.CHECKPOINT_INVALID,
+        "durable authority snapshot is malformed",
+      );
+    }
+    streams.clear();
+    producerSequences.clear();
+    for (const [key, sequence] of snapshot.producerSequences) {
+      if (typeof key !== "string" || !Number.isSafeInteger(sequence)) {
+        throw new FaultHarnessError(
+          FAULT_ERROR_CODES.CHECKPOINT_INVALID,
+          "durable authority producer state is malformed",
+        );
+      }
+      producerSequences.set(key, sequence);
+    }
+    for (const { entries, stream } of snapshot.streams) {
+      if (typeof stream !== "string" || !Array.isArray(entries)) {
+        throw new FaultHarnessError(
+          FAULT_ERROR_CODES.CHECKPOINT_INVALID,
+          "durable authority stream state is malformed",
+        );
+      }
+      streams.set(
+        stream,
+        entries.map(({ offset, record }) => ({
+          offset,
+          record: structuredClone(record),
+        })),
+      );
+    }
+  }
+
+  return Object.freeze({
+    append,
+    dump,
+    exportState,
+    importState,
+    read,
+    replace,
+    seed,
+  });
 }
 
 export async function runFaultSchedule(frozenSchedule, options = {}) {
@@ -408,10 +465,13 @@ export async function runFaultSchedule(frozenSchedule, options = {}) {
           role: "dispatch",
           stream: sourceStream,
         });
-        if (acknowledgement.delayTicks > 0) {
+        const acknowledgementResult = await settleAcknowledgement(
+          acknowledgement.delayTicks,
+        );
+        if (acknowledgementResult.delayed) {
           delayedAcknowledgements.push({
             processId,
-            ticks: acknowledgement.delayTicks,
+            ...acknowledgementResult,
           });
         }
         door.close();
@@ -421,6 +481,7 @@ export async function runFaultSchedule(frozenSchedule, options = {}) {
           processId,
           requestIndex,
           result: "accepted",
+          acknowledgement: acknowledgementResult,
         });
         acceptedEvents.push(dispatchResult.event);
       } catch (error) {
@@ -458,7 +519,7 @@ export async function runFaultSchedule(frozenSchedule, options = {}) {
   }));
   const authoritativeReplay = replayRecords(targetRecords);
   const delivery = publishDeliveries(targetDump, scheduler);
-  const readerRun = await consumeWithRestart({
+  const readerSession = await consumeWithRestart({
     delivery,
     scheduler,
     store,
@@ -469,7 +530,16 @@ export async function runFaultSchedule(frozenSchedule, options = {}) {
     disableDedup: options.disableDedup === true,
     disableResume: options.disableResume === true,
     disableOrdering: options.disableOrdering === true,
+    onPartition: ({ store: partitionStore }) =>
+      runSlowConsumerProbe({
+        partitioned: true,
+        scheduler,
+        sourceStream,
+        store: partitionStore,
+      }),
   });
+  const readerRun = readerSession.reader;
+  const activeStore = readerSession.store;
   if (
     options.disableResume &&
     processRestarts.some(({ component }) => component === "reader")
@@ -495,11 +565,13 @@ export async function runFaultSchedule(frozenSchedule, options = {}) {
     offset: invalidCausalOrder.at(0).offset,
   });
 
-  const slowConsumer = await runSlowConsumerProbe({
-    sourceStream,
-    store,
-    scheduler,
-  });
+  const slowConsumer =
+    readerSession.partitionProbe ??
+    (await runSlowConsumerProbe({
+      sourceStream,
+      store: activeStore,
+      scheduler,
+    }));
   scheduler.assertComplete();
   const finalDigest = authoritativeReplay.finalStateDigest;
   const readerDigest = readerRun.finalDigest;
@@ -515,7 +587,7 @@ export async function runFaultSchedule(frozenSchedule, options = {}) {
       "a logical dispatch mutation was duplicated",
     );
     assert.equal(
-      store.dump(HARNESS_IDEMPOTENCY_STREAM).length,
+      activeStore.dump(HARNESS_IDEMPOTENCY_STREAM).length,
       3,
       "receipt was duplicated",
     );
@@ -531,7 +603,7 @@ export async function runFaultSchedule(frozenSchedule, options = {}) {
     processRestarts,
     checkpoints,
     targetDump,
-    receiptDump: store.dump(HARNESS_IDEMPOTENCY_STREAM),
+    receiptDump: activeStore.dump(HARNESS_IDEMPOTENCY_STREAM),
     authoritativeReplay: {
       finalStateDigest: finalDigest,
       recordCount: targetRecords.length,
@@ -544,6 +616,21 @@ export async function runFaultSchedule(frozenSchedule, options = {}) {
     slowConsumer,
     delayedAcknowledgements,
     finalDigest,
+  };
+}
+
+async function settleAcknowledgement(delayTicks) {
+  const trace = ["pending"];
+  for (let tick = delayTicks; tick > 0; tick -= 1) {
+    await Promise.resolve();
+    trace.push(`deferred:${tick}`);
+  }
+  trace.push("acknowledged");
+  return {
+    delayed: delayTicks > 0,
+    released: true,
+    stateTrace: trace,
+    ticks: delayTicks,
   };
 }
 
@@ -656,6 +743,7 @@ async function consumeWithRestart({
   disableDedup,
   disableResume,
   disableOrdering,
+  onPartition,
 }) {
   let processIndex = 0;
   let reader = createReaderProcess({
@@ -676,6 +764,8 @@ async function consumeWithRestart({
   }
   let pending = delivery;
   let restartCount = 0;
+  let partitionProbe = null;
+  const durableAuthorityRestarts = [];
   while (pending.length > 0 && restartCount < 4) {
     try {
       await reader.consume(pending);
@@ -683,10 +773,26 @@ async function consumeWithRestart({
     } catch (error) {
       if (error.code !== FAULT_ERROR_CODES.PARTITIONED) throw error;
       const previous = reader.processId;
+      if (onPartition) {
+        partitionProbe = await onPartition({ store });
+      }
+      const durableSnapshot = store.exportState();
+      const durableSnapshotDigest = canonicalSha256(durableSnapshot);
+      const restartedStore = createHarnessStore({ scheduler });
+      restartedStore.importState(durableSnapshot);
+      const importedSnapshot = restartedStore.exportState();
+      assert.deepEqual(importedSnapshot, durableSnapshot);
+      store = restartedStore;
       processIndex += 1;
       restartCount += 1;
+      durableAuthorityRestarts.push({
+        exportedStreamCount: durableSnapshot.streams.length,
+        importedStreamCount: importedSnapshot.streams.length,
+        snapshotDigest: durableSnapshotDigest,
+      });
       processRestarts.push({
         component: "reader",
+        durableAuthorityRestart: durableAuthorityRestarts.at(-1),
         from: previous,
         reason: error.code,
         stateDeleted: true,
@@ -711,9 +817,16 @@ async function consumeWithRestart({
     }
   }
   assert.equal(pending.length, 0, "reader did not catch up after partition");
-  return {
+  const readerResult = {
     ...reader.result(),
     checkpointRecovery: checkpointRecoveries.at(0) ?? null,
+    durableAuthorityRestarts,
+    partitionProbe,
+  };
+  return {
+    reader: readerResult,
+    partitionProbe,
+    store,
   };
 }
 
@@ -879,27 +992,49 @@ async function persistCheckpoint(store, scheduler, record, checkpoints) {
   });
 }
 
-async function runSlowConsumerProbe({ sourceStream, store, scheduler }) {
+async function runSlowConsumerProbe({
+  partitioned = false,
+  sourceStream,
+  store,
+  scheduler,
+}) {
   const boundedRecords = sourceRecords(store, sourceStream);
   const maxRecords = 2;
-  const maxBytes = 4096;
+  const maxBytes = 1024;
   const queueBytes = boundedRecords.reduce(
     (total, record) => total + Buffer.byteLength(JSON.stringify(record)),
     0,
   );
-  const cancel = queueBytes > maxBytes || boundedRecords.length > maxRecords;
-  const cancelPolicy = cancel
-    ? {
-        code: FAULT_ERROR_CODES.SLOW_CONSUMER,
-        policy: SLOW_CONSUMER_POLICIES.CANCEL,
-        result: "cancelled",
-      }
-    : { policy: SLOW_CONSUMER_POLICIES.CANCEL, result: "caught-up" };
-  const catchUp = {
+  const cancelQueue = createBoundedQueue({
+    maxBytes,
+    maxRecords,
+    policy: SLOW_CONSUMER_POLICIES.CANCEL,
+  });
+  let cancelFailure = null;
+  for (const record of boundedRecords) {
+    try {
+      cancelQueue.enqueue(record);
+    } catch (error) {
+      if (error.code !== FAULT_ERROR_CODES.SLOW_CONSUMER) throw error;
+      cancelFailure = error;
+      break;
+    }
+  }
+  assert.ok(cancelFailure, "cancel policy did not enforce its queue bound");
+  const catchUpQueue = createBoundedQueue({
+    maxBytes,
+    maxRecords,
     policy: SLOW_CONSUMER_POLICIES.CATCH_UP,
-    result: "caught-up",
-    resumedFrom: ZERO_OFFSET,
-  };
+  });
+  let catchUpOverflow = null;
+  for (const record of boundedRecords) {
+    const result = catchUpQueue.enqueue(record);
+    if (result.overflow) {
+      catchUpOverflow = result;
+      break;
+    }
+  }
+  assert.ok(catchUpOverflow, "catch-up policy did not observe a full queue");
 
   scheduler.hit("publish", { phase: "slow-consumer", role: "unrelated" });
   const unrelatedStream = "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb";
@@ -910,25 +1045,79 @@ async function runSlowConsumerProbe({ sourceStream, store, scheduler }) {
       { role: "unrelated" },
     );
   }
+  const unrelatedRead = await store.read(unrelatedStream, ZERO_OFFSET);
   return {
     bounds: {
       maxBytes,
       maxRecords,
       inputBytes: queueBytes,
       inputRecords: boundedRecords.length,
-      observedBytes: Math.min(queueBytes, maxBytes),
-      observedRecords: Math.min(boundedRecords.length, maxRecords),
+      cancelPeakBytes: cancelQueue.peakBytes,
+      cancelPeakRecords: cancelQueue.peakRecords,
+      catchUpPeakBytes: catchUpQueue.peakBytes,
+      catchUpPeakRecords: catchUpQueue.peakRecords,
     },
-    cancel: cancelPolicy,
-    catchUp,
+    cancel: {
+      code: cancelFailure.code,
+      offset: cancelFailure.offset ?? null,
+      policy: SLOW_CONSUMER_POLICIES.CANCEL,
+      result: "cancelled",
+    },
+    catchUp: {
+      overflowAt: catchUpOverflow.offset,
+      policy: SLOW_CONSUMER_POLICIES.CATCH_UP,
+      result: "caught-up",
+      resumedFrom: ZERO_OFFSET,
+      replayedRecords: boundedRecords.length,
+    },
     unrelatedStreamProgress: {
       stream: unrelatedStream,
       partitionedStream: sourceStream,
       independent: unrelatedStream !== sourceStream,
-      headOfLineBlocked: false,
-      progressRecords: store.dump(unrelatedStream).length,
+      headOfLineBlocked: unrelatedRead.records.length === 0,
+      partitionedDuringProbe: partitioned,
+      progressRecords: unrelatedRead.records.length,
     },
   };
+}
+
+function createBoundedQueue({ maxBytes, maxRecords, policy }) {
+  const records = [];
+  let bytes = 0;
+  let peakBytes = 0;
+  let peakRecords = 0;
+
+  function enqueue(record) {
+    const offset = record.offset ?? null;
+    const recordBytes = Buffer.byteLength(JSON.stringify(record));
+    if (records.length + 1 > maxRecords || bytes + recordBytes > maxBytes) {
+      if (policy === SLOW_CONSUMER_POLICIES.CANCEL) {
+        throw new FaultHarnessError(
+          FAULT_ERROR_CODES.SLOW_CONSUMER,
+          `slow consumer exceeded ${maxRecords} records or ${maxBytes} bytes`,
+          { offset },
+        );
+      }
+      records.length = 0;
+      bytes = 0;
+      return { offset, overflow: true };
+    }
+    records.push(structuredClone(record));
+    bytes += recordBytes;
+    peakBytes = Math.max(peakBytes, bytes);
+    peakRecords = Math.max(peakRecords, records.length);
+    return { offset, overflow: false };
+  }
+
+  return Object.freeze({
+    enqueue,
+    get peakBytes() {
+      return peakBytes;
+    },
+    get peakRecords() {
+      return peakRecords;
+    },
+  });
 }
 
 function buildInvalidCausalDump(records) {

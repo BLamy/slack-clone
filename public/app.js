@@ -15,9 +15,13 @@ const autopilotMessage =
 const state = {
   editingDraft: "",
   editingMessageId: null,
+  eventSource: null,
+  lastAckedOffset: null,
   messages: new Map(),
+  reconnectTimer: null,
   sentAutopilot: false,
   session: null,
+  terminal: false,
 };
 
 const messagesEl = document.querySelector("[data-testid='messages']");
@@ -141,10 +145,19 @@ async function init() {
 }
 
 function connect() {
+  if (state.terminal) return;
+  if (state.reconnectTimer !== null) {
+    clearTimeout(state.reconnectTimer);
+    state.reconnectTimer = null;
+  }
   setConnectionState("connecting");
+  const checkpoint = state.lastAckedOffset
+    ? `?offset=${encodeURIComponent(state.lastAckedOffset)}`
+    : "";
   const events = applicationApiEvents(
-    `/api/rooms/${encodeURIComponent(room)}/events`,
+    `/api/rooms/${encodeURIComponent(room)}/events${checkpoint}`,
   );
+  state.eventSource = events;
 
   events.addEventListener("open", () => {
     setConnectionState("live");
@@ -155,6 +168,7 @@ function connect() {
     streamPathEl.textContent = payload.stream;
     streamOffsetEl.textContent = payload.nextOffset;
     streamDigestEl.textContent = payload.streamDigest;
+    state.lastAckedOffset = payload.nextOffset;
     state.messages.clear();
     for (const message of payload.messages) {
       state.messages.set(message.id, message);
@@ -175,6 +189,7 @@ function connect() {
     streamPathEl.textContent = payload.stream;
     streamOffsetEl.textContent = payload.nextOffset;
     streamDigestEl.textContent = payload.streamDigest;
+    state.lastAckedOffset = payload.nextOffset;
   });
 
   events.addEventListener("reset", (event) => {
@@ -188,11 +203,35 @@ function connect() {
   events.addEventListener("error", (event) => {
     if (event.data) {
       const payload = JSON.parse(event.data);
-      setConnectionState(payload.message || "stream error");
+      setConnectionState(payload.detail || payload.message || "stream error");
     } else {
-      setConnectionState("reconnecting");
+      reconnect(events);
     }
   });
+
+  events.addEventListener("terminal", (event) => {
+    const payload = JSON.parse(event.data);
+    events.close();
+    if (state.eventSource === events) state.eventSource = null;
+    if (payload.action === "resync" || payload.action === "reconnect") {
+      reconnect();
+      return;
+    }
+    state.terminal = true;
+    setConnectionState(payload.detail || payload.code || "stream closed");
+  });
+}
+
+function reconnect(events = state.eventSource) {
+  if (events && state.eventSource === events) {
+    events.close();
+    state.eventSource = null;
+  }
+  if (state.terminal || state.reconnectTimer !== null) return;
+  state.reconnectTimer = setTimeout(() => {
+    state.reconnectTimer = null;
+    connect();
+  }, 250);
 }
 
 function setConnectionState(value) {

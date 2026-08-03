@@ -24,12 +24,17 @@ the response checkpoint unchanged. The conformance matrix resumes at every captu
 checkpoint and checks the exact expected suffix with no duplicate record IDs.
 
 Browser SSE delivery takes one bounded snapshot before committing response headers, then
-shares one official upstream SSE follow per active room. Subscriber callbacks provide
-backpressure. The local emulator emits finite SSE responses, so the adapter parks an
-up-to-date reader on an abortable wake gate instead of recreating the former 350 ms
-PUT/GET loop. An append wakes the reader. Losing the last downstream client, resetting a
-room, shutting down HTTP delivery, or closing the adapter cancels the upstream session and
-drains its in-flight requests.
+gives each authenticated client its own official upstream SSE follow from the client's
+opaque acknowledged checkpoint. Subscriber callbacks provide backpressure and SSE `id`
+frames are emitted only for snapshot/status acknowledgements, so a reconnect resumes from
+the last complete logical batch rather than skipping a partially delivered batch. The local
+emulator emits finite SSE responses, so each adapter follow parks an up-to-date reader on an
+abortable wake gate instead of recreating the former 350 ms PUT/GET loop. An append wakes
+the relevant readers. Slow readers are serialized behind bounded per-client buffers and
+receive typed terminal/resync events; membership and session authorization are revalidated
+before delivery and heartbeat. Losing a downstream client, resetting a room, shutting down
+HTTP delivery, or closing the adapter cancels only the affected upstream session and drains
+its in-flight requests.
 
 ## Failure contract and evidence
 

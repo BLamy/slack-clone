@@ -619,6 +619,7 @@ test("HTTP delivery never attempts a second JSON response after SSE headers comm
 test("HTTP delivery preserves reset position inside a same-batch stream update", async () => {
   const timers = createFakeTimers();
   let onBatch;
+  const followClosed = new Promise(() => {});
   const chatService = {
     normalizeRoomId: (room) => room,
     readMessages: async () => ({
@@ -629,7 +630,7 @@ test("HTTP delivery preserves reset position inside a same-batch stream update",
     }),
     followMessages: async (_room, _offset, options) => {
       onBatch = options.onBatch;
-      return { cancel() {}, closed: Promise.resolve() };
+      return { cancel() {}, closed: followClosed };
     },
   };
   const delivery = createChatHttpDelivery({

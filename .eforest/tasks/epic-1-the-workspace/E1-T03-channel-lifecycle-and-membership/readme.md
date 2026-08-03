@@ -3,7 +3,7 @@ id: E1-T03
 epic: 1
 title: "Channel lifecycle, membership, and private-read isolation"
 priority: 103
-status: implemented
+status: verified
 depends_on: [E1-T02]
 estimate: L
 capstone: false
@@ -244,3 +244,19 @@ VERDICT: refuted
   offline replay, zero-canary scan, and sensitivity proof. Replay: N/A (server channel
   authorization model) + mitigation: committed known vector, direct-identity corpus,
   cross-channel negative matrix, lifecycle logs, and canonical replay digests.
+
+### Critic — 2026-08-03 — final independent verification
+
+VERDICT: verified
+
+- A fresh read-only critic ran `E1_T03_IMPLEMENTATION_COMMIT=0f6814c114292a222ab7596be8e8e29bc033608b
+  TEST_RUN_ID=critic-e1-t03-20260803 make verify-E1-T03` and exited 0 with all five gates
+  passing. Its worktree remained clean and it left task status and commits unchanged.
+- The critic independently reproduced the 29-record replay and manifest final digest
+  `sha256:0513eb1f0052aeb9d7a9e7157c87ec5c8e409b1fd17aa8602a8d2637ff724681`, SHA-256 vectors,
+  reordered/cross-workspace identity checks, and a fresh 5,000-set corpus with zero collisions.
+  It also reproduced reducer direct-ID mismatch/duplicate refusals, the full private-read
+  matrix, member discovery, creator-left management, revocation race, offline replay, and
+  sensitivity detection. Replay: N/A as specified for this server-only ticket.
+- Verdict evidence: `evidence/e1-t03-final/verification-summary.json` and
+  `fixtures/manifest.json`.

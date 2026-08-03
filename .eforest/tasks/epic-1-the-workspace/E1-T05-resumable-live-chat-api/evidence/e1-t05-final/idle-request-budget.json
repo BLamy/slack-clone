@@ -13,11 +13,11 @@
   "authorizeReadCalls": 90,
   "authorizeSubscriptionCalls": 1,
   "directoryReadCalls": 91,
-  "roomStatusReadCalls": 90,
+  "roomStatusReadCalls": 91,
   "keepAliveTimerExecutions": 90,
   "pollingTimerExecutions": 0,
   "pollingMutationMs": null,
   "result": "PASS",
-  "productionAuthorizationWiring": "workspaceAuthorization.authorizeSubscription plus workspace and channel revalidation on every 10-second heartbeat",
+  "productionAuthorizationWiring": "shared live revalidator performs workspace and channel checks at connection open and on every 10-second heartbeat",
   "pollingPositiveControl": "covered by test/unit/durable-streams-adapter.test.mjs"
 }

@@ -153,3 +153,34 @@ verification, while the server remains responsible for reduction and authorizati
   and focused authorization/backpressure tests.
 - Claim: channel archive and all critic-identified live boundary gaps are now implemented
   and evidenced against the exact repair commit; awaiting a fresh independent critic.
+
+### Builder — 2026-08-03 — archive reconnect authority repair complete
+
+- Repair commit: `a34ac48bc18a21c4d73ba5c936fa4f584542e196` (`E1-T05: close archive
+  reconnect authority gap`). Every live connection now performs the room-status check before
+  SSE headers, including resumed checkpoints after the archive fact. The check shares one
+  revalidator between production and the request-budget harness; it avoids recursively
+  reacquiring the workspace fence already held by subscription authorization. Archive is
+  manager-only through `workspace.channel.manage`, and the chat service rejects message,
+  edit, and reset mutations after the durable archive fact.
+- The focused verifier adds the previously missing reconnect-after-archive and
+  post-archive-write attacks. The real emulator returned `409 LIVE_CHANNEL_ARCHIVED` for a
+  post-archive checkpoint and `409 CHAT_ROOM_ARCHIVED` for a post-archive message; the live
+  client still terminated with `LIVE_CHANNEL_ARCHIVED` at its acknowledged checkpoint.
+- Exact promoted cold target: `PROMOTE_EVIDENCE=1
+  E1_T05_IMPLEMENTATION_COMMIT=a34ac48bc18a21c4d73ba5c936fa4f584542e196
+  TEST_RUN_ID=promoted-e1-t05-archive-reconnect make verify-E1-T05`. Format, lint, typecheck,
+  112 unit tests, 5 Playwright tests, build, fresh emulator, and the real two-client scenario
+  passed. The final digest is
+  `sha256:46c9c0a5b2e891f9c5f65f2d998026c48dee1be2d212648fa0a773068bbcb2cd`; both clients
+  converged at `0000000000000000_0000000000001470`, and the archive terminal checkpoint is
+  `0000000000000000_0000000000000739`.
+- Promoted evidence is under `evidence/e1-t05-final/`: `verification-summary.json`,
+  `network-transcript.json`, `idle-request-budget.json`, and `cold-clone-transcript.json`.
+  The idle budget records one authorized subscription, 90 workspace membership
+  revalidations, 91 authoritative room-status reads (one at open plus 90 heartbeats), one
+  bounded snapshot read, one live follow, and zero polling calls across 900,000 deterministic
+  milliseconds. Replay: N/A (server live-delivery API) + mitigation: real-emulator network
+  transcript, reconnect matrix, request counts, digest convergence, and focused tests.
+- Claim: the archive reconnect authority bypass and post-archive mutation path are closed
+  against the exact repair commit; awaiting a fresh independent critic.

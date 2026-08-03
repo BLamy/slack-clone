@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E1-T05",
-  "runId": "promoted-e1-t05-archive-repair",
-  "implementationCommit": "c0d0901b96a8ecd3a2ebcc2cc2d816c4b58cb2a4",
+  "runId": "promoted-e1-t05-archive-reconnect",
+  "implementationCommit": "a34ac48bc18a21c4d73ba5c936fa4f584542e196",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "replay": "Replay: N/A (server live-delivery API) + mitigation: real-emulator network transcript, reconnect matrix, request counts, and digest convergence",
@@ -11,6 +11,7 @@
     "focusedTestFile": "test/unit/live-chat-http.test.mjs",
     "cases": [
       "provider-rejected stale checkpoint is typed 409 before headers",
+      "reconnect after a durable channel archive is refused before headers",
       "session logout terminates queued delivery without leaking a message",
       "durable channel archive terminates live delivery at the last acknowledged checkpoint",
       "slow reader on one channel cannot block another channel",
@@ -33,31 +34,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 2155,
+      "durationMs": 2348,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 1734,
+      "durationMs": 2753,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 5709,
+      "durationMs": 11188,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 20008,
+      "durationMs": 25903,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 620,
+      "durationMs": 737,
       "name": "build",
       "result": "PASS"
     }
@@ -77,42 +78,51 @@
     "authorizeReadCalls": 90,
     "authorizeSubscriptionCalls": 1,
     "directoryReadCalls": 91,
-    "roomStatusReadCalls": 90,
+    "roomStatusReadCalls": 91,
     "keepAliveTimerExecutions": 90,
     "pollingTimerExecutions": 0,
     "pollingMutationMs": null,
     "result": "PASS",
-    "productionAuthorizationWiring": "workspaceAuthorization.authorizeSubscription plus workspace and channel revalidation on every 10-second heartbeat",
+    "productionAuthorizationWiring": "shared live revalidator performs workspace and channel checks at connection open and on every 10-second heartbeat",
     "pollingPositiveControl": "covered by test/unit/durable-streams-adapter.test.mjs"
   },
   "networkEvidence": {
-    "room": "e1-t05-promoted-e1-t05-archive-repair-resume",
+    "room": "e1-t05-promoted-e1-t05-archive-reconnect-resume",
     "clients": 2,
-    "firstCheckpoint": "0000000000000000_0000000000000724",
-    "secondCheckpoint": "0000000000000000_0000000000001458",
+    "firstCheckpoint": "0000000000000000_0000000000000730",
+    "secondCheckpoint": "0000000000000000_0000000000001470",
     "acceptedMessageIds": [
-      "4327b59b-c546-48d5-ae44-775abaf8ae1e",
-      "7c487c82-79c8-4389-ac0c-07baf320d7ee"
+      "1074c680-0327-4cdd-baeb-376dceff5c31",
+      "b1036f53-c2e0-45e4-b77e-646f12b436b6"
     ],
     "resumedMessageIds": [
-      "7c487c82-79c8-4389-ac0c-07baf320d7ee"
+      "b1036f53-c2e0-45e4-b77e-646f12b436b6"
     ],
-    "finalDigest": "sha256:0f5a01ff6e361489c031f06cfac197148e5b07c02b06f7089ec4687bab480b0f",
+    "finalDigest": "sha256:46c9c0a5b2e891f9c5f65f2d998026c48dee1be2d212648fa0a773068bbcb2cd",
     "finalOffsets": {
-      "ada": "0000000000000000_0000000000001458",
-      "linus": "0000000000000000_0000000000001458"
+      "ada": "0000000000000000_0000000000001470",
+      "linus": "0000000000000000_0000000000001470"
     },
     "noDuplicateLogicalEffects": true,
     "crossRoomIsolation": {
-      "isolatedRoom": "e1-t05-promoted-e1-t05-archive-repair-isolation",
-      "idleRoom": "e1-t05-promoted-e1-t05-archive-repair-idle",
-      "acceptedMessageId": "ff9c1cee-2b07-42a9-8ecd-a3c95855f0d9",
+      "isolatedRoom": "e1-t05-promoted-e1-t05-archive-reconnect-isolation",
+      "idleRoom": "e1-t05-promoted-e1-t05-archive-reconnect-idle",
+      "acceptedMessageId": "ada04f60-632d-4b6f-af80-baccd91b59e2",
       "otherClientReceivedMessage": false
     },
     "archive": {
       "responseStatus": 200,
       "terminalCode": "LIVE_CHANNEL_ARCHIVED",
-      "checkpoint": "0000000000000000_0000000000000733"
+      "checkpoint": "0000000000000000_0000000000000739",
+      "reconnectAfterArchive": {
+        "status": 409,
+        "code": "LIVE_CHANNEL_ARCHIVED",
+        "checkpoint": "0000000000000000_0000000000001260"
+      },
+      "writeAfterArchive": {
+        "status": 409,
+        "code": "CHAT_ROOM_ARCHIVED"
+      }
     },
     "logout": {
       "responseStatus": 302,
@@ -124,6 +134,8 @@
       "resume from opaque Last-Event-ID-equivalent query checkpoint",
       "independent room remains idle while a sibling room receives an event",
       "archive event terminates the hot room at its acknowledged checkpoint",
+      "reconnect from a post-archive checkpoint is refused before SSE headers",
+      "message mutation after archive is refused by the durable room authority",
       "logout before the next queued event"
     ],
     "typedRefusal": {
@@ -149,91 +161,105 @@
         "checkpoint": null,
         "label": "ada-initial",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-resume/events",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-resume/events",
         "status": 200
       },
       {
         "checkpoint": null,
         "label": "linus-initial",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-resume/events",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-resume/events",
         "status": 200
       },
       {
         "bodyCode": null,
         "label": "post-ik_aaaaaaaaaaaaaaaaaaaaaaaaaa",
         "method": "POST",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-resume/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-resume/messages",
         "status": 201
       },
       {
         "bodyCode": null,
         "label": "post-ik_bbbbbbbbbbbbbbbbbbbbbbbbbb",
         "method": "POST",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-resume/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-resume/messages",
         "status": 201
       },
       {
-        "checkpoint": "0000000000000000_0000000000000724",
+        "checkpoint": "0000000000000000_0000000000000730",
         "label": "ada-resumed",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-resume/events?offset=0000000000000000_0000000000000724",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-resume/events?offset=0000000000000000_0000000000000730",
         "status": 200
       },
       {
         "bodyCode": null,
         "label": "ada-final",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-resume/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-resume/messages",
         "status": 200
       },
       {
         "bodyCode": null,
         "label": "linus-final",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-resume/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-resume/messages",
         "status": 200
       },
       {
         "bodyCode": "LIVE_CHECKPOINT_INVALID",
         "label": "malformed-checkpoint",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-resume/events?offset=%00",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-resume/events?offset=%00",
         "status": 400
       },
       {
         "checkpoint": null,
         "label": "ada-isolation",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-isolation/events",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-isolation/events",
         "status": 200
       },
       {
         "checkpoint": null,
         "label": "linus-isolation",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-idle/events",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-idle/events",
         "status": 200
       },
       {
         "bodyCode": null,
         "label": "post-ik_cccccccccccccccccccccccccc",
         "method": "POST",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-isolation/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-isolation/messages",
         "status": 201
       },
       {
         "bodyCode": null,
         "label": "archive-room",
         "method": "POST",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-isolation/archive",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-isolation/archive",
         "status": 200
+      },
+      {
+        "bodyCode": "LIVE_CHANNEL_ARCHIVED",
+        "label": "archive-reconnect-after-status",
+        "method": "GET",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-isolation/events?offset=0000000000000000_0000000000001260",
+        "status": 409
+      },
+      {
+        "bodyCode": "CHAT_ROOM_ARCHIVED",
+        "label": "archive-write-after-status",
+        "method": "POST",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-isolation/messages",
+        "status": 409
       },
       {
         "checkpoint": null,
         "label": "ada-logout",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-logout/events",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-logout/events",
         "status": 200
       },
       {
@@ -246,7 +272,7 @@
         "bodyCode": null,
         "label": "post-ik_dddddddddddddddddddddddddd",
         "method": "POST",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-logout/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-logout/messages",
         "status": 201
       }
     ]

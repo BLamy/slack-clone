@@ -207,6 +207,17 @@ test("legacy compact messages retain actor and workspace scope", () => {
       ),
     REDUCER_ERROR_CODES.MESSAGE_AUTHOR_MISMATCH,
   );
+  for (const text of ["bad\u0000text", "bad\u0085text"]) {
+    assertReducerFailure(
+      () =>
+        reduceEnvelope(
+          createInitialState(),
+          { ...compact, data: { ...compact.data, text } },
+          { offset: offset(1) },
+        ),
+      REDUCER_ERROR_CODES.MESSAGE_TEXT,
+    );
+  }
   const replayed = reduceEnvelope(createInitialState(), compact, {
     offset: offset(1),
   });

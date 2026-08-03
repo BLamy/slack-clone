@@ -527,6 +527,26 @@ function verifyLegacyCompactScope() {
       return true;
     },
   );
+  const refusedLegacyControls = [];
+  for (const [index, text] of [
+    [802, "bad\u0000text"],
+    [803, "bad\u0085text"],
+  ]) {
+    const invalid = {
+      ...compact,
+      eventId: `ev_${eventToken(index)}`,
+      idempotencyKey: `ik_${eventToken(index)}`,
+      data: { ...compact.data, text },
+    };
+    assert.throws(
+      () => replayRecords([{ event: invalid, offset: nextOffset(1) }]),
+      (error) => {
+        assert.equal(error.code, REDUCER_ERROR_CODES.MESSAGE_TEXT);
+        return true;
+      },
+    );
+    refusedLegacyControls.push(index === 802 ? "C0" : "C1");
+  }
   const replayed = replayRecords([{ event: compact, offset: nextOffset(1) }]);
   assert.deepEqual(
     replayed.finalState.entities.messages["legacy-root"],
@@ -536,6 +556,7 @@ function verifyLegacyCompactScope() {
     compactMessageAcceptedWithoutShapeChange: true,
     foreignWorkspaceChannelRefused: true,
     forgedAuthorRefused: true,
+    compactControlsRefused: refusedLegacyControls,
     legacyProjectionPreserved: true,
     result: "PASS",
   };

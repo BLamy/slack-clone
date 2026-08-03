@@ -35,6 +35,13 @@ const fixtureDirectory = path.join(taskDirectory, "fixtures");
 const validDirectory = path.join(fixtureDirectory, "valid");
 const fixtureName = "workspace-membership.v1.json";
 const fixturePath = path.join(validDirectory, fixtureName);
+const taskReadmePath = path.relative(
+  root,
+  path.join(taskDirectory, "readme.md"),
+);
+const taskEvidencePathPrefix = `${path
+  .relative(root, path.join(taskDirectory, "evidence"))
+  .replaceAll(path.sep, "/")}/`;
 const runId = String(
   process.env.TEST_RUN_ID ?? `verify-${process.pid}-${Date.now().toString(36)}`,
 )
@@ -52,16 +59,6 @@ assert.match(
   /^[0-9a-f]{40}$/u,
   "E1-T02 evidence requires an exact implementation commit",
 );
-const implementationFiles = [
-  "package.json",
-  "packages/http/src/index.mjs",
-  "scripts/verify-e1-t02.mjs",
-  "src/ledger/workspace-auth.mjs",
-  "src/ledger/workspace-directory.mjs",
-  "src/server.mjs",
-  "test/unit/workspace-directory.test.mjs",
-  "test/unit/workspace-http.test.mjs",
-];
 assertImplementationBinding(implementationCommit);
 
 const promoteEvidence = process.env.PROMOTE_EVIDENCE === "1";
@@ -1215,15 +1212,24 @@ function assertImplementationBinding(commit) {
       "implementation commit must be an ancestor of the current checkout",
     );
   }
-  const changedImplementationFiles = execFileSync(
+  const changedPaths = execFileSync(
     "git",
-    ["diff", "--name-only", `${commit}..HEAD`, "--", ...implementationFiles],
+    ["diff", "--name-only", `${commit}..HEAD`],
     { cwd: root, encoding: "utf8" },
-  ).trim();
+  )
+    .trim()
+    .split("\n")
+    .filter(Boolean);
+  const unexpectedPaths = changedPaths.filter(
+    (filePath) =>
+      filePath !== ".eforest/tasks/QUEUE.md" &&
+      filePath !== taskReadmePath &&
+      !filePath.startsWith(taskEvidencePathPrefix),
+  );
   assert.equal(
-    changedImplementationFiles,
-    "",
-    "implementation files changed after the evidence commit",
+    unexpectedPaths.length,
+    0,
+    `implementation files changed after the evidence commit: ${unexpectedPaths.join(", ")}`,
   );
 }
 

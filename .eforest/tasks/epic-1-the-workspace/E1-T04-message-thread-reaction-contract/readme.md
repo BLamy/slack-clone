@@ -137,3 +137,18 @@ same authorized channel.
   evidence record the compact-scope and C1-control refusals. Replay: N/A (server
   conversation event contract) + mitigation: golden logs, authorization refusals,
   property tests, and per-prefix digest evidence.
+
+### Critic — 2026-08-02 — refuted
+
+- Fresh critic `019fc60f-ce4d-7862-aa5a-3f7ea166149d` ran the pinned cold verifier and
+  independently matched all 12 replay prefixes twice at final digest
+  `sha256:b0634cfd50db4f167aa5199815a70ab80d93b4acb5af7dfaeb9e57903e2502cc`. Foreign
+  compact channels, forged authors, reactions, authorization, roots, revisions,
+  idempotency, permutations, and the revision sensitivity mutant passed; Replay: N/A
+  (server conversation event contract) + mitigation: golden logs, authorization refusals,
+  property tests, and per-prefix digest evidence.
+- VERDICT: refuted. Compact legacy `channel.message.created` still accepted U+0085 and
+  U+0000 because that branch checked only `typeof data.text` at
+  `packages/reducers/src/index.mjs:412`, bypassing the conversation text validator.
+  Repair must validate compact text too while retaining the historical projection shape
+  and digest.

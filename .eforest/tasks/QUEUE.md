@@ -8,11 +8,15 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-No task is currently in progress, awaiting verification, or refuted.
+1. **E1-T02** — Workspace membership, roles, and tenant boundary *(builder working)*
 
 ## Next up (dependencies satisfied)
 
-1. **E1-T02** — Workspace membership, roles, and tenant boundary
+No new task may start until **E1-T02** clears the gate.
+
+## Unlocks when E1-T02 verifies
+
+1. **E1-T03** — Channel lifecycle, membership, and private-read isolation
 
 ## Epic 0 — `epic-0-the-ledger`
 
@@ -27,7 +31,7 @@ No task is currently in progress, awaiting verification, or refuted.
 ## Epic 1 — `epic-1-the-workspace`
 
 - [x] ` 101` [E1-T01](epic-1-the-workspace/E1-T01-principal-event-model/readme.md) — First-class human, agent, and service principal event model *(deps: E0)*
-- [ ] ` 102` [E1-T02](epic-1-the-workspace/E1-T02-workspace-membership-and-roles/readme.md) — Workspace membership, roles, and tenant boundary *(deps: E1-T01)*
+- [~] ` 102` [E1-T02](epic-1-the-workspace/E1-T02-workspace-membership-and-roles/readme.md) — Workspace membership, roles, and tenant boundary *(deps: E1-T01)*
 - [ ] ` 103` [E1-T03](epic-1-the-workspace/E1-T03-channel-lifecycle-and-membership/readme.md) — Channel lifecycle, membership, and private-read isolation *(deps: E1-T02)*
 - [ ] ` 104` [E1-T04](epic-1-the-workspace/E1-T04-message-thread-reaction-contract/readme.md) — Message, thread, edit, delete, and reaction event contract *(deps: E1-T03)*
 - [ ] ` 105` [E1-T05](epic-1-the-workspace/E1-T05-resumable-live-chat-api/readme.md) — Resumable live chat API without polling *(deps: E1-T04)*

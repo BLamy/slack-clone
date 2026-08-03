@@ -3,7 +3,7 @@ id: E1-T02
 epic: 1
 title: "Workspace membership, roles, and tenant boundary"
 priority: 102
-status: pending
+status: in-progress
 depends_on: [E1-T01]
 estimate: L
 capstone: false
@@ -64,3 +64,10 @@ the matrix without treating a role name as ambient authority.
    matrix goes red.
 
 ## Verification log
+
+### Builder — 2026-08-03 — activated after E1-T01 verification
+
+- E1-T01 is verified at `881a620`; E1-T02 is now the sole active queue gate. The
+  implementation will keep workspace context derived from trusted authentication and
+  routing, add append-only membership and role-capability events, and prove cross-tenant
+  refusal before any stream append or subscription registration.

@@ -13,6 +13,7 @@ import {
 } from "@stream-slack/protocol";
 import { validateAndReplayDump } from "../../src/ledger/replay.mjs";
 import {
+  createPrincipalFence,
   createPrincipalDispatchDoor,
   PRINCIPAL_DISPATCH_REFUSAL_CODES,
 } from "../../src/ledger/dispatch.mjs";
@@ -118,6 +119,7 @@ test("principal dispatch stamps authenticated identity and fences stale lifecycl
   const door = createPrincipalDispatchDoor({
     producerId: "unit-principal-door",
     streamStore: store,
+    withPrincipalFence: createPrincipalFence(),
     resolvePrincipal: async (subject) =>
       bySubject.get(subjectKey(subject)) ?? null,
     lookupPrincipal: async (principalId) => current.get(principalId) ?? null,
@@ -182,6 +184,25 @@ test("principal dispatch stamps authenticated identity and fences stale lifecycl
     (error) => error.code === PRINCIPAL_DISPATCH_REFUSAL_CODES.SUSPENDED,
   );
   assert.deepEqual(await store.read("blocked-principal-stream"), before);
+
+  const unfencedDoor = createPrincipalDispatchDoor({
+    producerId: "unit-unfenced-principal-door",
+    streamStore: store,
+    resolvePrincipal: async () => ADA,
+    lookupPrincipal: async () => ADA,
+  });
+  await assert.rejects(
+    unfencedDoor.dispatch(
+      request("unfenced-principal-stream", "gggggggggggggggggggggggggg"),
+      ADA_SUBJECT,
+    ),
+    (error) => error.code === PRINCIPAL_DISPATCH_REFUSAL_CODES.FENCE_REQUIRED,
+  );
+  assert.equal(
+    (await store.read("unfenced-principal-stream")).records.length,
+    0,
+  );
+  unfencedDoor.close();
   door.close();
 });
 

@@ -30,6 +30,7 @@ export const PRINCIPAL_DISPATCH_REFUSAL_CODES = Object.freeze({
   ACTOR_FIELD_FORBIDDEN: PRINCIPAL_ERROR_CODES.ACTOR_FIELD_FORBIDDEN,
   AUTHENTICATION_REQUIRED: PRINCIPAL_ERROR_CODES.AUTHENTICATION_REQUIRED,
   DEACTIVATED: PRINCIPAL_ERROR_CODES.DEACTIVATED,
+  FENCE_REQUIRED: "PRINCIPAL_FENCE_REQUIRED",
   INVALID_AUTHENTICATION: PRINCIPAL_ERROR_CODES.INVALID_AUTHENTICATION,
   INVALID_REQUEST: "PRINCIPAL_INVALID_DISPATCH_REQUEST",
   INVALID_RECORD: PRINCIPAL_ERROR_CODES.INVALID_RECORD,
@@ -546,6 +547,7 @@ export function createPrincipalDispatchDoor({
   streamStore,
   resolvePrincipal,
   lookupPrincipal = resolvePrincipal,
+  withPrincipalFence,
   authorize = () => true,
   ...dispatchOptions
 }) {
@@ -557,6 +559,14 @@ export function createPrincipalDispatchDoor({
   }
   if (typeof authorize !== "function") {
     throw new TypeError("principal dispatch authorization must be a function");
+  }
+  if (
+    withPrincipalFence !== undefined &&
+    typeof withPrincipalFence !== "function"
+  ) {
+    throw new TypeError(
+      "principal dispatch withPrincipalFence must be a function",
+    );
   }
 
   const door = createDispatchDoor({
@@ -609,13 +619,52 @@ export function createPrincipalDispatchDoor({
       authenticatedSubject,
       principal,
     );
-    return door.dispatch(stamped, {
-      ...(options ?? {}),
-      context: { authenticatedSubject },
-    });
+    const fence =
+      withPrincipalFence ??
+      (async () => {
+        throw new DispatchRefusalError(
+          PRINCIPAL_DISPATCH_REFUSAL_CODES.FENCE_REQUIRED,
+          "principal authorization requires a linearizable lifecycle fence",
+          { statusCode: 503 },
+        );
+      });
+    return fence(
+      {
+        authenticatedSubject,
+        principalId: stamped.actorId,
+        request: stamped,
+        workspaceId: stamped.workspaceId,
+      },
+      () =>
+        door.dispatch(stamped, {
+          ...(options ?? {}),
+          context: { authenticatedSubject },
+        }),
+    );
   }
 
   return Object.freeze({ close: door.close, dispatch });
+}
+
+export function createPrincipalFence() {
+  const tails = new Map();
+  return Object.freeze((context, operation) => {
+    if (
+      !context ||
+      typeof context.workspaceId !== "string" ||
+      typeof context.principalId !== "string" ||
+      typeof operation !== "function"
+    ) {
+      throw new TypeError(
+        "principal fence requires workspaceId, principalId, and an operation",
+      );
+    }
+    return serialize(
+      tails,
+      `${context.workspaceId}\u0000${context.principalId}`,
+      operation,
+    );
+  });
 }
 
 function createReceipt({ request, requestDigest, eventDigest, nextOffset }) {

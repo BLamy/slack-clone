@@ -8,6 +8,7 @@ import { ZERO_OFFSET } from "@stream-slack/protocol";
 import { canonicalStateJson } from "@stream-slack/reducers";
 
 import {
+  createPrincipalFence,
   createPrincipalDispatchDoor,
   PRINCIPAL_DISPATCH_REFUSAL_CODES,
 } from "../src/ledger/dispatch.mjs";
@@ -289,9 +290,11 @@ async function verifyDispatchDoor() {
     ]),
   );
   const store = createMemoryStore();
+  const withPrincipalFence = createPrincipalFence();
   const door = createPrincipalDispatchDoor({
     producerId: "e1-t01-principal-verifier",
     streamStore: store,
+    withPrincipalFence,
     resolvePrincipal: async (subject) =>
       subjectMap.get(subjectKey(subject)) ?? null,
     lookupPrincipal: async (principalId) => current.get(principalId) ?? null,
@@ -383,6 +386,7 @@ async function verifyDispatchDoor() {
   const mismatchDoor = createPrincipalDispatchDoor({
     producerId: "e1-t01-principal-mismatch-verifier",
     streamStore: store,
+    withPrincipalFence,
     resolvePrincipal: async () => bootstrapPrincipals.get(adaId),
     lookupPrincipal: async (principalId) => current.get(principalId) ?? null,
   });
@@ -443,6 +447,28 @@ async function verifyDispatchDoor() {
     targetUnchanged: true,
   });
 
+  const unfencedDoor = createPrincipalDispatchDoor({
+    producerId: "e1-t01-principal-unfenced-verifier",
+    streamStore: store,
+    resolvePrincipal: async () => bootstrapPrincipals.get(adaId),
+    lookupPrincipal: async () => bootstrapPrincipals.get(adaId),
+  });
+  const unfencedStream = "unfenced-principal";
+  const unfencedBefore = await store.read(unfencedStream);
+  const unfencedError = await refused(
+    unfencedDoor.dispatch(
+      principalRequest(unfencedStream, "kkkkkkkkkkkkkkkkkkkkkkkkkk"),
+      bootstrapPrincipals.get(adaId).subjectBinding,
+    ),
+    PRINCIPAL_DISPATCH_REFUSAL_CODES.FENCE_REQUIRED,
+  );
+  assert.deepEqual(await store.read(unfencedStream), unfencedBefore);
+  refusalMatrix.push({
+    label: "missing-principal-fence",
+    code: unfencedError.code,
+    targetUnchanged: true,
+  });
+
   assert.deepEqual(Object.keys(bootstrapPrincipals.get(agentId)).sort(), [
     "kind",
     "ownedBy",
@@ -454,6 +480,7 @@ async function verifyDispatchDoor() {
   ]);
   door.close();
   mismatchDoor.close();
+  unfencedDoor.close();
   return {
     accepted,
     ownerBoundary: {

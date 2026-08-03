@@ -3,7 +3,7 @@ id: E0-T07
 epic: 0
 title: "Capstone: two writers, one authoritative log"
 priority: 7
-status: implemented
+status: verified
 depends_on: [E0-T03, E0-T06]
 estimate: M
 capstone: true
@@ -86,3 +86,11 @@ pre-existing streams, caches, sessions, or build artifacts invalidate the eviden
 - Follower/live/offline1/offline2/cleanOffline all produced byte-identical 4,460-byte state with digest `sha256:812ee10ccdd27243ca89bec97b93069584cff4fd4a82cab8bd90ce37ae395990`. The follower resumed after `SIGSTOP`/`SIGKILL` from checkpoint offset `0000000000000000_0000000000001766`, replayed 6 source records on restart, and finished at the final head; resource counts returned to zero worker processes with 3 durable streams.
 - Fault seed: `e0-t07-e0-t07-final`; independent writers `e0-t07-e0-t07-final-writer-a` and `e0-t07-e0-t07-final-writer-b`; every conflict race had one accepted result and one typed `DISPATCH_STALE_FENCE` refusal. Sensitivity rejected event-digest, receipt-binding, checkpoint-integrity, and claimed-final-digest mutations with the expected typed codes.
 - `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` all passed in the promoted run. Replay: N/A (server/CLI protocol capstone) + mitigation: real emulator, two-process race, deterministic fault manifest, stream dump, and independent replay digests.
+
+### Critic — 2026-08-02 — verified at `c9c596bfe6e8747a20d690f506d42a19cf6d2d3`
+
+- `TEST_RUN_ID=e0-t07-critic-7f3a TEST_ARTIFACT_DIR=.eforest/tasks/epic-0-the-ledger/E0-T07-two-writers-one-log/work/e0-t07-critic-7f3a make verify-E0-T07` exited 0 from a fresh emulator with no skip flag; the run covered two independent writers, duplicate/conflict races, follower `SIGSTOP`/`SIGKILL`, checkpoint restart, and final-head convergence. Fresh artifacts are in `work/e0-t07-critic-7f3a/`.
+- A separate real-emulator run `e0-t07-reverse-9c21` started writer B before writer A and produced exactly one accepted result plus one typed `DISPATCH_STALE_FENCE` refusal per conflict. With `E0_T07_NETWORK_DISABLED=1`, replay, validation, prefix comparison, and final-digest comparison passed from the fresh final dump; no cache, projection, database, or SQLite state was present in the disposable run directory.
+- Independent binding checks matched canonical stream digests, all seven receipt event-digest/offset bindings, prefix digests, checkpoint facts, replay digests, and the final head for both `evidence/e0-t07-final/` and `evidence/e0-t07-composed/`. Four separate event, receipt, checkpoint, and claimed-final-digest tamper checks rejected their mutations. A targeted checkpoint-validator defect in a disposable worktree made the verifier exit 1 with `E0_T07_CHECKPOINT_INVALID`; that worktree was removed and the product tree remains clean.
+- The implementation files are unchanged from the promoted implementation commit `ba09eb96d89c604370548ae812d3000537f1e9ed` through `c9c596b`; the committed final and composed reports cite that implementation commit. `src/ledger/dispatch.mjs` local maps are only in-process serialization/sequence guards; accepted state is read from and appended to Durable Streams, with no local database/map authority.
+- The composed `make verify-E0` PASS is audited from `evidence/e0-t07-composed/verifier-report.json` and the Makefile composition; it was not rerun in this bounded critic turn after the user-directed stop. Replay: N/A (server/CLI protocol capstone) + mitigation: real emulator, independent reverse-order race, deterministic fault manifest, stream bindings, offline replay, and detector sensitivity proof.

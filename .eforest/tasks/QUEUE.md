@@ -8,11 +8,15 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-No task is currently in progress, awaiting verification, or refuted.
+1. **E0-T07** — Capstone: two writers, one authoritative log *(builder working)*
 
 ## Next up (dependencies satisfied)
 
-1. **E0-T07** — Capstone: two writers, one authoritative log
+No new task may start until **E0-T07** clears the gate.
+
+## Unlocks when E0-T07 verifies
+
+1. **E1-T01** — First-class human, agent, and service principal event model
 
 ## Epic 0 — `epic-0-the-ledger`
 
@@ -22,7 +26,7 @@ No task is currently in progress, awaiting verification, or refuted.
 - [x] `   4` [E0-T04](epic-0-the-ledger/E0-T04-fenced-dispatch-and-idempotency/readme.md) — Fenced dispatch and idempotent application writes *(deps: E0-T03)*
 - [x] `   5` [E0-T05](epic-0-the-ledger/E0-T05-reducers-digests-and-replay-cli/readme.md) — Pure reducers, canonical state digests, and replay CLI *(deps: E0-T01, E0-T04)*
 - [x] `   6` [E0-T06](epic-0-the-ledger/E0-T06-crash-duplicate-partition-harness/readme.md) — Crash, duplicate-delivery, and partition sensitivity harness *(deps: E0-T04, E0-T05)*
-- [ ] `   7` [E0-T07](epic-0-the-ledger/E0-T07-two-writers-one-log/readme.md) — Capstone: two writers, one authoritative log **[CAPSTONE]** *(deps: E0-T03, E0-T06)*
+- [~] `   7` [E0-T07](epic-0-the-ledger/E0-T07-two-writers-one-log/readme.md) — Capstone: two writers, one authoritative log **[CAPSTONE]** *(deps: E0-T03, E0-T06)*
 
 ## Epic 1 — `epic-1-the-workspace`
 

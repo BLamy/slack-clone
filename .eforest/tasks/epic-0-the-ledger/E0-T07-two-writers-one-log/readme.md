@@ -3,7 +3,7 @@ id: E0-T07
 epic: 0
 title: "Capstone: two writers, one authoritative log"
 priority: 7
-status: pending
+status: in-progress
 depends_on: [E0-T03, E0-T06]
 estimate: M
 capstone: true
@@ -62,3 +62,10 @@ pre-existing streams, caches, sessions, or build artifacts invalidate the eviden
    teardown, or evidence paths refute isolation.
 
 ## Verification log
+
+### Builder — 2026-08-03 — activated after E0-T06 verification
+
+- E0-T06 is verified at repair commit `e96acafed6efbd9cafc1f5b09fe3a8fa5303858f`;
+  E0-T07 is now the sole active capstone gate. The implementation will compose the
+  official Durable Streams emulator, two independent dispatch writers, the E0-T06
+  deterministic fault seams, and offline reducer replay without adding domain semantics.

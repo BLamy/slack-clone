@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E0-T06 is verified at repair e96acafed6efbd9cafc1f5b09fe3a8fa5303858f after independent durable-restart, partition-isolation, bounded-queue, acknowledgement, replay, and sensitivity review; E0-T07 is next.",
-  "updatedAt": "2026-08-03T00:09:04Z"
+  "statusReason": "E0-T07 is the sole active capstone gate after E0-T06 verification; orienting the two-writer race, follower restart/partition, and offline replay proof.",
+  "updatedAt": "2026-08-03T00:09:44Z"
 }

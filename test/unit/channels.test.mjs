@@ -12,6 +12,7 @@ import {
 import { REDUCER_ERROR_CODES, reduceEnvelope } from "@stream-slack/reducers";
 
 import { validateAndReplayDump } from "../../src/ledger/replay.mjs";
+import { sha256Digest } from "../../packages/protocol/src/sha256.mjs";
 import {
   createChannelAuthorization,
   createChannelFence,
@@ -76,6 +77,13 @@ test("direct identifiers stay collision-free across a generated corpus", () => {
     identifiers.add(channelId);
   }
   assert.equal(identifiers.size, 5000);
+});
+
+test("protocol SHA-256 digest matches the known abc vector", () => {
+  assert.equal(
+    Buffer.from(sha256Digest("abc")).toString("hex"),
+    "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+  );
 });
 
 test("channel fixture replays into two isolated public/private/direct topologies", async () => {

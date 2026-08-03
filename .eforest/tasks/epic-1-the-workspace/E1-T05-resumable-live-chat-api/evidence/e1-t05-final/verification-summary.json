@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E1-T05",
-  "runId": "promoted-e1-t05-repair",
-  "implementationCommit": "2d30a94118d0df72c7b1aa45757de517b47e7f2e",
+  "runId": "promoted-e1-t05-archive-repair",
+  "implementationCommit": "c0d0901b96a8ecd3a2ebcc2cc2d816c4b58cb2a4",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "replay": "Replay: N/A (server live-delivery API) + mitigation: real-emulator network transcript, reconnect matrix, request counts, and digest convergence",
@@ -12,9 +12,12 @@
     "cases": [
       "provider-rejected stale checkpoint is typed 409 before headers",
       "session logout terminates queued delivery without leaking a message",
+      "durable channel archive terminates live delivery at the last acknowledged checkpoint",
       "slow reader on one channel cannot block another channel",
       "membership revalidation runs before batches and heartbeats",
-      "delivery.close terminates every client exactly once"
+      "delivery.close terminates every client exactly once",
+      "disconnect after message write and during heartbeat does not advance the checkpoint",
+      "sibling-workspace event checkpoints are refused before the stream opens"
     ],
     "pollingSensitivity": "test/unit/durable-streams-adapter.test.mjs rejects a 350 ms polling positive control"
   },
@@ -30,31 +33,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 3476,
+      "durationMs": 2155,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 2453,
+      "durationMs": 1734,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 6469,
+      "durationMs": 5709,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 26388,
+      "durationMs": 20008,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 1465,
+      "durationMs": 620,
       "name": "build",
       "result": "PASS"
     }
@@ -74,36 +77,42 @@
     "authorizeReadCalls": 90,
     "authorizeSubscriptionCalls": 1,
     "directoryReadCalls": 91,
+    "roomStatusReadCalls": 90,
     "keepAliveTimerExecutions": 90,
     "pollingTimerExecutions": 0,
     "pollingMutationMs": null,
     "result": "PASS",
-    "productionAuthorizationWiring": "workspaceAuthorization.authorizeSubscription plus workspaceAuthorization.authorizeRead on every 10-second heartbeat",
+    "productionAuthorizationWiring": "workspaceAuthorization.authorizeSubscription plus workspace and channel revalidation on every 10-second heartbeat",
     "pollingPositiveControl": "covered by test/unit/durable-streams-adapter.test.mjs"
   },
   "networkEvidence": {
-    "room": "e1-t05-promoted-e1-t05-repair-resume",
+    "room": "e1-t05-promoted-e1-t05-archive-repair-resume",
     "clients": 2,
-    "firstCheckpoint": "0000000000000000_0000000000000708",
-    "secondCheckpoint": "0000000000000000_0000000000001426",
+    "firstCheckpoint": "0000000000000000_0000000000000724",
+    "secondCheckpoint": "0000000000000000_0000000000001458",
     "acceptedMessageIds": [
-      "3a99f152-ec32-46ec-9db2-8fffa99007fb",
-      "76a7501b-20ad-4a91-8aa9-b2c6b2ed55e5"
+      "4327b59b-c546-48d5-ae44-775abaf8ae1e",
+      "7c487c82-79c8-4389-ac0c-07baf320d7ee"
     ],
     "resumedMessageIds": [
-      "76a7501b-20ad-4a91-8aa9-b2c6b2ed55e5"
+      "7c487c82-79c8-4389-ac0c-07baf320d7ee"
     ],
-    "finalDigest": "sha256:0e7d26ed4c3cf2cf161236ef335a503599c66fd93e523255e13ce562c93ea84b",
+    "finalDigest": "sha256:0f5a01ff6e361489c031f06cfac197148e5b07c02b06f7089ec4687bab480b0f",
     "finalOffsets": {
-      "ada": "0000000000000000_0000000000001426",
-      "linus": "0000000000000000_0000000000001426"
+      "ada": "0000000000000000_0000000000001458",
+      "linus": "0000000000000000_0000000000001458"
     },
     "noDuplicateLogicalEffects": true,
     "crossRoomIsolation": {
-      "isolatedRoom": "e1-t05-promoted-e1-t05-repair-isolation",
-      "idleRoom": "e1-t05-promoted-e1-t05-repair-idle",
-      "acceptedMessageId": "cc58c82e-a21a-4f78-9a02-b525f7978f55",
+      "isolatedRoom": "e1-t05-promoted-e1-t05-archive-repair-isolation",
+      "idleRoom": "e1-t05-promoted-e1-t05-archive-repair-idle",
+      "acceptedMessageId": "ff9c1cee-2b07-42a9-8ecd-a3c95855f0d9",
       "otherClientReceivedMessage": false
+    },
+    "archive": {
+      "responseStatus": 200,
+      "terminalCode": "LIVE_CHANNEL_ARCHIVED",
+      "checkpoint": "0000000000000000_0000000000000733"
     },
     "logout": {
       "responseStatus": 302,
@@ -114,6 +123,7 @@
       "append while one client disconnected",
       "resume from opaque Last-Event-ID-equivalent query checkpoint",
       "independent room remains idle while a sibling room receives an event",
+      "archive event terminates the hot room at its acknowledged checkpoint",
       "logout before the next queued event"
     ],
     "typedRefusal": {
@@ -139,84 +149,91 @@
         "checkpoint": null,
         "label": "ada-initial",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-resume/events",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-resume/events",
         "status": 200
       },
       {
         "checkpoint": null,
         "label": "linus-initial",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-resume/events",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-resume/events",
         "status": 200
       },
       {
         "bodyCode": null,
         "label": "post-ik_aaaaaaaaaaaaaaaaaaaaaaaaaa",
         "method": "POST",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-resume/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-resume/messages",
         "status": 201
       },
       {
         "bodyCode": null,
         "label": "post-ik_bbbbbbbbbbbbbbbbbbbbbbbbbb",
         "method": "POST",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-resume/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-resume/messages",
         "status": 201
       },
       {
-        "checkpoint": "0000000000000000_0000000000000708",
+        "checkpoint": "0000000000000000_0000000000000724",
         "label": "ada-resumed",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-resume/events?offset=0000000000000000_0000000000000708",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-resume/events?offset=0000000000000000_0000000000000724",
         "status": 200
       },
       {
         "bodyCode": null,
         "label": "ada-final",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-resume/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-resume/messages",
         "status": 200
       },
       {
         "bodyCode": null,
         "label": "linus-final",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-resume/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-resume/messages",
         "status": 200
       },
       {
         "bodyCode": "LIVE_CHECKPOINT_INVALID",
         "label": "malformed-checkpoint",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-resume/events?offset=%00",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-resume/events?offset=%00",
         "status": 400
       },
       {
         "checkpoint": null,
         "label": "ada-isolation",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-isolation/events",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-isolation/events",
         "status": 200
       },
       {
         "checkpoint": null,
         "label": "linus-isolation",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-idle/events",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-idle/events",
         "status": 200
       },
       {
         "bodyCode": null,
         "label": "post-ik_cccccccccccccccccccccccccc",
         "method": "POST",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-isolation/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-isolation/messages",
         "status": 201
+      },
+      {
+        "bodyCode": null,
+        "label": "archive-room",
+        "method": "POST",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-isolation/archive",
+        "status": 200
       },
       {
         "checkpoint": null,
         "label": "ada-logout",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-logout/events",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-logout/events",
         "status": 200
       },
       {
@@ -229,7 +246,7 @@
         "bodyCode": null,
         "label": "post-ik_dddddddddddddddddddddddddd",
         "method": "POST",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-repair-logout/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-repair-logout/messages",
         "status": 201
       }
     ]

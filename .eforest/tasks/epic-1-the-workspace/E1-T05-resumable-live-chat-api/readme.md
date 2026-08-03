@@ -123,3 +123,33 @@ verification, while the server remains responsible for reduction and authorizati
   request counts, digest convergence, and focused authorization/backpressure tests.
 - Claim: the prior evidence gap is closed and the typed stale-checkpoint and logout paths
   are now proven against the implementation commit; awaiting a fresh independent critic.
+
+### Builder — 2026-08-03 — archive and boundary repair complete
+
+- Repair commit: `c0d0901b96a8ecd3a2ebcc2cc2d816c4b58cb2a4` (`E1-T05: enforce archived
+  channel live revocation`). The chat stream now treats the durable `chat.room.archived`
+  fact as channel-status authority, skips it as a message, and closes the live client with
+  typed `LIVE_CHANNEL_ARCHIVED` at its last acknowledged checkpoint. Production revalidation
+  checks both the fenced workspace membership and authoritative room status; the HTTP archive
+  command appends the durable status fact.
+- Focused boundary coverage now includes archive revocation, disconnect after message write
+  before status acknowledgement, disconnect during heartbeat, and sibling-workspace event
+  checkpoint refusal. The verifier's real-emulator transcript includes archive closure,
+  cross-room isolation, logout closure, reconnect suffix delivery, and digest convergence.
+- Exact promoted cold target: `PROMOTE_EVIDENCE=1
+  E1_T05_IMPLEMENTATION_COMMIT=c0d0901b96a8ecd3a2ebcc2cc2d816c4b58cb2a4
+  TEST_RUN_ID=promoted-e1-t05-archive-repair make verify-E1-T05`. Format, lint, typecheck, 111
+  unit tests, 5 Playwright tests, build, fresh emulator, and the real two-client scenario
+  passed. The final digest is
+  `sha256:0f5a01ff6e361489c031f06cfac197148e5b07c02b06f7089ec4687bab480b0f`; both clients
+  converged at `0000000000000000_0000000000001458`, and the archive terminal checkpoint is
+  `0000000000000000_0000000000000733`.
+- Promoted evidence is under `evidence/e1-t05-final/`: `verification-summary.json`,
+  `network-transcript.json`, `idle-request-budget.json`, and `cold-clone-transcript.json`.
+  The idle budget records 1 subscription directory read, 90 workspace revalidations, 90
+  channel-status reads, 1 bounded snapshot read, and 1 live follow across 900,000
+  deterministic milliseconds. Replay: N/A (server live-delivery API) + mitigation:
+  real-emulator network transcript, reconnect matrix, request counts, digest convergence,
+  and focused authorization/backpressure tests.
+- Claim: channel archive and all critic-identified live boundary gaps are now implemented
+  and evidenced against the exact repair commit; awaiting a fresh independent critic.

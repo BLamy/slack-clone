@@ -239,3 +239,32 @@ verification, while the server remains responsible for reduction and authorizati
   authorization/backpressure tests.
 - Claim: the idle-budget evidence now measures the actual authorization stream path and the
   implementation commit is ready for a fresh independent critic.
+
+### Builder — 2026-08-02 — cold-checkout evidence repair complete
+
+- Repair commit: `58546f41f98eed41b78d0e453ac4ceae9c64a9c3` (`E1-T05: verify from disposable
+  cold checkout`). The cold verifier now creates a disposable detached Git worktree at the
+  declared implementation commit, initializes the pinned emulator submodule, proves the
+  checkout has no tracked or untracked files before installation, runs installation/build and
+  the verifier inside that checkout, copies only the promoted evidence back, and removes the
+  checkout. This closes the prior in-place cold-run gap where unrelated untracked files could
+  influence the result.
+- Exact promoted cold target: `PROMOTE_EVIDENCE=1
+  E1_T05_IMPLEMENTATION_COMMIT=58546f41f98eed41b78d0e453ac4ceae9c64a9c3
+  TEST_RUN_ID=promoted-e1-t05-cold-checkout make verify-E1-T05`. The disposable checkout
+  passed its clean-status assertion, format, lint, typecheck, 113 unit tests, 5 Playwright
+  tests, build, fresh emulator bootstrap, and the real two-client scenario. The final digest
+  is `sha256:a3bc45285c0fd5d5fed7f057c765cacd917af2d06e896f78265bc6a223ddb4e6`; both clients
+  converged at `0000000000000000_0000000000001454`, and the archive terminal checkpoint is
+  `0000000000000000_0000000000000731`.
+- Promoted `cold-clone-transcript.json` records the detached worktree, exact implementation
+  commit, clean pre-install status, submodule initialization, frozen install, emulator build,
+  verifier exit codes, and PASS. The idle evidence remains service-backed: 2 Durable Stream
+  reads before logical time advances, 92 afterward, delta 90 matching heartbeats, one
+  message snapshot, one follow, and zero polling calls. Archive reconnect and post-archive
+  mutation remain typed 409 refusals; logout, isolation, resume, and digest convergence also
+  passed. Replay: N/A (server live-delivery API) + mitigation: real-emulator network
+  transcript, reconnect matrix, request counts, digest convergence, focused
+  authorization/backpressure tests, and disposable-checkout proof.
+- Claim: the cold-start proof now excludes ambient working-tree files and is tied to the exact
+  implementation commit; awaiting a fresh independent critic.

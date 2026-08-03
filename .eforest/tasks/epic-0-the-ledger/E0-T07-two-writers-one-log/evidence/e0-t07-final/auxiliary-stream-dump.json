@@ -1,0 +1,34 @@
+{
+  "stream": "e0-t07-final-nonconflicting",
+  "records": [
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-final-non-conflicting-auxiliary-6",
+          "value": "value-6"
+        },
+        "eventId": "ev_00000000000000000000000006",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_00000000000000000000000006",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:06.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "dispatch": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "expectedHead": "0000000000000000_0000000000000000",
+        "idempotencyKey": "ik_00000000000000000000000006",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:64fa270b5ae8ba1987df06e71fce4f6852a5296e46737109f02abfdba864a27c",
+        "schemaVersion": 1,
+        "stream": "e0-t07-final-nonconflicting",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    }
+  ],
+  "nextOffset": "0000000000000000_0000000000000887",
+  "streamDigest": "sha256:3ce35d2737ffb8f83f0f9e81565725f9660a5d12d0908146ca137c7b8706f664"
+}

@@ -77,3 +77,12 @@ pre-existing streams, caches, sessions, or build artifacts invalidate the eviden
 - Added cold `make verify-E0-T07` and composed `make verify-E0` targets. The final clean
   promoted run is the critic handoff evidence; Replay: N/A (server/CLI protocol capstone)
   + mitigation is recorded by the verifier.
+
+### Builder — 2026-08-03 — final evidence at `ba09eb96d89c604370548ae812d3000537f1e9ed`
+
+- `PROMOTE_EVIDENCE=1 E0_T07_IMPLEMENTATION_COMMIT=ba09eb96d89c604370548ae812d3000537f1e9ed TEST_RUN_ID=e0-t07-final make verify-E0-T07` passed from a clean tracked tree; the composed `TEST_RUN_ID=e0-t07-composed E0_T07_IMPLEMENTATION_COMMIT=ba09eb96d89c604370548ae812d3000537f1e9ed make verify-E0` also passed all targets.
+- Promoted evidence is in `evidence/e0-t07-final/`; the composed cold run is in `evidence/e0-t07-composed/`. Both runs have zero skipped checks and include the final stream dump, receipts, fault manifest, prefix digests, replay dump, follower checkpoint, and verifier report.
+- Promoted authoritative stream: 7 records, next offset `0000000000000000_0000000000006152`, digest `sha256:07dffad4de1d339354a6894d702b6982105fcd8f9ddf21f26234a602352c6aa2`. Receipts: 8 records, next offset `0000000000000000_0000000000004233`, digest `sha256:d0aae0de5b3c3fc2b6722caf181e7bdd81a5597dfeb445f721229deb49938cd5`. Auxiliary stream: 1 record, next offset `0000000000000000_0000000000000887`, digest `sha256:3ce35d2737ffb8f83f0f9e81565725f9660a5d12d0908146ca137c7b8706f664`.
+- Follower/live/offline1/offline2/cleanOffline all produced byte-identical 4,460-byte state with digest `sha256:812ee10ccdd27243ca89bec97b93069584cff4fd4a82cab8bd90ce37ae395990`. The follower resumed after `SIGSTOP`/`SIGKILL` from checkpoint offset `0000000000000000_0000000000001766`, replayed 6 source records on restart, and finished at the final head; resource counts returned to zero worker processes with 3 durable streams.
+- Fault seed: `e0-t07-e0-t07-final`; independent writers `e0-t07-e0-t07-final-writer-a` and `e0-t07-e0-t07-final-writer-b`; every conflict race had one accepted result and one typed `DISPATCH_STALE_FENCE` refusal. Sensitivity rejected event-digest, receipt-binding, checkpoint-integrity, and claimed-final-digest mutations with the expected typed codes.
+- `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` all passed in the promoted run. Replay: N/A (server/CLI protocol capstone) + mitigation: real emulator, two-process race, deterministic fault manifest, stream dump, and independent replay digests.

@@ -1,0 +1,803 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T07",
+  "result": "PASS",
+  "runId": "e0-t07-final",
+  "implementationCommit": "ba09eb96d89c604370548ae812d3000537f1e9ed",
+  "implementationTreeCleanAtStart": true,
+  "commands": [
+    "make verify-E0-T07",
+    "make verify-E0",
+    "pnpm format:check",
+    "pnpm lint",
+    "pnpm typecheck",
+    "pnpm test",
+    "pnpm build"
+  ],
+  "faultManifest": {
+    "schemaVersion": 1,
+    "seed": "e0-t07-e0-t07-final",
+    "schedule": [
+      {
+        "boundary": "dispatch",
+        "order": [
+          "a",
+          "b"
+        ],
+        "step": "duplicate-idempotency"
+      },
+      {
+        "boundary": "dispatch",
+        "order": [
+          "a",
+          "b"
+        ],
+        "step": "conflict-0"
+      },
+      {
+        "boundary": "dispatch",
+        "order": [
+          "b",
+          "a"
+        ],
+        "step": "conflict-1"
+      },
+      {
+        "boundary": "dispatch",
+        "order": [
+          "b",
+          "a"
+        ],
+        "step": "non-conflicting-streams"
+      },
+      {
+        "boundary": "follower",
+        "signal": "SIGSTOP",
+        "step": "partition"
+      },
+      {
+        "boundary": "dispatch",
+        "order": [
+          "a",
+          "b"
+        ],
+        "step": "partition-conflict-0"
+      },
+      {
+        "boundary": "dispatch",
+        "order": [
+          "b",
+          "a"
+        ],
+        "step": "partition-conflict-1"
+      },
+      {
+        "boundary": "follower",
+        "signal": "SIGKILL",
+        "step": "process-restart"
+      },
+      {
+        "boundary": "dispatch",
+        "order": [
+          "a",
+          "b"
+        ],
+        "step": "post-restart-conflict"
+      }
+    ],
+    "writerProcesses": [
+      {
+        "producerId": "e0-t07-e0-t07-final-writer-a",
+        "role": "writer-a"
+      },
+      {
+        "producerId": "e0-t07-e0-t07-final-writer-b",
+        "role": "writer-b"
+      }
+    ]
+  },
+  "offsets": {
+    "auxiliary": {
+      "nextOffset": "0000000000000000_0000000000000887",
+      "recordCount": 1,
+      "streamDigest": "sha256:3ce35d2737ffb8f83f0f9e81565725f9660a5d12d0908146ca137c7b8706f664"
+    },
+    "authoritative": {
+      "nextOffset": "0000000000000000_0000000000006152",
+      "recordCount": 7,
+      "streamDigest": "sha256:07dffad4de1d339354a6894d702b6982105fcd8f9ddf21f26234a602352c6aa2"
+    },
+    "dispatchReceipts": {
+      "nextOffset": "0000000000000000_0000000000004233",
+      "recordCount": 8,
+      "streamDigest": "sha256:d0aae0de5b3c3fc2b6722caf181e7bdd81a5597dfeb445f721229deb49938cd5"
+    }
+  },
+  "stateDigests": {
+    "follower": "sha256:812ee10ccdd27243ca89bec97b93069584cff4fd4a82cab8bd90ce37ae395990",
+    "live": "sha256:812ee10ccdd27243ca89bec97b93069584cff4fd4a82cab8bd90ce37ae395990",
+    "offline1": "sha256:812ee10ccdd27243ca89bec97b93069584cff4fd4a82cab8bd90ce37ae395990",
+    "offline2": "sha256:812ee10ccdd27243ca89bec97b93069584cff4fd4a82cab8bd90ce37ae395990",
+    "cleanOffline": "sha256:812ee10ccdd27243ca89bec97b93069584cff4fd4a82cab8bd90ce37ae395990"
+  },
+  "stateJsonBytes": {
+    "follower": 4460,
+    "live": 4460,
+    "offline1": 4460,
+    "offline2": 4460
+  },
+  "prefixDigests": [
+    {
+      "index": 1,
+      "offset": "0000000000000000_0000000000000888",
+      "stateDigest": "sha256:9955b814e0d29f7a73e9a537efdf7b6b2e65895488a28a6843b82846f3c93ff8"
+    },
+    {
+      "index": 2,
+      "offset": "0000000000000000_0000000000001766",
+      "stateDigest": "sha256:2df5020c782f2f83a9226b30931223bb6db16a107ed982680ea07b0e6ef3f777"
+    },
+    {
+      "index": 3,
+      "offset": "0000000000000000_0000000000002644",
+      "stateDigest": "sha256:0d531a6304aa48abe9159540e36f1d15e8d271825655a17a3753490ea42f110d"
+    },
+    {
+      "index": 4,
+      "offset": "0000000000000000_0000000000003525",
+      "stateDigest": "sha256:2bf69a5fbab6aff5d0cca5303e4d455682ab59717d16fc50da824fe8546c0423"
+    },
+    {
+      "index": 5,
+      "offset": "0000000000000000_0000000000004399",
+      "stateDigest": "sha256:962ee944c2ce5ab2a50148beee17dbd357392d925d9be5d0fba185c8cb966a9b"
+    },
+    {
+      "index": 6,
+      "offset": "0000000000000000_0000000000005275",
+      "stateDigest": "sha256:b2ff35e49073adb78fe9fa8c7934975a8935a09c7f19935cc98071081d8a6db8"
+    },
+    {
+      "index": 7,
+      "offset": "0000000000000000_0000000000006152",
+      "stateDigest": "sha256:812ee10ccdd27243ca89bec97b93069584cff4fd4a82cab8bd90ce37ae395990"
+    }
+  ],
+  "operationLog": [
+    {
+      "kind": "duplicate-idempotency",
+      "logicalOperation": "ik_00000000000000000000000000",
+      "results": [
+        {
+          "code": null,
+          "eventDigest": "sha256:1574e77e75a8680bea9a0422ac83c5c8fdc7395436ec8c8fa5078e57ce3a02ad",
+          "idempotencyKey": "ik_00000000000000000000000000",
+          "nextOffset": "0000000000000000_0000000000000888",
+          "ok": true,
+          "status": 200,
+          "writer": "writer-a"
+        },
+        {
+          "code": null,
+          "eventDigest": "sha256:1574e77e75a8680bea9a0422ac83c5c8fdc7395436ec8c8fa5078e57ce3a02ad",
+          "idempotencyKey": "ik_00000000000000000000000000",
+          "nextOffset": "0000000000000000_0000000000000888",
+          "ok": true,
+          "status": 200,
+          "writer": "writer-b"
+        }
+      ]
+    },
+    {
+      "accepted": [
+        {
+          "code": null,
+          "eventDigest": "sha256:660e1df5890f4a3612841b6a4d3803f15040b80f1974818f452ba58d51a114ad",
+          "idempotencyKey": "ik_00000000000000000000000001",
+          "nextOffset": "0000000000000000_0000000000001766",
+          "ok": true,
+          "status": 200,
+          "writer": "writer-a"
+        }
+      ],
+      "label": "pre-partition-0",
+      "kind": "conflict-race",
+      "loserRetry": {
+        "code": "DISPATCH_STALE_FENCE",
+        "eventDigest": null,
+        "idempotencyKey": "ik_00000000000000000000000002",
+        "nextOffset": null,
+        "ok": false,
+        "status": 409,
+        "writer": "e0-t07-e0-t07-final-writer-b"
+      },
+      "refused": [
+        {
+          "code": "DISPATCH_STALE_FENCE",
+          "eventDigest": null,
+          "idempotencyKey": "ik_00000000000000000000000002",
+          "nextOffset": null,
+          "ok": false,
+          "status": 409,
+          "writer": "writer-b"
+        }
+      ]
+    },
+    {
+      "accepted": [
+        {
+          "code": null,
+          "eventDigest": "sha256:eec081cfd1e346a695b2639b5710c683e7b8028da17b919c4f1964fff2c95d97",
+          "idempotencyKey": "ik_00000000000000000000000004",
+          "nextOffset": "0000000000000000_0000000000002644",
+          "ok": true,
+          "status": 200,
+          "writer": "writer-b"
+        }
+      ],
+      "label": "pre-partition-1",
+      "kind": "conflict-race",
+      "loserRetry": {
+        "code": "DISPATCH_STALE_FENCE",
+        "eventDigest": null,
+        "idempotencyKey": "ik_00000000000000000000000003",
+        "nextOffset": null,
+        "ok": false,
+        "status": 409,
+        "writer": "e0-t07-e0-t07-final-writer-a"
+      },
+      "refused": [
+        {
+          "code": "DISPATCH_STALE_FENCE",
+          "eventDigest": null,
+          "idempotencyKey": "ik_00000000000000000000000003",
+          "nextOffset": null,
+          "ok": false,
+          "status": 409,
+          "writer": "writer-a"
+        }
+      ]
+    },
+    {
+      "initial": [
+        {
+          "code": "DISPATCH_STALE_FENCE",
+          "eventDigest": null,
+          "idempotencyKey": "ik_00000000000000000000000006",
+          "nextOffset": null,
+          "ok": false,
+          "status": 409,
+          "writer": "writer-b"
+        },
+        {
+          "code": null,
+          "eventDigest": "sha256:4f52bb37da045282eb5203e418e83af56e89dc67d173370f8886e0dbe4cd3db5",
+          "idempotencyKey": "ik_00000000000000000000000005",
+          "nextOffset": "0000000000000000_0000000000003525",
+          "ok": true,
+          "status": 200,
+          "writer": "writer-a"
+        }
+      ],
+      "kind": "non-conflicting-streams",
+      "recovered": [
+        {
+          "code": null,
+          "eventDigest": "sha256:6efbe981043dbc8081638ffdd6ab41b24000622778c12e2cb8eabb200d0426b4",
+          "idempotencyKey": "ik_00000000000000000000000006",
+          "nextOffset": "0000000000000000_0000000000000887",
+          "ok": true,
+          "status": 200,
+          "writer": "writer-b"
+        },
+        {
+          "code": null,
+          "eventDigest": "sha256:4f52bb37da045282eb5203e418e83af56e89dc67d173370f8886e0dbe4cd3db5",
+          "idempotencyKey": "ik_00000000000000000000000005",
+          "nextOffset": "0000000000000000_0000000000003525",
+          "ok": true,
+          "status": 200,
+          "writer": "writer-a"
+        }
+      ]
+    },
+    {
+      "accepted": [
+        {
+          "code": null,
+          "eventDigest": "sha256:bf13783ac6f28bbe6905d42902ca9b2cbddcf367cda2b5298eb4e49c3878b4b4",
+          "idempotencyKey": "ik_00000000000000000000000008",
+          "nextOffset": "0000000000000000_0000000000004399",
+          "ok": true,
+          "status": 200,
+          "writer": "writer-b"
+        }
+      ],
+      "label": "partition-0",
+      "kind": "conflict-race",
+      "loserRetry": {
+        "code": "DISPATCH_STALE_FENCE",
+        "eventDigest": null,
+        "idempotencyKey": "ik_00000000000000000000000007",
+        "nextOffset": null,
+        "ok": false,
+        "status": 409,
+        "writer": "e0-t07-e0-t07-final-writer-a"
+      },
+      "refused": [
+        {
+          "code": "DISPATCH_STALE_FENCE",
+          "eventDigest": null,
+          "idempotencyKey": "ik_00000000000000000000000007",
+          "nextOffset": null,
+          "ok": false,
+          "status": 409,
+          "writer": "writer-a"
+        }
+      ]
+    },
+    {
+      "accepted": [
+        {
+          "code": null,
+          "eventDigest": "sha256:1bc8bca1be9d3534be1aca64c1cf5e6ec112bccc340eb54e2f1e7fbad9ccccdd",
+          "idempotencyKey": "ik_0000000000000000000000000a",
+          "nextOffset": "0000000000000000_0000000000005275",
+          "ok": true,
+          "status": 200,
+          "writer": "writer-b"
+        }
+      ],
+      "label": "partition-1",
+      "kind": "conflict-race",
+      "loserRetry": {
+        "code": "DISPATCH_STALE_FENCE",
+        "eventDigest": null,
+        "idempotencyKey": "ik_00000000000000000000000009",
+        "nextOffset": null,
+        "ok": false,
+        "status": 409,
+        "writer": "e0-t07-e0-t07-final-writer-a"
+      },
+      "refused": [
+        {
+          "code": "DISPATCH_STALE_FENCE",
+          "eventDigest": null,
+          "idempotencyKey": "ik_00000000000000000000000009",
+          "nextOffset": null,
+          "ok": false,
+          "status": 409,
+          "writer": "writer-a"
+        }
+      ]
+    },
+    {
+      "accepted": [
+        {
+          "code": null,
+          "eventDigest": "sha256:3666c56454b20d9b73c8fc4c83c161fcfe592e97645e8ce99232d252dfc40c3b",
+          "idempotencyKey": "ik_0000000000000000000000000c",
+          "nextOffset": "0000000000000000_0000000000006152",
+          "ok": true,
+          "status": 200,
+          "writer": "writer-b"
+        }
+      ],
+      "label": "post-restart",
+      "kind": "conflict-race",
+      "loserRetry": {
+        "code": "DISPATCH_STALE_FENCE",
+        "eventDigest": null,
+        "idempotencyKey": "ik_0000000000000000000000000b",
+        "nextOffset": null,
+        "ok": false,
+        "status": 409,
+        "writer": "e0-t07-e0-t07-final-writer-a"
+      },
+      "refused": [
+        {
+          "code": "DISPATCH_STALE_FENCE",
+          "eventDigest": null,
+          "idempotencyKey": "ik_0000000000000000000000000b",
+          "nextOffset": null,
+          "ok": false,
+          "status": 409,
+          "writer": "writer-a"
+        }
+      ]
+    }
+  ],
+  "transcript": [
+    {
+      "method": "HEAD",
+      "path": "/rooms/e0-t07-final-authoritative/messages",
+      "status": 404,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "HEAD",
+      "path": "/rooms/e0-t07-final-nonconflicting/messages",
+      "status": 404,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "HEAD",
+      "path": "/rooms/e0-t07-final-dispatch-index/messages",
+      "status": 404,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "PUT",
+      "path": "/rooms/e0-t07-final-authoritative/messages",
+      "status": 201,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "PUT",
+      "path": "/rooms/e0-t07-final-nonconflicting/messages",
+      "status": 201,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "PUT",
+      "path": "/rooms/e0-t07-final-dispatch-index/messages",
+      "status": 201,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t07-final-dispatch-index/messages",
+      "status": 200,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t07-final-authoritative/messages",
+      "status": 200,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t07-final-nonconflicting/messages",
+      "status": 200,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t07-final-authoritative/messages",
+      "status": 200,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t07-final-authoritative/messages",
+      "status": 200,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 409
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t07-final-authoritative/messages",
+      "status": 200,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 409
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t07-final-authoritative/messages",
+      "status": 200,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t07-final-authoritative/messages",
+      "status": 200,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t07-final-authoritative/messages",
+      "status": 200,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 409
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t07-final-authoritative/messages",
+      "status": 200,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 409
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t07-final-authoritative/messages",
+      "status": 200,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t07-final-authoritative/messages",
+      "status": 200,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/dispatch",
+      "status": 409
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t07-final-authoritative/messages",
+      "status": 200,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t07-final-nonconflicting/messages",
+      "status": 200,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t07-final-dispatch-index/messages",
+      "status": 200,
+      "streamSeq": null,
+      "producerId": null,
+      "producerSeq": null
+    }
+  ],
+  "partition": {
+    "checkpointBefore": {
+      "offset": "0000000000000000_0000000000001766",
+      "schemaVersion": 1,
+      "sourceStream": "e0-t07-final-authoritative",
+      "checkpointDigest": "sha256:b356ba47b3a5fa35aad32f05e53a59d551c28171a8b43e97c0af7f048c5e0286"
+    },
+    "killedFollower": {
+      "code": null,
+      "signal": "SIGKILL",
+      "output": "{\"checkpoint\":{\"offset\":\"-1\",\"schemaVersion\":1,\"sourceStream\":\"e0-t07-final-authoritative\",\"checkpointDigest\":\"sha256:b1eb55b3eabf00739d3e8a183c2c12b07d378e95df5caab14fe8edca2d8bdcb5\"},\"pid\":15156,\"ready\":true,\"role\":\"e0-t07-follower\",\"sourceStream\":\"e0-t07-final-authoritative\",\"stateAuthority\":\"durable-streams\"}\n"
+    },
+    "recordsBefore": 4,
+    "recordsAfter": 6,
+    "writesWhilePartitioned": 2,
+    "restartSourceReplayRecords": 6
+  },
+  "followerHealth": {
+    "checkpoint": {
+      "offset": "0000000000000000_0000000000006152",
+      "schemaVersion": 1,
+      "sourceStream": "e0-t07-final-authoritative",
+      "checkpointDigest": "sha256:ba2414f364933738ab92660b9eb5bce5112305941179ff74c4ace995df84d611"
+    },
+    "metrics": {
+      "batches": 4,
+      "externalHeadPolls": 2,
+      "followReconnects": 1,
+      "followRecords": 5,
+      "sourceReplayRecords": 6
+    },
+    "observedCount": 7,
+    "pid": 15273,
+    "ready": true,
+    "role": "e0-t07-follower",
+    "sourceStream": "e0-t07-final-authoritative",
+    "stateAuthority": "durable-streams"
+  },
+  "sensitivity": [
+    {
+      "detector": "authoritative-event-digest",
+      "expectedCode": "E0_T07_FINAL_DIGEST_MISMATCH",
+      "observed": "sha256:20769b58b32fa787137ea6622f1fae43f82b50cc6231bf83c989e52945d53d11",
+      "outcome": "rejected"
+    },
+    {
+      "detector": "dispatch-receipt-binding",
+      "expectedCode": "E0_T07_RECEIPT_MISMATCH",
+      "outcome": "rejected"
+    },
+    {
+      "detector": "opaque-checkpoint-integrity",
+      "expectedCode": "E0_T07_CHECKPOINT_INVALID",
+      "outcome": "rejected"
+    },
+    {
+      "detector": "claimed-final-digest",
+      "expectedCode": "E0_T07_FINAL_DIGEST_MISMATCH",
+      "expected": "sha256:812ee10ccdd27243ca89bec97b93069584cff4fd4a82cab8bd90ce37ae395990",
+      "claimed": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "outcome": "rejected"
+    }
+  ],
+  "resourceCounts": {
+    "before": {
+      "adapter": {
+        "appendCalls": 0,
+        "boundedReads": 15,
+        "createRequests": 3,
+        "ensureCalls": 15,
+        "followCalls": 0,
+        "requests": 21,
+        "requestsByMethod": {
+          "HEAD": 3,
+          "PUT": 3,
+          "GET": 15
+        },
+        "responsesByStatus": {
+          "200": 15,
+          "201": 3,
+          "404": 3
+        },
+        "sseRequests": 0,
+        "longPollRequests": 0,
+        "activeFollowers": 0,
+        "pendingIdleWaiters": 0,
+        "cachedStreams": 3
+      },
+      "workerProcesses": 3,
+      "streams": 3
+    },
+    "after": {
+      "adapter": {
+        "appendCalls": 0,
+        "boundedReads": 15,
+        "createRequests": 3,
+        "ensureCalls": 15,
+        "followCalls": 0,
+        "requests": 21,
+        "requestsByMethod": {
+          "HEAD": 3,
+          "PUT": 3,
+          "GET": 15
+        },
+        "responsesByStatus": {
+          "200": 15,
+          "201": 3,
+          "404": 3
+        },
+        "sseRequests": 0,
+        "longPollRequests": 0,
+        "activeFollowers": 0,
+        "pendingIdleWaiters": 0,
+        "cachedStreams": 3
+      },
+      "workerProcesses": 0,
+      "streams": 3
+    }
+  },
+  "replay": "N/A (server/CLI protocol capstone) + mitigation: real emulator, two-process race, deterministic fault manifest, stream dump, and independent replay digests",
+  "replayUploadAttempted": false,
+  "noLocalMutationAuthority": true,
+  "localProjectionFiles": []
+}

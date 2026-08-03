@@ -1,0 +1,119 @@
+{
+  "stream": "e0-t07-composed-dispatch-index",
+  "records": [
+    {
+      "kind": "dispatch.accepted",
+      "receipt": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "eventDigest": "sha256:e3f7966cadaae50335fcefdc28fd919a9c8c12a298bd06a3df0d2dda87e3f217",
+        "idempotencyKey": "ik_00000000000000000000000000",
+        "nextOffset": "0000000000000000_0000000000000894",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:dfc6c1d8922957206eb742c8ba6a5d807146389c2ddc6bca48651e7a1184a3dc",
+        "status": "accepted",
+        "stream": "e0-t07-composed-authoritative",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "kind": "dispatch.accepted",
+      "receipt": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "eventDigest": "sha256:af862beb3a26026f07388d0f461e83c243531e62013121cfbca01466c2ad6096",
+        "idempotencyKey": "ik_00000000000000000000000001",
+        "nextOffset": "0000000000000000_0000000000001778",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:a4cf8765433536067e0f2721fa5eae21658bfc708b94ba814b0a83c32fd9b75b",
+        "status": "accepted",
+        "stream": "e0-t07-composed-authoritative",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "kind": "dispatch.accepted",
+      "receipt": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "eventDigest": "sha256:5d8cdcd8a560a45b9eccc2426bb8217503f79c68997a625ff8b0c94fad95ee61",
+        "idempotencyKey": "ik_00000000000000000000000004",
+        "nextOffset": "0000000000000000_0000000000002662",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:902e70059053e97d8ce34ee330f3ac3b5c904de57018f0cd792bf7140609483a",
+        "status": "accepted",
+        "stream": "e0-t07-composed-authoritative",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "kind": "dispatch.accepted",
+      "receipt": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "eventDigest": "sha256:9da4245b66b091566a6f5a87b855c814746132c1c7645a42b0127aa78350e92f",
+        "idempotencyKey": "ik_00000000000000000000000005",
+        "nextOffset": "0000000000000000_0000000000003549",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:6d6f9374a5f4ff86b27120fd360276acb2149ad22a5de3297a2e8ee733bc72a8",
+        "status": "accepted",
+        "stream": "e0-t07-composed-authoritative",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "kind": "dispatch.accepted",
+      "receipt": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "eventDigest": "sha256:fea9cb537fd4b4db12b7d530318f534bb1c71245ee9f57bebbe722bb884d0119",
+        "idempotencyKey": "ik_00000000000000000000000006",
+        "nextOffset": "0000000000000000_0000000000000893",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:9d916b7c364a9bf855d30d32f284a14ef355fa6d34b4c850a04f98493d3894fa",
+        "status": "accepted",
+        "stream": "e0-t07-composed-nonconflicting",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "kind": "dispatch.accepted",
+      "receipt": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "eventDigest": "sha256:a9ade7ffeb8386a7c9aee2ab8d2652d6f821845011addfc1a8106e64ec593059",
+        "idempotencyKey": "ik_00000000000000000000000008",
+        "nextOffset": "0000000000000000_0000000000004429",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:3dbfe03ea08cebc25a0e212b8f02aa5eb5b5fcc7b34ddb831bfd3892b487635c",
+        "status": "accepted",
+        "stream": "e0-t07-composed-authoritative",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "kind": "dispatch.accepted",
+      "receipt": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "eventDigest": "sha256:f89498002c1a3b711cfd6fe84c5beb0efbd6dbfb5908ee92369f14e2a24bab08",
+        "idempotencyKey": "ik_0000000000000000000000000a",
+        "nextOffset": "0000000000000000_0000000000005311",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:47e3c26e63e702bc03352cf7e9e3508f656e30b14b7d284115f8071f97c917ca",
+        "status": "accepted",
+        "stream": "e0-t07-composed-authoritative",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "kind": "dispatch.accepted",
+      "receipt": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "eventDigest": "sha256:bde5af4804c88a5359c7ff6fa030ef7e9dc9b295abf645db1d8ca98eb1f1a359",
+        "idempotencyKey": "ik_0000000000000000000000000c",
+        "nextOffset": "0000000000000000_0000000000006194",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:0e6abe9202104a06148ff83d09533a88151c88e9ed946f10a0a407253c48bdb4",
+        "status": "accepted",
+        "stream": "e0-t07-composed-authoritative",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    }
+  ],
+  "nextOffset": "0000000000000000_0000000000004257",
+  "streamDigest": "sha256:af1fb4134b54f9c8a5206190d61c72089aa089bc9b24a547301231d1c59170cc"
+}

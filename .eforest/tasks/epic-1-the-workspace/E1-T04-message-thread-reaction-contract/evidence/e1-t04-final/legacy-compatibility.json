@@ -1,6 +1,7 @@
 {
   "compactMessageAcceptedWithoutShapeChange": true,
   "foreignWorkspaceChannelRefused": true,
+  "unknownSameWorkspaceChannelRefused": true,
   "forgedAuthorRefused": true,
   "compactControlsRefused": [
     "C0",

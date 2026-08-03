@@ -217,3 +217,32 @@ same authorized channel.
   returns the fence's arbitrary result without proving authorization ran. E1 must require
   projected channel membership and fail closed on skipped fence callbacks, while keeping
   E0 compatibility explicit and isolated.
+
+### Builder — 2026-08-02 — projection and fence repair published
+
+- Repair commit: `7e8b9bc4d578eb6bb06e91bb9c7205a9ccee3d07` (`E1-T04: require projected
+  channel membership`). Explicit conversation events now require a projected channel and
+  active membership; compact legacy messages may use the projection-free path only when
+  the replay input is explicitly identified as the E0-T05 compatibility format. A fence
+  callback that is omitted or returns without invoking its authorization operation now
+  fails closed with `CONVERSATION_FENCE_REQUIRED`.
+- The valid fixture now begins with durable principal, workspace, workspace-membership,
+  channel, and channel-membership facts, followed by the six conversation event variants:
+  23 records total. This makes the strict E1 projection contract testable without changing
+  the E0 compatibility boundary.
+- Cold command: `TEST_RUN_ID=repair-projection-cold-2 make verify-E1-T04`; exit code 0.
+  Frozen install and all five gates passed: `pnpm format:check`, `pnpm lint`,
+  `pnpm typecheck`, `pnpm test`, and `pnpm build`. Promoted command:
+  `PROMOTE_EVIDENCE=1 E1_T04_IMPLEMENTATION_COMMIT=7e8b9bc4d578eb6bb06e91bb9c7205a9ccee3d07
+  E1_T04_NETWORK_DISABLED=1 TEST_RUN_ID=promoted-e1-t04-projection node scripts/verify-e1-t04.mjs`
+  passed from a clean implementation tree.
+- The promoted replay consumed all 23 offsets twice with identical bytes and stable
+  per-prefix digests; final digest is
+  `sha256:57f7e79e68667d6e74de4852393cd1ed78f676ed4dac44942ec64431fffc1e34`. Six invalid
+  fixtures refused at their cited offsets. Evidence now includes the strict projection,
+  legacy compatibility, and omitted/no-op fence checks. Replay: N/A (server conversation
+  event contract) + mitigation: golden logs, authorization refusals, property tests,
+  and per-prefix digest evidence.
+- Claim: E1 conversation appends cannot rely on an unprojected or stale authorization
+  path; legacy E0 replay is explicit and scoped, while source offsets, state digests,
+  membership checks, fence execution, and refusal sensitivity remain interrogable.

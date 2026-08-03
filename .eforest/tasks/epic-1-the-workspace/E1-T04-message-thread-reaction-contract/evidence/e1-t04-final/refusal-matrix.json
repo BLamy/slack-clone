@@ -3,27 +3,27 @@
   "observed": {
     "cross-channel-reply.v1.json": {
       "code": "REDUCER_MESSAGE_REPLY_ROOT",
-      "offset": "0000000000000000_0000000000000002"
+      "offset": "0000000000000000_000000000000000d"
     },
     "invalid-text.v1.json": {
       "code": "REDUCER_MESSAGE_TEXT",
-      "offset": "0000000000000000_0000000000000001"
+      "offset": "0000000000000000_000000000000000c"
     },
     "missing-root.v1.json": {
       "code": "REDUCER_MESSAGE_REPLY_ROOT",
-      "offset": "0000000000000000_0000000000000001"
+      "offset": "0000000000000000_000000000000000c"
     },
     "reply-to-reply.v1.json": {
       "code": "REDUCER_MESSAGE_REPLY_ROOT",
-      "offset": "0000000000000000_0000000000000003"
+      "offset": "0000000000000000_000000000000000e"
     },
     "stale-edit.v1.json": {
       "code": "REDUCER_MESSAGE_REVISION_CONFLICT",
-      "offset": "0000000000000000_0000000000000002"
+      "offset": "0000000000000000_000000000000000d"
     },
     "unauthorized-edit.v1.json": {
       "code": "REDUCER_MESSAGE_AUTHOR_MISMATCH",
-      "offset": "0000000000000000_0000000000000002"
+      "offset": "0000000000000000_000000000000000d"
     }
   },
   "allRefusedAtCitedOffsets": true

@@ -1,5 +1,7 @@
 {
   "omittedFenceRefused": true,
+  "skippedCallbackRefused": true,
+  "skippedCallbackLookupCalls": 0,
   "code": "CONVERSATION_FENCE_REQUIRED",
   "result": "PASS"
 }

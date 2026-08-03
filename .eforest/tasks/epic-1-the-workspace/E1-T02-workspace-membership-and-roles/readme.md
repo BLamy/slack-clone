@@ -3,7 +3,7 @@ id: E1-T02
 epic: 1
 title: "Workspace membership, roles, and tenant boundary"
 priority: 102
-status: refuted
+status: in-progress
 depends_on: [E1-T01]
 estimate: L
 capstone: false
@@ -126,3 +126,10 @@ VERDICT: refuted
   headers/query/path/body hints before handler input is used, and add handler-level negative
   evidence with unchanged target heads. The implementation is returned to `in-progress` after
   this verdict is recorded.
+
+### Builder — 2026-08-03 — repair started after live handler refutation
+
+- The fresh critic's live-path finding is accepted. This repair wires the existing HTTP delivery
+  to a trusted workspace context and linearizable membership authorization, preserves the
+  working demo's seeded users, and expands scoped-value binding so sibling identifiers and
+  workspace streams cannot cross the boundary through alternate field or header names.

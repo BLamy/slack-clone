@@ -20,6 +20,7 @@ import {
   authorizeConversationCommand,
   ConversationAuthorizationError,
   CONVERSATION_AUTH_ERROR_CODES,
+  createConversationAuthorization,
 } from "../../src/ledger/conversation-auth.mjs";
 
 const WORKSPACE_ID = "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa";
@@ -347,6 +348,32 @@ test("conversation dispatch policy binds actor identity and grants moderator del
         WORKSPACE_ID,
       ),
     MessageValidationError,
+  );
+});
+
+test("conversation dispatch refuses to run without a linearizable fence", async () => {
+  const authorization = createConversationAuthorization({
+    lookupState: async () => conversationState(),
+  });
+  await assert.rejects(
+    () =>
+      authorization.authorizeDispatch({
+        actorId: AUTHOR_ID,
+        operation: "channel.message.create",
+        payload: {
+          channelId: CHANNEL_ID,
+          contentType: "text/plain",
+          messageId: "fenced-root",
+          rootMessageId: null,
+          text: "fenced",
+        },
+        workspaceId: WORKSPACE_ID,
+      }),
+    (error) => {
+      assert.ok(error instanceof ConversationAuthorizationError);
+      assert.equal(error.code, CONVERSATION_AUTH_ERROR_CODES.FENCE_REQUIRED);
+      return true;
+    },
   );
 });
 

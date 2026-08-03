@@ -90,6 +90,7 @@ const replayEvidence = verifyReplay(
 const refusalEvidence = await verifyInvalidFixtures();
 const schemaEvidence = await verifySchemas();
 const authorizationEvidence = verifyAuthorization();
+const fenceEvidence = await verifyFenceRequirement();
 const legacyCompatibilityEvidence = verifyLegacyCompactScope();
 const boundaryEvidence = verifyBoundaries();
 const idempotencyEvidence = await verifyIdempotency();
@@ -149,6 +150,7 @@ const summary = {
   replayEvidence,
   refusalEvidence,
   authorizationEvidence,
+  fenceEvidence,
   legacyCompatibilityEvidence,
   boundaryEvidence,
   idempotencyEvidence,
@@ -173,6 +175,7 @@ await writeJson(
   path.join(evidenceDirectory, "authorization-matrix.json"),
   authorizationEvidence,
 );
+await writeJson(path.join(evidenceDirectory, "fence.json"), fenceEvidence);
 await writeJson(
   path.join(evidenceDirectory, "legacy-compatibility.json"),
   legacyCompatibilityEvidence,
@@ -471,6 +474,37 @@ function verifyBoundaries() {
     normalization: "NFC required before append",
     storedTextIsPlainData: true,
     htmlInterpretation: false,
+  };
+}
+
+async function verifyFenceRequirement() {
+  const authorization = createConversationAuthorization({
+    lookupState: async () => authState(),
+  });
+  await assert.rejects(
+    () =>
+      authorization.authorizeDispatch({
+        actorId: AUTHOR_ID,
+        operation: "channel.message.create",
+        payload: {
+          channelId: CHANNEL_ID,
+          contentType: "text/plain",
+          messageId: "unfenced-root",
+          rootMessageId: null,
+          text: "unfenced",
+        },
+        workspaceId: WORKSPACE_ID,
+      }),
+    (error) => {
+      assert.ok(error instanceof ConversationAuthorizationError);
+      assert.equal(error.code, "CONVERSATION_FENCE_REQUIRED");
+      return true;
+    },
+  );
+  return {
+    omittedFenceRefused: true,
+    code: "CONVERSATION_FENCE_REQUIRED",
+    result: "PASS",
   };
 }
 

@@ -9,6 +9,7 @@ export const CONVERSATION_AUTH_ERROR_CODES = Object.freeze({
   ACCESS_DENIED: "CONVERSATION_ACCESS_DENIED",
   CHANNEL_ARCHIVED: "CONVERSATION_CHANNEL_ARCHIVED",
   CHANNEL_NOT_FOUND: "CONVERSATION_CHANNEL_NOT_FOUND",
+  FENCE_REQUIRED: "CONVERSATION_FENCE_REQUIRED",
   MESSAGE_NOT_FOUND: "CONVERSATION_MESSAGE_NOT_FOUND",
   MESSAGE_NOT_AUTHOR: "CONVERSATION_MESSAGE_NOT_AUTHOR",
   MESSAGE_DUPLICATE: "CONVERSATION_MESSAGE_DUPLICATE",
@@ -183,18 +184,26 @@ export function createConversationAuthorization({
   if (typeof lookupState !== "function") {
     throw new TypeError("conversation authorization requires lookupState");
   }
+  if (
+    withChannelFence !== undefined &&
+    typeof withChannelFence !== "function"
+  ) {
+    throw new TypeError(
+      "conversation authorization withChannelFence must be a function",
+    );
+  }
   const fence =
     withChannelFence ??
-    (async (_context, operation) => {
-      if (typeof operation !== "function") {
-        throw new TypeError("conversation authorization requires an operation");
-      }
-      return operation();
+    (async () => {
+      throw new ConversationAuthorizationError(
+        CONVERSATION_AUTH_ERROR_CODES.FENCE_REQUIRED,
+        "conversation authorization requires a linearizable channel fence",
+        { statusCode: 503 },
+      );
     });
 
   async function authorizeDispatch(request, context = {}) {
     const channelId = request?.payload?.channelId;
-    const state = await lookupState(request.workspaceId, channelId);
     return fence(
       {
         channelId,
@@ -202,14 +211,16 @@ export function createConversationAuthorization({
         workspaceId: request.workspaceId,
         ...context,
       },
-      () =>
-        authorizeConversationCommand({
+      async () => {
+        const state = await lookupState(request.workspaceId, channelId);
+        return authorizeConversationCommand({
           actorId: request.actorId,
           operation: request.operation,
           payload: request.payload,
           state,
           workspaceId: request.workspaceId,
-        }),
+        });
+      },
     );
   }
 

@@ -168,3 +168,19 @@ same authorized channel.
   `compactControlsRefused: ["C0", "C1"]`. Replay: N/A (server conversation event
   contract) + mitigation: golden logs, authorization refusals, property tests, and
   per-prefix digest evidence.
+
+### Critic — 2026-08-02 — refuted
+
+- Fresh critic `019fc61a-391f-7912-a932-c4a12bcc6306` ran
+  `E1_T04_NETWORK_DISABLED=1 TEST_RUN_ID=critic-20260803 make verify-E1-T04`, replayed
+  all 12 prefixes twice, and confirmed final digest
+  `sha256:b0634cfd50db4f167aa5199815a70ab80d93b4acb5af7dfaeb9e57903e2502cc`. All six
+  invalid fixtures, compact scope/control attacks, explicit boundaries, reactions,
+  authorization, roots, revisions, permutations, and author-guard sensitivity passed.
+  Promoted evidence bound `e711b8fe` from a clean implementation tree. Replay: N/A
+  (server conversation event contract) + mitigation: golden logs, authorization refusals,
+  property tests, and per-prefix digest evidence.
+- VERDICT: refuted. `src/ledger/conversation-auth.mjs:186` defaulted to an immediate
+  no-op fence, so `authorizeDispatch` could succeed without `withChannelFence`, leaving
+  a membership-revocation lookup/append race. The default must fail closed like the
+  existing channel authorization fence.

@@ -3,7 +3,7 @@ id: E1-T03
 epic: 1
 title: "Channel lifecycle, membership, and private-read isolation"
 priority: 103
-status: in-progress
+status: refuted
 depends_on: [E1-T02]
 estimate: L
 capstone: false
@@ -69,3 +69,70 @@ set contract; service principals do not join conversations.
   message channel events, replayable membership state, and authorization shared by snapshot,
   live, projection, and future search paths, with private-channel metadata refused before any
   source or projection access.
+
+### Builder — 2026-08-03 — implementation complete
+
+- Implementation commit: `12853e5ede77283dd21da04fe1d2e130650e183e` (`E1-T03: implement
+  channel lifecycle and private-read authorization`). The implementation adds the versioned
+  channel contract and schema, pure lifecycle and membership reducers, deterministic direct
+  participant identity, channel-scoped authorization for discovery/read/dispatch/subscription,
+  revalidation leases for live delivery, and a per-channel linearizable fence.
+- Cold command: `make verify-E1-T03`. The frozen install, `pnpm format:check`, `pnpm lint`,
+  `pnpm typecheck`, `pnpm test`, and `pnpm build` all passed with zero skips. The promoted run
+  was `PROMOTE_EVIDENCE=1 E1_T03_IMPLEMENTATION_COMMIT=12853e5ede77283dd21da04fe1d2e130650e183e
+  TEST_RUN_ID=promoted-e1-t03 node scripts/verify-e1-t03.mjs`.
+- The two-workspace fixture replays 29 offsets twice with stable per-prefix digests and final
+  digest `sha256:420edca1bcc21849e2949663562afe9904159fc68337d230b9fba8b871ac1d8f`.
+  It contains public, private, and direct channels in both workspaces; the direct participant
+  sets are canonical and service principals have no channel membership.
+- Authorization evidence refuses private name discovery, snapshot, head, event count, history,
+  SSE, long-poll, projection, search, and error probes with metadata-free 404s. It also proves
+  workspace-role-only refusal, audited admin read, nested sibling-channel binding refusal,
+  archived read allowance/write refusal, and a revocation checkpoint where the active live
+  reader delivers one pre-revocation item and zero post-revocation items while the writer race
+  is fenced.
+- Lifecycle evidence refuses cross-tenant IDs, service creators and participants, stale channel
+  revisions, duplicate direct participant IDs and equivalent sets, direct participant
+  replacement, and archived renames before append. A scratch membership-check mutation is
+  accepted by the unsafe module and rejected by the baseline matrix; full tracked-tree binding
+  also rejects a post-implementation mutation.
+- Evidence: `evidence/e1-t03-final/verification-summary.json`,
+  `evidence/e1-t03-final/channel-replay-evidence.json`,
+  `evidence/e1-t03-final/private-read-refusal-matrix.json`,
+  `evidence/e1-t03-final/revocation-race.json`,
+  `evidence/e1-t03-final/lifecycle-refusal-matrix.json`,
+  `evidence/e1-t03-final/sensitivity.json`, and
+  `evidence/e1-t03-final/offline-replay.json`.
+- Claim: public, private, and direct channels now reduce from authoritative workspace-scoped
+  events with immutable IDs and deterministic replay; channel membership is required for
+  private reads, live subscriptions, and writes; archive state blocks conversation mutations
+  while authorized reads remain available; direct participant sets are canonical and immutable;
+  and current membership is rechecked under a channel fence before source, projection, or live
+  delivery. `Replay: N/A (server channel authorization model) + mitigation: cross-channel
+  negative matrix, lifecycle logs, revocation race, sensitivity mutation, and canonical replay
+  digests`.
+
+### Critic — 2026-08-03 — direct identity collision refutation
+
+VERDICT: refuted
+
+- A fresh read-only critic reproduced `make verify-E1-T03` and independently confirmed the
+  replay digest, private-read matrix, revocation race, and sensitivity detector. It also found
+  a blocking direct-message identity defect in `packages/protocol/src/channels.mjs`: the
+  `digestToken` loop read only `value[0..25]` from a participant-set key that is longer than
+  26 characters. Consequently, `[OWNER_A, MEMBER_A]`, `[OWNER_A, NON_MEMBER_A]`, and
+  `[SERVICE_A, NON_MEMBER_A]` all produced the same direct channel ID within Workspace A.
+- The collision was not caught by the fixture because it contains only one direct channel per
+  workspace, and the reducer's participant-set map only detects equivalent sets after the
+  caller has supplied an ID. This refutes deterministic direct-channel identity and can route
+  a distinct DM lookup to an unrelated existing channel.
+- Required repair: make the deterministic token consume the complete canonical participant-set
+  key, add an independent distinct-set regression, regenerate fixture IDs and per-prefix
+  digests, and rerun the full cold verifier. The critic also noted two non-blocking consistency
+  repairs: channel members should be allowed to discover their private channel, and a creator
+  who has left should not retain management authority.
+
+### Builder — 2026-08-03 — direct identity repair started
+
+- The collision finding is accepted. E1-T03 is returned to `in-progress` for a complete-key
+  deterministic identity repair and the associated discovery/manager authorization alignment.

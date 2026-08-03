@@ -3,7 +3,7 @@ id: E1-T05
 epic: 1
 title: "Resumable live chat API without polling"
 priority: 105
-status: implemented
+status: verified
 depends_on: [E1-T04]
 estimate: L
 capstone: false
@@ -268,3 +268,32 @@ verification, while the server remains responsible for reduction and authorizati
   authorization/backpressure tests, and disposable-checkout proof.
 - Claim: the cold-start proof now excludes ambient working-tree files and is tied to the exact
   implementation commit; awaiting a fresh independent critic.
+
+### Critic — 2026-08-02 — verified
+
+VERDICT: verified
+
+- Fresh critic session reviewed implementation commit `58546f41f98eed41b78d0e453ac4ceae9c64a9c3`
+  and promoted evidence commit `60b0475` without editing the repository. The critic traced
+  `scripts/cold-verify-e1-t05.mjs` and confirmed the detached worktree, pinned submodule,
+  zero tracked/untracked pre-install status, in-checkout install/build/verifier execution,
+  named evidence copy, and success-path cleanup. The committed cold transcript records the
+  same facts and no E1-T05 worktree remains.
+- Independent bounded commands passed: `node --test
+  test/unit/workspace-http.test.mjs test/unit/live-chat-http.test.mjs` (17/17) and
+  `test/unit/durable-streams-adapter.test.mjs` (23/23). The critic reproduced the real-fence
+  slow-reader mutant distinction and confirmed the polling positive control goes red. It
+  confirmed actual `createChatService.readRoomStatus` delegation and underlying stream-read
+  accounting, plus the open/batch/heartbeat, checkpoint, revocation, archive, reconnect,
+  mutation, isolation, cancellation, and duplicate-response coverage against the promoted
+  transcript.
+- The only noted gap is a non-blocking end-to-end HTTP test for an active member with an
+  insufficient role attempting archive; the capability table and E1-T02 role contract cover
+  the authorization mapping, and the critic did not refute E1-T05.
+- Evidence: `evidence/e1-t05-final/cold-clone-transcript.json`, `verification-summary.json`,
+  `network-transcript.json`, and `idle-request-budget.json`. Replay: N/A (server live-delivery
+  API) + mitigation: real-emulator network transcript, reconnect matrix, request counts,
+  digest convergence, focused authorization/backpressure tests, and disposable-checkout
+  proof.
+- Claim: every E1-T05 acceptance criterion is verified against the exact implementation and
+  promoted evidence commits.

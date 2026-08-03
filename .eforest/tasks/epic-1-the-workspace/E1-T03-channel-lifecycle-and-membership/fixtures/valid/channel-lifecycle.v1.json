@@ -503,7 +503,7 @@
         "causation": null,
         "correlationId": "cr_00000000000000000000000024",
         "data": {
-          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_ccm44mccww4mm4wwccm44mccww",
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
           "creatorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
           "participantIds": [
             "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
@@ -605,7 +605,7 @@
         "causation": null,
         "correlationId": "cr_00000000000000000000000029",
         "data": {
-          "channelId": "ch_bbbbbbbbbbbbbbbbbbbbbbbbbb_m4ccwwm4m4ccwwm4m4ccwwm4m4",
+          "channelId": "ch_bbbbbbbbbbbbbbbbbbbbbbbbbb_1kpyz7rjzm8wsepzsfy1g191r1",
           "creatorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
           "participantIds": [
             "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd",

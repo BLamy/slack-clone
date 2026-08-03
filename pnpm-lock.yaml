@@ -56,7 +56,11 @@ importers:
 
   packages/protocol: {}
 
-  packages/reducers: {}
+  packages/reducers:
+    dependencies:
+      "@stream-slack/protocol":
+        specifier: workspace:*
+        version: link:../protocol
 
   packages/services:
     dependencies:

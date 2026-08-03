@@ -313,6 +313,7 @@ test("envelope provenance and source-reference mutations change replay digests",
 });
 
 test("reducer and canonicalizer dependency inspection finds no ambient capabilities", async () => {
+  const allowedPureImports = new Set(["@stream-slack/protocol"]);
   const sourceFiles = [
     "packages/reducers/src/index.mjs",
     "packages/reducers/src/canonical-state.mjs",
@@ -321,7 +322,12 @@ test("reducer and canonicalizer dependency inspection finds no ambient capabilit
     const source = await readFile(path.resolve(sourceFile), "utf8");
     const analysis = analyzeModuleSource(source, sourceFile);
     assert.deepEqual(analysis.ambientCapabilities, []);
-    assert.ok(analysis.imports.every((specifier) => specifier.startsWith(".")));
+    assert.ok(
+      analysis.imports.every(
+        (specifier) =>
+          specifier.startsWith(".") || allowedPureImports.has(specifier),
+      ),
+    );
   }
 
   const forbiddenFixture = analyzeModuleSource(

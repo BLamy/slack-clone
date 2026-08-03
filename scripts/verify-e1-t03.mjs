@@ -103,6 +103,7 @@ const dump = await readJson(fixturePath);
 const manifest = await readJson(path.join(fixtureDirectory, "manifest.json"));
 const replay = validateReplayTwice(dump, manifest["channel-lifecycle.v1.json"]);
 assertChannelState(replay.finalState);
+const directIdentity = verifyDirectIdentityCorpus();
 const replayEvidence = {
   finalStateDigest: replay.finalStateDigest,
   offsets: replay.prefixes.map(({ offset }) => offset),
@@ -177,6 +178,7 @@ const summary = {
   },
   schemas: schemaEvidence,
   replayEvidence,
+  directIdentity,
   authorization: authorizationEvidence,
   lifecycle: lifecycleEvidence,
   sensitivity,
@@ -190,6 +192,10 @@ await writeJson(
 await writeJson(
   path.join(evidenceDirectory, "channel-replay-evidence.json"),
   replayEvidence,
+);
+await writeJson(
+  path.join(evidenceDirectory, "direct-identity-collision-matrix.json"),
+  directIdentity,
 );
 await writeJson(
   path.join(evidenceDirectory, "private-read-refusal-matrix.json"),
@@ -270,6 +276,35 @@ function assertChannelState(state) {
     ),
     false,
   );
+}
+
+function verifyDirectIdentityCorpus() {
+  const identifiers = new Set();
+  const generatedSets = 5000;
+  for (let index = 0; index < generatedSets; index += 1) {
+    const participantIds = [
+      syntheticPrincipalId(WORKSPACE_A, index * 2),
+      syntheticPrincipalId(WORKSPACE_A, index * 2 + 1),
+    ];
+    const channelId = directChannelIdFor(WORKSPACE_A, participantIds);
+    assert.equal(
+      identifiers.has(channelId),
+      false,
+      `direct identity collision at generated set ${index}`,
+    );
+    identifiers.add(channelId);
+  }
+  assert.equal(identifiers.size, generatedSets);
+  return {
+    generatedSets,
+    uniqueIds: identifiers.size,
+    collisionCount: 0,
+    result: "PASS",
+  };
+}
+
+function syntheticPrincipalId(workspaceId, index) {
+  return `pr_${workspaceId.slice(3)}_${index.toString(16).padStart(26, "0")}`;
 }
 
 async function verifySchemas() {
@@ -708,12 +743,23 @@ function verifyLifecycle(sourceDump, replayValue) {
     OWNER_A,
     "channel.direct.created",
     {
-      channelId: channelIdFor(WORKSPACE_A, "66666666666666666666666666"),
+      channelId: DIRECT_A,
       creatorId: OWNER_A,
       participantIds: [MEMBER_A, OWNER_A],
     },
     WORKSPACE_A,
     31,
+  );
+  const directIdMismatch = envelope(
+    OWNER_A,
+    "channel.direct.created",
+    {
+      channelId: channelIdFor(WORKSPACE_A, "66666666666666666666666666"),
+      creatorId: OWNER_A,
+      participantIds: [MEMBER_A, OWNER_A],
+    },
+    WORKSPACE_A,
+    35,
   );
   const directService = envelope(
     OWNER_A,
@@ -738,6 +784,11 @@ function verifyLifecycle(sourceDump, replayValue) {
     33,
   );
   for (const [name, event, expectedCode] of [
+    [
+      "direct-id-mismatch",
+      directIdMismatch,
+      REDUCER_ERROR_CODES.CHANNEL_DIRECT_ID_MISMATCH,
+    ],
     [
       "equivalent-direct-set",
       directDuplicate,
@@ -799,6 +850,7 @@ function verifyLifecycle(sourceDump, replayValue) {
     refusals,
     raceProtection: true,
     directParticipantSetImmutable: true,
+    directIdentityBinding: true,
     result: "PASS",
   };
 }

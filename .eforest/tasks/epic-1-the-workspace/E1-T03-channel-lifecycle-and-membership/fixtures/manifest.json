@@ -1,6 +1,6 @@
 {
   "channel-lifecycle.v1.json": {
-    "finalStateDigest": "sha256:a600b2a92780597f82ceb56a761d98241a67ebd4fab2476f05440473072d1076",
+    "finalStateDigest": "sha256:0513eb1f0052aeb9d7a9e7157c87ec5c8e409b1fd17aa8602a8d2637ff724681",
     "prefixes": [
       {
         "index": 1,
@@ -120,32 +120,32 @@
       {
         "index": 24,
         "offset": "0000000000000000_0000000000000024",
-        "stateDigest": "sha256:412af539a97cbde5c9637b4f6c8b65294932a09ade6e3461a9b04756c58030af"
+        "stateDigest": "sha256:8d3ef0e3b88ab74d01d293c40c6b695521b47cf4b6e2af6d3b8b57f53613e9bb"
       },
       {
         "index": 25,
         "offset": "0000000000000000_0000000000000025",
-        "stateDigest": "sha256:914fc5cf40f70bf6f2e8ca99bff6530445e17723bc0847fa1c4031b1eee46a99"
+        "stateDigest": "sha256:96dcb6da63ef7173c3345d5456e06e218295347b90deb46007288fd3b5f8fc9c"
       },
       {
         "index": 26,
         "offset": "0000000000000000_0000000000000026",
-        "stateDigest": "sha256:3f8a40c1c84f904867b5923ad55f03c0ce79c8a8d1ffbae2ad7916ee6e792cb4"
+        "stateDigest": "sha256:744b4f625abde8519f1a1c46dae9251873308bcf6ff7c2ad87dce18f4353dde2"
       },
       {
         "index": 27,
         "offset": "0000000000000000_0000000000000027",
-        "stateDigest": "sha256:00c86bfc0c64c61f837bfebad3e8eadf09cd660c86b83408b9ab4efac3984149"
+        "stateDigest": "sha256:2d7e898b12fd57aea6ea88d232b619b2f2c27029d0c429135288a3904931827d"
       },
       {
         "index": 28,
         "offset": "0000000000000000_0000000000000028",
-        "stateDigest": "sha256:5f4e28a7d2a27769938f9c1be0dac096abc78aa285ceef53b7028b196b75822b"
+        "stateDigest": "sha256:64701521bc45ecabdc1066f1c78133c26c1ff5e213e2585b0eaa9be78f933fd9"
       },
       {
         "index": 29,
         "offset": "0000000000000000_0000000000000029",
-        "stateDigest": "sha256:a600b2a92780597f82ceb56a761d98241a67ebd4fab2476f05440473072d1076"
+        "stateDigest": "sha256:0513eb1f0052aeb9d7a9e7157c87ec5c8e409b1fd17aa8602a8d2637ff724681"
       }
     ]
   }

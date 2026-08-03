@@ -1,3 +1,5 @@
+import { directChannelIdFor } from "@stream-slack/protocol";
+
 import {
   canonicalStateDigest,
   canonicalStateJson,
@@ -78,6 +80,7 @@ export const REDUCER_ERROR_CODES = Object.freeze({
   WORKSPACE_SCOPE_MISMATCH: "REDUCER_WORKSPACE_SCOPE_MISMATCH",
   CHANNEL_ARCHIVED: "REDUCER_CHANNEL_ARCHIVED",
   CHANNEL_DIRECT_DUPLICATE: "REDUCER_CHANNEL_DIRECT_DUPLICATE",
+  CHANNEL_DIRECT_ID_MISMATCH: "REDUCER_CHANNEL_DIRECT_ID_MISMATCH",
   CHANNEL_DIRECT_PARTICIPANTS: "REDUCER_CHANNEL_DIRECT_PARTICIPANTS",
   CHANNEL_INVALID_DISPLAY_NAME: "REDUCER_CHANNEL_INVALID_DISPLAY_NAME",
   CHANNEL_INVALID_ID: "REDUCER_CHANNEL_INVALID_ID",
@@ -766,6 +769,18 @@ function reduceDirectChannelCreated(state, data, context) {
       );
     }
   }
+  const expectedChannelId = directChannelIdFor(
+    context.envelope.workspaceId,
+    participantIds,
+  );
+  if (data.channelId !== expectedChannelId) {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_DIRECT_ID_MISMATCH,
+      "direct channel id must be derived from its participant set",
+      "channelId",
+      context,
+    );
+  }
   if (data.creatorId !== context.envelope.actorId) {
     failChannel(
       REDUCER_ERROR_CODES.CHANNEL_SCOPE_MISMATCH,
@@ -774,7 +789,6 @@ function reduceDirectChannelCreated(state, data, context) {
       context,
     );
   }
-  assertUnique(channelMap(state), data.channelId, "channelId", context);
   const participantKey = participantSetKeyForReducer(participantIds);
   if (hasKey(directChannelMap(state), participantKey)) {
     failChannel(
@@ -784,6 +798,7 @@ function reduceDirectChannelCreated(state, data, context) {
       context,
     );
   }
+  assertUnique(channelMap(state), data.channelId, "channelId", context);
   state.entities.channels = setKey(channelMap(state), data.channelId, {
     channelId: data.channelId,
     creatorId: data.creatorId,

@@ -108,7 +108,7 @@ function isCapabilityImport(specifier) {
 }
 
 function isBareSpecifier(specifier) {
-  return !isRelativeSpecifier(specifier);
+  return !isRelativeSpecifier(specifier) && !internalLayerFor(specifier);
 }
 
 function isRelativeSpecifier(specifier) {

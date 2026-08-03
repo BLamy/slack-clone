@@ -60,6 +60,24 @@ test("channel identifiers and direct participant sets are canonical", () => {
   });
 });
 
+test("direct identifiers stay collision-free across a generated corpus", () => {
+  const identifiers = new Set();
+  for (let index = 0; index < 5000; index += 1) {
+    const participantIds = [
+      syntheticPrincipalId(WORKSPACE_A, index * 2),
+      syntheticPrincipalId(WORKSPACE_A, index * 2 + 1),
+    ];
+    const channelId = directChannelIdFor(WORKSPACE_A, participantIds);
+    assert.equal(
+      identifiers.has(channelId),
+      false,
+      `direct identity collision at generated set ${index}`,
+    );
+    identifiers.add(channelId);
+  }
+  assert.equal(identifiers.size, 5000);
+});
+
 test("channel fixture replays into two isolated public/private/direct topologies", async () => {
   const dump = JSON.parse(await readFile(fixturePath, "utf8"));
   const first = validateAndReplayDump(dump);
@@ -103,7 +121,7 @@ test("channel reducer rejects stale, cross-tenant, service, duplicate, and direc
       OWNER_A,
       "channel.direct.created",
       {
-        channelId: channelIdFor(WORKSPACE_A, "66666666666666666666666666"),
+        channelId: DIRECT_A,
         creatorId: OWNER_A,
         participantIds: [OWNER_A, MEMBER_A],
       },
@@ -111,6 +129,20 @@ test("channel reducer rejects stale, cross-tenant, service, duplicate, and direc
       30,
     ),
     REDUCER_ERROR_CODES.CHANNEL_DIRECT_DUPLICATE,
+  );
+  expectFailure(
+    envelope(
+      OWNER_A,
+      "channel.direct.created",
+      {
+        channelId: channelIdFor(WORKSPACE_A, "66666666666666666666666666"),
+        creatorId: OWNER_A,
+        participantIds: [OWNER_A, MEMBER_A],
+      },
+      WORKSPACE_A,
+      30,
+    ),
+    REDUCER_ERROR_CODES.CHANNEL_DIRECT_ID_MISMATCH,
   );
   expectFailure(
     envelope(
@@ -314,4 +346,8 @@ function envelope(actorId, eventType, data, workspaceId, sequence) {
     serverTimestamp: `2026-08-02T00:00:${String(sequence).padStart(2, "0")}.000Z`,
     workspaceId,
   };
+}
+
+function syntheticPrincipalId(workspaceId, index) {
+  return `pr_${workspaceId.slice(3)}_${index.toString(16).padStart(26, "0")}`;
 }

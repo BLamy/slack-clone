@@ -7,7 +7,7 @@
     },
     "reducers": {
       "path": "packages/reducers",
-      "mayImport": [],
+      "mayImport": ["protocol"],
       "pure": true
     },
     "durable-streams": {

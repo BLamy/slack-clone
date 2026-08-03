@@ -1,4 +1,5 @@
 import { validatePrincipalId, validateWorkspaceId } from "./principals.mjs";
+import { sha256Digest } from "./sha256.mjs";
 
 export const CHANNEL_SCHEMA_VERSION = 1;
 
@@ -227,30 +228,17 @@ export function channelMembershipKey(channelId, principalId) {
 }
 
 function digestToken(value) {
-  let left = 0x811c9dc5;
-  let right = 0x9e3779b9;
-  for (let index = 0; index < value.length; index += 1) {
-    const code = value.charCodeAt(index % value.length) ?? 0;
-    left = imul32(left ^ code ^ index, 0x01000193);
-    right = imul32(right ^ code ^ (index * 17), 0x85ebca6b);
-  }
+  const digest = sha256Digest(value);
   let output = "";
   for (let index = 0; index < 26; index += 1) {
-    left = imul32(left ^ index, 0x01000193);
-    right = imul32(right ^ (index * 17), 0x85ebca6b);
-    output += DIRECT_ID_ALPHABET.at((left ^ right) & 31);
+    const bitOffset = index * 5;
+    const byteOffset = bitOffset >> 3;
+    const shift = bitOffset % 8;
+    const bitWindow =
+      (digest.at(byteOffset) << 16) |
+      (digest.at(byteOffset + 1) << 8) |
+      digest.at(byteOffset + 2);
+    output += DIRECT_ID_ALPHABET.at((bitWindow >>> (19 - shift)) & 31);
   }
   return output;
-}
-
-function imul32(left, right) {
-  const leftLow = left & 0xffff;
-  const leftHigh = left >>> 16;
-  const rightLow = right & 0xffff;
-  const rightHigh = right >>> 16;
-  return (
-    (leftLow * rightLow +
-      ((leftHigh * rightLow + leftLow * rightHigh) << 16)) >>>
-    0
-  );
 }

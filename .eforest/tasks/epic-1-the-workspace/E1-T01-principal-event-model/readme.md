@@ -3,7 +3,7 @@ id: E1-T01
 epic: 1
 title: "First-class human, agent, and service principal event model"
 priority: 101
-status: pending
+status: in-progress
 depends_on: [E0]
 estimate: M
 capstone: false
@@ -67,3 +67,10 @@ an event body.
    fail.
 
 ## Verification log
+
+### Builder — 2026-08-03 — activated after E0-T07 verification
+
+- E0-T07 is verified at `7cf528d`; E1-T01 is now the sole active queue gate. The
+  implementation will add the versioned principal event model, subject/owner binding
+  contracts, server-derived actor stamping, pure replay fixtures, and canary evidence
+  without introducing workspace membership semantics ahead of E1-T02.

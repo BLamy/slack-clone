@@ -3,7 +3,7 @@ id: E1-T02
 epic: 1
 title: "Workspace membership, roles, and tenant boundary"
 priority: 102
-status: refuted
+status: in-progress
 depends_on: [E1-T01]
 estimate: L
 capstone: false
@@ -241,3 +241,10 @@ VERDICT: refuted
   detector-coverage defect rather than evidence of a current product regression. The ticket is
   returned to `in-progress` after this verdict is recorded. `Replay: N/A (server tenancy and RBAC
   contract) + mitigation: deterministic replay, live negative matrix, and exact-tree binding audit`.
+
+### Builder — 2026-08-03 — full tracked-tree binding repair started
+
+- The critic's detector-coverage finding is accepted. The evidence verifier will reject every
+  tracked change after the implementation commit except the task's own readme, regenerated queue,
+  and promoted evidence files, covering all transitive identity, protocol, reducer, replay, and
+  server dependencies without relying on a manually maintained implementation-file list.

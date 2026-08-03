@@ -3,7 +3,7 @@ id: E1-T02
 epic: 1
 title: "Workspace membership, roles, and tenant boundary"
 priority: 102
-status: refuted
+status: in-progress
 depends_on: [E1-T01]
 estimate: L
 capstone: false
@@ -179,6 +179,12 @@ VERDICT: refuted
   not available, so the mapping finding is source-level. `Replay: N/A (server tenancy and RBAC
   contract) + mitigation: deterministic replay, live negative matrix, and source-level subject
   binding audit`.
+
+### Builder — 2026-08-03 — exact evidence and subject repair started
+
+- The critic's two findings are accepted. This repair will make promoted evidence fail closed for
+  nonexistent or non-ancestor implementation commits and remove email/nickname authorization
+  fallbacks so only the exact replayed Auth0 subject binding can establish workspace identity.
 
 ### Builder — 2026-08-03 — repair started after live handler refutation
 

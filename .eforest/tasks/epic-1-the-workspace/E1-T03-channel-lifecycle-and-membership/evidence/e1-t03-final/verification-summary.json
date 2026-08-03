@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E1-T03",
-  "runId": "promoted-sha-repair-e1-t03",
-  "implementationCommit": "ac556e3f169ab6b3f0f7fc9f90d027dc8e4a8860",
+  "runId": "promoted-sha-vector-e1-t03",
+  "implementationCommit": "0f6814c114292a222ab7596be8e8e29bc033608b",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "fixtureCount": 1,
@@ -11,31 +11,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 1949,
+      "durationMs": 1829,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 1658,
+      "durationMs": 1507,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 5324,
+      "durationMs": 4707,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 19288,
+      "durationMs": 18362,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 726,
+      "durationMs": 513,
       "name": "build",
       "result": "PASS"
     }
@@ -278,7 +278,7 @@
         "statusCode": 404,
         "metadataFree": true,
         "sourceHistoryOrProjectionCallback": false,
-        "elapsedMs": 1,
+        "elapsedMs": 0,
         "result": "REFUSED"
       },
       {
@@ -323,7 +323,7 @@
         "statusCode": 404,
         "metadataFree": true,
         "sourceHistoryOrProjectionCallback": false,
-        "elapsedMs": 0,
+        "elapsedMs": 1,
         "result": "REFUSED"
       },
       {
@@ -350,7 +350,7 @@
         "statusCode": 404,
         "metadataFree": true,
         "sourceHistoryOrProjectionCallback": false,
-        "elapsedMs": 1,
+        "elapsedMs": 0,
         "result": "REFUSED"
       },
       {
@@ -474,7 +474,7 @@
       "verifierRejectedPostImplementationChange": true,
       "result": "PASS"
     },
-    "scratchPath": ".artifacts/e1-t03/promoted-sha-repair-e1-t03/unsafe-channel-auth/channel-auth.mjs",
+    "scratchPath": ".artifacts/e1-t03/promoted-sha-vector-e1-t03/unsafe-channel-auth/channel-auth.mjs",
     "result": "PASS"
   },
   "networkReplay": {

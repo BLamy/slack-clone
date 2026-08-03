@@ -5,7 +5,7 @@
     "statusCode": 404,
     "metadataFree": true,
     "sourceHistoryOrProjectionCallback": false,
-    "elapsedMs": 1,
+    "elapsedMs": 0,
     "result": "REFUSED"
   },
   {
@@ -50,7 +50,7 @@
     "statusCode": 404,
     "metadataFree": true,
     "sourceHistoryOrProjectionCallback": false,
-    "elapsedMs": 0,
+    "elapsedMs": 1,
     "result": "REFUSED"
   },
   {
@@ -77,7 +77,7 @@
     "statusCode": 404,
     "metadataFree": true,
     "sourceHistoryOrProjectionCallback": false,
-    "elapsedMs": 1,
+    "elapsedMs": 0,
     "result": "REFUSED"
   },
   {

@@ -225,3 +225,22 @@ VERDICT: refuted
   direct IDs with a 5,000-set collision detector, and the authoritative reducer refuses any
   direct event whose ID does not match its canonical participant set; private channel access
   and lifecycle fencing remain enforced as previously proven.
+
+### Builder — 2026-08-03 — protocol digest vector pinned
+
+- Evidence pin commit: `0f6814c114292a222ab7596be8e8e29bc033608b` (`E1-T03: pin protocol
+  SHA-256 vector`). `test/unit/channels.test.mjs` now asserts the new protocol digest helper
+  against the committed `sha256("abc")` vector
+  `ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad`, closing the evidence
+  gap between the protocol copy and the existing reducer hash test.
+- Final cold command: `make verify-E1-T03`, with frozen install and all five gates passing.
+  The final promoted command was `PROMOTE_EVIDENCE=1
+  E1_T03_IMPLEMENTATION_COMMIT=0f6814c114292a222ab7596be8e8e29bc033608b
+  TEST_RUN_ID=promoted-sha-vector-e1-t03 node scripts/verify-e1-t03.mjs`, with
+  `implementationTreeCleanAtStart: true`.
+- Final evidence retains 29 deterministic offsets, final digest
+  `sha256:0513eb1f0052aeb9d7a9e7157c87ec5c8e409b1fd17aa8602a8d2637ff724681`, the 5,000/5,000
+  direct-identity corpus, ten lifecycle refusals, the private-read matrix, revocation race,
+  offline replay, zero-canary scan, and sensitivity proof. Replay: N/A (server channel
+  authorization model) + mitigation: committed known vector, direct-identity corpus,
+  cross-channel negative matrix, lifecycle logs, and canonical replay digests.

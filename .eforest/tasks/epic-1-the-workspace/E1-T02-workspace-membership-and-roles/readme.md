@@ -3,7 +3,7 @@ id: E1-T02
 epic: 1
 title: "Workspace membership, roles, and tenant boundary"
 priority: 102
-status: implemented
+status: refuted
 depends_on: [E1-T01]
 estimate: L
 capstone: false
@@ -156,6 +156,29 @@ VERDICT: refuted
   seeded two-user demo, and remains replay-authoritative after projection deletion. `Replay: N/A
   (server tenancy and RBAC contract) + mitigation: two-workspace negative matrix, live handler
   refusal matrix, before/after heads, and deterministic membership replay`.
+
+### Critic — 2026-08-03 — evidence and subject-binding refutation
+
+VERDICT: refuted
+
+- Fresh managed critic `Feynman` audited implementation commit
+  `f047dece639da3a54c509cbcb3140aaeb04a4747` and the promoted evidence without modifying the
+  checkout. Functional checks passed, including the live handler matrix, full 86-test and five
+  Playwright gates, replay digest, projection deletion, lifecycle refusals, revocation race, and
+  verifier sensitivity.
+- Blocking finding: `scripts/verify-e1-t02.mjs:43-54` only checked that
+  `E1_T02_IMPLEMENTATION_COMMIT` matched a 40-hex shape. The critic supplied an all-zero commit
+  value and still obtained `result: PASS`, so the promoted evidence was not cryptographically
+  bound to an existing implementation commit or its exact tree.
+- Blocking finding: `src/server.mjs:145-151` fell back from the authoritative Auth0 subject to
+  mutable `email` and `preferredUsername` values. A different authenticated subject carrying
+  Ada's email or nickname could therefore be mapped to Ada's workspace principal.
+- Required repair: resolve and validate the implementation commit object as an ancestor with no
+  changes to the implementation file set, and map authenticated users only by the exact subject
+  binding replayed from the workspace directory. The arbitrary forged-subject emulator attack was
+  not available, so the mapping finding is source-level. `Replay: N/A (server tenancy and RBAC
+  contract) + mitigation: deterministic replay, live negative matrix, and source-level subject
+  binding audit`.
 
 ### Builder — 2026-08-03 — repair started after live handler refutation
 

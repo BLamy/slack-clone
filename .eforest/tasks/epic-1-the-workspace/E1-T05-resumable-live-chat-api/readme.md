@@ -3,7 +3,7 @@ id: E1-T05
 epic: 1
 title: "Resumable live chat API without polling"
 priority: 105
-status: pending
+status: in-progress
 depends_on: [E1-T04]
 estimate: L
 capstone: false

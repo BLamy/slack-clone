@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E1-T04",
-  "runId": "promoted-e1-t04-repair",
-  "implementationCommit": "4e3da78b0257aba1a21febe72e0e48764e6b4c05",
+  "runId": "promoted-e1-t04-compact-text",
+  "implementationCommit": "e711b8fe95f73fca32e7f59bebe96297375efdb8",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "fixtureCount": 1,
@@ -12,31 +12,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 1768,
+      "durationMs": 6156,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 1461,
+      "durationMs": 1846,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 4830,
+      "durationMs": 4695,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 18240,
+      "durationMs": 19195,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 461,
+      "durationMs": 641,
       "name": "build",
       "result": "PASS"
     }
@@ -241,6 +241,10 @@
     "compactMessageAcceptedWithoutShapeChange": true,
     "foreignWorkspaceChannelRefused": true,
     "forgedAuthorRefused": true,
+    "compactControlsRefused": [
+      "C0",
+      "C1"
+    ],
     "legacyProjectionPreserved": true,
     "result": "PASS"
   },

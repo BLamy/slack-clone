@@ -2,6 +2,10 @@
   "compactMessageAcceptedWithoutShapeChange": true,
   "foreignWorkspaceChannelRefused": true,
   "forgedAuthorRefused": true,
+  "compactControlsRefused": [
+    "C0",
+    "C1"
+  ],
   "legacyProjectionPreserved": true,
   "result": "PASS"
 }

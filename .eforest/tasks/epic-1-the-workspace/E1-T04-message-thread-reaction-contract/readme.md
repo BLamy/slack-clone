@@ -152,3 +152,19 @@ same authorized channel.
   `packages/reducers/src/index.mjs:412`, bypassing the conversation text validator.
   Repair must validate compact text too while retaining the historical projection shape
   and digest.
+
+### Builder — 2026-08-02 — compact text boundary repaired
+
+- Repair commit: `e711b8fe95f73fca32e7f59bebe96297375efdb8` (`E1-T04: enforce legacy
+  text boundary`). Compact legacy message creation now runs the same text validator as
+  explicit conversation events, rejecting C0/NUL and C1/U+0085 controls before append
+  without changing the stored compact projection. Unit and verifier regressions cover both
+  controls.
+- Cold command: `TEST_RUN_ID=repair-compact-text-cold-2 make verify-E1-T04`; frozen install
+  and all five gates passed. Promoted command:
+  `PROMOTE_EVIDENCE=1 E1_T04_IMPLEMENTATION_COMMIT=e711b8fe95f73fca32e7f59bebe96297375efdb8
+  E1_T04_NETWORK_DISABLED=1 TEST_RUN_ID=promoted-e1-t04-compact-text node scripts/verify-e1-t04.mjs`
+  passed from a clean implementation tree. The promoted legacy evidence now records
+  `compactControlsRefused: ["C0", "C1"]`. Replay: N/A (server conversation event
+  contract) + mitigation: golden logs, authorization refusals, property tests, and
+  per-prefix digest evidence.

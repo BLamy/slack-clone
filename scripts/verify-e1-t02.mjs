@@ -1,7 +1,15 @@
 import assert from "node:assert/strict";
 import { execFile, execFileSync } from "node:child_process";
 import { EventEmitter } from "node:events";
-import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
+import {
+  copyFile,
+  mkdir,
+  mkdtemp,
+  readFile,
+  rm,
+  writeFile,
+} from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
 import { pathToFileURL } from "node:url";
@@ -980,13 +988,81 @@ async function verifySensitivity() {
     unsafeAccepted = false;
   }
   assert.equal(unsafeAccepted, true);
+  const implementationTreeBinding =
+    await verifyImplementationBindingSensitivity();
   return {
     mutation: "disable trusted workspace context comparison in scratch module",
     unsafeBypassObserved: true,
     baselineConformanceMatrixMustRefuseTheSameInput: true,
+    implementationTreeBinding,
     scratchPath: path.relative(root, unsafePath),
     result: "PASS",
   };
+}
+
+async function verifyImplementationBindingSensitivity() {
+  const scratchRoot = await mkdtemp(
+    path.join(tmpdir(), "stream-slack-e1-t02-binding-"),
+  );
+  const omittedPath = "src/auth0-client.mjs";
+  try {
+    await execFileAsync("git", ["clone", "--no-hardlinks", root, scratchRoot], {
+      cwd: root,
+      maxBuffer: 32 * 1024 * 1024,
+    });
+    await execFileAsync("pnpm", ["install", "--offline", "--frozen-lockfile"], {
+      cwd: scratchRoot,
+      env: { ...process.env, CI: "1" },
+      maxBuffer: 32 * 1024 * 1024,
+    });
+    const sourcePath = path.join(scratchRoot, omittedPath);
+    await writeFile(
+      sourcePath,
+      `${await readFile(sourcePath, "utf8")}\n// binding sensitivity mutation\n`,
+    );
+    const identity = [
+      "-c",
+      "user.name=E1-T02 verifier",
+      "-c",
+      "user.email=e1-t02-verifier@example.invalid",
+    ];
+    await execFileAsync("git", [...identity, "add", omittedPath], {
+      cwd: scratchRoot,
+    });
+    await execFileAsync(
+      "git",
+      [
+        ...identity,
+        "commit",
+        "--no-verify",
+        "-m",
+        "binding sensitivity mutation",
+      ],
+      { cwd: scratchRoot },
+    );
+    const result = await runNode(
+      ["scripts/verify-e1-t02.mjs"],
+      {
+        E1_T02_IMPLEMENTATION_COMMIT: implementationCommit,
+        E1_T02_SKIP_GATES: "1",
+        TEST_ARTIFACT_DIR: path.join(".artifacts", "binding-sensitivity"),
+        TEST_RUN_ID: `${runId}-binding-sensitivity`,
+      },
+      scratchRoot,
+    );
+    assert.notEqual(result.code, 0);
+    assert.match(
+      `${result.stdout}\n${result.stderr}`,
+      /implementation files changed after the evidence commit: src\/auth0-client\.mjs/u,
+    );
+    return {
+      mutatedPath: omittedPath,
+      verifierRejectedPostImplementationChange: true,
+      result: "PASS",
+    };
+  } finally {
+    await rm(scratchRoot, { force: true, recursive: true });
+  }
 }
 
 async function verifyOfflineReplay(sourcePath, expectedDigest) {
@@ -1170,10 +1246,10 @@ async function runPnpm(script, env) {
   }
 }
 
-async function runNode(args, extraEnv = {}) {
+async function runNode(args, extraEnv = {}, cwd = root) {
   try {
     const result = await execFileAsync(process.execPath, args, {
-      cwd: root,
+      cwd,
       env: { ...process.env, ...extraEnv },
       maxBuffer: 32 * 1024 * 1024,
     });

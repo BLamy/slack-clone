@@ -3,7 +3,7 @@ id: E1-T03
 epic: 1
 title: "Channel lifecycle, membership, and private-read isolation"
 priority: 103
-status: in-progress
+status: implemented
 depends_on: [E1-T02]
 estimate: L
 capstone: false
@@ -136,3 +136,40 @@ VERDICT: refuted
 
 - The collision finding is accepted. E1-T03 is returned to `in-progress` for a complete-key
   deterministic identity repair and the associated discovery/manager authorization alignment.
+
+### Builder — 2026-08-03 — direct identity repair complete
+
+- Repair commit: `c66871746a5348ac3d94a69676b3455eff546954` (`E1-T03: repair deterministic
+  direct-channel identity`). `digestToken` now consumes the complete canonical participant-set
+  key before emitting the fixed-width token; distinct valid participant sets in both workspaces
+  are independently asserted. Fixture direct IDs and every affected replay digest were
+  regenerated. Private-channel members can discover their own channel, and management remains
+  capability-gated by active channel membership so a creator who leaves cannot retain authority.
+- Cold command: `make verify-E1-T03`. Frozen install, `pnpm format:check`, `pnpm lint`,
+  `pnpm typecheck`, `pnpm test`, and `pnpm build` all passed with zero skips. The promoted run
+  was `PROMOTE_EVIDENCE=1 E1_T03_IMPLEMENTATION_COMMIT=c66871746a5348ac3d94a69676b3455eff546954
+  TEST_RUN_ID=promoted-repair-e1-t03 node scripts/verify-e1-t03.mjs` with
+  `implementationTreeCleanAtStart: true`.
+- The repaired two-workspace fixture replays 29 offsets twice with stable per-prefix digests and
+  final digest `sha256:a600b2a92780597f82ceb56a761d98241a67ebd4fab2476f05440473072d1076`.
+  The verifier independently probes alternate participant sets so the prior truncated-key
+  collision cannot recur silently.
+- The repaired authorization evidence proves private member discovery/read, metadata-free
+  non-member refusal across name discovery, snapshot, head, event count, history, SSE,
+  long-poll, projection, search, and error paths; workspace-role-only refusal; audited admin
+  read; cross-channel binding refusal; archived read allowance/write refusal; and the live
+  revocation race. Offline replay, zero credential canaries, and sensitivity mutation detection
+  also pass. Replay: N/A (server channel authorization model) + mitigation: cross-channel
+  negative matrix, lifecycle logs, revocation race, sensitivity mutation, and canonical replay
+  digests.
+- Evidence: `evidence/e1-t03-final/verification-summary.json`,
+  `evidence/e1-t03-final/channel-replay-evidence.json`,
+  `evidence/e1-t03-final/private-read-refusal-matrix.json`,
+  `evidence/e1-t03-final/revocation-race.json`,
+  `evidence/e1-t03-final/lifecycle-refusal-matrix.json`,
+  `evidence/e1-t03-final/sensitivity.json`, and
+  `evidence/e1-t03-final/offline-replay.json`.
+- Claim: direct-channel IDs are deterministic over the full canonical participant set and
+  cannot alias distinct valid DMs; private-channel discovery/read and channel management are
+  bound to current channel membership; lifecycle reducers and authorization remain fenced,
+  replayable, and tenant-scoped under the repaired implementation.

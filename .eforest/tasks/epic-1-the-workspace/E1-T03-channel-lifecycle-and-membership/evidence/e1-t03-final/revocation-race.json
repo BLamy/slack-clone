@@ -1,0 +1,11 @@
+{
+  "revocationEventId": "ev_00000000000000000000000030",
+  "revocationOffset": "0000000000000000_0000000000000030",
+  "revocationStateDigest": "sha256:4795da1c91cd84daf0e0d89f809f7569caba2cf73470f7e2a7113345f6a430db",
+  "liveReaderDeliveredBeforeRevocation": 1,
+  "liveReaderDeliveryAfterRevocation": 0,
+  "writerAcceptedBeforeRevocation": true,
+  "revocationWaitedForInFlightWriter": true,
+  "writerRefusedAfterRevocation": true,
+  "result": "PASS"
+}

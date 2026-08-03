@@ -1,0 +1,7 @@
+{
+  "command": "node scripts/replay-ledger.mjs replay <channel-lifecycle-offline.json>",
+  "networkDisabled": true,
+  "queryStoreWritten": false,
+  "finalStateDigest": "sha256:a600b2a92780597f82ceb56a761d98241a67ebd4fab2476f05440473072d1076",
+  "result": "PASS"
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "operation": "name-discovery",
+    "code": "CHANNEL_ACCESS_DENIED",
+    "statusCode": 404,
+    "metadataFree": true,
+    "sourceHistoryOrProjectionCallback": false,
+    "elapsedMs": 1,
+    "result": "REFUSED"
+  },
+  {
+    "operation": "snapshot",
+    "code": "CHANNEL_ACCESS_DENIED",
+    "statusCode": 404,
+    "metadataFree": true,
+    "sourceHistoryOrProjectionCallback": false,
+    "elapsedMs": 0,
+    "result": "REFUSED"
+  },
+  {
+    "operation": "head",
+    "code": "CHANNEL_ACCESS_DENIED",
+    "statusCode": 404,
+    "metadataFree": true,
+    "sourceHistoryOrProjectionCallback": false,
+    "elapsedMs": 0,
+    "result": "REFUSED"
+  },
+  {
+    "operation": "event-count",
+    "code": "CHANNEL_ACCESS_DENIED",
+    "statusCode": 404,
+    "metadataFree": true,
+    "sourceHistoryOrProjectionCallback": false,
+    "elapsedMs": 0,
+    "result": "REFUSED"
+  },
+  {
+    "operation": "history",
+    "code": "CHANNEL_ACCESS_DENIED",
+    "statusCode": 404,
+    "metadataFree": true,
+    "sourceHistoryOrProjectionCallback": false,
+    "elapsedMs": 0,
+    "result": "REFUSED"
+  },
+  {
+    "operation": "sse",
+    "code": "CHANNEL_ACCESS_DENIED",
+    "statusCode": 404,
+    "metadataFree": true,
+    "sourceHistoryOrProjectionCallback": false,
+    "elapsedMs": 0,
+    "result": "REFUSED"
+  },
+  {
+    "operation": "long-poll",
+    "code": "CHANNEL_ACCESS_DENIED",
+    "statusCode": 404,
+    "metadataFree": true,
+    "sourceHistoryOrProjectionCallback": false,
+    "elapsedMs": 0,
+    "result": "REFUSED"
+  },
+  {
+    "operation": "projection",
+    "code": "CHANNEL_ACCESS_DENIED",
+    "statusCode": 404,
+    "metadataFree": true,
+    "sourceHistoryOrProjectionCallback": false,
+    "elapsedMs": 0,
+    "result": "REFUSED"
+  },
+  {
+    "operation": "search",
+    "code": "CHANNEL_ACCESS_DENIED",
+    "statusCode": 404,
+    "metadataFree": true,
+    "sourceHistoryOrProjectionCallback": false,
+    "elapsedMs": 0,
+    "result": "REFUSED"
+  },
+  {
+    "operation": "error",
+    "code": "CHANNEL_ACCESS_DENIED",
+    "statusCode": 404,
+    "metadataFree": true,
+    "sourceHistoryOrProjectionCallback": false,
+    "elapsedMs": 0,
+    "result": "REFUSED"
+  }
+]

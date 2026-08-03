@@ -3,7 +3,7 @@ id: E1-T04
 epic: 1
 title: "Message, thread, edit, delete, and reaction event contract"
 priority: 104
-status: implemented
+status: in-progress
 depends_on: [E1-T03]
 estimate: L
 capstone: false
@@ -102,3 +102,18 @@ same authorized channel.
   root relationships, and reaction effects deterministically; command validation and
   channel-scoped authorization refuse unauthorized or malformed mutations before the
   durable append door, while same-id retries converge to one logical effect.
+
+### Critic — 2026-08-03 — refuted
+
+- Fresh critic `019fc602-abae-7d23-ac06-02159d178b63` ran `make verify-E1-T04` against
+  `f3383de` and independently replayed the 12-record fixture twice. The pinned gates,
+  six invalid fixtures, authorization matrix, root/revision attacks, retry door,
+  generated property log, offline replay, and disposable author/revision mutants all
+  passed. Replay: N/A (server conversation event contract) + mitigation: golden logs,
+  authorization refusals, property tests, and per-prefix digest evidence.
+- VERDICT: refuted. A compact legacy `channel.message.created` event bypassed workspace
+  channel scope and actor checks, while the explicit v1 shape refused the same attack
+  (`packages/reducers/src/index.mjs:409`). U+0085 (Unicode C1 control) was accepted by
+  the text boundary (`packages/protocol/src/messages.mjs:84`). Repair must enforce the
+  same scope/actor policy for compact events without regressing historical E0 digests,
+  and reject the complete C0/C1 control range before append.

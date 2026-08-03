@@ -200,3 +200,20 @@ same authorized channel.
   `evidence/e1-t04-final/fence.json`; it records `CONVERSATION_FENCE_REQUIRED`. Replay:
   N/A (server conversation event contract) + mitigation: golden logs, authorization
   refusals, property tests, and per-prefix digest evidence.
+
+### Critic — 2026-08-02 — refuted
+
+- Fresh critic `019fc624-d2df-7e03-b2a6-ec49932a3635` ran the disabled-network cold
+  verifier, independently matched all 12 replay prefixes twice at final digest
+  `sha256:b0634cfd50db4f167aa5199815a70ab80d93b4acb5af7dfaeb9e57903e2502cc`, and passed
+  all invalid fixtures, conversation attacks, and sensitivity checks. Promoted evidence
+  confirmed `34d72c1` and a clean start. Replay: N/A (server conversation event contract)
+  + mitigation: golden logs, authorization refusals, property tests, and per-prefix digest
+  evidence.
+- VERDICT: refuted. The empty-channel compatibility return at
+  `packages/reducers/src/index.mjs:827` accepts a compact message for an unknown channel
+  in the same workspace, bypassing existence and membership checks. Also, a supplied
+  fence that returns without invoking its callback is accepted; `authorizeDispatch`
+  returns the fence's arbitrary result without proving authorization ran. E1 must require
+  projected channel membership and fail closed on skipped fence callbacks, while keeping
+  E0 compatibility explicit and isolated.

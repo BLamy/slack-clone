@@ -23,6 +23,21 @@ const CONTEXT_INPUT_KEYS = [
   "trustedHost",
   "trustedWorkspaceId",
 ];
+const WORKSPACE_TOKEN = "[0-9a-hjkmnp-tv-z]{26}";
+const SCOPED_ID_PATTERN = new RegExp(
+  `^(?:pr|ch|ag|rn|cn|px|mb|iv)_(${WORKSPACE_TOKEN})_${WORKSPACE_TOKEN}$`,
+  "u",
+);
+const WORKSPACE_ID_PATTERN = new RegExp(`^ws_(${WORKSPACE_TOKEN})$`, "u");
+const WORKSPACE_STREAM_PATTERN = new RegExp(
+  `workspace:(ws_${WORKSPACE_TOKEN})(?:[/\\?#]|$)`,
+  "u",
+);
+const EMBEDDED_WORKSPACE_ID_PATTERN = new RegExp(`ws_${WORKSPACE_TOKEN}`, "gu");
+const EMBEDDED_SCOPED_ID_PATTERN = new RegExp(
+  `(?:pr|ch|ag|rn|cn|px|mb|iv)_${WORKSPACE_TOKEN}_${WORKSPACE_TOKEN}`,
+  "gu",
+);
 
 export class WorkspaceAuthorizationError extends Error {
   constructor(code, detail, { statusCode = 404 } = {}) {
@@ -235,6 +250,7 @@ export function createWorkspaceFence() {
 export function bindWorkspaceRequest(request, trustedWorkspaceId) {
   if (!isRecord(request)) throw accessDenied();
   try {
+    validateWorkspaceId(trustedWorkspaceId);
     assertNoWorkspaceOverride(request, trustedWorkspaceId, new Set());
   } catch (error) {
     if (error instanceof WorkspaceAuthorizationError) throw error;
@@ -254,11 +270,64 @@ function assertNoWorkspaceOverride(value, expectedWorkspaceId, seen) {
     return;
   }
   for (const [key, nested] of Object.entries(value)) {
-    if (key === "workspaceId" && nested !== expectedWorkspaceId) {
+    if (isWorkspaceHintKey(key) && nested !== expectedWorkspaceId) {
       throw accessDenied();
+    }
+    const allowEmbeddedIds =
+      key === "path" || key === "url" || key === "location";
+    if (typeof nested === "string") {
+      assertScopedValue(nested, expectedWorkspaceId, { allowEmbeddedIds });
     }
     assertNoWorkspaceOverride(nested, expectedWorkspaceId, seen);
   }
+}
+
+function assertScopedValue(
+  value,
+  expectedWorkspaceId,
+  { allowEmbeddedIds = false } = {},
+) {
+  const candidates = [value];
+  try {
+    const decoded = decodeURIComponent(value);
+    if (decoded !== value) candidates.push(decoded);
+  } catch {
+    throw accessDenied();
+  }
+  for (const candidate of candidates) {
+    const workspaceMatch = candidate.match(WORKSPACE_ID_PATTERN);
+    if (workspaceMatch && `ws_${workspaceMatch[1]}` !== expectedWorkspaceId) {
+      throw accessDenied();
+    }
+    const scopedMatch = candidate.match(SCOPED_ID_PATTERN);
+    if (scopedMatch && `ws_${scopedMatch[1]}` !== expectedWorkspaceId) {
+      throw accessDenied();
+    }
+    const streamMatch = candidate.match(WORKSPACE_STREAM_PATTERN);
+    if (streamMatch && streamMatch[1] !== expectedWorkspaceId) {
+      throw accessDenied();
+    }
+    if (allowEmbeddedIds) {
+      for (const embedded of candidate.matchAll(
+        EMBEDDED_WORKSPACE_ID_PATTERN,
+      )) {
+        if (`ws_${embedded[0].slice(3)}` !== expectedWorkspaceId) {
+          throw accessDenied();
+        }
+      }
+      for (const embedded of candidate.matchAll(EMBEDDED_SCOPED_ID_PATTERN)) {
+        const workspaceToken = embedded[0].split("_", 3)[1];
+        if (`ws_${workspaceToken}` !== expectedWorkspaceId) {
+          throw accessDenied();
+        }
+      }
+    }
+  }
+}
+
+function isWorkspaceHintKey(key) {
+  const compact = key.toLowerCase().replace(/[^a-z0-9]/gu, "");
+  return compact === "workspaceid" || compact.endsWith("workspaceid");
 }
 
 function assertAllowedKeys(value, expectedKeys) {

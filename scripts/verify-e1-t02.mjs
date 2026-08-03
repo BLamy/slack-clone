@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile, execFileSync } from "node:child_process";
+import { EventEmitter } from "node:events";
 import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { promisify } from "node:util";
@@ -10,10 +11,12 @@ import {
   WORKSPACE_CAPABILITIES,
   roleHasCapability,
 } from "@stream-slack/protocol";
+import { createChatHttpDelivery } from "@stream-slack/http";
 import { REDUCER_ERROR_CODES } from "@stream-slack/reducers";
 
 import { EVENT_TYPES_V1 } from "../src/ledger/envelope.mjs";
 import {
+  bindWorkspaceRequest,
   createWorkspaceAuthorization,
   createWorkspaceFence,
   establishWorkspaceContext,
@@ -106,6 +109,7 @@ const replayEvidence = {
 
 const schemaEvidence = await verifySchemas();
 const authorizationEvidence = await verifyAuthorization(state, replayEvidence);
+const httpBoundaryEvidence = await verifyHttpBoundary();
 const lifecycleEvidence = verifyLifecycle(dump);
 const sensitivity = await verifySensitivity();
 const networkReplay = await verifyOfflineReplay(
@@ -161,6 +165,7 @@ const summary = {
   schemas: schemaEvidence,
   replayEvidence,
   authorization: authorizationEvidence,
+  httpBoundary: httpBoundaryEvidence,
   lifecycle: lifecycleEvidence,
   sensitivity,
   networkReplay,
@@ -177,6 +182,10 @@ await writeJson(
 await writeJson(
   path.join(evidenceDirectory, "tenant-refusal-matrix.json"),
   authorizationEvidence,
+);
+await writeJson(
+  path.join(evidenceDirectory, "live-handler-refusal-matrix.json"),
+  httpBoundaryEvidence,
 );
 await writeJson(
   path.join(evidenceDirectory, "lifecycle-refusal-matrix.json"),
@@ -517,6 +526,241 @@ async function verifyAuthorization(currentState, replayEvidenceValue) {
   };
 }
 
+async function verifyHttpBoundary() {
+  const callbacks = {
+    append: 0,
+    follow: 0,
+    normalize: 0,
+    read: 0,
+    reset: 0,
+    update: 0,
+  };
+  const heads = new Map([["chat:A", "0000000000000000_0000000000000000"]]);
+  const memberships = new Map([
+    [
+      membershipKey(WORKSPACE_A, OWNER_A),
+      {
+        membershipId:
+          "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        principalId: OWNER_A,
+        role: "owner",
+        status: "active",
+        workspaceId: WORKSPACE_A,
+      },
+    ],
+  ]);
+  const core = createWorkspaceAuthorization({
+    lookupMembership: async (workspaceId, principalId) =>
+      memberships.get(membershipKey(workspaceId, principalId)) ?? null,
+    withWorkspaceFence: createWorkspaceFence(),
+  });
+  const workspaceAuthorization = {
+    async contextForRequest({ request, url, user }) {
+      const trusted = context(user.sub, WORKSPACE_A);
+      bindWorkspaceRequest(
+        {
+          headers: request.headers,
+          path: request.url ?? url.pathname,
+          query: Object.fromEntries(url.searchParams.entries()),
+        },
+        trusted.workspaceId,
+      );
+      return trusted;
+    },
+    authorizeDispatch: core.authorizeDispatch,
+    authorizeRead: core.authorizeRead,
+    authorizeSubscription: core.authorizeSubscription,
+  };
+  const delivery = createChatHttpDelivery({
+    auth0Health: async () => true,
+    auth0EmulatorUrl: "http://auth.test",
+    chatService: {
+      appendMessage: async () => {
+        callbacks.append += 1;
+        heads.set("chat:A", "0000000000000000_0000000000000001");
+        return {
+          message: { id: "live-message", text: "authorized" },
+          nextOffset: "0000000000000000_0000000000000001",
+        };
+      },
+      followMessages: async () => {
+        callbacks.follow += 1;
+        return { cancel() {}, closed: Promise.resolve() };
+      },
+      normalizeRoomId: (room) => {
+        callbacks.normalize += 1;
+        return room;
+      },
+      readMessages: async () => {
+        callbacks.read += 1;
+        return {
+          messages: [],
+          nextOffset: "0000000000000000_0000000000000000",
+          records: [],
+          streamDigest:
+            "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        };
+      },
+      resetRoom: async () => {
+        callbacks.reset += 1;
+        return {
+          nextOffset: "0000000000000000_0000000000000001",
+          streamDigest:
+            "sha256:0000000000000000000000000000000000000000000000000000000000000001",
+        };
+      },
+      updateMessage: async () => {
+        callbacks.update += 1;
+        return {
+          message: { id: "live-message", text: "updated" },
+          nextOffset: "0000000000000000_0000000000000001",
+        };
+      },
+    },
+    currentSession: () => ({ user: { sub: OWNER_A } }),
+    durableStreamsUrl: "http://streams.test",
+    emptyDigest:
+      "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    sessionUser: (request) => ({ sub: request.principalId ?? OWNER_A }),
+    workspaceAuthorization,
+  });
+
+  const allowReadResponse = createFakeResponse();
+  await delivery.handleApi(
+    createHttpRequest({
+      method: "GET",
+      path: "/api/rooms/demo/messages",
+    }),
+    allowReadResponse,
+    new URL("http://app.test/api/rooms/demo/messages"),
+  );
+  assert.equal(allowReadResponse.status, 200);
+  const allowAppendResponse = createFakeResponse();
+  await delivery.handleApi(
+    createHttpRequest({
+      body: { text: "authorized" },
+      method: "POST",
+      path: "/api/rooms/demo/messages",
+    }),
+    allowAppendResponse,
+    new URL("http://app.test/api/rooms/demo/messages"),
+  );
+  assert.equal(allowAppendResponse.status, 201);
+
+  const refusals = [];
+  for (const [name, request] of [
+    [
+      "non-member-read",
+      {
+        method: "GET",
+        path: "/api/rooms/demo/messages",
+        principalId: NON_MEMBER_A,
+      },
+    ],
+    [
+      "non-member-mutation",
+      {
+        body: { text: "unauthorized" },
+        method: "POST",
+        path: "/api/rooms/demo/messages",
+        principalId: NON_MEMBER_A,
+      },
+    ],
+    [
+      "non-member-subscription",
+      {
+        method: "GET",
+        path: "/api/rooms/demo/events",
+        principalId: NON_MEMBER_A,
+      },
+    ],
+    [
+      "non-member-reset",
+      {
+        method: "DELETE",
+        path: "/api/rooms/demo/messages",
+        principalId: NON_MEMBER_A,
+      },
+    ],
+    [
+      "sibling-principal-path",
+      {
+        method: "GET",
+        path: `/api/rooms/${OWNER_B}/messages`,
+        principalId: OWNER_A,
+      },
+    ],
+    [
+      "sibling-workspace-header",
+      {
+        headers: { "x-workspace-id": WORKSPACE_B },
+        method: "GET",
+        path: "/api/rooms/demo/messages",
+        principalId: OWNER_A,
+      },
+    ],
+    [
+      "sibling-workspace-body",
+      {
+        body: { text: "unauthorized", workspaceId: WORKSPACE_B },
+        method: "POST",
+        path: "/api/rooms/demo/messages",
+        principalId: OWNER_A,
+      },
+    ],
+    [
+      "sibling-workspace-stream",
+      {
+        body: {
+          stream: `workspace:${WORKSPACE_B}/directory`,
+          text: "unauthorized",
+        },
+        method: "POST",
+        path: "/api/rooms/demo/messages",
+        principalId: OWNER_A,
+      },
+    ],
+  ]) {
+    const beforeHeads = Object.fromEntries(heads);
+    const beforeCallbacks = serviceCallbackCounts(callbacks);
+    const response = createFakeResponse();
+    const user = { sub: request.principalId };
+    const error = await rejected(
+      delivery.handleApi(
+        createHttpRequest(request),
+        response,
+        new URL(`http://app.test${request.path}`),
+      ),
+    );
+    assertGenericAccessRefusal(error, [
+      request.principalId,
+      WORKSPACE_A,
+      WORKSPACE_B,
+      OWNER_B,
+    ]);
+    assert.deepEqual(Object.fromEntries(heads), beforeHeads);
+    assert.deepEqual(serviceCallbackCounts(callbacks), beforeCallbacks);
+    assert.equal(response.writeHeadCalls, 0);
+    assert.equal(user.sub, request.principalId);
+    refusals.push({
+      action: name,
+      code: error.code,
+      refusedBeforeAppendOrRegister: true,
+      targetHeadsUnchanged: true,
+      metadataFree: true,
+    });
+  }
+  delivery.close();
+  return {
+    allow: ["current-member message read", "current-member message mutation"],
+    refusalCount: refusals.length,
+    refusals,
+    serviceCallbacks: callbacks,
+    targetHeadsUnchangedForRefusals: true,
+    result: "PASS",
+  };
+}
+
 async function verifyRevocationRace(currentState) {
   const live = new Map(
     Object.values(currentState.entities.memberships).map((membership) => [
@@ -792,6 +1036,15 @@ async function captureAccessRefusal(
   };
 }
 
+async function rejected(promise) {
+  try {
+    await promise;
+  } catch (error) {
+    return error;
+  }
+  assert.fail("operation was accepted");
+}
+
 function captureSyncAccessRefusal(name, operation, forbiddenValues) {
   let error;
   try {
@@ -829,6 +1082,54 @@ function context(principalId, workspaceId) {
 
 function membershipKey(workspaceId, principalId) {
   return `${workspaceId}\u0000${principalId}`;
+}
+
+function createHttpRequest({
+  body = null,
+  headers = {},
+  method = "GET",
+  path,
+  principalId,
+}) {
+  const request = new EventEmitter();
+  request.headers = { host: "app.test", ...headers };
+  request.method = method;
+  request.principalId = principalId;
+  request.url = path;
+  request[Symbol.asyncIterator] = async function* () {
+    if (body !== null) yield Buffer.from(JSON.stringify(body));
+  };
+  return request;
+}
+
+function createFakeResponse() {
+  const response = new EventEmitter();
+  response.destroyed = false;
+  response.headersSent = false;
+  response.output = [];
+  response.writableEnded = false;
+  response.writeHeadCalls = 0;
+  response.writeHead = (status, headers) => {
+    response.headersSent = true;
+    response.status = status;
+    response.headers = headers;
+    response.writeHeadCalls += 1;
+  };
+  response.write = (value) => {
+    response.output.push(String(value));
+    return true;
+  };
+  response.end = (value) => {
+    if (value !== undefined) response.output.push(String(value));
+    response.writableEnded = true;
+  };
+  return response;
+}
+
+function serviceCallbackCounts(callbacks) {
+  return Object.fromEntries(
+    Object.entries(callbacks).filter(([name]) => name !== "normalize"),
+  );
 }
 
 function assertNoCredentialPattern(source, label) {

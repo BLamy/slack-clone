@@ -17,6 +17,13 @@ import { createAuth0Client } from "./auth0-client.mjs";
 import { createInboundHttpServer } from "./http-server.mjs";
 import { canonicalSha256 } from "./ledger/canonical-json.mjs";
 import { createDispatchDoor } from "./ledger/dispatch.mjs";
+import {
+  bindWorkspaceRequest,
+  createWorkspaceAuthorization,
+  createWorkspaceFence,
+  establishWorkspaceContext,
+} from "./ledger/workspace-auth.mjs";
+import { createWorkspaceDirectoryAuthority } from "./ledger/workspace-directory.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
@@ -39,6 +46,69 @@ const AUTH0_REALM =
   process.env.AUTH0_REALM ?? "Username-Password-Authentication";
 const SESSION_COOKIE = "slack_clone_session";
 const CHAT_WORKSPACE_ID = "ws_00000000000000000000000000";
+const CHAT_WORKSPACE_TOKEN = CHAT_WORKSPACE_ID.slice(3);
+const CHAT_ADA_ID = `pr_${CHAT_WORKSPACE_TOKEN}_${"a".repeat(26)}`;
+const CHAT_LINUS_ID = `pr_${CHAT_WORKSPACE_TOKEN}_${"b".repeat(26)}`;
+const CHAT_DIRECTORY_INVITE_ID = `iv_${CHAT_WORKSPACE_TOKEN}_${"c".repeat(26)}`;
+const TRUSTED_HOST = process.env.TRUSTED_HOST ?? `${HOST}:${PORT}`;
+
+const CHAT_PRINCIPAL_BY_AUTH_SUBJECT = new Map([
+  ["ada", CHAT_ADA_ID],
+  ["auth0|ada", CHAT_ADA_ID],
+  ["linus", CHAT_LINUS_ID],
+  ["auth0|linus", CHAT_LINUS_ID],
+  ["ada@example.test", CHAT_ADA_ID],
+  ["linus@example.test", CHAT_LINUS_ID],
+]);
+
+const CHAT_DIRECTORY_BOOTSTRAP = Object.freeze([
+  workspaceBootstrapEvent("a", "principal.created", CHAT_ADA_ID, {
+    kind: "human",
+    ownedBy: null,
+    principalId: CHAT_ADA_ID,
+    profile: {
+      displayName: "Ada Lovelace",
+      email: "ada@example.test",
+      handle: "ada",
+    },
+    subjectBinding: {
+      audience: "stream-slack",
+      issuer: "auth0",
+      subject: "auth0|ada",
+    },
+  }),
+  workspaceBootstrapEvent("b", "principal.created", CHAT_ADA_ID, {
+    kind: "human",
+    ownedBy: null,
+    principalId: CHAT_LINUS_ID,
+    profile: {
+      displayName: "Linus Torvalds",
+      email: "linus@example.test",
+      handle: "linus",
+    },
+    subjectBinding: {
+      audience: "stream-slack",
+      issuer: "auth0",
+      subject: "auth0|linus",
+    },
+  }),
+  workspaceBootstrapEvent("c", "workspace.created", CHAT_ADA_ID, {
+    displayName: "Stream Slack",
+    ownerPrincipalId: CHAT_ADA_ID,
+    workspaceId: CHAT_WORKSPACE_ID,
+  }),
+  workspaceBootstrapEvent("d", "workspace.membership.invited", CHAT_ADA_ID, {
+    expectedWorkspaceRevision: 1,
+    inviteId: CHAT_DIRECTORY_INVITE_ID,
+    principalId: CHAT_LINUS_ID,
+    role: "member",
+  }),
+  workspaceBootstrapEvent("e", "workspace.membership.accepted", CHAT_LINUS_ID, {
+    expectedWorkspaceRevision: 2,
+    inviteId: CHAT_DIRECTORY_INVITE_ID,
+    principalId: CHAT_LINUS_ID,
+  }),
+]);
 
 const sessions = new Map();
 const auth0Client = createAuth0Client({
@@ -70,6 +140,16 @@ function currentSession(request) {
 
 function sessionUser(request) {
   return currentSession(request)?.user ?? null;
+}
+
+function principalIdForAuthUser(user) {
+  if (!user || typeof user !== "object") return null;
+  for (const value of [user.sub, user.email, user.preferredUsername]) {
+    if (typeof value !== "string") continue;
+    const principalId = CHAT_PRINCIPAL_BY_AUTH_SUBJECT.get(value);
+    if (principalId) return principalId;
+  }
+  return null;
 }
 
 function setSessionCookie(response, sessionId) {
@@ -185,9 +265,14 @@ async function handleAuth(request, response, url) {
         form.get("email") ?? "",
         form.get("password") ?? "",
       );
+      const principalId = principalIdForAuthUser(user);
+      if (!principalId) {
+        throw new Error("authenticated user is not a workspace member");
+      }
       const sessionId = crypto.randomUUID();
       sessions.set(sessionId, {
-        user,
+        authenticatedSubject: user.sub,
+        user: { ...user, sub: principalId },
         accessToken: token.access_token,
         createdAt: Date.now(),
       });
@@ -221,6 +306,37 @@ const streamStore = createNodeDurableStreamsStore({
   token: DURABLE_STREAMS_ADMIN_TOKEN,
   digestRecords: canonicalSha256,
 });
+const workspaceDirectory = createWorkspaceDirectoryAuthority({
+  bootstrapEvents: CHAT_DIRECTORY_BOOTSTRAP,
+  streamStore,
+  workspaceId: CHAT_WORKSPACE_ID,
+});
+const workspaceAuthorizationCore = createWorkspaceAuthorization({
+  lookupMembership: workspaceDirectory.lookupMembership,
+  withWorkspaceFence: createWorkspaceFence(),
+});
+const workspaceAuthorization = Object.freeze({
+  async contextForRequest({ request, url, user }) {
+    const context = establishWorkspaceContext({
+      authenticatedPrincipalId: user?.sub,
+      clientHost: request.headers.host,
+      trustedHost: TRUSTED_HOST,
+      trustedWorkspaceId: CHAT_WORKSPACE_ID,
+    });
+    bindWorkspaceRequest(
+      {
+        headers: request.headers,
+        path: request.url ?? url.pathname,
+        query: Object.fromEntries(url.searchParams.entries()),
+      },
+      context.workspaceId,
+    );
+    return context;
+  },
+  authorizeDispatch: workspaceAuthorizationCore.authorizeDispatch,
+  authorizeRead: workspaceAuthorizationCore.authorizeRead,
+  authorizeSubscription: workspaceAuthorizationCore.authorizeSubscription,
+});
 const dispatchDoor = createDispatchDoor({
   authorize: ({ actorId }) =>
     [...sessions.values()].some((session) => session.user.sub === actorId),
@@ -243,6 +359,7 @@ const chatHttp = createChatHttpDelivery({
   durableStreamsUrl: DURABLE_STREAMS_URL,
   emptyDigest: canonicalSha256([]),
   sessionUser,
+  workspaceAuthorization,
 });
 
 const contentTypes = new Map([
@@ -356,3 +473,18 @@ function shutdown() {
 
 process.on("SIGTERM", shutdown);
 process.on("SIGINT", shutdown);
+
+function workspaceBootstrapEvent(token, eventType, actorId, data) {
+  return {
+    actorId,
+    causation: null,
+    correlationId: `cr_${CHAT_WORKSPACE_TOKEN}`,
+    data,
+    eventId: `ev_${token.repeat(26)}`,
+    eventType,
+    idempotencyKey: `ik_${token.repeat(26)}`,
+    schemaVersion: 1,
+    serverTimestamp: "2026-08-02T00:00:00.000Z",
+    workspaceId: CHAT_WORKSPACE_ID,
+  };
+}

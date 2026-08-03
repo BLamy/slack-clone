@@ -44,9 +44,25 @@ export function createChatHttpDelivery({
   durableStreamsUrl,
   emptyDigest,
   sessionUser,
+  workspaceAuthorization = null,
   timers = DEFAULT_TIMERS,
 }) {
   const rooms = new Map();
+
+  if (workspaceAuthorization !== null) {
+    for (const method of [
+      "authorizeDispatch",
+      "authorizeRead",
+      "authorizeSubscription",
+      "contextForRequest",
+    ]) {
+      if (typeof workspaceAuthorization[method] !== "function") {
+        throw new TypeError(
+          `workspace authorization requires ${method} capability`,
+        );
+      }
+    }
+  }
 
   function roomState(roomId) {
     const room = chatService.normalizeRoomId(roomId);
@@ -267,16 +283,36 @@ export function createChatHttpDelivery({
       return true;
     }
 
+    const workspaceContext = workspaceAuthorization
+      ? await workspaceAuthorization.contextForRequest({ request, url, user })
+      : null;
+
     const room = chatService.normalizeRoomId(decodeURIComponent(match[1]));
     const resource = match[2];
     const messageId = match[3] ? decodeURIComponent(match[3]) : null;
 
     if (resource === "events" && request.method === "GET") {
-      return handleEvents(request, response, room);
+      if (!workspaceAuthorization) {
+        return handleEvents(request, response, room);
+      }
+      return workspaceAuthorization.authorizeSubscription(
+        requestMetadata(request, url, { room }),
+        workspaceContext,
+        {
+          capability: "workspace.subscribe",
+          register: () => handleEvents(request, response, room),
+        },
+      );
     }
 
     if (resource === "messages" && request.method === "GET") {
-      const result = await chatService.readMessages(room, "-1");
+      const result = workspaceAuthorization
+        ? await workspaceAuthorization
+            .authorizeRead(workspaceContext, {
+              capability: "workspace.read",
+            })
+            .then(() => chatService.readMessages(room, "-1"))
+        : await chatService.readMessages(room, "-1");
       sendJson(response, 200, {
         ok: true,
         room,
@@ -291,12 +327,21 @@ export function createChatHttpDelivery({
 
     if (resource === "messages" && request.method === "POST") {
       const input = await readJson(request);
-      const result = await chatService.appendMessage(room, input, user, {
-        idempotencyKey:
-          typeof request.headers["idempotency-key"] === "string"
-            ? request.headers["idempotency-key"]
-            : undefined,
-      });
+      const result = workspaceAuthorization
+        ? await workspaceAuthorization.authorizeDispatch(
+            requestMetadata(request, url, { body: input, room }),
+            workspaceContext,
+            {
+              capability: "workspace.message.mutate",
+              dispatch: () =>
+                chatService.appendMessage(room, input, user, {
+                  idempotencyKey: idempotencyKey(request),
+                }),
+            },
+          )
+        : await chatService.appendMessage(room, input, user, {
+            idempotencyKey: idempotencyKey(request),
+          });
       startFollowing(roomState(room));
       sendJson(response, 201, {
         ok: true,
@@ -309,18 +354,24 @@ export function createChatHttpDelivery({
 
     if (resource === "messages" && messageId && request.method === "PATCH") {
       const input = await readJson(request);
-      const result = await chatService.updateMessage(
-        room,
-        messageId,
-        input,
-        user,
-        {
-          idempotencyKey:
-            typeof request.headers["idempotency-key"] === "string"
-              ? request.headers["idempotency-key"]
-              : undefined,
-        },
-      );
+      const update = () =>
+        chatService.updateMessage(room, messageId, input, user, {
+          idempotencyKey: idempotencyKey(request),
+        });
+      const result = workspaceAuthorization
+        ? await workspaceAuthorization.authorizeDispatch(
+            requestMetadata(request, url, {
+              body: input,
+              messageId,
+              room,
+            }),
+            workspaceContext,
+            {
+              capability: "workspace.message.mutate",
+              dispatch: update,
+            },
+          )
+        : await update();
       startFollowing(roomState(room));
       sendJson(response, 200, {
         ok: true,
@@ -332,22 +383,32 @@ export function createChatHttpDelivery({
     }
 
     if (resource === "messages" && request.method === "DELETE") {
-      const state = roomState(room);
-      stopFollowing(state, "room reset");
-      const reset = await chatService.resetRoom(room, user, {
-        idempotencyKey:
-          typeof request.headers["idempotency-key"] === "string"
-            ? request.headers["idempotency-key"]
-            : undefined,
-      });
-      state.nextOffset = reset.nextOffset;
-      state.streamDigest = reset.streamDigest ?? emptyDigest;
-      broadcast(state, "reset", {
-        room,
-        nextOffset: state.nextOffset,
-        streamDigest: state.streamDigest,
-      });
-      startFollowing(state);
+      const resetRoom = async () => {
+        const state = roomState(room);
+        stopFollowing(state, "room reset");
+        const reset = await chatService.resetRoom(room, user, {
+          idempotencyKey: idempotencyKey(request),
+        });
+        state.nextOffset = reset.nextOffset;
+        state.streamDigest = reset.streamDigest ?? emptyDigest;
+        broadcast(state, "reset", {
+          room,
+          nextOffset: state.nextOffset,
+          streamDigest: state.streamDigest,
+        });
+        startFollowing(state);
+        return { reset, state };
+      };
+      const { state } = workspaceAuthorization
+        ? await workspaceAuthorization.authorizeDispatch(
+            requestMetadata(request, url, { room }),
+            workspaceContext,
+            {
+              capability: "workspace.message.mutate",
+              dispatch: resetRoom,
+            },
+          )
+        : await resetRoom();
       sendJson(response, 200, {
         ok: true,
         room,
@@ -375,4 +436,21 @@ export function createChatHttpDelivery({
   }
 
   return { close, handleApi };
+}
+
+function idempotencyKey(request) {
+  return typeof request.headers["idempotency-key"] === "string"
+    ? request.headers["idempotency-key"]
+    : undefined;
+}
+
+function requestMetadata(request, url, { body, messageId, room } = {}) {
+  return {
+    ...(body === undefined ? {} : { body }),
+    headers: request.headers,
+    ...(messageId === undefined ? {} : { messageId }),
+    path: request.url ?? url.pathname,
+    query: Object.fromEntries(url.searchParams.entries()),
+    ...(room === undefined ? {} : { room }),
+  };
 }

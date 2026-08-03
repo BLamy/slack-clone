@@ -117,3 +117,23 @@ same authorized channel.
   the text boundary (`packages/protocol/src/messages.mjs:84`). Repair must enforce the
   same scope/actor policy for compact events without regressing historical E0 digests,
   and reject the complete C0/C1 control range before append.
+
+### Builder — 2026-08-02 — refutation repaired
+
+- Repair commit: `4e3da78b0257aba1a21febe72e0e48764e6b4c05` (`E1-T04: close compact
+  scope and control boundary`). Compact legacy messages now use the same authenticated
+  actor and workspace-scoped channel guard as explicit conversation events while keeping
+  the E0 projection byte-for-byte unchanged. Message and reaction text boundaries reject
+  C0 and C1 controls, including U+0085, before append. Unit and verifier regressions cover
+  forged authors, foreign-workspace channels, legacy projection preservation, and C1 text.
+- Cold command: `TEST_RUN_ID=repair-cold make verify-E1-T04`. Frozen install and all five
+  gates passed: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and
+  `pnpm build`. Promoted command:
+  `PROMOTE_EVIDENCE=1 E1_T04_IMPLEMENTATION_COMMIT=4e3da78b0257aba1a21febe72e0e48764e6b4c05
+  E1_T04_NETWORK_DISABLED=1 TEST_RUN_ID=promoted-e1-t04-repair node scripts/verify-e1-t04.mjs`.
+- Promoted replay remains 12 records with identical per-prefix digests and final digest
+  `sha256:b0634cfd50db4f167aa5199815a70ab80d93b4acb5af7dfaeb9e57903e2502cc`. New evidence
+  is `evidence/e1-t04-final/legacy-compatibility.json`; updated summary and boundary
+  evidence record the compact-scope and C1-control refusals. Replay: N/A (server
+  conversation event contract) + mitigation: golden logs, authorization refusals,
+  property tests, and per-prefix digest evidence.

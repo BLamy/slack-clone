@@ -4,6 +4,7 @@
     "html-content",
     "nfc-drift",
     "control-character",
+    "c1-control-character",
     "bidi-control",
     "unpaired-surrogate",
     "oversized"

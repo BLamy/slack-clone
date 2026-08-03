@@ -1,0 +1,7 @@
+{
+  "compactMessageAcceptedWithoutShapeChange": true,
+  "foreignWorkspaceChannelRefused": true,
+  "forgedAuthorRefused": true,
+  "legacyProjectionPreserved": true,
+  "result": "PASS"
+}

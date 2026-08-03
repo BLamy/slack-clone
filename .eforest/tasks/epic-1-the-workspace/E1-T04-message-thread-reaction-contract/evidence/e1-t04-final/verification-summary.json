@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E1-T04",
-  "runId": "promoted-e1-t04",
-  "implementationCommit": "d19ef5f0507765b373191c85ddc8d413f15eeb6f",
+  "runId": "promoted-e1-t04-repair",
+  "implementationCommit": "4e3da78b0257aba1a21febe72e0e48764e6b4c05",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "fixtureCount": 1,
@@ -12,31 +12,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 4710,
+      "durationMs": 1768,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 3302,
+      "durationMs": 1461,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 22207,
+      "durationMs": 4830,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 18786,
+      "durationMs": 18240,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 521,
+      "durationMs": 461,
       "name": "build",
       "result": "PASS"
     }
@@ -237,12 +237,20 @@
     "moderatorDeleteRequiresActiveMembership": true,
     "refusalLeavesSourceHeadUnchanged": true
   },
+  "legacyCompatibilityEvidence": {
+    "compactMessageAcceptedWithoutShapeChange": true,
+    "foreignWorkspaceChannelRefused": true,
+    "forgedAuthorRefused": true,
+    "legacyProjectionPreserved": true,
+    "result": "PASS"
+  },
   "boundaryEvidence": {
     "refused": [
       "actor-spoof",
       "html-content",
       "nfc-drift",
       "control-character",
+      "c1-control-character",
       "bidi-control",
       "unpaired-surrogate",
       "oversized"

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E1-T02",
-  "runId": "e1-t02-subject-authority-final-20260803",
-  "implementationCommit": "579a97f313b3d6cd99c1e759cbe26b6c4f39a3a5",
+  "runId": "e1-t02-full-tree-binding-final-20260803",
+  "implementationCommit": "329d784766e54f8676ef8f4053f2901635f8264e",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "fixtureCount": 1,
@@ -11,31 +11,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 7131,
+      "durationMs": 2668,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 5665,
+      "durationMs": 2362,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 10456,
+      "durationMs": 6273,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 26118,
+      "durationMs": 21525,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 1101,
+      "durationMs": 757,
       "name": "build",
       "result": "PASS"
     }
@@ -528,7 +528,7 @@
     "mutation": "disable trusted workspace context comparison in scratch module",
     "unsafeBypassObserved": true,
     "baselineConformanceMatrixMustRefuseTheSameInput": true,
-    "scratchPath": ".artifacts/e1-t02/e1-t02-subject-authority-final-20260803/workspace-auth-context-comparison-disabled.mjs",
+    "scratchPath": ".artifacts/e1-t02/e1-t02-full-tree-binding-final-20260803/workspace-auth-context-comparison-disabled.mjs",
     "result": "PASS"
   },
   "networkReplay": {

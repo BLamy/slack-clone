@@ -1,4 +1,9 @@
-import { directChannelIdFor } from "@stream-slack/protocol";
+import {
+  directChannelIdFor,
+  normalizeReactionName,
+  validateConversationText,
+  validateMessageContentType,
+} from "@stream-slack/protocol";
 
 import {
   canonicalStateDigest,
@@ -17,6 +22,11 @@ export const REDUCER_EVENT_TYPES_V1 = Object.freeze([
   "ledger.fixture-recorded",
   "workspace.directory.updated",
   "channel.message.created",
+  "channel.message.replied",
+  "channel.message.edited",
+  "channel.message.deleted",
+  "channel.message.reaction.added",
+  "channel.message.reaction.removed",
   "agent.config.revised",
   "workspace.invocation.requested",
   "run.lifecycle.changed",
@@ -94,6 +104,14 @@ export const REDUCER_ERROR_CODES = Object.freeze({
   CHANNEL_PARTICIPANT_SERVICE: "REDUCER_CHANNEL_PARTICIPANT_SERVICE",
   CHANNEL_REVISION_CONFLICT: "REDUCER_CHANNEL_REVISION_CONFLICT",
   CHANNEL_SCOPE_MISMATCH: "REDUCER_CHANNEL_SCOPE_MISMATCH",
+  MESSAGE_AUTHOR_MISMATCH: "REDUCER_MESSAGE_AUTHOR_MISMATCH",
+  MESSAGE_CONTENT_TYPE: "REDUCER_MESSAGE_CONTENT_TYPE",
+  MESSAGE_DELETED: "REDUCER_MESSAGE_DELETED",
+  MESSAGE_MODERATOR_REQUIRED: "REDUCER_MESSAGE_MODERATOR_REQUIRED",
+  MESSAGE_NOT_FOUND: "REDUCER_MESSAGE_NOT_FOUND",
+  MESSAGE_REPLY_ROOT: "REDUCER_MESSAGE_REPLY_ROOT",
+  MESSAGE_REVISION_CONFLICT: "REDUCER_MESSAGE_REVISION_CONFLICT",
+  MESSAGE_TEXT: "REDUCER_MESSAGE_TEXT",
   UNKNOWN_EVENT_TYPE: "REDUCER_UNKNOWN_EVENT_TYPE",
   UNSUPPORTED_SCHEMA_VERSION: "REDUCER_UNSUPPORTED_SCHEMA_VERSION",
 });
@@ -230,6 +248,11 @@ export const REDUCER_REGISTRY_V1 = Object.freeze({
   "ledger.fixture-recorded": reduceFixtureRecorded,
   "workspace.directory.updated": reduceDirectoryUpdated,
   "channel.message.created": reduceMessageCreated,
+  "channel.message.replied": reduceMessageReplied,
+  "channel.message.edited": reduceMessageEdited,
+  "channel.message.deleted": reduceMessageDeleted,
+  "channel.message.reaction.added": reduceReactionAdded,
+  "channel.message.reaction.removed": reduceReactionRemoved,
   "agent.config.revised": reduceAgentConfigRevised,
   "workspace.invocation.requested": reduceInvocationRequested,
   "run.lifecycle.changed": reduceRunLifecycleChanged,
@@ -349,6 +372,43 @@ function reduceDirectoryUpdated(state, data, context) {
 }
 
 function reduceMessageCreated(state, data, context) {
+  if (isConversationMessageData(data)) {
+    assertData(
+      data,
+      [
+        "authorId",
+        "channelId",
+        "contentType",
+        "messageId",
+        "rootMessageId",
+        "text",
+      ],
+      [],
+      context,
+    );
+    if (data.rootMessageId !== null) {
+      failMessage(
+        REDUCER_ERROR_CODES.MESSAGE_REPLY_ROOT,
+        "a root message must have a null rootMessageId",
+        "rootMessageId",
+        context,
+      );
+    }
+    assertConversationMessageIdentity(state, data, context);
+    assertConversationText(data.text, context);
+    assertConversationContentType(data.contentType, context);
+    assertUnique(state.entities.messages, data.messageId, "messageId", context);
+    state.entities.messages = setKey(
+      state.entities.messages,
+      data.messageId,
+      createConversationMessageRecord(data, context, "created"),
+    );
+    return;
+  }
+
+  // E0's compact message event remains readable so old source streams retain
+  // their historical state digests while the explicit v1 conversation shape
+  // below carries revision and thread semantics.
   assertData(data, ["messageId", "channelId", "authorId", "text"], [], context);
   assertToken(data.messageId, "messageId", context);
   assertToken(data.channelId, "channelId", context);
@@ -367,6 +427,481 @@ function reduceMessageCreated(state, data, context) {
     data.messageId,
     copyJson(data),
   );
+}
+
+function reduceMessageReplied(state, data, context) {
+  assertData(
+    data,
+    [
+      "authorId",
+      "channelId",
+      "contentType",
+      "messageId",
+      "rootMessageId",
+      "text",
+    ],
+    [],
+    context,
+  );
+  assertConversationMessageIdentity(state, data, context);
+  assertConversationText(data.text, context);
+  assertConversationContentType(data.contentType, context);
+  assertToken(data.rootMessageId, "rootMessageId", context);
+  if (data.rootMessageId === data.messageId) {
+    failMessage(
+      REDUCER_ERROR_CODES.MESSAGE_REPLY_ROOT,
+      "a reply cannot reference itself",
+      "rootMessageId",
+      context,
+    );
+  }
+  const root = getConversationMessage(state, data.rootMessageId);
+  if (!root) {
+    failMessage(
+      REDUCER_ERROR_CODES.MESSAGE_REPLY_ROOT,
+      "reply root does not exist",
+      "rootMessageId",
+      context,
+    );
+  }
+  const rootWorkspaceId = root.workspaceId ?? context.envelope.workspaceId;
+  if (
+    rootWorkspaceId !== context.envelope.workspaceId ||
+    root.channelId !== data.channelId ||
+    (root.rootMessageId !== undefined && root.rootMessageId !== null) ||
+    root.status === "deleted"
+  ) {
+    failMessage(
+      REDUCER_ERROR_CODES.MESSAGE_REPLY_ROOT,
+      "reply root must be a visible root in the same workspace and channel",
+      "rootMessageId",
+      context,
+    );
+  }
+  assertUnique(state.entities.messages, data.messageId, "messageId", context);
+  state.entities.messages = setKey(
+    state.entities.messages,
+    data.messageId,
+    createConversationMessageRecord(data, context, "replied"),
+  );
+}
+
+function reduceMessageEdited(state, data, context) {
+  assertData(
+    data,
+    ["channelId", "contentType", "expectedRevision", "messageId", "text"],
+    [],
+    context,
+  );
+  assertConversationTargetIdentity(data, context);
+  assertConversationText(data.text, context);
+  assertConversationContentType(data.contentType, context);
+  assertRevision(data.expectedRevision, "expectedRevision", context);
+  const current = requireConversationMessage(state, data.messageId, context);
+  const normalized = normalizeConversationMessage(current, context);
+  if (normalized.channelId !== data.channelId) {
+    failMessage(
+      REDUCER_ERROR_CODES.CHANNEL_SCOPE_MISMATCH,
+      "message belongs to a different channel",
+      "channelId",
+      context,
+    );
+  }
+  assertConversationChannelAccess(state, data.channelId, context, {
+    allowArchived: false,
+  });
+  if (normalized.status === "deleted") {
+    failMessage(
+      REDUCER_ERROR_CODES.MESSAGE_DELETED,
+      "deleted messages cannot be edited",
+      "messageId",
+      context,
+    );
+  }
+  if (normalized.authorId !== context.envelope.actorId) {
+    failMessage(
+      REDUCER_ERROR_CODES.MESSAGE_AUTHOR_MISMATCH,
+      "only the message author may edit a message",
+      "messageId",
+      context,
+    );
+  }
+  if (data.expectedRevision !== normalized.revision) {
+    failMessage(
+      REDUCER_ERROR_CODES.MESSAGE_REVISION_CONFLICT,
+      `message revision ${data.expectedRevision} is not current`,
+      "expectedRevision",
+      context,
+    );
+  }
+  const revision = normalized.revision + 1;
+  state.entities.messages = setKey(state.entities.messages, data.messageId, {
+    ...normalized,
+    contentType: data.contentType,
+    revision,
+    revisions: [
+      ...normalized.revisions,
+      revisionRecord({
+        context,
+        contentType: data.contentType,
+        kind: "edited",
+        revision,
+        text: data.text,
+      }),
+    ],
+    status: "active",
+    text: data.text,
+  });
+}
+
+function reduceMessageDeleted(state, data, context) {
+  assertData(data, ["channelId", "expectedRevision", "messageId"], [], context);
+  assertConversationTargetIdentity(data, context);
+  assertRevision(data.expectedRevision, "expectedRevision", context);
+  const current = requireConversationMessage(state, data.messageId, context);
+  const normalized = normalizeConversationMessage(current, context);
+  if (normalized.channelId !== data.channelId) {
+    failMessage(
+      REDUCER_ERROR_CODES.CHANNEL_SCOPE_MISMATCH,
+      "message belongs to a different channel",
+      "channelId",
+      context,
+    );
+  }
+  assertConversationChannelAccess(state, data.channelId, context, {
+    allowArchived: false,
+  });
+  if (normalized.status === "deleted") {
+    failMessage(
+      REDUCER_ERROR_CODES.MESSAGE_DELETED,
+      "message is already deleted",
+      "messageId",
+      context,
+    );
+  }
+  if (data.expectedRevision !== normalized.revision) {
+    failMessage(
+      REDUCER_ERROR_CODES.MESSAGE_REVISION_CONFLICT,
+      `message revision ${data.expectedRevision} is not current`,
+      "expectedRevision",
+      context,
+    );
+  }
+  if (
+    normalized.authorId !== context.envelope.actorId &&
+    !conversationModerator(state, data.channelId, context.envelope.actorId)
+  ) {
+    failMessage(
+      REDUCER_ERROR_CODES.MESSAGE_MODERATOR_REQUIRED,
+      "only the author or an active channel moderator may delete a message",
+      "messageId",
+      context,
+    );
+  }
+  const revision = normalized.revision + 1;
+  state.entities.messages = setKey(state.entities.messages, data.messageId, {
+    ...normalized,
+    revision,
+    revisions: [
+      ...normalized.revisions,
+      revisionRecord({
+        context,
+        contentType: normalized.contentType,
+        kind: "deleted",
+        revision,
+        text: null,
+      }),
+    ],
+    status: "deleted",
+    text: null,
+  });
+}
+
+function reduceReactionAdded(state, data, context) {
+  reduceReaction(state, data, context, "added");
+}
+
+function reduceReactionRemoved(state, data, context) {
+  reduceReaction(state, data, context, "removed");
+}
+
+function reduceReaction(state, data, context, kind) {
+  assertData(data, ["channelId", "emoji", "messageId"], [], context);
+  assertConversationTargetIdentity(data, context);
+  assertReaction(data.emoji, context);
+  const message = requireConversationMessage(state, data.messageId, context);
+  const normalized = normalizeConversationMessage(message, context);
+  if (normalized.channelId !== data.channelId) {
+    failMessage(
+      REDUCER_ERROR_CODES.CHANNEL_SCOPE_MISMATCH,
+      "message belongs to a different channel",
+      "channelId",
+      context,
+    );
+  }
+  assertConversationChannelAccess(state, data.channelId, context, {
+    allowArchived: false,
+  });
+  if (kind === "added" && normalized.status === "deleted") {
+    failMessage(
+      REDUCER_ERROR_CODES.MESSAGE_DELETED,
+      "deleted messages cannot receive reactions",
+      "messageId",
+      context,
+    );
+  }
+  const key = reactionKey(data.messageId, context.envelope.actorId, data.emoji);
+  const reactions = state.entities.reactions ?? {};
+  const current = getKey(reactions, key);
+  const desiredStatus = kind === "added" ? "active" : "removed";
+  if (current?.status === desiredStatus) return;
+  state.entities.reactions = setKey(reactions, key, {
+    actorId: context.envelope.actorId,
+    channelId: data.channelId,
+    emoji: data.emoji,
+    history: [
+      ...(current?.history ?? []),
+      {
+        actorId: context.envelope.actorId,
+        eventId: context.envelope.eventId,
+        kind,
+        offset: context.offset,
+        status: desiredStatus,
+      },
+    ],
+    messageId: data.messageId,
+    revision: (current?.revision ?? 0) + 1,
+    status: desiredStatus,
+  });
+}
+
+function isConversationMessageData(data) {
+  return (
+    Object.hasOwn(data, "contentType") || Object.hasOwn(data, "rootMessageId")
+  );
+}
+
+function assertConversationMessageIdentity(state, data, context) {
+  assertConversationTargetIdentity(data, context);
+  if (data.authorId !== context.envelope.actorId) {
+    failMessage(
+      REDUCER_ERROR_CODES.MESSAGE_AUTHOR_MISMATCH,
+      "message author must match the authenticated event actor",
+      "authorId",
+      context,
+    );
+  }
+  assertConversationChannelAccess(state, data.channelId, context, {
+    allowArchived: false,
+  });
+}
+
+function assertConversationTargetIdentity(data, context) {
+  assertChannelId(data.channelId, "channelId", context);
+  assertToken(data.messageId, "messageId", context);
+}
+
+function assertConversationText(value, context) {
+  try {
+    validateConversationText(value);
+  } catch (error) {
+    failMessage(
+      REDUCER_ERROR_CODES.MESSAGE_TEXT,
+      error instanceof Error ? (error.detail ?? error.message) : String(error),
+      "text",
+      context,
+    );
+  }
+}
+
+function assertConversationContentType(value, context) {
+  try {
+    validateMessageContentType(value);
+  } catch (error) {
+    failMessage(
+      REDUCER_ERROR_CODES.MESSAGE_CONTENT_TYPE,
+      error instanceof Error ? (error.detail ?? error.message) : String(error),
+      "contentType",
+      context,
+    );
+  }
+}
+
+function assertReaction(value, context) {
+  try {
+    normalizeReactionName(value);
+  } catch (error) {
+    failMessage(
+      REDUCER_ERROR_CODES.MESSAGE_TEXT,
+      error instanceof Error ? (error.detail ?? error.message) : String(error),
+      "emoji",
+      context,
+    );
+  }
+}
+
+function createConversationMessageRecord(data, context, kind) {
+  return {
+    authorId: data.authorId,
+    channelId: data.channelId,
+    contentType: data.contentType,
+    messageId: data.messageId,
+    revision: 1,
+    revisions: [
+      revisionRecord({
+        context,
+        contentType: data.contentType,
+        kind,
+        revision: 1,
+        text: data.text,
+      }),
+    ],
+    rootMessageId: data.rootMessageId,
+    status: "active",
+    text: data.text,
+    workspaceId: context.envelope.workspaceId,
+  };
+}
+
+function revisionRecord({ context, contentType, kind, revision, text }) {
+  return {
+    actorId: context.envelope.actorId,
+    contentType,
+    eventId: context.envelope.eventId,
+    kind,
+    offset: context.offset,
+    revision,
+    text,
+  };
+}
+
+function requireConversationMessage(state, messageId, context) {
+  const message = getConversationMessage(state, messageId);
+  if (!message) {
+    failMessage(
+      REDUCER_ERROR_CODES.MESSAGE_NOT_FOUND,
+      "message does not exist",
+      "messageId",
+      context,
+    );
+  }
+  return message;
+}
+
+function getConversationMessage(state, messageId) {
+  return getKey(state.entities.messages, messageId);
+}
+
+function normalizeConversationMessage(message, context) {
+  if (Array.isArray(message.revisions)) return message;
+  return {
+    ...message,
+    contentType: message.contentType ?? "text/plain",
+    revision: 1,
+    revisions: [
+      {
+        actorId: message.authorId,
+        contentType: message.contentType ?? "text/plain",
+        eventId: context.envelope.eventId,
+        kind: "created",
+        offset: context.offset,
+        revision: 1,
+        text: message.text,
+      },
+    ],
+    rootMessageId: null,
+    status: message.status ?? "active",
+    workspaceId: message.workspaceId ?? context.envelope.workspaceId,
+  };
+}
+
+function assertConversationChannelAccess(
+  state,
+  channelId,
+  context,
+  { allowArchived },
+) {
+  const channels = channelMap(state);
+  if (Object.keys(channels).length === 0) return;
+  const channel = getKey(channels, channelId);
+  if (!channel) {
+    failMessage(
+      REDUCER_ERROR_CODES.CHANNEL_NOT_FOUND,
+      "conversation event references an unknown channel",
+      "channelId",
+      context,
+    );
+  }
+  if (channel.workspaceId !== context.envelope.workspaceId) {
+    failMessage(
+      REDUCER_ERROR_CODES.CHANNEL_SCOPE_MISMATCH,
+      "conversation channel belongs to another workspace",
+      "channelId",
+      context,
+    );
+  }
+  if (!allowArchived && channel.status !== "active") {
+    failMessage(
+      REDUCER_ERROR_CODES.CHANNEL_ARCHIVED,
+      "archived channels do not accept conversation mutations",
+      "channelId",
+      context,
+    );
+  }
+  const workspaceMembership = getKey(
+    membershipMap(state),
+    membershipIdForReducer(
+      context.envelope.workspaceId,
+      context.envelope.actorId,
+    ),
+  );
+  const channelMembership = getKey(
+    channelMembershipMap(state),
+    channelMembershipKeyForReducer(channelId, context.envelope.actorId),
+  );
+  if (
+    !workspaceMembership ||
+    workspaceMembership.status !== "active" ||
+    !channelMembership ||
+    channelMembership.status !== "active"
+  ) {
+    failMessage(
+      REDUCER_ERROR_CODES.CHANNEL_MEMBERSHIP_INACTIVE,
+      "conversation actor must be an active workspace and channel member",
+      "channelId",
+      context,
+    );
+  }
+}
+
+function conversationModerator(state, channelId, principalId) {
+  const channel = getKey(channelMap(state), channelId);
+  const channelMembership = getKey(
+    channelMembershipMap(state),
+    channelMembershipKeyForReducer(channelId, principalId),
+  );
+  const workspaceMembership = getKey(
+    membershipMap(state),
+    membershipIdForReducer(channel?.workspaceId ?? "", principalId),
+  );
+  return Boolean(
+    channel &&
+    channelMembership?.status === "active" &&
+    workspaceMembership?.status === "active" &&
+    (channel.creatorId === principalId ||
+      ["owner", "admin"].includes(workspaceMembership.role)),
+  );
+}
+
+function reactionKey(messageId, actorId, emoji) {
+  return `${messageId}\u0000${actorId}\u0000${emoji}`;
+}
+
+function failMessage(code, detail, field, context) {
+  throw reducerError(code, detail, {
+    offset: context.offset,
+    path: `$.event.data.${field}`,
+  });
 }
 
 function reduceAgentConfigRevised(state, data, context) {

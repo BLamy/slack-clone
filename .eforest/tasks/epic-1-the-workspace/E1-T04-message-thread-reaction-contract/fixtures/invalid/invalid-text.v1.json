@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "task": "E1-T04",
+  "records": [
+    {
+      "offset": "0000000000000000_0000000000000001",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_gggggggggggggggggggggggggg",
+        "data": {
+          "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "contentType": "text/plain",
+          "messageId": "bad-text",
+          "rootMessageId": null,
+          "text": "Café"
+        },
+        "eventId": "ev_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventType": "channel.message.created",
+        "idempotencyKey": "ik_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-03T00:00:00.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stream-slack.local/schemas/message-events.v1.schema.json",
+  "title": "Stream Slack conversation events v1",
+  "oneOf": [
+    {
+      "title": "Root message created",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorId",
+        "channelId",
+        "contentType",
+        "messageId",
+        "rootMessageId",
+        "text"
+      ],
+      "properties": {
+        "authorId": { "$ref": "#/$defs/principalId" },
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "contentType": { "const": "text/plain" },
+        "messageId": { "$ref": "#/$defs/messageId" },
+        "rootMessageId": { "type": "null" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 4000 }
+      }
+    },
+    {
+      "title": "Thread reply created",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorId",
+        "channelId",
+        "contentType",
+        "messageId",
+        "rootMessageId",
+        "text"
+      ],
+      "properties": {
+        "authorId": { "$ref": "#/$defs/principalId" },
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "contentType": { "const": "text/plain" },
+        "messageId": { "$ref": "#/$defs/messageId" },
+        "rootMessageId": { "$ref": "#/$defs/messageId" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 4000 }
+      }
+    },
+    {
+      "title": "Message edited",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "channelId",
+        "contentType",
+        "expectedRevision",
+        "messageId",
+        "text"
+      ],
+      "properties": {
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "contentType": { "const": "text/plain" },
+        "expectedRevision": { "type": "integer", "minimum": 1 },
+        "messageId": { "$ref": "#/$defs/messageId" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 4000 }
+      }
+    },
+    {
+      "title": "Message deleted",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channelId", "expectedRevision", "messageId"],
+      "properties": {
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "expectedRevision": { "type": "integer", "minimum": 1 },
+        "messageId": { "$ref": "#/$defs/messageId" }
+      }
+    },
+    {
+      "title": "Reaction added or removed",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channelId", "emoji", "messageId"],
+      "properties": {
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "emoji": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "messageId": { "$ref": "#/$defs/messageId" }
+      }
+    }
+  ],
+  "$defs": {
+    "channelId": {
+      "type": "string",
+      "pattern": "^ch_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "messageId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,200}$"
+    },
+    "principalId": {
+      "type": "string",
+      "pattern": "^pr_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+    }
+  }
+}

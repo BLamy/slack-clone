@@ -3,6 +3,7 @@ export const DEFAULT_CHAT_PATH = "/app?room=demo";
 
 export * from "./principals.mjs";
 export * from "./channels.mjs";
+export * from "./messages.mjs";
 export * from "./workspace.mjs";
 
 export function normalizeRoomId(roomId) {

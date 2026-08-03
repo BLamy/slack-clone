@@ -1,5 +1,7 @@
 import {
   membershipIdFor,
+  sameSubjectBinding,
+  validateAuthenticatedSubject,
   validatePrincipalId,
   validateWorkspaceId,
 } from "@stream-slack/protocol";
@@ -37,6 +39,22 @@ export function createWorkspaceDirectoryAuthority({
     const replay = await readReplay();
     const membershipId = membershipIdFor(workspaceId, principalId);
     return replay.finalState.entities.memberships?.[membershipId] ?? null;
+  }
+
+  async function lookupPrincipalBySubject(
+    requestedWorkspaceId,
+    authenticatedSubject,
+  ) {
+    if (requestedWorkspaceId !== workspaceId) return null;
+    validateAuthenticatedSubject(authenticatedSubject);
+    await ensureReady();
+    const replay = await readReplay();
+    return (
+      Object.values(replay.finalState.entities.principals ?? {}).find(
+        (principal) =>
+          sameSubjectBinding(principal.subjectBinding, authenticatedSubject),
+      ) ?? null
+    );
   }
 
   function ensureReady() {
@@ -106,6 +124,7 @@ export function createWorkspaceDirectoryAuthority({
 
   return Object.freeze({
     lookupMembership,
+    lookupPrincipalBySubject,
     get ready() {
       return ensureReady();
     },

@@ -6,6 +6,7 @@ import test from "node:test";
 import { createWorkspaceDirectoryAuthority } from "../../src/ledger/workspace-directory.mjs";
 
 const WORKSPACE_A = "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa";
+const PRINCIPAL_A = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb";
 const MEMBER_A = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc";
 const MEMBERSHIP_A = "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc";
 
@@ -48,6 +49,29 @@ test("workspace directory retries transient provider startup and replays authori
   assert.equal(membership.membershipId, MEMBERSHIP_A);
   assert.equal(membership.role, "admin");
   assert.equal(membership.status, "active");
+
+  const principal = await authority.lookupPrincipalBySubject(WORKSPACE_A, {
+    audience: "stream-slack",
+    issuer: "auth0",
+    subject: "workspace-a-ada",
+  });
+  assert.equal(principal.principalId, PRINCIPAL_A);
+  assert.equal(
+    await authority.lookupPrincipalBySubject(WORKSPACE_A, {
+      audience: "stream-slack",
+      issuer: "auth0",
+      subject: "ada@example.test",
+    }),
+    null,
+  );
+  assert.equal(
+    await authority.lookupPrincipalBySubject(WORKSPACE_A, {
+      audience: "other-audience",
+      issuer: "auth0",
+      subject: "workspace-a-ada",
+    }),
+    null,
+  );
 });
 
 function offset(sequence) {

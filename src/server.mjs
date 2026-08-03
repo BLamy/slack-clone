@@ -50,16 +50,9 @@ const CHAT_WORKSPACE_TOKEN = CHAT_WORKSPACE_ID.slice(3);
 const CHAT_ADA_ID = `pr_${CHAT_WORKSPACE_TOKEN}_${"a".repeat(26)}`;
 const CHAT_LINUS_ID = `pr_${CHAT_WORKSPACE_TOKEN}_${"b".repeat(26)}`;
 const CHAT_DIRECTORY_INVITE_ID = `iv_${CHAT_WORKSPACE_TOKEN}_${"c".repeat(26)}`;
+const CHAT_SUBJECT_AUDIENCE = "stream-slack";
+const CHAT_SUBJECT_ISSUER = "auth0";
 const TRUSTED_HOST = process.env.TRUSTED_HOST ?? `${HOST}:${PORT}`;
-
-const CHAT_PRINCIPAL_BY_AUTH_SUBJECT = new Map([
-  ["ada", CHAT_ADA_ID],
-  ["auth0|ada", CHAT_ADA_ID],
-  ["linus", CHAT_LINUS_ID],
-  ["auth0|linus", CHAT_LINUS_ID],
-  ["ada@example.test", CHAT_ADA_ID],
-  ["linus@example.test", CHAT_LINUS_ID],
-]);
 
 const CHAT_DIRECTORY_BOOTSTRAP = Object.freeze([
   workspaceBootstrapEvent("a", "principal.created", CHAT_ADA_ID, {
@@ -140,16 +133,6 @@ function currentSession(request) {
 
 function sessionUser(request) {
   return currentSession(request)?.user ?? null;
-}
-
-function principalIdForAuthUser(user) {
-  if (!user || typeof user !== "object") return null;
-  for (const value of [user.sub, user.email, user.preferredUsername]) {
-    if (typeof value !== "string") continue;
-    const principalId = CHAT_PRINCIPAL_BY_AUTH_SUBJECT.get(value);
-    if (principalId) return principalId;
-  }
-  return null;
 }
 
 function setSessionCookie(response, sessionId) {
@@ -265,7 +248,15 @@ async function handleAuth(request, response, url) {
         form.get("email") ?? "",
         form.get("password") ?? "",
       );
-      const principalId = principalIdForAuthUser(user);
+      const principal = await workspaceDirectory.lookupPrincipalBySubject(
+        CHAT_WORKSPACE_ID,
+        {
+          audience: CHAT_SUBJECT_AUDIENCE,
+          issuer: CHAT_SUBJECT_ISSUER,
+          subject: user.sub,
+        },
+      );
+      const principalId = principal?.principalId ?? null;
       if (!principalId) {
         throw new Error("authenticated user is not a workspace member");
       }

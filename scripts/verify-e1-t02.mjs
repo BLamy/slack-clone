@@ -52,6 +52,17 @@ assert.match(
   /^[0-9a-f]{40}$/u,
   "E1-T02 evidence requires an exact implementation commit",
 );
+const implementationFiles = [
+  "package.json",
+  "packages/http/src/index.mjs",
+  "scripts/verify-e1-t02.mjs",
+  "src/ledger/workspace-auth.mjs",
+  "src/ledger/workspace-directory.mjs",
+  "src/server.mjs",
+  "test/unit/workspace-directory.test.mjs",
+  "test/unit/workspace-http.test.mjs",
+];
+assertImplementationBinding(implementationCommit);
 
 const promoteEvidence = process.env.PROMOTE_EVIDENCE === "1";
 if (promoteEvidence) {
@@ -1177,6 +1188,43 @@ async function runNode(args, extraEnv = {}) {
       stdout: error.stdout ?? "",
     };
   }
+}
+
+function assertImplementationBinding(commit) {
+  let resolved;
+  try {
+    resolved = execFileSync(
+      "git",
+      ["rev-parse", "--verify", `${commit}^{commit}`],
+      {
+        cwd: root,
+        encoding: "utf8",
+      },
+    ).trim();
+  } catch {
+    assert.fail(`implementation commit ${commit} does not resolve to a commit`);
+  }
+  assert.equal(resolved, commit, "implementation commit must resolve exactly");
+  try {
+    execFileSync("git", ["merge-base", "--is-ancestor", commit, "HEAD"], {
+      cwd: root,
+      stdio: "ignore",
+    });
+  } catch {
+    assert.fail(
+      "implementation commit must be an ancestor of the current checkout",
+    );
+  }
+  const changedImplementationFiles = execFileSync(
+    "git",
+    ["diff", "--name-only", `${commit}..HEAD`, "--", ...implementationFiles],
+    { cwd: root, encoding: "utf8" },
+  ).trim();
+  assert.equal(
+    changedImplementationFiles,
+    "",
+    "implementation files changed after the evidence commit",
+  );
 }
 
 async function readJson(filePath) {

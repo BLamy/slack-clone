@@ -184,3 +184,19 @@ same authorized channel.
   no-op fence, so `authorizeDispatch` could succeed without `withChannelFence`, leaving
   a membership-revocation lookup/append race. The default must fail closed like the
   existing channel authorization fence.
+
+### Builder — 2026-08-02 — authorization fence repaired
+
+- Repair commit: `34d72c1b306ca52a91db7a7aee2b2e375af6d7cf` (`E1-T04: require conversation
+  authorization fencing`). `createConversationAuthorization` now rejects a missing or
+  invalid fence with `CONVERSATION_FENCE_REQUIRED`, and performs the state lookup inside
+  the supplied fence. Unit and verifier regressions prove an omitted fence cannot
+  authorize a message command.
+- Cold command: `TEST_RUN_ID=repair-fence-cold make verify-E1-T04`; frozen install and
+  all five gates passed. Promoted command:
+  `PROMOTE_EVIDENCE=1 E1_T04_IMPLEMENTATION_COMMIT=34d72c1b306ca52a91db7a7aee2b2e375af6d7cf
+  E1_T04_NETWORK_DISABLED=1 TEST_RUN_ID=promoted-e1-t04-fence node scripts/verify-e1-t04.mjs`
+  passed from a clean implementation tree. New evidence is
+  `evidence/e1-t04-final/fence.json`; it records `CONVERSATION_FENCE_REQUIRED`. Replay:
+  N/A (server conversation event contract) + mitigation: golden logs, authorization
+  refusals, property tests, and per-prefix digest evidence.

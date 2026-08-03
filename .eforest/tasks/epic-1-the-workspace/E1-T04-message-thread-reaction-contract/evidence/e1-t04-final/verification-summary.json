@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E1-T04",
-  "runId": "promoted-e1-t04-compact-text",
-  "implementationCommit": "e711b8fe95f73fca32e7f59bebe96297375efdb8",
+  "runId": "promoted-e1-t04-fence",
+  "implementationCommit": "34d72c1b306ca52a91db7a7aee2b2e375af6d7cf",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "fixtureCount": 1,
@@ -12,31 +12,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 6156,
+      "durationMs": 1975,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 1846,
+      "durationMs": 1648,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 4695,
+      "durationMs": 5085,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 19195,
+      "durationMs": 18206,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 641,
+      "durationMs": 420,
       "name": "build",
       "result": "PASS"
     }
@@ -236,6 +236,11 @@
     "authorEditOnly": true,
     "moderatorDeleteRequiresActiveMembership": true,
     "refusalLeavesSourceHeadUnchanged": true
+  },
+  "fenceEvidence": {
+    "omittedFenceRefused": true,
+    "code": "CONVERSATION_FENCE_REQUIRED",
+    "result": "PASS"
   },
   "legacyCompatibilityEvidence": {
     "compactMessageAcceptedWithoutShapeChange": true,

@@ -7,6 +7,6 @@
     "verifierRejectedPostImplementationChange": true,
     "result": "PASS"
   },
-  "scratchPath": ".artifacts/e1-t03/promoted-repair-e1-t03/unsafe-channel-auth/channel-auth.mjs",
+  "scratchPath": ".artifacts/e1-t03/promoted-sha-repair-e1-t03/unsafe-channel-auth/channel-auth.mjs",
   "result": "PASS"
 }

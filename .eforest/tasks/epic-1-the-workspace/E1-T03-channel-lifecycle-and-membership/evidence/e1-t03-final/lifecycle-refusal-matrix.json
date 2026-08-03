@@ -1,5 +1,5 @@
 {
-  "refusalCount": 9,
+  "refusalCount": 10,
   "refusals": [
     {
       "name": "cross-tenant-channel-id",
@@ -37,6 +37,12 @@
       "sourceDumpUnchangedAfterReducerFailure": true
     },
     {
+      "name": "direct-id-mismatch",
+      "code": "REDUCER_CHANNEL_DIRECT_ID_MISMATCH",
+      "offset": "0000000000000000_0000000000000035",
+      "refusedBeforeAppend": true
+    },
+    {
       "name": "equivalent-direct-set",
       "code": "REDUCER_CHANNEL_DIRECT_DUPLICATE",
       "offset": "0000000000000000_0000000000000031",
@@ -63,5 +69,6 @@
   ],
   "raceProtection": true,
   "directParticipantSetImmutable": true,
+  "directIdentityBinding": true,
   "result": "PASS"
 }

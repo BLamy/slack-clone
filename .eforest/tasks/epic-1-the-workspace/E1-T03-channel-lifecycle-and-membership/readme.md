@@ -173,3 +173,55 @@ VERDICT: refuted
   cannot alias distinct valid DMs; private-channel discovery/read and channel management are
   bound to current channel membership; lifecycle reducers and authorization remain fenced,
   replayable, and tenant-scoped under the repaired implementation.
+
+### Critic — 2026-08-03 — direct identity squeeze refutation
+
+VERDICT: refuted
+
+- A fresh independent critic inspected repair commit `c66871746a5348ac3d94a69676b3455eff546954`
+  and found that its custom two-word squeeze exposed only low bits. Despite consuming the full
+  participant key, the emitted 26-character token was a function of at most 10 state bits, so
+  the direct-ID space collapsed to at most 1,024 values. The committed fixture's tokens using
+  only four alphabet symbols corroborated the finding. The four hand-picked inequality checks
+  were not sensitive enough to detect this defect.
+- Required repair: use a full-state digest for the 130-bit token, add a generated collision
+  corpus that fails against the defective squeeze, bind reducer events to the derived direct
+  ID, regenerate fixture IDs/digests, and rerun the cold verifier. The critic also confirmed
+  the prior private-member discovery and creator-left management repairs.
+
+### Builder — 2026-08-03 — full-state direct identity repair complete
+
+- Repair commit: `ac556e3f169ab6b3f0f7fc9f90d027dc8e4a8860` (`E1-T03: harden direct identity
+  hashing and binding`). `packages/protocol/src/sha256.mjs` now provides a pure standard
+  SHA-256 implementation; direct-channel IDs encode the first 130 digest bits into the 26-byte
+  channel token alphabet. The protocol implementation was checked against the known SHA-256
+  digest for `abc`, and a generated 5,000-set corpus produced 5,000 unique IDs.
+- The reducer now imports only the pure protocol package, enforces
+  `data.channelId === directChannelIdFor(workspaceId, participantIds)`, reports the typed
+  `REDUCER_CHANNEL_DIRECT_ID_MISMATCH` refusal, and checks equivalent participant sets before
+  generic channel-ID uniqueness. The pure-package boundary and dependency inspection now
+  explicitly allow this one-way protocol dependency.
+- Cold command: `make verify-E1-T03`. Frozen install, `pnpm format:check`, `pnpm lint`,
+  `pnpm typecheck`, `pnpm test`, and `pnpm build` all passed with zero skips. The promoted run
+  was `PROMOTE_EVIDENCE=1 E1_T03_IMPLEMENTATION_COMMIT=ac556e3f169ab6b3f0f7fc9f90d027dc8e4a8860
+  TEST_RUN_ID=promoted-sha-repair-e1-t03 node scripts/verify-e1-t03.mjs` with
+  `implementationTreeCleanAtStart: true`.
+- The repaired fixture replays 29 offsets twice with stable per-prefix digests and final digest
+  `sha256:0513eb1f0052aeb9d7a9e7157c87ec5c8e409b1fd17aa8602a8d2637ff724681`. The verifier
+  records `generatedSets: 5000`, `uniqueIds: 5000`, `collisionCount: 0`, ten lifecycle
+  refusals including direct-ID mismatch, and the unchanged private-read/revocation/offline
+  replay proofs. Replay: N/A (server channel authorization model) + mitigation:
+  cross-channel negative matrix, lifecycle logs, revocation race, direct-identity corpus,
+  reducer binding refusal, sensitivity mutation, and canonical replay digests.
+- Evidence: `evidence/e1-t03-final/verification-summary.json`,
+  `evidence/e1-t03-final/channel-replay-evidence.json`,
+  `evidence/e1-t03-final/direct-identity-collision-matrix.json`,
+  `evidence/e1-t03-final/private-read-refusal-matrix.json`,
+  `evidence/e1-t03-final/revocation-race.json`,
+  `evidence/e1-t03-final/lifecycle-refusal-matrix.json`,
+  `evidence/e1-t03-final/sensitivity.json`, and
+  `evidence/e1-t03-final/offline-replay.json`.
+- Claim: distinct valid participant sets now derive full-state SHA-256-backed workspace-scoped
+  direct IDs with a 5,000-set collision detector, and the authoritative reducer refuses any
+  direct event whose ID does not match its canonical participant set; private channel access
+  and lifecycle fencing remain enforced as previously proven.

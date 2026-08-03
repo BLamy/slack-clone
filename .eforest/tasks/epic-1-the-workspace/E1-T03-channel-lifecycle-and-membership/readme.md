@@ -3,7 +3,7 @@ id: E1-T03
 epic: 1
 title: "Channel lifecycle, membership, and private-read isolation"
 priority: 103
-status: refuted
+status: in-progress
 depends_on: [E1-T02]
 estimate: L
 capstone: false

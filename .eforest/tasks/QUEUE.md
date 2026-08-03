@@ -8,7 +8,7 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-1. **E1-T03** — Channel lifecycle, membership, and private-read isolation *(builder rework required)*
+1. **E1-T03** — Channel lifecycle, membership, and private-read isolation *(builder working)*
 
 ## Next up (dependencies satisfied)
 
@@ -32,7 +32,7 @@ No new task may start until **E1-T03** clears the gate.
 
 - [x] ` 101` [E1-T01](epic-1-the-workspace/E1-T01-principal-event-model/readme.md) — First-class human, agent, and service principal event model *(deps: E0)*
 - [x] ` 102` [E1-T02](epic-1-the-workspace/E1-T02-workspace-membership-and-roles/readme.md) — Workspace membership, roles, and tenant boundary *(deps: E1-T01)*
-- [!] ` 103` [E1-T03](epic-1-the-workspace/E1-T03-channel-lifecycle-and-membership/readme.md) — Channel lifecycle, membership, and private-read isolation *(deps: E1-T02)*
+- [~] ` 103` [E1-T03](epic-1-the-workspace/E1-T03-channel-lifecycle-and-membership/readme.md) — Channel lifecycle, membership, and private-read isolation *(deps: E1-T02)*
 - [ ] ` 104` [E1-T04](epic-1-the-workspace/E1-T04-message-thread-reaction-contract/readme.md) — Message, thread, edit, delete, and reaction event contract *(deps: E1-T03)*
 - [ ] ` 105` [E1-T05](epic-1-the-workspace/E1-T05-resumable-live-chat-api/readme.md) — Resumable live chat API without polling *(deps: E1-T04)*
 - [ ] ` 106` [E1-T06](epic-1-the-workspace/E1-T06-canonical-structured-mentions/readme.md) — Canonical structured mentions as durable trigger facts *(deps: E1-T04)*

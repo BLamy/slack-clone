@@ -483,21 +483,48 @@
       "operation": "dispatch",
       "processId": "dispatch-process-0-0",
       "requestIndex": 0,
-      "result": "accepted"
+      "result": "accepted",
+      "acknowledgement": {
+        "delayed": false,
+        "released": true,
+        "stateTrace": [
+          "pending",
+          "acknowledged"
+        ],
+        "ticks": 0
+      }
     },
     {
       "attempt": 1,
       "operation": "dispatch",
       "processId": "dispatch-process-1-0",
       "requestIndex": 1,
-      "result": "accepted"
+      "result": "accepted",
+      "acknowledgement": {
+        "delayed": false,
+        "released": true,
+        "stateTrace": [
+          "pending",
+          "acknowledged"
+        ],
+        "ticks": 0
+      }
     },
     {
       "attempt": 1,
       "operation": "dispatch",
       "processId": "dispatch-process-2-0",
       "requestIndex": 2,
-      "result": "accepted"
+      "result": "accepted",
+      "acknowledgement": {
+        "delayed": false,
+        "released": true,
+        "stateTrace": [
+          "pending",
+          "acknowledged"
+        ],
+        "ticks": 0
+      }
     }
   ],
   "processRestarts": [],
@@ -683,7 +710,9 @@
     },
     "checkpointRecovery": null,
     "resumeFrom": "0000000000000000_0000000000000000",
-    "sourceReplayCount": 3
+    "sourceReplayCount": 3,
+    "durableAuthorityRestarts": [],
+    "partitionProbe": null
   },
   "invalidCausalOrder": {
     "rejected": {
@@ -694,28 +723,34 @@
   },
   "slowConsumer": {
     "bounds": {
-      "maxBytes": 4096,
+      "maxBytes": 1024,
       "maxRecords": 2,
       "inputBytes": 1434,
       "inputRecords": 3,
-      "observedBytes": 1434,
-      "observedRecords": 2
+      "cancelPeakBytes": 956,
+      "cancelPeakRecords": 2,
+      "catchUpPeakBytes": 956,
+      "catchUpPeakRecords": 2
     },
     "cancel": {
       "code": "HARNESS_SLOW_CONSUMER",
+      "offset": "0000000000000000_0000000000000003",
       "policy": "cancel",
       "result": "cancelled"
     },
     "catchUp": {
+      "overflowAt": "0000000000000000_0000000000000003",
       "policy": "catch-up",
       "result": "caught-up",
-      "resumedFrom": "0000000000000000_0000000000000000"
+      "resumedFrom": "0000000000000000_0000000000000000",
+      "replayedRecords": 3
     },
     "unrelatedStreamProgress": {
       "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
       "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "independent": true,
       "headOfLineBlocked": false,
+      "partitionedDuringProbe": false,
       "progressRecords": 5
     }
   },

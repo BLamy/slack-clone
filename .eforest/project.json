@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E0-T06 rework is in progress after the 2026-08-02T23:57:22Z refutation; durable authority restart, actual bounded slow-consumer isolation, and deferred acknowledgement are being repaired.",
-  "updatedAt": "2026-08-03T00:01:23Z"
+  "statusReason": "E0-T06 repair e96acafed6efbd9cafc1f5b09fe3a8fa5303858f is implemented after critic refutation; a fresh critic must verify durable restart, bounded partition-time isolation, and deferred acknowledgement evidence.",
+  "updatedAt": "2026-08-03T00:03:42Z"
 }

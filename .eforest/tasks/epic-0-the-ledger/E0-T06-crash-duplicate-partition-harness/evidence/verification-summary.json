@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E0-T06",
-  "runId": "e0-t06-promoted-final",
-  "implementationCommit": "7a20becc6e8b50581035b914c7a95397e57ff1a9",
+  "runId": "e0-t06-repair-promoted",
+  "implementationCommit": "e96acafed6efbd9cafc1f5b09fe3a8fa5303858f",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "zeroSkippedSchedules": true,
@@ -10,31 +10,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 1853,
+      "durationMs": 4396,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 1592,
+      "durationMs": 2584,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 5984,
+      "durationMs": 9515,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 30009,
+      "durationMs": 21677,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 1273,
+      "durationMs": 518,
       "name": "build",
       "result": "PASS"
     }
@@ -408,21 +408,48 @@
           "operation": "dispatch",
           "processId": "dispatch-process-0-0",
           "requestIndex": 0,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-1-0",
           "requestIndex": 1,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-2-0",
           "requestIndex": 2,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         }
       ],
       "processRestarts": [],
@@ -438,28 +465,34 @@
       },
       "slowConsumer": {
         "bounds": {
-          "maxBytes": 4096,
+          "maxBytes": 1024,
           "maxRecords": 2,
           "inputBytes": 1434,
           "inputRecords": 3,
-          "observedBytes": 1434,
-          "observedRecords": 2
+          "cancelPeakBytes": 956,
+          "cancelPeakRecords": 2,
+          "catchUpPeakBytes": 956,
+          "catchUpPeakRecords": 2
         },
         "cancel": {
           "code": "HARNESS_SLOW_CONSUMER",
+          "offset": "0000000000000000_0000000000000003",
           "policy": "cancel",
           "result": "cancelled"
         },
         "catchUp": {
+          "overflowAt": "0000000000000000_0000000000000003",
           "policy": "catch-up",
           "result": "caught-up",
-          "resumedFrom": "0000000000000000_0000000000000000"
+          "resumedFrom": "0000000000000000_0000000000000000",
+          "replayedRecords": 3
         },
         "unrelatedStreamProgress": {
           "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
           "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
           "independent": true,
           "headOfLineBlocked": false,
+          "partitionedDuringProbe": false,
           "progressRecords": 5
         }
       }
@@ -504,21 +537,48 @@
           "operation": "dispatch",
           "processId": "dispatch-process-0-1",
           "requestIndex": 0,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-1-0",
           "requestIndex": 1,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-2-0",
           "requestIndex": 2,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         }
       ],
       "processRestarts": [
@@ -542,28 +602,34 @@
       },
       "slowConsumer": {
         "bounds": {
-          "maxBytes": 4096,
+          "maxBytes": 1024,
           "maxRecords": 2,
           "inputBytes": 1434,
           "inputRecords": 3,
-          "observedBytes": 1434,
-          "observedRecords": 2
+          "cancelPeakBytes": 956,
+          "cancelPeakRecords": 2,
+          "catchUpPeakBytes": 956,
+          "catchUpPeakRecords": 2
         },
         "cancel": {
           "code": "HARNESS_SLOW_CONSUMER",
+          "offset": "0000000000000000_0000000000000003",
           "policy": "cancel",
           "result": "cancelled"
         },
         "catchUp": {
+          "overflowAt": "0000000000000000_0000000000000003",
           "policy": "catch-up",
           "result": "caught-up",
-          "resumedFrom": "0000000000000000_0000000000000000"
+          "resumedFrom": "0000000000000000_0000000000000000",
+          "replayedRecords": 3
         },
         "unrelatedStreamProgress": {
           "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
           "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
           "independent": true,
           "headOfLineBlocked": false,
+          "partitionedDuringProbe": false,
           "progressRecords": 5
         }
       }
@@ -608,21 +674,48 @@
           "operation": "dispatch",
           "processId": "dispatch-process-0-1",
           "requestIndex": 0,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-1-0",
           "requestIndex": 1,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-2-0",
           "requestIndex": 2,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         }
       ],
       "processRestarts": [
@@ -646,28 +739,34 @@
       },
       "slowConsumer": {
         "bounds": {
-          "maxBytes": 4096,
+          "maxBytes": 1024,
           "maxRecords": 2,
           "inputBytes": 1434,
           "inputRecords": 3,
-          "observedBytes": 1434,
-          "observedRecords": 2
+          "cancelPeakBytes": 956,
+          "cancelPeakRecords": 2,
+          "catchUpPeakBytes": 956,
+          "catchUpPeakRecords": 2
         },
         "cancel": {
           "code": "HARNESS_SLOW_CONSUMER",
+          "offset": "0000000000000000_0000000000000003",
           "policy": "cancel",
           "result": "cancelled"
         },
         "catchUp": {
+          "overflowAt": "0000000000000000_0000000000000003",
           "policy": "catch-up",
           "result": "caught-up",
-          "resumedFrom": "0000000000000000_0000000000000000"
+          "resumedFrom": "0000000000000000_0000000000000000",
+          "replayedRecords": 3
         },
         "unrelatedStreamProgress": {
           "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
           "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
           "independent": true,
           "headOfLineBlocked": false,
+          "partitionedDuringProbe": false,
           "progressRecords": 5
         }
       }
@@ -712,21 +811,48 @@
           "operation": "dispatch",
           "processId": "dispatch-process-0-1",
           "requestIndex": 0,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-1-0",
           "requestIndex": 1,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-2-0",
           "requestIndex": 2,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         }
       ],
       "processRestarts": [
@@ -750,28 +876,34 @@
       },
       "slowConsumer": {
         "bounds": {
-          "maxBytes": 4096,
+          "maxBytes": 1024,
           "maxRecords": 2,
           "inputBytes": 1434,
           "inputRecords": 3,
-          "observedBytes": 1434,
-          "observedRecords": 2
+          "cancelPeakBytes": 956,
+          "cancelPeakRecords": 2,
+          "catchUpPeakBytes": 956,
+          "catchUpPeakRecords": 2
         },
         "cancel": {
           "code": "HARNESS_SLOW_CONSUMER",
+          "offset": "0000000000000000_0000000000000003",
           "policy": "cancel",
           "result": "cancelled"
         },
         "catchUp": {
+          "overflowAt": "0000000000000000_0000000000000003",
           "policy": "catch-up",
           "result": "caught-up",
-          "resumedFrom": "0000000000000000_0000000000000000"
+          "resumedFrom": "0000000000000000_0000000000000000",
+          "replayedRecords": 3
         },
         "unrelatedStreamProgress": {
           "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
           "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
           "independent": true,
           "headOfLineBlocked": false,
+          "partitionedDuringProbe": false,
           "progressRecords": 5
         }
       }
@@ -816,21 +948,48 @@
           "operation": "dispatch",
           "processId": "dispatch-process-0-1",
           "requestIndex": 0,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-1-0",
           "requestIndex": 1,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-2-0",
           "requestIndex": 2,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         }
       ],
       "processRestarts": [
@@ -854,28 +1013,34 @@
       },
       "slowConsumer": {
         "bounds": {
-          "maxBytes": 4096,
+          "maxBytes": 1024,
           "maxRecords": 2,
           "inputBytes": 1434,
           "inputRecords": 3,
-          "observedBytes": 1434,
-          "observedRecords": 2
+          "cancelPeakBytes": 956,
+          "cancelPeakRecords": 2,
+          "catchUpPeakBytes": 956,
+          "catchUpPeakRecords": 2
         },
         "cancel": {
           "code": "HARNESS_SLOW_CONSUMER",
+          "offset": "0000000000000000_0000000000000003",
           "policy": "cancel",
           "result": "cancelled"
         },
         "catchUp": {
+          "overflowAt": "0000000000000000_0000000000000003",
           "policy": "catch-up",
           "result": "caught-up",
-          "resumedFrom": "0000000000000000_0000000000000000"
+          "resumedFrom": "0000000000000000_0000000000000000",
+          "replayedRecords": 3
         },
         "unrelatedStreamProgress": {
           "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
           "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
           "independent": true,
           "headOfLineBlocked": false,
+          "partitionedDuringProbe": false,
           "progressRecords": 5
         }
       }
@@ -920,21 +1085,48 @@
           "operation": "dispatch",
           "processId": "dispatch-process-0-1",
           "requestIndex": 0,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-1-0",
           "requestIndex": 1,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-2-0",
           "requestIndex": 2,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         }
       ],
       "processRestarts": [
@@ -958,28 +1150,34 @@
       },
       "slowConsumer": {
         "bounds": {
-          "maxBytes": 4096,
+          "maxBytes": 1024,
           "maxRecords": 2,
           "inputBytes": 1434,
           "inputRecords": 3,
-          "observedBytes": 1434,
-          "observedRecords": 2
+          "cancelPeakBytes": 956,
+          "cancelPeakRecords": 2,
+          "catchUpPeakBytes": 956,
+          "catchUpPeakRecords": 2
         },
         "cancel": {
           "code": "HARNESS_SLOW_CONSUMER",
+          "offset": "0000000000000000_0000000000000003",
           "policy": "cancel",
           "result": "cancelled"
         },
         "catchUp": {
+          "overflowAt": "0000000000000000_0000000000000003",
           "policy": "catch-up",
           "result": "caught-up",
-          "resumedFrom": "0000000000000000_0000000000000000"
+          "resumedFrom": "0000000000000000_0000000000000000",
+          "replayedRecords": 3
         },
         "unrelatedStreamProgress": {
           "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
           "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
           "independent": true,
           "headOfLineBlocked": false,
+          "partitionedDuringProbe": false,
           "progressRecords": 5
         }
       }
@@ -1014,21 +1212,48 @@
           "operation": "dispatch",
           "processId": "dispatch-process-0-0",
           "requestIndex": 0,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-1-0",
           "requestIndex": 1,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-2-0",
           "requestIndex": 2,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         }
       ],
       "processRestarts": [],
@@ -1044,28 +1269,34 @@
       },
       "slowConsumer": {
         "bounds": {
-          "maxBytes": 4096,
+          "maxBytes": 1024,
           "maxRecords": 2,
           "inputBytes": 1434,
           "inputRecords": 3,
-          "observedBytes": 1434,
-          "observedRecords": 2
+          "cancelPeakBytes": 956,
+          "cancelPeakRecords": 2,
+          "catchUpPeakBytes": 956,
+          "catchUpPeakRecords": 2
         },
         "cancel": {
           "code": "HARNESS_SLOW_CONSUMER",
+          "offset": "0000000000000000_0000000000000003",
           "policy": "cancel",
           "result": "cancelled"
         },
         "catchUp": {
+          "overflowAt": "0000000000000000_0000000000000003",
           "policy": "catch-up",
           "result": "caught-up",
-          "resumedFrom": "0000000000000000_0000000000000000"
+          "resumedFrom": "0000000000000000_0000000000000000",
+          "replayedRecords": 3
         },
         "unrelatedStreamProgress": {
           "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
           "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
           "independent": true,
           "headOfLineBlocked": false,
+          "partitionedDuringProbe": false,
           "progressRecords": 5
         }
       }
@@ -1100,21 +1331,48 @@
           "operation": "dispatch",
           "processId": "dispatch-process-0-0",
           "requestIndex": 0,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-1-0",
           "requestIndex": 1,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-2-0",
           "requestIndex": 2,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         }
       ],
       "processRestarts": [],
@@ -1130,28 +1388,34 @@
       },
       "slowConsumer": {
         "bounds": {
-          "maxBytes": 4096,
+          "maxBytes": 1024,
           "maxRecords": 2,
           "inputBytes": 1434,
           "inputRecords": 3,
-          "observedBytes": 1434,
-          "observedRecords": 2
+          "cancelPeakBytes": 956,
+          "cancelPeakRecords": 2,
+          "catchUpPeakBytes": 956,
+          "catchUpPeakRecords": 2
         },
         "cancel": {
           "code": "HARNESS_SLOW_CONSUMER",
+          "offset": "0000000000000000_0000000000000003",
           "policy": "cancel",
           "result": "cancelled"
         },
         "catchUp": {
+          "overflowAt": "0000000000000000_0000000000000003",
           "policy": "catch-up",
           "result": "caught-up",
-          "resumedFrom": "0000000000000000_0000000000000000"
+          "resumedFrom": "0000000000000000_0000000000000000",
+          "replayedRecords": 3
         },
         "unrelatedStreamProgress": {
           "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
           "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
           "independent": true,
           "headOfLineBlocked": false,
+          "partitionedDuringProbe": false,
           "progressRecords": 5
         }
       }
@@ -1194,21 +1458,48 @@
           "operation": "dispatch",
           "processId": "dispatch-process-0-0",
           "requestIndex": 0,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-1-0",
           "requestIndex": 1,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-2-0",
           "requestIndex": 2,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         }
       ],
       "processRestarts": [],
@@ -1224,28 +1515,34 @@
       },
       "slowConsumer": {
         "bounds": {
-          "maxBytes": 4096,
+          "maxBytes": 1024,
           "maxRecords": 2,
           "inputBytes": 1434,
           "inputRecords": 3,
-          "observedBytes": 1434,
-          "observedRecords": 2
+          "cancelPeakBytes": 956,
+          "cancelPeakRecords": 2,
+          "catchUpPeakBytes": 956,
+          "catchUpPeakRecords": 2
         },
         "cancel": {
           "code": "HARNESS_SLOW_CONSUMER",
+          "offset": "0000000000000000_0000000000000003",
           "policy": "cancel",
           "result": "cancelled"
         },
         "catchUp": {
+          "overflowAt": "0000000000000000_0000000000000003",
           "policy": "catch-up",
           "result": "caught-up",
-          "resumedFrom": "0000000000000000_0000000000000000"
+          "resumedFrom": "0000000000000000_0000000000000000",
+          "replayedRecords": 3
         },
         "unrelatedStreamProgress": {
           "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
           "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
           "independent": true,
           "headOfLineBlocked": false,
+          "partitionedDuringProbe": false,
           "progressRecords": 5
         }
       }
@@ -1280,26 +1577,58 @@
           "operation": "dispatch",
           "processId": "dispatch-process-0-0",
           "requestIndex": 0,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-1-0",
           "requestIndex": 1,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-2-0",
           "requestIndex": 2,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         }
       ],
       "processRestarts": [
         {
           "component": "reader",
+          "durableAuthorityRestart": {
+            "exportedStreamCount": 4,
+            "importedStreamCount": 4,
+            "snapshotDigest": "sha256:a427409bf2ff5501bc7bdcb23b8f24ad3df17142fb71bac8b707326695f2b953"
+          },
           "reason": "HARNESS_PARTITIONED",
           "stateDeleted": true,
           "to": "reader-process-1"
@@ -1317,28 +1646,34 @@
       },
       "slowConsumer": {
         "bounds": {
-          "maxBytes": 4096,
+          "maxBytes": 1024,
           "maxRecords": 2,
           "inputBytes": 1434,
           "inputRecords": 3,
-          "observedBytes": 1434,
-          "observedRecords": 2
+          "cancelPeakBytes": 956,
+          "cancelPeakRecords": 2,
+          "catchUpPeakBytes": 956,
+          "catchUpPeakRecords": 2
         },
         "cancel": {
           "code": "HARNESS_SLOW_CONSUMER",
+          "offset": "0000000000000000_0000000000000003",
           "policy": "cancel",
           "result": "cancelled"
         },
         "catchUp": {
+          "overflowAt": "0000000000000000_0000000000000003",
           "policy": "catch-up",
           "result": "caught-up",
-          "resumedFrom": "0000000000000000_0000000000000000"
+          "resumedFrom": "0000000000000000_0000000000000000",
+          "replayedRecords": 3
         },
         "unrelatedStreamProgress": {
           "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
           "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
           "independent": true,
           "headOfLineBlocked": false,
+          "partitionedDuringProbe": true,
           "progressRecords": 5
         }
       }
@@ -1373,21 +1708,48 @@
           "operation": "dispatch",
           "processId": "dispatch-process-0-0",
           "requestIndex": 0,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-1-0",
           "requestIndex": 1,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-2-0",
           "requestIndex": 2,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         }
       ],
       "processRestarts": [],
@@ -1403,28 +1765,34 @@
       },
       "slowConsumer": {
         "bounds": {
-          "maxBytes": 4096,
+          "maxBytes": 1024,
           "maxRecords": 2,
           "inputBytes": 1434,
           "inputRecords": 3,
-          "observedBytes": 1434,
-          "observedRecords": 2
+          "cancelPeakBytes": 956,
+          "cancelPeakRecords": 2,
+          "catchUpPeakBytes": 956,
+          "catchUpPeakRecords": 2
         },
         "cancel": {
           "code": "HARNESS_SLOW_CONSUMER",
+          "offset": "0000000000000000_0000000000000003",
           "policy": "cancel",
           "result": "cancelled"
         },
         "catchUp": {
+          "overflowAt": "0000000000000000_0000000000000003",
           "policy": "catch-up",
           "result": "caught-up",
-          "resumedFrom": "0000000000000000_0000000000000000"
+          "resumedFrom": "0000000000000000_0000000000000000",
+          "replayedRecords": 3
         },
         "unrelatedStreamProgress": {
           "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
           "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
           "independent": true,
           "headOfLineBlocked": false,
+          "partitionedDuringProbe": false,
           "progressRecords": 5
         }
       }
@@ -1459,21 +1827,51 @@
           "operation": "dispatch",
           "processId": "dispatch-process-0-0",
           "requestIndex": 0,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": true,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "deferred:3",
+              "deferred:2",
+              "deferred:1",
+              "acknowledged"
+            ],
+            "ticks": 3
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-1-0",
           "requestIndex": 1,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-2-0",
           "requestIndex": 2,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         }
       ],
       "processRestarts": [],
@@ -1489,28 +1887,34 @@
       },
       "slowConsumer": {
         "bounds": {
-          "maxBytes": 4096,
+          "maxBytes": 1024,
           "maxRecords": 2,
           "inputBytes": 1434,
           "inputRecords": 3,
-          "observedBytes": 1434,
-          "observedRecords": 2
+          "cancelPeakBytes": 956,
+          "cancelPeakRecords": 2,
+          "catchUpPeakBytes": 956,
+          "catchUpPeakRecords": 2
         },
         "cancel": {
           "code": "HARNESS_SLOW_CONSUMER",
+          "offset": "0000000000000000_0000000000000003",
           "policy": "cancel",
           "result": "cancelled"
         },
         "catchUp": {
+          "overflowAt": "0000000000000000_0000000000000003",
           "policy": "catch-up",
           "result": "caught-up",
-          "resumedFrom": "0000000000000000_0000000000000000"
+          "resumedFrom": "0000000000000000_0000000000000000",
+          "replayedRecords": 3
         },
         "unrelatedStreamProgress": {
           "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
           "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
           "independent": true,
           "headOfLineBlocked": false,
+          "partitionedDuringProbe": false,
           "progressRecords": 5
         }
       }
@@ -1601,26 +2005,61 @@
           "operation": "dispatch",
           "processId": "dispatch-process-0-0",
           "requestIndex": 0,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": true,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "deferred:3",
+              "deferred:2",
+              "deferred:1",
+              "acknowledged"
+            ],
+            "ticks": 3
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-1-0",
           "requestIndex": 1,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         },
         {
           "attempt": 1,
           "operation": "dispatch",
           "processId": "dispatch-process-2-0",
           "requestIndex": 2,
-          "result": "accepted"
+          "result": "accepted",
+          "acknowledgement": {
+            "delayed": false,
+            "released": true,
+            "stateTrace": [
+              "pending",
+              "acknowledged"
+            ],
+            "ticks": 0
+          }
         }
       ],
       "processRestarts": [
         {
           "component": "reader",
+          "durableAuthorityRestart": {
+            "exportedStreamCount": 4,
+            "importedStreamCount": 4,
+            "snapshotDigest": "sha256:b55f1a263cbeba7a97e213c064ad741eba3ba6a3622be46205a62f63630c5479"
+          },
           "reason": "HARNESS_PARTITIONED",
           "stateDeleted": true,
           "to": "reader-process-1"
@@ -1638,28 +2077,34 @@
       },
       "slowConsumer": {
         "bounds": {
-          "maxBytes": 4096,
+          "maxBytes": 1024,
           "maxRecords": 2,
           "inputBytes": 1434,
           "inputRecords": 3,
-          "observedBytes": 1434,
-          "observedRecords": 2
+          "cancelPeakBytes": 956,
+          "cancelPeakRecords": 2,
+          "catchUpPeakBytes": 956,
+          "catchUpPeakRecords": 2
         },
         "cancel": {
           "code": "HARNESS_SLOW_CONSUMER",
+          "offset": "0000000000000000_0000000000000003",
           "policy": "cancel",
           "result": "cancelled"
         },
         "catchUp": {
+          "overflowAt": "0000000000000000_0000000000000003",
           "policy": "catch-up",
           "result": "caught-up",
-          "resumedFrom": "0000000000000000_0000000000000000"
+          "resumedFrom": "0000000000000000_0000000000000000",
+          "replayedRecords": 3
         },
         "unrelatedStreamProgress": {
           "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
           "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
           "independent": true,
           "headOfLineBlocked": false,
+          "partitionedDuringProbe": true,
           "progressRecords": 5
         }
       }

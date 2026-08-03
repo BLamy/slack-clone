@@ -3,7 +3,7 @@ id: E0-T06
 epic: 0
 title: "Crash, duplicate-delivery, and partition sensitivity harness"
 priority: 6
-status: in-progress
+status: implemented
 depends_on: [E0-T04, E0-T05]
 estimate: L
 capstone: false
@@ -110,3 +110,16 @@ schedule, and every final claim cites a stream dump and digest.
   restarted reader, enforce (rather than report) bounded queue policies during the
   partition, flood an unrelated stream while that partition is active, and model the
   acknowledgement delay as a deterministic deferred acknowledgement.
+
+### Builder — 2026-08-03 — repair implemented at `e96acafed6efbd9cafc1f5b09fe3a8fa5303858f`
+
+- The reader now exports durable stream authority, imports it into a fresh store instance
+  before restart, and proves the imported snapshot is byte-equivalent. The partition
+  callback floods an unrelated stream while the reader is still partitioned, then records
+  its independent progress after import.
+- Slow-consumer policies enforce a 2-record/1024-byte queue: cancel raises typed
+  `HARNESS_SLOW_CONSUMER`, while catch-up clears the full queue and resumes from durable
+  source. Acknowledgement delay now uses a deterministic pending/deferred/acknowledged
+  trace rather than only recording a number.
+- Cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e0-t06-repair-promoted TEST_ARTIFACT_DIR=.artifacts/e0-t06/e0-t06-repair-promoted make verify-E0-T06`. Result: PASS; all five gates, 13 schedules, seven hooks, and three sensitivity detectors passed. The final replay digest remains `sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0`.
+- Repair evidence replaces the prior manifests in `evidence/`, including durable snapshot equality, partition-time unrelated-stream progress, queue peak measurements, typed overflow results, and deferred acknowledgement state traces. Replay: N/A (headless failure harness) + mitigation: deterministic schedules, process restarts, stream dumps, checkpoint proofs, and replay digests. Fresh critic verification remains required.

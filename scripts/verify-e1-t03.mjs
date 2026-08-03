@@ -91,6 +91,7 @@ const SERVICE_A = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd";
 const OWNER_B = "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc";
 const MEMBER_B = "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd";
 const NON_MEMBER_A = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff";
+const NON_MEMBER_B = "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_ffffffffffffffffffffffffff";
 const PUBLIC_A = "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111";
 const PRIVATE_A = "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222";
 const PUBLIC_B = "ch_bbbbbbbbbbbbbbbbbbbbbbbbbb_33333333333333333333333333";
@@ -255,6 +256,14 @@ function assertChannelState(state) {
     OWNER_B,
     MEMBER_B,
   ]);
+  assert.notEqual(
+    DIRECT_A,
+    directChannelIdFor(WORKSPACE_A, [OWNER_A, SERVICE_A]),
+  );
+  assert.notEqual(
+    DIRECT_B,
+    directChannelIdFor(WORKSPACE_B, [OWNER_B, NON_MEMBER_B]),
+  );
   assert.equal(
     Object.values(state.entities.channelMemberships).some(
       ({ principalId }) => principalId === SERVICE_A,
@@ -396,8 +405,15 @@ async function verifyAuthorization(finalState, replayValue) {
   const memberRead = await authorization.authorizeRead(member, {
     channelId: PRIVATE_A,
   });
+  const privateMemberDiscovery = await authorization.authorizeDiscovery(
+    member,
+    {
+      channelId: PRIVATE_A,
+    },
+  );
   assert.equal(memberDiscovery.channel.channelId, PUBLIC_A);
   assert.equal(memberRead.channel.channelId, PRIVATE_A);
+  assert.equal(privateMemberDiscovery.channel.channelId, PRIVATE_A);
 
   let writeCallbacks = 0;
   await rejected(

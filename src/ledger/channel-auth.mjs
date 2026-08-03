@@ -206,8 +206,8 @@ export function createChannelAuthorization({
       workspaceMembership.role,
     );
     const isManager =
-      channel.creatorId === trusted.principalId ||
-      (isWorkspaceAdmin && isMember);
+      isMember &&
+      (channel.creatorId === trusted.principalId || isWorkspaceAdmin);
     const isActive = channel.status === "active";
     const grant = () =>
       authorizationResult(channel, channelMembership, workspaceMembership, {
@@ -222,7 +222,10 @@ export function createChannelAuthorization({
           ),
       });
 
-    if (capability === "channel.discover" && channel.kind === "public") {
+    if (
+      capability === "channel.discover" &&
+      (channel.kind === "public" || isMember)
+    ) {
       return grant();
     }
     if (capability === "channel.manage" && isManager) {

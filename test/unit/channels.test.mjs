@@ -23,6 +23,7 @@ const WORKSPACE_B = "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb";
 const OWNER_A = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb";
 const MEMBER_A = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc";
 const SERVICE_A = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd";
+const NON_MEMBER_A = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff";
 const PUBLIC_A = "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111";
 const PRIVATE_A = "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222";
 const PRIVATE_B = "ch_bbbbbbbbbbbbbbbbbbbbbbbbbb_44444444444444444444444444";
@@ -38,6 +39,14 @@ test("channel identifiers and direct participant sets are canonical", () => {
     PUBLIC_A,
   );
   assert.equal(directChannelIdFor(WORKSPACE_A, [MEMBER_A, OWNER_A]), DIRECT_A);
+  assert.notEqual(
+    DIRECT_A,
+    directChannelIdFor(WORKSPACE_A, [OWNER_A, NON_MEMBER_A]),
+  );
+  assert.notEqual(
+    DIRECT_A,
+    directChannelIdFor(WORKSPACE_A, [SERVICE_A, NON_MEMBER_A]),
+  );
   assert.deepEqual(canonicalParticipantIds([MEMBER_A, OWNER_A]), [
     OWNER_A,
     MEMBER_A,
@@ -197,7 +206,14 @@ test("channel authorization is leak-neutral and rechecks membership for every re
   const memberRead = await authorization.authorizeRead(memberContext, {
     channelId: PRIVATE_A,
   });
+  const memberDiscovery = await authorization.authorizeDiscovery(
+    memberContext,
+    {
+      channelId: PRIVATE_A,
+    },
+  );
   assert.equal(memberRead.channel.channelId, PRIVATE_A);
+  assert.equal(memberDiscovery.channel.channelId, PRIVATE_A);
   assert.equal(typeof memberRead.revalidate, "function");
 
   const observedErrors = [];

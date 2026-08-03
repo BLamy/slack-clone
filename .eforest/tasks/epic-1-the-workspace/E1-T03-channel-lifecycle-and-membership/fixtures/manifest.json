@@ -1,6 +1,6 @@
 {
   "channel-lifecycle.v1.json": {
-    "finalStateDigest": "sha256:420edca1bcc21849e2949663562afe9904159fc68337d230b9fba8b871ac1d8f",
+    "finalStateDigest": "sha256:a600b2a92780597f82ceb56a761d98241a67ebd4fab2476f05440473072d1076",
     "prefixes": [
       {
         "index": 1,
@@ -120,32 +120,32 @@
       {
         "index": 24,
         "offset": "0000000000000000_0000000000000024",
-        "stateDigest": "sha256:aa90cf135ddf82d55979508012b542828e0f33684f0bd025d65f3d0b593a3416"
+        "stateDigest": "sha256:412af539a97cbde5c9637b4f6c8b65294932a09ade6e3461a9b04756c58030af"
       },
       {
         "index": 25,
         "offset": "0000000000000000_0000000000000025",
-        "stateDigest": "sha256:d2fb836d3148b94b6b6a7463a3d8847e0f6a5141209941a465b02aefc52f142d"
+        "stateDigest": "sha256:914fc5cf40f70bf6f2e8ca99bff6530445e17723bc0847fa1c4031b1eee46a99"
       },
       {
         "index": 26,
         "offset": "0000000000000000_0000000000000026",
-        "stateDigest": "sha256:a840a59b81c4af881465e2194609c1956825dbe9b8283cdc0af5e54620c90202"
+        "stateDigest": "sha256:3f8a40c1c84f904867b5923ad55f03c0ce79c8a8d1ffbae2ad7916ee6e792cb4"
       },
       {
         "index": 27,
         "offset": "0000000000000000_0000000000000027",
-        "stateDigest": "sha256:504858e9bc2e10bcf2f60ef03b7cd4e9d5d7196369f449b983fcfc7bd9d877d7"
+        "stateDigest": "sha256:00c86bfc0c64c61f837bfebad3e8eadf09cd660c86b83408b9ab4efac3984149"
       },
       {
         "index": 28,
         "offset": "0000000000000000_0000000000000028",
-        "stateDigest": "sha256:e36b049b7244d7178a160c2bff1499fca007186cb1cd0ddc3db885fda18d9a7a"
+        "stateDigest": "sha256:5f4e28a7d2a27769938f9c1be0dac096abc78aa285ceef53b7028b196b75822b"
       },
       {
         "index": 29,
         "offset": "0000000000000000_0000000000000029",
-        "stateDigest": "sha256:420edca1bcc21849e2949663562afe9904159fc68337d230b9fba8b871ac1d8f"
+        "stateDigest": "sha256:a600b2a92780597f82ceb56a761d98241a67ebd4fab2476f05440473072d1076"
       }
     ]
   }

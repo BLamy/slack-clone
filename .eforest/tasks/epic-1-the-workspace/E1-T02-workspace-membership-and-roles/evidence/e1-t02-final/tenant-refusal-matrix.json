@@ -1,0 +1,213 @@
+{
+  "replayFinalStateDigest": "sha256:b89894bc917a4d355b9582cd40cce01cbcf81c519c405bbda83df4a5ae62432d",
+  "allow": [
+    "owner directory read",
+    "owner directory mutation",
+    "owner directory subscription",
+    "admin message mutation"
+  ],
+  "refusalCount": 14,
+  "refusals": [
+    {
+      "action": "non-member-directory-read",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeAppendOrRegister": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "non-member-directory-mutation",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeAppendOrRegister": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "non-member-subscription",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeAppendOrRegister": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "removed-sibling-directory-read",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeAppendOrRegister": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "removed-sibling-directory-mutation",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeAppendOrRegister": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "removed-sibling-subscription",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeAppendOrRegister": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "sibling-principal-context",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeHandlerInput": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "context-clientWorkspaceId-override",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeHandlerInput": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "context-pathWorkspaceId-override",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeHandlerInput": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "context-queryWorkspaceId-override",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeHandlerInput": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "context-bodyWorkspaceId-override",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeHandlerInput": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "context-eventWorkspaceId-override",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeHandlerInput": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "nested-sibling-workspace-id",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeAppendOrRegister": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    },
+    {
+      "action": "new-mutation-after-suspension",
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "refusedBeforeAppendOrRegister": true,
+      "targetHeadsUnchanged": true,
+      "metadataFree": true
+    }
+  ],
+  "roleMatrix": [
+    {
+      "capability": "workspace.read",
+      "owner": true,
+      "admin": true,
+      "member": true,
+      "guest": true,
+      "agent": true,
+      "service": true
+    },
+    {
+      "capability": "workspace.directory.read",
+      "owner": true,
+      "admin": true,
+      "member": true,
+      "guest": true,
+      "agent": true,
+      "service": true
+    },
+    {
+      "capability": "workspace.directory.mutate",
+      "owner": true,
+      "admin": true,
+      "member": true,
+      "guest": false,
+      "agent": true,
+      "service": true
+    },
+    {
+      "capability": "workspace.subscribe",
+      "owner": true,
+      "admin": true,
+      "member": true,
+      "guest": true,
+      "agent": true,
+      "service": false
+    },
+    {
+      "capability": "workspace.message.mutate",
+      "owner": true,
+      "admin": true,
+      "member": true,
+      "guest": false,
+      "agent": true,
+      "service": false
+    },
+    {
+      "capability": "workspace.membership.invite",
+      "owner": true,
+      "admin": true,
+      "member": false,
+      "guest": false,
+      "agent": false,
+      "service": false
+    },
+    {
+      "capability": "workspace.membership.accept",
+      "owner": true,
+      "admin": true,
+      "member": false,
+      "guest": false,
+      "agent": false,
+      "service": false
+    },
+    {
+      "capability": "workspace.membership.role.change",
+      "owner": true,
+      "admin": true,
+      "member": false,
+      "guest": false,
+      "agent": false,
+      "service": false
+    },
+    {
+      "capability": "workspace.membership.suspend",
+      "owner": true,
+      "admin": true,
+      "member": false,
+      "guest": false,
+      "agent": false,
+      "service": false
+    },
+    {
+      "capability": "workspace.membership.remove",
+      "owner": true,
+      "admin": true,
+      "member": false,
+      "guest": false,
+      "agent": false,
+      "service": false
+    }
+  ],
+  "revocationRecheckedOnEveryNewOperation": true,
+  "refusedHeadsUnchanged": true,
+  "noFenceFailClosed": true,
+  "race": {
+    "workspaceScopedFence": true,
+    "queuedRevocationWaitedForAcceptedOperation": true,
+    "postRevocationMutationRefused": true,
+    "reverseOrderingAcceptedThenRevoked": true,
+    "result": "PASS"
+  },
+  "result": "PASS"
+}

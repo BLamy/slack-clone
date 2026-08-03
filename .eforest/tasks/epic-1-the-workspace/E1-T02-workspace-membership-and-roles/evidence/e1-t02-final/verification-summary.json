@@ -1,0 +1,466 @@
+{
+  "schemaVersion": 1,
+  "task": "E1-T02",
+  "runId": "e1-t02-final-20260803",
+  "implementationCommit": "09c41946b503da15d73bfd4f4f3283f847e0f483",
+  "implementationTreeCleanAtStart": true,
+  "result": "PASS",
+  "fixtureCount": 1,
+  "replay": "Replay: N/A (server tenancy and RBAC contract) + mitigation: two-workspace negative matrix, before/after dumps, and deterministic membership replay",
+  "replayUploadAttempted": false,
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "durationMs": 3134,
+      "name": "format",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "durationMs": 2081,
+      "name": "lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "durationMs": 4953,
+      "name": "typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "durationMs": 19369,
+      "name": "tests",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm build",
+      "durationMs": 560,
+      "name": "build",
+      "result": "PASS"
+    }
+  ],
+  "canaryScan": {
+    "fixtureCount": 1,
+    "forbiddenCredentialPatterns": 0,
+    "result": "PASS"
+  },
+  "schemas": {
+    "envelopeEventTypes": [
+      "ledger.fixture-recorded",
+      "workspace.directory.updated",
+      "channel.message.created",
+      "agent.config.revised",
+      "workspace.invocation.requested",
+      "run.lifecycle.changed",
+      "connection.config.revised",
+      "workspace.audit.recorded",
+      "projection.checkpointed",
+      "principal.created",
+      "principal.profile.updated",
+      "principal.suspended",
+      "principal.deactivated",
+      "workspace.created",
+      "workspace.membership.invited",
+      "workspace.membership.accepted",
+      "workspace.membership.role.changed",
+      "workspace.membership.suspended",
+      "workspace.membership.removed"
+    ],
+    "workspaceEventVariants": 5,
+    "result": "PASS"
+  },
+  "replayEvidence": {
+    "finalStateDigest": "sha256:b89894bc917a4d355b9582cd40cce01cbcf81c519c405bbda83df4a5ae62432d",
+    "offsets": [
+      "0000000000000000_0000000000000001",
+      "0000000000000000_0000000000000002",
+      "0000000000000000_0000000000000003",
+      "0000000000000000_0000000000000004",
+      "0000000000000000_0000000000000005",
+      "0000000000000000_0000000000000006",
+      "0000000000000000_0000000000000007",
+      "0000000000000000_0000000000000008",
+      "0000000000000000_0000000000000009",
+      "0000000000000000_0000000000000010",
+      "0000000000000000_0000000000000011",
+      "0000000000000000_0000000000000012",
+      "0000000000000000_0000000000000013"
+    ],
+    "perPrefixDigests": [
+      {
+        "index": 1,
+        "offset": "0000000000000000_0000000000000001",
+        "stateDigest": "sha256:1f4c1aae1063eb438b699a4ee31259ba5858a533bec3817d8348a196b2d280c2"
+      },
+      {
+        "index": 2,
+        "offset": "0000000000000000_0000000000000002",
+        "stateDigest": "sha256:ed9bf2703be73bfc1aaea07a19658aebee0b9ba57a3d6e8e96b0252bcf3fb3ab"
+      },
+      {
+        "index": 3,
+        "offset": "0000000000000000_0000000000000003",
+        "stateDigest": "sha256:5c816ff104fa0c6c9b09207bd41b0cb8bc7e859a72dcf99b98795b6bf1fbce70"
+      },
+      {
+        "index": 4,
+        "offset": "0000000000000000_0000000000000004",
+        "stateDigest": "sha256:0485a5d05853febac7bc4ae28751cd5039fb7bd6dc8c63f898ff6abd6a7b3b8a"
+      },
+      {
+        "index": 5,
+        "offset": "0000000000000000_0000000000000005",
+        "stateDigest": "sha256:630ee1f6ccae343fecc7ad0d3f40167d6cd0b0dc5ade843967eb68a6afab861e"
+      },
+      {
+        "index": 6,
+        "offset": "0000000000000000_0000000000000006",
+        "stateDigest": "sha256:3eefeab49d4784d010b92e0d84ec4a31b860f93700b30bbf90111ba29f4e7e5c"
+      },
+      {
+        "index": 7,
+        "offset": "0000000000000000_0000000000000007",
+        "stateDigest": "sha256:7af45fbe9da4a761495a7f02a5d33ff07dff31352e668a5a86fe0c24c02c9beb"
+      },
+      {
+        "index": 8,
+        "offset": "0000000000000000_0000000000000008",
+        "stateDigest": "sha256:ab164836a664e7fd9067e746c8bd5e682ec30420565aeff76e61c3f6f049e918"
+      },
+      {
+        "index": 9,
+        "offset": "0000000000000000_0000000000000009",
+        "stateDigest": "sha256:c27e7718ab4710a7d75f920ae4ddfb16866edae65f51aff31d0ccc4668aa12bc"
+      },
+      {
+        "index": 10,
+        "offset": "0000000000000000_0000000000000010",
+        "stateDigest": "sha256:2991b02ff112079f78539df32f3e6acf0f5d35ee6337e97de0ae9dcdfdcdf3e6"
+      },
+      {
+        "index": 11,
+        "offset": "0000000000000000_0000000000000011",
+        "stateDigest": "sha256:cad64b8e5376d7349e584da23b8ba43ab85b4e0cbb4a844a01dfb7be6a39e9b6"
+      },
+      {
+        "index": 12,
+        "offset": "0000000000000000_0000000000000012",
+        "stateDigest": "sha256:f60ab1335aa8be2abe6b9a14b1f5642351930f8cec04b5a09dd7221b3ad67bfd"
+      },
+      {
+        "index": 13,
+        "offset": "0000000000000000_0000000000000013",
+        "stateDigest": "sha256:b89894bc917a4d355b9582cd40cce01cbcf81c519c405bbda83df4a5ae62432d"
+      }
+    ],
+    "records": 13,
+    "replayedTwiceWithIdenticalBytes": true,
+    "authorityRebuild": {
+      "membershipsRecovered": 4,
+      "projectionsDeletedBeforeAuthorization": true,
+      "authorizedFromReplayedMembershipsAfterProjectionDeletion": true,
+      "source": "fresh replay finalState.entities.memberships",
+      "result": "PASS"
+    }
+  },
+  "authorization": {
+    "replayFinalStateDigest": "sha256:b89894bc917a4d355b9582cd40cce01cbcf81c519c405bbda83df4a5ae62432d",
+    "allow": [
+      "owner directory read",
+      "owner directory mutation",
+      "owner directory subscription",
+      "admin message mutation"
+    ],
+    "refusalCount": 14,
+    "refusals": [
+      {
+        "action": "non-member-directory-read",
+        "code": "WORKSPACE_ACCESS_DENIED",
+        "refusedBeforeAppendOrRegister": true,
+        "targetHeadsUnchanged": true,
+        "metadataFree": true
+      },
+      {
+        "action": "non-member-directory-mutation",
+        "code": "WORKSPACE_ACCESS_DENIED",
+        "refusedBeforeAppendOrRegister": true,
+        "targetHeadsUnchanged": true,
+        "metadataFree": true
+      },
+      {
+        "action": "non-member-subscription",
+        "code": "WORKSPACE_ACCESS_DENIED",
+        "refusedBeforeAppendOrRegister": true,
+        "targetHeadsUnchanged": true,
+        "metadataFree": true
+      },
+      {
+        "action": "removed-sibling-directory-read",
+        "code": "WORKSPACE_ACCESS_DENIED",
+        "refusedBeforeAppendOrRegister": true,
+        "targetHeadsUnchanged": true,
+        "metadataFree": true
+      },
+      {
+        "action": "removed-sibling-directory-mutation",
+        "code": "WORKSPACE_ACCESS_DENIED",
+        "refusedBeforeAppendOrRegister": true,
+        "targetHeadsUnchanged": true,
+        "metadataFree": true
+      },
+      {
+        "action": "removed-sibling-subscription",
+        "code": "WORKSPACE_ACCESS_DENIED",
+        "refusedBeforeAppendOrRegister": true,
+        "targetHeadsUnchanged": true,
+        "metadataFree": true
+      },
+      {
+        "action": "sibling-principal-context",
+        "code": "WORKSPACE_ACCESS_DENIED",
+        "refusedBeforeHandlerInput": true,
+        "targetHeadsUnchanged": true,
+        "metadataFree": true
+      },
+      {
+        "action": "context-clientWorkspaceId-override",
+        "code": "WORKSPACE_ACCESS_DENIED",
+        "refusedBeforeHandlerInput": true,
+        "targetHeadsUnchanged": true,
+        "metadataFree": true
+      },
+      {
+        "action": "context-pathWorkspaceId-override",
+        "code": "WORKSPACE_ACCESS_DENIED",
+        "refusedBeforeHandlerInput": true,
+        "targetHeadsUnchanged": true,
+        "metadataFree": true
+      },
+      {
+        "action": "context-queryWorkspaceId-override",
+        "code": "WORKSPACE_ACCESS_DENIED",
+        "refusedBeforeHandlerInput": true,
+        "targetHeadsUnchanged": true,
+        "metadataFree": true
+      },
+      {
+        "action": "context-bodyWorkspaceId-override",
+        "code": "WORKSPACE_ACCESS_DENIED",
+        "refusedBeforeHandlerInput": true,
+        "targetHeadsUnchanged": true,
+        "metadataFree": true
+      },
+      {
+        "action": "context-eventWorkspaceId-override",
+        "code": "WORKSPACE_ACCESS_DENIED",
+        "refusedBeforeHandlerInput": true,
+        "targetHeadsUnchanged": true,
+        "metadataFree": true
+      },
+      {
+        "action": "nested-sibling-workspace-id",
+        "code": "WORKSPACE_ACCESS_DENIED",
+        "refusedBeforeAppendOrRegister": true,
+        "targetHeadsUnchanged": true,
+        "metadataFree": true
+      },
+      {
+        "action": "new-mutation-after-suspension",
+        "code": "WORKSPACE_ACCESS_DENIED",
+        "refusedBeforeAppendOrRegister": true,
+        "targetHeadsUnchanged": true,
+        "metadataFree": true
+      }
+    ],
+    "roleMatrix": [
+      {
+        "capability": "workspace.read",
+        "owner": true,
+        "admin": true,
+        "member": true,
+        "guest": true,
+        "agent": true,
+        "service": true
+      },
+      {
+        "capability": "workspace.directory.read",
+        "owner": true,
+        "admin": true,
+        "member": true,
+        "guest": true,
+        "agent": true,
+        "service": true
+      },
+      {
+        "capability": "workspace.directory.mutate",
+        "owner": true,
+        "admin": true,
+        "member": true,
+        "guest": false,
+        "agent": true,
+        "service": true
+      },
+      {
+        "capability": "workspace.subscribe",
+        "owner": true,
+        "admin": true,
+        "member": true,
+        "guest": true,
+        "agent": true,
+        "service": false
+      },
+      {
+        "capability": "workspace.message.mutate",
+        "owner": true,
+        "admin": true,
+        "member": true,
+        "guest": false,
+        "agent": true,
+        "service": false
+      },
+      {
+        "capability": "workspace.membership.invite",
+        "owner": true,
+        "admin": true,
+        "member": false,
+        "guest": false,
+        "agent": false,
+        "service": false
+      },
+      {
+        "capability": "workspace.membership.accept",
+        "owner": true,
+        "admin": true,
+        "member": false,
+        "guest": false,
+        "agent": false,
+        "service": false
+      },
+      {
+        "capability": "workspace.membership.role.change",
+        "owner": true,
+        "admin": true,
+        "member": false,
+        "guest": false,
+        "agent": false,
+        "service": false
+      },
+      {
+        "capability": "workspace.membership.suspend",
+        "owner": true,
+        "admin": true,
+        "member": false,
+        "guest": false,
+        "agent": false,
+        "service": false
+      },
+      {
+        "capability": "workspace.membership.remove",
+        "owner": true,
+        "admin": true,
+        "member": false,
+        "guest": false,
+        "agent": false,
+        "service": false
+      }
+    ],
+    "revocationRecheckedOnEveryNewOperation": true,
+    "refusedHeadsUnchanged": true,
+    "noFenceFailClosed": true,
+    "race": {
+      "workspaceScopedFence": true,
+      "queuedRevocationWaitedForAcceptedOperation": true,
+      "postRevocationMutationRefused": true,
+      "reverseOrderingAcceptedThenRevoked": true,
+      "result": "PASS"
+    },
+    "result": "PASS"
+  },
+  "lifecycle": [
+    {
+      "name": "duplicate-membership",
+      "code": "REDUCER_WORKSPACE_DUPLICATE_MEMBERSHIP",
+      "offset": "0000000000000000_0000000000000007",
+      "refusedBeforeAppend": true,
+      "sourceDumpUnchangedAfterReducerFailure": true
+    },
+    {
+      "name": "accepting-another-principal-invite",
+      "code": "REDUCER_WORKSPACE_INVITE_ACTOR_MISMATCH",
+      "offset": "0000000000000000_0000000000000008",
+      "refusedBeforeAppend": true,
+      "sourceDumpUnchangedAfterReducerFailure": true
+    },
+    {
+      "name": "stale-workspace-version",
+      "code": "REDUCER_WORKSPACE_REVISION_CONFLICT",
+      "offset": "0000000000000000_0000000000000007",
+      "refusedBeforeAppend": true,
+      "sourceDumpUnchangedAfterReducerFailure": true
+    },
+    {
+      "name": "stale-membership-version",
+      "code": "REDUCER_WORKSPACE_REVISION_CONFLICT",
+      "offset": "0000000000000000_0000000000000011",
+      "refusedBeforeAppend": true,
+      "sourceDumpUnchangedAfterReducerFailure": true
+    },
+    {
+      "name": "self-escalation",
+      "code": "REDUCER_WORKSPACE_SELF_ESCALATION",
+      "offset": "0000000000000000_0000000000000011",
+      "refusedBeforeAppend": true,
+      "sourceDumpUnchangedAfterReducerFailure": true
+    },
+    {
+      "name": "last-owner-suspension",
+      "code": "REDUCER_WORKSPACE_LAST_OWNER",
+      "offset": "0000000000000000_0000000000000012",
+      "refusedBeforeAppend": true,
+      "sourceDumpUnchangedAfterReducerFailure": true
+    },
+    {
+      "name": "cross-tenant-membership-id",
+      "code": "REDUCER_WORKSPACE_SCOPE_MISMATCH",
+      "offset": "0000000000000000_0000000000000011",
+      "refusedBeforeAppend": true,
+      "sourceDumpUnchangedAfterReducerFailure": true
+    },
+    {
+      "name": "cross-tenant-invite-id",
+      "code": "REDUCER_WORKSPACE_SCOPE_MISMATCH",
+      "offset": "0000000000000000_0000000000000007",
+      "refusedBeforeAppend": true,
+      "sourceDumpUnchangedAfterReducerFailure": true
+    },
+    {
+      "name": "role-kind-mismatch",
+      "code": "REDUCER_WORKSPACE_ROLE_KIND_MISMATCH",
+      "offset": "0000000000000000_0000000000000007",
+      "refusedBeforeAppend": true,
+      "sourceDumpUnchangedAfterReducerFailure": true
+    },
+    {
+      "name": "bootstrap-actor-mismatch",
+      "code": "REDUCER_WORKSPACE_BOOTSTRAP_INVALID",
+      "offset": "0000000000000000_0000000000000005",
+      "refusedBeforeAppend": true,
+      "sourceDumpUnchangedAfterReducerFailure": true
+    }
+  ],
+  "sensitivity": {
+    "mutation": "disable trusted workspace context comparison in scratch module",
+    "unsafeBypassObserved": true,
+    "baselineConformanceMatrixMustRefuseTheSameInput": true,
+    "scratchPath": ".artifacts/e1-t02/e1-t02-final-20260803/workspace-auth-context-comparison-disabled.mjs",
+    "result": "PASS"
+  },
+  "networkReplay": {
+    "command": "node scripts/replay-ledger.mjs replay <workspace-membership-offline.json>",
+    "networkDisabled": true,
+    "queryStoreWritten": false,
+    "finalStateDigest": "sha256:b89894bc917a4d355b9582cd40cce01cbcf81c519c405bbda83df4a5ae62432d",
+    "result": "PASS"
+  }
+}

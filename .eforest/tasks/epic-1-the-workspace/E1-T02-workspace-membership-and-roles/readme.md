@@ -3,7 +3,7 @@ id: E1-T02
 epic: 1
 title: "Workspace membership, roles, and tenant boundary"
 priority: 102
-status: in-progress
+status: implemented
 depends_on: [E1-T01]
 estimate: L
 capstone: false
@@ -71,3 +71,38 @@ the matrix without treating a role name as ambient authority.
   implementation will keep workspace context derived from trusted authentication and
   routing, add append-only membership and role-capability events, and prove cross-tenant
   refusal before any stream append or subscription registration.
+
+### Builder — 2026-08-03 — implementation complete
+
+- Implementation commit: `09c41946b503da15d73bfd4f4f3283f847e0f483` (`E1-T02: add
+  workspace membership tenancy gate`). The implementation adds the versioned workspace and
+  membership event schema, pure replay reducers, explicit role capabilities, immutable
+  trusted workspace context, and a workspace-scoped authorization fence.
+- Cold command: `PROMOTE_EVIDENCE=1 E1_T02_IMPLEMENTATION_COMMIT=09c41946b503da15d73bfd4f4f3283f847e0f483 TEST_RUN_ID=e1-t02-final-20260803 make verify-E1-T02`.
+  Frozen install, `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and
+  `pnpm build` all passed. The full test gate passed 82 tests, including five Playwright
+  tests; the build emitted 44 files.
+- The two-workspace fixture replays 13 offsets twice with stable prefixes and final digest
+  `sha256:b89894bc917a4d355b9582cd40cce01cbcf81c519c405bbda83df4a5ae62432d`.
+  Workspace A ends at revision 4 with an active admin member; Workspace B ends at revision 5
+  with its member removed while its owner remains active.
+- Authorization evidence covers owner/admin/member/guest/agent/service capability decisions,
+  non-member and sibling-workspace read/mutation/subscription refusals, nested and hinted
+  workspace-ID overrides, no-fence refusal, before/after target-head checks, replay-derived
+  membership authorization after projection deletion, and a workspace-wide revocation race.
+  Lifecycle evidence refuses duplicate membership, invite-subject mismatch, stale workspace
+  and membership versions, self-escalation, last-owner suspension, cross-tenant IDs, role-kind
+  mismatch, and bootstrap actor mismatch before append.
+- Evidence: `evidence/e1-t02-final/verification-summary.json`,
+  `evidence/e1-t02-final/workspace-replay-evidence.json`,
+  `evidence/e1-t02-final/tenant-refusal-matrix.json`,
+  `evidence/e1-t02-final/lifecycle-refusal-matrix.json`,
+  `evidence/e1-t02-final/sensitivity.json`, and
+  `evidence/e1-t02-final/offline-replay.json`.
+- Claim: workspace membership and role state now lives in append-only events with deterministic
+  replay; trusted immutable workspace context is established before handler input; capabilities
+  are explicit and tenant-bound; invite/accept/role/suspend/remove operations enforce principal
+  kind, revision, duplicate, invite-subject, and last-owner constraints; every new read,
+  mutation, and subscription rechecks current membership under one workspace fence. `Replay:
+  N/A (server tenancy and RBAC contract) + mitigation: two-workspace negative matrix,
+  before/after dumps, and deterministic membership replay`.

@@ -1,0 +1,7 @@
+{
+  "mutation": "disable trusted workspace context comparison in scratch module",
+  "unsafeBypassObserved": true,
+  "baselineConformanceMatrixMustRefuseTheSameInput": true,
+  "scratchPath": ".artifacts/e1-t02/e1-t02-final-20260803/workspace-auth-context-comparison-disabled.mjs",
+  "result": "PASS"
+}

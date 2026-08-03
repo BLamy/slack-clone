@@ -1,0 +1,7 @@
+{
+  "command": "node scripts/replay-ledger.mjs replay <workspace-membership-offline.json>",
+  "networkDisabled": true,
+  "queryStoreWritten": false,
+  "finalStateDigest": "sha256:b89894bc917a4d355b9582cd40cce01cbcf81c519c405bbda83df4a5ae62432d",
+  "result": "PASS"
+}

@@ -3,7 +3,7 @@ id: E1-T04
 epic: 1
 title: "Message, thread, edit, delete, and reaction event contract"
 priority: 104
-status: in-progress
+status: verified
 depends_on: [E1-T03]
 estimate: L
 capstone: false
@@ -293,3 +293,24 @@ same authorized channel.
 - Claim: the legacy compact shape is a deliberately marked E0 compatibility mode rather
   than an implicit alternate E1 append path; unmarked compact events cannot bypass the
   explicit conversation contract even when projections are present.
+
+### Critic — 2026-08-02 — final independent verification
+
+VERDICT: verified
+
+- Fresh critic `019fc63f-bc94-79d2-a7ab-16c9f6fcfb96` ran
+  `E1_T04_NETWORK_DISABLED=1 TEST_RUN_ID=critic-explicit-compact make verify-E1-T04` and
+  exited 0 with all five gates passing. It independently confirmed the 23-record replay
+  digest `sha256:57f7e79e68667d6e74de4852393cd1ed78f676ed4dac44942ec64431fffc1e34`, all six
+  invalid fixture refusals at cited offsets, strict projected E1 variants, and successful
+  E0-T05 fixture replay. Replay: N/A (server conversation event contract) + mitigation:
+  golden logs, authorization refusals, property tests, and per-prefix digest evidence.
+- The compact projected-state attack refused with
+  `REDUCER_LEGACY_COMPACT_REPLAY_REQUIRED`; explicit compatibility preserved the compact
+  shape while rejecting foreign/unknown channels, forged actors, and C0/C1 text. Omitted
+  and skipped-callback fences refused with zero lookup calls. Disabling the new guard in a
+  disposable check changed refusal to acceptance, proving detector sensitivity.
+- Exact diff coverage was exercised in `scripts/verify-e1-t04.mjs:556-680` and
+  `test/unit/messages.test.mjs:185-248`. The working tree remained clean and the critic
+  made no edits, staging, or commits. Evidence: `evidence/e1-t04-final/verification-summary.json`,
+  `legacy-compatibility.json`, `fence.json`, `refusal-matrix.json`, and `sensitivity.json`.

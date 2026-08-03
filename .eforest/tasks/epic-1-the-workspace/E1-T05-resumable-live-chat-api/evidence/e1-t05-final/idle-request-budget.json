@@ -10,14 +10,14 @@
   "readCallsAfterLogicalAdvance": 1,
   "followCallsBeforeLogicalAdvance": 1,
   "followCallsAfterLogicalAdvance": 1,
-  "authorizeReadCalls": 90,
+  "authorizeReadCalls": 91,
   "authorizeSubscriptionCalls": 1,
-  "directoryReadCalls": 91,
+  "directoryReadCalls": 92,
   "roomStatusReadCalls": 91,
   "keepAliveTimerExecutions": 90,
   "pollingTimerExecutions": 0,
   "pollingMutationMs": null,
   "result": "PASS",
-  "productionAuthorizationWiring": "shared live revalidator performs workspace and channel checks at connection open and on every 10-second heartbeat",
+  "productionAuthorizationWiring": "workspace subscription plus shared live revalidator perform workspace and channel checks at connection open and on every 10-second heartbeat",
   "pollingPositiveControl": "covered by test/unit/durable-streams-adapter.test.mjs"
 }

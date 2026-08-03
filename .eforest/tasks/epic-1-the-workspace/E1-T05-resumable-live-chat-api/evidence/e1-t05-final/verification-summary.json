@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E1-T05",
-  "runId": "promoted-e1-t05-archive-reconnect",
-  "implementationCommit": "a34ac48bc18a21c4d73ba5c936fa4f584542e196",
+  "runId": "promoted-e1-t05-fence-repair",
+  "implementationCommit": "b4dc236c5aed39fbb36abe5afe001b26d43a7057",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "replay": "Replay: N/A (server live-delivery API) + mitigation: real-emulator network transcript, reconnect matrix, request counts, and digest convergence",
@@ -34,31 +34,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 2348,
+      "durationMs": 2227,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 2753,
+      "durationMs": 1666,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 11188,
+      "durationMs": 5492,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 25903,
+      "durationMs": 18870,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 737,
+      "durationMs": 472,
       "name": "build",
       "result": "PASS"
     }
@@ -75,49 +75,49 @@
     "readCallsAfterLogicalAdvance": 1,
     "followCallsBeforeLogicalAdvance": 1,
     "followCallsAfterLogicalAdvance": 1,
-    "authorizeReadCalls": 90,
+    "authorizeReadCalls": 91,
     "authorizeSubscriptionCalls": 1,
-    "directoryReadCalls": 91,
+    "directoryReadCalls": 92,
     "roomStatusReadCalls": 91,
     "keepAliveTimerExecutions": 90,
     "pollingTimerExecutions": 0,
     "pollingMutationMs": null,
     "result": "PASS",
-    "productionAuthorizationWiring": "shared live revalidator performs workspace and channel checks at connection open and on every 10-second heartbeat",
+    "productionAuthorizationWiring": "workspace subscription plus shared live revalidator perform workspace and channel checks at connection open and on every 10-second heartbeat",
     "pollingPositiveControl": "covered by test/unit/durable-streams-adapter.test.mjs"
   },
   "networkEvidence": {
-    "room": "e1-t05-promoted-e1-t05-archive-reconnect-resume",
+    "room": "e1-t05-promoted-e1-t05-fence-repair-resume",
     "clients": 2,
-    "firstCheckpoint": "0000000000000000_0000000000000730",
-    "secondCheckpoint": "0000000000000000_0000000000001470",
+    "firstCheckpoint": "0000000000000000_0000000000000720",
+    "secondCheckpoint": "0000000000000000_0000000000001450",
     "acceptedMessageIds": [
-      "1074c680-0327-4cdd-baeb-376dceff5c31",
-      "b1036f53-c2e0-45e4-b77e-646f12b436b6"
+      "eb83962a-5579-482f-8926-827f429a05c7",
+      "0a8866a4-4d8f-4956-9e6e-35f605218be5"
     ],
     "resumedMessageIds": [
-      "b1036f53-c2e0-45e4-b77e-646f12b436b6"
+      "0a8866a4-4d8f-4956-9e6e-35f605218be5"
     ],
-    "finalDigest": "sha256:46c9c0a5b2e891f9c5f65f2d998026c48dee1be2d212648fa0a773068bbcb2cd",
+    "finalDigest": "sha256:e2323b11e208a2a69d89fd3db860857b45548f12208209e36762c44d98e5bd04",
     "finalOffsets": {
-      "ada": "0000000000000000_0000000000001470",
-      "linus": "0000000000000000_0000000000001470"
+      "ada": "0000000000000000_0000000000001450",
+      "linus": "0000000000000000_0000000000001450"
     },
     "noDuplicateLogicalEffects": true,
     "crossRoomIsolation": {
-      "isolatedRoom": "e1-t05-promoted-e1-t05-archive-reconnect-isolation",
-      "idleRoom": "e1-t05-promoted-e1-t05-archive-reconnect-idle",
-      "acceptedMessageId": "ada04f60-632d-4b6f-af80-baccd91b59e2",
+      "isolatedRoom": "e1-t05-promoted-e1-t05-fence-repair-isolation",
+      "idleRoom": "e1-t05-promoted-e1-t05-fence-repair-idle",
+      "acceptedMessageId": "5e87f134-2e3c-4319-9cee-864310d97a8e",
       "otherClientReceivedMessage": false
     },
     "archive": {
       "responseStatus": 200,
       "terminalCode": "LIVE_CHANNEL_ARCHIVED",
-      "checkpoint": "0000000000000000_0000000000000739",
+      "checkpoint": "0000000000000000_0000000000000729",
       "reconnectAfterArchive": {
         "status": 409,
         "code": "LIVE_CHANNEL_ARCHIVED",
-        "checkpoint": "0000000000000000_0000000000001260"
+        "checkpoint": "0000000000000000_0000000000001240"
       },
       "writeAfterArchive": {
         "status": 409,
@@ -161,105 +161,105 @@
         "checkpoint": null,
         "label": "ada-initial",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-resume/events",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-resume/events",
         "status": 200
       },
       {
         "checkpoint": null,
         "label": "linus-initial",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-resume/events",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-resume/events",
         "status": 200
       },
       {
         "bodyCode": null,
         "label": "post-ik_aaaaaaaaaaaaaaaaaaaaaaaaaa",
         "method": "POST",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-resume/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-resume/messages",
         "status": 201
       },
       {
         "bodyCode": null,
         "label": "post-ik_bbbbbbbbbbbbbbbbbbbbbbbbbb",
         "method": "POST",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-resume/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-resume/messages",
         "status": 201
       },
       {
-        "checkpoint": "0000000000000000_0000000000000730",
+        "checkpoint": "0000000000000000_0000000000000720",
         "label": "ada-resumed",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-resume/events?offset=0000000000000000_0000000000000730",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-resume/events?offset=0000000000000000_0000000000000720",
         "status": 200
       },
       {
         "bodyCode": null,
         "label": "ada-final",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-resume/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-resume/messages",
         "status": 200
       },
       {
         "bodyCode": null,
         "label": "linus-final",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-resume/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-resume/messages",
         "status": 200
       },
       {
         "bodyCode": "LIVE_CHECKPOINT_INVALID",
         "label": "malformed-checkpoint",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-resume/events?offset=%00",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-resume/events?offset=%00",
         "status": 400
       },
       {
         "checkpoint": null,
         "label": "ada-isolation",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-isolation/events",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-isolation/events",
         "status": 200
       },
       {
         "checkpoint": null,
         "label": "linus-isolation",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-idle/events",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-idle/events",
         "status": 200
       },
       {
         "bodyCode": null,
         "label": "post-ik_cccccccccccccccccccccccccc",
         "method": "POST",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-isolation/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-isolation/messages",
         "status": 201
       },
       {
         "bodyCode": null,
         "label": "archive-room",
         "method": "POST",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-isolation/archive",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-isolation/archive",
         "status": 200
       },
       {
         "bodyCode": "LIVE_CHANNEL_ARCHIVED",
         "label": "archive-reconnect-after-status",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-isolation/events?offset=0000000000000000_0000000000001260",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-isolation/events?offset=0000000000000000_0000000000001240",
         "status": 409
       },
       {
         "bodyCode": "CHAT_ROOM_ARCHIVED",
         "label": "archive-write-after-status",
         "method": "POST",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-isolation/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-isolation/messages",
         "status": 409
       },
       {
         "checkpoint": null,
         "label": "ada-logout",
         "method": "GET",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-logout/events",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-logout/events",
         "status": 200
       },
       {
@@ -272,7 +272,7 @@
         "bodyCode": null,
         "label": "post-ik_dddddddddddddddddddddddddd",
         "method": "POST",
-        "path": "/api/rooms/e1-t05-promoted-e1-t05-archive-reconnect-logout/messages",
+        "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-logout/messages",
         "status": 201
       }
     ]

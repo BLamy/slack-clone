@@ -184,3 +184,30 @@ verification, while the server remains responsible for reduction and authorizati
   transcript, reconnect matrix, request counts, digest convergence, and focused tests.
 - Claim: the archive reconnect authority bypass and post-archive mutation path are closed
   against the exact repair commit; awaiting a fresh independent critic.
+
+### Builder — 2026-08-03 — workspace fence repair complete
+
+- Repair commit: `b4dc236c5aed39fbb36abe5afe001b26d43a7057` (`E1-T05: release workspace
+  fence before live delivery`). Workspace subscription authorization now completes its
+  fenced membership check before registering the long-lived HTTP delivery. The delivery then
+  performs its own open workspace and room-status revalidation, so a slow initial socket
+  cannot hold the workspace fence while waiting for drain.
+- A real-fence unit attack proves an unrelated workspace read completes while another SSE
+  client is non-draining. The real emulator also passed archive reconnect refusal,
+  post-archive mutation refusal, logout closure, cross-room isolation, and digest convergence.
+- Exact promoted cold target: `PROMOTE_EVIDENCE=1
+  E1_T05_IMPLEMENTATION_COMMIT=b4dc236c5aed39fbb36abe5afe001b26d43a7057
+  TEST_RUN_ID=promoted-e1-t05-fence-repair make verify-E1-T05`. Format, lint, typecheck,
+  113 unit tests, 5 Playwright tests, build, fresh emulator, and the real two-client scenario
+  passed. The final digest is
+  `sha256:e2323b11e208a2a69d89fd3db860857b45548f12208209e36762c44d98e5bd04`; both clients
+  converged at `0000000000000000_0000000000001450`, and the archive terminal checkpoint is
+  `0000000000000000_0000000000000729`.
+- Promoted evidence is under `evidence/e1-t05-final/`. Its idle budget records one
+  subscription check, 91 workspace checks, 91 room-status reads, one message snapshot, one
+  follow, and no additional message-delivery calls while idle; the polling positive control
+  remains sensitive. Replay: N/A (server live-delivery API) + mitigation: real-emulator
+  network transcript, reconnect matrix, request counts, digest convergence, and focused
+  authorization/backpressure tests.
+- Claim: the workspace-fence slow-reader bypass is closed against the exact repair commit;
+  awaiting a fresh independent critic.

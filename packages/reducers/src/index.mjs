@@ -25,6 +25,12 @@ export const REDUCER_EVENT_TYPES_V1 = Object.freeze([
   "principal.profile.updated",
   "principal.suspended",
   "principal.deactivated",
+  "workspace.created",
+  "workspace.membership.invited",
+  "workspace.membership.accepted",
+  "workspace.membership.role.changed",
+  "workspace.membership.suspended",
+  "workspace.membership.removed",
 ]);
 
 export const REDUCER_ERROR_CODES = Object.freeze({
@@ -46,6 +52,21 @@ export const REDUCER_ERROR_CODES = Object.freeze({
   PRINCIPAL_NOT_FOUND: "REDUCER_PRINCIPAL_NOT_FOUND",
   PRINCIPAL_PROFILE_REVISION: "REDUCER_PRINCIPAL_PROFILE_REVISION",
   PRINCIPAL_SCOPE_MISMATCH: "REDUCER_PRINCIPAL_SCOPE_MISMATCH",
+  WORKSPACE_ALREADY_EXISTS: "REDUCER_WORKSPACE_ALREADY_EXISTS",
+  WORKSPACE_BOOTSTRAP_INVALID: "REDUCER_WORKSPACE_BOOTSTRAP_INVALID",
+  WORKSPACE_CAPABILITY_DENIED: "REDUCER_WORKSPACE_CAPABILITY_DENIED",
+  WORKSPACE_DUPLICATE_MEMBERSHIP: "REDUCER_WORKSPACE_DUPLICATE_MEMBERSHIP",
+  WORKSPACE_INVITE_INVALID: "REDUCER_WORKSPACE_INVITE_INVALID",
+  WORKSPACE_INVITE_ACTOR_MISMATCH: "REDUCER_WORKSPACE_INVITE_ACTOR_MISMATCH",
+  WORKSPACE_LAST_OWNER: "REDUCER_WORKSPACE_LAST_OWNER",
+  WORKSPACE_MEMBERSHIP_INACTIVE: "REDUCER_WORKSPACE_MEMBERSHIP_INACTIVE",
+  WORKSPACE_MEMBERSHIP_NOT_FOUND: "REDUCER_WORKSPACE_MEMBERSHIP_NOT_FOUND",
+  WORKSPACE_NOT_FOUND: "REDUCER_WORKSPACE_NOT_FOUND",
+  WORKSPACE_REVISION_CONFLICT: "REDUCER_WORKSPACE_REVISION_CONFLICT",
+  WORKSPACE_ROLE_INVALID: "REDUCER_WORKSPACE_ROLE_INVALID",
+  WORKSPACE_ROLE_KIND_MISMATCH: "REDUCER_WORKSPACE_ROLE_KIND_MISMATCH",
+  WORKSPACE_SELF_ESCALATION: "REDUCER_WORKSPACE_SELF_ESCALATION",
+  WORKSPACE_SCOPE_MISMATCH: "REDUCER_WORKSPACE_SCOPE_MISMATCH",
   UNKNOWN_EVENT_TYPE: "REDUCER_UNKNOWN_EVENT_TYPE",
   UNSUPPORTED_SCHEMA_VERSION: "REDUCER_UNSUPPORTED_SCHEMA_VERSION",
 });
@@ -192,6 +213,12 @@ export const REDUCER_REGISTRY_V1 = Object.freeze({
   "principal.profile.updated": reducePrincipalProfileUpdated,
   "principal.suspended": reducePrincipalSuspended,
   "principal.deactivated": reducePrincipalDeactivated,
+  "workspace.created": reduceWorkspaceCreated,
+  "workspace.membership.invited": reduceWorkspaceMembershipInvited,
+  "workspace.membership.accepted": reduceWorkspaceMembershipAccepted,
+  "workspace.membership.role.changed": reduceWorkspaceMembershipRoleChanged,
+  "workspace.membership.suspended": reduceWorkspaceMembershipSuspended,
+  "workspace.membership.removed": reduceWorkspaceMembershipRemoved,
 });
 
 export function materializeMessages(records) {
@@ -814,6 +841,589 @@ function hasControlCharacter(value) {
     if (codePoint <= 31 || codePoint === 127) return true;
   }
   return false;
+}
+
+function reduceWorkspaceCreated(state, data, context) {
+  assertData(
+    data,
+    ["displayName", "ownerPrincipalId", "workspaceId"],
+    [],
+    context,
+  );
+  assertWorkspaceIdValue(data.workspaceId, "workspaceId", context);
+  assertBoundWorkspaceString(data.displayName, 160, "displayName", context);
+  assertPrincipalId(data.ownerPrincipalId, "ownerPrincipalId", context);
+  if (data.ownerPrincipalId !== context.envelope.actorId) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_BOOTSTRAP_INVALID,
+      "workspace bootstrap actor must be the initial owner",
+      "ownerPrincipalId",
+      context,
+    );
+  }
+  const owner = getPrincipal(state, data.ownerPrincipalId);
+  if (!owner || owner.kind !== "human" || owner.status !== "active") {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_BOOTSTRAP_INVALID,
+      "workspace owner must be an existing active human principal",
+      "ownerPrincipalId",
+      context,
+    );
+  }
+  const workspaces = workspaceMap(state);
+  assertUnique(workspaces, data.workspaceId, "workspaceId", context);
+  const membershipId = membershipIdForReducer(
+    data.workspaceId,
+    data.ownerPrincipalId,
+  );
+  const memberships = membershipMap(state);
+  assertUnique(memberships, membershipId, "membershipId", context);
+  state.entities.workspaces = setKey(workspaces, data.workspaceId, {
+    createdBy: data.ownerPrincipalId,
+    displayName: data.displayName,
+    ownerMembershipId: membershipId,
+    revision: 1,
+    status: "active",
+    workspaceId: data.workspaceId,
+  });
+  state.entities.memberships = setKey(memberships, membershipId, {
+    invitedBy: null,
+    inviteId: null,
+    membershipId,
+    principalId: data.ownerPrincipalId,
+    reason: null,
+    revision: 1,
+    role: "owner",
+    status: "active",
+    workspaceId: data.workspaceId,
+  });
+}
+
+function reduceWorkspaceMembershipInvited(state, data, context) {
+  assertData(
+    data,
+    ["expectedWorkspaceRevision", "inviteId", "principalId", "role"],
+    [],
+    context,
+  );
+  const workspace = requireWorkspace(state, context);
+  assertWorkspaceRevision(data.expectedWorkspaceRevision, workspace, context);
+  const actorMembership = requireActorCapability(
+    state,
+    context,
+    "workspace.membership.invite",
+  );
+  assertPrincipalId(data.principalId, "principalId", context);
+  assertInviteId(data.inviteId, "inviteId", context);
+  assertWorkspaceRole(data.role, context);
+  if (data.role === "owner" && actorMembership.role !== "owner") {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_CAPABILITY_DENIED,
+      "only an owner may invite an owner",
+      "role",
+      context,
+    );
+  }
+  const principal = getPrincipal(state, data.principalId);
+  if (!principal || principal.status !== "active") {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_MEMBERSHIP_INACTIVE,
+      "invite target must be an existing active principal",
+      "principalId",
+      context,
+    );
+  }
+  assertRoleKind(principal, data.role, context);
+  const membershipId = membershipIdForReducer(
+    context.envelope.workspaceId,
+    data.principalId,
+  );
+  if (hasKey(membershipMap(state), membershipId)) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_DUPLICATE_MEMBERSHIP,
+      "principal already has a membership in this workspace",
+      "principalId",
+      context,
+    );
+  }
+  const invites = inviteMap(state);
+  assertUnique(invites, data.inviteId, "inviteId", context);
+  state.entities.invites = setKey(invites, data.inviteId, {
+    acceptedBy: null,
+    inviteId: data.inviteId,
+    invitedBy: context.envelope.actorId,
+    principalId: data.principalId,
+    revision: 1,
+    role: data.role,
+    status: "pending",
+    workspaceId: context.envelope.workspaceId,
+  });
+  advanceWorkspace(state, workspace, context);
+}
+
+function reduceWorkspaceMembershipAccepted(state, data, context) {
+  assertData(
+    data,
+    ["expectedWorkspaceRevision", "inviteId", "principalId"],
+    [],
+    context,
+  );
+  const workspace = requireWorkspace(state, context);
+  assertWorkspaceRevision(data.expectedWorkspaceRevision, workspace, context);
+  assertPrincipalId(data.principalId, "principalId", context);
+  assertInviteId(data.inviteId, "inviteId", context);
+  if (context.envelope.actorId !== data.principalId) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_INVITE_ACTOR_MISMATCH,
+      "only the invited principal may accept this invite",
+      "principalId",
+      context,
+    );
+  }
+  const invite = getKey(inviteMap(state), data.inviteId);
+  if (
+    !invite ||
+    invite.status !== "pending" ||
+    invite.principalId !== data.principalId ||
+    invite.workspaceId !== context.envelope.workspaceId
+  ) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_INVITE_INVALID,
+      "invite is missing, consumed, or bound to another principal",
+      "inviteId",
+      context,
+    );
+  }
+  const principal = getPrincipal(state, data.principalId);
+  if (!principal || principal.status !== "active") {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_MEMBERSHIP_INACTIVE,
+      "invited principal is not active",
+      "principalId",
+      context,
+    );
+  }
+  assertRoleKind(principal, invite.role, context);
+  const membershipId = membershipIdForReducer(
+    context.envelope.workspaceId,
+    data.principalId,
+  );
+  if (hasKey(membershipMap(state), membershipId)) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_DUPLICATE_MEMBERSHIP,
+      "principal already has a membership in this workspace",
+      "principalId",
+      context,
+    );
+  }
+  state.entities.invites = setKey(inviteMap(state), data.inviteId, {
+    ...invite,
+    acceptedBy: data.principalId,
+    revision: invite.revision + 1,
+    status: "accepted",
+  });
+  state.entities.memberships = setKey(membershipMap(state), membershipId, {
+    invitedBy: invite.invitedBy,
+    inviteId: invite.inviteId,
+    membershipId,
+    principalId: data.principalId,
+    reason: null,
+    revision: 1,
+    role: invite.role,
+    status: "active",
+    workspaceId: context.envelope.workspaceId,
+  });
+  advanceWorkspace(state, workspace, context);
+}
+
+function reduceWorkspaceMembershipRoleChanged(state, data, context) {
+  assertData(
+    data,
+    [
+      "expectedMembershipRevision",
+      "expectedWorkspaceRevision",
+      "membershipId",
+      "role",
+    ],
+    [],
+    context,
+  );
+  const workspace = requireWorkspace(state, context);
+  assertWorkspaceRevision(data.expectedWorkspaceRevision, workspace, context);
+  const actorMembership = requireActorCapability(
+    state,
+    context,
+    "workspace.membership.role.change",
+  );
+  const target = requireTargetMembership(state, data, context, true);
+  assertWorkspaceRole(data.role, context);
+  const targetPrincipal = getPrincipal(state, target.principalId);
+  assertRoleKind(targetPrincipal, data.role, context);
+  if (target.principalId === context.envelope.actorId) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_SELF_ESCALATION,
+      "a principal may not change its own membership role",
+      "membershipId",
+      context,
+    );
+  }
+  if (
+    actorMembership.role !== "owner" &&
+    (target.role === "owner" || data.role === "owner")
+  ) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_CAPABILITY_DENIED,
+      "only an owner may change an owner membership or grant owner role",
+      "role",
+      context,
+    );
+  }
+  if (
+    target.role === "owner" &&
+    data.role !== "owner" &&
+    countNonRemovedOwners(state, context.envelope.workspaceId) <= 1
+  ) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_LAST_OWNER,
+      "workspace must retain at least one owner",
+      "role",
+      context,
+    );
+  }
+  state.entities.memberships = setKey(membershipMap(state), data.membershipId, {
+    ...target,
+    reason: null,
+    revision: target.revision + 1,
+    role: data.role,
+  });
+  advanceWorkspace(state, workspace, context);
+}
+
+function reduceWorkspaceMembershipSuspended(state, data, context) {
+  reduceWorkspaceMembershipStatus(state, data, "suspended", context);
+}
+
+function reduceWorkspaceMembershipRemoved(state, data, context) {
+  reduceWorkspaceMembershipStatus(state, data, "removed", context);
+}
+
+function reduceWorkspaceMembershipStatus(state, data, nextStatus, context) {
+  assertData(
+    data,
+    ["expectedMembershipRevision", "expectedWorkspaceRevision", "membershipId"],
+    ["reason"],
+    context,
+  );
+  const workspace = requireWorkspace(state, context);
+  assertWorkspaceRevision(data.expectedWorkspaceRevision, workspace, context);
+  const capability =
+    nextStatus === "suspended"
+      ? "workspace.membership.suspend"
+      : "workspace.membership.remove";
+  const actorMembership = requireActorCapability(state, context, capability);
+  const target = requireTargetMembership(state, data, context, false);
+  if (target.status === "removed") {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_MEMBERSHIP_INACTIVE,
+      "removed membership cannot be changed",
+      "membershipId",
+      context,
+    );
+  }
+  if (nextStatus === "suspended" && target.status !== "active") {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_MEMBERSHIP_INACTIVE,
+      "only an active membership may be suspended",
+      "membershipId",
+      context,
+    );
+  }
+  if (actorMembership.role !== "owner" && target.role === "owner") {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_CAPABILITY_DENIED,
+      "only an owner may change an owner membership",
+      "membershipId",
+      context,
+    );
+  }
+  if (target.role === "owner") {
+    const ownerCount =
+      nextStatus === "suspended"
+        ? countActiveOwners(state, context.envelope.workspaceId)
+        : countNonRemovedOwners(state, context.envelope.workspaceId);
+    if (ownerCount <= 1) {
+      failWorkspace(
+        REDUCER_ERROR_CODES.WORKSPACE_LAST_OWNER,
+        "workspace must retain at least one owner",
+        "membershipId",
+        context,
+      );
+    }
+  }
+  if (Object.hasOwn(data, "reason")) {
+    assertBoundWorkspaceString(data.reason, 240, "reason", context);
+  }
+  state.entities.memberships = setKey(membershipMap(state), data.membershipId, {
+    ...target,
+    reason: data.reason ?? null,
+    revision: target.revision + 1,
+    status: nextStatus,
+  });
+  advanceWorkspace(state, workspace, context);
+}
+
+const WORKSPACE_ID_PATTERN = /^ws_[0-9a-hjkmnp-tv-z]{26}$/u;
+const MEMBERSHIP_ID_PATTERN =
+  /^mb_([0-9a-hjkmnp-tv-z]{26})_([0-9a-hjkmnp-tv-z]{26})$/u;
+const INVITE_ID_PATTERN =
+  /^iv_([0-9a-hjkmnp-tv-z]{26})_([0-9a-hjkmnp-tv-z]{26})$/u;
+const WORKSPACE_ROLES = new Set([
+  "owner",
+  "admin",
+  "member",
+  "guest",
+  "agent",
+  "service",
+]);
+const WORKSPACE_ADMIN_CAPABILITIES = new Set([
+  "workspace.membership.invite",
+  "workspace.membership.role.change",
+  "workspace.membership.suspend",
+  "workspace.membership.remove",
+]);
+
+function assertWorkspaceIdValue(value, field, context) {
+  if (typeof value !== "string" || !WORKSPACE_ID_PATTERN.test(value)) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_SCOPE_MISMATCH,
+      "workspace id must be a lowercase workspace identifier",
+      field,
+      context,
+    );
+  }
+  if (value !== context.envelope.workspaceId) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_SCOPE_MISMATCH,
+      "workspace id belongs to a different workspace",
+      field,
+      context,
+    );
+  }
+}
+
+function assertMembershipId(value, field, context) {
+  const match =
+    typeof value === "string" ? value.match(MEMBERSHIP_ID_PATTERN) : null;
+  if (!match || `ws_${match[1]}` !== context.envelope.workspaceId) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_SCOPE_MISMATCH,
+      "membership id belongs to a different workspace",
+      field,
+      context,
+    );
+  }
+}
+
+function assertInviteId(value, field, context) {
+  const match =
+    typeof value === "string" ? value.match(INVITE_ID_PATTERN) : null;
+  if (!match || `ws_${match[1]}` !== context.envelope.workspaceId) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_SCOPE_MISMATCH,
+      "invite id belongs to a different workspace",
+      field,
+      context,
+    );
+  }
+}
+
+function assertWorkspaceRole(value, context) {
+  if (typeof value !== "string" || !WORKSPACE_ROLES.has(value)) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_ROLE_INVALID,
+      "role is not registered",
+      "role",
+      context,
+    );
+  }
+}
+
+function assertRoleKind(principal, role, context) {
+  if (!principal) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_MEMBERSHIP_INACTIVE,
+      "membership principal does not exist",
+      "principalId",
+      context,
+    );
+  }
+  const kindMatches = ["owner", "admin", "member", "guest"].includes(role)
+    ? principal.kind === "human"
+    : principal.kind === role;
+  if (!kindMatches) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_ROLE_KIND_MISMATCH,
+      "role is not valid for the principal kind",
+      "role",
+      context,
+    );
+  }
+}
+
+function requireWorkspace(state, context) {
+  const workspace = getKey(workspaceMap(state), context.envelope.workspaceId);
+  if (!workspace || workspace.status !== "active") {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_NOT_FOUND,
+      "workspace is not active",
+      "workspaceId",
+      context,
+    );
+  }
+  return workspace;
+}
+
+function requireActorCapability(state, context, capability) {
+  const membershipId = membershipIdForReducer(
+    context.envelope.workspaceId,
+    context.envelope.actorId,
+  );
+  const membership = getKey(membershipMap(state), membershipId);
+  if (
+    !membership ||
+    membership.status !== "active" ||
+    !workspaceRoleHasCapability(membership.role, capability)
+  ) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_CAPABILITY_DENIED,
+      "active membership does not grant this capability",
+      "actorId",
+      context,
+    );
+  }
+  return membership;
+}
+
+function workspaceRoleHasCapability(role, capability) {
+  return (
+    (role === "owner" || role === "admin") &&
+    WORKSPACE_ADMIN_CAPABILITIES.has(capability)
+  );
+}
+
+function requireTargetMembership(state, data, context, activeOnly) {
+  assertMembershipId(data.membershipId, "membershipId", context);
+  const membership = getKey(membershipMap(state), data.membershipId);
+  if (!membership) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_MEMBERSHIP_NOT_FOUND,
+      "membership does not exist",
+      "membershipId",
+      context,
+    );
+  }
+  if (membership.workspaceId !== context.envelope.workspaceId) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_SCOPE_MISMATCH,
+      "membership belongs to a different workspace",
+      "membershipId",
+      context,
+    );
+  }
+  if (membership.revision !== data.expectedMembershipRevision) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_REVISION_CONFLICT,
+      `membership revision ${data.expectedMembershipRevision} is not current`,
+      "expectedMembershipRevision",
+      context,
+    );
+  }
+  if (activeOnly && membership.status !== "active") {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_MEMBERSHIP_INACTIVE,
+      "membership is not active",
+      "membershipId",
+      context,
+    );
+  }
+  return membership;
+}
+
+function assertWorkspaceRevision(expected, workspace, context) {
+  assertRevision(expected, "expectedWorkspaceRevision", context);
+  if (expected !== workspace.revision) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.WORKSPACE_REVISION_CONFLICT,
+      `workspace revision ${expected} is not current`,
+      "expectedWorkspaceRevision",
+      context,
+    );
+  }
+}
+
+function advanceWorkspace(state, workspace, context) {
+  state.entities.workspaces = setKey(
+    workspaceMap(state),
+    context.envelope.workspaceId,
+    { ...workspace, revision: workspace.revision + 1 },
+  );
+}
+
+function countActiveOwners(state, workspaceId) {
+  return Object.values(membershipMap(state)).filter(
+    (membership) =>
+      membership.workspaceId === workspaceId &&
+      membership.role === "owner" &&
+      membership.status === "active",
+  ).length;
+}
+
+function countNonRemovedOwners(state, workspaceId) {
+  return Object.values(membershipMap(state)).filter(
+    (membership) =>
+      membership.workspaceId === workspaceId &&
+      membership.role === "owner" &&
+      membership.status !== "removed",
+  ).length;
+}
+
+function failWorkspace(code, detail, field, context) {
+  throw reducerError(code, detail, {
+    offset: context.offset,
+    path: `$.event.data.${field}`,
+  });
+}
+
+function assertBoundWorkspaceString(value, maxLength, field, context) {
+  if (
+    typeof value !== "string" ||
+    value.length === 0 ||
+    value.length > maxLength ||
+    hasControlCharacter(value)
+  ) {
+    failWorkspace(
+      REDUCER_ERROR_CODES.INVALID_EVENT_DATA,
+      "value must be a bounded string without control characters",
+      field,
+      context,
+    );
+  }
+}
+
+function workspaceMap(state) {
+  return state.entities.workspaces ?? {};
+}
+
+function membershipMap(state) {
+  return state.entities.memberships ?? {};
+}
+
+function inviteMap(state) {
+  return state.entities.invites ?? {};
+}
+
+function membershipIdForReducer(workspaceId, principalId) {
+  return `mb_${workspaceId.slice(3)}_${principalId.slice(30)}`;
 }
 
 function assertData(data, required, optional, context, pathPrefix = "") {

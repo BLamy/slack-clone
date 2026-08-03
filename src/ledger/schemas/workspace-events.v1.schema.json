@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stream-slack.local/schemas/workspace-events.v1.schema.json",
+  "title": "Stream Slack workspace and membership events v1",
+  "oneOf": [
+    {
+      "title": "Workspace created",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["displayName", "ownerPrincipalId", "workspaceId"],
+      "properties": {
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "ownerPrincipalId": { "$ref": "#/$defs/principalId" },
+        "workspaceId": { "$ref": "#/$defs/workspaceId" }
+      }
+    },
+    {
+      "title": "Membership invited",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expectedWorkspaceRevision",
+        "inviteId",
+        "principalId",
+        "role"
+      ],
+      "properties": {
+        "expectedWorkspaceRevision": { "type": "integer", "minimum": 1 },
+        "inviteId": { "$ref": "#/$defs/inviteId" },
+        "principalId": { "$ref": "#/$defs/principalId" },
+        "role": { "$ref": "#/$defs/role" }
+      }
+    },
+    {
+      "title": "Membership accepted",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expectedWorkspaceRevision", "inviteId", "principalId"],
+      "properties": {
+        "expectedWorkspaceRevision": { "type": "integer", "minimum": 1 },
+        "inviteId": { "$ref": "#/$defs/inviteId" },
+        "principalId": { "$ref": "#/$defs/principalId" }
+      }
+    },
+    {
+      "title": "Membership role changed",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expectedMembershipRevision",
+        "expectedWorkspaceRevision",
+        "membershipId",
+        "role"
+      ],
+      "properties": {
+        "expectedMembershipRevision": { "type": "integer", "minimum": 1 },
+        "expectedWorkspaceRevision": { "type": "integer", "minimum": 1 },
+        "membershipId": { "$ref": "#/$defs/membershipId" },
+        "role": { "$ref": "#/$defs/role" }
+      }
+    },
+    {
+      "title": "Membership suspended or removed",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expectedMembershipRevision",
+        "expectedWorkspaceRevision",
+        "membershipId"
+      ],
+      "properties": {
+        "expectedMembershipRevision": { "type": "integer", "minimum": 1 },
+        "expectedWorkspaceRevision": { "type": "integer", "minimum": 1 },
+        "membershipId": { "$ref": "#/$defs/membershipId" },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 240 }
+      }
+    }
+  ],
+  "$defs": {
+    "workspaceId": {
+      "type": "string",
+      "pattern": "^ws_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "principalId": {
+      "type": "string",
+      "pattern": "^pr_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "membershipId": {
+      "type": "string",
+      "pattern": "^mb_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "inviteId": {
+      "type": "string",
+      "pattern": "^iv_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "role": {
+      "enum": ["owner", "admin", "member", "guest", "agent", "service"]
+    }
+  }
+}

@@ -1,0 +1,296 @@
+{
+  "records": [
+    {
+      "offset": "0000000000000000_0000000000000001",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "data": {
+          "kind": "human",
+          "ownedBy": null,
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "profile": {
+            "displayName": "Ada Lovelace",
+            "email": "ada@a.example",
+            "handle": "ada"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "workspace-a-ada"
+          }
+        },
+        "eventId": "ev_00000000000000000000000001",
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_00000000000000000000000001",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:00.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000002",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "data": {
+          "kind": "human",
+          "ownedBy": null,
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "profile": {
+            "displayName": "Linus Torvalds",
+            "email": "linus@a.example",
+            "handle": "linus"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "workspace-a-linus"
+          }
+        },
+        "eventId": "ev_00000000000000000000000002",
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_00000000000000000000000002",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:01.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000003",
+      "event": {
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "data": {
+          "kind": "human",
+          "ownedBy": null,
+          "principalId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+          "profile": {
+            "displayName": "Grace Hopper",
+            "email": "grace@b.example",
+            "handle": "grace"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "workspace-b-grace"
+          }
+        },
+        "eventId": "ev_00000000000000000000000003",
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_00000000000000000000000003",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:02.000Z",
+        "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000004",
+      "event": {
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "data": {
+          "kind": "human",
+          "ownedBy": null,
+          "principalId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd",
+          "profile": {
+            "displayName": "Alan Turing",
+            "email": "alan@b.example",
+            "handle": "alan"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "workspace-b-alan"
+          }
+        },
+        "eventId": "ev_00000000000000000000000004",
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_00000000000000000000000004",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:03.000Z",
+        "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000005",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "data": {
+          "displayName": "Workspace A",
+          "ownerPrincipalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "eventId": "ev_00000000000000000000000005",
+        "eventType": "workspace.created",
+        "idempotencyKey": "ik_00000000000000000000000005",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:04.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000006",
+      "event": {
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "data": {
+          "displayName": "Workspace B",
+          "ownerPrincipalId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+          "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "eventId": "ev_00000000000000000000000006",
+        "eventType": "workspace.created",
+        "idempotencyKey": "ik_00000000000000000000000006",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:05.000Z",
+        "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000007",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "data": {
+          "expectedWorkspaceRevision": 1,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "role": "member"
+        },
+        "eventId": "ev_00000000000000000000000007",
+        "eventType": "workspace.membership.invited",
+        "idempotencyKey": "ik_00000000000000000000000007",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:06.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000008",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "data": {
+          "expectedWorkspaceRevision": 2,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+        },
+        "eventId": "ev_00000000000000000000000008",
+        "eventType": "workspace.membership.accepted",
+        "idempotencyKey": "ik_00000000000000000000000008",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:07.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000009",
+      "event": {
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "data": {
+          "expectedWorkspaceRevision": 1,
+          "inviteId": "iv_bbbbbbbbbbbbbbbbbbbbbbbbbb_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "principalId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd",
+          "role": "member"
+        },
+        "eventId": "ev_00000000000000000000000009",
+        "eventType": "workspace.membership.invited",
+        "idempotencyKey": "ik_00000000000000000000000009",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:08.000Z",
+        "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000010",
+      "event": {
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd",
+        "causation": null,
+        "correlationId": "cr_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "data": {
+          "expectedWorkspaceRevision": 2,
+          "inviteId": "iv_bbbbbbbbbbbbbbbbbbbbbbbbbb_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "principalId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd"
+        },
+        "eventId": "ev_00000000000000000000000010",
+        "eventType": "workspace.membership.accepted",
+        "idempotencyKey": "ik_00000000000000000000000010",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:09.000Z",
+        "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000011",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "data": {
+          "expectedMembershipRevision": 1,
+          "expectedWorkspaceRevision": 3,
+          "membershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "role": "admin"
+        },
+        "eventId": "ev_00000000000000000000000011",
+        "eventType": "workspace.membership.role.changed",
+        "idempotencyKey": "ik_00000000000000000000000011",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:10.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000012",
+      "event": {
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "data": {
+          "expectedMembershipRevision": 1,
+          "expectedWorkspaceRevision": 3,
+          "membershipId": "mb_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd",
+          "reason": "security review"
+        },
+        "eventId": "ev_00000000000000000000000012",
+        "eventType": "workspace.membership.suspended",
+        "idempotencyKey": "ik_00000000000000000000000012",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:11.000Z",
+        "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000013",
+      "event": {
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "data": {
+          "expectedMembershipRevision": 2,
+          "expectedWorkspaceRevision": 4,
+          "membershipId": "mb_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd",
+          "reason": "membership removed"
+        },
+        "eventId": "ev_00000000000000000000000013",
+        "eventType": "workspace.membership.removed",
+        "idempotencyKey": "ik_00000000000000000000000013",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:12.000Z",
+        "workspaceId": "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    }
+  ]
+}

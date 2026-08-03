@@ -52,7 +52,13 @@
         "principal.created",
         "principal.profile.updated",
         "principal.suspended",
-        "principal.deactivated"
+        "principal.deactivated",
+        "workspace.created",
+        "workspace.membership.invited",
+        "workspace.membership.accepted",
+        "workspace.membership.role.changed",
+        "workspace.membership.suspended",
+        "workspace.membership.removed"
       ]
     },
     "idempotencyKey": {

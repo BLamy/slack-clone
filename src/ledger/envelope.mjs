@@ -1,7 +1,12 @@
 import { TextDecoder } from "node:util";
 
 import { canonicalJson, canonicalSha256 } from "./canonical-json.mjs";
-import { assertExactKeys, LEDGER_ERROR_CODES, LedgerValidationError, fail } from "./errors.mjs";
+import {
+  assertExactKeys,
+  LEDGER_ERROR_CODES,
+  LedgerValidationError,
+  fail,
+} from "./errors.mjs";
 import { assertIdentifier } from "./identifiers.mjs";
 import { parseStreamName } from "./topology.mjs";
 
@@ -21,6 +26,12 @@ export const EVENT_TYPES_V1 = Object.freeze([
   "principal.profile.updated",
   "principal.suspended",
   "principal.deactivated",
+  "workspace.created",
+  "workspace.membership.invited",
+  "workspace.membership.accepted",
+  "workspace.membership.role.changed",
+  "workspace.membership.suspended",
+  "workspace.membership.removed",
 ]);
 
 const EVENT_TYPE_SET = new Set(EVENT_TYPES_V1);
@@ -46,9 +57,15 @@ const APPEND_INPUT_KEYS = ENVELOPE_KEYS.filter(
 );
 const ISSUANCE_KEYS = ["clock", "eventId"];
 
-export function validateSourceReference(value, { expectedWorkspaceId, path = "$.causation" } = {}) {
+export function validateSourceReference(
+  value,
+  { expectedWorkspaceId, path = "$.causation" } = {},
+) {
   assertExactKeys(value, SOURCE_REFERENCE_KEYS, path);
-  parseStreamName(value.stream, { expectedWorkspaceId, path: `${path}.stream` });
+  parseStreamName(value.stream, {
+    expectedWorkspaceId,
+    path: `${path}.stream`,
+  });
 
   if (typeof value.offset !== "string" || !OFFSET_PATTERN.test(value.offset)) {
     fail(
@@ -83,8 +100,15 @@ export function validateEventEnvelope(value) {
       `supported version is ${EVENT_ENVELOPE_SCHEMA_VERSION}`,
     );
   }
-  if (typeof value.eventType !== "string" || !EVENT_TYPE_SET.has(value.eventType)) {
-    fail(LEDGER_ERROR_CODES.INVALID_EVENT_TYPE, "$.eventType", "event type is not registered for v1");
+  if (
+    typeof value.eventType !== "string" ||
+    !EVENT_TYPE_SET.has(value.eventType)
+  ) {
+    fail(
+      LEDGER_ERROR_CODES.INVALID_EVENT_TYPE,
+      "$.eventType",
+      "event type is not registered for v1",
+    );
   }
 
   assertIdentifier("workspace", value.workspaceId, { path: "$.workspaceId" });
@@ -93,16 +117,30 @@ export function validateEventEnvelope(value) {
     path: "$.actorId",
     workspaceId: value.workspaceId,
   });
-  assertIdentifier("correlation", value.correlationId, { path: "$.correlationId" });
-  assertIdentifier("idempotency", value.idempotencyKey, { path: "$.idempotencyKey" });
+  assertIdentifier("correlation", value.correlationId, {
+    path: "$.correlationId",
+  });
+  assertIdentifier("idempotency", value.idempotencyKey, {
+    path: "$.idempotencyKey",
+  });
 
   validateTimestamp(value.serverTimestamp);
   if (value.causation !== null) {
-    validateSourceReference(value.causation, { expectedWorkspaceId: value.workspaceId });
+    validateSourceReference(value.causation, {
+      expectedWorkspaceId: value.workspaceId,
+    });
   }
 
-  if (!value.data || typeof value.data !== "object" || Array.isArray(value.data)) {
-    fail(LEDGER_ERROR_CODES.TYPE_MISMATCH, "$.data", "event data must be an object");
+  if (
+    !value.data ||
+    typeof value.data !== "object" ||
+    Array.isArray(value.data)
+  ) {
+    fail(
+      LEDGER_ERROR_CODES.TYPE_MISMATCH,
+      "$.data",
+      "event data must be an object",
+    );
   }
   canonicalJson(value.data, "$.data");
   return value;
@@ -120,12 +158,20 @@ export function issueEventEnvelope(input, issuance) {
     );
   }
   if (typeof issuance.clock !== "function") {
-    fail(LEDGER_ERROR_CODES.TYPE_MISMATCH, "$.issuance.clock", "clock must be a function");
+    fail(
+      LEDGER_ERROR_CODES.TYPE_MISMATCH,
+      "$.issuance.clock",
+      "clock must be a function",
+    );
   }
 
   const issuedAt = issuance.clock();
   if (!(issuedAt instanceof Date) || Number.isNaN(issuedAt.getTime())) {
-    fail(LEDGER_ERROR_CODES.INVALID_TIMESTAMP, "$.issuance.clock", "clock returned an invalid Date");
+    fail(
+      LEDGER_ERROR_CODES.INVALID_TIMESTAMP,
+      "$.issuance.clock",
+      "clock returned an invalid Date",
+    );
   }
 
   const envelope = {
@@ -154,18 +200,30 @@ export function decodeEventEnvelope(encoded) {
     } else if (encoded instanceof Uint8Array) {
       text = new TextDecoder("utf-8", { fatal: true }).decode(encoded);
     } else {
-      fail(LEDGER_ERROR_CODES.INVALID_JSON, "$", "encoded envelope must be text or UTF-8 bytes");
+      fail(
+        LEDGER_ERROR_CODES.INVALID_JSON,
+        "$",
+        "encoded envelope must be text or UTF-8 bytes",
+      );
     }
   } catch (error) {
     if (error instanceof LedgerValidationError) throw error;
-    fail(LEDGER_ERROR_CODES.INVALID_JSON, "$", "encoded envelope is not valid UTF-8");
+    fail(
+      LEDGER_ERROR_CODES.INVALID_JSON,
+      "$",
+      "encoded envelope is not valid UTF-8",
+    );
   }
 
   let value;
   try {
     value = JSON.parse(text);
   } catch {
-    fail(LEDGER_ERROR_CODES.INVALID_JSON, "$", "encoded envelope is not valid JSON");
+    fail(
+      LEDGER_ERROR_CODES.INVALID_JSON,
+      "$",
+      "encoded envelope is not valid JSON",
+    );
   }
   return validateEventEnvelope(value);
 }
@@ -180,6 +238,10 @@ function validateTimestamp(value) {
   }
   const parsed = new Date(value);
   if (Number.isNaN(parsed.getTime()) || parsed.toISOString() !== value) {
-    fail(LEDGER_ERROR_CODES.INVALID_TIMESTAMP, "$.serverTimestamp", "timestamp is not a real UTC instant");
+    fail(
+      LEDGER_ERROR_CODES.INVALID_TIMESTAMP,
+      "$.serverTimestamp",
+      "timestamp is not a real UTC instant",
+    );
   }
 }

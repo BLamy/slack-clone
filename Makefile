@@ -1,4 +1,4 @@
-.PHONY: verify-E0 verify-E0-T01 verify-E0-T02 verify-E0-T03 verify-E0-T04 verify-E0-T05 verify-E0-T06 verify-E0-T07 verify-E1-T01
+.PHONY: verify-E0 verify-E0-T01 verify-E0-T02 verify-E0-T03 verify-E0-T04 verify-E0-T05 verify-E0-T06 verify-E0-T07 verify-E1-T01 verify-E1-T02
 
 verify-E0: verify-E0-T01 verify-E0-T02 verify-E0-T03 verify-E0-T04 verify-E0-T05 verify-E0-T06 verify-E0-T07
 
@@ -25,3 +25,6 @@ verify-E0-T07:
 
 verify-E1-T01:
 	@node scripts/cold-verify-e1-t01.mjs
+
+verify-E1-T02:
+	@node scripts/cold-verify-e1-t02.mjs

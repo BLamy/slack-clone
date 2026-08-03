@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "boundary": "HTTP delivery to Durable Streams adapter",
+  "boundary": "HTTP message-delivery reads/follows; authorization stream reads are reported separately",
   "logicalIdleDurationMs": 900000,
   "timerFinishedAtMs": 900000,
   "callsBeforeLogicalAdvance": 2,
@@ -10,6 +10,9 @@
   "readCallsAfterLogicalAdvance": 1,
   "followCallsBeforeLogicalAdvance": 1,
   "followCallsAfterLogicalAdvance": 1,
+  "durableStreamReadCallsBeforeLogicalAdvance": 2,
+  "durableStreamReadCallsAfterLogicalAdvance": 92,
+  "durableStreamReadCallDeltaWhileIdle": 90,
   "authorizeReadCalls": 91,
   "authorizeSubscriptionCalls": 1,
   "directoryReadCalls": 92,

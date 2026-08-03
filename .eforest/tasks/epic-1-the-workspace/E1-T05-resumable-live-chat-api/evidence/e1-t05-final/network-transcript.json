@@ -1,35 +1,35 @@
 {
-  "room": "e1-t05-promoted-e1-t05-fence-repair-resume",
+  "room": "e1-t05-promoted-e1-t05-stream-accounting-resume",
   "clients": 2,
-  "firstCheckpoint": "0000000000000000_0000000000000720",
-  "secondCheckpoint": "0000000000000000_0000000000001450",
+  "firstCheckpoint": "0000000000000000_0000000000000730",
+  "secondCheckpoint": "0000000000000000_0000000000001470",
   "acceptedMessageIds": [
-    "eb83962a-5579-482f-8926-827f429a05c7",
-    "0a8866a4-4d8f-4956-9e6e-35f605218be5"
+    "abf54507-96e6-4c83-9f43-55f95a66cb56",
+    "57cee473-b7e2-4445-85f5-4e1df709b356"
   ],
   "resumedMessageIds": [
-    "0a8866a4-4d8f-4956-9e6e-35f605218be5"
+    "57cee473-b7e2-4445-85f5-4e1df709b356"
   ],
-  "finalDigest": "sha256:e2323b11e208a2a69d89fd3db860857b45548f12208209e36762c44d98e5bd04",
+  "finalDigest": "sha256:b65a0aa4a8c964817a76aaa77597682ae3947fbbacacf12f913e916bde3d9ff3",
   "finalOffsets": {
-    "ada": "0000000000000000_0000000000001450",
-    "linus": "0000000000000000_0000000000001450"
+    "ada": "0000000000000000_0000000000001470",
+    "linus": "0000000000000000_0000000000001470"
   },
   "noDuplicateLogicalEffects": true,
   "crossRoomIsolation": {
-    "isolatedRoom": "e1-t05-promoted-e1-t05-fence-repair-isolation",
-    "idleRoom": "e1-t05-promoted-e1-t05-fence-repair-idle",
-    "acceptedMessageId": "5e87f134-2e3c-4319-9cee-864310d97a8e",
+    "isolatedRoom": "e1-t05-promoted-e1-t05-stream-accounting-isolation",
+    "idleRoom": "e1-t05-promoted-e1-t05-stream-accounting-idle",
+    "acceptedMessageId": "9334c7d7-fcb1-411a-8a04-d31744542bf3",
     "otherClientReceivedMessage": false
   },
   "archive": {
     "responseStatus": 200,
     "terminalCode": "LIVE_CHANNEL_ARCHIVED",
-    "checkpoint": "0000000000000000_0000000000000729",
+    "checkpoint": "0000000000000000_0000000000000739",
     "reconnectAfterArchive": {
       "status": 409,
       "code": "LIVE_CHANNEL_ARCHIVED",
-      "checkpoint": "0000000000000000_0000000000001240"
+      "checkpoint": "0000000000000000_0000000000001260"
     },
     "writeAfterArchive": {
       "status": 409,
@@ -73,105 +73,105 @@
       "checkpoint": null,
       "label": "ada-initial",
       "method": "GET",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-resume/events",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-stream-accounting-resume/events",
       "status": 200
     },
     {
       "checkpoint": null,
       "label": "linus-initial",
       "method": "GET",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-resume/events",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-stream-accounting-resume/events",
       "status": 200
     },
     {
       "bodyCode": null,
       "label": "post-ik_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "method": "POST",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-resume/messages",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-stream-accounting-resume/messages",
       "status": 201
     },
     {
       "bodyCode": null,
       "label": "post-ik_bbbbbbbbbbbbbbbbbbbbbbbbbb",
       "method": "POST",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-resume/messages",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-stream-accounting-resume/messages",
       "status": 201
     },
     {
-      "checkpoint": "0000000000000000_0000000000000720",
+      "checkpoint": "0000000000000000_0000000000000730",
       "label": "ada-resumed",
       "method": "GET",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-resume/events?offset=0000000000000000_0000000000000720",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-stream-accounting-resume/events?offset=0000000000000000_0000000000000730",
       "status": 200
     },
     {
       "bodyCode": null,
       "label": "ada-final",
       "method": "GET",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-resume/messages",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-stream-accounting-resume/messages",
       "status": 200
     },
     {
       "bodyCode": null,
       "label": "linus-final",
       "method": "GET",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-resume/messages",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-stream-accounting-resume/messages",
       "status": 200
     },
     {
       "bodyCode": "LIVE_CHECKPOINT_INVALID",
       "label": "malformed-checkpoint",
       "method": "GET",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-resume/events?offset=%00",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-stream-accounting-resume/events?offset=%00",
       "status": 400
     },
     {
       "checkpoint": null,
       "label": "ada-isolation",
       "method": "GET",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-isolation/events",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-stream-accounting-isolation/events",
       "status": 200
     },
     {
       "checkpoint": null,
       "label": "linus-isolation",
       "method": "GET",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-idle/events",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-stream-accounting-idle/events",
       "status": 200
     },
     {
       "bodyCode": null,
       "label": "post-ik_cccccccccccccccccccccccccc",
       "method": "POST",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-isolation/messages",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-stream-accounting-isolation/messages",
       "status": 201
     },
     {
       "bodyCode": null,
       "label": "archive-room",
       "method": "POST",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-isolation/archive",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-stream-accounting-isolation/archive",
       "status": 200
     },
     {
       "bodyCode": "LIVE_CHANNEL_ARCHIVED",
       "label": "archive-reconnect-after-status",
       "method": "GET",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-isolation/events?offset=0000000000000000_0000000000001240",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-stream-accounting-isolation/events?offset=0000000000000000_0000000000001260",
       "status": 409
     },
     {
       "bodyCode": "CHAT_ROOM_ARCHIVED",
       "label": "archive-write-after-status",
       "method": "POST",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-isolation/messages",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-stream-accounting-isolation/messages",
       "status": 409
     },
     {
       "checkpoint": null,
       "label": "ada-logout",
       "method": "GET",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-logout/events",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-stream-accounting-logout/events",
       "status": 200
     },
     {
@@ -184,7 +184,7 @@
       "bodyCode": null,
       "label": "post-ik_dddddddddddddddddddddddddd",
       "method": "POST",
-      "path": "/api/rooms/e1-t05-promoted-e1-t05-fence-repair-logout/messages",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-stream-accounting-logout/messages",
       "status": 201
     }
   ]

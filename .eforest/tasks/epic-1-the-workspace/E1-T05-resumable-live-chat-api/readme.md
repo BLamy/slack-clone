@@ -211,3 +211,31 @@ verification, while the server remains responsible for reduction and authorizati
   authorization/backpressure tests.
 - Claim: the workspace-fence slow-reader bypass is closed against the exact repair commit;
   awaiting a fresh independent critic.
+
+### Builder — 2026-08-02 — stream accounting repair complete
+
+- Repair commit: `a228ee99bada05eade5c8168fb25ab9034d15a14` (`E1-T05: account for
+  authorization stream reads`). The idle request probe now delegates room-status checks to
+  the real `createChatService.readRoomStatus` implementation and counts its underlying
+  Durable Stream reads through the fake stream store. Evidence distinguishes the HTTP
+  message-delivery budget from the authorization/status reads required by the open check and
+  90 deterministic heartbeats.
+- Exact promoted cold target: `PROMOTE_EVIDENCE=1
+  E1_T05_IMPLEMENTATION_COMMIT=a228ee99bada05eade5c8168fb25ab9034d15a14
+  TEST_RUN_ID=promoted-e1-t05-stream-accounting make verify-E1-T05`. Format, lint, typecheck,
+  113 unit tests, 5 Playwright tests, build, fresh emulator, and the real two-client scenario
+  passed. The final digest is
+  `sha256:b65a0aa4a8c964817a76aaa77597682ae3947fbbacacf12f913e916bde3d9ff3`; both clients
+  converged at `0000000000000000_0000000000001470`, and the archive terminal checkpoint is
+  `0000000000000000_0000000000000739`.
+- Promoted idle evidence records 91 authorization reads, 92 directory reads, 91 room-status
+  reads, 2 Durable Stream reads before logical time advances, 92 afterward, and a delta of 90
+  status reads matching the 90 heartbeat executions. Message-delivery reads/follows remain
+  constant at one each with zero polling calls. The real emulator also proved archive
+  reconnect refusal (`409 LIVE_CHANNEL_ARCHIVED`), post-archive mutation refusal
+  (`409 CHAT_ROOM_ARCHIVED`), logout closure, cross-room isolation, opaque-checkpoint resume,
+  and digest convergence. Replay: N/A (server live-delivery API) + mitigation: real-emulator
+  network transcript, reconnect matrix, request counts, digest convergence, and focused
+  authorization/backpressure tests.
+- Claim: the idle-budget evidence now measures the actual authorization stream path and the
+  implementation commit is ready for a fresh independent critic.

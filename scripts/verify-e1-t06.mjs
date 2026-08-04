@@ -190,9 +190,20 @@ function verifyParserCorpus(corpus) {
       text: fixture.text,
     };
   });
+  const invalid = (corpus.invalidParserCases ?? []).map((fixture) => {
+    let observedCode;
+    try {
+      parseMentionCandidates(fixture.text);
+    } catch (error) {
+      observedCode = error.code;
+    }
+    assert.equal(observedCode, fixture.code, fixture.name);
+    return { code: observedCode, name: fixture.name, result: "REFUSED" };
+  });
   return {
     policyVersion: corpus.policyVersion,
     cases: observed,
+    invalidCases: invalid,
     result: "PASS",
   };
 }

@@ -16,6 +16,7 @@ export const MENTION_POLICY = Object.freeze({
     "escaped-text",
     "block-quote",
     "url",
+    "format-control",
   ]),
   principalKinds: MENTION_PRINCIPAL_KINDS,
   unresolved: "plain-text",
@@ -41,6 +42,7 @@ const MENTION_CANDIDATE_PATTERN = /@([a-z0-9][a-z0-9._-]{0,63})/gu;
 const WORD_OR_AT_PATTERN = /[\p{L}\p{N}_@]/u;
 const URL_PATTERN = /\b[a-z][a-z\d+.-]{1,31}:\/\/[^\s<>()]+/giu;
 const AUTOLINK_PATTERN = /<(?:https?|ftp|mailto):[^>]+>/giu;
+const FORMAT_CONTROL_PATTERN = /\p{Cf}/u;
 const OFFSET_PATTERN = /^[0-9a-f]{16}_[0-9a-f]{16}$/u;
 const DIGEST_PATTERN = /^sha256:[0-9a-f]{64}$/u;
 const encoder = new TextEncoder();
@@ -312,6 +314,7 @@ function markdownExclusions(text) {
   }
   ranges.push(...blockQuoteRanges(text));
   ranges.push(...fencedCodeRanges(text));
+  ranges.sort((left, right) => left[0] - right[0] || left[1] - right[1]);
   ranges.push(...inlineCodeRanges(text, ranges));
   ranges.sort((left, right) => left[0] - right[0] || left[1] - right[1]);
   const merged = [];
@@ -408,8 +411,17 @@ function lineRanges(text) {
 }
 
 function hasMentionBoundary(text, start) {
-  if (start === 0 || text.at(start - 1) === "\\") return start === 0;
-  return !WORD_OR_AT_PATTERN.test(text.at(start - 1));
+  if (start === 0) return true;
+  let backslashCount = 0;
+  for (let index = start - 1; index >= 0 && text.at(index) === "\\"; index -= 1)
+    backslashCount += 1;
+  if (backslashCount % 2 === 1) return false;
+  const boundaryIndex = start - backslashCount - 1;
+  const preceding =
+    boundaryIndex < 0
+      ? null
+      : Array.from(text.slice(0, boundaryIndex + 1)).at(-1);
+  return preceding === null || !WORD_OR_AT_PATTERN.test(preceding);
 }
 
 function isExcluded(ranges, index) {
@@ -472,12 +484,13 @@ function validateMentionParseText(value) {
       (codeUnit <= 31 && codeUnit !== 10) ||
       (codeUnit >= 128 && codeUnit <= 159) ||
       codeUnit === 127 ||
-      /[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]/u.test(value.at(index))
+      /[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]/u.test(value.at(index)) ||
+      FORMAT_CONTROL_PATTERN.test(value.at(index))
     ) {
       throw mentionError(
         MENTION_REFUSAL_CODES.INVALID_TEXT,
         "$.text",
-        "mention text contains a forbidden control or bidi character",
+        "mention text contains a forbidden control, bidi, or format character",
       );
     }
   }

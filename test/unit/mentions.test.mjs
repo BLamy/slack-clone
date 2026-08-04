@@ -73,6 +73,29 @@ test("mention parser uses UTF-8 spans and a deterministic Markdown exclusion pol
   ]);
 });
 
+test("mention parser refuses invisible format controls before resolution", () => {
+  for (const text of [
+    "ada\u200b@example.test",
+    "x\u2060@helper",
+    "x\ufeff@helper",
+    "x\u00ad@helper",
+    "@ada\u200bxyz",
+  ]) {
+    assert.throws(
+      () => parseMentionCandidates(text),
+      (error) => error.code === MENTION_REFUSAL_CODES.INVALID_TEXT,
+    );
+  }
+  assert.deepEqual(parseMentionCandidates("\\\\@helper"), [
+    {
+      handle: "helper",
+      text: "@helper",
+      span: { startByte: 2, endByte: 9 },
+    },
+  ]);
+  assert.deepEqual(parseMentionCandidates("𝒜@helper"), []);
+});
+
 test("resolver returns canonical human and agent facts and typed identity-neutral refusals", () => {
   const state = mentionState();
   const result = resolveConversationMentions({

@@ -1,6 +1,7 @@
 import {
   directChannelIdFor,
   MENTION_PRINCIPAL_KINDS,
+  parseMentionCandidates,
   validateMentionFacts,
   normalizeReactionName,
   validateConversationText,
@@ -780,6 +781,25 @@ function assertConversationMentions(state, data, context) {
       expectedWorkspaceId: context.envelope.workspaceId,
       path: "$.event.data.mentions",
     });
+    const candidates = parseMentionCandidates(data.text);
+    for (const mention of mentions) {
+      if (
+        !candidates.some(
+          (candidate) =>
+            candidate.handle === mention.handle &&
+            candidate.text === mention.text &&
+            candidate.span.startByte === mention.span.startByte &&
+            candidate.span.endByte === mention.span.endByte,
+        )
+      ) {
+        failMessage(
+          REDUCER_ERROR_CODES.MENTION_INVALID,
+          "mention fact does not identify a visible parser candidate",
+          "mentions",
+          context,
+        );
+      }
+    }
   } catch (error) {
     failMessage(
       REDUCER_ERROR_CODES.MENTION_INVALID,

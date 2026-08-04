@@ -9,6 +9,7 @@ import {
 import {
   canonicalStateDigest,
   createInitialState,
+  REDUCER_ERROR_CODES,
   reduceEnvelope,
 } from "@stream-slack/reducers";
 
@@ -307,6 +308,33 @@ test("replay retains the original stable target and source digest after a handle
   assert.equal(
     second.entities.messages["mentioned-message"].mentions[0].source.offset,
     offset(1),
+  );
+});
+
+test("reducer rejects mention facts hidden inside Markdown exclusions", () => {
+  const fact = {
+    handle: "ada",
+    kind: "human",
+    principalId: ADA_ID,
+    span: { startByte: 1, endByte: 5 },
+    text: "@ada",
+  };
+  assert.throws(
+    () =>
+      reduceEnvelope(
+        mentionState(),
+        event("channel.message.created", AUTHOR_ID, "f", {
+          authorId: AUTHOR_ID,
+          channelId: CHANNEL_ID,
+          contentType: "text/plain",
+          messageId: "inline-code-mention",
+          mentions: [fact],
+          rootMessageId: null,
+          text: "`@ada`",
+        }),
+        { offset: offset(1) },
+      ),
+    (error) => error.code === REDUCER_ERROR_CODES.MENTION_INVALID,
   );
 });
 

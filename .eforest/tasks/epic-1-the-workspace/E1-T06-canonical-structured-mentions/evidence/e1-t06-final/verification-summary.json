@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E1-T06",
-  "runId": "e1-t06-final-20260804-r2",
-  "implementationCommit": "165657df77ed5edbc5b449c5647b75dce7152267",
+  "runId": "e1-t06-final-20260804-r4",
+  "implementationCommit": "cf70595b745c49304f99becc9b9a67ed044917e1",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "replay": "Replay: N/A (server mention parsing and source binding) + mitigation: parser corpus, typed refusal matrix, retry/edit matrix, source-offset evidence, replay digest, and sensitivity proof",
@@ -10,31 +10,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 3729,
+      "durationMs": 33911,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 3166,
+      "durationMs": 34305,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 8557,
+      "durationMs": 6322,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 23891,
+      "durationMs": 65754,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 819,
+      "durationMs": 657,
       "name": "build",
       "result": "PASS"
     }
@@ -67,6 +67,19 @@
           }
         ],
         "text": "Café @ada and @helper"
+      },
+      {
+        "handles": [
+          "ada"
+        ],
+        "name": "zwj-emoji-and-mention",
+        "spans": [
+          {
+            "startByte": 12,
+            "endByte": 16
+          }
+        ],
+        "text": "👩‍💻 @ada"
       },
       {
         "handles": [
@@ -123,29 +136,29 @@
     ],
     "invalidCases": [
       {
-        "code": "MENTION_INVALID_TEXT",
+        "handles": [],
         "name": "zero-width-space-email",
-        "result": "REFUSED"
+        "result": "PLAIN_TEXT"
       },
       {
-        "code": "MENTION_INVALID_TEXT",
+        "handles": [],
         "name": "word-joiner-before-mention",
-        "result": "REFUSED"
+        "result": "PLAIN_TEXT"
       },
       {
-        "code": "MENTION_INVALID_TEXT",
+        "handles": [],
         "name": "bom-before-mention",
-        "result": "REFUSED"
+        "result": "PLAIN_TEXT"
       },
       {
-        "code": "MENTION_INVALID_TEXT",
+        "handles": [],
         "name": "soft-hyphen-before-mention",
-        "result": "REFUSED"
+        "result": "PLAIN_TEXT"
       },
       {
-        "code": "MENTION_INVALID_TEXT",
+        "handles": [],
         "name": "zero-width-inside-handle",
-        "result": "REFUSED"
+        "result": "PLAIN_TEXT"
       }
     ],
     "result": "PASS"
@@ -231,40 +244,41 @@
   },
   "dispatchEvidence": {
     "firstSource": {
-      "digest": "sha256:4e3c1960740e4ee257fb139fa8f4d1d908e839474e20709f6098b8debc5c4f6c",
+      "digest": "sha256:aaa850e6ed60bdebb52aa364f0502c1fbe96f1068601f8520c0b2f98ba59b157",
       "offset": "0000000000000000_0000000000000001",
       "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
     },
     "replayedSource": {
-      "digest": "sha256:4e3c1960740e4ee257fb139fa8f4d1d908e839474e20709f6098b8debc5c4f6c",
+      "digest": "sha256:aaa850e6ed60bdebb52aa364f0502c1fbe96f1068601f8520c0b2f98ba59b157",
       "offset": "0000000000000000_0000000000000001",
       "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
     },
     "targetEventCountAfterRetry": 1,
     "refusalLeavesTargetUnchanged": true,
+    "projectedSourceMatchesDispatch": true,
     "result": "PASS"
   },
   "replayEvidence": {
-    "finalStateDigest": "sha256:db29485d3ffd116e870974363d8f39929c15ed2851986624aae740b6835cc66a",
+    "finalStateDigest": "sha256:c952583e83ebaf9417417a02f18a7da7773c3fa87719baeb373c56b138aaabab",
     "handleAfterProfileChange": "ada-renamed",
-    "mentionStateDigest": "sha256:95508697c8887311cdbccb90a00a63feb30d7162df6dc0d7eae257b9c6abae48",
+    "mentionStateDigest": "sha256:42e4e086c6650de9c37f53a0f44733c9fc2de81360e460bbd4ff2f75e8ec6e25",
     "perPrefixDigests": [
       {
         "offset": "0000000000000000_0000000000000001",
-        "stateDigest": "sha256:ab730c7f0d753473bd31d3ccea2d5e03306a2712c5257f09a4baa018dc0e74fe"
+        "stateDigest": "sha256:07171a37a9d49c25007cf0ac1d6022466c5bb88bc5f49f9d165b0eafefcf2606"
       },
       {
         "offset": "0000000000000000_0000000000000002",
-        "stateDigest": "sha256:19f79dfa33a6e59ed2dcc43be8d077d2974139512a4a680b17ccd8f20c529122"
+        "stateDigest": "sha256:e832b3e1e3088eee0be2dbd76e54501a9ead4f0e83132148446ab68623ae0923"
       },
       {
         "offset": "0000000000000000_0000000000000003",
-        "stateDigest": "sha256:db29485d3ffd116e870974363d8f39929c15ed2851986624aae740b6835cc66a"
+        "stateDigest": "sha256:c952583e83ebaf9417417a02f18a7da7773c3fa87719baeb373c56b138aaabab"
       }
     ],
     "replayedTwiceWithIdenticalDigest": true,
     "source": {
-      "digest": "sha256:f60c0ff0ca8a831de64ac44b493184152106d29c843699382eea982d04ea9f30",
+      "digest": "sha256:409f72952994bfa09fb23829a39bc8074a62b40aff23c96f48ea4868e715f857",
       "offset": "0000000000000000_0000000000000001",
       "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
     },

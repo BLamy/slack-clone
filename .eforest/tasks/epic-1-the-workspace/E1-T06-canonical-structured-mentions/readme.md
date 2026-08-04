@@ -102,3 +102,39 @@ fact only; no agent process runs until Epic 3.
   preserve idempotent history across retry/edit/replay/handle changes, and refuse malformed or
   identity-sensitive inputs without leaking principal identity; awaiting a fresh independent
   critic.
+
+### Builder — 2026-08-04 — reducer-policy repair and final cold proof
+
+- Repair commit: `cf70595b745c49304f99becc9b9a67ed044917e1` (`Harden reducer mention policy`)
+  makes the reducer compare every persisted mention fact with the canonical visible parser
+  candidates, so a direct event writer cannot smuggle a mention from inline or fenced Markdown
+  into durable state. The unit suite adds the inline-code regression; the previous `1eb49c2`
+  repair remains responsible for format-control plain text, ZWJ preservation, load-bearing fenced
+  exclusion, and dispatch/reducer source-digest alignment.
+- Exact promoted cold command:
+  `E1_T06_IMPLEMENTATION_COMMIT=cf70595b745c49304f99becc9b9a67ed044917e1
+  PROMOTE_EVIDENCE=1 TEST_RUN_ID=e1-t06-final-20260804-r4 make verify-E1-T06`. The detached
+  checkout was clean before install, initialized the pinned emulator submodule, ran frozen
+  install and emulator setup, then passed `pnpm format:check`, `pnpm lint`, `pnpm typecheck`,
+  `pnpm test`, and `pnpm build`.
+- Parser evidence records visible UTF-8 spans, ZWJ emoji followed by a valid mention, all frozen
+  Markdown/URL exclusions, and zero handles for zero-width space, word joiner, BOM, soft hyphen,
+  and zero-width-inside-handle inputs. Typed resolution refusals cover service, disabled,
+  non-member, ambiguous, unknown, forged-scope, forged-kind, wrong-byte, and overlapping-span
+  cases without identity leakage.
+- Retry evidence binds both attempts to one target event and one source checkpoint:
+  `channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc`, offset
+  `0000000000000000_0000000000000001`, digest
+  `sha256:aaa850e6ed60bdebb52aa364f0502c1fbe96f1068601f8520c0b2f98ba59b157`; the reducer
+  projection explicitly reports `projectedSourceMatchesDispatch: true`. Replay twice produces
+  the same final digest `sha256:c952583e83ebaf9417417a02f18a7da7773c3fa87719baeb373c56b138aaabab`,
+  preserves principal `ada` after the profile handle becomes `ada-renamed`, and leaves one
+  trigger fact after edit.
+- Promoted evidence is under `evidence/e1-t06-final/`, including the cold transcript,
+  verification summary, parser corpus, refusal matrix, dispatch retry, replay evidence, and
+  sensitivity proof. Replay: N/A (server mention parsing and source binding) + mitigation:
+  parser corpus, typed refusal matrix, retry/edit matrix, source-offset evidence, replay digest,
+  reducer exclusion regression, and sensitivity proof.
+- Claim: the reducer, parser, resolver, and dispatch receipt together make canonical structured
+  mentions durable, workspace-scoped, Markdown-aware, idempotent, and stable across profile
+  changes; awaiting a fresh independent critic.

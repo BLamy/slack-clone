@@ -21,6 +21,19 @@
     },
     {
       "handles": [
+        "ada"
+      ],
+      "name": "zwj-emoji-and-mention",
+      "spans": [
+        {
+          "startByte": 12,
+          "endByte": 16
+        }
+      ],
+      "text": "👩‍💻 @ada"
+    },
+    {
+      "handles": [
         "helper"
       ],
       "name": "inline-code-escaped-and-quote",
@@ -74,29 +87,29 @@
   ],
   "invalidCases": [
     {
-      "code": "MENTION_INVALID_TEXT",
+      "handles": [],
       "name": "zero-width-space-email",
-      "result": "REFUSED"
+      "result": "PLAIN_TEXT"
     },
     {
-      "code": "MENTION_INVALID_TEXT",
+      "handles": [],
       "name": "word-joiner-before-mention",
-      "result": "REFUSED"
+      "result": "PLAIN_TEXT"
     },
     {
-      "code": "MENTION_INVALID_TEXT",
+      "handles": [],
       "name": "bom-before-mention",
-      "result": "REFUSED"
+      "result": "PLAIN_TEXT"
     },
     {
-      "code": "MENTION_INVALID_TEXT",
+      "handles": [],
       "name": "soft-hyphen-before-mention",
-      "result": "REFUSED"
+      "result": "PLAIN_TEXT"
     },
     {
-      "code": "MENTION_INVALID_TEXT",
+      "handles": [],
       "name": "zero-width-inside-handle",
-      "result": "REFUSED"
+      "result": "PLAIN_TEXT"
     }
   ],
   "result": "PASS"

@@ -21,6 +21,11 @@
       "result": "REFUSED"
     },
     {
+      "code": "REDUCER_MENTION_AMBIGUOUS_TARGET",
+      "name": "ambiguous-principal-target",
+      "result": "REFUSED"
+    },
+    {
       "code": "MENTION_INVALID_SPAN",
       "name": "overlapping-spans",
       "result": "REFUSED"

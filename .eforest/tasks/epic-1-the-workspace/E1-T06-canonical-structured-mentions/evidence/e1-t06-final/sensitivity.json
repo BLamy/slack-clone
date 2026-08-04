@@ -1,5 +1,13 @@
 {
   "codeFenceExclusion": "baseline rejects unsafe positive control",
+  "mutation": {
+    "changedFile": "packages/protocol/src/mentions.mjs",
+    "installCommand": "pnpm install --frozen-lockfile",
+    "installExitCode": 0,
+    "verifierCommand": "E1_T06_SKIP_GATES=1 E1_T06_SKIP_SENSITIVITY=1 node scripts/verify-e1-t06.mjs",
+    "verifierExitCode": 1,
+    "verifierRejected": true
+  },
   "unsafePositiveControl": [
     "ada",
     "helper"

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E1-T06",
-  "runId": "e1-t06-final-20260804-r6",
-  "implementationCommit": "ed09c3b715f3d860e5f7351da61b260215ff8695",
+  "runId": "e1-t06-final-20260804-r7",
+  "implementationCommit": "d03bfe20630e6c89cf72d8d59fa1ad83e91bc0bd",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "replay": "Replay: N/A (server mention parsing and source binding) + mitigation: parser corpus, typed refusal matrix, retry/edit matrix, source-offset evidence, replay digest, and sensitivity proof",
@@ -10,31 +10,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 27501,
+      "durationMs": 2444,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 28251,
+      "durationMs": 2407,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 5169,
+      "durationMs": 8035,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 56825,
+      "durationMs": 22849,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 844,
+      "durationMs": 991,
       "name": "build",
       "result": "PASS"
     }
@@ -235,6 +235,11 @@
         "result": "REFUSED"
       },
       {
+        "code": "REDUCER_MENTION_AMBIGUOUS_TARGET",
+        "name": "ambiguous-principal-target",
+        "result": "REFUSED"
+      },
+      {
         "code": "MENTION_INVALID_SPAN",
         "name": "overlapping-spans",
         "result": "REFUSED"
@@ -292,6 +297,14 @@
   },
   "sensitivityEvidence": {
     "codeFenceExclusion": "baseline rejects unsafe positive control",
+    "mutation": {
+      "changedFile": "packages/protocol/src/mentions.mjs",
+      "installCommand": "pnpm install --frozen-lockfile",
+      "installExitCode": 0,
+      "verifierCommand": "E1_T06_SKIP_GATES=1 E1_T06_SKIP_SENSITIVITY=1 node scripts/verify-e1-t06.mjs",
+      "verifierExitCode": 1,
+      "verifierRejected": true
+    },
     "unsafePositiveControl": [
       "ada",
       "helper"

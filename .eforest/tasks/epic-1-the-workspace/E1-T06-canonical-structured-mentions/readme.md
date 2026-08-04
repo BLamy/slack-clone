@@ -170,3 +170,32 @@ fact only; no agent process runs until Epic 3.
 - Claim: direct durable writers can no longer substitute an active principal behind a valid
   display handle; canonical structured mentions remain durable, workspace-scoped, Markdown-aware,
   idempotent, and stable across profile changes; awaiting a fresh independent critic.
+
+### Builder — 2026-08-04 — ambiguity and sensitivity repair complete
+
+- Repair commit: `d03bfe20630e6c89cf72d8d59fa1ad83e91bc0bd` (`Close mention ambiguity and
+  sensitivity gaps`) makes the reducer mirror resolver ambiguity policy: a handle must resolve to
+  exactly one workspace principal, otherwise it refuses with typed
+  `REDUCER_MENTION_AMBIGUOUS_TARGET`. The invalid corpus now exercises the two-active-principal
+  `ambiguous` collision. The verifier's sensitivity path creates a disposable worktree, removes
+  the fenced-code exclusion call, installs that mutant, and proves the nested verifier exits 1.
+- Exact promoted cold command:
+  `E1_T06_IMPLEMENTATION_COMMIT=d03bfe20630e6c89cf72d8d59fa1ad83e91bc0bd
+  TEST_RUN_ID=e1-t06-final-20260804-r7 PROMOTE_EVIDENCE=1 make verify-E1-T06`. The clean detached
+  checkout initialized the pinned emulator, completed frozen install and setup, and passed
+  `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`.
+- Final refusal evidence covers foreign scope, wrong bytes, substituted principal, kind mismatch,
+  ambiguous principal target, and overlapping spans. Retry remains one target event at offset
+  `0000000000000000_0000000000000001` with source digest
+  `sha256:aaa850e6ed60bdebb52aa364f0502c1fbe96f1068601f8520c0b2f98ba59b157`; dispatch and
+  reducer projection report equal source references. Replay twice converges at final digest
+  `sha256:c952583e83ebaf9417417a02f18a7da7773c3fa87719baeb373c56b138aaabab`, retains the stable
+  principal through handle change, and leaves one trigger fact after edit.
+- Promoted evidence is under `evidence/e1-t06-final/`; `sensitivity.json` now records the actual
+  mutated file, frozen install exit 0, nested verifier exit 1, and `verifierRejected: true`.
+  Replay: N/A (server mention parsing and source binding) + mitigation: parser corpus, typed
+  refusal matrix, retry/edit matrix, source-offset evidence, replay digest, reducer policy
+  regressions, and a disposable red sensitivity run.
+- Claim: canonical structured mentions now reject mismatched, ambiguous, invisible, malformed,
+  unauthorized, and non-durable trigger inputs at both dispatch and reducer boundaries; awaiting
+  a fresh independent critic.

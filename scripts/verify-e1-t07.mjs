@@ -705,7 +705,7 @@ async function verifySensitivity() {
     const projectionPath = path.join(mutationCheckout, "src/projections.mjs");
     const source = await readFile(projectionPath, "utf8");
     const provenanceStart = source.indexOf("function assertRowProvenance(");
-    const provenanceBodyStart = source.indexOf("{", provenanceStart) + 1;
+    const provenanceBodyStart = source.indexOf(") {", provenanceStart) + 3;
     const provenanceEnd = source.indexOf(
       "\n}\n\nexport function projectionManifest",
       provenanceBodyStart,

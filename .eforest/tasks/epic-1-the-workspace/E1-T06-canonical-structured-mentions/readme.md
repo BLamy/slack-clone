@@ -3,7 +3,7 @@ id: E1-T06
 epic: 1
 title: "Canonical structured mentions as durable trigger facts"
 priority: 106
-status: pending
+status: in-progress
 depends_on: [E1-T04]
 estimate: M
 capstone: false

@@ -1,5 +1,7 @@
 import {
   directChannelIdFor,
+  MENTION_PRINCIPAL_KINDS,
+  validateMentionFacts,
   normalizeReactionName,
   validateConversationText,
   validateMessageContentType,
@@ -113,6 +115,11 @@ export const REDUCER_ERROR_CODES = Object.freeze({
   MESSAGE_REPLY_ROOT: "REDUCER_MESSAGE_REPLY_ROOT",
   MESSAGE_REVISION_CONFLICT: "REDUCER_MESSAGE_REVISION_CONFLICT",
   MESSAGE_TEXT: "REDUCER_MESSAGE_TEXT",
+  MENTION_INVALID: "REDUCER_MENTION_INVALID",
+  MENTION_KIND_MISMATCH: "REDUCER_MENTION_KIND_MISMATCH",
+  MENTION_PRINCIPAL_NOT_FOUND: "REDUCER_MENTION_PRINCIPAL_NOT_FOUND",
+  MENTION_TARGET_DISABLED: "REDUCER_MENTION_TARGET_DISABLED",
+  MENTION_TARGET_NOT_MEMBER: "REDUCER_MENTION_TARGET_NOT_MEMBER",
   UNKNOWN_EVENT_TYPE: "REDUCER_UNKNOWN_EVENT_TYPE",
   UNSUPPORTED_SCHEMA_VERSION: "REDUCER_UNSUPPORTED_SCHEMA_VERSION",
 });
@@ -401,7 +408,7 @@ function reduceMessageCreated(state, data, context) {
         "rootMessageId",
         "text",
       ],
-      [],
+      ["mentions"],
       context,
     );
     if (data.rootMessageId !== null) {
@@ -415,6 +422,7 @@ function reduceMessageCreated(state, data, context) {
     assertConversationMessageIdentity(state, data, context);
     assertConversationText(data.text, context);
     assertConversationContentType(data.contentType, context);
+    assertConversationMentions(state, data, context);
     assertUnique(state.entities.messages, data.messageId, "messageId", context);
     state.entities.messages = setKey(
       state.entities.messages,
@@ -470,12 +478,13 @@ function reduceMessageReplied(state, data, context) {
       "rootMessageId",
       "text",
     ],
-    [],
+    ["mentions"],
     context,
   );
   assertConversationMessageIdentity(state, data, context);
   assertConversationText(data.text, context);
   assertConversationContentType(data.contentType, context);
+  assertConversationMentions(state, data, context);
   assertToken(data.rootMessageId, "rootMessageId", context);
   if (data.rootMessageId === data.messageId) {
     failMessage(
@@ -763,6 +772,74 @@ function assertConversationContentType(value, context) {
   }
 }
 
+function assertConversationMentions(state, data, context) {
+  if (!Object.hasOwn(data, "mentions")) return [];
+  let mentions;
+  try {
+    mentions = validateMentionFacts(data.mentions, data.text, {
+      expectedWorkspaceId: context.envelope.workspaceId,
+      path: "$.event.data.mentions",
+    });
+  } catch (error) {
+    failMessage(
+      REDUCER_ERROR_CODES.MENTION_INVALID,
+      error instanceof Error ? (error.detail ?? error.message) : String(error),
+      "mentions",
+      context,
+    );
+  }
+  for (const mention of mentions) {
+    const principal = getPrincipal(state, mention.principalId);
+    if (!principal) {
+      failMessage(
+        REDUCER_ERROR_CODES.MENTION_PRINCIPAL_NOT_FOUND,
+        "mention principal does not exist in the workspace directory",
+        "mentions",
+        context,
+      );
+    }
+    if (
+      principal.kind !== mention.kind ||
+      !MENTION_PRINCIPAL_KINDS.includes(principal.kind)
+    ) {
+      failMessage(
+        REDUCER_ERROR_CODES.MENTION_KIND_MISMATCH,
+        "mention principal kind does not match the canonical target",
+        "mentions",
+        context,
+      );
+    }
+    if (principal.status !== "active") {
+      failMessage(
+        REDUCER_ERROR_CODES.MENTION_TARGET_DISABLED,
+        "mention target was not active when the source message was accepted",
+        "mentions",
+        context,
+      );
+    }
+    const workspaceMembership = getKey(
+      membershipMap(state),
+      membershipIdForReducer(context.envelope.workspaceId, mention.principalId),
+    );
+    const channelMembership = getKey(
+      channelMembershipMap(state),
+      channelMembershipKeyForReducer(data.channelId, mention.principalId),
+    );
+    if (
+      workspaceMembership?.status !== "active" ||
+      channelMembership?.status !== "active"
+    ) {
+      failMessage(
+        REDUCER_ERROR_CODES.MENTION_TARGET_NOT_MEMBER,
+        "mention target was not an active workspace and channel member when the source message was accepted",
+        "mentions",
+        context,
+      );
+    }
+  }
+  return mentions;
+}
+
 function assertReaction(value, context) {
   try {
     normalizeReactionName(value);
@@ -777,7 +854,7 @@ function assertReaction(value, context) {
 }
 
 function createConversationMessageRecord(data, context, kind) {
-  return {
+  const record = {
     authorId: data.authorId,
     channelId: data.channelId,
     contentType: data.contentType,
@@ -797,6 +874,17 @@ function createConversationMessageRecord(data, context, kind) {
     text: data.text,
     workspaceId: context.envelope.workspaceId,
   };
+  if (Object.hasOwn(data, "mentions")) {
+    record.mentions = data.mentions.map((mention) => ({
+      ...mention,
+      source: {
+        digest: canonicalStateDigest(context.envelope),
+        offset: context.offset,
+        stream: `channel:${data.channelId}`,
+      },
+    }));
+  }
+  return record;
 }
 
 function revisionRecord({ context, contentType, kind, revision, text }) {

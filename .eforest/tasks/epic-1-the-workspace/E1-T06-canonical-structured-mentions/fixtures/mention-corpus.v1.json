@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "policyVersion": 1,
+  "parserCases": [
+    {
+      "name": "unicode-and-visible",
+      "text": "Café @ada and @helper",
+      "handles": ["ada", "helper"]
+    },
+    {
+      "name": "inline-code-escaped-and-quote",
+      "text": "`@ada` and \\@ada\n> @ada\nnormal @helper",
+      "handles": ["helper"]
+    },
+    {
+      "name": "fenced-code",
+      "text": "before\n```markdown\n@ada\n```\nafter @helper",
+      "handles": ["helper"]
+    },
+    {
+      "name": "url",
+      "text": "https://example.test/@ada @helper",
+      "handles": ["helper"]
+    },
+    {
+      "name": "malformed-and-email",
+      "text": "ada@example.test @@ada @Ada @helper/child",
+      "handles": ["helper"]
+    }
+  ],
+  "resolutionCases": [
+    { "handle": "ada", "result": "accepted", "kind": "human" },
+    { "handle": "helper", "result": "accepted", "kind": "agent" },
+    {
+      "handle": "service",
+      "result": "refused",
+      "code": "MENTION_TARGET_SERVICE"
+    },
+    {
+      "handle": "disabled",
+      "result": "refused",
+      "code": "MENTION_TARGET_DISABLED"
+    },
+    {
+      "handle": "outsider",
+      "result": "refused",
+      "code": "MENTION_TARGET_NOT_MEMBER"
+    },
+    {
+      "handle": "ambiguous",
+      "result": "refused",
+      "code": "MENTION_AMBIGUOUS_TARGET"
+    },
+    {
+      "handle": "foreign",
+      "result": "refused",
+      "code": "MENTION_TARGET_UNKNOWN"
+    }
+  ]
+}

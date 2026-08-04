@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "invalidFactCases": [
+    {
+      "name": "forged-principal-scope",
+      "fact": {
+        "handle": "ada",
+        "kind": "human",
+        "principalId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd",
+        "span": { "startByte": 0, "endByte": 4 },
+        "text": "@ada"
+      },
+      "code": "PRINCIPAL_SCOPE_MISMATCH"
+    },
+    {
+      "name": "wrong-byte-span",
+      "fact": {
+        "handle": "ada",
+        "kind": "human",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "span": { "startByte": 0, "endByte": 4 },
+        "text": "@ada"
+      },
+      "code": "MENTION_TEXT_MISMATCH"
+    },
+    {
+      "name": "forged-kind",
+      "fact": {
+        "handle": "ada",
+        "kind": "agent",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "span": { "startByte": 6, "endByte": 10 },
+        "text": "@ada"
+      },
+      "code": "REDUCER_MENTION_KIND_MISMATCH"
+    },
+    {
+      "name": "overlapping-spans",
+      "text": "@@ada",
+      "facts": [
+        {
+          "handle": "ada",
+          "kind": "human",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "span": { "startByte": 1, "endByte": 5 },
+          "text": "@ada"
+        },
+        {
+          "handle": "ada",
+          "kind": "human",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "span": { "startByte": 1, "endByte": 5 },
+          "text": "@ada"
+        }
+      ],
+      "code": "MENTION_INVALID_SPAN"
+    }
+  ]
+}

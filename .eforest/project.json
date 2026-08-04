@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E1-T03 is the sole active gate after E1-T02 verification; implementing channel lifecycle, membership, and private-read isolation.",
+  "statusReason": "E1-T06 is the sole active gate after E1-T05 verification; implementing canonical structured mentions and source-bound mention facts.",
   "updatedAt": "2026-08-03T03:36:55Z"
 }

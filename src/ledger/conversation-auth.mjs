@@ -5,6 +5,11 @@ import {
   validateWorkspaceId,
 } from "@stream-slack/protocol";
 
+import {
+  bindAcceptedMentionSource,
+  resolveConversationMentions,
+} from "./mentions.mjs";
+
 export const CONVERSATION_AUTH_ERROR_CODES = Object.freeze({
   ACCESS_DENIED: "CONVERSATION_ACCESS_DENIED",
   CHANNEL_ARCHIVED: "CONVERSATION_CHANNEL_ARCHIVED",
@@ -252,14 +257,96 @@ export function prepareConversationEvent({
   payload,
   state,
   workspaceId,
+  mentionMode = "plain-text",
 }) {
-  return authorizeConversationCommand({
+  const prepared = authorizeConversationCommand({
     actorId,
     operation,
     payload,
     state,
     workspaceId,
   });
+  if (
+    operation !== "channel.message.create" &&
+    operation !== "channel.message.reply"
+  ) {
+    return prepared;
+  }
+  const resolution = resolveConversationMentions({
+    channelId: payload.channelId,
+    mode: mentionMode,
+    state,
+    text: payload.text,
+    workspaceId,
+  });
+  return Object.freeze({
+    ...prepared,
+    data: {
+      ...prepared.data,
+      ...(resolution.mentions.length > 0
+        ? { mentions: resolution.mentions }
+        : {}),
+    },
+    mentionResolution: resolution,
+  });
+}
+
+/**
+ * Compose mention resolution with the fenced append door. The resolver runs
+ * against the same state snapshot that authorizes the message, then the
+ * accepted receipt binds the returned mention facts to the durable source.
+ */
+export function createMentionAwareConversationDispatcher({
+  dispatch,
+  lookupState,
+  withChannelFence,
+} = {}) {
+  if (typeof dispatch !== "function") {
+    throw new TypeError(
+      "mention-aware conversation dispatch requires dispatch",
+    );
+  }
+  if (typeof lookupState !== "function") {
+    throw new TypeError(
+      "mention-aware conversation dispatch requires lookupState",
+    );
+  }
+  if (typeof withChannelFence !== "function") {
+    throw new ConversationAuthorizationError(
+      CONVERSATION_AUTH_ERROR_CODES.FENCE_REQUIRED,
+      "mention-aware conversation dispatch requires a linearizable channel fence",
+      { statusCode: 503 },
+    );
+  }
+
+  return async function dispatchConversation(request, options = {}) {
+    const channelId = request?.payload?.channelId;
+    return withChannelFence(
+      {
+        channelId,
+        principalId: request?.actorId,
+        workspaceId: request?.workspaceId,
+      },
+      async () => {
+        const state = await lookupState(request.workspaceId, channelId);
+        const prepared = prepareConversationEvent({
+          actorId: request.actorId,
+          operation: request.operation,
+          payload: request.payload,
+          state,
+          workspaceId: request.workspaceId,
+        });
+        const result = await dispatch(
+          { ...request, payload: prepared.data },
+          options,
+        );
+        return bindAcceptedMentionSource(result, {
+          channelId,
+          text: request.payload?.text,
+        });
+      },
+    );
+  };
 }
 
 function requireActiveMembership(state, workspaceId, channelId, principalId) {

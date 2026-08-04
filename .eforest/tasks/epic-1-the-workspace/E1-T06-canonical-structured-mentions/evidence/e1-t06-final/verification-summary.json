@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E1-T06",
-  "runId": "e1-t06-final-20260804-r7",
-  "implementationCommit": "d03bfe20630e6c89cf72d8d59fa1ad83e91bc0bd",
+  "runId": "e1-t06-final-20260804-r8",
+  "implementationCommit": "69300c4810b9d4e1da78452bf6c8fc7f2ddbff82",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "replay": "Replay: N/A (server mention parsing and source binding) + mitigation: parser corpus, typed refusal matrix, retry/edit matrix, source-offset evidence, replay digest, and sensitivity proof",
@@ -10,31 +10,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 2444,
+      "durationMs": 4364,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 2407,
+      "durationMs": 3069,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 8035,
+      "durationMs": 9487,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 22849,
+      "durationMs": 25435,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 991,
+      "durationMs": 828,
       "name": "build",
       "result": "PASS"
     }
@@ -237,6 +237,16 @@
       {
         "code": "REDUCER_MENTION_AMBIGUOUS_TARGET",
         "name": "ambiguous-principal-target",
+        "result": "REFUSED"
+      },
+      {
+        "code": "REDUCER_MENTION_TARGET_DISABLED",
+        "name": "disabled-principal-target",
+        "result": "REFUSED"
+      },
+      {
+        "code": "REDUCER_MENTION_TARGET_NOT_MEMBER",
+        "name": "non-member-principal-target",
         "result": "REFUSED"
       },
       {

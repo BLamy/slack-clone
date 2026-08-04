@@ -199,3 +199,40 @@ fact only; no agent process runs until Epic 3.
 - Claim: canonical structured mentions now reject mismatched, ambiguous, invisible, malformed,
   unauthorized, and non-durable trigger inputs at both dispatch and reducer boundaries; awaiting
   a fresh independent critic.
+
+### Builder — 2026-08-04 — reducer refusal coverage and final cold proof
+
+- Coverage commit: `69300c4810b9d4e1da78452bf6c8fc7f2ddbff82` (`Cover reducer mention refusal
+  branches`) adds durable reducer-level invalid fixtures and unit coverage for disabled and
+  non-member principals. These cases now refuse with `REDUCER_MENTION_TARGET_DISABLED` and
+  `REDUCER_MENTION_TARGET_NOT_MEMBER`, complementing the existing resolver refusal matrix.
+- Exact promoted cold command:
+  `E1_T06_IMPLEMENTATION_COMMIT=69300c4810b9d4e1da78452bf6c8fc7f2ddbff82
+  TEST_RUN_ID=e1-t06-final-20260804-r8 PROMOTE_EVIDENCE=1 make verify-E1-T06`. The detached
+  checkout was clean before install, initialized the pinned emulator submodule, completed
+  frozen install and emulator setup, and passed `pnpm format:check`, `pnpm lint`,
+  `pnpm typecheck`, `pnpm test`, and `pnpm build`.
+- Final parser and refusal evidence covers visible UTF-8 spans, ZWJ preservation, Markdown and
+  URL exclusions, invisible format controls, forged scope, wrong bytes, substituted principal,
+  kind mismatch, ambiguity, disabled target, non-member target, and overlapping spans. All
+  refused facts are typed and the identity-sensitive resolution cases report no identity leak.
+- Retry evidence remains one target event bound to
+  `channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc`, offset
+  `0000000000000000_0000000000000001`, and source digest
+  `sha256:aaa850e6ed60bdebb52aa364f0502c1fbe96f1068601f8520c0b2f98ba59b157`; the reducer
+  projection reports `projectedSourceMatchesDispatch: true`. Replay twice converges on final
+  digest `sha256:c952583e83ebaf9417417a02f18a7da7773c3fa87719baeb373c56b138aaabab`, preserves
+  the stable `ada` target after the profile handle changes, and leaves one trigger fact after
+  edit. Mention-state digest is
+  `sha256:42e4e086c6650de9c37f53a0f44733c9fc2de81360e460bbd4ff2f75e8ec6e25`.
+- Promoted evidence is under `evidence/e1-t06-final/`, including the updated cold transcript,
+  verification summary, parser corpus, refusal matrix, dispatch retry, replay evidence, and
+  sensitivity proof. The sensitivity run removes the fenced-code exclusion in a disposable
+  worktree, installs the mutant, and records nested verifier exit 1. Replay: N/A (server mention
+  parsing and source binding) + mitigation: parser corpus, typed refusal matrix, retry/edit
+  matrix, source-offset evidence, replay digest, reducer regressions, and disposable red
+  sensitivity proof.
+- Claim: canonical structured mentions now reject mismatched, ambiguous, invisible, malformed,
+  unauthorized, and non-durable trigger inputs at both dispatch and reducer boundaries while
+  preserving idempotent source binding and stable replay targets; awaiting a fresh independent
+  critic.

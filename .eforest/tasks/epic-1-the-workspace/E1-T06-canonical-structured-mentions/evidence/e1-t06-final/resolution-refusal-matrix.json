@@ -26,6 +26,16 @@
       "result": "REFUSED"
     },
     {
+      "code": "REDUCER_MENTION_TARGET_DISABLED",
+      "name": "disabled-principal-target",
+      "result": "REFUSED"
+    },
+    {
+      "code": "REDUCER_MENTION_TARGET_NOT_MEMBER",
+      "name": "non-member-principal-target",
+      "result": "REFUSED"
+    },
+    {
       "code": "MENTION_INVALID_SPAN",
       "name": "overlapping-spans",
       "result": "REFUSED"

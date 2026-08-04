@@ -3,20 +3,13 @@ import {
   reduceEnvelope,
   canonicalStateDigest,
 } from "@stream-slack/reducers";
-import {
-  validatePrincipalId,
-  validateWorkspaceId,
-} from "@stream-slack/protocol";
+import { validateWorkspaceId } from "@stream-slack/protocol";
 
 import { canonicalJson, canonicalSha256 } from "./ledger/canonical-json.mjs";
 import {
   digestEventEnvelope,
   validateEventEnvelope,
 } from "./ledger/envelope.mjs";
-import {
-  createE0T07Checkpoint,
-  validateE0T07Checkpoint,
-} from "./ledger/e0-t07-protocol.mjs";
 import { parseStreamName } from "./ledger/topology.mjs";
 
 export const PROJECTION_SCHEMA_VERSION = 1;
@@ -1280,7 +1273,7 @@ function projectionOffset(sequence) {
   if (
     !Number.isSafeInteger(sequence) ||
     sequence < 1 ||
-    sequence > 0xffffffffffffffff
+    sequence > Number.MAX_SAFE_INTEGER
   ) {
     throw projectionError(
       PROJECTION_ERROR_CODES.INVALID_SOURCE,

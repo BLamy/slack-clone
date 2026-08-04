@@ -17,11 +17,8 @@ import {
 
 const WORKSPACE_ID = "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa";
 const OWNER_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb";
-const MEMBER_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc";
 const SERVICE_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd";
 const OUTSIDER_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff";
-const PUBLIC_CHANNEL_ID =
-  "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111";
 const PRIVATE_CHANNEL_ID =
   "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222";
 const DIRECT_CHANNEL_ID =

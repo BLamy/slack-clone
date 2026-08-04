@@ -1,4 +1,13 @@
 import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  renameSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+
+import {
   createInitialState,
   reduceEnvelope,
   canonicalStateDigest,
@@ -66,31 +75,80 @@ export class ProjectionError extends Error {
   }
 }
 
-export function createProjectionStore({ workspaceId, projectionId }) {
+export function createProjectionStore({
+  directory = null,
+  projectionId,
+  workspaceId,
+}) {
   validateWorkspaceId(workspaceId);
   validateProjectionId(projectionId, workspaceId);
+  if (directory !== null && (typeof directory !== "string" || !directory)) {
+    throw new TypeError("projection directory must be a non-empty string");
+  }
+  if (directory) mkdirSync(directory, { recursive: true });
 
   let rows = emptyRows();
   let checkpoint = null;
   let rowsSequence = 0;
 
+  function readState() {
+    if (!directory) return { checkpoint, rows, rowsSequence };
+    const metadata = readProjectionFile(directory, "metadata.json");
+    if (metadata) {
+      if (
+        metadata.projectionId !== projectionId ||
+        metadata.reducerVersion !== PROJECTION_REDUCER_VERSION ||
+        metadata.schemaVersion !== PROJECTION_SCHEMA_VERSION ||
+        metadata.workspaceId !== workspaceId
+      ) {
+        throw projectionError(
+          PROJECTION_ERROR_CODES.CHECKPOINT_INVALID,
+          "projection storage metadata is bound to a different projection",
+        );
+      }
+    }
+    const persistedRows =
+      readProjectionFile(directory, "rows.json") ?? emptyRows();
+    const persistedCheckpoint =
+      readProjectionFile(directory, "checkpoint.json") ?? null;
+    validateRows(persistedRows, { workspaceId });
+    if (persistedCheckpoint) {
+      validateProjectionCheckpoint(persistedCheckpoint, {
+        projectionId,
+        workspaceId,
+      });
+    }
+    return {
+      checkpoint: persistedCheckpoint,
+      rows: persistedRows,
+      rowsSequence:
+        metadata?.rowsSequence ?? persistedCheckpoint?.sequence ?? 0,
+    };
+  }
+
+  function writeStateFile(name, value) {
+    if (!directory) return;
+    writeProjectionFile(directory, name, value);
+  }
+
   function snapshot() {
+    const current = readState();
     const value = {
-      checkpoint: clone(checkpoint),
+      checkpoint: clone(current.checkpoint),
       projectionId,
-      projectionDigest: checkpoint
+      projectionDigest: current.checkpoint
         ? projectionDigest({
-            checkpoint,
+            checkpoint: current.checkpoint,
             projectionId,
             reducerVersion: PROJECTION_REDUCER_VERSION,
-            rows,
+            rows: current.rows,
             schemaVersion: PROJECTION_SCHEMA_VERSION,
             workspaceId,
           })
         : null,
       reducerVersion: PROJECTION_REDUCER_VERSION,
-      rows: clone(rows),
-      rowsSequence,
+      rows: clone(current.rows),
+      rowsSequence: current.rowsSequence,
       schemaVersion: PROJECTION_SCHEMA_VERSION,
       workspaceId,
     };
@@ -99,9 +157,14 @@ export function createProjectionStore({ workspaceId, projectionId }) {
 
   return Object.freeze({
     deleteAll() {
-      rows = emptyRows();
-      checkpoint = null;
-      rowsSequence = 0;
+      if (directory) {
+        for (const name of ["checkpoint.json", "metadata.json", "rows.json"])
+          rmSync(`${directory}/${name}`, { force: true });
+      } else {
+        rows = emptyRows();
+        checkpoint = null;
+        rowsSequence = 0;
+      }
     },
     read() {
       return snapshot();
@@ -111,21 +174,26 @@ export function createProjectionStore({ workspaceId, projectionId }) {
         projectionId,
         workspaceId,
       });
-      if (nextCheckpoint.sequence !== rowsSequence) {
+      const current = readState();
+      if (nextCheckpoint.sequence !== current.rowsSequence) {
         throw projectionError(
           PROJECTION_ERROR_CODES.CHECKPOINT_MISMATCH,
           "checkpoint sequence does not match the most recent row write",
           { sequence: nextCheckpoint.sequence },
         );
       }
-      if (checkpoint && nextCheckpoint.sequence < checkpoint.sequence) {
+      if (
+        current.checkpoint &&
+        nextCheckpoint.sequence < current.checkpoint.sequence
+      ) {
         throw projectionError(
           PROJECTION_ERROR_CODES.CHECKPOINT_MISMATCH,
           "checkpoint sequence regressed",
           { sequence: nextCheckpoint.sequence },
         );
       }
-      checkpoint = clone(nextCheckpoint);
+      if (directory) writeStateFile("checkpoint.json", nextCheckpoint);
+      else checkpoint = clone(nextCheckpoint);
     },
     writeRows(nextRows, sequence) {
       validateRows(nextRows, { workspaceId });
@@ -135,15 +203,27 @@ export function createProjectionStore({ workspaceId, projectionId }) {
           "row sequence must be a non-negative safe integer",
         );
       }
-      if (checkpoint && sequence < checkpoint.sequence) {
+      const current = readState();
+      if (current.checkpoint && sequence < current.checkpoint.sequence) {
         throw projectionError(
           PROJECTION_ERROR_CODES.CHECKPOINT_MISMATCH,
           "row write would move before the durable checkpoint",
           { sequence },
         );
       }
-      rows = clone(nextRows);
-      rowsSequence = sequence;
+      if (directory) {
+        writeStateFile("rows.json", nextRows);
+        writeStateFile("metadata.json", {
+          projectionId,
+          reducerVersion: PROJECTION_REDUCER_VERSION,
+          rowsSequence: sequence,
+          schemaVersion: PROJECTION_SCHEMA_VERSION,
+          workspaceId,
+        });
+      } else {
+        rows = clone(nextRows);
+        rowsSequence = sequence;
+      }
     },
   });
 }
@@ -309,7 +389,10 @@ export function createProjectionQueries(store) {
     assertChannelMember(snapshot, workspaceId, channelId, principalId);
     const boundedLimit = queryLimit(limit);
     const messages = rowValues(snapshot, "message")
-      .filter((row) => row.value.channelId === channelId)
+      .filter(
+        (row) =>
+          row.value.channelId === channelId && row.value.status === "active",
+      )
       .sort(compareRows);
     const start = after === null ? 0 : cursorIndex(messages, after);
     const page = messages.slice(start, start + boundedLimit).map(publicRow);
@@ -327,8 +410,22 @@ export function createProjectionQueries(store) {
   function listThreads({ channelId, principalId, workspaceId }) {
     const snapshot = readySnapshot();
     assertChannelMember(snapshot, workspaceId, channelId, principalId);
+    const activeMessageIds = new Set(
+      rowValues(snapshot, "message")
+        .filter(
+          (row) =>
+            row.value.channelId === channelId && row.value.status === "active",
+        )
+        .map((row) => row.id),
+    );
     return rowValues(snapshot, "thread")
-      .filter((row) => row.value.channelId === channelId)
+      .filter(
+        (row) =>
+          row.value.channelId === channelId &&
+          row.value.messageIds.some((messageId) =>
+            activeMessageIds.has(messageId),
+          ),
+      )
       .sort(compareRows)
       .map(publicRow);
   }
@@ -538,6 +635,10 @@ export function assertProjectionIntegrity(
     sourceHeads: sourceHeadsForPrefix(normalized, snapshot.checkpoint.sequence),
     workspaceId: expectedWorkspaceId,
   });
+  assertRowProvenance(snapshot.rows, normalized, {
+    checkpointDigest: snapshot.checkpoint.checkpointDigest,
+    workspaceId: expectedWorkspaceId,
+  });
   const expectedRows = materializeRows({
     checkpoint: snapshot.checkpoint,
     currentSource: normalized.at(snapshot.checkpoint.sequence - 1)
@@ -572,21 +673,30 @@ export function assertProjectionIntegrity(
       "projection row manifest differs from independent source replay",
     );
   }
+  return {
+    checkpoint: clone(snapshot.checkpoint),
+    projectionDigest: projectionDigest(actualManifest),
+    rowCount: allRows(snapshot.rows).length,
+    stateDigest: snapshot.checkpoint.stateDigest,
+  };
+}
+
+function assertRowProvenance(
+  rows,
+  normalized,
+  { checkpointDigest, workspaceId },
+) {
   const sourceIndex = new Map(
     normalized.map((record) => [
       `${record.stream}\u0000${record.offset}`,
       record,
     ]),
   );
-  for (const row of allRows(snapshot.rows)) {
-    const source = sourceIndex.get(
-      `${row.source.stream}\u0000${row.source.offset}`,
-    );
-    if (!source || source.digest !== row.source.digest) {
+  for (const row of allRows(rows)) {
+    if (row.workspaceId !== workspaceId) {
       throw projectionError(
         PROJECTION_ERROR_CODES.CORRUPT_ROW,
-        `row ${row.kind}:${row.id} has an unknown source reference`,
-        { stream: row.source.stream, offset: row.source.offset },
+        `row ${row.kind}:${row.id} has the wrong workspace scope`,
       );
     }
     if (row.reducerVersion !== PROJECTION_REDUCER_VERSION) {
@@ -595,13 +705,23 @@ export function assertProjectionIntegrity(
         `row ${row.kind}:${row.id} has an unsupported reducer version`,
       );
     }
+    if (row.checkpointDigest !== checkpointDigest) {
+      throw projectionError(
+        PROJECTION_ERROR_CODES.CORRUPT_ROW,
+        `row ${row.kind}:${row.id} has a stale projection checkpoint`,
+      );
+    }
+    const source = sourceIndex.get(
+      `${row.source?.stream}\u0000${row.source?.offset}`,
+    );
+    if (!source || source.digest !== row.source?.digest) {
+      throw projectionError(
+        PROJECTION_ERROR_CODES.CORRUPT_ROW,
+        `row ${row.kind}:${row.id} has an unknown source reference`,
+        { stream: row.source?.stream, offset: row.source?.offset },
+      );
+    }
   }
-  return {
-    checkpoint: clone(snapshot.checkpoint),
-    projectionDigest: projectionDigest(actualManifest),
-    rowCount: allRows(snapshot.rows).length,
-    stateDigest: snapshot.checkpoint.stateDigest,
-  };
 }
 
 export function projectionManifest(value) {
@@ -1320,6 +1440,26 @@ function invalidQuery(detail) {
 
 function projectionError(code, detail, metadata) {
   return new ProjectionError(code, detail, metadata);
+}
+
+function readProjectionFile(directory, name) {
+  const filePath = `${directory}/${name}`;
+  if (!existsSync(filePath)) return null;
+  try {
+    return JSON.parse(readFileSync(filePath, "utf8"));
+  } catch (error) {
+    throw projectionError(
+      PROJECTION_ERROR_CODES.CHECKPOINT_INVALID,
+      `projection storage file ${name} is not valid JSON: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+}
+
+function writeProjectionFile(directory, name, value) {
+  const filePath = `${directory}/${name}`;
+  const temporaryPath = `${filePath}.tmp-${process.pid}`;
+  writeFileSync(temporaryPath, `${JSON.stringify(value)}\n`);
+  renameSync(temporaryPath, filePath);
 }
 
 function clone(value) {

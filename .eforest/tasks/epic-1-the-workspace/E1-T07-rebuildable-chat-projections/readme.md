@@ -3,7 +3,7 @@ id: E1-T07
 epic: 1
 title: "Checkpointed, rebuildable chat projections"
 priority: 107
-status: implemented
+status: in-progress
 depends_on: [E1-T04, E1-T05]
 estimate: L
 capstone: false

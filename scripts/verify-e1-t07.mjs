@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
+import { mkdtempSync, rmSync } from "node:fs";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -11,12 +12,13 @@ import {
   normalizeSourceRecords,
   projectionDigest,
   projectionManifest,
-  replayProjectionPrefixes,
   PROJECTION_ERROR_CODES,
 } from "../src/projections.mjs";
+import { replayIndependentPrefixes } from "./e1-t07-independent-replay.mjs";
 
 const WORKSPACE_ID = "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa";
 const OWNER_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb";
+const MEMBER_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc";
 const SERVICE_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd";
 const OUTSIDER_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff";
 const PRIVATE_CHANNEL_ID =
@@ -66,6 +68,13 @@ const artifactRoot = path.resolve(
 const evidenceDirectory = promoteEvidence
   ? path.join(taskDirectory, "evidence/e1-t07-final")
   : artifactRoot;
+const trackedTreeCleanAtStart =
+  execFileSync("git", ["status", "--porcelain", "--untracked-files=no"], {
+    cwd: root,
+    encoding: "utf8",
+  }).trim() === "";
+const projectionDirectories = new Set();
+await mkdir(artifactRoot, { recursive: true });
 await mkdir(evidenceDirectory, { recursive: true });
 
 const records = await buildSourceHistory();
@@ -121,7 +130,7 @@ const summary = {
   task: "E1-T07",
   runId,
   implementationCommit,
-  implementationTreeCleanAtStart: promoteEvidence,
+  implementationTreeCleanAtStart: trackedTreeCleanAtStart,
   result: "PASS",
   replay:
     "Replay: N/A (server projection and rebuild apparatus) + mitigation: projection deletion, source replay, row manifests, crash recovery, ACL matrix, and digest parity",
@@ -193,6 +202,10 @@ await writeJson(
   sensitivityEvidence,
 );
 
+for (const directory of projectionDirectories) {
+  rmSync(directory, { recursive: true, force: true });
+}
+
 console.log(JSON.stringify(summary, null, 2));
 
 async function buildSourceHistory() {
@@ -223,6 +236,38 @@ async function buildSourceHistory() {
         data: { ...record.event.data, channelId: MESSAGE_CHANNEL_ID },
       })),
   ];
+  const messageCreated = conversationFixture.records.find(
+    (record) => record.event.eventType === "channel.message.created",
+  )?.event;
+  assert.ok(messageCreated);
+  events.push(
+    {
+      ...messageCreated,
+      actorId: MEMBER_ID,
+      data: {
+        ...messageCreated.data,
+        authorId: MEMBER_ID,
+        channelId: MESSAGE_CHANNEL_ID,
+        messageId: "active-a",
+        text: "Unread active message",
+      },
+      eventId: "ev_zzzzzzzzzzzzzzzzzzzzzzzzzz",
+      idempotencyKey: "ik_zzzzzzzzzzzzzzzzzzzzzzzzzz",
+      serverTimestamp: "2026-08-04T00:00:00.000Z",
+    },
+    {
+      ...messageCreated,
+      data: {
+        ...messageCreated.data,
+        channelId: MESSAGE_CHANNEL_ID,
+        messageId: "active-b",
+        text: "Owner active message",
+      },
+      eventId: "ev_yyyyyyyyyyyyyyyyyyyyyyyyyy",
+      idempotencyKey: "ik_yyyyyyyyyyyyyyyyyyyyyyyyyy",
+      serverTimestamp: "2026-08-04T00:00:01.000Z",
+    },
+  );
   const directoryEventTypes = new Set([
     "principal.created",
     "workspace.created",
@@ -304,7 +349,7 @@ function verifyCrashAndDuplicateRecovery(records) {
     records[11],
     ...records.slice(12),
   ];
-  const { store, worker } = newProjection();
+  const { directory, store, worker } = newProjection();
   const crashSequence = 12;
   let crash;
   try {
@@ -316,60 +361,71 @@ function verifyCrashAndDuplicateRecovery(records) {
   const dirtySnapshot = store.read();
   assert.equal(dirtySnapshot.rowsSequence, crashSequence);
   assert.equal(dirtySnapshot.checkpoint.sequence, crashSequence - 1);
-  worker.catchUp(duplicateDelivery);
-  const proof = assertProjectionIntegrity(store, records);
-  assert.equal(store.read().checkpoint.sequence, records.length);
+  const restarted = newProjection({ directory });
+  const persistedSnapshot = restarted.store.read();
+  assert.equal(persistedSnapshot.rowsSequence, crashSequence);
+  assert.equal(persistedSnapshot.checkpoint.sequence, crashSequence - 1);
+  restarted.worker.catchUp(duplicateDelivery);
+  const proof = assertProjectionIntegrity(restarted.store, records);
+  assert.equal(restarted.store.read().checkpoint.sequence, records.length);
   return {
     crashSequence,
     checkpointBeforeCrash: crashSequence - 1,
     rowsWrittenBeforeCrash: crashSequence,
     duplicateDeliveryIgnored: true,
-    recoveredCheckpoint: store.read().checkpoint,
+    recoveredCheckpoint: restarted.store.read().checkpoint,
     recoveredProjectionDigest: proof.projectionDigest,
     noDuplicateLogicalRows: true,
     noMissedLogicalEffects: true,
+    resumedFromOlderValidCheckpoint: true,
+    restartObserved: true,
     result: "PASS",
   };
 }
 
 function verifyLiveCatchUp(records) {
   const split = Math.max(1, Math.floor(records.length / 2));
-  const { store, worker } = newProjection();
-  worker.rebuild(records.slice(0, split));
-  const checkpointBefore = store.read().checkpoint;
-  worker.catchUp(records);
-  const proof = assertProjectionIntegrity(store, records);
+  const initial = newProjection();
+  initial.worker.rebuild(records.slice(0, split));
+  const checkpointBefore = initial.store.read().checkpoint;
+  const restarted = newProjection({ directory: initial.directory });
+  restarted.worker.catchUp(records);
+  const proof = assertProjectionIntegrity(restarted.store, records);
   return {
     checkpointBefore,
-    checkpointAfter: store.read().checkpoint,
+    checkpointAfter: restarted.store.read().checkpoint,
     caughtUpRecords: records.length - split,
     projectionDigest: proof.projectionDigest,
+    resumedFromPersistedCheckpoint: true,
     result: "PASS",
   };
 }
 
 function verifyShadowPrefixes(records) {
-  const expected = replayProjectionPrefixes(
-    records,
-    WORKSPACE_ID,
-    PROJECTION_ID,
-  );
+  const expected = replayIndependentPrefixes(records, WORKSPACE_ID);
   const observed = [];
   for (let sequence = 1; sequence <= records.length; sequence += 1) {
     const { store, worker } = newProjection();
     worker.rebuild(records.slice(0, sequence));
     const snapshot = store.read();
-    const proof = assertProjectionIntegrity(store, records.slice(0, sequence));
     assert.equal(
-      snapshot.projectionDigest,
-      expected[sequence - 1].projectionDigest,
+      snapshot.checkpoint.stateDigest,
+      expected[sequence - 1].stateDigest,
     );
-    assert.equal(proof.stateDigest, expected[sequence - 1].stateDigest);
+    assert.deepEqual(
+      logicalRows(snapshot.rows),
+      expected[sequence - 1].rows,
+      `independent replay mismatch at prefix ${sequence}`,
+    );
     observed.push({
       projectionDigest: snapshot.projectionDigest,
       sequence,
       sourceHeads: snapshot.checkpoint.sourceHeads,
       stateDigest: snapshot.checkpoint.stateDigest,
+      logicalRowCount: Object.values(expected[sequence - 1].rows).reduce(
+        (count, rows) => count + rows.length,
+        0,
+      ),
     });
   }
   return {
@@ -426,7 +482,7 @@ function verifyAccessMatrix(records) {
       principalId: OWNER_ID,
       workspaceId: WORKSPACE_ID,
     }).length,
-    1,
+    2,
   );
   assert.equal(
     queries.listReactions({
@@ -441,7 +497,7 @@ function verifyAccessMatrix(records) {
     principalId: OWNER_ID,
     workspaceId: WORKSPACE_ID,
   });
-  assert.equal(unread.value.count, 0);
+  assert.equal(unread.value.count, 1);
 
   const cases = [
     {
@@ -479,6 +535,33 @@ function verifyAccessMatrix(records) {
           workspaceId: WORKSPACE_ID,
         }),
     },
+    {
+      label: "private-threads-outsider",
+      operation: () =>
+        queries.listThreads({
+          channelId: PRIVATE_CHANNEL_ID,
+          principalId: OUTSIDER_ID,
+          workspaceId: WORKSPACE_ID,
+        }),
+    },
+    {
+      label: "private-reactions-outsider",
+      operation: () =>
+        queries.listReactions({
+          messageId: "active-a",
+          principalId: OUTSIDER_ID,
+          workspaceId: WORKSPACE_ID,
+        }),
+    },
+    {
+      label: "private-unread-outsider",
+      operation: () =>
+        queries.getUnread({
+          channelId: PRIVATE_CHANNEL_ID,
+          principalId: OUTSIDER_ID,
+          workspaceId: WORKSPACE_ID,
+        }),
+    },
   ];
   const observed = cases.map(({ label, operation }) => {
     let error;
@@ -497,15 +580,51 @@ function verifyAccessMatrix(records) {
       result: "REFUSED",
     };
   });
+  const timingProbe = runTimingProbe(queries);
   return {
     visibleOwnerChannelKinds: ownerChannels.map((row) => row.value.kind),
     serviceVisibleChannelKinds: serviceChannels.map((row) => row.value.kind),
     ownerMessagePages: [ownerMessages, ownerNextPage],
     unread,
     cases: observed,
+    timingProbe,
     privateRowsRemainUndiscoverable: true,
     result: "PASS",
   };
+}
+
+function runTimingProbe(queries) {
+  const existing = measureDenied(queries, PRIVATE_CHANNEL_ID);
+  const sibling = measureDenied(
+    queries,
+    "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_99999999999999999999999999",
+  );
+  assert.deepEqual(existing.errors, sibling.errors);
+  return {
+    existingSamplesMs: existing.samplesMs,
+    siblingSamplesMs: sibling.samplesMs,
+    equalErrorSurface: true,
+    result: "PASS",
+  };
+}
+
+function measureDenied(queries, channelId) {
+  const samplesMs = [];
+  const errors = [];
+  for (let index = 0; index < 8; index += 1) {
+    const startedAt = performance.now();
+    try {
+      queries.getChannel({
+        channelId,
+        principalId: OUTSIDER_ID,
+        workspaceId: WORKSPACE_ID,
+      });
+    } catch (error) {
+      errors.push({ code: error.code, detail: error.detail });
+    }
+    samplesMs.push(Number((performance.now() - startedAt).toFixed(3)));
+  }
+  return { errors, samplesMs };
 }
 
 function verifyCorruptionDetection(records) {
@@ -523,6 +642,24 @@ function verifyCorruptionDetection(records) {
     rowError = error;
   }
   assert.equal(rowError?.code, PROJECTION_ERROR_CODES.CORRUPT_ROW);
+  assert.match(rowError?.detail ?? "", /unknown source reference/u);
+
+  const reducerVersionRows = structuredClone(snapshot.rows);
+  reducerVersionRows.message[0].reducerVersion = "stream-slack-reducer-v0";
+  let reducerVersionError;
+  try {
+    assertProjectionIntegrity(
+      { read: () => ({ ...snapshot, rows: reducerVersionRows }) },
+      records,
+    );
+  } catch (error) {
+    reducerVersionError = error;
+  }
+  assert.equal(
+    reducerVersionError?.code,
+    PROJECTION_ERROR_CODES.REDUCER_VERSION_MISMATCH,
+  );
+  assert.match(reducerVersionError?.detail ?? "", /unsupported reducer/u);
 
   const { store: checkpointStore, worker: checkpointWorker } = newProjection();
   checkpointWorker.rebuild(records);
@@ -541,6 +678,9 @@ function verifyCorruptionDetection(records) {
   );
   return {
     rowSourceRefused: rowError.code,
+    rowSourceDetail: rowError.detail,
+    reducerVersionRefused: reducerVersionError.code,
+    reducerVersionDetail: reducerVersionError.detail,
     crossWorkspaceCheckpointRefused: checkpointError.code,
     sourceDigestChecked: true,
     reducerVersionChecked: true,
@@ -564,14 +704,18 @@ async function verifySensitivity() {
     worktreeAdded = true;
     const projectionPath = path.join(mutationCheckout, "src/projections.mjs");
     const source = await readFile(projectionPath, "utf8");
-    const anchor = "store.writeCheckpoint(checkpoint);";
-    assert.equal(source.split(anchor).length - 1, 1);
+    const provenanceStart = source.indexOf("function assertRowProvenance(");
+    const provenanceBodyStart = source.indexOf("{", provenanceStart) + 1;
+    const provenanceEnd = source.indexOf(
+      "\n}\n\nexport function projectionManifest",
+      provenanceBodyStart,
+    );
+    assert.ok(provenanceStart >= 0);
+    assert.ok(provenanceBodyStart > provenanceStart);
+    assert.ok(provenanceEnd > provenanceBodyStart);
     await writeFile(
       projectionPath,
-      source.replace(
-        anchor,
-        "// sensitivity mutant: omit checkpoint persistence",
-      ),
+      `${source.slice(0, provenanceBodyStart)}\n  // sensitivity mutant: omit row provenance checks${source.slice(provenanceEnd)}`,
     );
     const mutationArtifactDirectory = path.join(
       mutationCheckout,
@@ -601,10 +745,13 @@ async function verifySensitivity() {
       mutationEnv,
     );
     assert.notEqual(verifier.exitCode, 0);
-    assert.match(verifier.output, /checkpoint|projection/u);
+    assert.match(
+      verifier.output,
+      /unknown source reference|unsupported reducer/u,
+    );
     return {
       changedFile: "src/projections.mjs",
-      mutation: "checkpoint persistence omitted",
+      mutation: "row source-digest and reducer-version checks omitted",
       installExitCode: install.exitCode,
       verifierExitCode: verifier.exitCode,
       verifierRejected: true,
@@ -660,8 +807,15 @@ async function verifyCanaries(sourceDump) {
   };
 }
 
-function newProjection() {
+function newProjection({ directory = null, persistent = true } = {}) {
+  const storageDirectory =
+    directory ??
+    (persistent
+      ? mkdtempSync(path.join(artifactRoot, "projection-store-"))
+      : null);
+  if (storageDirectory) projectionDirectories.add(storageDirectory);
   const store = createProjectionStore({
+    directory: storageDirectory,
     projectionId: PROJECTION_ID,
     workspaceId: WORKSPACE_ID,
   });
@@ -670,7 +824,23 @@ function newProjection() {
     store,
     workspaceId: WORKSPACE_ID,
   });
-  return { store, worker };
+  return { directory: storageDirectory, store, worker };
+}
+
+function logicalRows(rows) {
+  return Object.fromEntries(
+    Object.entries(rows).map(([kind, values]) => [
+      kind,
+      values
+        .map(({ id, kind: rowKind, value, workspaceId }) => ({
+          id,
+          kind: rowKind,
+          value,
+          workspaceId,
+        }))
+        .sort((left, right) => `${left.id}`.localeCompare(`${right.id}`)),
+    ]),
+  );
 }
 
 function runSensitivityCommand(command, args, cwd, env) {
@@ -747,6 +917,7 @@ function assertImplementationBinding(commit) {
     "Makefile",
     "package.json",
     "scripts/cold-verify-e1-t07.mjs",
+    "scripts/e1-t07-independent-replay.mjs",
     "scripts/verify-e1-t07.mjs",
     "src/projections.mjs",
     "test/unit/projections.test.mjs",

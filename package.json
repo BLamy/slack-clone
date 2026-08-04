@@ -36,6 +36,7 @@
     "verify:E1-T04": "node scripts/cold-verify-e1-t04.mjs",
     "verify:E1-T05": "node scripts/cold-verify-e1-t05.mjs",
     "verify:E1-T06": "node scripts/cold-verify-e1-t06.mjs",
+    "verify:E1-T07": "node scripts/cold-verify-e1-t07.mjs",
     "replay:ledger": "node scripts/replay-ledger.mjs",
     "audit:durable-streams": "node tools/audit-durable-streams-access.mjs",
     "record:replay": "node scripts/record-two-replays.mjs"

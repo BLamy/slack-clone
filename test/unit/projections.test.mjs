@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
 import test from "node:test";
 
 import {
@@ -121,7 +121,9 @@ test("source provenance, checkpoint corruption, and row corruption fail closed",
   store.writeRows(corruptedRows, snapshot.checkpoint.sequence);
   assert.throws(
     () => assertProjectionIntegrity(store, records),
-    (error) => error.code === PROJECTION_ERROR_CODES.CORRUPT_ROW,
+    (error) =>
+      error.code === PROJECTION_ERROR_CODES.CORRUPT_ROW &&
+      error.detail.includes("unknown source reference"),
   );
 
   store.deleteAll();
@@ -135,6 +137,51 @@ test("source provenance, checkpoint corruption, and row corruption fail closed",
       }),
     (error) => error.code === PROJECTION_ERROR_CODES.CHECKPOINT_INVALID,
   );
+
+  const reducerVersionRows = structuredClone(store.read().rows);
+  reducerVersionRows.message[0].reducerVersion = "stream-slack-reducer-v0";
+  assert.throws(
+    () =>
+      assertProjectionIntegrity(
+        { read: () => ({ ...store.read(), rows: reducerVersionRows }) },
+        records,
+      ),
+    (error) =>
+      error.code === PROJECTION_ERROR_CODES.REDUCER_VERSION_MISMATCH &&
+      error.detail.includes("unsupported reducer"),
+  );
+});
+
+test("filesystem projection storage survives a worker restart and deletes completely", async () => {
+  const fixture = await readFixture(conversationFixturePath);
+  const records = sourceRecords(fixture);
+  const directory = await mkdtemp("/tmp/stream-slack-projection-");
+  try {
+    const first = createProjectionStore({
+      directory,
+      projectionId: PROJECTION_ID,
+      workspaceId: WORKSPACE_ID,
+    });
+    const worker = createProjectionWorker({
+      projectionId: PROJECTION_ID,
+      store: first,
+      workspaceId: WORKSPACE_ID,
+    });
+    worker.rebuild(records);
+    const expected = first.read();
+
+    const restarted = createProjectionStore({
+      directory,
+      projectionId: PROJECTION_ID,
+      workspaceId: WORKSPACE_ID,
+    });
+    assert.deepEqual(restarted.read(), expected);
+    restarted.deleteAll();
+    assert.equal(restarted.read().checkpoint, null);
+    assert.equal(restarted.read().rowsSequence, 0);
+  } finally {
+    await rm(directory, { force: true, recursive: true });
+  }
 });
 
 test("private and direct rows are filtered by current membership at query time", async () => {

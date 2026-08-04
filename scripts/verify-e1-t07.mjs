@@ -140,7 +140,7 @@ if (namedCommand) {
     implementationTreeCleanAtStart: trackedTreeCleanAtStart,
     result: "PASS",
     replay:
-      "Replay: N/A (server projection and rebuild apparatus) + mitigation: projection deletion, source replay, row manifests, crash recovery, ACL matrix, and digest parity",
+      "Replay: N/A (server projection and rebuild apparatus) + mitigation: projection deletion, source replay, row manifests, crash recovery, and digest parity",
     replayUploadAttempted: false,
     gates,
     canaryScan,
@@ -528,6 +528,28 @@ function verifyAccessMatrix(records) {
     workspaceId: WORKSPACE_ID,
   });
   assert.equal(ownerNextPage.messages.length, 1);
+  const visibleOwnerMessages = [
+    ...ownerMessages.messages,
+    ...ownerNextPage.messages,
+  ];
+  const deletedMessageIds = new Set(
+    store
+      .read()
+      .rows.message.filter((row) => row.value.status === "deleted")
+      .map((row) => row.id),
+  );
+  assert.ok(deletedMessageIds.size > 0);
+  assert.ok(visibleOwnerMessages.every((row) => row.value.status === "active"));
+  assert.equal(
+    visibleOwnerMessages.some((row) => deletedMessageIds.has(row.id)),
+    false,
+  );
+  const serviceChannelCount = queries.countChannels({
+    principalId: SERVICE_ID,
+    workspaceId: WORKSPACE_ID,
+  });
+  assert.equal(serviceChannelCount, serviceChannels.length);
+  assert.ok(ownerChannels.length > serviceChannelCount);
   assert.equal(
     queries.listThreads({
       channelId: MESSAGE_CHANNEL_ID,
@@ -554,6 +576,7 @@ function verifyAccessMatrix(records) {
   const cases = [
     {
       label: "private-row-service",
+      principalId: SERVICE_ID,
       operation: () =>
         queries.getChannel({
           channelId: PRIVATE_CHANNEL_ID,
@@ -563,6 +586,7 @@ function verifyAccessMatrix(records) {
     },
     {
       label: "direct-row-service",
+      principalId: SERVICE_ID,
       operation: () =>
         queries.getChannel({
           channelId: DIRECT_CHANNEL_ID,
@@ -571,16 +595,18 @@ function verifyAccessMatrix(records) {
         }),
     },
     {
-      label: "private-messages-outsider",
+      label: "private-messages-service",
+      principalId: SERVICE_ID,
       operation: () =>
         queries.listMessages({
           channelId: PRIVATE_CHANNEL_ID,
-          principalId: OUTSIDER_ID,
+          principalId: SERVICE_ID,
           workspaceId: WORKSPACE_ID,
         }),
     },
     {
-      label: "private-count-outsider",
+      label: "workspace-count-outsider",
+      principalId: OUTSIDER_ID,
       operation: () =>
         queries.countChannels({
           principalId: OUTSIDER_ID,
@@ -588,34 +614,37 @@ function verifyAccessMatrix(records) {
         }),
     },
     {
-      label: "private-threads-outsider",
+      label: "private-threads-service",
+      principalId: SERVICE_ID,
       operation: () =>
         queries.listThreads({
           channelId: PRIVATE_CHANNEL_ID,
-          principalId: OUTSIDER_ID,
+          principalId: SERVICE_ID,
           workspaceId: WORKSPACE_ID,
         }),
     },
     {
-      label: "private-reactions-outsider",
+      label: "private-reactions-service",
+      principalId: SERVICE_ID,
       operation: () =>
         queries.listReactions({
           messageId: "active-a",
-          principalId: OUTSIDER_ID,
+          principalId: SERVICE_ID,
           workspaceId: WORKSPACE_ID,
         }),
     },
     {
-      label: "private-unread-outsider",
+      label: "private-unread-service",
+      principalId: SERVICE_ID,
       operation: () =>
         queries.getUnread({
           channelId: PRIVATE_CHANNEL_ID,
-          principalId: OUTSIDER_ID,
+          principalId: SERVICE_ID,
           workspaceId: WORKSPACE_ID,
         }),
     },
   ];
-  const observed = cases.map(({ label, operation }) => {
+  const observed = cases.map(({ label, operation, principalId }) => {
     let error;
     try {
       operation();
@@ -623,7 +652,7 @@ function verifyAccessMatrix(records) {
       error = caught;
     }
     assert.equal(error?.code, PROJECTION_ERROR_CODES.ACCESS_DENIED, label);
-    assert.equal(error?.detail.includes(OUTSIDER_ID), false, label);
+    assert.equal(error?.detail.includes(principalId), false, label);
     assert.equal(error?.detail.includes(PRIVATE_CHANNEL_ID), false, label);
     return {
       code: error.code,
@@ -632,11 +661,14 @@ function verifyAccessMatrix(records) {
       result: "REFUSED",
     };
   });
-  const timingProbe = runTimingProbe(queries);
+  const timingProbe = runTimingProbe(queries, SERVICE_ID);
   return {
     visibleOwnerChannelKinds: ownerChannels.map((row) => row.value.kind),
     serviceVisibleChannelKinds: serviceChannels.map((row) => row.value.kind),
+    ownerChannelCount: ownerChannels.length,
+    serviceChannelCount,
     ownerMessagePages: [ownerMessages, ownerNextPage],
+    deletedMessageIdsExcluded: true,
     unread,
     cases: observed,
     timingProbe,
@@ -645,11 +677,12 @@ function verifyAccessMatrix(records) {
   };
 }
 
-function runTimingProbe(queries) {
-  const existing = measureDenied(queries, PRIVATE_CHANNEL_ID);
+function runTimingProbe(queries, principalId) {
+  const existing = measureDenied(queries, PRIVATE_CHANNEL_ID, principalId);
   const sibling = measureDenied(
     queries,
     "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_99999999999999999999999999",
+    principalId,
   );
   assert.deepEqual(existing.errors, sibling.errors);
   return {
@@ -660,7 +693,7 @@ function runTimingProbe(queries) {
   };
 }
 
-function measureDenied(queries, channelId) {
+function measureDenied(queries, channelId, principalId) {
   const samplesMs = [];
   const errors = [];
   for (let index = 0; index < 8; index += 1) {
@@ -668,7 +701,7 @@ function measureDenied(queries, channelId) {
     try {
       queries.getChannel({
         channelId,
-        principalId: OUTSIDER_ID,
+        principalId,
         workspaceId: WORKSPACE_ID,
       });
     } catch (error) {
@@ -799,7 +832,7 @@ async function verifySensitivity() {
     assert.notEqual(verifier.exitCode, 0);
     assert.match(
       verifier.output,
-      /unknown source reference|unsupported reducer/u,
+      /projection row manifest differs from independent source replay/u,
     );
     return {
       changedFile: "src/projections.mjs",

@@ -92,8 +92,7 @@ grant discovery.
 - Promoted evidence is under `evidence/e1-t07-final/`, including the source dump, checkpoint and
   row manifests, crash recovery, prefix shadow comparison, access matrix, corruption detection,
   cold transcript, and sensitivity proof. Replay: N/A (server projection and rebuild apparatus) +
-  mitigation: projection deletion, source replay, row manifests, crash recovery, ACL matrix, and
-  digest parity.
+  mitigation: projection deletion, source replay, row manifests, crash recovery, and digest parity.
 - Claim: rebuildable workspace, channel, message, thread, reaction, and unread projections now
   converge from authoritative streams under duplicate delivery and crash recovery, preserve
   source/checkpoint provenance, and enforce query-time private/DM access boundaries; awaiting a
@@ -131,7 +130,6 @@ grant discovery.
 - Promoted evidence is under `evidence/e1-t07-final/`, including the source dump, checkpoint and
   row manifests, crash recovery, prefix shadow comparison, access matrix, corruption detection,
   cold transcript, and sensitivity proof. Replay: N/A (server projection and rebuild apparatus) +
-  mitigation: projection deletion, source replay, row manifests, crash recovery, ACL matrix, and
-  digest parity.
+  mitigation: projection deletion, source replay, row manifests, crash recovery, and digest parity.
 - Claim: the repaired implementation satisfies the E1-T07 acceptance and adversarial checks from a
   clean cold clone; awaiting a fresh independent critic.

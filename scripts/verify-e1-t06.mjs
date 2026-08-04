@@ -253,17 +253,17 @@ function verifyInvalidFacts(fixtures, state) {
         validateMentionFacts(fixture.facts, fixture.text ?? "@ada", {
           expectedWorkspaceId: WORKSPACE_ID,
         });
-      } else if (fixture.name === "forged-kind") {
+      } else if (fixture.reducer) {
         reduceEnvelope(
           state,
-          messageEvent("a", {
+          messageEvent(fixture.name === "forged-kind" ? "a" : "b", {
             authorId: AUTHOR_ID,
             channelId: CHANNEL_ID,
             contentType: "text/plain",
-            messageId: "invalid-kind",
+            messageId: `invalid-${fixture.name}`,
             mentions: [fixture.fact],
             rootMessageId: null,
-            text: "hello @ada",
+            text: fixture.text ?? "hello @ada",
           }),
           { offset: offset(1) },
         );

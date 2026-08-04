@@ -24,6 +24,18 @@
       "code": "MENTION_TEXT_MISMATCH"
     },
     {
+      "name": "forged-principal-substitution",
+      "fact": {
+        "handle": "ada",
+        "kind": "human",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "span": { "startByte": 6, "endByte": 10 },
+        "text": "@ada"
+      },
+      "reducer": true,
+      "code": "REDUCER_MENTION_HANDLE_MISMATCH"
+    },
+    {
       "name": "forged-kind",
       "fact": {
         "handle": "ada",
@@ -32,6 +44,7 @@
         "span": { "startByte": 6, "endByte": 10 },
         "text": "@ada"
       },
+      "reducer": true,
       "code": "REDUCER_MENTION_KIND_MISMATCH"
     },
     {

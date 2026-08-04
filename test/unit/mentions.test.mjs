@@ -338,6 +338,34 @@ test("reducer rejects mention facts hidden inside Markdown exclusions", () => {
   );
 });
 
+test("reducer rejects a valid display handle bound to another principal", () => {
+  assert.throws(
+    () =>
+      reduceEnvelope(
+        mentionState(),
+        event("channel.message.created", AUTHOR_ID, "g", {
+          authorId: AUTHOR_ID,
+          channelId: CHANNEL_ID,
+          contentType: "text/plain",
+          messageId: "substituted-principal-mention",
+          mentions: [
+            {
+              handle: "ada",
+              kind: "human",
+              principalId: AUTHOR_ID,
+              span: { startByte: 6, endByte: 10 },
+              text: "@ada",
+            },
+          ],
+          rootMessageId: null,
+          text: "hello @ada",
+        }),
+        { offset: offset(1) },
+      ),
+    (error) => error.code === REDUCER_ERROR_CODES.MENTION_HANDLE_MISMATCH,
+  );
+});
+
 function mentionState() {
   const state = createInitialState();
   state.entities.principals = {

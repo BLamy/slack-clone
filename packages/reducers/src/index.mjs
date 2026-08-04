@@ -116,6 +116,7 @@ export const REDUCER_ERROR_CODES = Object.freeze({
   MESSAGE_REPLY_ROOT: "REDUCER_MESSAGE_REPLY_ROOT",
   MESSAGE_REVISION_CONFLICT: "REDUCER_MESSAGE_REVISION_CONFLICT",
   MESSAGE_TEXT: "REDUCER_MESSAGE_TEXT",
+  MENTION_HANDLE_MISMATCH: "REDUCER_MENTION_HANDLE_MISMATCH",
   MENTION_INVALID: "REDUCER_MENTION_INVALID",
   MENTION_KIND_MISMATCH: "REDUCER_MENTION_KIND_MISMATCH",
   MENTION_PRINCIPAL_NOT_FOUND: "REDUCER_MENTION_PRINCIPAL_NOT_FOUND",
@@ -825,6 +826,14 @@ function assertConversationMentions(state, data, context) {
       failMessage(
         REDUCER_ERROR_CODES.MENTION_KIND_MISMATCH,
         "mention principal kind does not match the canonical target",
+        "mentions",
+        context,
+      );
+    }
+    if (principal.profile?.handle !== mention.handle) {
+      failMessage(
+        REDUCER_ERROR_CODES.MENTION_HANDLE_MISMATCH,
+        "mention handle does not match the canonical principal profile",
         "mentions",
         context,
       );

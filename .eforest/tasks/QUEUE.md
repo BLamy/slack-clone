@@ -8,11 +8,15 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-No task is currently in progress, awaiting verification, or refuted.
+1. **E1-T07** — Checkpointed, rebuildable chat projections *(builder working)*
 
 ## Next up (dependencies satisfied)
 
-1. **E1-T07** — Checkpointed, rebuildable chat projections
+No new task may start until **E1-T07** clears the gate.
+
+## Unlocks when E1-T07 verifies
+
+1. **E1-T08** — Capstone: multi-user, agent-ready chat API
 
 ## Epic 0 — `epic-0-the-ledger`
 
@@ -32,7 +36,7 @@ No task is currently in progress, awaiting verification, or refuted.
 - [x] ` 104` [E1-T04](epic-1-the-workspace/E1-T04-message-thread-reaction-contract/readme.md) — Message, thread, edit, delete, and reaction event contract *(deps: E1-T03)*
 - [x] ` 105` [E1-T05](epic-1-the-workspace/E1-T05-resumable-live-chat-api/readme.md) — Resumable live chat API without polling *(deps: E1-T04)*
 - [x] ` 106` [E1-T06](epic-1-the-workspace/E1-T06-canonical-structured-mentions/readme.md) — Canonical structured mentions as durable trigger facts *(deps: E1-T04)*
-- [ ] ` 107` [E1-T07](epic-1-the-workspace/E1-T07-rebuildable-chat-projections/readme.md) — Checkpointed, rebuildable chat projections *(deps: E1-T04, E1-T05)*
+- [~] ` 107` [E1-T07](epic-1-the-workspace/E1-T07-rebuildable-chat-projections/readme.md) — Checkpointed, rebuildable chat projections *(deps: E1-T04, E1-T05)*
 - [ ] ` 108` [E1-T08](epic-1-the-workspace/E1-T08-multi-user-chat-api/readme.md) — Capstone: multi-user, agent-ready chat API **[CAPSTONE]** *(deps: E1-T06, E1-T07)*
 
 ## Epic 2 — `epic-2-the-roster`

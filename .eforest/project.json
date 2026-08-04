@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E1-T06 is verified with promoted cold evidence and an independent critic; E1-T07 is now the next eligible gate.",
-  "updatedAt": "2026-08-04T21:41:23Z"
+  "statusReason": "E1-T07 is in progress; no later gate may start.",
+  "updatedAt": "2026-08-04T21:45:00Z"
 }

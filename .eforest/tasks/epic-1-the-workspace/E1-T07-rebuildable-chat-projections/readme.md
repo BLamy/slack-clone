@@ -3,7 +3,7 @@ id: E1-T07
 epic: 1
 title: "Checkpointed, rebuildable chat projections"
 priority: 107
-status: implemented
+status: verified
 depends_on: [E1-T04, E1-T05]
 estimate: L
 capstone: false
@@ -158,5 +158,26 @@ grant discovery.
   persisted sequence-11 checkpoint after 12 row writes and converges to sequence 33 without
   duplicates or missed effects; the source/reducer sensitivity mutant exits 1 with the expected
   manifest-mismatch signal.
+- Replay: N/A (server projection and rebuild apparatus) + mitigation: projection deletion, source
+  replay, row manifests, crash recovery, and digest parity.
 - Claim: the final E1-T07 implementation and evidence satisfy the task acceptance and adversarial
   checks from a clean cold clone; awaiting a fresh independent critic.
+
+### Critic — 2026-08-04 — verified
+
+VERDICT: verified
+
+- Fresh critic session `09f9d2cc-f31f-4ff7-84d8-fd923fde41a8` reviewed the exact implementation at
+  `a526707a1bb117bcd811a7c241bf0777de57d979` and promoted evidence commit `21585b3` without editing
+  the worktree. It confirmed the detached cold transcript is clean, the pinned emulator and frozen
+  install complete, all five gates pass, and the verifier exits 0.
+- The critic mapped every acceptance criterion to the final evidence: deletion/rebuild digest
+  identity, persisted sequence-11 crash recovery to sequence 33, 33/33 independent shadow
+  prefixes, typed provenance/checkpoint corruption refusals, owner/service 3/1 channel visibility,
+  seven ACL denials, active-only pagination with deleted-message exclusion, timing parity, the
+  concrete sensitivity mutant failure, and the exact Replay declaration.
+- Advisory observations only: shadow comparison intentionally uses logical rows while provenance
+  is checked separately; both replay paths share the separately verified reducer authority; and the
+  projection store retains deleted rows internally while query surfaces filter them. None refutes an
+  acceptance criterion or adversarial item.
+- Verdict: E1-T07 is `verified`; E1-T08 is the next eligible queue gate.

@@ -3,7 +3,7 @@ id: E1-T08
 epic: 1
 title: "Capstone: multi-user, agent-ready chat API"
 priority: 108
-status: pending
+status: in-progress
 depends_on: [E1-T06, E1-T07]
 estimate: L
 capstone: true

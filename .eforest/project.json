@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E1-T07 is verified; E1-T08 is now the next eligible gate.",
-  "updatedAt": "2026-08-04T23:23:50Z"
+  "statusReason": "E1-T08 is the active queue gate.",
+  "updatedAt": "2026-08-04T23:26:59Z"
 }

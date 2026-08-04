@@ -3,7 +3,7 @@ id: E1-T07
 epic: 1
 title: "Checkpointed, rebuildable chat projections"
 priority: 107
-status: in-progress
+status: implemented
 depends_on: [E1-T04, E1-T05]
 estimate: L
 capstone: false
@@ -62,3 +62,39 @@ grant discovery.
    harness must go red.
 
 ## Verification log
+
+### Builder — 2026-08-04 — projection implementation and cold proof
+
+- Implementation commits: `052a2fb26bdde640aa145a942b11abf7f5a75c63` adds the disposable
+  checkpointed projection store, worker, query ACLs, verifier, and unit coverage; `8ec0bd8e5b46d9c85865876bbf4c95cb8e5fc902`
+  records the lint-safe final implementation.
+- Exact promoted cold command:
+  `E1_T07_IMPLEMENTATION_COMMIT=8ec0bd8e5b46d9c85865876bbf4c95cb8e5fc902
+  TEST_RUN_ID=e1-t07-final-20260804-r1 PROMOTE_EVIDENCE=1 make verify-E1-T07`. The clean detached
+  checkout initialized the pinned emulator, completed frozen install and setup, and passed
+  `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`.
+- The final source replay covers 31 records across four authoritative streams. Checkpoint sequence
+  31 records state digest `sha256:8d8dd7212213714ef3fb6e63ec9b0ce109299a4b9bc02bde3ff4bbce03f03385`
+  and checkpoint digest `sha256:21a27823288372391a8dbbbc851a32d2f5cd6f0eed991a1aa38267d5d22a9b1c`;
+  the canonical projection digest is `sha256:a374a259a0048556fbb5e7abedd7bf0b55a9a176eaa88da374ce753995718495`
+  with row counts workspace 1, principals 3, memberships 3, channels 3, channel memberships 5,
+  messages 2, threads 1, reactions 2, and unread rows 7.
+- Deleting the entire disposable query store and rebuilding produces the same row manifest and
+  digest. Duplicate delivery and a crash after 12 row writes before checkpoint persistence recover
+  with no duplicate logical rows or missed effects. Independent replay comparison passes all 31
+  frozen prefixes. Source references, reducer version, cross-workspace checkpoints, and row
+  provenance corruption fail closed with typed projection errors.
+- Query-time authorization shows the owner sees direct/public/private channels while the service
+  principal sees only public channels; private and direct rows, counts, pagination, and messages
+  refuse outsider access with generic `PROJECTION_ACCESS_DENIED` and no identity leak. The
+  sensitivity mutant omits checkpoint persistence, installs in a disposable worktree, and is
+  rejected by the nested verifier (exit 1).
+- Promoted evidence is under `evidence/e1-t07-final/`, including the source dump, checkpoint and
+  row manifests, crash recovery, prefix shadow comparison, access matrix, corruption detection,
+  cold transcript, and sensitivity proof. Replay: N/A (server projection and rebuild apparatus) +
+  mitigation: projection deletion, source replay, row manifests, crash recovery, ACL matrix, and
+  digest parity.
+- Claim: rebuildable workspace, channel, message, thread, reaction, and unread projections now
+  converge from authoritative streams under duplicate delivery and crash recovery, preserve
+  source/checkpoint provenance, and enforce query-time private/DM access boundaries; awaiting a
+  fresh independent critic.

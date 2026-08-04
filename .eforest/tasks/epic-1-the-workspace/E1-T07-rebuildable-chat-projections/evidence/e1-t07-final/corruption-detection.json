@@ -1,0 +1,7 @@
+{
+  "rowSourceRefused": "PROJECTION_CORRUPT_ROW",
+  "crossWorkspaceCheckpointRefused": "PROJECTION_CHECKPOINT_INVALID",
+  "sourceDigestChecked": true,
+  "reducerVersionChecked": true,
+  "result": "PASS"
+}

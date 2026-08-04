@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "runId": "e1-t07-final-20260804-r1",
+  "implementationCommit": "8ec0bd8e5b46d9c85865876bbf4c95cb8e5fc902",
+  "checkout": "disposable git worktree at the implementation commit",
+  "commands": [
+    {
+      "command": "git worktree add --detach <checkout> 8ec0bd8e5b46d9c85865876bbf4c95cb8e5fc902",
+      "exitCode": 0
+    },
+    {
+      "command": "git submodule update --init --recursive",
+      "exitCode": 0
+    },
+    {
+      "command": "git status --porcelain --untracked-files=all",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm setup:emulate",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/verify-e1-t07.mjs",
+      "exitCode": 0
+    }
+  ],
+  "cleanCheckoutBeforeInstall": true,
+  "result": "PASS"
+}

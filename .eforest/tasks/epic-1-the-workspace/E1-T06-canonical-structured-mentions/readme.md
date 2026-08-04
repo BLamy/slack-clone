@@ -3,7 +3,7 @@ id: E1-T06
 epic: 1
 title: "Canonical structured mentions as durable trigger facts"
 priority: 106
-status: in-progress
+status: implemented
 depends_on: [E1-T04]
 estimate: M
 capstone: false
@@ -64,3 +64,41 @@ fact only; no agent process runs until Epic 3.
    must fail.
 
 ## Verification log
+
+### Builder — 2026-08-04 — implementation and repaired cold proof
+
+- Implementation commits: `278293ee52b5ecab83a5da39f2e66976adf89ce7` added the canonical
+  mention protocol, resolver, reducer/schema validation, dispatch receipt binding, fixtures,
+  and verifier; `165657df77ed5edbc5b449c5647b75dce7152267` repaired the independent critic's
+  zero-width/format-control finding, sorted Markdown exclusion ranges before inline-code
+  parsing, fixed escaped-backslash and astral-letter boundaries, and restored the existing
+  E0-T03 conformance file to `format:check`. The latter is the exact implementation commit
+  bound by the promoted evidence.
+- Exact promoted cold command: `E1_T06_IMPLEMENTATION_COMMIT=165657df77ed5edbc5b449c5647b75dce7152267
+  PROMOTE_EVIDENCE=1 TEST_RUN_ID=e1-t06-final-20260804-r2 make verify-E1-T06`. The detached
+  checkout was clean before install, initialized the pinned emulator submodule, ran
+  `pnpm install --frozen-lockfile`, `pnpm setup:emulate`, and the verifier; all exited 0.
+  The verifier passed `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (120/120),
+  and `pnpm build`.
+- Parser evidence covers UTF-8 byte spans and fenced/inline/escaped/blockquote/URL exclusions;
+  malformed spans and zero-width space, word joiner, BOM, soft hyphen, and zero-width-inside-
+  handle inputs refuse with `MENTION_INVALID_TEXT`. Typed resolution refusals cover service,
+  disabled, non-member, ambiguous, unknown, forged scope, forged kind, wrong bytes, and
+  overlapping spans without identity leakage.
+- Accepted dispatch facts are source-bound to `channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc`,
+  offset `0000000000000000_0000000000000001`, and event digest
+  `sha256:4e3c1960740e4ee257fb139fa8f4d1d908e839474e20709f6098b8debc5c4f6c`; retry leaves one
+  target event and returns the same source fact. Replay preserves the original `ada` target
+  after a handle change with source digest `sha256:f60c0ff0ca8a831de64ac44b493184152106d29c843699382eea982d04ea9f30`,
+  mention-state digest `sha256:95508697c8887311cdbccb90a00a63feb30d7162df6dc0d7eae257b9c6abae48`,
+  and final state digest `sha256:db29485d3ffd116e870974363d8f39929c15ed2851986624aae740b6835cc66a`.
+- Evidence: `evidence/e1-t06-final/cold-clone-transcript.json`,
+  `verification-summary.json`, `parser-corpus.json`, `resolution-refusal-matrix.json`,
+  `dispatch-retry.json`, `mention-replay-evidence.json`, and `sensitivity.json`. Replay:
+  N/A (server mention parsing and source binding) + mitigation: parser corpus, typed refusal
+  matrix, retry/edit matrix, source-offset evidence, replay digest, and sensitivity proof.
+- Claim: canonical structured mentions resolve only from the authorized replayed workspace
+  state, persist stable principal facts with exact source bytes and accepted stream references,
+  preserve idempotent history across retry/edit/replay/handle changes, and refuse malformed or
+  identity-sensitive inputs without leaking principal identity; awaiting a fresh independent
+  critic.

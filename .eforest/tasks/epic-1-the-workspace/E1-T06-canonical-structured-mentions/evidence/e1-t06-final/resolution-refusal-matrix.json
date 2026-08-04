@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "code": "PRINCIPAL_SCOPE_MISMATCH",
+      "name": "forged-principal-scope",
+      "result": "REFUSED"
+    },
+    {
+      "code": "MENTION_TEXT_MISMATCH",
+      "name": "wrong-byte-span",
+      "result": "REFUSED"
+    },
+    {
+      "code": "REDUCER_MENTION_KIND_MISMATCH",
+      "name": "forged-kind",
+      "result": "REFUSED"
+    },
+    {
+      "code": "MENTION_INVALID_SPAN",
+      "name": "overlapping-spans",
+      "result": "REFUSED"
+    }
+  ],
+  "result": "PASS"
+}

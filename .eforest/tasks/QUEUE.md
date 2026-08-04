@@ -8,7 +8,7 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-1. **E1-T06** — Canonical structured mentions as durable trigger facts *(builder working)*
+1. **E1-T06** — Canonical structured mentions as durable trigger facts *(awaiting independent critic)*
 
 ## Next up (dependencies satisfied)
 
@@ -35,7 +35,7 @@ No task unlocks directly.
 - [x] ` 103` [E1-T03](epic-1-the-workspace/E1-T03-channel-lifecycle-and-membership/readme.md) — Channel lifecycle, membership, and private-read isolation *(deps: E1-T02)*
 - [x] ` 104` [E1-T04](epic-1-the-workspace/E1-T04-message-thread-reaction-contract/readme.md) — Message, thread, edit, delete, and reaction event contract *(deps: E1-T03)*
 - [x] ` 105` [E1-T05](epic-1-the-workspace/E1-T05-resumable-live-chat-api/readme.md) — Resumable live chat API without polling *(deps: E1-T04)*
-- [~] ` 106` [E1-T06](epic-1-the-workspace/E1-T06-canonical-structured-mentions/readme.md) — Canonical structured mentions as durable trigger facts *(deps: E1-T04)*
+- [?] ` 106` [E1-T06](epic-1-the-workspace/E1-T06-canonical-structured-mentions/readme.md) — Canonical structured mentions as durable trigger facts *(deps: E1-T04)*
 - [ ] ` 107` [E1-T07](epic-1-the-workspace/E1-T07-rebuildable-chat-projections/readme.md) — Checkpointed, rebuildable chat projections *(deps: E1-T04, E1-T05)*
 - [ ] ` 108` [E1-T08](epic-1-the-workspace/E1-T08-multi-user-chat-api/readme.md) — Capstone: multi-user, agent-ready chat API **[CAPSTONE]** *(deps: E1-T06, E1-T07)*
 

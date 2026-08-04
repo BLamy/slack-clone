@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 1,
+  "task": "E1-T06",
+  "runId": "e1-t06-final-20260804-r2",
+  "implementationCommit": "165657df77ed5edbc5b449c5647b75dce7152267",
+  "implementationTreeCleanAtStart": true,
+  "result": "PASS",
+  "replay": "Replay: N/A (server mention parsing and source binding) + mitigation: parser corpus, typed refusal matrix, retry/edit matrix, source-offset evidence, replay digest, and sensitivity proof",
+  "replayUploadAttempted": false,
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "durationMs": 3729,
+      "name": "format",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "durationMs": 3166,
+      "name": "lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "durationMs": 8557,
+      "name": "typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "durationMs": 23891,
+      "name": "tests",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm build",
+      "durationMs": 819,
+      "name": "build",
+      "result": "PASS"
+    }
+  ],
+  "canaryScan": {
+    "files": [
+      ".eforest/tasks/epic-1-the-workspace/E1-T06-canonical-structured-mentions/fixtures/mention-corpus.v1.json",
+      ".eforest/tasks/epic-1-the-workspace/E1-T06-canonical-structured-mentions/fixtures/invalid/mention-facts.v1.json"
+    ],
+    "forbiddenPatterns": 0,
+    "result": "PASS"
+  },
+  "parserEvidence": {
+    "policyVersion": 1,
+    "cases": [
+      {
+        "handles": [
+          "ada",
+          "helper"
+        ],
+        "name": "unicode-and-visible",
+        "spans": [
+          {
+            "startByte": 6,
+            "endByte": 10
+          },
+          {
+            "startByte": 15,
+            "endByte": 22
+          }
+        ],
+        "text": "Café @ada and @helper"
+      },
+      {
+        "handles": [
+          "helper"
+        ],
+        "name": "inline-code-escaped-and-quote",
+        "spans": [
+          {
+            "startByte": 31,
+            "endByte": 38
+          }
+        ],
+        "text": "`@ada` and \\@ada\n> @ada\nnormal @helper"
+      },
+      {
+        "handles": [
+          "helper"
+        ],
+        "name": "fenced-code",
+        "spans": [
+          {
+            "startByte": 34,
+            "endByte": 41
+          }
+        ],
+        "text": "before\n```markdown\n@ada\n```\nafter @helper"
+      },
+      {
+        "handles": [
+          "helper"
+        ],
+        "name": "url",
+        "spans": [
+          {
+            "startByte": 26,
+            "endByte": 33
+          }
+        ],
+        "text": "https://example.test/@ada @helper"
+      },
+      {
+        "handles": [
+          "helper"
+        ],
+        "name": "malformed-and-email",
+        "spans": [
+          {
+            "startByte": 28,
+            "endByte": 35
+          }
+        ],
+        "text": "ada@example.test @@ada @Ada @helper/child"
+      }
+    ],
+    "invalidCases": [
+      {
+        "code": "MENTION_INVALID_TEXT",
+        "name": "zero-width-space-email",
+        "result": "REFUSED"
+      },
+      {
+        "code": "MENTION_INVALID_TEXT",
+        "name": "word-joiner-before-mention",
+        "result": "REFUSED"
+      },
+      {
+        "code": "MENTION_INVALID_TEXT",
+        "name": "bom-before-mention",
+        "result": "REFUSED"
+      },
+      {
+        "code": "MENTION_INVALID_TEXT",
+        "name": "soft-hyphen-before-mention",
+        "result": "REFUSED"
+      },
+      {
+        "code": "MENTION_INVALID_TEXT",
+        "name": "zero-width-inside-handle",
+        "result": "REFUSED"
+      }
+    ],
+    "result": "PASS"
+  },
+  "resolutionEvidence": {
+    "cases": [
+      {
+        "code": null,
+        "handle": "ada",
+        "kind": "human",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "handle": "helper",
+        "kind": "agent",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "result": "accepted"
+      },
+      {
+        "code": "MENTION_TARGET_SERVICE",
+        "handle": "service",
+        "identityLeaked": false,
+        "result": "plain-text"
+      },
+      {
+        "code": "MENTION_TARGET_DISABLED",
+        "handle": "disabled",
+        "identityLeaked": false,
+        "result": "plain-text"
+      },
+      {
+        "code": "MENTION_TARGET_NOT_MEMBER",
+        "handle": "outsider",
+        "identityLeaked": false,
+        "result": "plain-text"
+      },
+      {
+        "code": "MENTION_AMBIGUOUS_TARGET",
+        "handle": "ambiguous",
+        "identityLeaked": false,
+        "result": "plain-text"
+      },
+      {
+        "code": "MENTION_TARGET_UNKNOWN",
+        "handle": "foreign",
+        "identityLeaked": false,
+        "result": "plain-text"
+      }
+    ],
+    "result": "PASS"
+  },
+  "refusalEvidence": {
+    "cases": [
+      {
+        "code": "PRINCIPAL_SCOPE_MISMATCH",
+        "name": "forged-principal-scope",
+        "result": "REFUSED"
+      },
+      {
+        "code": "MENTION_TEXT_MISMATCH",
+        "name": "wrong-byte-span",
+        "result": "REFUSED"
+      },
+      {
+        "code": "REDUCER_MENTION_KIND_MISMATCH",
+        "name": "forged-kind",
+        "result": "REFUSED"
+      },
+      {
+        "code": "MENTION_INVALID_SPAN",
+        "name": "overlapping-spans",
+        "result": "REFUSED"
+      }
+    ],
+    "result": "PASS"
+  },
+  "preparedEvidence": {
+    "mentionCount": 2,
+    "sourceBoundBeforeAppend": false,
+    "result": "PASS"
+  },
+  "dispatchEvidence": {
+    "firstSource": {
+      "digest": "sha256:4e3c1960740e4ee257fb139fa8f4d1d908e839474e20709f6098b8debc5c4f6c",
+      "offset": "0000000000000000_0000000000000001",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+    },
+    "replayedSource": {
+      "digest": "sha256:4e3c1960740e4ee257fb139fa8f4d1d908e839474e20709f6098b8debc5c4f6c",
+      "offset": "0000000000000000_0000000000000001",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+    },
+    "targetEventCountAfterRetry": 1,
+    "refusalLeavesTargetUnchanged": true,
+    "result": "PASS"
+  },
+  "replayEvidence": {
+    "finalStateDigest": "sha256:db29485d3ffd116e870974363d8f39929c15ed2851986624aae740b6835cc66a",
+    "handleAfterProfileChange": "ada-renamed",
+    "mentionStateDigest": "sha256:95508697c8887311cdbccb90a00a63feb30d7162df6dc0d7eae257b9c6abae48",
+    "perPrefixDigests": [
+      {
+        "offset": "0000000000000000_0000000000000001",
+        "stateDigest": "sha256:ab730c7f0d753473bd31d3ccea2d5e03306a2712c5257f09a4baa018dc0e74fe"
+      },
+      {
+        "offset": "0000000000000000_0000000000000002",
+        "stateDigest": "sha256:19f79dfa33a6e59ed2dcc43be8d077d2974139512a4a680b17ccd8f20c529122"
+      },
+      {
+        "offset": "0000000000000000_0000000000000003",
+        "stateDigest": "sha256:db29485d3ffd116e870974363d8f39929c15ed2851986624aae740b6835cc66a"
+      }
+    ],
+    "replayedTwiceWithIdenticalDigest": true,
+    "source": {
+      "digest": "sha256:f60c0ff0ca8a831de64ac44b493184152106d29c843699382eea982d04ea9f30",
+      "offset": "0000000000000000_0000000000000001",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+    },
+    "triggerFactCountAfterEdit": 1,
+    "result": "PASS"
+  },
+  "sensitivityEvidence": {
+    "codeFenceExclusion": "baseline rejects unsafe positive control",
+    "unsafePositiveControl": [
+      "ada",
+      "helper"
+    ],
+    "result": "PASS"
+  }
+}

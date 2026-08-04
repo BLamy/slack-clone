@@ -1,0 +1,8 @@
+{
+  "codeFenceExclusion": "baseline rejects unsafe positive control",
+  "unsafePositiveControl": [
+    "ada",
+    "helper"
+  ],
+  "result": "PASS"
+}

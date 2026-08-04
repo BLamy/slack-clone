@@ -48,6 +48,19 @@
       "code": "REDUCER_MENTION_KIND_MISMATCH"
     },
     {
+      "name": "ambiguous-principal-target",
+      "fact": {
+        "handle": "ambiguous",
+        "kind": "human",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "span": { "startByte": 6, "endByte": 16 },
+        "text": "@ambiguous"
+      },
+      "reducer": true,
+      "text": "hello @ambiguous",
+      "code": "REDUCER_MENTION_AMBIGUOUS_TARGET"
+    },
+    {
       "name": "overlapping-spans",
       "text": "@@ada",
       "facts": [

@@ -366,6 +366,34 @@ test("reducer rejects a valid display handle bound to another principal", () => 
   );
 });
 
+test("reducer rejects an ambiguous canonical display handle", () => {
+  assert.throws(
+    () =>
+      reduceEnvelope(
+        mentionState(),
+        event("channel.message.created", AUTHOR_ID, "h", {
+          authorId: AUTHOR_ID,
+          channelId: CHANNEL_ID,
+          contentType: "text/plain",
+          messageId: "ambiguous-mention",
+          mentions: [
+            {
+              handle: "ambiguous",
+              kind: "human",
+              principalId: AMBIGUOUS_A_ID,
+              span: { startByte: 6, endByte: 16 },
+              text: "@ambiguous",
+            },
+          ],
+          rootMessageId: null,
+          text: "hello @ambiguous",
+        }),
+        { offset: offset(1) },
+      ),
+    (error) => error.code === REDUCER_ERROR_CODES.MENTION_AMBIGUOUS_TARGET,
+  );
+});
+
 function mentionState() {
   const state = createInitialState();
   state.entities.principals = {

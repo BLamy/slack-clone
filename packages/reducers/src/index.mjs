@@ -2,6 +2,7 @@ import {
   directChannelIdFor,
   MENTION_PRINCIPAL_KINDS,
   parseMentionCandidates,
+  validatePrincipalId,
   validateMentionFacts,
   normalizeReactionName,
   validateConversationText,
@@ -116,6 +117,7 @@ export const REDUCER_ERROR_CODES = Object.freeze({
   MESSAGE_REPLY_ROOT: "REDUCER_MESSAGE_REPLY_ROOT",
   MESSAGE_REVISION_CONFLICT: "REDUCER_MESSAGE_REVISION_CONFLICT",
   MESSAGE_TEXT: "REDUCER_MESSAGE_TEXT",
+  MENTION_AMBIGUOUS_TARGET: "REDUCER_MENTION_AMBIGUOUS_TARGET",
   MENTION_HANDLE_MISMATCH: "REDUCER_MENTION_HANDLE_MISMATCH",
   MENTION_INVALID: "REDUCER_MENTION_INVALID",
   MENTION_KIND_MISMATCH: "REDUCER_MENTION_KIND_MISMATCH",
@@ -834,6 +836,20 @@ function assertConversationMentions(state, data, context) {
       failMessage(
         REDUCER_ERROR_CODES.MENTION_HANDLE_MISMATCH,
         "mention handle does not match the canonical principal profile",
+        "mentions",
+        context,
+      );
+    }
+    if (
+      principalHandleMatches(
+        state,
+        context.envelope.workspaceId,
+        mention.handle,
+      ).length !== 1
+    ) {
+      failMessage(
+        REDUCER_ERROR_CODES.MENTION_AMBIGUOUS_TARGET,
+        "mention handle does not resolve to exactly one workspace principal",
         "mentions",
         context,
       );
@@ -2294,6 +2310,19 @@ function principalMap(state) {
 
 function getPrincipal(state, principalId) {
   return getKey(principalMap(state), principalId);
+}
+
+function principalHandleMatches(state, workspaceId, handle) {
+  return Object.values(principalMap(state)).filter((principal) => {
+    try {
+      validatePrincipalId(principal?.principalId, {
+        expectedWorkspaceId: workspaceId,
+      });
+    } catch {
+      return false;
+    }
+    return principal?.profile?.handle === handle;
+  });
 }
 
 function principalSubjectKey(value) {

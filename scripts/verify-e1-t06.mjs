@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import {
@@ -97,7 +97,10 @@ const refusalEvidence = verifyInvalidFacts(invalidFacts, baseState);
 const preparedEvidence = verifyPreparation(baseState);
 const dispatchEvidence = await verifyDispatchRetry(baseState);
 const replayEvidence = verifyReplay(baseState);
-const sensitivityEvidence = verifySensitivity(corpus);
+const sensitivityEvidence =
+  process.env.E1_T06_SKIP_SENSITIVITY === "1"
+    ? { result: "SKIPPED", reason: "nested mutation verifier" }
+    : await verifySensitivity(corpus);
 const canaryScan = await verifyCanaryFiles();
 
 const gates = [];
@@ -466,7 +469,7 @@ function verifyReplay(state) {
   };
 }
 
-function verifySensitivity(corpus) {
+async function verifySensitivity(corpus) {
   const fenced = corpus.parserCases.find(
     (fixture) => fixture.name === "fenced-code",
   );
@@ -476,11 +479,127 @@ function verifySensitivity(corpus) {
   ].map((match) => match[1]);
   assert.deepEqual(safe, ["helper"]);
   assert.deepEqual(unsafePositiveControl, ["ada", "helper"]);
-  return {
-    codeFenceExclusion: "baseline rejects unsafe positive control",
-    unsafePositiveControl,
-    result: "PASS",
-  };
+
+  const taskWorkDirectory = path.join(taskDirectory, "work");
+  await mkdir(taskWorkDirectory, { recursive: true });
+  const mutationParent = await mkdtemp(
+    path.join(taskWorkDirectory, "sensitivity-mutant-"),
+  );
+  const mutationCheckout = path.join(mutationParent, "checkout");
+  let worktreeAdded = false;
+  try {
+    execFileSync(
+      "git",
+      ["worktree", "add", "--detach", mutationCheckout, implementationCommit],
+      { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
+    );
+    worktreeAdded = true;
+
+    const protocolPath = path.join(
+      mutationCheckout,
+      "packages/protocol/src/mentions.mjs",
+    );
+    const protocolSource = await readFile(protocolPath, "utf8");
+    const fencedCall = "  ranges.push(...fencedCodeRanges(text));";
+    assert.equal(
+      protocolSource.split(fencedCall).length - 1,
+      1,
+      "sensitivity mutation anchor must remain unique",
+    );
+    await writeFile(
+      protocolPath,
+      protocolSource.replace(
+        fencedCall,
+        "  // sensitivity mutant: omit fenced-code exclusions",
+      ),
+    );
+
+    const mutationArtifactDirectory = path.join(
+      mutationCheckout,
+      ".artifacts/e1-t06-sensitivity",
+    );
+    await mkdir(mutationArtifactDirectory, { recursive: true });
+    const mutationEnv = {
+      ...process.env,
+      E1_T06_IMPLEMENTATION_COMMIT: implementationCommit,
+      E1_T06_SKIP_GATES: "1",
+      E1_T06_SKIP_SENSITIVITY: "1",
+      TEST_ARTIFACT_DIR: mutationArtifactDirectory,
+      TEST_RUN_ID: `${runId}-fenced-mutant`,
+    };
+    delete mutationEnv.PROMOTE_EVIDENCE;
+    const install = runSensitivityCommand(
+      "pnpm",
+      ["install", "--frozen-lockfile"],
+      mutationCheckout,
+      mutationEnv,
+    );
+    assert.equal(
+      install.exitCode,
+      0,
+      `sensitivity mutant install failed: ${install.output}`,
+    );
+    const verifier = runSensitivityCommand(
+      "node",
+      ["scripts/verify-e1-t06.mjs"],
+      mutationCheckout,
+      mutationEnv,
+    );
+    assert.notEqual(
+      verifier.exitCode,
+      0,
+      "fenced-code mutation must make the verifier fail",
+    );
+    assert.match(verifier.output, /fenced-code/u);
+
+    return {
+      codeFenceExclusion: "baseline rejects unsafe positive control",
+      mutation: {
+        changedFile: "packages/protocol/src/mentions.mjs",
+        installCommand: "pnpm install --frozen-lockfile",
+        installExitCode: install.exitCode,
+        verifierCommand:
+          "E1_T06_SKIP_GATES=1 E1_T06_SKIP_SENSITIVITY=1 node scripts/verify-e1-t06.mjs",
+        verifierExitCode: verifier.exitCode,
+        verifierRejected: true,
+      },
+      unsafePositiveControl,
+      result: "PASS",
+    };
+  } finally {
+    if (worktreeAdded) {
+      try {
+        execFileSync(
+          "git",
+          ["worktree", "remove", "--force", mutationCheckout],
+          { cwd: root, stdio: "ignore" },
+        );
+      } catch {
+        // Preserve the original verifier failure; cleanup is best effort.
+      }
+    }
+    await rm(mutationParent, { recursive: true, force: true });
+  }
+}
+
+function runSensitivityCommand(command, args, cwd, env) {
+  try {
+    execFileSync(command, args, {
+      cwd,
+      encoding: "utf8",
+      env,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    return { exitCode: 0, output: "" };
+  } catch (error) {
+    return {
+      exitCode: typeof error.status === "number" ? error.status : 1,
+      output: [error.stdout, error.stderr]
+        .filter(Boolean)
+        .map((value) => value.toString())
+        .join("\n"),
+    };
+  }
 }
 
 async function verifyCanaryFiles() {

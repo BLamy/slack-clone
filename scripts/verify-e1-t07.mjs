@@ -77,136 +77,188 @@ const projectionDirectories = new Set();
 await mkdir(artifactRoot, { recursive: true });
 await mkdir(evidenceDirectory, { recursive: true });
 
-const records = await buildSourceHistory();
-const sourceDump = records.map(({ digest, event, offset, stream }) => ({
-  digest,
-  event,
-  offset,
-  stream,
-}));
+const namedCommand = process.env.E1_T07_COMMAND ?? null;
+if (namedCommand) {
+  await runNamedCommand(namedCommand, await buildSourceHistory());
+  for (const directory of projectionDirectories) {
+    rmSync(directory, { recursive: true, force: true });
+  }
+} else {
+  const records = await buildSourceHistory();
+  const sourceDump = records.map(({ digest, event, offset, stream }) => ({
+    digest,
+    event,
+    offset,
+    stream,
+  }));
 
-const rebuildEvidence = verifyDeletionAndRebuild(records);
-const crashEvidence = verifyCrashAndDuplicateRecovery(records);
-const liveCatchUpEvidence = verifyLiveCatchUp(records);
-const shadowEvidence = verifyShadowPrefixes(records);
-const accessEvidence = verifyAccessMatrix(records);
-const corruptionEvidence = verifyCorruptionDetection(records);
-const sensitivityEvidence =
-  process.env.E1_T07_SKIP_SENSITIVITY === "1"
-    ? { result: "SKIPPED", reason: "nested mutation verifier" }
-    : await verifySensitivity();
-const canaryScan = await verifyCanaries(sourceDump);
+  const rebuildEvidence = verifyDeletionAndRebuild(records);
+  const crashEvidence = verifyCrashAndDuplicateRecovery(records);
+  const liveCatchUpEvidence = verifyLiveCatchUp(records);
+  const shadowEvidence = verifyShadowPrefixes(records);
+  const accessEvidence = verifyAccessMatrix(records);
+  const corruptionEvidence = verifyCorruptionDetection(records);
+  const sensitivityEvidence =
+    process.env.E1_T07_SKIP_SENSITIVITY === "1"
+      ? { result: "SKIPPED", reason: "nested mutation verifier" }
+      : await verifySensitivity();
+  const canaryScan = await verifyCanaries(sourceDump);
 
-const gates = [];
-if (process.env.E1_T07_SKIP_GATES !== "1") {
-  for (const [name, script] of [
-    ["format", "format:check"],
-    ["lint", "lint"],
-    ["typecheck", "typecheck"],
-    ["tests", "test"],
-    ["build", "build"],
-  ]) {
-    const startedAt = Date.now();
-    runPnpm(script, {
-      ...process.env,
-      BUILD_DIR: path.join(artifactRoot, "build"),
-      E1_T07_IMPLEMENTATION_COMMIT: implementationCommit,
-      E1_T07_SKIP_GATES: "1",
-      TEST_ARTIFACT_DIR: artifactRoot,
-      TEST_RUN_ID: runId,
-    });
-    gates.push({
-      command: `pnpm ${script}`,
-      durationMs: Date.now() - startedAt,
-      name,
-      result: "PASS",
-    });
+  const gates = [];
+  if (process.env.E1_T07_SKIP_GATES !== "1") {
+    for (const [name, script] of [
+      ["format", "format:check"],
+      ["lint", "lint"],
+      ["typecheck", "typecheck"],
+      ["tests", "test"],
+      ["build", "build"],
+    ]) {
+      const startedAt = Date.now();
+      runPnpm(script, {
+        ...process.env,
+        BUILD_DIR: path.join(artifactRoot, "build"),
+        E1_T07_IMPLEMENTATION_COMMIT: implementationCommit,
+        E1_T07_SKIP_GATES: "1",
+        TEST_ARTIFACT_DIR: artifactRoot,
+        TEST_RUN_ID: runId,
+      });
+      gates.push({
+        command: `pnpm ${script}`,
+        durationMs: Date.now() - startedAt,
+        name,
+        result: "PASS",
+      });
+    }
+  }
+
+  const finalSnapshot = rebuildEvidence.afterSnapshot;
+  const summary = {
+    schemaVersion: 1,
+    task: "E1-T07",
+    runId,
+    implementationCommit,
+    implementationTreeCleanAtStart: trackedTreeCleanAtStart,
+    result: "PASS",
+    replay:
+      "Replay: N/A (server projection and rebuild apparatus) + mitigation: projection deletion, source replay, row manifests, crash recovery, ACL matrix, and digest parity",
+    replayUploadAttempted: false,
+    gates,
+    canaryScan,
+    source: {
+      recordCount: records.length,
+      streamCount: finalSnapshot.checkpoint.sourceHeads.length,
+      sourceHeads: finalSnapshot.checkpoint.sourceHeads,
+    },
+    checkpoint: finalSnapshot.checkpoint,
+    rowManifest: {
+      projectionDigest: finalSnapshot.projectionDigest,
+      rowCounts: Object.fromEntries(
+        Object.entries(finalSnapshot.rows).map(([kind, rows]) => [
+          kind,
+          rows.length,
+        ]),
+      ),
+    },
+    rebuildEvidence,
+    crashEvidence,
+    liveCatchUpEvidence,
+    shadowEvidence,
+    accessEvidence,
+    corruptionEvidence,
+    sensitivityEvidence,
+  };
+
+  await writeJson(
+    path.join(evidenceDirectory, "verification-summary.json"),
+    summary,
+  );
+  await writeJson(path.join(evidenceDirectory, "source-dump.json"), {
+    records: sourceDump,
+  });
+  await writeJson(path.join(evidenceDirectory, "checkpoint-manifest.json"), {
+    checkpoint: finalSnapshot.checkpoint,
+    projectionDigest: finalSnapshot.projectionDigest,
+    rowCounts: summary.rowManifest.rowCounts,
+  });
+  await writeJson(
+    path.join(evidenceDirectory, "row-manifest-before-rebuild.json"),
+    rebuildEvidence.beforeManifest,
+  );
+  await writeJson(
+    path.join(evidenceDirectory, "row-manifest-after-rebuild.json"),
+    rebuildEvidence.afterManifest,
+  );
+  await writeJson(
+    path.join(evidenceDirectory, "crash-recovery.json"),
+    crashEvidence,
+  );
+  await writeJson(
+    path.join(evidenceDirectory, "shadow-compare.json"),
+    shadowEvidence,
+  );
+  await writeJson(
+    path.join(evidenceDirectory, "access-matrix.json"),
+    accessEvidence,
+  );
+  await writeJson(
+    path.join(evidenceDirectory, "corruption-detection.json"),
+    corruptionEvidence,
+  );
+  await writeJson(
+    path.join(evidenceDirectory, "sensitivity.json"),
+    sensitivityEvidence,
+  );
+
+  for (const directory of projectionDirectories) {
+    rmSync(directory, { recursive: true, force: true });
+  }
+
+  console.log(JSON.stringify(summary, null, 2));
+}
+
+async function runNamedCommand(command, records) {
+  switch (command) {
+    case "rebuild": {
+      const proof = verifyDeletionAndRebuild(records);
+      console.log(
+        JSON.stringify(
+          {
+            afterProjectionDigest: proof.afterProjectionDigest,
+            command,
+            identicalCanonicalManifest: proof.identicalCanonicalManifest,
+            result: proof.result,
+          },
+          null,
+          2,
+        ),
+      );
+      return;
+    }
+    case "catch-up":
+      console.log(
+        JSON.stringify({ command, ...verifyLiveCatchUp(records) }, null, 2),
+      );
+      return;
+    case "corruption":
+      console.log(
+        JSON.stringify(
+          { command, ...verifyCorruptionDetection(records) },
+          null,
+          2,
+        ),
+      );
+      return;
+    case "shadow":
+      console.log(
+        JSON.stringify({ command, ...verifyShadowPrefixes(records) }, null, 2),
+      );
+      return;
+    default:
+      throw new Error(
+        `unknown E1_T07_COMMAND ${command}; expected rebuild, catch-up, corruption, or shadow`,
+      );
   }
 }
-
-const finalSnapshot = rebuildEvidence.afterSnapshot;
-const summary = {
-  schemaVersion: 1,
-  task: "E1-T07",
-  runId,
-  implementationCommit,
-  implementationTreeCleanAtStart: trackedTreeCleanAtStart,
-  result: "PASS",
-  replay:
-    "Replay: N/A (server projection and rebuild apparatus) + mitigation: projection deletion, source replay, row manifests, crash recovery, ACL matrix, and digest parity",
-  replayUploadAttempted: false,
-  gates,
-  canaryScan,
-  source: {
-    recordCount: records.length,
-    streamCount: finalSnapshot.checkpoint.sourceHeads.length,
-    sourceHeads: finalSnapshot.checkpoint.sourceHeads,
-  },
-  checkpoint: finalSnapshot.checkpoint,
-  rowManifest: {
-    projectionDigest: finalSnapshot.projectionDigest,
-    rowCounts: Object.fromEntries(
-      Object.entries(finalSnapshot.rows).map(([kind, rows]) => [
-        kind,
-        rows.length,
-      ]),
-    ),
-  },
-  rebuildEvidence,
-  crashEvidence,
-  liveCatchUpEvidence,
-  shadowEvidence,
-  accessEvidence,
-  corruptionEvidence,
-  sensitivityEvidence,
-};
-
-await writeJson(
-  path.join(evidenceDirectory, "verification-summary.json"),
-  summary,
-);
-await writeJson(path.join(evidenceDirectory, "source-dump.json"), {
-  records: sourceDump,
-});
-await writeJson(path.join(evidenceDirectory, "checkpoint-manifest.json"), {
-  checkpoint: finalSnapshot.checkpoint,
-  projectionDigest: finalSnapshot.projectionDigest,
-  rowCounts: summary.rowManifest.rowCounts,
-});
-await writeJson(
-  path.join(evidenceDirectory, "row-manifest-before-rebuild.json"),
-  rebuildEvidence.beforeManifest,
-);
-await writeJson(
-  path.join(evidenceDirectory, "row-manifest-after-rebuild.json"),
-  rebuildEvidence.afterManifest,
-);
-await writeJson(
-  path.join(evidenceDirectory, "crash-recovery.json"),
-  crashEvidence,
-);
-await writeJson(
-  path.join(evidenceDirectory, "shadow-compare.json"),
-  shadowEvidence,
-);
-await writeJson(
-  path.join(evidenceDirectory, "access-matrix.json"),
-  accessEvidence,
-);
-await writeJson(
-  path.join(evidenceDirectory, "corruption-detection.json"),
-  corruptionEvidence,
-);
-await writeJson(
-  path.join(evidenceDirectory, "sensitivity.json"),
-  sensitivityEvidence,
-);
-
-for (const directory of projectionDirectories) {
-  rmSync(directory, { recursive: true, force: true });
-}
-
-console.log(JSON.stringify(summary, null, 2));
 
 async function buildSourceHistory() {
   const channelFixture = await readJson(
@@ -917,6 +969,7 @@ function assertImplementationBinding(commit) {
     "Makefile",
     "package.json",
     "scripts/cold-verify-e1-t07.mjs",
+    "scripts/e1-t07-command.mjs",
     "scripts/e1-t07-independent-replay.mjs",
     "scripts/verify-e1-t07.mjs",
     "src/projections.mjs",

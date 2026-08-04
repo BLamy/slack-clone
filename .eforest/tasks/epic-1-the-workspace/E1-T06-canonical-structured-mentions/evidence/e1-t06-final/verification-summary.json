@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E1-T06",
-  "runId": "e1-t06-final-20260804-r4",
-  "implementationCommit": "cf70595b745c49304f99becc9b9a67ed044917e1",
+  "runId": "e1-t06-final-20260804-r6",
+  "implementationCommit": "ed09c3b715f3d860e5f7351da61b260215ff8695",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "replay": "Replay: N/A (server mention parsing and source binding) + mitigation: parser corpus, typed refusal matrix, retry/edit matrix, source-offset evidence, replay digest, and sensitivity proof",
@@ -10,31 +10,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 33911,
+      "durationMs": 27501,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 34305,
+      "durationMs": 28251,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 6322,
+      "durationMs": 5169,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 65754,
+      "durationMs": 56825,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 657,
+      "durationMs": 844,
       "name": "build",
       "result": "PASS"
     }
@@ -222,6 +222,11 @@
       {
         "code": "MENTION_TEXT_MISMATCH",
         "name": "wrong-byte-span",
+        "result": "REFUSED"
+      },
+      {
+        "code": "REDUCER_MENTION_HANDLE_MISMATCH",
+        "name": "forged-principal-substitution",
         "result": "REFUSED"
       },
       {

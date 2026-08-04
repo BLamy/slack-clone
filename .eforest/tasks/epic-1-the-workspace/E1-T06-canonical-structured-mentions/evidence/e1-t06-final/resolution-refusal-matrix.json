@@ -11,6 +11,11 @@
       "result": "REFUSED"
     },
     {
+      "code": "REDUCER_MENTION_HANDLE_MISMATCH",
+      "name": "forged-principal-substitution",
+      "result": "REFUSED"
+    },
+    {
       "code": "REDUCER_MENTION_KIND_MISMATCH",
       "name": "forged-kind",
       "result": "REFUSED"

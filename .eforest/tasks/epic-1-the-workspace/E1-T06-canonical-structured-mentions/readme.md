@@ -138,3 +138,35 @@ fact only; no agent process runs until Epic 3.
 - Claim: the reducer, parser, resolver, and dispatch receipt together make canonical structured
   mentions durable, workspace-scoped, Markdown-aware, idempotent, and stable across profile
   changes; awaiting a fresh independent critic.
+
+### Builder — 2026-08-04 — principal-binding repair and final cold proof
+
+- Repair commit: `ed09c3b715f3d860e5f7351da61b260215ff8695` (`Reject substituted mention
+  principals`) requires every durable mention handle to equal the current canonical principal
+  profile handle in addition to the existing visible-candidate, kind, status, and membership
+  checks. The verifier fixture now attacks an active same-workspace, same-kind principal
+  substitution and expects typed `REDUCER_MENTION_HANDLE_MISMATCH`; the unit suite covers the
+  same attack directly.
+- Exact promoted cold command:
+  `E1_T06_IMPLEMENTATION_COMMIT=ed09c3b715f3d860e5f7351da61b260215ff8695
+  TEST_RUN_ID=e1-t06-final-20260804-r6 PROMOTE_EVIDENCE=1 make verify-E1-T06`. The detached
+  checkout was clean before install, initialized the pinned emulator submodule, ran frozen
+  install and emulator setup, and passed `pnpm format:check`, `pnpm lint`, `pnpm typecheck`,
+  `pnpm test`, and `pnpm build`.
+- The promoted refusal matrix now records `forged-principal-substitution` as
+  `REDUCER_MENTION_HANDLE_MISMATCH` alongside scope, wrong-byte, kind, and overlap refusals.
+  Retry still produces one target event at offset
+  `0000000000000000_0000000000000001` with source digest
+  `sha256:aaa850e6ed60bdebb52aa364f0502c1fbe96f1068601f8520c0b2f98ba59b157`, and the reducer
+  comparison remains `projectedSourceMatchesDispatch: true`. Replay twice still converges on
+  final digest `sha256:c952583e83ebaf9417417a02f18a7da7773c3fa87719baeb373c56b138aaabab`, keeps
+  the original `ada` target after the profile handle changes, and leaves one trigger fact after
+  edit.
+- Promoted evidence is under `evidence/e1-t06-final/`, including the updated cold transcript,
+  verification summary, parser corpus, refusal matrix, dispatch retry, replay evidence, and
+  sensitivity proof. Replay: N/A (server mention parsing and source binding) + mitigation:
+  parser corpus, typed refusal matrix, retry/edit matrix, source-offset evidence, replay digest,
+  reducer exclusion and principal-binding regressions, and sensitivity proof.
+- Claim: direct durable writers can no longer substitute an active principal behind a valid
+  display handle; canonical structured mentions remain durable, workspace-scoped, Markdown-aware,
+  idempotent, and stable across profile changes; awaiting a fresh independent critic.

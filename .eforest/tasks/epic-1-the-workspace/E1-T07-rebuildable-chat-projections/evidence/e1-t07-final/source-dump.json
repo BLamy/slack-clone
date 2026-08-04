@@ -701,6 +701,54 @@
       },
       "offset": "0000000000000000_0000000000000012",
       "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+    },
+    {
+      "digest": "sha256:0b4d125064cf00e8ac7a9ff6d93ebda0dae04c8972d533e525c6581ab5261c0b",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "data": {
+          "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+          "contentType": "text/plain",
+          "messageId": "active-a",
+          "rootMessageId": null,
+          "text": "Unread active message"
+        },
+        "eventId": "ev_zzzzzzzzzzzzzzzzzzzzzzzzzz",
+        "eventType": "channel.message.created",
+        "idempotencyKey": "ik_zzzzzzzzzzzzzzzzzzzzzzzzzz",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-04T00:00:00.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "offset": "0000000000000000_0000000000000013",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+    },
+    {
+      "digest": "sha256:40340da7f83666bb1dc1bd1dc12ef0bf2a982c70b9cf9bbe06d835d0c657c2c7",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "data": {
+          "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+          "contentType": "text/plain",
+          "messageId": "active-b",
+          "rootMessageId": null,
+          "text": "Owner active message"
+        },
+        "eventId": "ev_yyyyyyyyyyyyyyyyyyyyyyyyyy",
+        "eventType": "channel.message.created",
+        "idempotencyKey": "ik_yyyyyyyyyyyyyyyyyyyyyyyyyy",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-04T00:00:01.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "offset": "0000000000000000_0000000000000014",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
     }
   ]
 }

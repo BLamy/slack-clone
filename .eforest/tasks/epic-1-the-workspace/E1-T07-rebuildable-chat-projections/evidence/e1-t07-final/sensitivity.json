@@ -1,6 +1,6 @@
 {
   "changedFile": "src/projections.mjs",
-  "mutation": "checkpoint persistence omitted",
+  "mutation": "row source-digest and reducer-version checks omitted",
   "installExitCode": 0,
   "verifierExitCode": 1,
   "verifierRejected": true,

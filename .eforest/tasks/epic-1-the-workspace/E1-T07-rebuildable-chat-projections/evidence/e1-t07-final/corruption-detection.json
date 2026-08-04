@@ -1,5 +1,8 @@
 {
   "rowSourceRefused": "PROJECTION_CORRUPT_ROW",
+  "rowSourceDetail": "row message:reply-a-1 has an unknown source reference",
+  "reducerVersionRefused": "PROJECTION_REDUCER_VERSION_MISMATCH",
+  "reducerVersionDetail": "row message:reply-a-1 has an unsupported reducer version",
   "crossWorkspaceCheckpointRefused": "PROJECTION_CHECKPOINT_INVALID",
   "sourceDigestChecked": true,
   "reducerVersionChecked": true,

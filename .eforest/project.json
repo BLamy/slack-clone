@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E1-T07 is refuted and in repair; no later gate may start.",
-  "updatedAt": "2026-08-04T21:45:00Z"
+  "statusReason": "E1-T07 is implemented; awaiting an independent critic.",
+  "updatedAt": "2026-08-04T23:00:15Z"
 }

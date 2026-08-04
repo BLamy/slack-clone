@@ -3,7 +3,7 @@ id: E1-T07
 epic: 1
 title: "Checkpointed, rebuildable chat projections"
 priority: 107
-status: in-progress
+status: implemented
 depends_on: [E1-T04, E1-T05]
 estimate: L
 capstone: false
@@ -98,3 +98,40 @@ grant discovery.
   converge from authoritative streams under duplicate delivery and crash recovery, preserve
   source/checkpoint provenance, and enforce query-time private/DM access boundaries; awaiting a
   fresh independent critic.
+
+### Builder — 2026-08-04 — repair after critic refutation and final cold proof
+
+- Repair commits: `628ae98b0a0cb05c7f0bbb829dd707ae178c9cc7` makes row provenance checks live before
+  manifest comparison and adds persistent projection-store restart coverage; `ebc334b1f9e6693b9a7ce29c2030c079b62cf8c3`
+  repairs the exact source/reducer sensitivity mutant; `5f46d6f44327952d883e9c589678afbd7170b0b1`
+  exposes named rebuild, catch-up, corruption, and shadow commands; `5918ede724e2f606d1d82a4e6611b3d03238eb4a`
+  is the final static-analysis-safe implementation commit.
+- Exact promoted cold command:
+  `E1_T07_IMPLEMENTATION_COMMIT=5918ede724e2f606d1d82a4e6611b3d03238eb4a
+  TEST_RUN_ID=e1-t07-final-20260804-r2 PROMOTE_EVIDENCE=1 make verify-E1-T07`. The clean detached
+  checkout initialized the pinned emulator, completed frozen install and setup, and passed
+  `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`.
+- The final source replay covers 33 records across four authoritative streams. Checkpoint sequence
+  33 has state digest `sha256:2b52780ffa9b22a288c12a2bbf94005a3da80df1b51daa5447ee5e808809499c`
+  and checkpoint digest `sha256:fbd53cab21498ecae01071b2694addff77b34542621f2f9e6036f2322d55dad7`;
+  the canonical projection digest is `sha256:9146ab1a378cebbb1dc47d5f4db51c2451520b45d64c5748288c7454797ea0ef`
+  with row counts workspace 1, principals 3, memberships 3, channels 3, channel memberships 5,
+  messages 4, threads 3, reactions 2, and unread rows 7.
+- Deleting the entire persistent query store and rebuilding produces the same row manifest and
+  digest. A crash after 12 row writes recovers from the persisted sequence-11 checkpoint after a
+  new store instance, then catches up to sequence 33 with no duplicate logical rows or missed
+  effects. Independent replay comparison passes all 33 frozen prefixes; the named catch-up command
+  resumes from a persisted sequence-16 checkpoint. Source references, reducer versions,
+  cross-workspace checkpoints, and row provenance corruption fail closed with typed errors.
+- Query-time authorization shows the owner sees direct/public/private channels while the service
+  principal sees only public channels; deleted message content is excluded, and private/direct rows,
+  counts, pagination, threads, reactions, unread data, and outsider timing probes refuse access
+  with generic `PROJECTION_ACCESS_DENIED` and no identity leak. The exact sensitivity mutant that
+  omits row source-digest and reducer-version checks is rejected by the nested verifier (exit 1).
+- Promoted evidence is under `evidence/e1-t07-final/`, including the source dump, checkpoint and
+  row manifests, crash recovery, prefix shadow comparison, access matrix, corruption detection,
+  cold transcript, and sensitivity proof. Replay: N/A (server projection and rebuild apparatus) +
+  mitigation: projection deletion, source replay, row manifests, crash recovery, ACL matrix, and
+  digest parity.
+- Claim: the repaired implementation satisfies the E1-T07 acceptance and adversarial checks from a
+  clean cold clone; awaiting a fresh independent critic.

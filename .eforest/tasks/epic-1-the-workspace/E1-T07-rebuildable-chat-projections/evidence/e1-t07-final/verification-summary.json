@@ -1,40 +1,40 @@
 {
   "schemaVersion": 1,
   "task": "E1-T07",
-  "runId": "e1-t07-final-20260804-r2",
-  "implementationCommit": "5918ede724e2f606d1d82a4e6611b3d03238eb4a",
+  "runId": "e1-t07-final-20260804-r3",
+  "implementationCommit": "a526707a1bb117bcd811a7c241bf0777de57d979",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
-  "replay": "Replay: N/A (server projection and rebuild apparatus) + mitigation: projection deletion, source replay, row manifests, crash recovery, ACL matrix, and digest parity",
+  "replay": "Replay: N/A (server projection and rebuild apparatus) + mitigation: projection deletion, source replay, row manifests, crash recovery, and digest parity",
   "replayUploadAttempted": false,
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 261613,
+      "durationMs": 3850,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 58169,
+      "durationMs": 4632,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 7143,
+      "durationMs": 9024,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 83699,
+      "durationMs": 26741,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 770,
+      "durationMs": 797,
       "name": "build",
       "result": "PASS"
     }
@@ -3502,6 +3502,8 @@
     "serviceVisibleChannelKinds": [
       "public"
     ],
+    "ownerChannelCount": 3,
+    "serviceChannelCount": 1,
     "ownerMessagePages": [
       {
         "checkpoint": {
@@ -3646,6 +3648,7 @@
         "projectionDigest": "sha256:9146ab1a378cebbb1dc47d5f4db51c2451520b45d64c5748288c7454797ea0ef"
       }
     ],
+    "deletedMessageIdsExcluded": true,
     "unread": {
       "checkpointDigest": "sha256:fbd53cab21498ecae01071b2694addff77b34542621f2f9e6036f2322d55dad7",
       "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -3678,55 +3681,55 @@
       },
       {
         "code": "PROJECTION_ACCESS_DENIED",
-        "label": "private-messages-outsider",
+        "label": "private-messages-service",
         "identityLeaked": false,
         "result": "REFUSED"
       },
       {
         "code": "PROJECTION_ACCESS_DENIED",
-        "label": "private-count-outsider",
+        "label": "workspace-count-outsider",
         "identityLeaked": false,
         "result": "REFUSED"
       },
       {
         "code": "PROJECTION_ACCESS_DENIED",
-        "label": "private-threads-outsider",
+        "label": "private-threads-service",
         "identityLeaked": false,
         "result": "REFUSED"
       },
       {
         "code": "PROJECTION_ACCESS_DENIED",
-        "label": "private-reactions-outsider",
+        "label": "private-reactions-service",
         "identityLeaked": false,
         "result": "REFUSED"
       },
       {
         "code": "PROJECTION_ACCESS_DENIED",
-        "label": "private-unread-outsider",
+        "label": "private-unread-service",
         "identityLeaked": false,
         "result": "REFUSED"
       }
     ],
     "timingProbe": {
       "existingSamplesMs": [
-        1.885,
-        1.738,
-        1.695,
-        1.51,
-        1.586,
-        2.547,
-        2.362,
-        1.467
+        3.972,
+        2.307,
+        2.679,
+        3.916,
+        1.232,
+        1.172,
+        1.639,
+        1.687
       ],
       "siblingSamplesMs": [
-        1.399,
-        1.263,
-        1.444,
-        2.13,
-        1.963,
-        1.541,
-        2.22,
-        1.647
+        3.945,
+        2.099,
+        1.44,
+        2.405,
+        1.53,
+        3.853,
+        2.175,
+        1.583
       ],
       "equalErrorSurface": true,
       "result": "PASS"

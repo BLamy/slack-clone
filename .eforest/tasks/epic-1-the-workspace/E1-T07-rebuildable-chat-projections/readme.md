@@ -133,3 +133,30 @@ grant discovery.
   mitigation: projection deletion, source replay, row manifests, crash recovery, and digest parity.
 - Claim: the repaired implementation satisfies the E1-T07 acceptance and adversarial checks from a
   clean cold clone; awaiting a fresh independent critic.
+
+### Builder — 2026-08-04 — final ACL and sensitivity hardening proof
+
+- Hardening commit: `a526707a1bb117bcd811a7c241bf0777de57d979` adds explicit deleted-message
+  exclusion assertions, counts the owner-visible versus service-visible channel set, and runs
+  private list/messages/threads/reactions/unread/timing attacks as a workspace member who is not a
+  private-channel member. It also makes sensitivity require the concrete manifest-mismatch signal
+  and uses the literal Replay mitigation declaration.
+- Exact promoted cold command:
+  `E1_T07_IMPLEMENTATION_COMMIT=a526707a1bb117bcd811a7c241bf0777de57d979
+  TEST_RUN_ID=e1-t07-final-20260804-r3 PROMOTE_EVIDENCE=1 make verify-E1-T07`. The detached checkout
+  was clean, initialized the pinned emulator, completed frozen install/setup, and passed all five
+  gates: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`.
+- Promoted r3 evidence records 33 source records across four streams, checkpoint sequence 33,
+  state digest `sha256:2b52780ffa9b22a288c12a2bbf94005a3da80df1b51daa5447ee5e808809499c`, checkpoint
+  digest `sha256:fbd53cab21498ecae01071b2694addff77b34542621f2f9e6036f2322d55dad7`, and projection
+  digest `sha256:9146ab1a378cebbb1dc47d5f4db51c2451520b45d64c5748288c7454797ea0ef`. The four named
+  commands independently pass: rebuild manifest identity, persisted checkpoint catch-up from
+  sequence 16, typed corruption refusal, and 33/33 independent shadow prefixes.
+- Access evidence records owner/service channel counts 3/1, active-only two-page message results,
+  deleted-message exclusion, seven typed denials, and equal existing/sibling error surfaces for a
+  valid workspace member lacking private-channel membership. The crash proof resumes from the
+  persisted sequence-11 checkpoint after 12 row writes and converges to sequence 33 without
+  duplicates or missed effects; the source/reducer sensitivity mutant exits 1 with the expected
+  manifest-mismatch signal.
+- Claim: the final E1-T07 implementation and evidence satisfy the task acceptance and adversarial
+  checks from a clean cold clone; awaiting a fresh independent critic.

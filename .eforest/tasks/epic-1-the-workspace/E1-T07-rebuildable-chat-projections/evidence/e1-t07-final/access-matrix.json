@@ -7,6 +7,8 @@
   "serviceVisibleChannelKinds": [
     "public"
   ],
+  "ownerChannelCount": 3,
+  "serviceChannelCount": 1,
   "ownerMessagePages": [
     {
       "checkpoint": {
@@ -151,6 +153,7 @@
       "projectionDigest": "sha256:9146ab1a378cebbb1dc47d5f4db51c2451520b45d64c5748288c7454797ea0ef"
     }
   ],
+  "deletedMessageIdsExcluded": true,
   "unread": {
     "checkpointDigest": "sha256:fbd53cab21498ecae01071b2694addff77b34542621f2f9e6036f2322d55dad7",
     "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -183,55 +186,55 @@
     },
     {
       "code": "PROJECTION_ACCESS_DENIED",
-      "label": "private-messages-outsider",
+      "label": "private-messages-service",
       "identityLeaked": false,
       "result": "REFUSED"
     },
     {
       "code": "PROJECTION_ACCESS_DENIED",
-      "label": "private-count-outsider",
+      "label": "workspace-count-outsider",
       "identityLeaked": false,
       "result": "REFUSED"
     },
     {
       "code": "PROJECTION_ACCESS_DENIED",
-      "label": "private-threads-outsider",
+      "label": "private-threads-service",
       "identityLeaked": false,
       "result": "REFUSED"
     },
     {
       "code": "PROJECTION_ACCESS_DENIED",
-      "label": "private-reactions-outsider",
+      "label": "private-reactions-service",
       "identityLeaked": false,
       "result": "REFUSED"
     },
     {
       "code": "PROJECTION_ACCESS_DENIED",
-      "label": "private-unread-outsider",
+      "label": "private-unread-service",
       "identityLeaked": false,
       "result": "REFUSED"
     }
   ],
   "timingProbe": {
     "existingSamplesMs": [
-      1.885,
-      1.738,
-      1.695,
-      1.51,
-      1.586,
-      2.547,
-      2.362,
-      1.467
+      3.972,
+      2.307,
+      2.679,
+      3.916,
+      1.232,
+      1.172,
+      1.639,
+      1.687
     ],
     "siblingSamplesMs": [
-      1.399,
-      1.263,
-      1.444,
-      2.13,
-      1.963,
-      1.541,
-      2.22,
-      1.647
+      3.945,
+      2.099,
+      1.44,
+      2.405,
+      1.53,
+      3.853,
+      2.175,
+      1.583
     ],
     "equalErrorSurface": true,
     "result": "PASS"

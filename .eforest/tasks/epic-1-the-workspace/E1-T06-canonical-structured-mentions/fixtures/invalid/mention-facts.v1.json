@@ -61,6 +61,32 @@
       "code": "REDUCER_MENTION_AMBIGUOUS_TARGET"
     },
     {
+      "name": "disabled-principal-target",
+      "fact": {
+        "handle": "disabled",
+        "kind": "human",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "span": { "startByte": 6, "endByte": 15 },
+        "text": "@disabled"
+      },
+      "reducer": true,
+      "text": "hello @disabled",
+      "code": "REDUCER_MENTION_TARGET_DISABLED"
+    },
+    {
+      "name": "non-member-principal-target",
+      "fact": {
+        "handle": "outsider",
+        "kind": "human",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_kkkkkkkkkkkkkkkkkkkkkkkkkk",
+        "span": { "startByte": 6, "endByte": 15 },
+        "text": "@outsider"
+      },
+      "reducer": true,
+      "text": "hello @outsider",
+      "code": "REDUCER_MENTION_TARGET_NOT_MEMBER"
+    },
+    {
       "name": "overlapping-spans",
       "text": "@@ada",
       "facts": [

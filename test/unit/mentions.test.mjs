@@ -394,6 +394,51 @@ test("reducer rejects an ambiguous canonical display handle", () => {
   );
 });
 
+test("reducer refuses disabled and non-member mention targets", () => {
+  for (const [token, target, expectedCode] of [
+    [
+      "i",
+      {
+        handle: "disabled",
+        kind: "human",
+        principalId: DISABLED_ID,
+        span: { startByte: 6, endByte: 15 },
+        text: "@disabled",
+      },
+      REDUCER_ERROR_CODES.MENTION_TARGET_DISABLED,
+    ],
+    [
+      "j",
+      {
+        handle: "outsider",
+        kind: "human",
+        principalId: OUTSIDER_ID,
+        span: { startByte: 6, endByte: 15 },
+        text: "@outsider",
+      },
+      REDUCER_ERROR_CODES.MENTION_TARGET_NOT_MEMBER,
+    ],
+  ]) {
+    assert.throws(
+      () =>
+        reduceEnvelope(
+          mentionState(),
+          event("channel.message.created", AUTHOR_ID, token, {
+            authorId: AUTHOR_ID,
+            channelId: CHANNEL_ID,
+            contentType: "text/plain",
+            messageId: `${target.handle}-mention-target`,
+            mentions: [target],
+            rootMessageId: null,
+            text: `hello @${target.handle}`,
+          }),
+          { offset: offset(1) },
+        ),
+      (error) => error.code === expectedCode,
+    );
+  }
+});
+
 function mentionState() {
   const state = createInitialState();
   state.entities.principals = {

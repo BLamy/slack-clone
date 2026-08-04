@@ -1457,7 +1457,7 @@ function readProjectionFile(directory, name) {
 
 function writeProjectionFile(directory, name, value) {
   const filePath = `${directory}/${name}`;
-  const temporaryPath = `${filePath}.tmp-${process.pid}`;
+  const temporaryPath = `${filePath}.tmp`;
   writeFileSync(temporaryPath, `${JSON.stringify(value)}\n`);
   renameSync(temporaryPath, filePath);
 }

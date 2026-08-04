@@ -73,19 +73,19 @@ test("mention parser uses UTF-8 spans and a deterministic Markdown exclusion pol
   ]);
 });
 
-test("mention parser refuses invisible format controls before resolution", () => {
+test("mention parser treats invisible format controls as plain text", () => {
   for (const text of [
     "ada\u200b@example.test",
     "x\u2060@helper",
     "x\ufeff@helper",
     "x\u00ad@helper",
     "@ada\u200bxyz",
-  ]) {
-    assert.throws(
-      () => parseMentionCandidates(text),
-      (error) => error.code === MENTION_REFUSAL_CODES.INVALID_TEXT,
-    );
-  }
+  ])
+    assert.deepEqual(parseMentionCandidates(text), []);
+  assert.deepEqual(
+    parseMentionCandidates("👩‍💻 @ada").map(({ handle }) => handle),
+    ["ada"],
+  );
   assert.deepEqual(parseMentionCandidates("\\\\@helper"), [
     {
       handle: "helper",
@@ -193,7 +193,7 @@ test("accepted dispatch binds the immutable receipt source without changing disp
     { text: "hello @ada" },
   );
   assert.deepEqual(bound.event.mentions[0].source, {
-    digest: `sha256:${"a".repeat(64)}`,
+    digest: canonicalStateDigest({ channelId: CHANNEL_ID, mentions }),
     offset: "0000000000000000_0000000000000007",
     stream: `channel:${CHANNEL_ID}`,
   });
@@ -251,7 +251,7 @@ test("mention-aware dispatch fences resolution and appends canonical facts", asy
   assert.equal(result.event.mentions[0].source.offset, offset(9));
   assert.equal(
     result.event.mentions[0].source.digest,
-    `sha256:${"c".repeat(64)}`,
+    canonicalStateDigest(dispatchedRequest.payload),
   );
 });
 
@@ -302,7 +302,7 @@ test("replay retains the original stable target and source digest after a handle
   );
   assert.equal(
     second.entities.messages["mentioned-message"].mentions[0].source.digest,
-    canonicalStateDigest(created),
+    canonicalStateDigest(created.data),
   );
   assert.equal(
     second.entities.messages["mentioned-message"].mentions[0].source.offset,

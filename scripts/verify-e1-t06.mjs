@@ -191,14 +191,10 @@ function verifyParserCorpus(corpus) {
     };
   });
   const invalid = (corpus.invalidParserCases ?? []).map((fixture) => {
-    let observedCode;
-    try {
-      parseMentionCandidates(fixture.text);
-    } catch (error) {
-      observedCode = error.code;
-    }
-    assert.equal(observedCode, fixture.code, fixture.name);
-    return { code: observedCode, name: fixture.name, result: "REFUSED" };
+    const candidates = parseMentionCandidates(fixture.text);
+    const handles = candidates.map(({ handle }) => handle);
+    assert.deepEqual(handles, fixture.handles, fixture.name);
+    return { handles, name: fixture.name, result: "PLAIN_TEXT" };
   });
   return {
     policyVersion: corpus.policyVersion,
@@ -347,7 +343,17 @@ async function verifyDispatchRetry(state) {
   assert.equal(first.receipt.eventDigest, second.receipt.eventDigest);
   assert.equal(first.receipt.nextOffset, second.receipt.nextOffset);
   assert.equal(store.dump(stream).length, 1);
-  assert.equal(first.event.mentions[0].source.offset, first.receipt.nextOffset);
+  const targetEntry = store.dump(stream)[0];
+  assert.equal(first.event.mentions[0].source.offset, targetEntry.offset);
+  const persistedData = { ...targetEntry.record };
+  delete persistedData.dispatch;
+  const projected = reduceEnvelope(state, messageEvent("d", persistedData), {
+    offset: targetEntry.offset,
+  });
+  assert.deepEqual(
+    projected.entities.messages["retry-message"].mentions[0].source,
+    first.event.mentions[0].source,
+  );
 
   const beforeRefused = store.dump(`channel:${CHANNEL_ID}:refusal`);
   assert.throws(
@@ -375,6 +381,7 @@ async function verifyDispatchRetry(state) {
     replayedSource: second.event.mentions[0].source,
     targetEventCountAfterRetry: store.dump(stream).length,
     refusalLeavesTargetUnchanged: true,
+    projectedSourceMatchesDispatch: true,
     result: "PASS",
   };
 }
@@ -431,7 +438,7 @@ function verifyReplay(state) {
   assert.equal(message.mentions[0].source.offset, offset(1));
   assert.equal(
     message.mentions[0].source.digest,
-    canonicalStateDigest(created),
+    canonicalStateDigest(created.data),
   );
   assert.equal(
     first.finalState.eventProvenance.filter(({ envelope }) =>
@@ -610,20 +617,24 @@ function createMemoryStore() {
   const streams = new Map();
   return {
     async append(stream, record, { streamSeq }) {
-      const records = streams.get(stream) ?? [];
-      const currentOffset = offset(records.length);
+      const entries = streams.get(stream) ?? [];
+      const currentOffset = offset(entries.length);
       if (streamSeq !== currentOffset) {
         const error = new Error("stale stream head");
         error.status = 409;
         throw error;
       }
-      records.push(record);
-      streams.set(stream, records);
-      return { nextOffset: offset(records.length) };
+      const entry = { offset: offset(entries.length + 1), record };
+      entries.push(entry);
+      streams.set(stream, entries);
+      return { nextOffset: entry.offset };
     },
     async read(stream) {
-      const records = streams.get(stream) ?? [];
-      return { nextOffset: offset(records.length), records: [...records] };
+      const entries = streams.get(stream) ?? [];
+      return {
+        nextOffset: offset(entries.length),
+        records: entries.map(({ record }) => record),
+      };
     },
     dump(stream) {
       return [...(streams.get(stream) ?? [])];

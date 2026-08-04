@@ -85,6 +85,7 @@ export function parseMentionCandidates(value) {
         exclusions,
         startCodeUnit > endCodeUnit - 1 ? startCodeUnit : endCodeUnit - 1,
       ) ||
+      isAdjacentToFormatControl(value, startCodeUnit, endCodeUnit) ||
       !hasMentionBoundary(value, startCodeUnit)
     ) {
       continue;
@@ -376,6 +377,10 @@ function inlineCodeRanges(text, existingRanges) {
     }
     let runLength = 1;
     while (text.at(index + runLength) === "`") runLength += 1;
+    if (runLength >= 3) {
+      index += runLength;
+      continue;
+    }
     let closing = -1;
     for (let cursor = index + runLength; cursor < text.length; cursor += 1) {
       if (isExcluded(existingRanges, cursor) || text.at(cursor) !== "`")
@@ -422,6 +427,13 @@ function hasMentionBoundary(text, start) {
       ? null
       : Array.from(text.slice(0, boundaryIndex + 1)).at(-1);
   return preceding === null || !WORD_OR_AT_PATTERN.test(preceding);
+}
+
+function isAdjacentToFormatControl(text, start, end) {
+  return (
+    (start > 0 && FORMAT_CONTROL_PATTERN.test(text.at(start - 1))) ||
+    (end < text.length && FORMAT_CONTROL_PATTERN.test(text.at(end)))
+  );
 }
 
 function isExcluded(ranges, index) {
@@ -484,8 +496,7 @@ function validateMentionParseText(value) {
       (codeUnit <= 31 && codeUnit !== 10) ||
       (codeUnit >= 128 && codeUnit <= 159) ||
       codeUnit === 127 ||
-      /[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]/u.test(value.at(index)) ||
-      FORMAT_CONTROL_PATTERN.test(value.at(index))
+      /[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]/u.test(value.at(index))
     ) {
       throw mentionError(
         MENTION_REFUSAL_CODES.INVALID_TEXT,

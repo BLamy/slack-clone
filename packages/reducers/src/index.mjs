@@ -878,7 +878,7 @@ function createConversationMessageRecord(data, context, kind) {
     record.mentions = data.mentions.map((mention) => ({
       ...mention,
       source: {
-        digest: canonicalStateDigest(context.envelope),
+        digest: canonicalStateDigest(context.envelope.data),
         offset: context.offset,
         stream: `channel:${data.channelId}`,
       },

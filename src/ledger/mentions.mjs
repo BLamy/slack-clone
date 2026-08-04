@@ -11,6 +11,7 @@ import {
   membershipIdFor,
   channelMembershipKey,
 } from "@stream-slack/protocol";
+import { canonicalStateDigest } from "@stream-slack/reducers";
 
 export const MENTION_RESOLUTION_MODES = Object.freeze(["plain-text", "refuse"]);
 
@@ -118,10 +119,10 @@ export function resolveConversationMentionsStrict(input) {
 }
 
 /**
- * Add the accepted Durable Streams receipt reference to the result handed to
+ * Add the accepted Durable Streams source reference to the result handed to
  * the next dispatcher. The event already contains canonical target IDs and
  * spans; this binds the immutable source evidence only after append assigns
- * the accepted checkpoint and event digest.
+ * the accepted checkpoint.
  */
 export function bindAcceptedMentionSource(result, { channelId, text } = {}) {
   if (!result || typeof result !== "object") return result;
@@ -141,7 +142,7 @@ export function bindAcceptedMentionSource(result, { channelId, text } = {}) {
     expectedWorkspaceId: receipt.workspaceId,
   });
   const source = {
-    digest: receipt.eventDigest,
+    digest: canonicalStateDigest(withoutDispatch(event)),
     offset: receipt.nextOffset,
     stream: `channel:${resolvedChannelId}`,
   };
@@ -153,6 +154,13 @@ export function bindAcceptedMentionSource(result, { channelId, text } = {}) {
     ...result,
     event: Object.freeze({ ...event, mentions: Object.freeze(bound) }),
   });
+}
+
+function withoutDispatch(event) {
+  if (!event || typeof event !== "object") return event;
+  const sourceEvent = { ...event };
+  delete sourceEvent.dispatch;
+  return sourceEvent;
 }
 
 function resolveRefusalCode({ candidate, channelId, state, workspaceId }) {

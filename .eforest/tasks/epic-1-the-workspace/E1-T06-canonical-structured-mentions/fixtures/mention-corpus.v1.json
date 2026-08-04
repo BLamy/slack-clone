@@ -8,6 +8,11 @@
       "handles": ["ada", "helper"]
     },
     {
+      "name": "zwj-emoji-and-mention",
+      "text": "👩‍💻 @ada",
+      "handles": ["ada"]
+    },
+    {
       "name": "inline-code-escaped-and-quote",
       "text": "`@ada` and \\@ada\n> @ada\nnormal @helper",
       "handles": ["helper"]
@@ -32,27 +37,27 @@
     {
       "name": "zero-width-space-email",
       "text": "ada\u200b@example.test",
-      "code": "MENTION_INVALID_TEXT"
+      "handles": []
     },
     {
       "name": "word-joiner-before-mention",
       "text": "x\u2060@helper",
-      "code": "MENTION_INVALID_TEXT"
+      "handles": []
     },
     {
       "name": "bom-before-mention",
       "text": "x\ufeff@helper",
-      "code": "MENTION_INVALID_TEXT"
+      "handles": []
     },
     {
       "name": "soft-hyphen-before-mention",
       "text": "x\u00ad@helper",
-      "code": "MENTION_INVALID_TEXT"
+      "handles": []
     },
     {
       "name": "zero-width-inside-handle",
       "text": "@ada\u200bxyz",
-      "code": "MENTION_INVALID_TEXT"
+      "handles": []
     }
   ],
   "resolutionCases": [

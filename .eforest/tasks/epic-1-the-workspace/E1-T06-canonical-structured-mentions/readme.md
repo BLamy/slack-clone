@@ -3,7 +3,7 @@ id: E1-T06
 epic: 1
 title: "Canonical structured mentions as durable trigger facts"
 priority: 106
-status: implemented
+status: verified
 depends_on: [E1-T04]
 estimate: M
 capstone: false
@@ -236,3 +236,19 @@ fact only; no agent process runs until Epic 3.
   unauthorized, and non-durable trigger inputs at both dispatch and reducer boundaries while
   preserving idempotent source binding and stable replay targets; awaiting a fresh independent
   critic.
+
+### Critic — 2026-08-04 — verified
+
+- Fresh independent critic session `0d955bd9-be9e-4f90-a043-beb3f6fe86ed` reviewed implementation
+  commit `69300c4810b9d4e1da78452bf6c8fc7f2ddbff82` and promoted evidence commit `b5c073a` without
+  editing files, task state, queue, or history.
+- The critic independently reran `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`,
+  and `pnpm build` (124/124 tests passed), then ran
+  `E1_T06_IMPLEMENTATION_COMMIT=69300c4 E1_T06_SKIP_GATES=1 TEST_RUN_ID=critic-indep-1
+  node scripts/verify-e1-t06.mjs` with exit 0 and matching replay/source digests.
+- Direct reducer attacks independently refused URL, blockquote, escaped, cross-workspace,
+  duplicate-fact, client-source, edited-event, and stale-handle inputs while accepting the
+  legitimate visible control. The critic confirmed the disposable fenced-code mutation installs,
+  causes the nested verifier to exit 1, and leaves no worktree residue.
+- Verdict: `VERDICT: verified`. Advisory notes about stale edit spans, typed refusal oracles, and
+  fixture-state sharing were not acceptance-refuting; no required evidence or product fix remains.

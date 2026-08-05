@@ -1,0 +1,4 @@
+{
+  "result": "PASS",
+  "detector": "tamper matrix localizes source, row, checkpoint, and claimed digest mutations"
+}

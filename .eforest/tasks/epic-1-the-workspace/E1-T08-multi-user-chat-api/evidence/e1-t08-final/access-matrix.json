@@ -1,0 +1,36 @@
+{
+  "ownerChannelKinds": [
+    "public",
+    "private",
+    "direct"
+  ],
+  "agentChannelKinds": [
+    "public",
+    "private"
+  ],
+  "serviceChannelKinds": [
+    "public"
+  ],
+  "removedMemberPrivateRead": "refused",
+  "refusals": [
+    {
+      "code": "CAPSTONE_ACCESS_DENIED",
+      "identityLeaked": false,
+      "name": "removed-member"
+    },
+    {
+      "code": "CAPSTONE_ACCESS_DENIED",
+      "identityLeaked": false,
+      "name": "service"
+    },
+    {
+      "code": "CAPSTONE_ACCESS_DENIED",
+      "identityLeaked": false,
+      "name": "sibling-workspace"
+    }
+  ],
+  "privateMetadataNotLeaked": true,
+  "agentMemberReadAllowed": true,
+  "stateWorkspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "result": "PASS"
+}

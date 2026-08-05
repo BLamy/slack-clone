@@ -1,0 +1,12 @@
+{
+  "creationOrderVariant": [
+    "agent-request-first",
+    "linus-session",
+    "ada-session"
+  ],
+  "sourceCausalPrerequisitesPreserved": true,
+  "randomizedMessageInterleavingReplayed": true,
+  "finalMessageShapeDigest": "sha256:d023106cb05cb8de17b27cbff8d6277b14b876f2fcbbc09e32b51a2364aba172",
+  "finalOrderingMayDifferBecauseSourceOrderDiffers": true,
+  "result": "PASS"
+}

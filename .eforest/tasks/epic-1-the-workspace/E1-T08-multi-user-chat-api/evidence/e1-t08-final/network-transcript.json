@@ -1,0 +1,334 @@
+{
+  "schemaVersion": 1,
+  "records": [
+    {
+      "bodyCode": null,
+      "label": "session-login",
+      "method": "POST",
+      "path": "/api/capstone/sessions",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "session-login",
+      "method": "POST",
+      "path": "/api/capstone/sessions",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": "CAPSTONE_AGENT_AUTH_FORBIDDEN",
+      "label": "agent-owner-authentication",
+      "method": "POST",
+      "path": "/api/capstone/sessions",
+      "status": 403,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "ada-directory",
+      "method": "GET",
+      "path": "/api/capstone/directory",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "create-public-channel",
+      "method": "POST",
+      "path": "/api/capstone/channels",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "create-private-channel",
+      "method": "POST",
+      "path": "/api/capstone/channels",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "create-direct-channel",
+      "method": "POST",
+      "path": "/api/capstone/channels",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "ada-channels",
+      "method": "GET",
+      "path": "/api/capstone/channels",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "label": "direct-ada-initial",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm/events",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "label": "direct-linus-initial",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm/events",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "label": "private-ada-initial",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222/events",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "label": "private-linus-initial",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222/events",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "label": "public-ada-initial",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111/events",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "label": "public-linus-initial",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111/events",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "bodyCode": null,
+      "label": "public-root-create",
+      "method": "POST",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111/messages",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "public-root-retry",
+      "method": "POST",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111/messages",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "public-root-edit",
+      "method": "PATCH",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111/messages/public-root",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "public-root-reaction-add",
+      "method": "POST",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111/messages/public-root/reactions",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "public-root-reaction-remove",
+      "method": "POST",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111/messages/public-root/reactions",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "public-offline-create",
+      "method": "POST",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111/messages",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "label": "public-ada-resumed",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111/events?offset=0000000000000000_0000000000000009",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "bodyCode": null,
+      "label": "private-root-create",
+      "method": "POST",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222/messages",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "private-reply-create",
+      "method": "POST",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222/messages",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "private-root-edit",
+      "method": "PATCH",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222/messages/private-root",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "private-root-reaction",
+      "method": "POST",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222/messages/private-root/reactions",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "private-reply-delete",
+      "method": "DELETE",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222/messages/private-reply",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "dm-root-create",
+      "method": "POST",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm/messages",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "dm-reply-create",
+      "method": "POST",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm/messages",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "dm-root-edit",
+      "method": "PATCH",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm/messages/dm-root",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "dm-root-reaction",
+      "method": "POST",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm/messages/dm-root/reactions",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "linus-ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111-snapshot",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "ada-ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111-snapshot",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "ada-ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222-snapshot",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "linus-ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222-snapshot",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "ada-ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm-snapshot",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "linus-ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm-snapshot",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "private-member-remove",
+      "method": "POST",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222/members/pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc/remove",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": "CAPSTONE_ACCESS_DENIED",
+      "label": "removed-member-private-read",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+      "status": 404,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": "CAPSTONE_ACCESS_DENIED",
+      "label": "removed-member-private-write",
+      "method": "POST",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222/messages",
+      "status": 404,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "removed-member-channel-list",
+      "method": "GET",
+      "path": "/api/capstone/channels",
+      "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "restart-ada-session-login",
+      "method": "POST",
+      "path": "/api/capstone/sessions",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "post-restart-private-read",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+      "status": 200,
+      "type": "HTTP"
+    }
+  ]
+}

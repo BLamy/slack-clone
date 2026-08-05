@@ -1,0 +1,19 @@
+{
+  "sourceEvent": {
+    "code": "SOURCE_DIGEST_MISMATCH",
+    "localized": true
+  },
+  "projectionRow": {
+    "code": "PROJECTION_CORRUPT_ROW",
+    "localized": true
+  },
+  "checkpoint": {
+    "code": "PROJECTION_CHECKPOINT_INVALID",
+    "localized": true
+  },
+  "claimedCompositeDigest": {
+    "code": "COMPOSITE_DIGEST_MISMATCH",
+    "localized": true
+  },
+  "result": "PASS"
+}

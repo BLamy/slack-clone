@@ -1,0 +1,3573 @@
+{
+  "schemaVersion": 1,
+  "task": "E1-T08",
+  "runId": "e1-t08-final-2",
+  "implementationCommit": "a9347bb7820d5e5d8395ebf0e9111cf6e3124db4",
+  "implementationTreeCleanAtStart": true,
+  "result": "PASS",
+  "replay": "Replay: N/A (server/API capstone; product UI lands later) + mitigation: multi-client HTTP/SSE transcript, access matrix, source dumps, projection rebuild, and composite replay digest",
+  "replayUploadAttempted": false,
+  "skips": [],
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "durationMs": 5135,
+      "name": "format",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "durationMs": 4015,
+      "name": "lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "durationMs": 11255,
+      "name": "typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "durationMs": 30164,
+      "name": "tests",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm build",
+      "durationMs": 1285,
+      "name": "build",
+      "result": "PASS"
+    }
+  ],
+  "source": {
+    "recordCount": 38,
+    "streams": [
+      "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+      "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+      "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+      "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+    ],
+    "finalStateDigest": "sha256:421913b4abb70138e823e70b32e161ea2c5ecd11c01c3e28c8b9069be4087a06"
+  },
+  "channels": {
+    "public": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+    "private": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+    "direct": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+  },
+  "sessions": {
+    "humanCount": 2,
+    "agentMember": true,
+    "agentAuthenticationRefused": "CAPSTONE_AGENT_AUTH_FORBIDDEN",
+    "processCountForAgentExecution": 0
+  },
+  "convergence": {
+    "channels": [
+      {
+        "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+        "adaDigest": "sha256:bf2361802b218ab4fa0b75659bae1eb8d32488097b17fcfdbcbdd94f5dafde4e",
+        "linusDigest": "sha256:bf2361802b218ab4fa0b75659bae1eb8d32488097b17fcfdbcbdd94f5dafde4e",
+        "stateDigest": "sha256:65d494497ecb965b72a94dbde1b674e944e199b44e8aec0858954b5bf357cc73",
+        "messageIds": [
+          "public-root",
+          "public-offline"
+        ]
+      },
+      {
+        "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+        "adaDigest": "sha256:a9ae2eda3113119060e56978126f2e7d1fd18119e4e38fab242cce6a8b29877a",
+        "linusDigest": "sha256:a9ae2eda3113119060e56978126f2e7d1fd18119e4e38fab242cce6a8b29877a",
+        "stateDigest": "sha256:65d494497ecb965b72a94dbde1b674e944e199b44e8aec0858954b5bf357cc73",
+        "messageIds": [
+          "private-root"
+        ]
+      },
+      {
+        "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+        "adaDigest": "sha256:6f3ec485bc846ded6f616c0f927ae4a56cfa73b1b90650b8ba5a184e23b00df6",
+        "linusDigest": "sha256:6f3ec485bc846ded6f616c0f927ae4a56cfa73b1b90650b8ba5a184e23b00df6",
+        "stateDigest": "sha256:65d494497ecb965b72a94dbde1b674e944e199b44e8aec0858954b5bf357cc73",
+        "messageIds": [
+          "dm-root",
+          "dm-reply"
+        ]
+      }
+    ],
+    "sameStateDigest": true,
+    "result": "PASS"
+  },
+  "mentionEvidence": {
+    "sourceMentionCount": 1,
+    "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+    "originalHandle": "helper",
+    "currentHandle": "helper-renamed",
+    "ownerStable": true,
+    "source": {
+      "digest": "sha256:a48102c7b4525ba54cfb8b662411a227ca68524ec9617954dde1f129da71c584",
+      "offset": "0000000000000000_0000000100000017",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+    },
+    "retryCreatedNoNewSource": true,
+    "editCreatedNoNewTrigger": true,
+    "reconnectCreatedNoNewTrigger": true,
+    "replayCreatedNoNewTrigger": true,
+    "processCountForMention": 0,
+    "sourceBinding": {
+      "digest": "sha256:a48102c7b4525ba54cfb8b662411a227ca68524ec9617954dde1f129da71c584",
+      "offset": "0000000000000000_0000000000000006",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+    },
+    "result": "PASS"
+  },
+  "accessEvidence": {
+    "ownerChannelKinds": [
+      "public",
+      "private",
+      "direct"
+    ],
+    "agentChannelKinds": [
+      "public",
+      "private"
+    ],
+    "serviceChannelKinds": [
+      "public"
+    ],
+    "removedMemberPrivateRead": "refused",
+    "refusals": [
+      {
+        "code": "CAPSTONE_ACCESS_DENIED",
+        "identityLeaked": false,
+        "name": "removed-member"
+      },
+      {
+        "code": "CAPSTONE_ACCESS_DENIED",
+        "identityLeaked": false,
+        "name": "service"
+      },
+      {
+        "code": "CAPSTONE_ACCESS_DENIED",
+        "identityLeaked": false,
+        "name": "sibling-workspace"
+      }
+    ],
+    "privateMetadataNotLeaked": true,
+    "agentMemberReadAllowed": true,
+    "stateWorkspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "result": "PASS"
+  },
+  "restartEvidence": {
+    "sessionsAndProcessMapsDiscarded": true,
+    "sourceDigestBefore": "sha256:421913b4abb70138e823e70b32e161ea2c5ecd11c01c3e28c8b9069be4087a06",
+    "sourceDigestAfter": "sha256:421913b4abb70138e823e70b32e161ea2c5ecd11c01c3e28c8b9069be4087a06",
+    "sourceRecordsUnchanged": true,
+    "result": "PASS"
+  },
+  "projectionEvidence": {
+    "beforeDeletion": {
+      "checkpoint": {
+        "projectionId": "px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "reducerVersion": "stream-slack-reducer-v1",
+        "schemaVersion": 1,
+        "sequence": 38,
+        "sourceHeads": [
+          {
+            "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+            "offset": "0000000000000000_000000000000000a",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+          },
+          {
+            "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+            "offset": "0000000000000000_000000000000000b",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+          },
+          {
+            "digest": "sha256:0fbe4a9bd85b4b8c8b4a02e868d283a73367f2e59829667ce201126735dccab2",
+            "offset": "0000000000000000_0000000000000005",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+          },
+          {
+            "digest": "sha256:d1466e264f375af5006e98d146541b36d8957bf4ba45fe8f1ecf28c97b0ea544",
+            "offset": "0000000000000000_000000000000000c",
+            "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+          }
+        ],
+        "stateDigest": "sha256:d499dc70e57337bdcd429260738e7967061bd6e8cb00fa4f755be303dd8f5bd8",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2"
+      },
+      "projectionDigest": "sha256:77ad18d8206e03eb46a0470b0e1679b4a4693dc21b6c50314e042c1520c65e31"
+    },
+    "afterRebuild": {
+      "checkpoint": {
+        "projectionId": "px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "reducerVersion": "stream-slack-reducer-v1",
+        "schemaVersion": 1,
+        "sequence": 38,
+        "sourceHeads": [
+          {
+            "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+            "offset": "0000000000000000_000000000000000a",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+          },
+          {
+            "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+            "offset": "0000000000000000_000000000000000b",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+          },
+          {
+            "digest": "sha256:0fbe4a9bd85b4b8c8b4a02e868d283a73367f2e59829667ce201126735dccab2",
+            "offset": "0000000000000000_0000000000000005",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+          },
+          {
+            "digest": "sha256:d1466e264f375af5006e98d146541b36d8957bf4ba45fe8f1ecf28c97b0ea544",
+            "offset": "0000000000000000_000000000000000c",
+            "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+          }
+        ],
+        "stateDigest": "sha256:d499dc70e57337bdcd429260738e7967061bd6e8cb00fa4f755be303dd8f5bd8",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2"
+      },
+      "projectionDigest": "sha256:77ad18d8206e03eb46a0470b0e1679b4a4693dc21b6c50314e042c1520c65e31",
+      "stateDigest": "sha256:d499dc70e57337bdcd429260738e7967061bd6e8cb00fa4f755be303dd8f5bd8"
+    },
+    "afterCatchUp": {
+      "checkpoint": {
+        "projectionId": "px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "reducerVersion": "stream-slack-reducer-v1",
+        "schemaVersion": 1,
+        "sequence": 38,
+        "sourceHeads": [
+          {
+            "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+            "offset": "0000000000000000_000000000000000a",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+          },
+          {
+            "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+            "offset": "0000000000000000_000000000000000b",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+          },
+          {
+            "digest": "sha256:0fbe4a9bd85b4b8c8b4a02e868d283a73367f2e59829667ce201126735dccab2",
+            "offset": "0000000000000000_0000000000000005",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+          },
+          {
+            "digest": "sha256:d1466e264f375af5006e98d146541b36d8957bf4ba45fe8f1ecf28c97b0ea544",
+            "offset": "0000000000000000_000000000000000c",
+            "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+          }
+        ],
+        "stateDigest": "sha256:d499dc70e57337bdcd429260738e7967061bd6e8cb00fa4f755be303dd8f5bd8",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2"
+      },
+      "compositeDigest": "sha256:2b9db2630e42f4ff910d7702c2b6c317257dd8816dc772025b5cfcb9da7664cc",
+      "projectionDigest": "sha256:77ad18d8206e03eb46a0470b0e1679b4a4693dc21b6c50314e042c1520c65e31",
+      "resumedFromCheckpoint": {
+        "projectionId": "px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "reducerVersion": "stream-slack-reducer-v1",
+        "schemaVersion": 1,
+        "sequence": 19,
+        "sourceHeads": [
+          {
+            "digest": "sha256:d26e6ca7da337a8d104ffc0f210443219d5f99ec7412c18bc17cb8f820a8c847",
+            "offset": "0000000000000000_0000000000000005",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+          },
+          {
+            "digest": "sha256:f6f6792fd372022b664c23f48fd3e2e8189a0794fb82d3fc19a3425c78510b74",
+            "offset": "0000000000000000_0000000000000003",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+          },
+          {
+            "digest": "sha256:fda03c2f83cfdf2037dfe2ebd7f50e40b4f5893106b51179c15ff2ef31620477",
+            "offset": "0000000000000000_000000000000000b",
+            "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+          }
+        ],
+        "stateDigest": "sha256:cca30f20387a031ce61987c34c386499e65552961f785bf488d54cbb59c0db07",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "checkpointDigest": "sha256:9fc62ff6f7fb74c8bab8fbae5218cfecedf925de741d1a4253470e04e5d466bd"
+      }
+    },
+    "independentReplays": {
+      "finalStateDigest": "sha256:421913b4abb70138e823e70b32e161ea2c5ecd11c01c3e28c8b9069be4087a06",
+      "identical": true
+    },
+    "manifest": {
+      "before": {
+        "checkpoint": {
+          "projectionId": "px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "reducerVersion": "stream-slack-reducer-v1",
+          "schemaVersion": 1,
+          "sequence": 38,
+          "sourceHeads": [
+            {
+              "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+              "offset": "0000000000000000_000000000000000a",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+            },
+            {
+              "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+              "offset": "0000000000000000_000000000000000b",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+            },
+            {
+              "digest": "sha256:0fbe4a9bd85b4b8c8b4a02e868d283a73367f2e59829667ce201126735dccab2",
+              "offset": "0000000000000000_0000000000000005",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+            },
+            {
+              "digest": "sha256:d1466e264f375af5006e98d146541b36d8957bf4ba45fe8f1ecf28c97b0ea544",
+              "offset": "0000000000000000_000000000000000c",
+              "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+            }
+          ],
+          "stateDigest": "sha256:d499dc70e57337bdcd429260738e7967061bd6e8cb00fa4f755be303dd8f5bd8",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2"
+        },
+        "projectionId": "px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "projectionDigest": "sha256:77ad18d8206e03eb46a0470b0e1679b4a4693dc21b6c50314e042c1520c65e31",
+        "reducerVersion": "stream-slack-reducer-v1",
+        "rows": {
+          "workspace": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "kind": "workspace",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:fda03c2f83cfdf2037dfe2ebd7f50e40b4f5893106b51179c15ff2ef31620477",
+                "offset": "0000000000000000_000000000000000b",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "createdBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "displayName": "Capstone Workspace",
+                "ownerMembershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "revision": 7,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "directory": [],
+          "principal": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "principal",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:20ae3ef895d238f031c546484066dd78d1b3480fb85594a2ad38b0177bc92dbf",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "kind": "human",
+                "ownedBy": null,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "profile": {
+                  "displayName": "Ada",
+                  "email": "ada@example.test",
+                  "handle": "ada"
+                },
+                "profileRevision": 1,
+                "status": "active",
+                "subjectBinding": {
+                  "audience": "stream-slack",
+                  "issuer": "auth0",
+                  "subject": "human:ada"
+                }
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "principal",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:2dcc2bdb5a0f669ced87afdef1a607a830335c8347a82c553f1a601723ea4f7f",
+                "offset": "0000000000000000_0000000000000002",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "kind": "human",
+                "ownedBy": null,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "profile": {
+                  "displayName": "Linus",
+                  "email": "linus@example.test",
+                  "handle": "linus"
+                },
+                "profileRevision": 1,
+                "status": "active",
+                "subjectBinding": {
+                  "audience": "stream-slack",
+                  "issuer": "auth0",
+                  "subject": "human:linus"
+                }
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+              "kind": "principal",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:321d726a1d9b411b57f04cdc36750b0208f6967e177fce481e7e3fd008dda607",
+                "offset": "0000000000000000_0000000000000004",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "kind": "service",
+                "ownedBy": null,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+                "profile": {
+                  "displayName": "Audit-service",
+                  "email": "",
+                  "handle": "audit-service"
+                },
+                "profileRevision": 1,
+                "status": "active",
+                "subjectBinding": {
+                  "audience": "stream-slack",
+                  "issuer": "stream-slack",
+                  "subject": "service:audit-service"
+                }
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "principal",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:d1466e264f375af5006e98d146541b36d8957bf4ba45fe8f1ecf28c97b0ea544",
+                "offset": "0000000000000000_000000000000000c",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "kind": "agent",
+                "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                "profile": {
+                  "displayName": "Renamed Helper",
+                  "email": "",
+                  "handle": "helper-renamed"
+                },
+                "profileRevision": 2,
+                "status": "active",
+                "subjectBinding": {
+                  "audience": "stream-slack",
+                  "issuer": "stream-slack",
+                  "subject": "agent:helper"
+                }
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "membership": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "membership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:79f11c7f66df60615c5c67a17e9417782ff8219581b9918961171337c3102077",
+                "offset": "0000000000000000_0000000000000005",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "invitedBy": null,
+                "inviteId": null,
+                "membershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "reason": null,
+                "revision": 1,
+                "role": "owner",
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "membership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:afa188260788728985697e224b3aec1e2130fd1b4d720969a964d8746ee0f7e7",
+                "offset": "0000000000000000_0000000000000007",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "invitedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_00000000000000000000000014",
+                "membershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "reason": null,
+                "revision": 1,
+                "role": "member",
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "membership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:653b7f9e443b69278c517c14ee24df5aaae72743f645f7f86c4b29c743dc0a8e",
+                "offset": "0000000000000000_0000000000000009",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "invitedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_00000000000000000000000017",
+                "membershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                "reason": null,
+                "revision": 1,
+                "role": "agent",
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+              "kind": "membership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:fda03c2f83cfdf2037dfe2ebd7f50e40b4f5893106b51179c15ff2ef31620477",
+                "offset": "0000000000000000_000000000000000b",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "invitedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_0000000000000000000000001a",
+                "membershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+                "reason": null,
+                "revision": 1,
+                "role": "service",
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "channel": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+              "kind": "channel",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:484e98edb14d48f104c6b2fd4b627693115808433be309b41e80cd755684b24b",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "creatorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "displayName": "",
+                "kind": "direct",
+                "participantIds": [
+                  "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+                ],
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+              "kind": "channel",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:d26e6ca7da337a8d104ffc0f210443219d5f99ec7412c18bc17cb8f820a8c847",
+                "offset": "0000000000000000_0000000000000005",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "creatorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "displayName": "general",
+                "kind": "public",
+                "participantIds": null,
+                "revision": 5,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+              "kind": "channel",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+                "offset": "0000000000000000_000000000000000b",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "creatorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "displayName": "incident-room",
+                "kind": "private",
+                "participantIds": null,
+                "revision": 6,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "channelMembership": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:4c2b30bd1ba8d2dc46af2b256198834ef0f417b79510dacc94418f92edf59777",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:3ef64da1f04c8723aa37d2351c3eff5d92a2e385a0ef94da811f1001d10486ec",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:484e98edb14d48f104c6b2fd4b627693115808433be309b41e80cd755684b24b",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:484e98edb14d48f104c6b2fd4b627693115808433be309b41e80cd755684b24b",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:561b97bac2fc5323369ae779263a0e8a2595df06db7ece90df696ef6e2c5791c",
+                "offset": "0000000000000000_0000000000000003",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:d26e6ca7da337a8d104ffc0f210443219d5f99ec7412c18bc17cb8f820a8c847",
+                "offset": "0000000000000000_0000000000000005",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:ad4fa1ec25373cfa240d0dd509a576b8c09aef30de338eaf3843e36588ae98c5",
+                "offset": "0000000000000000_0000000000000005",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+                "offset": "0000000000000000_000000000000000b",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "revision": 2,
+                "status": "removed",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "reason": "membership revoked during live session"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "message": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "dm-reply",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:5b8d4c9723dda27d4f01a845cb122517754822082d16c58961a0e461db218174",
+                "offset": "0000000000000000_0000000000000003",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "contentType": "text/plain",
+                "messageId": "dm-reply",
+                "revision": 1,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000023",
+                    "kind": "replied",
+                    "offset": "0000000000000000_0000000000000023",
+                    "revision": 1,
+                    "text": "Direct reply"
+                  }
+                ],
+                "rootMessageId": "dm-root",
+                "status": "active",
+                "text": "Direct reply",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "dm-root",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:f71b683ff0c423d0d73509ed4dc4a659df6140c4c8d7d16072a54e3bdff9d62c",
+                "offset": "0000000000000000_0000000000000004",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "contentType": "text/plain",
+                "messageId": "dm-root",
+                "revision": 2,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000022",
+                    "kind": "created",
+                    "offset": "0000000000000000_0000000000000022",
+                    "revision": 1,
+                    "text": "Direct root"
+                  },
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000024",
+                    "kind": "edited",
+                    "offset": "0000000000000000_0000000000000024",
+                    "revision": 2,
+                    "text": "Direct root edited"
+                  }
+                ],
+                "rootMessageId": null,
+                "status": "active",
+                "text": "Direct root edited",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "public-root",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:db0c64a3faedb14ae650e2bd89eac48a20ad830ef5425334f59f6fe5e77d89d4",
+                "offset": "0000000000000000_0000000000000007",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "contentType": "text/plain",
+                "messageId": "public-root",
+                "revision": 2,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000017",
+                    "kind": "created",
+                    "offset": "0000000000000000_0000000000000017",
+                    "revision": 1,
+                    "text": "Welcome @helper"
+                  },
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000018",
+                    "kind": "edited",
+                    "offset": "0000000000000000_0000000000000018",
+                    "revision": 2,
+                    "text": "Welcome, edited"
+                  }
+                ],
+                "rootMessageId": null,
+                "status": "active",
+                "text": "Welcome, edited",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "mentions": [
+                  {
+                    "handle": "helper",
+                    "kind": "agent",
+                    "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                    "span": {
+                      "startByte": 8,
+                      "endByte": 15
+                    },
+                    "text": "@helper",
+                    "source": {
+                      "digest": "sha256:a48102c7b4525ba54cfb8b662411a227ca68524ec9617954dde1f129da71c584",
+                      "offset": "0000000000000000_0000000000000017",
+                      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+                    }
+                  }
+                ]
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "private-root",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:52b2ccaaa569ecdae17138aa8a87310940b7ed540e5a84e1bdc89cb77ce0bf2f",
+                "offset": "0000000000000000_0000000000000008",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "contentType": "text/plain",
+                "messageId": "private-root",
+                "revision": 2,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_0000000000000000000000001d",
+                    "kind": "created",
+                    "offset": "0000000000000000_000000000000001d",
+                    "revision": 1,
+                    "text": "Private source fact"
+                  },
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_0000000000000000000000001f",
+                    "kind": "edited",
+                    "offset": "0000000000000000_000000000000001f",
+                    "revision": 2,
+                    "text": "Private source fact edited"
+                  }
+                ],
+                "rootMessageId": null,
+                "status": "active",
+                "text": "Private source fact edited",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "private-reply",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:07b6a74879dcaee1adf39e9684320879f15f06486e44957731b36aebde72343e",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "contentType": "text/plain",
+                "messageId": "private-reply",
+                "revision": 2,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "contentType": "text/plain",
+                    "eventId": "ev_0000000000000000000000001e",
+                    "kind": "replied",
+                    "offset": "0000000000000000_000000000000001e",
+                    "revision": 1,
+                    "text": "Private reply"
+                  },
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000021",
+                    "kind": "deleted",
+                    "offset": "0000000000000000_0000000000000021",
+                    "revision": 2,
+                    "text": null
+                  }
+                ],
+                "rootMessageId": "private-root",
+                "status": "deleted",
+                "text": null,
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "public-offline",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "contentType": "text/plain",
+                "messageId": "public-offline",
+                "revision": 1,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "contentType": "text/plain",
+                    "eventId": "ev_0000000000000000000000001c",
+                    "kind": "created",
+                    "offset": "0000000000000000_000000000000001c",
+                    "revision": 1,
+                    "text": "Resumed public event"
+                  }
+                ],
+                "rootMessageId": null,
+                "status": "active",
+                "text": "Resumed public event",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "thread": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "dm-root",
+              "kind": "thread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:f71b683ff0c423d0d73509ed4dc4a659df6140c4c8d7d16072a54e3bdff9d62c",
+                "offset": "0000000000000000_0000000000000004",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "messageIds": [
+                  "dm-reply",
+                  "dm-root"
+                ],
+                "rootMessageId": "dm-root"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "public-root",
+              "kind": "thread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:db0c64a3faedb14ae650e2bd89eac48a20ad830ef5425334f59f6fe5e77d89d4",
+                "offset": "0000000000000000_0000000000000007",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "messageIds": [
+                  "public-root"
+                ],
+                "rootMessageId": "public-root"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "private-root",
+              "kind": "thread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:07b6a74879dcaee1adf39e9684320879f15f06486e44957731b36aebde72343e",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "messageIds": [
+                  "private-reply",
+                  "private-root"
+                ],
+                "rootMessageId": "private-root"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "public-offline",
+              "kind": "thread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "messageIds": [
+                  "public-offline"
+                ],
+                "rootMessageId": "public-offline"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "reaction": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "dm-root\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\u0000wave",
+              "kind": "reaction",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:0fbe4a9bd85b4b8c8b4a02e868d283a73367f2e59829667ce201126735dccab2",
+                "offset": "0000000000000000_0000000000000005",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "emoji": "wave",
+                "history": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "eventId": "ev_00000000000000000000000025",
+                    "kind": "added",
+                    "offset": "0000000000000000_0000000000000025",
+                    "status": "active"
+                  }
+                ],
+                "messageId": "dm-root",
+                "revision": 1,
+                "status": "active"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "private-root\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc\u0000eyes",
+              "kind": "reaction",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:83d80a9d5edaa9bd0faedd451d850070fc7c962ec5be4d698f1689e148d5e275",
+                "offset": "0000000000000000_0000000000000009",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "emoji": "eyes",
+                "history": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "eventId": "ev_00000000000000000000000020",
+                    "kind": "added",
+                    "offset": "0000000000000000_0000000000000020",
+                    "status": "active"
+                  }
+                ],
+                "messageId": "private-root",
+                "revision": 1,
+                "status": "active"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "public-root\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc\u0000thumbsup",
+              "kind": "reaction",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:cd0718ed2b2c417af6cf22c8ac24a49ef935ad9af4258b6cc6c1cdd823dec514",
+                "offset": "0000000000000000_0000000000000009",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "emoji": "thumbsup",
+                "history": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "eventId": "ev_0000000000000000000000001a",
+                    "kind": "added",
+                    "offset": "0000000000000000_000000000000001a",
+                    "status": "active"
+                  },
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "eventId": "ev_0000000000000000000000001b",
+                    "kind": "removed",
+                    "offset": "0000000000000000_000000000000001b",
+                    "status": "removed"
+                  }
+                ],
+                "messageId": "public-root",
+                "revision": 2,
+                "status": "removed"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "unread": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:5b8d4c9723dda27d4f01a845cb122517754822082d16c58961a0e461db218174",
+                "offset": "0000000000000000_0000000000000003",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "count": 1,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:f71b683ff0c423d0d73509ed4dc4a659df6140c4c8d7d16072a54e3bdff9d62c",
+                "offset": "0000000000000000_0000000000000004",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "count": 1,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:db0c64a3faedb14ae650e2bd89eac48a20ad830ef5425334f59f6fe5e77d89d4",
+                "offset": "0000000000000000_0000000000000007",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "count": 1,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:52b2ccaaa569ecdae17138aa8a87310940b7ed540e5a84e1bdc89cb77ce0bf2f",
+                "offset": "0000000000000000_0000000000000008",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "count": 1,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "count": 1,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "count": 2,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "count": 2,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+                "offset": "0000000000000000_000000000000000b",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "count": 0,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ]
+        },
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "afterRebuild": {
+        "checkpoint": {
+          "projectionId": "px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "reducerVersion": "stream-slack-reducer-v1",
+          "schemaVersion": 1,
+          "sequence": 38,
+          "sourceHeads": [
+            {
+              "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+              "offset": "0000000000000000_000000000000000a",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+            },
+            {
+              "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+              "offset": "0000000000000000_000000000000000b",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+            },
+            {
+              "digest": "sha256:0fbe4a9bd85b4b8c8b4a02e868d283a73367f2e59829667ce201126735dccab2",
+              "offset": "0000000000000000_0000000000000005",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+            },
+            {
+              "digest": "sha256:d1466e264f375af5006e98d146541b36d8957bf4ba45fe8f1ecf28c97b0ea544",
+              "offset": "0000000000000000_000000000000000c",
+              "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+            }
+          ],
+          "stateDigest": "sha256:d499dc70e57337bdcd429260738e7967061bd6e8cb00fa4f755be303dd8f5bd8",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2"
+        },
+        "projectionId": "px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "projectionDigest": "sha256:77ad18d8206e03eb46a0470b0e1679b4a4693dc21b6c50314e042c1520c65e31",
+        "reducerVersion": "stream-slack-reducer-v1",
+        "rows": {
+          "workspace": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "kind": "workspace",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:fda03c2f83cfdf2037dfe2ebd7f50e40b4f5893106b51179c15ff2ef31620477",
+                "offset": "0000000000000000_000000000000000b",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "createdBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "displayName": "Capstone Workspace",
+                "ownerMembershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "revision": 7,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "directory": [],
+          "principal": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "principal",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:20ae3ef895d238f031c546484066dd78d1b3480fb85594a2ad38b0177bc92dbf",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "kind": "human",
+                "ownedBy": null,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "profile": {
+                  "displayName": "Ada",
+                  "email": "ada@example.test",
+                  "handle": "ada"
+                },
+                "profileRevision": 1,
+                "status": "active",
+                "subjectBinding": {
+                  "audience": "stream-slack",
+                  "issuer": "auth0",
+                  "subject": "human:ada"
+                }
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "principal",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:2dcc2bdb5a0f669ced87afdef1a607a830335c8347a82c553f1a601723ea4f7f",
+                "offset": "0000000000000000_0000000000000002",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "kind": "human",
+                "ownedBy": null,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "profile": {
+                  "displayName": "Linus",
+                  "email": "linus@example.test",
+                  "handle": "linus"
+                },
+                "profileRevision": 1,
+                "status": "active",
+                "subjectBinding": {
+                  "audience": "stream-slack",
+                  "issuer": "auth0",
+                  "subject": "human:linus"
+                }
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+              "kind": "principal",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:321d726a1d9b411b57f04cdc36750b0208f6967e177fce481e7e3fd008dda607",
+                "offset": "0000000000000000_0000000000000004",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "kind": "service",
+                "ownedBy": null,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+                "profile": {
+                  "displayName": "Audit-service",
+                  "email": "",
+                  "handle": "audit-service"
+                },
+                "profileRevision": 1,
+                "status": "active",
+                "subjectBinding": {
+                  "audience": "stream-slack",
+                  "issuer": "stream-slack",
+                  "subject": "service:audit-service"
+                }
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "principal",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:d1466e264f375af5006e98d146541b36d8957bf4ba45fe8f1ecf28c97b0ea544",
+                "offset": "0000000000000000_000000000000000c",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "kind": "agent",
+                "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                "profile": {
+                  "displayName": "Renamed Helper",
+                  "email": "",
+                  "handle": "helper-renamed"
+                },
+                "profileRevision": 2,
+                "status": "active",
+                "subjectBinding": {
+                  "audience": "stream-slack",
+                  "issuer": "stream-slack",
+                  "subject": "agent:helper"
+                }
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "membership": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "membership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:79f11c7f66df60615c5c67a17e9417782ff8219581b9918961171337c3102077",
+                "offset": "0000000000000000_0000000000000005",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "invitedBy": null,
+                "inviteId": null,
+                "membershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "reason": null,
+                "revision": 1,
+                "role": "owner",
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "membership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:afa188260788728985697e224b3aec1e2130fd1b4d720969a964d8746ee0f7e7",
+                "offset": "0000000000000000_0000000000000007",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "invitedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_00000000000000000000000014",
+                "membershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "reason": null,
+                "revision": 1,
+                "role": "member",
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "membership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:653b7f9e443b69278c517c14ee24df5aaae72743f645f7f86c4b29c743dc0a8e",
+                "offset": "0000000000000000_0000000000000009",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "invitedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_00000000000000000000000017",
+                "membershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                "reason": null,
+                "revision": 1,
+                "role": "agent",
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+              "kind": "membership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:fda03c2f83cfdf2037dfe2ebd7f50e40b4f5893106b51179c15ff2ef31620477",
+                "offset": "0000000000000000_000000000000000b",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "invitedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_0000000000000000000000001a",
+                "membershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+                "reason": null,
+                "revision": 1,
+                "role": "service",
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "channel": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+              "kind": "channel",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:484e98edb14d48f104c6b2fd4b627693115808433be309b41e80cd755684b24b",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "creatorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "displayName": "",
+                "kind": "direct",
+                "participantIds": [
+                  "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+                ],
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+              "kind": "channel",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:d26e6ca7da337a8d104ffc0f210443219d5f99ec7412c18bc17cb8f820a8c847",
+                "offset": "0000000000000000_0000000000000005",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "creatorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "displayName": "general",
+                "kind": "public",
+                "participantIds": null,
+                "revision": 5,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+              "kind": "channel",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+                "offset": "0000000000000000_000000000000000b",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "creatorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "displayName": "incident-room",
+                "kind": "private",
+                "participantIds": null,
+                "revision": 6,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "channelMembership": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:4c2b30bd1ba8d2dc46af2b256198834ef0f417b79510dacc94418f92edf59777",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:3ef64da1f04c8723aa37d2351c3eff5d92a2e385a0ef94da811f1001d10486ec",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:484e98edb14d48f104c6b2fd4b627693115808433be309b41e80cd755684b24b",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:484e98edb14d48f104c6b2fd4b627693115808433be309b41e80cd755684b24b",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:561b97bac2fc5323369ae779263a0e8a2595df06db7ece90df696ef6e2c5791c",
+                "offset": "0000000000000000_0000000000000003",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:d26e6ca7da337a8d104ffc0f210443219d5f99ec7412c18bc17cb8f820a8c847",
+                "offset": "0000000000000000_0000000000000005",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:ad4fa1ec25373cfa240d0dd509a576b8c09aef30de338eaf3843e36588ae98c5",
+                "offset": "0000000000000000_0000000000000005",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+                "offset": "0000000000000000_000000000000000b",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "revision": 2,
+                "status": "removed",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "reason": "membership revoked during live session"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "message": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "dm-reply",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:5b8d4c9723dda27d4f01a845cb122517754822082d16c58961a0e461db218174",
+                "offset": "0000000000000000_0000000000000003",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "contentType": "text/plain",
+                "messageId": "dm-reply",
+                "revision": 1,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000023",
+                    "kind": "replied",
+                    "offset": "0000000000000000_0000000000000023",
+                    "revision": 1,
+                    "text": "Direct reply"
+                  }
+                ],
+                "rootMessageId": "dm-root",
+                "status": "active",
+                "text": "Direct reply",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "dm-root",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:f71b683ff0c423d0d73509ed4dc4a659df6140c4c8d7d16072a54e3bdff9d62c",
+                "offset": "0000000000000000_0000000000000004",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "contentType": "text/plain",
+                "messageId": "dm-root",
+                "revision": 2,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000022",
+                    "kind": "created",
+                    "offset": "0000000000000000_0000000000000022",
+                    "revision": 1,
+                    "text": "Direct root"
+                  },
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000024",
+                    "kind": "edited",
+                    "offset": "0000000000000000_0000000000000024",
+                    "revision": 2,
+                    "text": "Direct root edited"
+                  }
+                ],
+                "rootMessageId": null,
+                "status": "active",
+                "text": "Direct root edited",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "public-root",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:db0c64a3faedb14ae650e2bd89eac48a20ad830ef5425334f59f6fe5e77d89d4",
+                "offset": "0000000000000000_0000000000000007",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "contentType": "text/plain",
+                "messageId": "public-root",
+                "revision": 2,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000017",
+                    "kind": "created",
+                    "offset": "0000000000000000_0000000000000017",
+                    "revision": 1,
+                    "text": "Welcome @helper"
+                  },
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000018",
+                    "kind": "edited",
+                    "offset": "0000000000000000_0000000000000018",
+                    "revision": 2,
+                    "text": "Welcome, edited"
+                  }
+                ],
+                "rootMessageId": null,
+                "status": "active",
+                "text": "Welcome, edited",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "mentions": [
+                  {
+                    "handle": "helper",
+                    "kind": "agent",
+                    "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                    "span": {
+                      "startByte": 8,
+                      "endByte": 15
+                    },
+                    "text": "@helper",
+                    "source": {
+                      "digest": "sha256:a48102c7b4525ba54cfb8b662411a227ca68524ec9617954dde1f129da71c584",
+                      "offset": "0000000000000000_0000000000000017",
+                      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+                    }
+                  }
+                ]
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "private-root",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:52b2ccaaa569ecdae17138aa8a87310940b7ed540e5a84e1bdc89cb77ce0bf2f",
+                "offset": "0000000000000000_0000000000000008",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "contentType": "text/plain",
+                "messageId": "private-root",
+                "revision": 2,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_0000000000000000000000001d",
+                    "kind": "created",
+                    "offset": "0000000000000000_000000000000001d",
+                    "revision": 1,
+                    "text": "Private source fact"
+                  },
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_0000000000000000000000001f",
+                    "kind": "edited",
+                    "offset": "0000000000000000_000000000000001f",
+                    "revision": 2,
+                    "text": "Private source fact edited"
+                  }
+                ],
+                "rootMessageId": null,
+                "status": "active",
+                "text": "Private source fact edited",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "private-reply",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:07b6a74879dcaee1adf39e9684320879f15f06486e44957731b36aebde72343e",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "contentType": "text/plain",
+                "messageId": "private-reply",
+                "revision": 2,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "contentType": "text/plain",
+                    "eventId": "ev_0000000000000000000000001e",
+                    "kind": "replied",
+                    "offset": "0000000000000000_000000000000001e",
+                    "revision": 1,
+                    "text": "Private reply"
+                  },
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000021",
+                    "kind": "deleted",
+                    "offset": "0000000000000000_0000000000000021",
+                    "revision": 2,
+                    "text": null
+                  }
+                ],
+                "rootMessageId": "private-root",
+                "status": "deleted",
+                "text": null,
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "public-offline",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "contentType": "text/plain",
+                "messageId": "public-offline",
+                "revision": 1,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "contentType": "text/plain",
+                    "eventId": "ev_0000000000000000000000001c",
+                    "kind": "created",
+                    "offset": "0000000000000000_000000000000001c",
+                    "revision": 1,
+                    "text": "Resumed public event"
+                  }
+                ],
+                "rootMessageId": null,
+                "status": "active",
+                "text": "Resumed public event",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "thread": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "dm-root",
+              "kind": "thread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:f71b683ff0c423d0d73509ed4dc4a659df6140c4c8d7d16072a54e3bdff9d62c",
+                "offset": "0000000000000000_0000000000000004",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "messageIds": [
+                  "dm-reply",
+                  "dm-root"
+                ],
+                "rootMessageId": "dm-root"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "public-root",
+              "kind": "thread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:db0c64a3faedb14ae650e2bd89eac48a20ad830ef5425334f59f6fe5e77d89d4",
+                "offset": "0000000000000000_0000000000000007",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "messageIds": [
+                  "public-root"
+                ],
+                "rootMessageId": "public-root"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "private-root",
+              "kind": "thread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:07b6a74879dcaee1adf39e9684320879f15f06486e44957731b36aebde72343e",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "messageIds": [
+                  "private-reply",
+                  "private-root"
+                ],
+                "rootMessageId": "private-root"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "public-offline",
+              "kind": "thread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "messageIds": [
+                  "public-offline"
+                ],
+                "rootMessageId": "public-offline"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "reaction": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "dm-root\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\u0000wave",
+              "kind": "reaction",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:0fbe4a9bd85b4b8c8b4a02e868d283a73367f2e59829667ce201126735dccab2",
+                "offset": "0000000000000000_0000000000000005",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "emoji": "wave",
+                "history": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "eventId": "ev_00000000000000000000000025",
+                    "kind": "added",
+                    "offset": "0000000000000000_0000000000000025",
+                    "status": "active"
+                  }
+                ],
+                "messageId": "dm-root",
+                "revision": 1,
+                "status": "active"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "private-root\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc\u0000eyes",
+              "kind": "reaction",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:83d80a9d5edaa9bd0faedd451d850070fc7c962ec5be4d698f1689e148d5e275",
+                "offset": "0000000000000000_0000000000000009",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "emoji": "eyes",
+                "history": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "eventId": "ev_00000000000000000000000020",
+                    "kind": "added",
+                    "offset": "0000000000000000_0000000000000020",
+                    "status": "active"
+                  }
+                ],
+                "messageId": "private-root",
+                "revision": 1,
+                "status": "active"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "public-root\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc\u0000thumbsup",
+              "kind": "reaction",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:cd0718ed2b2c417af6cf22c8ac24a49ef935ad9af4258b6cc6c1cdd823dec514",
+                "offset": "0000000000000000_0000000000000009",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "emoji": "thumbsup",
+                "history": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "eventId": "ev_0000000000000000000000001a",
+                    "kind": "added",
+                    "offset": "0000000000000000_000000000000001a",
+                    "status": "active"
+                  },
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "eventId": "ev_0000000000000000000000001b",
+                    "kind": "removed",
+                    "offset": "0000000000000000_000000000000001b",
+                    "status": "removed"
+                  }
+                ],
+                "messageId": "public-root",
+                "revision": 2,
+                "status": "removed"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "unread": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:5b8d4c9723dda27d4f01a845cb122517754822082d16c58961a0e461db218174",
+                "offset": "0000000000000000_0000000000000003",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "count": 1,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:f71b683ff0c423d0d73509ed4dc4a659df6140c4c8d7d16072a54e3bdff9d62c",
+                "offset": "0000000000000000_0000000000000004",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "count": 1,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:db0c64a3faedb14ae650e2bd89eac48a20ad830ef5425334f59f6fe5e77d89d4",
+                "offset": "0000000000000000_0000000000000007",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "count": 1,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:52b2ccaaa569ecdae17138aa8a87310940b7ed540e5a84e1bdc89cb77ce0bf2f",
+                "offset": "0000000000000000_0000000000000008",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "count": 1,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "count": 1,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "count": 2,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "count": 2,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+                "offset": "0000000000000000_000000000000000b",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "count": 0,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ]
+        },
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "afterCatchUp": {
+        "checkpoint": {
+          "projectionId": "px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "reducerVersion": "stream-slack-reducer-v1",
+          "schemaVersion": 1,
+          "sequence": 38,
+          "sourceHeads": [
+            {
+              "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+              "offset": "0000000000000000_000000000000000a",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+            },
+            {
+              "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+              "offset": "0000000000000000_000000000000000b",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+            },
+            {
+              "digest": "sha256:0fbe4a9bd85b4b8c8b4a02e868d283a73367f2e59829667ce201126735dccab2",
+              "offset": "0000000000000000_0000000000000005",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+            },
+            {
+              "digest": "sha256:d1466e264f375af5006e98d146541b36d8957bf4ba45fe8f1ecf28c97b0ea544",
+              "offset": "0000000000000000_000000000000000c",
+              "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+            }
+          ],
+          "stateDigest": "sha256:d499dc70e57337bdcd429260738e7967061bd6e8cb00fa4f755be303dd8f5bd8",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2"
+        },
+        "projectionId": "px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "projectionDigest": "sha256:77ad18d8206e03eb46a0470b0e1679b4a4693dc21b6c50314e042c1520c65e31",
+        "reducerVersion": "stream-slack-reducer-v1",
+        "rows": {
+          "workspace": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "kind": "workspace",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:fda03c2f83cfdf2037dfe2ebd7f50e40b4f5893106b51179c15ff2ef31620477",
+                "offset": "0000000000000000_000000000000000b",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "createdBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "displayName": "Capstone Workspace",
+                "ownerMembershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "revision": 7,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "directory": [],
+          "principal": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "principal",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:20ae3ef895d238f031c546484066dd78d1b3480fb85594a2ad38b0177bc92dbf",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "kind": "human",
+                "ownedBy": null,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "profile": {
+                  "displayName": "Ada",
+                  "email": "ada@example.test",
+                  "handle": "ada"
+                },
+                "profileRevision": 1,
+                "status": "active",
+                "subjectBinding": {
+                  "audience": "stream-slack",
+                  "issuer": "auth0",
+                  "subject": "human:ada"
+                }
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "principal",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:2dcc2bdb5a0f669ced87afdef1a607a830335c8347a82c553f1a601723ea4f7f",
+                "offset": "0000000000000000_0000000000000002",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "kind": "human",
+                "ownedBy": null,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "profile": {
+                  "displayName": "Linus",
+                  "email": "linus@example.test",
+                  "handle": "linus"
+                },
+                "profileRevision": 1,
+                "status": "active",
+                "subjectBinding": {
+                  "audience": "stream-slack",
+                  "issuer": "auth0",
+                  "subject": "human:linus"
+                }
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+              "kind": "principal",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:321d726a1d9b411b57f04cdc36750b0208f6967e177fce481e7e3fd008dda607",
+                "offset": "0000000000000000_0000000000000004",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "kind": "service",
+                "ownedBy": null,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+                "profile": {
+                  "displayName": "Audit-service",
+                  "email": "",
+                  "handle": "audit-service"
+                },
+                "profileRevision": 1,
+                "status": "active",
+                "subjectBinding": {
+                  "audience": "stream-slack",
+                  "issuer": "stream-slack",
+                  "subject": "service:audit-service"
+                }
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "principal",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:d1466e264f375af5006e98d146541b36d8957bf4ba45fe8f1ecf28c97b0ea544",
+                "offset": "0000000000000000_000000000000000c",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "kind": "agent",
+                "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                "profile": {
+                  "displayName": "Renamed Helper",
+                  "email": "",
+                  "handle": "helper-renamed"
+                },
+                "profileRevision": 2,
+                "status": "active",
+                "subjectBinding": {
+                  "audience": "stream-slack",
+                  "issuer": "stream-slack",
+                  "subject": "agent:helper"
+                }
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "membership": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "membership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:79f11c7f66df60615c5c67a17e9417782ff8219581b9918961171337c3102077",
+                "offset": "0000000000000000_0000000000000005",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "invitedBy": null,
+                "inviteId": null,
+                "membershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "reason": null,
+                "revision": 1,
+                "role": "owner",
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "membership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:afa188260788728985697e224b3aec1e2130fd1b4d720969a964d8746ee0f7e7",
+                "offset": "0000000000000000_0000000000000007",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "invitedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_00000000000000000000000014",
+                "membershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "reason": null,
+                "revision": 1,
+                "role": "member",
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "membership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:653b7f9e443b69278c517c14ee24df5aaae72743f645f7f86c4b29c743dc0a8e",
+                "offset": "0000000000000000_0000000000000009",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "invitedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_00000000000000000000000017",
+                "membershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                "reason": null,
+                "revision": 1,
+                "role": "agent",
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+              "kind": "membership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:fda03c2f83cfdf2037dfe2ebd7f50e40b4f5893106b51179c15ff2ef31620477",
+                "offset": "0000000000000000_000000000000000b",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+              },
+              "value": {
+                "invitedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_0000000000000000000000001a",
+                "membershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+                "reason": null,
+                "revision": 1,
+                "role": "service",
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "channel": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+              "kind": "channel",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:484e98edb14d48f104c6b2fd4b627693115808433be309b41e80cd755684b24b",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "creatorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "displayName": "",
+                "kind": "direct",
+                "participantIds": [
+                  "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+                ],
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+              "kind": "channel",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:d26e6ca7da337a8d104ffc0f210443219d5f99ec7412c18bc17cb8f820a8c847",
+                "offset": "0000000000000000_0000000000000005",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "creatorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "displayName": "general",
+                "kind": "public",
+                "participantIds": null,
+                "revision": 5,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+              "kind": "channel",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+                "offset": "0000000000000000_000000000000000b",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "creatorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "displayName": "incident-room",
+                "kind": "private",
+                "participantIds": null,
+                "revision": 6,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "channelMembership": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:4c2b30bd1ba8d2dc46af2b256198834ef0f417b79510dacc94418f92edf59777",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:3ef64da1f04c8723aa37d2351c3eff5d92a2e385a0ef94da811f1001d10486ec",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:484e98edb14d48f104c6b2fd4b627693115808433be309b41e80cd755684b24b",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:484e98edb14d48f104c6b2fd4b627693115808433be309b41e80cd755684b24b",
+                "offset": "0000000000000000_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:561b97bac2fc5323369ae779263a0e8a2595df06db7ece90df696ef6e2c5791c",
+                "offset": "0000000000000000_0000000000000003",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:d26e6ca7da337a8d104ffc0f210443219d5f99ec7412c18bc17cb8f820a8c847",
+                "offset": "0000000000000000_0000000000000005",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:ad4fa1ec25373cfa240d0dd509a576b8c09aef30de338eaf3843e36588ae98c5",
+                "offset": "0000000000000000_0000000000000005",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                "revision": 1,
+                "status": "active",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "channelMembership",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+                "offset": "0000000000000000_000000000000000b",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "revision": 2,
+                "status": "removed",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "reason": "membership revoked during live session"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "message": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "dm-reply",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:5b8d4c9723dda27d4f01a845cb122517754822082d16c58961a0e461db218174",
+                "offset": "0000000000000000_0000000000000003",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "contentType": "text/plain",
+                "messageId": "dm-reply",
+                "revision": 1,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000023",
+                    "kind": "replied",
+                    "offset": "0000000000000000_0000000000000023",
+                    "revision": 1,
+                    "text": "Direct reply"
+                  }
+                ],
+                "rootMessageId": "dm-root",
+                "status": "active",
+                "text": "Direct reply",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "dm-root",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:f71b683ff0c423d0d73509ed4dc4a659df6140c4c8d7d16072a54e3bdff9d62c",
+                "offset": "0000000000000000_0000000000000004",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "contentType": "text/plain",
+                "messageId": "dm-root",
+                "revision": 2,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000022",
+                    "kind": "created",
+                    "offset": "0000000000000000_0000000000000022",
+                    "revision": 1,
+                    "text": "Direct root"
+                  },
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000024",
+                    "kind": "edited",
+                    "offset": "0000000000000000_0000000000000024",
+                    "revision": 2,
+                    "text": "Direct root edited"
+                  }
+                ],
+                "rootMessageId": null,
+                "status": "active",
+                "text": "Direct root edited",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "public-root",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:db0c64a3faedb14ae650e2bd89eac48a20ad830ef5425334f59f6fe5e77d89d4",
+                "offset": "0000000000000000_0000000000000007",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "contentType": "text/plain",
+                "messageId": "public-root",
+                "revision": 2,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000017",
+                    "kind": "created",
+                    "offset": "0000000000000000_0000000000000017",
+                    "revision": 1,
+                    "text": "Welcome @helper"
+                  },
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000018",
+                    "kind": "edited",
+                    "offset": "0000000000000000_0000000000000018",
+                    "revision": 2,
+                    "text": "Welcome, edited"
+                  }
+                ],
+                "rootMessageId": null,
+                "status": "active",
+                "text": "Welcome, edited",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "mentions": [
+                  {
+                    "handle": "helper",
+                    "kind": "agent",
+                    "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                    "span": {
+                      "startByte": 8,
+                      "endByte": 15
+                    },
+                    "text": "@helper",
+                    "source": {
+                      "digest": "sha256:a48102c7b4525ba54cfb8b662411a227ca68524ec9617954dde1f129da71c584",
+                      "offset": "0000000000000000_0000000000000017",
+                      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+                    }
+                  }
+                ]
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "private-root",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:52b2ccaaa569ecdae17138aa8a87310940b7ed540e5a84e1bdc89cb77ce0bf2f",
+                "offset": "0000000000000000_0000000000000008",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "contentType": "text/plain",
+                "messageId": "private-root",
+                "revision": 2,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_0000000000000000000000001d",
+                    "kind": "created",
+                    "offset": "0000000000000000_000000000000001d",
+                    "revision": 1,
+                    "text": "Private source fact"
+                  },
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "contentType": "text/plain",
+                    "eventId": "ev_0000000000000000000000001f",
+                    "kind": "edited",
+                    "offset": "0000000000000000_000000000000001f",
+                    "revision": 2,
+                    "text": "Private source fact edited"
+                  }
+                ],
+                "rootMessageId": null,
+                "status": "active",
+                "text": "Private source fact edited",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "private-reply",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:07b6a74879dcaee1adf39e9684320879f15f06486e44957731b36aebde72343e",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "contentType": "text/plain",
+                "messageId": "private-reply",
+                "revision": 2,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "contentType": "text/plain",
+                    "eventId": "ev_0000000000000000000000001e",
+                    "kind": "replied",
+                    "offset": "0000000000000000_000000000000001e",
+                    "revision": 1,
+                    "text": "Private reply"
+                  },
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "contentType": "text/plain",
+                    "eventId": "ev_00000000000000000000000021",
+                    "kind": "deleted",
+                    "offset": "0000000000000000_0000000000000021",
+                    "revision": 2,
+                    "text": null
+                  }
+                ],
+                "rootMessageId": "private-root",
+                "status": "deleted",
+                "text": null,
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "public-offline",
+              "kind": "message",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "contentType": "text/plain",
+                "messageId": "public-offline",
+                "revision": 1,
+                "revisions": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "contentType": "text/plain",
+                    "eventId": "ev_0000000000000000000000001c",
+                    "kind": "created",
+                    "offset": "0000000000000000_000000000000001c",
+                    "revision": 1,
+                    "text": "Resumed public event"
+                  }
+                ],
+                "rootMessageId": null,
+                "status": "active",
+                "text": "Resumed public event",
+                "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "thread": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "dm-root",
+              "kind": "thread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:f71b683ff0c423d0d73509ed4dc4a659df6140c4c8d7d16072a54e3bdff9d62c",
+                "offset": "0000000000000000_0000000000000004",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "messageIds": [
+                  "dm-reply",
+                  "dm-root"
+                ],
+                "rootMessageId": "dm-root"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "public-root",
+              "kind": "thread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:db0c64a3faedb14ae650e2bd89eac48a20ad830ef5425334f59f6fe5e77d89d4",
+                "offset": "0000000000000000_0000000000000007",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "messageIds": [
+                  "public-root"
+                ],
+                "rootMessageId": "public-root"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "private-root",
+              "kind": "thread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:07b6a74879dcaee1adf39e9684320879f15f06486e44957731b36aebde72343e",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "messageIds": [
+                  "private-reply",
+                  "private-root"
+                ],
+                "rootMessageId": "private-root"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "public-offline",
+              "kind": "thread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "messageIds": [
+                  "public-offline"
+                ],
+                "rootMessageId": "public-offline"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "reaction": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "dm-root\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\u0000wave",
+              "kind": "reaction",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:0fbe4a9bd85b4b8c8b4a02e868d283a73367f2e59829667ce201126735dccab2",
+                "offset": "0000000000000000_0000000000000005",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "emoji": "wave",
+                "history": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "eventId": "ev_00000000000000000000000025",
+                    "kind": "added",
+                    "offset": "0000000000000000_0000000000000025",
+                    "status": "active"
+                  }
+                ],
+                "messageId": "dm-root",
+                "revision": 1,
+                "status": "active"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "private-root\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc\u0000eyes",
+              "kind": "reaction",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:83d80a9d5edaa9bd0faedd451d850070fc7c962ec5be4d698f1689e148d5e275",
+                "offset": "0000000000000000_0000000000000009",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "emoji": "eyes",
+                "history": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "eventId": "ev_00000000000000000000000020",
+                    "kind": "added",
+                    "offset": "0000000000000000_0000000000000020",
+                    "status": "active"
+                  }
+                ],
+                "messageId": "private-root",
+                "revision": 1,
+                "status": "active"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "public-root\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc\u0000thumbsup",
+              "kind": "reaction",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:cd0718ed2b2c417af6cf22c8ac24a49ef935ad9af4258b6cc6c1cdd823dec514",
+                "offset": "0000000000000000_0000000000000009",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "emoji": "thumbsup",
+                "history": [
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "eventId": "ev_0000000000000000000000001a",
+                    "kind": "added",
+                    "offset": "0000000000000000_000000000000001a",
+                    "status": "active"
+                  },
+                  {
+                    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                    "eventId": "ev_0000000000000000000000001b",
+                    "kind": "removed",
+                    "offset": "0000000000000000_000000000000001b",
+                    "status": "removed"
+                  }
+                ],
+                "messageId": "public-root",
+                "revision": 2,
+                "status": "removed"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "unread": [
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:5b8d4c9723dda27d4f01a845cb122517754822082d16c58961a0e461db218174",
+                "offset": "0000000000000000_0000000000000003",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "count": 1,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:f71b683ff0c423d0d73509ed4dc4a659df6140c4c8d7d16072a54e3bdff9d62c",
+                "offset": "0000000000000000_0000000000000004",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+                "count": 1,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:db0c64a3faedb14ae650e2bd89eac48a20ad830ef5425334f59f6fe5e77d89d4",
+                "offset": "0000000000000000_0000000000000007",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "count": 1,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:52b2ccaaa569ecdae17138aa8a87310940b7ed540e5a84e1bdc89cb77ce0bf2f",
+                "offset": "0000000000000000_0000000000000008",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "count": 1,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "count": 1,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "count": 2,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+                "offset": "0000000000000000_000000000000000a",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+                "count": 2,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2",
+              "id": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222\u0000pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "kind": "unread",
+              "reducerVersion": "stream-slack-reducer-v1",
+              "source": {
+                "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+                "offset": "0000000000000000_000000000000000b",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+              },
+              "value": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+                "count": 0,
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ]
+        },
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    "result": "PASS"
+  },
+  "interleavingEvidence": {
+    "creationOrderVariant": [
+      "agent-request-first",
+      "linus-session",
+      "ada-session"
+    ],
+    "sourceCausalPrerequisitesPreserved": true,
+    "randomizedMessageInterleavingReplayed": true,
+    "finalMessageShapeDigest": "sha256:d023106cb05cb8de17b27cbff8d6277b14b876f2fcbbc09e32b51a2364aba172",
+    "finalOrderingMayDifferBecauseSourceOrderDiffers": true,
+    "result": "PASS"
+  },
+  "tamperEvidence": {
+    "sourceEvent": {
+      "code": "SOURCE_DIGEST_MISMATCH",
+      "localized": true
+    },
+    "projectionRow": {
+      "code": "PROJECTION_CORRUPT_ROW",
+      "localized": true
+    },
+    "checkpoint": {
+      "code": "PROJECTION_CHECKPOINT_INVALID",
+      "localized": true
+    },
+    "claimedCompositeDigest": {
+      "code": "COMPOSITE_DIGEST_MISMATCH",
+      "localized": true
+    },
+    "result": "PASS"
+  },
+  "canaryScan": {
+    "files": [
+      ".eforest/tasks/epic-1-the-workspace/E1-T08-multi-user-chat-api/readme.md",
+      "src/ledger/multi-user-chat-api.mjs",
+      "scripts/verify-e1-t08.mjs"
+    ],
+    "forbiddenPatterns": 0,
+    "result": "PASS"
+  },
+  "compositeDigest": "sha256:2b9db2630e42f4ff910d7702c2b6c317257dd8816dc772025b5cfcb9da7664cc",
+  "network": {
+    "transcriptPath": "network-transcript.json",
+    "sseClientCount": 6,
+    "activePrivateRemovalTerminal": "CAPSTONE_ACCESS_DENIED",
+    "result": "PASS"
+  }
+}

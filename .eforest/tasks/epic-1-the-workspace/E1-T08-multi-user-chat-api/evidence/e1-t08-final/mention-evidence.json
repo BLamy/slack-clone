@@ -1,0 +1,23 @@
+{
+  "sourceMentionCount": 1,
+  "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+  "originalHandle": "helper",
+  "currentHandle": "helper-renamed",
+  "ownerStable": true,
+  "source": {
+    "digest": "sha256:a48102c7b4525ba54cfb8b662411a227ca68524ec9617954dde1f129da71c584",
+    "offset": "0000000000000000_0000000100000017",
+    "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+  },
+  "retryCreatedNoNewSource": true,
+  "editCreatedNoNewTrigger": true,
+  "reconnectCreatedNoNewTrigger": true,
+  "replayCreatedNoNewTrigger": true,
+  "processCountForMention": 0,
+  "sourceBinding": {
+    "digest": "sha256:a48102c7b4525ba54cfb8b662411a227ca68524ec9617954dde1f129da71c584",
+    "offset": "0000000000000000_0000000000000006",
+    "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+  },
+  "result": "PASS"
+}

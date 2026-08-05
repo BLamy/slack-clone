@@ -3,7 +3,7 @@ id: E2-T02
 epic: 2
 title: "Agent configuration stream and immutable revisions"
 priority: 202
-status: implemented
+status: verified
 depends_on: [E2-T01]
 estimate: M
 capstone: false
@@ -132,3 +132,21 @@ explicit events. Secret resolution never occurs in this stream.
   `sha256:a48f87c190bac1ea973d22e67ed240169af9b23d3b9081ffee0e3cd5dc2ca223`.
 - Claim: the compatibility-spoof hardening closes the remaining critic observation while
   preserving the E0 replay boundary; awaiting the final fresh independent critic.
+
+### Critic — 2026-08-05 — final independent verification
+
+- `VERDICT: verified` from a fresh read-only Claude Code audit of implementation commit
+  `a64f2866709b2fcd2543e11263f29018b7f92cdc` and evidence commit `ababa2f`.
+- The critic independently ran `TEST_RUN_ID=critic-cold-audit node scripts/cold-verify-e2-t02.mjs`
+  from a detached checkout: clean-before-install, frozen install, pinned emulator setup, all
+  five gates exit 0, `skips: []`, and final digest
+  `sha256:a48f87c190bac1ea973d22e67ed240169af9b23d3b9081ffee0e3cd5dc2ca223`.
+- It reproduced the original legacy-shadowing attack at multiple insertion points, under default
+  replay and spoofed E0-T05 compatibility, plus direct `replayRecords` compatibility bypass; all
+  refused with `REDUCER_AGENT_CONFIG_INVALID_EVENT`. It independently exercised a revise-vs-revise
+  race, broader canary locations, lifecycle refusals, suffix replay, forged scope/predecessors,
+  duplicate offsets, and sensitivity mutants. No blocking findings; the task is verified.
+- Non-blocking observations retained for follow-up: non-promoted cold runs currently rewrite the
+  transcript path under `evidence/e2-t02-final`; the repo-wide E0-T05 purity gate has a pre-existing
+  dependency failure; and the shipped race/canary verifier is narrower than the critic's expanded
+  attacks. These do not refute E2-T02 or its promoted proof.

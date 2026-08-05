@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E2-T01 is the active queue gate.",
-  "updatedAt": "2026-08-05T07:53:53Z"
+  "statusReason": "E2-T01 is refuted: canonical ordering repair required.",
+  "updatedAt": "2026-08-05T08:18:13Z"
 }

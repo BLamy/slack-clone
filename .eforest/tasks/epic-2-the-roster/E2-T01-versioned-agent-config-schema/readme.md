@@ -3,7 +3,7 @@ id: E2-T01
 epic: 2
 title: "Versioned agent configuration schema without embedded secrets"
 priority: 201
-status: implemented
+status: refuted
 depends_on: [E1]
 estimate: M
 capstone: false
@@ -96,3 +96,15 @@ and lifecycle, workspace inputs, and connection-grant references.
 - Claim: the versioned AgentConfig contract, canonical encoding, upgrade hook, schema fixtures,
   threat model, and cold verifier satisfy the acceptance criteria; awaiting a fresh independent
   critic.
+
+### Critic — 2026-08-05 — canonical ordering refutation
+
+- `VERDICT: refuted` from a fresh read-only Claude Code audit of implementation commit
+  `846de0f76b216a77ac2eb2832ed67171ffdfab7f` and evidence commit `4b9d557`.
+- Blocking finding: `compareConnectionRefs` used `localeCompare` on NUL-joined fields. The
+  critic independently constructed two valid, semantically distinct grant references whose
+  joined strings compare equal under ICU; stable sort therefore preserved input order and
+  produced different canonical bytes/digests for the same unordered reference set.
+- The committed valid fixture had an empty `connectionGrants.refs` array, and neither the unit
+  test nor verifier exercised non-empty reference reordering. The claimed unordered-array parity
+  evidence was therefore incomplete. No workspace edits were made by the critic.

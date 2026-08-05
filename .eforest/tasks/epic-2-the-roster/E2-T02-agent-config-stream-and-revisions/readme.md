@@ -3,7 +3,7 @@ id: E2-T02
 epic: 2
 title: "Agent configuration stream and immutable revisions"
 priority: 202
-status: refuted
+status: in-progress
 depends_on: [E2-T01]
 estimate: M
 capstone: false

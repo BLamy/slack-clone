@@ -27,6 +27,7 @@ test("v1 AgentConfig validates, encodes canonically, and hashes with SHA-256", a
   const reordered = structuredClone(config);
   reordered.trigger.events.reverse();
   reordered.harness.requiredCapabilities.reverse();
+  reordered.connectionGrants.refs.reverse();
   reordered.workspaceInputs.paths.reverse();
   assert.equal(canonicalAgentConfig(config), canonicalAgentConfig(reordered));
   assert.equal(agentConfigDigest(config), agentConfigDigest(reordered));
@@ -48,10 +49,8 @@ test("v0 upgrade maps every required policy field without permissive defaults", 
   const upgraded = upgradeAgentConfig(legacy);
   assert.equal(upgraded.schemaVersion, 1);
   validateAgentConfig(upgraded);
-  assert.deepEqual(upgraded.connectionGrants, {
-    refs: [],
-    maxCallsPerRun: 0,
-  });
+  assert.equal(upgraded.connectionGrants.refs.length, 2);
+  assert.equal(upgraded.connectionGrants.maxCallsPerRun, 2);
   assert.deepEqual(upgraded.delegation, {
     enabled: false,
     maxDepth: 0,

@@ -836,14 +836,16 @@ function assertUnique(values, path) {
 }
 
 function compareConnectionRefs(left, right) {
-  return [left.connectionId, left.grantId, left.revision, left.purpose]
-    .map(String)
-    .join("\u0000")
-    .localeCompare(
-      [right.connectionId, right.grantId, right.revision, right.purpose]
-        .map(String)
-        .join("\u0000"),
-    );
+  for (const [leftValue, rightValue] of [
+    [left.connectionId, right.connectionId],
+    [left.grantId, right.grantId],
+    [left.revision, right.revision],
+    [left.purpose, right.purpose],
+  ]) {
+    const comparison = compareCodeUnits(String(leftValue), String(rightValue));
+    if (comparison !== 0) return comparison;
+  }
+  return 0;
 }
 
 function agentConfigError(code, path, detail) {
@@ -908,7 +910,7 @@ function encodeCanonical(value, path, ancestors) {
       return `[${value.map((item, index) => encodeCanonical(item, `${path}[${index}]`, ancestors)).join(",")}]`;
     }
     const entries = Object.entries(value).sort(([left], [right]) =>
-      left.localeCompare(right),
+      compareCodeUnits(left, right),
     );
     return `{${entries
       .map(
@@ -1016,4 +1018,8 @@ function bytesToHex(bytes) {
   return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join(
     "",
   );
+}
+
+function compareCodeUnits(left, right) {
+  return left < right ? -1 : left > right ? 1 : 0;
 }

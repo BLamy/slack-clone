@@ -87,6 +87,7 @@ const reordered = structuredClone(validV1);
 reordered.trigger.events.reverse();
 reordered.harness.requiredCapabilities.reverse();
 reordered.sandbox.requiredCapabilities.reverse();
+reordered.connectionGrants.refs.reverse();
 reordered.workspaceInputs.paths.reverse();
 assert.equal(
   canonicalAgentConfig(reordered),

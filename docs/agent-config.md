@@ -40,8 +40,8 @@ The validator also rejects prototype-sensitive objects, accessor fields, symbol 
 or custom-property arrays, non-safe integers, invalid enums, unknown providers and versions,
 duplicate unordered values, path traversal, and contradictory policy combinations. Canonical
 encoding sorts only unordered arrays (`trigger.events`, provider capabilities, workspace paths,
-and connection references); ordered guardrails remain ordered. `agentConfigDigest` hashes those
-canonical UTF-8 bytes with SHA-256.
+and connection references) with deterministic UTF-16 code-unit ordering; ordered guardrails
+remain ordered. `agentConfigDigest` hashes those canonical UTF-8 bytes with SHA-256.
 
 Version 0 is the only supported prior input. Its complete security policy is required and is
 mapped by `upgradeAgentConfig` to v1 without inventing a permissive default. Missing version,

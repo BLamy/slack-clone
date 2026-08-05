@@ -56,7 +56,20 @@
     "maxBytes": 1048576
   },
   "connectionGrants": {
-    "refs": [],
-    "maxCallsPerRun": 0
+    "refs": [
+      {
+        "connectionId": "conn_agrant_b",
+        "grantId": "grant_c",
+        "purpose": "p",
+        "revision": 1
+      },
+      {
+        "connectionId": "conn_a",
+        "grantId": "grant_bgrant_c",
+        "purpose": "p",
+        "revision": 1
+      }
+    ],
+    "maxCallsPerRun": 2
   }
 }

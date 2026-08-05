@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E1-T08",
-  "runId": "e1-t08-final-2",
-  "implementationCommit": "a9347bb7820d5e5d8395ebf0e9111cf6e3124db4",
+  "runId": "e1-t08-detector-repair-final",
+  "implementationCommit": "13129da04c3644cb9a8a9d2daaf582420564c544",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "replay": "Replay: N/A (server/API capstone; product UI lands later) + mitigation: multi-client HTTP/SSE transcript, access matrix, source dumps, projection rebuild, and composite replay digest",
@@ -11,31 +11,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 5135,
+      "durationMs": 4948,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 4015,
+      "durationMs": 6770,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 11255,
+      "durationMs": 10089,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 30164,
+      "durationMs": 23800,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 1285,
+      "durationMs": 705,
       "name": "build",
       "result": "PASS"
     }
@@ -105,7 +105,8 @@
     "source": {
       "digest": "sha256:a48102c7b4525ba54cfb8b662411a227ca68524ec9617954dde1f129da71c584",
       "offset": "0000000000000000_0000000100000017",
-      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+      "coordinateSpace": "replay-offset"
     },
     "retryCreatedNoNewSource": true,
     "editCreatedNoNewTrigger": true,
@@ -115,7 +116,8 @@
     "sourceBinding": {
       "digest": "sha256:a48102c7b4525ba54cfb8b662411a227ca68524ec9617954dde1f129da71c584",
       "offset": "0000000000000000_0000000000000006",
-      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+      "coordinateSpace": "durable-stream-offset"
     },
     "result": "PASS"
   },
@@ -3537,7 +3539,8 @@
   },
   "tamperEvidence": {
     "sourceEvent": {
-      "code": "SOURCE_DIGEST_MISMATCH",
+      "code": "PROJECTION_SOURCE_DIGEST_MISMATCH",
+      "detail": "source record 0 digest does not match event bytes",
       "localized": true
     },
     "projectionRow": {
@@ -3550,8 +3553,17 @@
     },
     "claimedCompositeDigest": {
       "code": "COMPOSITE_DIGEST_MISMATCH",
+      "detail": "claimed composite digest sha256:2b9db2630e42f4ff910d7702c2b6c317257dd8816dc772025b5cfcb9da7664c0 does not match sha256:2b9db2630e42f4ff910d7702c2b6c317257dd8816dc772025b5cfcb9da7664cc",
       "localized": true
     },
+    "result": "PASS"
+  },
+  "sensitivityEvidence": {
+    "changedFile": "src/ledger/multi-user-chat-api.mjs",
+    "mutation": "omit private channel membership recheck in assertReadable",
+    "installExitCode": 0,
+    "verifierExitCode": 1,
+    "verifierRejected": true,
     "result": "PASS"
   },
   "canaryScan": {

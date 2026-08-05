@@ -7,7 +7,8 @@
   "source": {
     "digest": "sha256:a48102c7b4525ba54cfb8b662411a227ca68524ec9617954dde1f129da71c584",
     "offset": "0000000000000000_0000000100000017",
-    "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+    "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+    "coordinateSpace": "replay-offset"
   },
   "retryCreatedNoNewSource": true,
   "editCreatedNoNewTrigger": true,
@@ -17,7 +18,8 @@
   "sourceBinding": {
     "digest": "sha256:a48102c7b4525ba54cfb8b662411a227ca68524ec9617954dde1f129da71c584",
     "offset": "0000000000000000_0000000000000006",
-    "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+    "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+    "coordinateSpace": "durable-stream-offset"
   },
   "result": "PASS"
 }

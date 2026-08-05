@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "runId": "e1-composed-detector-repair-final",
-  "command": "E1_T08_IMPLEMENTATION_COMMIT=13129da04c3644cb9a8a9d2daaf582420564c544 TEST_RUN_ID=e1-composed-detector-repair-final make verify-E1",
-  "rootCheckoutCleanBeforeRun": true,
+  "runId": "e1-composed-repair-final",
+  "command": "E1_T08_IMPLEMENTATION_COMMIT=8dc0f53d8f194fa82fcda045b1a4723bd915500a TEST_RUN_ID=e1-composed-repair-final make verify-E1",
+  "rootCheckoutCleanBeforeRun": false,
   "targetOrder": [
     "verify-E1-T01",
     "verify-E1-T02",
@@ -14,61 +14,61 @@
     "verify-E1-T08"
   ],
   "targetImplementationCommits": {
-    "verify-E1-T01": "62b4b17a4d8c81e7bde0d29a65b05d6a59d09617",
-    "verify-E1-T02": "62b4b17a4d8c81e7bde0d29a65b05d6a59d09617",
-    "verify-E1-T03": "62b4b17a4d8c81e7bde0d29a65b05d6a59d09617",
-    "verify-E1-T04": "62b4b17a4d8c81e7bde0d29a65b05d6a59d09617",
-    "verify-E1-T05": "62b4b17a4d8c81e7bde0d29a65b05d6a59d09617",
-    "verify-E1-T06": "62b4b17a4d8c81e7bde0d29a65b05d6a59d09617",
-    "verify-E1-T07": "62b4b17a4d8c81e7bde0d29a65b05d6a59d09617",
-    "verify-E1-T08": "13129da04c3644cb9a8a9d2daaf582420564c544"
+    "verify-E1-T01": "8dc0f53d8f194fa82fcda045b1a4723bd915500a",
+    "verify-E1-T02": "8dc0f53d8f194fa82fcda045b1a4723bd915500a",
+    "verify-E1-T03": "8dc0f53d8f194fa82fcda045b1a4723bd915500a",
+    "verify-E1-T04": "8dc0f53d8f194fa82fcda045b1a4723bd915500a",
+    "verify-E1-T05": "8dc0f53d8f194fa82fcda045b1a4723bd915500a",
+    "verify-E1-T06": "8dc0f53d8f194fa82fcda045b1a4723bd915500a",
+    "verify-E1-T07": "8dc0f53d8f194fa82fcda045b1a4723bd915500a",
+    "verify-E1-T08": "8dc0f53d8f194fa82fcda045b1a4723bd915500a"
   },
   "commands": [
     {
       "command": "make verify-E1-T01",
-      "durationMs": 39968,
+      "durationMs": 51455,
       "exitCode": 0,
       "target": "verify-E1-T01"
     },
     {
       "command": "make verify-E1-T02",
-      "durationMs": 40860,
+      "durationMs": 39874,
       "exitCode": 0,
       "target": "verify-E1-T02"
     },
     {
       "command": "make verify-E1-T03",
-      "durationMs": 33670,
+      "durationMs": 34024,
       "exitCode": 0,
       "target": "verify-E1-T03"
     },
     {
       "command": "make verify-E1-T04",
-      "durationMs": 29189,
+      "durationMs": 30139,
       "exitCode": 0,
       "target": "verify-E1-T04"
     },
     {
       "command": "make verify-E1-T05",
-      "durationMs": 102530,
+      "durationMs": 108372,
       "exitCode": 0,
       "target": "verify-E1-T05"
     },
     {
       "command": "make verify-E1-T06",
-      "durationMs": 111081,
+      "durationMs": 120965,
       "exitCode": 0,
       "target": "verify-E1-T06"
     },
     {
       "command": "make verify-E1-T07",
-      "durationMs": 129910,
+      "durationMs": 140683,
       "exitCode": 0,
       "target": "verify-E1-T07"
     },
     {
       "command": "make verify-E1-T08",
-      "durationMs": 178317,
+      "durationMs": 213082,
       "exitCode": 0,
       "target": "verify-E1-T08"
     }

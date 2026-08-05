@@ -1,0 +1,28 @@
+{
+  "primaryOrder": [
+    "ada-session",
+    "linus-session",
+    "agent-request"
+  ],
+  "reversedOrder": [
+    "agent-request",
+    "linus-session",
+    "ada-session"
+  ],
+  "executionOrder": [
+    "agent-request",
+    "linus-session",
+    "ada-session"
+  ],
+  "orderWasReversed": true,
+  "agentAuthenticationRefused": "CAPSTONE_AGENT_AUTH_FORBIDDEN",
+  "channelCreationOrder": [
+    "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+    "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+    "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+  ],
+  "sourceRecordCount": 22,
+  "sourceCausalPrerequisitesPreserved": true,
+  "stateDigest": "sha256:a52c5532218a3bd35c89eb3cc49932c5038375b1b3eb443f032c9dc6b139c366",
+  "result": "PASS"
+}

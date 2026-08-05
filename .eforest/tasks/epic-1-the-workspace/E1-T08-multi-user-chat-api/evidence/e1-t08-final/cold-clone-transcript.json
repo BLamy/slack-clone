@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "runId": "e1-t08-detector-repair-final",
-  "implementationCommit": "13129da04c3644cb9a8a9d2daaf582420564c544",
+  "runId": "e1-t08-repair-final-2",
+  "implementationCommit": "8dc0f53d8f194fa82fcda045b1a4723bd915500a",
   "checkout": "disposable git worktree at the implementation commit",
   "commands": [
     {
-      "command": "git worktree add --detach <checkout> 13129da04c3644cb9a8a9d2daaf582420564c544",
+      "command": "git worktree add --detach <checkout> 8dc0f53d8f194fa82fcda045b1a4723bd915500a",
       "exitCode": 0
     },
     {

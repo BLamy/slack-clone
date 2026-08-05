@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E1-T08",
-  "runId": "e1-t08-detector-repair-final",
-  "implementationCommit": "13129da04c3644cb9a8a9d2daaf582420564c544",
+  "runId": "e1-t08-repair-final-2",
+  "implementationCommit": "8dc0f53d8f194fa82fcda045b1a4723bd915500a",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "replay": "Replay: N/A (server/API capstone; product UI lands later) + mitigation: multi-client HTTP/SSE transcript, access matrix, source dumps, projection rebuild, and composite replay digest",
@@ -11,31 +11,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 4948,
+      "durationMs": 4367,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 6770,
+      "durationMs": 3660,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 10089,
+      "durationMs": 9186,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 23800,
+      "durationMs": 23884,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 705,
+      "durationMs": 789,
       "name": "build",
       "result": "PASS"
     }
@@ -158,10 +158,32 @@
     "result": "PASS"
   },
   "restartEvidence": {
-    "sessionsAndProcessMapsDiscarded": true,
-    "sourceDigestBefore": "sha256:421913b4abb70138e823e70b32e161ea2c5ecd11c01c3e28c8b9069be4087a06",
-    "sourceDigestAfter": "sha256:421913b4abb70138e823e70b32e161ea2c5ecd11c01c3e28c8b9069be4087a06",
-    "sourceRecordsUnchanged": true,
+    "liveBoundaries": [
+      {
+        "label": "channels-created",
+        "sourceRecordCountBefore": 22,
+        "sourceRecordCountAfter": 22,
+        "stateDigestBefore": "sha256:cf89b143c04b036ec388d183101797899c33f844460cee89913157851c34a310",
+        "stateDigestAfter": "sha256:cf89b143c04b036ec388d183101797899c33f844460cee89913157851c34a310",
+        "result": "PASS"
+      },
+      {
+        "label": "mention-created",
+        "sourceRecordCountBefore": 23,
+        "sourceRecordCountAfter": 23,
+        "stateDigestBefore": "sha256:9814748d45a77179271093e31ede2d6941b5d736a2ef8593231393112721d2ef",
+        "stateDigestAfter": "sha256:9814748d45a77179271093e31ede2d6941b5d736a2ef8593231393112721d2ef",
+        "result": "PASS"
+      }
+    ],
+    "final": {
+      "label": "membership-removed",
+      "sessionsAndProcessMapsDiscarded": true,
+      "sourceDigestBefore": "sha256:421913b4abb70138e823e70b32e161ea2c5ecd11c01c3e28c8b9069be4087a06",
+      "sourceDigestAfter": "sha256:421913b4abb70138e823e70b32e161ea2c5ecd11c01c3e28c8b9069be4087a06",
+      "sourceRecordsUnchanged": true
+    },
+    "boundaryCount": 3,
     "result": "PASS"
   },
   "projectionEvidence": {
@@ -3523,16 +3545,96 @@
         "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
       }
     },
+    "boundaryRestarts": {
+      "boundaries": [
+        {
+          "name": "channels-created",
+          "prefixRecordCount": 22,
+          "crashAfterRowsAt": 22,
+          "crashCode": "PROJECTION_CRASH_AFTER_ROW_WRITE",
+          "projectorRestarted": true,
+          "recoveredCheckpointSequence": 22,
+          "recoveryComplete": true,
+          "result": "PASS"
+        },
+        {
+          "name": "mention-created",
+          "prefixRecordCount": 23,
+          "crashAfterRowsAt": 23,
+          "crashCode": "PROJECTION_CRASH_AFTER_ROW_WRITE",
+          "projectorRestarted": true,
+          "recoveredCheckpointSequence": 23,
+          "recoveryComplete": true,
+          "result": "PASS"
+        },
+        {
+          "name": "membership-removed",
+          "prefixRecordCount": 38,
+          "crashAfterRowsAt": 38,
+          "crashCode": "PROJECTION_CRASH_AFTER_ROW_WRITE",
+          "projectorRestarted": true,
+          "recoveredCheckpointSequence": 38,
+          "recoveryComplete": true,
+          "result": "PASS"
+        }
+      ],
+      "allBoundariesRestarted": true,
+      "result": "PASS"
+    },
     "result": "PASS"
   },
-  "interleavingEvidence": {
-    "creationOrderVariant": [
-      "agent-request-first",
+  "creationOrderEvidence": {
+    "primaryOrder": [
+      "ada-session",
+      "linus-session",
+      "agent-request"
+    ],
+    "reversedOrder": [
+      "agent-request",
       "linus-session",
       "ada-session"
     ],
+    "executionOrder": [
+      "agent-request",
+      "linus-session",
+      "ada-session"
+    ],
+    "orderWasReversed": true,
+    "agentAuthenticationRefused": "CAPSTONE_AGENT_AUTH_FORBIDDEN",
+    "channelCreationOrder": [
+      "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+      "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+      "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+    ],
+    "sourceRecordCount": 22,
+    "sourceCausalPrerequisitesPreserved": true,
+    "stateDigest": "sha256:a52c5532218a3bd35c89eb3cc49932c5038375b1b3eb443f032c9dc6b139c366",
+    "result": "PASS"
+  },
+  "interleavingEvidence": {
+    "seed": "e1-t08-repair-final-2",
+    "sourceOrderChanged": true,
+    "messageOrderChanged": true,
     "sourceCausalPrerequisitesPreserved": true,
     "randomizedMessageInterleavingReplayed": true,
+    "firstMessageOrder": [
+      "public-root",
+      "public-offline",
+      "private-root",
+      "private-reply",
+      "dm-reply",
+      "dm-root"
+    ],
+    "secondMessageOrder": [
+      "public-root",
+      "private-root",
+      "dm-reply",
+      "dm-root",
+      "private-reply",
+      "public-offline"
+    ],
+    "firstReplayMatchesSourceOrder": true,
+    "secondReplayMatchesSourceOrder": true,
     "finalMessageShapeDigest": "sha256:d023106cb05cb8de17b27cbff8d6277b14b876f2fcbbc09e32b51a2364aba172",
     "finalOrderingMayDifferBecauseSourceOrderDiffers": true,
     "result": "PASS"
@@ -3578,7 +3680,7 @@
   "compositeDigest": "sha256:2b9db2630e42f4ff910d7702c2b6c317257dd8816dc772025b5cfcb9da7664cc",
   "network": {
     "transcriptPath": "network-transcript.json",
-    "sseClientCount": 6,
+    "sseClientCount": 19,
     "activePrivateRemovalTerminal": "CAPSTONE_ACCESS_DENIED",
     "result": "PASS"
   }

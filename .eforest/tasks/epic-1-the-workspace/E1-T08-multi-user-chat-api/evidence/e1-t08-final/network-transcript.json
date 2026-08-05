@@ -109,11 +109,127 @@
     },
     {
       "bodyCode": null,
+      "label": "channels-created-ada-session-login",
+      "method": "POST",
+      "path": "/api/capstone/sessions",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "channels-created-linus-session-login",
+      "method": "POST",
+      "path": "/api/capstone/sessions",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "label": "channels-created-direct-ada",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm/events",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "label": "channels-created-direct-linus",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm/events",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "label": "channels-created-private-ada",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222/events",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "label": "channels-created-private-linus",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222/events",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "label": "channels-created-public-ada",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111/events",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "label": "channels-created-public-linus",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111/events",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "bodyCode": null,
       "label": "public-root-create",
       "method": "POST",
       "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111/messages",
       "status": 201,
       "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "mention-created-ada-session-login",
+      "method": "POST",
+      "path": "/api/capstone/sessions",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "mention-created-linus-session-login",
+      "method": "POST",
+      "path": "/api/capstone/sessions",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "label": "mention-created-direct-ada",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm/events",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "label": "mention-created-direct-linus",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm/events",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "label": "mention-created-private-ada",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222/events",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "label": "mention-created-private-linus",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222/events",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "label": "mention-created-public-ada",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111/events",
+      "status": 200,
+      "type": "SSE"
+    },
+    {
+      "label": "mention-created-public-linus",
+      "method": "GET",
+      "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111/events",
+      "status": 200,
+      "type": "SSE"
     },
     {
       "bodyCode": null,
@@ -328,6 +444,54 @@
       "method": "GET",
       "path": "/api/capstone/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
       "status": 200,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": "CAPSTONE_AGENT_AUTH_FORBIDDEN",
+      "label": "reversed-agent-owner-authentication",
+      "method": "POST",
+      "path": "/api/capstone/sessions",
+      "status": 403,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "reversed-linus-session-login",
+      "method": "POST",
+      "path": "/api/capstone/sessions",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "reversed-ada-session-login",
+      "method": "POST",
+      "path": "/api/capstone/sessions",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "create-direct-channel",
+      "method": "POST",
+      "path": "/api/capstone/channels",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "create-public-channel",
+      "method": "POST",
+      "path": "/api/capstone/channels",
+      "status": 201,
+      "type": "HTTP"
+    },
+    {
+      "bodyCode": null,
+      "label": "create-private-channel",
+      "method": "POST",
+      "path": "/api/capstone/channels",
+      "status": 201,
       "type": "HTTP"
     }
   ]

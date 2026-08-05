@@ -82,6 +82,7 @@ const directChannelId = directChannelIdFor(CAPSTONE_WORKSPACE_ID, [
 ]);
 const transcript = [];
 const clients = [];
+const liveRestartEvidence = [];
 let stack;
 let capstoneServer;
 let api;
@@ -105,14 +106,16 @@ try {
   await api.bootstrap();
   capstoneServer = createMultiUserChatHttpServer({ api });
   const address = await capstoneServer.listen();
-  const baseUrl = `http://127.0.0.1:${address.port}`;
+  let baseUrl = `http://127.0.0.1:${address.port}`;
 
-  const adaSession = await login(baseUrl, CAPSTONE_PRINCIPALS.ADA, "human:ada");
-  const linusSession = await login(
+  let adaSession = await login(baseUrl, CAPSTONE_PRINCIPALS.ADA, "human:ada");
+  const primaryCreationOrder = ["ada-session"];
+  let linusSession = await login(
     baseUrl,
     CAPSTONE_PRINCIPALS.LINUS,
     "human:linus",
   );
+  primaryCreationOrder.push("linus-session");
   const agentAuth = await requestJson(
     baseUrl,
     "/api/capstone/sessions",
@@ -130,6 +133,7 @@ try {
     agentAuth.body.code,
     CAPSTONE_API_ERROR_CODES.AGENT_AUTH_FORBIDDEN,
   );
+  primaryCreationOrder.push("agent-request");
 
   const directory = await requestJson(
     baseUrl,
@@ -178,6 +182,84 @@ try {
   );
 
   const channelClients = {};
+  async function restartLiveSessions(label) {
+    const stateBeforeRestart = await api.currentState();
+    const sourceRecordCountBefore = (await api.readSourceDump()).length;
+    const sourceStreamNames = [...api.sourceStreams];
+    for (const client of clients) await client.close();
+    clients.length = 0;
+    await capstoneServer.close();
+    capstoneServer = null;
+    await api.close();
+    api = null;
+
+    api = createMultiUserChatApi({
+      sourceStreams: sourceStreamNames,
+      streamStore,
+      workspaceId: CAPSTONE_WORKSPACE_ID,
+    });
+    await api.bootstrap();
+    capstoneServer = createMultiUserChatHttpServer({ api });
+    const restartedAddress = await capstoneServer.listen();
+    baseUrl = `http://127.0.0.1:${restartedAddress.port}`;
+    adaSession = await login(
+      baseUrl,
+      CAPSTONE_PRINCIPALS.ADA,
+      "human:ada",
+      `${label}-ada-session`,
+    );
+    linusSession = await login(
+      baseUrl,
+      CAPSTONE_PRINCIPALS.LINUS,
+      "human:linus",
+      `${label}-linus-session`,
+    );
+
+    const stateAfterRestart = await api.currentState();
+    assert.equal(
+      canonicalStateDigest(stateAfterRestart),
+      canonicalStateDigest(stateBeforeRestart),
+    );
+    for (const [name, channelId] of Object.entries({
+      direct: directChannelId,
+      private: CAPSTONE_CHANNELS.PRIVATE,
+      public: CAPSTONE_CHANNELS.PUBLIC,
+    })) {
+      channelClients[name] = {
+        ada: await openSse(
+          baseUrl,
+          channelId,
+          adaSession,
+          `${label}-${name}-ada`,
+        ),
+        linus: await openSse(
+          baseUrl,
+          channelId,
+          linusSession,
+          `${label}-${name}-linus`,
+        ),
+      };
+      clients.push(channelClients[name].ada, channelClients[name].linus);
+      await expectInitial(channelClients[name].ada);
+      await expectInitial(channelClients[name].linus);
+    }
+    const sourceAfterRestart = await api.readSourceDump();
+    const evidence = {
+      label,
+      sourceRecordCountBefore,
+      sourceRecordCountAfter: sourceAfterRestart.length,
+      stateDigestBefore: canonicalStateDigest(stateBeforeRestart),
+      stateDigestAfter: canonicalStateDigest(stateAfterRestart),
+      result: "PASS",
+    };
+    assert.equal(
+      evidence.sourceRecordCountAfter,
+      evidence.sourceRecordCountBefore,
+    );
+    liveRestartEvidence.push(evidence);
+    return evidence;
+  }
+
   for (const [name, channelId] of Object.entries({
     direct: directChannelId,
     private: CAPSTONE_CHANNELS.PRIVATE,
@@ -196,6 +278,7 @@ try {
     await expectInitial(channelClients[name].ada);
     await expectInitial(channelClients[name].linus);
   }
+  await restartLiveSessions("channels-created");
 
   const publicCreate = await postMessage(
     baseUrl,
@@ -218,6 +301,7 @@ try {
   );
   await expectMessage(channelClients.public.ada, "public-root");
   await expectMessage(channelClients.public.linus, "public-root");
+  await restartLiveSessions("mention-created");
 
   const publicRetry = await postMessage(
     baseUrl,
@@ -532,6 +616,23 @@ try {
       stream: record.stream,
     })),
   );
+  const sourceRecordsUnchanged =
+    JSON.stringify(
+      sourceAfterRestart.map((record) => ({
+        eventId: record.event.eventId,
+        stream: record.stream,
+      })),
+    ) ===
+    JSON.stringify(
+      sourceBeforeRestart.map((record) => ({
+        eventId: record.event.eventId,
+        stream: record.stream,
+      })),
+    );
+  const finalRestartCompleted =
+    restartedApi !== null && restartedServer !== null && api === null;
+  assert.equal(sourceRecordsUnchanged, true);
+  assert.equal(finalRestartCompleted, true);
 
   const projectionEvidence = await verifyProjectionRecovery(
     sourceAfterRestart,
@@ -544,7 +645,11 @@ try {
     sourceAfterRestart,
     publicMentionSource,
   );
-  const interleavingEvidence = verifyInterleavings(sourceAfterRestart);
+  const creationOrderEvidence = await verifyCreationOrderVariant(
+    streamStore,
+    primaryCreationOrder,
+  );
+  const interleavingEvidence = verifyInterleavings(sourceAfterRestart, runId);
   const tamperEvidence = verifyTamperMatrix(
     sourceAfterRestart,
     projectionEvidence,
@@ -606,13 +711,19 @@ try {
     mentionEvidence,
     accessEvidence,
     restartEvidence: {
-      sessionsAndProcessMapsDiscarded: true,
-      sourceDigestBefore: canonicalStateDigest(stateBeforeRestart),
-      sourceDigestAfter: canonicalStateDigest(stateAfterRestart),
-      sourceRecordsUnchanged: true,
+      liveBoundaries: liveRestartEvidence,
+      final: {
+        label: "membership-removed",
+        sessionsAndProcessMapsDiscarded: finalRestartCompleted,
+        sourceDigestBefore: canonicalStateDigest(stateBeforeRestart),
+        sourceDigestAfter: canonicalStateDigest(stateAfterRestart),
+        sourceRecordsUnchanged,
+      },
+      boundaryCount: liveRestartEvidence.length + 1,
       result: "PASS",
     },
     projectionEvidence,
+    creationOrderEvidence,
     interleavingEvidence,
     tamperEvidence,
     sensitivityEvidence,
@@ -620,7 +731,7 @@ try {
     compositeDigest,
     network: {
       transcriptPath: "network-transcript.json",
-      sseClientCount: 6,
+      sseClientCount: transcript.filter(({ type }) => type === "SSE").length,
       activePrivateRemovalTerminal: privateTerminal.data.code,
       result: "PASS",
     },
@@ -655,6 +766,10 @@ try {
     mentionEvidence,
   );
   await writeJson(
+    path.join(evidenceDirectory, "creation-order.json"),
+    creationOrderEvidence,
+  );
+  await writeJson(
     path.join(evidenceDirectory, "interleavings.json"),
     interleavingEvidence,
   );
@@ -676,6 +791,127 @@ try {
   await stack?.stop().catch(() => {});
   if (projectionDirectory)
     await rm(projectionDirectory, { recursive: true, force: true });
+}
+
+function createNamespacedStreamStore(streamStore, namespace) {
+  const streamName = (name) => `${namespace}-${name}`;
+  return Object.freeze({
+    append(name, event, options) {
+      return streamStore.append(streamName(name), event, options);
+    },
+    ensure(name) {
+      return streamStore.ensure(streamName(name));
+    },
+    read(name, offset, options) {
+      return streamStore.read(streamName(name), offset, options);
+    },
+  });
+}
+
+async function verifyCreationOrderVariant(streamStore, primaryOrder) {
+  const variantStore = createNamespacedStreamStore(
+    streamStore,
+    `e1-t08-${runId}-creation-order-reversed`,
+  );
+  const variantApi = createMultiUserChatApi({
+    sourceStreams: [],
+    streamStore: variantStore,
+    workspaceId: CAPSTONE_WORKSPACE_ID,
+  });
+  let variantServer;
+  try {
+    await variantApi.bootstrap();
+    variantServer = createMultiUserChatHttpServer({ api: variantApi });
+    const address = await variantServer.listen();
+    const baseUrl = `http://127.0.0.1:${address.port}`;
+    const executionOrder = [];
+    const agentAuth = await requestJson(
+      baseUrl,
+      "/api/capstone/sessions",
+      {
+        body: {
+          principalId: CAPSTONE_PRINCIPALS.AGENT,
+          subject: "human:ada",
+        },
+        method: "POST",
+      },
+      "reversed-agent-owner-authentication",
+    );
+    assert.equal(agentAuth.response.status, 403);
+    assert.equal(
+      agentAuth.body.code,
+      CAPSTONE_API_ERROR_CODES.AGENT_AUTH_FORBIDDEN,
+    );
+    executionOrder.push("agent-request");
+
+    const linusSession = await login(
+      baseUrl,
+      CAPSTONE_PRINCIPALS.LINUS,
+      "human:linus",
+      "reversed-linus-session",
+    );
+    executionOrder.push("linus-session");
+    const adaSession = await login(
+      baseUrl,
+      CAPSTONE_PRINCIPALS.ADA,
+      "human:ada",
+      "reversed-ada-session",
+    );
+    executionOrder.push("ada-session");
+
+    await createChannel(baseUrl, linusSession, {
+      channelId: directChannelId,
+      kind: "direct",
+      participantIds: [CAPSTONE_PRINCIPALS.ADA, CAPSTONE_PRINCIPALS.LINUS],
+    });
+    await createChannel(baseUrl, adaSession, {
+      channelId: CAPSTONE_CHANNELS.PUBLIC,
+      displayName: "general-reversed",
+      kind: "public",
+    });
+    await createChannel(baseUrl, adaSession, {
+      channelId: CAPSTONE_CHANNELS.PRIVATE,
+      displayName: "incident-room-reversed",
+      kind: "private",
+    });
+
+    const sourceRecords = await variantApi.readSourceDump();
+    const state = await variantApi.currentState();
+    const replay = replayOffline(sourceRecords);
+    const sourceCausalPrerequisitesPreserved =
+      replay.finalStateDigest === canonicalStateDigest(state) &&
+      sourceRecords.some(
+        (record) => record.event.eventType === "channel.direct.created",
+      ) &&
+      state.entities.channels[directChannelId]?.kind === "direct";
+    assert.equal(sourceCausalPrerequisitesPreserved, true);
+    const reversedOrder = [...primaryOrder].reverse();
+    const orderWasReversed =
+      executionOrder.length === reversedOrder.length &&
+      executionOrder.every((step, index) => step === reversedOrder[index]);
+    assert.equal(orderWasReversed, true);
+    return {
+      primaryOrder,
+      reversedOrder,
+      executionOrder,
+      orderWasReversed,
+      agentAuthenticationRefused: agentAuth.body.code,
+      channelCreationOrder: sourceRecords
+        .filter((record) =>
+          ["channel.created", "channel.direct.created"].includes(
+            record.event.eventType,
+          ),
+        )
+        .map((record) => record.event.data.channelId),
+      sourceRecordCount: sourceRecords.length,
+      sourceCausalPrerequisitesPreserved,
+      stateDigest: canonicalStateDigest(state),
+      result: "PASS",
+    };
+  } finally {
+    await variantServer?.close().catch(() => {});
+    await variantApi.close().catch(() => {});
+  }
 }
 
 async function verifyProjectionRecovery(
@@ -727,6 +963,10 @@ async function verifyProjectionRecovery(
   const offlineTwo = replayOffline(structuredClone(sourceRecords));
   assert.equal(offlineOne.finalStateDigest, offlineTwo.finalStateDigest);
   assert.equal(offlineOne.finalStateDigest, canonicalStateDigest(finalState));
+  const boundaryRestarts = await verifyProjectorBoundaryRestarts(
+    sourceRecords,
+    artifactRootPath,
+  );
   const afterRebuildComposite = compositeStateDigest({
     projection: rebuildProof,
     source: sourceRecords,
@@ -763,6 +1003,93 @@ async function verifyProjectionRecovery(
       afterRebuild: afterManifest,
       afterCatchUp: manifestOf(afterCatchUp, projectionId),
     },
+    boundaryRestarts,
+    result: "PASS",
+  };
+}
+
+async function verifyProjectorBoundaryRestarts(
+  sourceRecords,
+  artifactRootPath,
+) {
+  const firstMessageIndex = sourceRecords.findIndex((record) =>
+    isMessageEvent(record.event.eventType),
+  );
+  const mentionIndex = sourceRecords.findIndex((record) =>
+    Array.isArray(record.event.data?.mentions),
+  );
+  const removalIndex = sourceRecords.findIndex(
+    (record) =>
+      record.event.eventType === "channel.membership.removed" &&
+      record.event.data?.channelId === CAPSTONE_CHANNELS.PRIVATE,
+  );
+  const boundaries = [
+    {
+      name: "channels-created",
+      prefixLength: firstMessageIndex,
+    },
+    {
+      name: "mention-created",
+      prefixLength: mentionIndex + 1,
+    },
+    {
+      name: "membership-removed",
+      prefixLength: removalIndex + 1,
+    },
+  ];
+  assert.equal(
+    boundaries.every(({ prefixLength }) => prefixLength > 0),
+    true,
+  );
+  const evidence = [];
+  for (const [index, boundary] of boundaries.entries()) {
+    const prefix = sourceRecords.slice(0, boundary.prefixLength);
+    const directory = await mkdtemp(
+      path.join(artifactRootPath, `projector-boundary-${index}-`),
+    );
+    const projectionId = `px_aaaaaaaaaaaaaaaaaaaaaaaaaa_${String(
+      index + 10,
+    ).padStart(26, "0")}`;
+    const first = createProjection(directory, projectionId);
+    let crashCode;
+    try {
+      first.worker.catchUp(prefix, {
+        crashAfterRowsAt: prefix.length,
+      });
+    } catch (error) {
+      crashCode = error.code;
+    }
+    assert.equal(crashCode, PROJECTION_ERROR_CODES.CRASH_AFTER_ROW_WRITE);
+    const restartedWorker = createProjectionWorker({
+      projectionId,
+      store: first.store,
+      workspaceId: CAPSTONE_WORKSPACE_ID,
+    });
+    const recovered = restartedWorker.catchUp(prefix);
+    const recoveryComplete =
+      recovered.checkpoint?.sequence === prefix.length &&
+      recovered.rowsSequence === prefix.length;
+    const projectorRestarted = restartedWorker !== first.worker;
+    assert.equal(projectorRestarted, true);
+    assert.equal(recoveryComplete, true);
+    evidence.push({
+      name: boundary.name,
+      prefixRecordCount: prefix.length,
+      crashAfterRowsAt: prefix.length,
+      crashCode,
+      projectorRestarted,
+      recoveredCheckpointSequence: recovered.checkpoint.sequence,
+      recoveryComplete,
+      result: "PASS",
+    });
+    await rm(directory, { recursive: true, force: true });
+  }
+  return {
+    boundaries: evidence,
+    allBoundariesRestarted: evidence.every(
+      ({ recoveryComplete, projectorRestarted }) =>
+        recoveryComplete && projectorRestarted,
+    ),
     result: "PASS",
   };
 }
@@ -873,30 +1200,56 @@ function verifyMentionStability(state, sourceRecords, expectedSource) {
   };
 }
 
-function verifyInterleavings(sourceRecords) {
+function verifyInterleavings(sourceRecords, seed) {
   const ordered = sourceRecords.map((record, index) => ({
     event: record.event,
     offset: replayOffset(index + 1),
   }));
-  const shuffled = reorderIndependentMessages(ordered);
+  const shuffled = reorderIndependentMessages(ordered, seed);
   const first = replayRecords(ordered);
   const second = replayRecords(shuffled);
-  assert.deepEqual(
-    normalizedMessageShapes(first.finalState),
-    normalizedMessageShapes(second.finalState),
-  );
+  const firstLogicalMessages = normalizedMessageShapes(first.finalState);
+  const secondLogicalMessages = normalizedMessageShapes(second.finalState);
+  const expectedFirstMessageOrder = messageOrderForRecords(ordered);
+  const expectedSecondMessageOrder = messageOrderForRecords(shuffled);
+  const firstMessageOrder = Object.keys(first.finalState.entities.messages);
+  const secondMessageOrder = Object.keys(second.finalState.entities.messages);
+  const firstReplayMatchesSourceOrder =
+    JSON.stringify(firstMessageOrder) ===
+    JSON.stringify(expectedFirstMessageOrder);
+  const secondReplayMatchesSourceOrder =
+    JSON.stringify(secondMessageOrder) ===
+    JSON.stringify(expectedSecondMessageOrder);
+  const sourceOrderChanged =
+    JSON.stringify(ordered.map(({ event }) => event.eventId)) !==
+    JSON.stringify(shuffled.map(({ event }) => event.eventId));
+  const messageOrderChanged =
+    JSON.stringify(firstMessageOrder) !== JSON.stringify(secondMessageOrder);
+  const sourceCausalPrerequisitesPreserved =
+    JSON.stringify(messageOrdersByChannel(ordered)) ===
+    JSON.stringify(messageOrdersByChannel(shuffled));
+  assert.deepEqual(firstLogicalMessages, secondLogicalMessages);
+  assert.equal(firstReplayMatchesSourceOrder, true);
+  assert.equal(secondReplayMatchesSourceOrder, true);
+  assert.equal(sourceOrderChanged, true);
+  assert.equal(messageOrderChanged, true);
+  assert.equal(sourceCausalPrerequisitesPreserved, true);
   return {
-    creationOrderVariant: [
-      "agent-request-first",
-      "linus-session",
-      "ada-session",
-    ],
-    sourceCausalPrerequisitesPreserved: true,
-    randomizedMessageInterleavingReplayed: true,
-    finalMessageShapeDigest: canonicalSha256(
-      normalizedMessageShapes(first.finalState),
-    ),
-    finalOrderingMayDifferBecauseSourceOrderDiffers: true,
+    seed,
+    sourceOrderChanged,
+    messageOrderChanged,
+    sourceCausalPrerequisitesPreserved,
+    randomizedMessageInterleavingReplayed:
+      sourceOrderChanged &&
+      messageOrderChanged &&
+      firstReplayMatchesSourceOrder &&
+      secondReplayMatchesSourceOrder,
+    firstMessageOrder,
+    secondMessageOrder,
+    firstReplayMatchesSourceOrder,
+    secondReplayMatchesSourceOrder,
+    finalMessageShapeDigest: canonicalSha256(firstLogicalMessages),
+    finalOrderingMayDifferBecauseSourceOrderDiffers: messageOrderChanged,
     result: "PASS",
   };
 }
@@ -1159,29 +1512,108 @@ function normalizedMessageShapes(state) {
     .sort((left, right) => left.messageId.localeCompare(right.messageId));
 }
 
-function reorderIndependentMessages(records) {
-  const output = [];
-  let span = [];
-  const flush = () => {
-    output.push(
-      ...span.sort((left, right) =>
-        right.event.data.channelId.localeCompare(left.event.data.channelId),
-      ),
-    );
-    span = [];
-  };
-  for (const record of records) {
-    if (isMessageEvent(record.event.eventType)) span.push(record);
-    else {
-      flush();
-      output.push(record);
+function reorderIndependentMessages(records, seed) {
+  const firstProfileUpdate = records.findIndex(
+    ({ event }) => event.eventType === "principal.profile.updated",
+  );
+  const removal = records.findIndex(
+    ({ event }) => event.eventType === "channel.membership.removed",
+  );
+  const start = firstProfileUpdate === -1 ? 0 : firstProfileUpdate + 1;
+  const end = removal === -1 ? records.length : removal;
+  const reorderableIndexes = records.reduce((indexes, record, index) => {
+    if (
+      index >= start &&
+      index < end &&
+      isMessageEvent(record.event.eventType)
+    ) {
+      indexes.push(index);
     }
-  }
-  flush();
+    return indexes;
+  }, []);
+  const reorderableMessages = reorderableIndexes.map((index) => records[index]);
+  const shuffledMessages = interleaveMessageLanes(reorderableMessages, seed);
+  const output = [...records];
+  reorderableIndexes.forEach((index, messageIndex) => {
+    output[index] = shuffledMessages[messageIndex];
+  });
   return output.map((record, index) => ({
     event: record.event,
     offset: replayOffset(index + 1),
   }));
+}
+
+function interleaveMessageLanes(records, seed) {
+  const lanes = new Map();
+  for (const record of records) {
+    const channelId = record.event.data?.channelId;
+    const lane = lanes.get(channelId) ?? [];
+    lane.push(record);
+    lanes.set(channelId, lane);
+  }
+  const random = seededRandom(seed);
+  const activeLanes = [...lanes.keys()];
+  const output = [];
+  while (activeLanes.length > 0) {
+    const laneIndex = Math.floor(random() * activeLanes.length);
+    const channelId = activeLanes[laneIndex];
+    const lane = lanes.get(channelId);
+    output.push(lane.shift());
+    if (lane.length === 0) activeLanes.splice(laneIndex, 1);
+  }
+  return output;
+}
+
+function seededRandom(seed) {
+  let state = Number.parseInt(canonicalSha256(seed).slice(-8), 16) >>> 0;
+  if (state === 0) state = 0x9e3779b9;
+  return () => {
+    state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+    return state / 0x100000000;
+  };
+}
+
+function messageOrderForRecords(records) {
+  const order = [];
+  for (const record of records) {
+    if (!isMessageEvent(record.event.eventType)) continue;
+    const messageId = record.event.data?.messageId;
+    if (!messageId) continue;
+    if (
+      record.event.eventType === "channel.message.created" ||
+      record.event.eventType === "channel.message.replied"
+    ) {
+      order.push(messageId);
+      continue;
+    }
+    if (
+      record.event.eventType !== "channel.message.edited" &&
+      record.event.eventType !== "channel.message.deleted"
+    ) {
+      continue;
+    }
+    const currentIndex = order.indexOf(messageId);
+    if (currentIndex !== -1) order.splice(currentIndex, 1);
+    order.push(messageId);
+  }
+  return order;
+}
+
+function messageOrdersByChannel(records) {
+  const byChannel = records
+    .filter(({ event }) => isMessageEvent(event.eventType))
+    .reduce((byChannel, record) => {
+      const channelId = record.event.data.channelId;
+      const list = byChannel[channelId] ?? [];
+      list.push(record.event.eventId);
+      byChannel[channelId] = list;
+      return byChannel;
+    }, {});
+  return Object.fromEntries(
+    Object.entries(byChannel).sort(([left], [right]) =>
+      left.localeCompare(right),
+    ),
+  );
 }
 
 function isMessageEvent(eventType) {

@@ -114,3 +114,21 @@ explicit events. Secret resolution never occurs in this stream.
   `sha256:a48f87c190bac1ea973d22e67ed240169af9b23d3b9081ffee0e3cd5dc2ca223`.
 - Claim: the critic's legacy shadowing refutation is repaired without weakening E0 compatibility;
   all E2-T02 acceptance criteria are satisfied, awaiting a fresh independent critic.
+
+### Builder hardening — 2026-08-05 — compatibility-spoof refusal and final cold proof
+
+- Exact hardening implementation commit: `a64f2866709b2fcd2543e11263f29018b7f92cdc`.
+- A strict v1 revision chain now rejects legacy-shaped revisions even when a dump falsely claims
+  E0-T05 compatibility. The unit regression and verifier cover both the default and spoofed
+  compatibility paths; genuine E0-T05 legacy fixtures remain explicitly supported.
+- Exact cold command:
+  `PROMOTE_EVIDENCE=1 E2_T02_IMPLEMENTATION_COMMIT=a64f2866709b2fcd2543e11263f29018b7f92cdc
+  TEST_RUN_ID=e2-t02-compat-hardening-final make verify-E2-T02`. The detached checkout was clean
+  before install, hydrated the pinned emulator, and passed `pnpm format:check`, `pnpm lint`,
+  `pnpm typecheck`, `pnpm test`, and `pnpm build`; all child commands exited 0 with
+  `skips: []`. Evidence is under `evidence/e2-t02-final/`.
+- The final verifier records eight typed refusal cases, one CAS winner, two canary refusals,
+  deterministic upgrade/lifecycle/replay checks, sensitivity exit 7, and final digest
+  `sha256:a48f87c190bac1ea973d22e67ed240169af9b23d3b9081ffee0e3cd5dc2ca223`.
+- Claim: the compatibility-spoof hardening closes the remaining critic observation while
+  preserving the E0 replay boundary; awaiting the final fresh independent critic.

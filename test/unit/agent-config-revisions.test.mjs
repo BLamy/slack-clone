@@ -124,6 +124,15 @@ test("legacy-shaped revision events require explicit E0 compatibility", async ()
       error.code === REDUCER_ERROR_CODES.AGENT_CONFIG_INVALID_EVENT &&
       error.offset === offset(8),
   );
+
+  const spoofedCompatibility = structuredClone(poisoned);
+  spoofedCompatibility.task = "E0-T05";
+  assert.throws(
+    () => validateAndReplayDump(spoofedCompatibility),
+    (error) =>
+      error.code === REDUCER_ERROR_CODES.AGENT_CONFIG_INVALID_EVENT &&
+      error.offset === offset(8),
+  );
 });
 
 test("two config writers racing the same head have one CAS winner", async () => {

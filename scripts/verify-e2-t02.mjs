@@ -392,6 +392,15 @@ function verifyRefusals(dump, invalidLegacyFixture) {
       "legacy-revision-shadow",
     ),
   );
+  const legacyShadowWithCompat = structuredClone(legacyShadow);
+  legacyShadowWithCompat.task = "E0-T05";
+  refusalCases.push(
+    expectReplayRefusal(
+      legacyShadowWithCompat,
+      REDUCER_ERROR_CODES.AGENT_CONFIG_INVALID_EVENT,
+      "legacy-revision-shadow-under-compat",
+    ),
+  );
   refusalCases.push(
     expectReplayRefusal(
       invalidLegacyFixture,

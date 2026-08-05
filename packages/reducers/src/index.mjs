@@ -1106,6 +1106,15 @@ function reduceAgentConfigCreated(state, data, context) {
 
 function reduceAgentConfigRevised(state, data, context) {
   if (isLegacyAgentConfigRevision(data)) {
+    const current = getKey(state.entities.agents, data.agentId);
+    if (current?.revisions) {
+      failAgentConfig(
+        REDUCER_ERROR_CODES.AGENT_CONFIG_INVALID_EVENT,
+        "legacy agent configuration revisions cannot shadow a strict revision chain",
+        "data",
+        context,
+      );
+    }
     if (!context.allowLegacyAgentConfigRevisions) {
       failAgentConfig(
         REDUCER_ERROR_CODES.AGENT_CONFIG_INVALID_EVENT,

@@ -31,6 +31,10 @@ const validFixturePath = path.join(
   fixtureDirectory,
   "valid/agent-config-chain.v1.json",
 );
+const invalidLegacyFixturePath = path.join(
+  fixtureDirectory,
+  "invalid/legacy-revision-shadow.v1.json",
+);
 const runId = String(
   process.env.TEST_RUN_ID ?? `verify-${process.pid}-${Date.now().toString(36)}`,
 )
@@ -73,6 +77,7 @@ await mkdir(evidenceDirectory, { recursive: true });
 await mkdir(path.join(taskDirectory, "work"), { recursive: true });
 
 const fixture = await readJson(validFixturePath);
+const invalidLegacyFixture = await readJson(invalidLegacyFixturePath);
 const firstReplay = validateAndReplayDump(fixture);
 const secondReplay = validateAndReplayDump(structuredClone(fixture));
 const replayEvidence = verifyRevisionHistory(
@@ -82,7 +87,7 @@ const replayEvidence = verifyRevisionHistory(
 );
 const schemaEvidence = await verifySchemas();
 const upgradeEvidence = await verifyUpgrade();
-const refusalEvidence = verifyRefusals(fixture);
+const refusalEvidence = verifyRefusals(fixture, invalidLegacyFixture);
 const lifecycleEvidence = await verifyStreamLifecycle(fixture);
 const raceEvidence = await verifyRevisionRace(fixture);
 const canaryEvidence = await verifyCanaryBoundary(fixture);
@@ -296,7 +301,7 @@ async function verifyUpgrade() {
   };
 }
 
-function verifyRefusals(dump) {
+function verifyRefusals(dump, invalidLegacyFixture) {
   const refusalCases = [];
   const stale = structuredClone(dump);
   stale.records[2].event.data.expectedRevision = 0;
@@ -362,6 +367,36 @@ function verifyRefusals(dump) {
       activateRetired,
       REDUCER_ERROR_CODES.AGENT_CONFIG_IMMUTABLE,
       "activate-retired",
+    ),
+  );
+
+  const legacyShadow = structuredClone(dump);
+  const legacyEvent = structuredClone(legacyShadow.records.at(-1).event);
+  legacyEvent.eventId = `ev_${"z".repeat(26)}`;
+  legacyEvent.eventType = "agent.config.revised";
+  legacyEvent.idempotencyKey = `ik_${"z".repeat(26)}`;
+  legacyEvent.serverTimestamp = "2026-08-05T00:00:00.008Z";
+  legacyEvent.data = {
+    agentId: dump.records[0].event.data.agentId,
+    config: { hijacked: true },
+    revision: 99,
+  };
+  legacyShadow.records.push({
+    offset: "0000000000000000_0000000000000008",
+    event: legacyEvent,
+  });
+  refusalCases.push(
+    expectReplayRefusal(
+      legacyShadow,
+      REDUCER_ERROR_CODES.AGENT_CONFIG_INVALID_EVENT,
+      "legacy-revision-shadow",
+    ),
+  );
+  refusalCases.push(
+    expectReplayRefusal(
+      invalidLegacyFixture,
+      REDUCER_ERROR_CODES.AGENT_CONFIG_INVALID_EVENT,
+      "legacy-revision-shadow-fixture",
     ),
   );
 

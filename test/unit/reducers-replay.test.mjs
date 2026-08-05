@@ -113,6 +113,7 @@ test("replay is invariant across chunk boundaries", async () => {
   const dump = await readJson(path.join(validDirectory, "ledger-log.v1.json"));
   const normalized = normalizeDump(dump);
   const expected = replayRecords(normalized, {
+    allowLegacyAgentConfigRevisions: true,
     allowLegacyCompactMessages: true,
   });
   let state = createInitialState();
@@ -120,6 +121,7 @@ test("replay is invariant across chunk boundaries", async () => {
 
   for (let index = 0; index < normalized.length; index += 1) {
     state = reduceEnvelope(state, normalized.at(index).event, {
+      allowLegacyAgentConfigRevisions: true,
       allowLegacyCompactMessages: true,
       offset: normalized.at(index).offset,
     });

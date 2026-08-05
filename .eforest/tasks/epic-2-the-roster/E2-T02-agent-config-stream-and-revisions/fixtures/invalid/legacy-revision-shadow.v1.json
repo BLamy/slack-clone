@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "task": "E2-T02",
+  "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc/config",
+  "records": [
+    {
+      "offset": "0000000000000000_0000000000000001",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "data": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "config": {
+            "schemaVersion": 1,
+            "instructions": {
+              "system": "system",
+              "task": "",
+              "guardrails": []
+            },
+            "context": {
+              "scope": "none",
+              "includePrivate": false,
+              "includeThreadHistory": false,
+              "maxMessages": 0,
+              "maxBytes": 0
+            },
+            "trigger": {
+              "events": ["manual"],
+              "requireMention": false,
+              "allowMessageEdits": false
+            },
+            "delegation": {
+              "enabled": false,
+              "maxDepth": 0,
+              "maxChildren": 0,
+              "allowCrossChannel": false
+            },
+            "concurrency": {
+              "maxConcurrentRuns": 1,
+              "maxConcurrentPerChannel": 1,
+              "queueStrategy": "serialize"
+            },
+            "budgets": {
+              "timeoutSeconds": 1,
+              "maxInputTokens": 1,
+              "maxOutputTokens": 1,
+              "maxTotalTokens": 2,
+              "maxCostUsdCents": 1
+            },
+            "harness": {
+              "providerId": "scripted",
+              "providerVersion": "1.0.0",
+              "requiredCapabilities": []
+            },
+            "sandbox": {
+              "providerId": "scripted",
+              "providerVersion": "1.0.0",
+              "requiredCapabilities": ["ephemeral"],
+              "lifecycle": "ephemeral",
+              "networkPolicy": "deny-all"
+            },
+            "workspaceInputs": {
+              "source": "none",
+              "paths": [],
+              "maxBytes": 0
+            },
+            "connectionGrants": {
+              "maxCallsPerRun": 0,
+              "refs": []
+            }
+          },
+          "configDigest": "sha256:8d7abbc24665b117724a03950506dedaa3b34dc90b8897c48774100e70dde3c7",
+          "expectedRevision": 0,
+          "expectedRevisionId": null,
+          "predecessorRevisionId": null,
+          "revision": 1,
+          "revisionId": "acr_8904644369c210752d46446543fe8c205a340b95716e61f1cd5512a745386759"
+        },
+        "eventId": "ev_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventType": "agent.config.created",
+        "idempotencyKey": "ik_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-05T00:00:00.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000002",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "data": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "config": { "hijacked": true },
+          "revision": 99
+        },
+        "eventId": "ev_zzzzzzzzzzzzzzzzzzzzzzzzzz",
+        "eventType": "agent.config.revised",
+        "idempotencyKey": "ik_zzzzzzzzzzzzzzzzzzzzzzzzzz",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-05T00:00:00.008Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    }
+  ]
+}

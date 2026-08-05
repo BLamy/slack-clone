@@ -183,7 +183,11 @@ export function createInitialState() {
 export function reduceEnvelope(
   state,
   envelope,
-  { allowLegacyCompactMessages = false, offset = null } = {},
+  {
+    allowLegacyAgentConfigRevisions = false,
+    allowLegacyCompactMessages = false,
+    offset = null,
+  } = {},
 ) {
   assertEnvelope(envelope, offset);
   if (state?.schemaVersion !== REDUCER_SCHEMA_VERSION) {
@@ -204,6 +208,7 @@ export function reduceEnvelope(
   const next = cloneState(state);
   const reducer = registryReducer(envelope.eventType);
   reducer(next, envelope.data, {
+    allowLegacyAgentConfigRevisions,
     allowLegacyCompactMessages,
     envelope,
     offset,
@@ -219,6 +224,7 @@ export function reduceEnvelope(
 export function replayRecords(
   records,
   {
+    allowLegacyAgentConfigRevisions = false,
     allowLegacyCompactMessages = false,
     initialState = createInitialState(),
   } = {},
@@ -261,6 +267,7 @@ export function replayRecords(
     seenOffsets.add(offset);
     const envelope = record?.event ?? record?.envelope ?? record;
     state = reduceEnvelope(state, envelope, {
+      allowLegacyAgentConfigRevisions,
       allowLegacyCompactMessages,
       offset,
     });
@@ -1099,6 +1106,14 @@ function reduceAgentConfigCreated(state, data, context) {
 
 function reduceAgentConfigRevised(state, data, context) {
   if (isLegacyAgentConfigRevision(data)) {
+    if (!context.allowLegacyAgentConfigRevisions) {
+      failAgentConfig(
+        REDUCER_ERROR_CODES.AGENT_CONFIG_INVALID_EVENT,
+        "legacy agent configuration revisions require explicit E0-T05 replay compatibility",
+        "data",
+        context,
+      );
+    }
     reduceLegacyAgentConfigRevised(state, data, context);
     return;
   }

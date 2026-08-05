@@ -13,6 +13,7 @@ import {
   createAgentConfigStream,
 } from "../../src/ledger/agent-config-stream.mjs";
 import { validateAndReplayDump } from "../../src/ledger/replay.mjs";
+import { REDUCER_ERROR_CODES } from "@stream-slack/reducers";
 
 const fixturePath = path.resolve(
   ".eforest/tasks/epic-2-the-roster/E2-T02-agent-config-stream-and-revisions/fixtures/valid/agent-config-chain.v1.json",
@@ -100,6 +101,29 @@ test("revision IDs bind agent, ordinal, and canonical config digest", () => {
     /^acr_[0-9a-f]{64}$/u,
   );
   assert.equal(config.marker, "test-only");
+});
+
+test("legacy-shaped revision events require explicit E0 compatibility", async () => {
+  const fixture = JSON.parse(await readFile(fixturePath, "utf8"));
+  const poisoned = structuredClone(fixture);
+  const event = structuredClone(poisoned.records.at(-1).event);
+  event.eventId = `ev_${"z".repeat(26)}`;
+  event.eventType = "agent.config.revised";
+  event.idempotencyKey = `ik_${"z".repeat(26)}`;
+  event.serverTimestamp = "2026-08-05T00:00:00.008Z";
+  event.data = {
+    agentId: fixture.records[0].event.data.agentId,
+    config: { hijacked: true },
+    revision: 99,
+  };
+  poisoned.records.push({ offset: offset(8), event });
+
+  assert.throws(
+    () => validateAndReplayDump(poisoned),
+    (error) =>
+      error.code === REDUCER_ERROR_CODES.AGENT_CONFIG_INVALID_EVENT &&
+      error.offset === offset(8),
+  );
 });
 
 test("two config writers racing the same head have one CAS winner", async () => {

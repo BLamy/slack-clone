@@ -8,12 +8,15 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-No task is currently in progress, awaiting verification, or refuted.
+1. **E2-T02** — Agent configuration stream and immutable revisions *(builder working)*
 
 ## Next up (dependencies satisfied)
 
-1. **E2-T02** — Agent configuration stream and immutable revisions
 1. **E2-T05** — Harness and sandbox provider registry with capability negotiation
+
+## Unlocks when E2-T02 verifies
+
+1. **E2-T03** — Agent management API and machine-readable CLI
 
 ## Epic 0 — `epic-0-the-ledger`
 
@@ -39,7 +42,7 @@ No task is currently in progress, awaiting verification, or refuted.
 ## Epic 2 — `epic-2-the-roster`
 
 - [x] ` 201` [E2-T01](epic-2-the-roster/E2-T01-versioned-agent-config-schema/readme.md) — Versioned agent configuration schema without embedded secrets *(deps: E1)*
-- [ ] ` 202` [E2-T02](epic-2-the-roster/E2-T02-agent-config-stream-and-revisions/readme.md) — Agent configuration stream and immutable revisions *(deps: E2-T01)*
+- [~] ` 202` [E2-T02](epic-2-the-roster/E2-T02-agent-config-stream-and-revisions/readme.md) — Agent configuration stream and immutable revisions *(deps: E2-T01)*
 - [ ] ` 203` [E2-T03](epic-2-the-roster/E2-T03-agent-management-api-and-cli/readme.md) — Agent management API and machine-readable CLI *(deps: E2-T02)*
 - [ ] ` 204` [E2-T04](epic-2-the-roster/E2-T04-agent-administration-authz/readme.md) — Agent administration authorization and separation of duties *(deps: E2-T03)*
 - [ ] ` 205` [E2-T05](epic-2-the-roster/E2-T05-provider-registry-and-capabilities/readme.md) — Harness and sandbox provider registry with capability negotiation *(deps: E2-T01)*

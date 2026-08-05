@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E2-T01 is verified; E2-T02 and E2-T05 are unlocked.",
-  "updatedAt": "2026-08-05T08:27:47Z"
+  "statusReason": "E2-T02 is the active queue gate.",
+  "updatedAt": "2026-08-05T18:03:20Z"
 }

@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E2-T01 is refuted: canonical ordering repair required.",
-  "updatedAt": "2026-08-05T08:18:13Z"
+  "statusReason": "E2-T01 is in repair after canonical ordering refutation.",
+  "updatedAt": "2026-08-05T08:18:27Z"
 }

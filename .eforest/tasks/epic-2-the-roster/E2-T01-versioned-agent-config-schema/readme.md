@@ -3,7 +3,7 @@ id: E2-T01
 epic: 2
 title: "Versioned agent configuration schema without embedded secrets"
 priority: 201
-status: refuted
+status: in-progress
 depends_on: [E1]
 estimate: M
 capstone: false

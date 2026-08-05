@@ -22,10 +22,31 @@ from `@stream-slack/protocol`; the structural JSON Schema is
 | `workspaceInputs`  | Workspace policy names a source and normalized relative paths with a byte ceiling.        | No absolute paths, traversal, arbitrary mounts, or environment maps.                                    |
 | `connectionGrants` | Later connection control plane owns the grant and revision references.                    | Every reference requires `connectionId`, `grantId`, `revision`, and purpose; values are never embedded. |
 
-The configuration stream introduced by E2-T02 will be authoritative for revisions. This
-ticket only defines and validates the portable payload. The provider registry is represented
-as data in `AGENT_CONFIG_PROVIDER_REGISTRY`; E2-T05 can extend that registry without adding
-provider-specific branches to orchestration.
+The configuration stream in E2-T02 is authoritative for revisions. The provider registry is
+represented as data in `AGENT_CONFIG_PROVIDER_REGISTRY`; E2-T05 can extend that registry without
+adding provider-specific branches to orchestration.
+
+## Revision stream
+
+Each agent owns `agent:<agentId>/config`. The stream stores envelope records with the canonical
+event digest and never stores a resolved credential. Revision events are
+`agent.config.created`, `agent.config.revised`, `agent.config.activated`,
+`agent.config.disabled`, and `agent.config.retired`; their strict payload schemas live in
+`packages/protocol/src/schemas/agent-config-events.v1.schema.json`.
+
+Create and revise events carry the normalized config, its `configDigest`, a deterministic
+`revisionId`, and both the expected and predecessor revision IDs. The reducer records the
+immutable revision manifest with actor, event ID, and source offset, while lifecycle events only
+change the derived runnable state. Revisions are appended; they are never replaced in place.
+
+Every append reads the stream head and supplies that opaque offset as Durable Streams `Stream-Seq`.
+If two writers use the same expected predecessor, provider CAS accepts one append and maps the
+loser to a stable stale-revision refusal. Replaying from offset `-1` reconstructs the full history,
+active revision, and runnable status without a mutable configuration row or process cache.
+
+The lifecycle is `draft -> active -> disabled -> active` with `retired` terminal; a revision may
+be prepared while active or disabled, but it cannot become runnable until an explicit activation.
+Disabled and retired states always expose `runnable: false`.
 
 ## Threat model
 

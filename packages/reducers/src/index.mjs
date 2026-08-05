@@ -1,5 +1,7 @@
 import {
   directChannelIdFor,
+  AGENT_CONFIG_REVISION_EVENT_TYPES_V1,
+  validateAgentConfigRevisionEventData,
   MENTION_PRINCIPAL_KINDS,
   parseMentionCandidates,
   validatePrincipalId,
@@ -31,7 +33,7 @@ export const REDUCER_EVENT_TYPES_V1 = Object.freeze([
   "channel.message.deleted",
   "channel.message.reaction.added",
   "channel.message.reaction.removed",
-  "agent.config.revised",
+  ...AGENT_CONFIG_REVISION_EVENT_TYPES_V1,
   "workspace.invocation.requested",
   "run.lifecycle.changed",
   "connection.config.revised",
@@ -61,6 +63,12 @@ export const REDUCER_EVENT_TYPES_V1 = Object.freeze([
 export const REDUCER_ERROR_CODES = Object.freeze({
   DUPLICATE_EVENT_ID: "REDUCER_DUPLICATE_EVENT_ID",
   DUPLICATE_LOGICAL_ID: "REDUCER_DUPLICATE_LOGICAL_ID",
+  AGENT_CONFIG_DUPLICATE: "REDUCER_AGENT_CONFIG_DUPLICATE",
+  AGENT_CONFIG_IMMUTABLE: "REDUCER_AGENT_CONFIG_IMMUTABLE",
+  AGENT_CONFIG_INVALID_EVENT: "REDUCER_AGENT_CONFIG_INVALID_EVENT",
+  AGENT_CONFIG_NOT_FOUND: "REDUCER_AGENT_CONFIG_NOT_FOUND",
+  AGENT_CONFIG_REVISION_CONFLICT: "REDUCER_AGENT_CONFIG_REVISION_CONFLICT",
+  AGENT_CONFIG_SOURCE_OFFSET: "REDUCER_AGENT_CONFIG_SOURCE_OFFSET",
   ILLEGAL_TRANSITION: "REDUCER_ILLEGAL_TRANSITION",
   INVALID_EVENT_DATA: "REDUCER_INVALID_EVENT_DATA",
   INVALID_OFFSET: "REDUCER_INVALID_OFFSET",
@@ -282,7 +290,11 @@ export const REDUCER_REGISTRY_V1 = Object.freeze({
   "channel.message.deleted": reduceMessageDeleted,
   "channel.message.reaction.added": reduceReactionAdded,
   "channel.message.reaction.removed": reduceReactionRemoved,
+  "agent.config.created": reduceAgentConfigCreated,
   "agent.config.revised": reduceAgentConfigRevised,
+  "agent.config.activated": reduceAgentConfigActivated,
+  "agent.config.disabled": reduceAgentConfigDisabled,
+  "agent.config.retired": reduceAgentConfigRetired,
   "workspace.invocation.requested": reduceInvocationRequested,
   "run.lifecycle.changed": reduceRunLifecycleChanged,
   "connection.config.revised": reduceConnectionConfigRevised,
@@ -1081,7 +1093,232 @@ function failMessage(code, detail, field, context) {
   });
 }
 
+function reduceAgentConfigCreated(state, data, context) {
+  reduceAgentConfigRevision(state, data, context, "agent.config.created");
+}
+
 function reduceAgentConfigRevised(state, data, context) {
+  if (isLegacyAgentConfigRevision(data)) {
+    reduceLegacyAgentConfigRevised(state, data, context);
+    return;
+  }
+  reduceAgentConfigRevision(state, data, context, "agent.config.revised");
+}
+
+function reduceAgentConfigActivated(state, data, context) {
+  const normalized = validateAgentConfigEventData(
+    "agent.config.activated",
+    data,
+    context,
+  );
+  const current = requireAgentConfig(state, normalized.agentId, context);
+  assertCurrentRevision(current, normalized, context);
+  if (current.status === "retired") {
+    failAgentConfig(
+      REDUCER_ERROR_CODES.AGENT_CONFIG_IMMUTABLE,
+      "retired agent configuration cannot be activated",
+      "revisionId",
+      context,
+    );
+  }
+  const target = current.revisions.find(
+    (revision) => revision.revisionId === normalized.revisionId,
+  );
+  if (!target) {
+    failAgentConfig(
+      REDUCER_ERROR_CODES.AGENT_CONFIG_NOT_FOUND,
+      "activation target revision does not exist in this agent stream",
+      "revisionId",
+      context,
+    );
+  }
+  if (
+    current.status === "active" &&
+    current.activeRevisionId === normalized.revisionId
+  ) {
+    failAgentConfig(
+      REDUCER_ERROR_CODES.ILLEGAL_TRANSITION,
+      "agent configuration revision is already active",
+      "revisionId",
+      context,
+    );
+  }
+  const next = updateAgentConfigLifecycle(current, {
+    activeRevision: target.revision,
+    activeRevisionId: target.revisionId,
+    status: "active",
+  });
+  state.entities.agents = setKey(
+    state.entities.agents,
+    normalized.agentId,
+    appendAgentConfigTransition(next, context, {
+      eventType: "agent.config.activated",
+      revisionId: target.revisionId,
+      statusAfter: "active",
+    }),
+  );
+}
+
+function reduceAgentConfigDisabled(state, data, context) {
+  const normalized = validateAgentConfigEventData(
+    "agent.config.disabled",
+    data,
+    context,
+  );
+  const current = requireAgentConfig(state, normalized.agentId, context);
+  assertCurrentRevision(current, normalized, context);
+  if (current.status !== "active") {
+    failAgentConfig(
+      REDUCER_ERROR_CODES.ILLEGAL_TRANSITION,
+      `agent configuration cannot be disabled from ${current.status}`,
+      "agentId",
+      context,
+    );
+  }
+  const next = updateAgentConfigLifecycle(current, {
+    activeRevision: null,
+    activeRevisionId: null,
+    status: "disabled",
+  });
+  state.entities.agents = setKey(
+    state.entities.agents,
+    normalized.agentId,
+    appendAgentConfigTransition(next, context, {
+      eventType: "agent.config.disabled",
+      statusAfter: "disabled",
+    }),
+  );
+}
+
+function reduceAgentConfigRetired(state, data, context) {
+  const normalized = validateAgentConfigEventData(
+    "agent.config.retired",
+    data,
+    context,
+  );
+  const current = requireAgentConfig(state, normalized.agentId, context);
+  assertCurrentRevision(current, normalized, context);
+  if (current.status === "retired") {
+    failAgentConfig(
+      REDUCER_ERROR_CODES.AGENT_CONFIG_IMMUTABLE,
+      "retired agent configuration is terminal",
+      "agentId",
+      context,
+    );
+  }
+  const next = updateAgentConfigLifecycle(current, {
+    activeRevision: null,
+    activeRevisionId: null,
+    status: "retired",
+  });
+  state.entities.agents = setKey(
+    state.entities.agents,
+    normalized.agentId,
+    appendAgentConfigTransition(next, context, {
+      eventType: "agent.config.retired",
+      statusAfter: "retired",
+    }),
+  );
+}
+
+function reduceAgentConfigRevision(state, data, context, eventType) {
+  const normalized = validateAgentConfigEventData(eventType, data, context);
+  requireAgentConfigSourceOffset(context);
+  const current = getKey(state.entities.agents, normalized.agentId);
+  if (eventType === "agent.config.created") {
+    if (current) {
+      failAgentConfig(
+        REDUCER_ERROR_CODES.AGENT_CONFIG_DUPLICATE,
+        "agent configuration stream was already created",
+        "agentId",
+        context,
+      );
+    }
+    if (normalized.expectedRevision !== 0) {
+      failAgentConfig(
+        REDUCER_ERROR_CODES.AGENT_CONFIG_REVISION_CONFLICT,
+        "create expected an empty agent configuration stream",
+        "expectedRevision",
+        context,
+      );
+    }
+    const revision = createAgentConfigRevisionRecord(normalized, context);
+    state.entities.agents = setKey(
+      state.entities.agents,
+      normalized.agentId,
+      appendAgentConfigTransition(
+        {
+          activeConfig: null,
+          activeRevision: null,
+          activeRevisionId: null,
+          agentId: normalized.agentId,
+          headRevision: revision.revision,
+          lastRevisionId: revision.revisionId,
+          revisions: [revision],
+          runnable: false,
+          status: "draft",
+          transitions: [],
+        },
+        context,
+        {
+          eventType,
+          revisionId: revision.revisionId,
+          statusAfter: "draft",
+        },
+      ),
+    );
+    return;
+  }
+
+  const existing = requireAgentConfig(state, normalized.agentId, context);
+  if (existing.status === "retired") {
+    failAgentConfig(
+      REDUCER_ERROR_CODES.AGENT_CONFIG_IMMUTABLE,
+      "retired agent configuration cannot receive revisions",
+      "agentId",
+      context,
+    );
+  }
+  assertCurrentRevision(existing, normalized, context);
+  if (normalized.predecessorRevisionId !== existing.lastRevisionId) {
+    failAgentConfig(
+      REDUCER_ERROR_CODES.AGENT_CONFIG_REVISION_CONFLICT,
+      "revision predecessor does not match the current stream head",
+      "predecessorRevisionId",
+      context,
+    );
+  }
+  if (
+    existing.revisions.some(
+      (revision) => revision.revisionId === normalized.revisionId,
+    )
+  ) {
+    failAgentConfig(
+      REDUCER_ERROR_CODES.AGENT_CONFIG_IMMUTABLE,
+      "revision id was already committed with immutable bytes",
+      "revisionId",
+      context,
+    );
+  }
+  const revision = createAgentConfigRevisionRecord(normalized, context);
+  const next = {
+    ...existing,
+    headRevision: revision.revision,
+    lastRevisionId: revision.revisionId,
+    revisions: [...existing.revisions, revision],
+  };
+  state.entities.agents = setKey(
+    state.entities.agents,
+    normalized.agentId,
+    appendAgentConfigTransition(next, context, {
+      eventType,
+      revisionId: revision.revisionId,
+      statusAfter: existing.status,
+    }),
+  );
+}
+
+function reduceLegacyAgentConfigRevised(state, data, context) {
   assertData(data, ["agentId", "revision", "config"], [], context);
   assertToken(data.agentId, "agentId", context);
   assertRevision(data.revision, "revision", context);
@@ -1098,6 +1335,133 @@ function reduceAgentConfigRevised(state, data, context) {
     agentId: data.agentId,
     revision: data.revision,
     config: copyJson(data.config),
+  });
+}
+
+function isLegacyAgentConfigRevision(data) {
+  return (
+    isRecord(data) &&
+    Object.keys(data).length === 3 &&
+    Object.hasOwn(data, "agentId") &&
+    Object.hasOwn(data, "revision") &&
+    Object.hasOwn(data, "config")
+  );
+}
+
+function validateAgentConfigEventData(eventType, data, context) {
+  requireAgentConfigSourceOffset(context);
+  try {
+    return validateAgentConfigRevisionEventData(eventType, data, {
+      expectedWorkspaceId: context.envelope.workspaceId,
+    });
+  } catch (error) {
+    failAgentConfig(
+      REDUCER_ERROR_CODES.AGENT_CONFIG_INVALID_EVENT,
+      error?.detail ?? "agent configuration event data is invalid",
+      error?.path?.split(".").at(-1) ?? "data",
+      context,
+    );
+  }
+}
+
+function requireAgentConfig(state, agentId, context) {
+  const current = getKey(state.entities.agents, agentId);
+  if (!current || !Array.isArray(current.revisions)) {
+    failAgentConfig(
+      REDUCER_ERROR_CODES.AGENT_CONFIG_NOT_FOUND,
+      "agent configuration stream has no committed revision history",
+      "agentId",
+      context,
+    );
+  }
+  return current;
+}
+
+function assertCurrentRevision(current, data, context) {
+  if (
+    data.expectedRevision !== current.headRevision ||
+    data.expectedRevisionId !== current.lastRevisionId
+  ) {
+    failAgentConfig(
+      REDUCER_ERROR_CODES.AGENT_CONFIG_REVISION_CONFLICT,
+      "expected revision is not the current stream head",
+      "expectedRevision",
+      context,
+    );
+  }
+}
+
+function createAgentConfigRevisionRecord(data, context) {
+  return {
+    actorId: context.envelope.actorId,
+    agentId: data.agentId,
+    config: copyJson(data.config),
+    configDigest: data.configDigest,
+    eventId: context.envelope.eventId,
+    expectedRevision: data.expectedRevision,
+    predecessorRevisionId: data.predecessorRevisionId,
+    revision: data.revision,
+    revisionId: data.revisionId,
+    sourceOffset: context.offset,
+    workspaceId: context.envelope.workspaceId,
+  };
+}
+
+function appendAgentConfigTransition(
+  current,
+  context,
+  { eventType, revisionId = null, statusAfter },
+) {
+  const transition = {
+    actorId: context.envelope.actorId,
+    eventId: context.envelope.eventId,
+    eventType,
+    revisionId,
+    sourceOffset: context.offset,
+    statusAfter,
+    statusBefore: current.transitions.at(-1)?.statusAfter ?? null,
+  };
+  return refreshAgentConfigDerived({
+    ...current,
+    transitions: [...current.transitions, transition],
+  });
+}
+
+function updateAgentConfigLifecycle(current, updates) {
+  return refreshAgentConfigDerived({ ...current, ...updates });
+}
+
+function refreshAgentConfigDerived(current) {
+  const active = current.activeRevisionId
+    ? current.revisions.find(
+        (revision) => revision.revisionId === current.activeRevisionId,
+      )
+    : null;
+  return {
+    ...current,
+    activeConfig: active ? copyJson(active.config) : null,
+    runnable: current.status === "active" && current.activeRevisionId !== null,
+  };
+}
+
+function requireAgentConfigSourceOffset(context) {
+  if (
+    typeof context.offset !== "string" ||
+    !/^\d{16}_[0-9a-f]{16}$/u.test(context.offset)
+  ) {
+    failAgentConfig(
+      REDUCER_ERROR_CODES.AGENT_CONFIG_SOURCE_OFFSET,
+      "agent configuration revisions require a canonical source offset",
+      "sourceOffset",
+      context,
+    );
+  }
+}
+
+function failAgentConfig(code, detail, field, context) {
+  throw reducerError(code, detail, {
+    offset: context.offset,
+    path: `$.event.data.${field}`,
   });
 }
 

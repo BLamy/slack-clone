@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "runId": "e2-t01-cold-final",
-  "implementationCommit": "846de0f76b216a77ac2eb2832ed67171ffdfab7f",
+  "runId": "e2-t01-canonical-repair-final",
+  "implementationCommit": "444b5c392eee30e13f875126826dbcc3365ad9ea",
   "result": "PASS",
   "skips": [],
   "canonical": {
-    "byteLength": 1221,
-    "canonicalUtf8": "{\"budgets\":{\"maxCostUsdCents\":250,\"maxInputTokens\":8000,\"maxOutputTokens\":4000,\"maxTotalTokens\":12000,\"timeoutSeconds\":900},\"concurrency\":{\"maxConcurrentPerChannel\":1,\"maxConcurrentRuns\":4,\"queueStrategy\":\"serialize\"},\"connectionGrants\":{\"maxCallsPerRun\":0,\"refs\":[]},\"context\":{\"includePrivate\":false,\"includeThreadHistory\":true,\"maxBytes\":65536,\"maxMessages\":50,\"scope\":\"current-channel\"},\"delegation\":{\"allowCrossChannel\":false,\"enabled\":false,\"maxChildren\":0,\"maxDepth\":0},\"harness\":{\"providerId\":\"scripted\",\"providerVersion\":\"1.0.0\",\"requiredCapabilities\":[\"structured-output\"]},\"instructions\":{\"guardrails\":[\"Never disclose credentials or secret-shaped values.\",\"Keep replies bounded and auditable.\"],\"system\":\"You are a workspace assistant. Follow the workspace policy and cite durable facts.\",\"task\":\"Answer the current request using only the authorized context.\"},\"sandbox\":{\"lifecycle\":\"ephemeral\",\"networkPolicy\":\"deny-all\",\"providerId\":\"scripted\",\"providerVersion\":\"1.0.0\",\"requiredCapabilities\":[\"ephemeral\"]},\"schemaVersion\":1,\"trigger\":{\"allowMessageEdits\":false,\"events\":[\"manual\",\"mention\"],\"requireMention\":false},\"workspaceInputs\":{\"maxBytes\":1048576,\"paths\":[\"README.md\",\"docs\"],\"source\":\"workspace\"}}",
-    "digest": "sha256:f49949d51b54b76e1d72b3114607cfc9200454156b26e57b936c0b5a14c65309",
+    "byteLength": 1380,
+    "canonicalUtf8": "{\"budgets\":{\"maxCostUsdCents\":250,\"maxInputTokens\":8000,\"maxOutputTokens\":4000,\"maxTotalTokens\":12000,\"timeoutSeconds\":900},\"concurrency\":{\"maxConcurrentPerChannel\":1,\"maxConcurrentRuns\":4,\"queueStrategy\":\"serialize\"},\"connectionGrants\":{\"maxCallsPerRun\":2,\"refs\":[{\"connectionId\":\"conn_a\",\"grantId\":\"grant_bgrant_c\",\"purpose\":\"p\",\"revision\":1},{\"connectionId\":\"conn_agrant_b\",\"grantId\":\"grant_c\",\"purpose\":\"p\",\"revision\":1}]},\"context\":{\"includePrivate\":false,\"includeThreadHistory\":true,\"maxBytes\":65536,\"maxMessages\":50,\"scope\":\"current-channel\"},\"delegation\":{\"allowCrossChannel\":false,\"enabled\":false,\"maxChildren\":0,\"maxDepth\":0},\"harness\":{\"providerId\":\"scripted\",\"providerVersion\":\"1.0.0\",\"requiredCapabilities\":[\"structured-output\"]},\"instructions\":{\"guardrails\":[\"Never disclose credentials or secret-shaped values.\",\"Keep replies bounded and auditable.\"],\"system\":\"You are a workspace assistant. Follow the workspace policy and cite durable facts.\",\"task\":\"Answer the current request using only the authorized context.\"},\"sandbox\":{\"lifecycle\":\"ephemeral\",\"networkPolicy\":\"deny-all\",\"providerId\":\"scripted\",\"providerVersion\":\"1.0.0\",\"requiredCapabilities\":[\"ephemeral\"]},\"schemaVersion\":1,\"trigger\":{\"allowMessageEdits\":false,\"events\":[\"manual\",\"mention\"],\"requireMention\":false},\"workspaceInputs\":{\"maxBytes\":1048576,\"paths\":[\"README.md\",\"docs\"],\"source\":\"workspace\"}}",
+    "digest": "sha256:985cb3cc8e3ddfb848768e8f058afad174135e97253eed9376953c0a820973c7",
     "mapAndUnorderedArrayParity": true,
     "semanticMutationChangesDigest": true
   },

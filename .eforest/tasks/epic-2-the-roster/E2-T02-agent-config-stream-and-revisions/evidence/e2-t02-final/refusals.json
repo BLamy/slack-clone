@@ -1,0 +1,32 @@
+[
+  {
+    "name": "forged-predecessor",
+    "code": "REDUCER_AGENT_CONFIG_INVALID_EVENT",
+    "offset": "0000000000000000_0000000000000003",
+    "result": "REFUSED"
+  },
+  {
+    "name": "config-digest-mismatch",
+    "code": "REDUCER_AGENT_CONFIG_INVALID_EVENT",
+    "offset": "0000000000000000_0000000000000003",
+    "result": "REFUSED"
+  },
+  {
+    "name": "sibling-agent-scope",
+    "code": "REDUCER_AGENT_CONFIG_INVALID_EVENT",
+    "offset": "0000000000000000_0000000000000001",
+    "result": "REFUSED"
+  },
+  {
+    "name": "unknown-activation-target",
+    "code": "REDUCER_AGENT_CONFIG_NOT_FOUND",
+    "offset": "0000000000000000_0000000000000004",
+    "result": "REFUSED"
+  },
+  {
+    "name": "activate-retired",
+    "code": "REDUCER_AGENT_CONFIG_IMMUTABLE",
+    "offset": "0000000000000000_0000000000000008",
+    "result": "REFUSED"
+  }
+]

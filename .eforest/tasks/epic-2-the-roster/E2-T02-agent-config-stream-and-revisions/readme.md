@@ -3,7 +3,7 @@ id: E2-T02
 epic: 2
 title: "Agent configuration stream and immutable revisions"
 priority: 202
-status: in-progress
+status: implemented
 depends_on: [E2-T01]
 estimate: M
 capstone: false
@@ -60,3 +60,25 @@ explicit events. Secret resolution never occurs in this stream.
 5. Permit in-place update in a scratch worktree; the immutable-manifest test must fail.
 
 ## Verification log
+
+### Builder — 2026-08-05 — implementation and cold proof
+
+- Exact implementation commit: `fca92859931312b1f01d097e6a474ec359b66903`.
+- Exact cold command:
+  `PROMOTE_EVIDENCE=1 E2_T02_IMPLEMENTATION_COMMIT=fca92859931312b1f01d097e6a474ec359b66903
+  TEST_RUN_ID=e2-t02-cold-final make verify-E2-T02`. The detached checkout was clean before
+  install, hydrated the pinned emulator, and passed `pnpm format:check`, `pnpm lint`,
+  `pnpm typecheck`, `pnpm test`, and `pnpm build`; all child commands exited 0 with
+  `skips: []`. The cold transcript is under `evidence/e2-t02-final/`.
+- The valid seven-event chain replays twice to final state digest
+  `sha256:a48f87c190bac1ea973d22e67ed240169af9b23d3b9081ffee0e3cd5dc2ca223`, with two
+  immutable revision manifests, seven source-offset-bound transitions, and retired/runnable
+  state `false`.
+- The verifier records five typed refusal cases, one-winner/one-stale-refusal concurrent create
+  race with no losing payload persisted, two rejected secret canaries, deterministic v0 upgrade,
+  disabled and retired non-runnable lifecycle checks, and a sensitivity mutant that exits 7.
+- Replay: N/A (server config revision protocol) + mitigation: concurrent revision races,
+  immutable manifests, canary scan, and replay digests.
+- Claim: the E2-T02 config event schemas, stream append boundary, immutable revision reducer,
+  optimistic concurrency, lifecycle transitions, upgrade path, fixtures, and cold verifier
+  satisfy the acceptance criteria; awaiting a fresh independent critic.

@@ -1,0 +1,119 @@
+{
+  "finalStateDigest": "sha256:a48f87c190bac1ea973d22e67ed240169af9b23d3b9081ffee0e3cd5dc2ca223",
+  "offsets": [
+    "0000000000000000_0000000000000001",
+    "0000000000000000_0000000000000002",
+    "0000000000000000_0000000000000003",
+    "0000000000000000_0000000000000004",
+    "0000000000000000_0000000000000005",
+    "0000000000000000_0000000000000006",
+    "0000000000000000_0000000000000007"
+  ],
+  "perPrefixDigests": [
+    {
+      "index": 1,
+      "offset": "0000000000000000_0000000000000001",
+      "stateDigest": "sha256:a7ffc2fe46ae8e5a245d79a9b60c98a6e52da03a995656280e40177466b5c6de"
+    },
+    {
+      "index": 2,
+      "offset": "0000000000000000_0000000000000002",
+      "stateDigest": "sha256:d584506fbd6d52032f34e4a15a331fb13c4d0468cdb3d0ca36bb06b3d4f5331f"
+    },
+    {
+      "index": 3,
+      "offset": "0000000000000000_0000000000000003",
+      "stateDigest": "sha256:ceeb83c26a9076125bb3db982ba4cf2762d57e4338d8344d9f98677d92f44c24"
+    },
+    {
+      "index": 4,
+      "offset": "0000000000000000_0000000000000004",
+      "stateDigest": "sha256:e93f8b4b10a20035062360d8a916480d94fcdc36559ec92ac118ba5d06046972"
+    },
+    {
+      "index": 5,
+      "offset": "0000000000000000_0000000000000005",
+      "stateDigest": "sha256:f3393491321da61f55603875547dd3f808f6f74056f044d3d52a88f6eb4c4967"
+    },
+    {
+      "index": 6,
+      "offset": "0000000000000000_0000000000000006",
+      "stateDigest": "sha256:7cbe890719fc2bfee551c46f3a9cd94eea5a4fffe90bff73dde2133edc3f1345"
+    },
+    {
+      "index": 7,
+      "offset": "0000000000000000_0000000000000007",
+      "stateDigest": "sha256:a48f87c190bac1ea973d22e67ed240169af9b23d3b9081ffee0e3cd5dc2ca223"
+    }
+  ],
+  "records": 7,
+  "revisions": 2,
+  "historyManifest": [
+    {
+      "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eventId": "ev_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "eventType": "agent.config.created",
+      "revisionId": "acr_8904644369c210752d46446543fe8c205a340b95716e61f1cd5512a745386759",
+      "sourceOffset": "0000000000000000_0000000000000001",
+      "statusAfter": "draft",
+      "statusBefore": null
+    },
+    {
+      "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eventId": "ev_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eventType": "agent.config.activated",
+      "revisionId": "acr_8904644369c210752d46446543fe8c205a340b95716e61f1cd5512a745386759",
+      "sourceOffset": "0000000000000000_0000000000000002",
+      "statusAfter": "active",
+      "statusBefore": "draft"
+    },
+    {
+      "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eventId": "ev_cccccccccccccccccccccccccc",
+      "eventType": "agent.config.revised",
+      "revisionId": "acr_a32e82ec1d251d8bf8ea12030cd4f7c1d4c55a734758c065aa656e74d7e41799",
+      "sourceOffset": "0000000000000000_0000000000000003",
+      "statusAfter": "active",
+      "statusBefore": "active"
+    },
+    {
+      "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eventId": "ev_dddddddddddddddddddddddddd",
+      "eventType": "agent.config.activated",
+      "revisionId": "acr_a32e82ec1d251d8bf8ea12030cd4f7c1d4c55a734758c065aa656e74d7e41799",
+      "sourceOffset": "0000000000000000_0000000000000004",
+      "statusAfter": "active",
+      "statusBefore": "active"
+    },
+    {
+      "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eventId": "ev_eeeeeeeeeeeeeeeeeeeeeeeeee",
+      "eventType": "agent.config.disabled",
+      "revisionId": null,
+      "sourceOffset": "0000000000000000_0000000000000005",
+      "statusAfter": "disabled",
+      "statusBefore": "active"
+    },
+    {
+      "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eventId": "ev_ffffffffffffffffffffffffff",
+      "eventType": "agent.config.activated",
+      "revisionId": "acr_8904644369c210752d46446543fe8c205a340b95716e61f1cd5512a745386759",
+      "sourceOffset": "0000000000000000_0000000000000006",
+      "statusAfter": "active",
+      "statusBefore": "disabled"
+    },
+    {
+      "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eventId": "ev_gggggggggggggggggggggggggg",
+      "eventType": "agent.config.retired",
+      "revisionId": null,
+      "sourceOffset": "0000000000000000_0000000000000007",
+      "statusAfter": "retired",
+      "statusBefore": "active"
+    }
+  ],
+  "replayedTwiceWithIdenticalBytes": true,
+  "activeRevisionAfterRetire": null,
+  "sourceOffsetsBound": true
+}

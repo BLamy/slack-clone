@@ -1,0 +1,18 @@
+{
+  "cases": 2,
+  "allRejected": true,
+  "persistedCanary": false,
+  "locations": [
+    {
+      "location": "instructions.system",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "persisted": false
+    },
+    {
+      "location": "instructions.task",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "persisted": false
+    }
+  ],
+  "result": "PASS"
+}

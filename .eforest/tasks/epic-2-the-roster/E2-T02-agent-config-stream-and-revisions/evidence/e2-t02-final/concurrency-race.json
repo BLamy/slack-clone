@@ -1,0 +1,10 @@
+{
+  "concurrentAttempts": 2,
+  "winnerCount": 1,
+  "staleRefusalCount": 1,
+  "refusalCode": "AGENT_CONFIG_STREAM_STALE_REVISION",
+  "finalLogicalEvents": 1,
+  "losingPayloadAppended": false,
+  "winnerConfigDigest": "sha256:8d7abbc24665b117724a03950506dedaa3b34dc90b8897c48774100e70dde3c7",
+  "result": "PASS"
+}

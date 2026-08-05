@@ -3,7 +3,7 @@ id: E2-T01
 epic: 2
 title: "Versioned agent configuration schema without embedded secrets"
 priority: 201
-status: in-progress
+status: implemented
 depends_on: [E1]
 estimate: M
 capstone: false
@@ -69,3 +69,30 @@ and lifecycle, workspace inputs, and connection-grant references.
 5. Relax unknown-field validation in a scratch worktree; the fixture verifier must fail.
 
 ## Verification log
+
+### Builder — 2026-08-05 — implementation and cold proof
+
+- Exact implementation commit: `846de0f76b216a77ac2eb2832ed67171ffdfab7f`.
+- Exact cold command:
+  `PROMOTE_EVIDENCE=1 E2_T01_IMPLEMENTATION_COMMIT=846de0f76b216a77ac2eb2832ed67171ffdfab7f
+  TEST_RUN_ID=e2-t01-cold-final make verify-E2-T01`.
+  The detached checkout was clean before install, hydrated the pinned emulator, and passed
+  `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`; all child
+  commands exited 0 and `skips: []`.
+- The canonical v1 fixture encodes to 1,221 UTF-8 bytes with digest
+  `sha256:f49949d51b54b76e1d72b3114607cfc9200454156b26e57b936c0b5a14c65309`. Reordered
+  unordered arrays preserve bytes; one semantic budget change changes the digest. The v0
+  upgrade is deterministic and invents no security defaults.
+- The verifier records 15 typed refusal cases, including forbidden environment/startup fields,
+  secret-shaped instructions, unknown provider/version/schema, invalid budgets, contradictory
+  policies, and an unversioned connection reference. Fourteen canary placements across
+  instructions, provider selections, workspace inputs, and connection references are all
+  refused as `AGENT_CONFIG_SECRET_VALUE`.
+- Sensitivity evidence mutates a disposable module copy to disable unknown-field rejection;
+  the mutant accepts the environment attack and exits 7, proving the verifier detects the
+  weakened boundary. Evidence is under `evidence/e2-t01-final/`.
+- Replay: N/A (server configuration schema) + mitigation: strict fixture corpus, canary-secret
+  refusals, upgrade matrix, and canonical config digests.
+- Claim: the versioned AgentConfig contract, canonical encoding, upgrade hook, schema fixtures,
+  threat model, and cold verifier satisfy the acceptance criteria; awaiting a fresh independent
+  critic.

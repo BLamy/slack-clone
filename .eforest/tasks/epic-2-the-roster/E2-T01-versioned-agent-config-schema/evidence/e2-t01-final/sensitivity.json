@@ -1,0 +1,7 @@
+{
+  "mutation": "disabled unknown-field rejection in disposable module copy",
+  "sourceGuardOccurrences": 1,
+  "mutantExitCode": 7,
+  "verifierDetectedMutant": true,
+  "rejectedByMutant": false
+}

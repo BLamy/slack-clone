@@ -1,0 +1,17 @@
+{
+  "additionalPropertiesFalse": true,
+  "requiredFields": [
+    "schemaVersion",
+    "instructions",
+    "context",
+    "trigger",
+    "delegation",
+    "concurrency",
+    "budgets",
+    "harness",
+    "sandbox",
+    "workspaceInputs",
+    "connectionGrants"
+  ],
+  "forbiddenFieldsAbsent": true
+}

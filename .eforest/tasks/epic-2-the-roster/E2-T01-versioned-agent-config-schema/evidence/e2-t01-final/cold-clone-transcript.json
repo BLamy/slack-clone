@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "runId": "e2-t01-cold-final",
+  "implementationCommit": "846de0f76b216a77ac2eb2832ed67171ffdfab7f",
+  "checkout": "disposable git worktree at the implementation commit",
+  "commands": [
+    {
+      "command": "git worktree add --detach <checkout> 846de0f76b216a77ac2eb2832ed67171ffdfab7f",
+      "exitCode": 0
+    },
+    {
+      "command": "git submodule update --init --recursive",
+      "exitCode": 0
+    },
+    {
+      "command": "git status --porcelain --untracked-files=all",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm setup:emulate",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/verify-e2-t01.mjs",
+      "exitCode": 0
+    }
+  ],
+  "cleanCheckoutBeforeInstall": true,
+  "result": "PASS"
+}

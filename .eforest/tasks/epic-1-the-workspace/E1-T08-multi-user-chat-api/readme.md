@@ -76,6 +76,13 @@ sessions, process maps, and projections.
   emulator, completed frozen install/setup, and passed `pnpm format:check`, `pnpm lint`,
   `pnpm typecheck`, `pnpm test`, and `pnpm build`; the test suite recorded 129 unit/integration
   passes and five Playwright passes.
+- Exact composed cold command:
+  `E1_T08_IMPLEMENTATION_COMMIT=a9347bb7820d5e5d8395ebf0e9111cf6e3124db4
+  TEST_RUN_ID=e1-composed-20260804 make verify-E1` returned exit code 0 after running
+  `verify-E1-T01` through `verify-E1-T08` in order. Each target created its cold checkout,
+  installed from its frozen lockfile, rebuilt the pinned emulator/query state, and returned PASS;
+  the capstone target returned zero skips. The committed transcript is
+  `evidence/e1-t08-final/composed-verify-transcript.json`.
 - The final source replay covers 38 records across the workspace directory and public, private, and
   direct channel streams. Final state digest is `sha256:421913b4abb70138e823e70b32e161ea2c5ecd11c01c3e28c8b9069be4087a06`;
   the rebuild/catch-up composite digest is

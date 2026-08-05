@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "runId": "e1-composed-20260804",
+  "command": "E1_T08_IMPLEMENTATION_COMMIT=a9347bb7820d5e5d8395ebf0e9111cf6e3124db4 TEST_RUN_ID=e1-composed-20260804 make verify-E1",
+  "exitCode": 0,
+  "result": "PASS",
+  "coldTargetOrder": [
+    "verify-E1-T01",
+    "verify-E1-T02",
+    "verify-E1-T03",
+    "verify-E1-T04",
+    "verify-E1-T05",
+    "verify-E1-T06",
+    "verify-E1-T07",
+    "verify-E1-T08"
+  ],
+  "targetImplementationCommits": {
+    "verify-E1-T01": "ef6ca09f461919d7a2421e1e24b5e7561d2ec566",
+    "verify-E1-T02": "ef6ca09f461919d7a2421e1e24b5e7561d2ec566",
+    "verify-E1-T03": "ef6ca09f461919d7a2421e1e24b5e7561d2ec566",
+    "verify-E1-T04": "ef6ca09f461919d7a2421e1e24b5e7561d2ec566",
+    "verify-E1-T05": "ef6ca09f461919d7a2421e1e24b5e7561d2ec566",
+    "verify-E1-T06": "ef6ca09f461919d7a2421e1e24b5e7561d2ec566",
+    "verify-E1-T07": "ef6ca09f461919d7a2421e1e24b5e7561d2ec566",
+    "verify-E1-T08": "a9347bb7820d5e5d8395ebf0e9111cf6e3124db4"
+  },
+  "freshState": {
+    "rootCheckoutCleanBeforeRun": true,
+    "eachTargetUsesColdClone": true,
+    "emulatorAndQueryStateRebuilt": true,
+    "frozenInstallAndSetupRanPerTarget": true
+  },
+  "zeroSkips": true,
+  "capstoneEvidence": {
+    "verificationSummary": "verification-summary.json",
+    "coldCloneTranscript": "cold-clone-transcript.json",
+    "compositeDigest": "sha256:2b9db2630e42f4ff910d7702c2b6c317257dd8816dc772025b5cfcb9da7664cc"
+  },
+  "note": "The composed target completed all eight cold targets and returned zero; no prerequisite failure short-circuited the recipe."
+}

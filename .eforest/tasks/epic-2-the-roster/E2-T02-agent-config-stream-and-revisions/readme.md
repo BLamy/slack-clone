@@ -3,7 +3,7 @@ id: E2-T02
 epic: 2
 title: "Agent configuration stream and immutable revisions"
 priority: 202
-status: in-progress
+status: implemented
 depends_on: [E2-T01]
 estimate: M
 capstone: false
@@ -95,3 +95,22 @@ explicit events. Secret resolution never occurs in this stream.
 - Required repair: legacy agent-config replay must be explicitly scoped to the E0-T05 compatibility
   path; default E2 replay must reject the legacy-shaped payload with a typed refusal, and the
   E2 verifier must cover the shadowing mutation. No product files were changed by the critic.
+
+### Builder rework — 2026-08-05 — explicit legacy compatibility boundary and cold rerun
+
+- Exact repair implementation commit: `0c316d94d658cdf03a450b94e98356be7128fed2`.
+- Legacy-shaped `agent.config.revised` payloads now require the explicit E0-T05 replay option;
+  default E2 replay rejects them before mutation. The repair adds a typed unit regression, a
+  static invalid shadowing fixture, and both full-chain and fixture-backed refusal cases.
+- Exact cold command:
+  `PROMOTE_EVIDENCE=1 E2_T02_IMPLEMENTATION_COMMIT=0c316d94d658cdf03a450b94e98356be7128fed2
+  TEST_RUN_ID=e2-t02-legacy-repair-final make verify-E2-T02`. The detached checkout was clean
+  before install, hydrated the pinned emulator, and passed `pnpm format:check`, `pnpm lint`,
+  `pnpm typecheck`, `pnpm test`, and `pnpm build`; all child commands exited 0 with
+  `skips: []`. Evidence is under `evidence/e2-t02-final/`.
+- The repaired verifier records seven typed refusal cases, including the reproduced legacy
+  revision shadow, while retaining the one-winner race, two canary refusals, deterministic v0
+  upgrade, lifecycle checks, and sensitivity mutant. The final state digest remains
+  `sha256:a48f87c190bac1ea973d22e67ed240169af9b23d3b9081ffee0e3cd5dc2ca223`.
+- Claim: the critic's legacy shadowing refutation is repaired without weakening E0 compatibility;
+  all E2-T02 acceptance criteria are satisfied, awaiting a fresh independent critic.

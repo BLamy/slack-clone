@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "runId": "e2-t02-cold-final",
-  "implementationCommit": "fca92859931312b1f01d097e6a474ec359b66903",
+  "runId": "e2-t02-legacy-repair-final",
+  "implementationCommit": "0c316d94d658cdf03a450b94e98356be7128fed2",
   "checkout": "disposable git worktree at the implementation commit",
   "commands": [
     {
-      "command": "git worktree add --detach <checkout> fca92859931312b1f01d097e6a474ec359b66903",
+      "command": "git worktree add --detach <checkout> 0c316d94d658cdf03a450b94e98356be7128fed2",
       "exitCode": 0
     },
     {

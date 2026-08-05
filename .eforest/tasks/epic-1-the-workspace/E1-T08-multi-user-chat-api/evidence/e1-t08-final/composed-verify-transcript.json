@@ -1,10 +1,9 @@
 {
   "schemaVersion": 1,
-  "runId": "e1-composed-20260804",
-  "command": "E1_T08_IMPLEMENTATION_COMMIT=a9347bb7820d5e5d8395ebf0e9111cf6e3124db4 TEST_RUN_ID=e1-composed-20260804 make verify-E1",
-  "exitCode": 0,
-  "result": "PASS",
-  "coldTargetOrder": [
+  "runId": "e1-composed-detector-repair-final",
+  "command": "E1_T08_IMPLEMENTATION_COMMIT=13129da04c3644cb9a8a9d2daaf582420564c544 TEST_RUN_ID=e1-composed-detector-repair-final make verify-E1",
+  "rootCheckoutCleanBeforeRun": true,
+  "targetOrder": [
     "verify-E1-T01",
     "verify-E1-T02",
     "verify-E1-T03",
@@ -15,26 +14,67 @@
     "verify-E1-T08"
   ],
   "targetImplementationCommits": {
-    "verify-E1-T01": "ef6ca09f461919d7a2421e1e24b5e7561d2ec566",
-    "verify-E1-T02": "ef6ca09f461919d7a2421e1e24b5e7561d2ec566",
-    "verify-E1-T03": "ef6ca09f461919d7a2421e1e24b5e7561d2ec566",
-    "verify-E1-T04": "ef6ca09f461919d7a2421e1e24b5e7561d2ec566",
-    "verify-E1-T05": "ef6ca09f461919d7a2421e1e24b5e7561d2ec566",
-    "verify-E1-T06": "ef6ca09f461919d7a2421e1e24b5e7561d2ec566",
-    "verify-E1-T07": "ef6ca09f461919d7a2421e1e24b5e7561d2ec566",
-    "verify-E1-T08": "a9347bb7820d5e5d8395ebf0e9111cf6e3124db4"
+    "verify-E1-T01": "62b4b17a4d8c81e7bde0d29a65b05d6a59d09617",
+    "verify-E1-T02": "62b4b17a4d8c81e7bde0d29a65b05d6a59d09617",
+    "verify-E1-T03": "62b4b17a4d8c81e7bde0d29a65b05d6a59d09617",
+    "verify-E1-T04": "62b4b17a4d8c81e7bde0d29a65b05d6a59d09617",
+    "verify-E1-T05": "62b4b17a4d8c81e7bde0d29a65b05d6a59d09617",
+    "verify-E1-T06": "62b4b17a4d8c81e7bde0d29a65b05d6a59d09617",
+    "verify-E1-T07": "62b4b17a4d8c81e7bde0d29a65b05d6a59d09617",
+    "verify-E1-T08": "13129da04c3644cb9a8a9d2daaf582420564c544"
   },
-  "freshState": {
-    "rootCheckoutCleanBeforeRun": true,
-    "eachTargetUsesColdClone": true,
-    "emulatorAndQueryStateRebuilt": true,
-    "frozenInstallAndSetupRanPerTarget": true
-  },
+  "commands": [
+    {
+      "command": "make verify-E1-T01",
+      "durationMs": 39968,
+      "exitCode": 0,
+      "target": "verify-E1-T01"
+    },
+    {
+      "command": "make verify-E1-T02",
+      "durationMs": 40860,
+      "exitCode": 0,
+      "target": "verify-E1-T02"
+    },
+    {
+      "command": "make verify-E1-T03",
+      "durationMs": 33670,
+      "exitCode": 0,
+      "target": "verify-E1-T03"
+    },
+    {
+      "command": "make verify-E1-T04",
+      "durationMs": 29189,
+      "exitCode": 0,
+      "target": "verify-E1-T04"
+    },
+    {
+      "command": "make verify-E1-T05",
+      "durationMs": 102530,
+      "exitCode": 0,
+      "target": "verify-E1-T05"
+    },
+    {
+      "command": "make verify-E1-T06",
+      "durationMs": 111081,
+      "exitCode": 0,
+      "target": "verify-E1-T06"
+    },
+    {
+      "command": "make verify-E1-T07",
+      "durationMs": 129910,
+      "exitCode": 0,
+      "target": "verify-E1-T07"
+    },
+    {
+      "command": "make verify-E1-T08",
+      "durationMs": 178317,
+      "exitCode": 0,
+      "target": "verify-E1-T08"
+    }
+  ],
   "zeroSkips": true,
-  "capstoneEvidence": {
-    "verificationSummary": "verification-summary.json",
-    "coldCloneTranscript": "cold-clone-transcript.json",
-    "compositeDigest": "sha256:2b9db2630e42f4ff910d7702c2b6c317257dd8816dc772025b5cfcb9da7664cc"
-  },
-  "note": "The composed target completed all eight cold targets and returned zero; no prerequisite failure short-circuited the recipe."
+  "skipVariables": [],
+  "result": "PASS",
+  "failure": null
 }

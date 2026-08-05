@@ -3,7 +3,7 @@ id: E1-T08
 epic: 1
 title: "Capstone: multi-user, agent-ready chat API"
 priority: 108
-status: implemented
+status: verified
 depends_on: [E1-T06, E1-T07]
 estimate: L
 capstone: true
@@ -118,4 +118,16 @@ sessions, process maps, and projections.
 - Replay: N/A (server/API capstone; product UI lands later) + mitigation: multi-client HTTP/SSE
   transcript, access matrix, source dumps, projection rebuild, and composite replay digest.
 - Claim: the E1-T08 implementation and its verification apparatus satisfy the acceptance and
-  adversarial checks from a clean cold clone; awaiting a fresh independent critic.
+  adversarial checks from a clean cold clone; the fresh independent critic verified the claim.
+
+### Critic — 2026-08-04 — fresh committed-state audit
+
+- `VERDICT: verified` from a fresh read-only Claude Code critic after documentation commit
+  `276544d`. The critic confirmed the readme command uses `TEST_RUN_ID=e1-composed-clean-final`
+  and matches `evidence/e1-t08-final/composed-verify-transcript.json`, whose actual child
+  `verify-E1-T01` through `verify-E1-T08` exits are all zero with `zeroSkips: true` and
+  `result: PASS`.
+- The critic independently checked the committed repairs: real HTTP creation-order reversal,
+  seeded interleaving with per-channel causal lanes, API and projector restart boundaries,
+  production tamper detectors, and a disposable sensitivity mutant that makes the verifier
+  exit non-zero. It found no refutation and made no workspace edits.

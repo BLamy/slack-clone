@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E2-T01 is in repair after canonical ordering refutation.",
-  "updatedAt": "2026-08-05T08:18:27Z"
+  "statusReason": "E2-T01 is verified; E2-T02 and E2-T05 are unlocked.",
+  "updatedAt": "2026-08-05T08:27:47Z"
 }

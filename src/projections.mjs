@@ -48,6 +48,7 @@ export const PROJECTION_ERROR_CODES = Object.freeze({
   INVALID_SOURCE: "PROJECTION_INVALID_SOURCE",
   NOT_READY: "PROJECTION_NOT_READY",
   REDUCER_VERSION_MISMATCH: "PROJECTION_REDUCER_VERSION_MISMATCH",
+  SOURCE_DIGEST_MISMATCH: "PROJECTION_SOURCE_DIGEST_MISMATCH",
   SOURCE_ORDER: "PROJECTION_SOURCE_ORDER",
 });
 
@@ -512,6 +513,13 @@ export function normalizeSourceRecords(records, workspaceId) {
       );
     }
     const digest = digestEventEnvelope(event);
+    if (record.digest !== undefined && record.digest !== digest) {
+      throw projectionError(
+        PROJECTION_ERROR_CODES.SOURCE_DIGEST_MISMATCH,
+        `source record ${index} digest does not match event bytes`,
+        { offset, stream },
+      );
+    }
     const sourceKey = `${stream}\u0000${offset}`;
     const existing = bySource.get(sourceKey);
     if (existing) {

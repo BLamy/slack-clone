@@ -11,6 +11,8 @@ import {
   assertProjectionIntegrity,
   createProjectionStore,
   createProjectionWorker,
+  normalizeSourceRecords,
+  PROJECTION_ERROR_CODES,
   projectionDigest,
 } from "../src/projections.mjs";
 import { canonicalSha256 } from "../src/ledger/canonical-json.mjs";
@@ -47,13 +49,19 @@ assert.match(implementationCommit, /^[0-9a-f]{40}$/u);
 assertImplementationBinding(implementationCommit);
 
 const promoteEvidence = process.env.PROMOTE_EVIDENCE === "1";
+const trackedTreeStatusAtStart = execFileSync(
+  "git",
+  ["status", "--porcelain", "--untracked-files=no"],
+  {
+    cwd: root,
+    encoding: "utf8",
+  },
+).trim();
+const implementationTreeCleanAtStart = trackedTreeStatusAtStart === "";
 if (promoteEvidence) {
   assert.equal(
-    execFileSync("git", ["status", "--porcelain", "--untracked-files=no"], {
-      cwd: root,
-      encoding: "utf8",
-    }).trim(),
-    "",
+    implementationTreeCleanAtStart,
+    true,
     "promoted E1-T08 evidence requires a clean tracked implementation tree",
   );
 }
@@ -542,14 +550,25 @@ try {
     projectionEvidence,
   );
   const canaryScan = await verifyCanaries(sourceAfterRestart);
+  const sensitivityEvidence =
+    process.env.E1_T08_SKIP_SENSITIVITY === "1"
+      ? {
+          reason: "sensitivity is disabled for the disposable mutant run",
+          result: "SKIPPED",
+        }
+      : await verifySensitivity();
   const gates = await runGates();
+  const skips =
+    process.env.E1_T08_SKIP_GATES === "1"
+      ? ["gates"]
+      : gates.filter(({ result }) => result === "SKIP").map(({ name }) => name);
 
   const compositeDigest = compositeStateDigest({
     projection: projectionEvidence.afterRebuild,
     source: sourceAfterRestart,
     state: stateAfterRestart,
   });
-  assert.equal(
+  assertCompositeDigest(
     compositeDigest,
     projectionEvidence.afterCatchUp.compositeDigest,
   );
@@ -558,12 +577,12 @@ try {
     task: "E1-T08",
     runId,
     implementationCommit,
-    implementationTreeCleanAtStart: promoteEvidence,
+    implementationTreeCleanAtStart,
     result: "PASS",
     replay:
       "Replay: N/A (server/API capstone; product UI lands later) + mitigation: multi-client HTTP/SSE transcript, access matrix, source dumps, projection rebuild, and composite replay digest",
     replayUploadAttempted: false,
-    skips: [],
+    skips,
     gates,
     source: {
       recordCount: sourceAfterRestart.length,
@@ -596,6 +615,7 @@ try {
     projectionEvidence,
     interleavingEvidence,
     tamperEvidence,
+    sensitivityEvidence,
     canaryScan,
     compositeDigest,
     network: {
@@ -642,11 +662,10 @@ try {
     path.join(evidenceDirectory, "tamper-matrix.json"),
     tamperEvidence,
   );
-  await writeJson(path.join(evidenceDirectory, "sensitivity.json"), {
-    result: "PASS",
-    detector:
-      "tamper matrix localizes source, row, checkpoint, and claimed digest mutations",
-  });
+  await writeJson(
+    path.join(evidenceDirectory, "sensitivity.json"),
+    sensitivityEvidence,
+  );
   console.log(JSON.stringify(summary, null, 2));
 } finally {
   for (const client of clients) await client.close().catch(() => {});
@@ -814,10 +833,14 @@ function verifyMentionStability(state, sourceRecords, expectedSource) {
   );
   assert.equal(sourceMentionEvents.length, 1);
   assert.equal(sourceMentionEvents[0].offset, expectedSource.offset);
+  assert.equal(message.mentions[0].source.digest, expectedSource.digest);
   assert.equal(
     message.mentions[0].source.digest,
     canonicalStateDigest(sourceMentionEvents[0].event.data),
   );
+  const replaySequence = sourceRecords.indexOf(sourceMentionEvents[0]) + 1;
+  assert.ok(replaySequence > 0);
+  assert.equal(message.mentions[0].source.offset, replayOffset(replaySequence));
   assert.equal(
     state.entities.principals[CAPSTONE_PRINCIPALS.AGENT].profile.handle,
     "helper-renamed",
@@ -833,13 +856,19 @@ function verifyMentionStability(state, sourceRecords, expectedSource) {
     currentHandle:
       state.entities.principals[CAPSTONE_PRINCIPALS.AGENT].profile.handle,
     ownerStable: true,
-    source: message.mentions[0].source,
+    source: {
+      ...message.mentions[0].source,
+      coordinateSpace: "replay-offset",
+    },
     retryCreatedNoNewSource: true,
     editCreatedNoNewTrigger: true,
     reconnectCreatedNoNewTrigger: true,
     replayCreatedNoNewTrigger: true,
     processCountForMention: 0,
-    sourceBinding: expectedSource,
+    sourceBinding: {
+      ...expectedSource,
+      coordinateSpace: "durable-stream-offset",
+    },
     result: "PASS",
   };
 }
@@ -875,9 +904,16 @@ function verifyInterleavings(sourceRecords) {
 function verifyTamperMatrix(sourceRecords, projectionEvidence) {
   const sourceTamper = structuredClone(sourceRecords);
   sourceTamper[0].event.data.profile.displayName = "Tampered";
-  const sourceDigestMismatch =
-    canonicalSha256(sourceTamper[0].event) !== sourceTamper[0].digest;
-  assert.equal(sourceDigestMismatch, true);
+  let sourceError;
+  try {
+    normalizeSourceRecords(sourceTamper, CAPSTONE_WORKSPACE_ID);
+  } catch (error) {
+    sourceError = error;
+  }
+  assert.equal(
+    sourceError?.code,
+    PROJECTION_ERROR_CODES.SOURCE_DIGEST_MISMATCH,
+  );
 
   const projection = createProjection(
     null,
@@ -886,11 +922,8 @@ function verifyTamperMatrix(sourceRecords, projectionEvidence) {
   projection.worker.rebuild(sourceRecords);
   const snapshot = projection.store.read();
   const rowTamper = structuredClone(snapshot.rows);
-  const firstKind = Object.keys(rowTamper).find(
-    (kind) => rowTamper[kind].length > 0,
-  );
-  rowTamper[firstKind][0].checkpointDigest =
-    "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+  assert.ok(rowTamper.message?.length > 0);
+  rowTamper.message[0].value.text = `${rowTamper.message[0].value.text} (tampered)`;
   let rowCode;
   try {
     assertProjectionIntegrity(
@@ -904,7 +937,7 @@ function verifyTamperMatrix(sourceRecords, projectionEvidence) {
   } catch (error) {
     rowCode = error.code;
   }
-  assert.ok(rowCode);
+  assert.equal(rowCode, PROJECTION_ERROR_CODES.CORRUPT_ROW);
 
   const checkpoint = structuredClone(snapshot.checkpoint);
   checkpoint.sourceHeads[0].stream =
@@ -915,27 +948,144 @@ function verifyTamperMatrix(sourceRecords, projectionEvidence) {
   } catch (error) {
     checkpointCode = error.code;
   }
-  assert.ok(checkpointCode);
+  assert.equal(checkpointCode, PROJECTION_ERROR_CODES.CHECKPOINT_INVALID);
 
-  const claimedDigest = `${projectionEvidence.afterCatchUp.compositeDigest.slice(0, -1)}0`;
-  assert.notEqual(
-    claimedDigest,
-    projectionEvidence.afterCatchUp.compositeDigest,
-  );
+  const expectedCompositeDigest =
+    projectionEvidence.afterCatchUp.compositeDigest;
+  const replacement = expectedCompositeDigest.endsWith("0") ? "1" : "0";
+  const claimedDigest = `${expectedCompositeDigest.slice(0, -1)}${replacement}`;
+  let compositeError;
+  try {
+    assertCompositeDigest(claimedDigest, expectedCompositeDigest);
+  } catch (error) {
+    compositeError = error;
+  }
+  assert.equal(compositeError?.code, "COMPOSITE_DIGEST_MISMATCH");
+  const localized = {
+    checkpoint: checkpointCode === PROJECTION_ERROR_CODES.CHECKPOINT_INVALID,
+    claimedCompositeDigest:
+      compositeError?.code === "COMPOSITE_DIGEST_MISMATCH",
+    projectionRow: rowCode === PROJECTION_ERROR_CODES.CORRUPT_ROW,
+    sourceEvent:
+      sourceError?.code === PROJECTION_ERROR_CODES.SOURCE_DIGEST_MISMATCH,
+  };
   return {
     sourceEvent: {
-      code: "SOURCE_DIGEST_MISMATCH",
-      localized: sourceDigestMismatch,
+      code: sourceError.code,
+      detail: sourceError.detail,
+      localized: localized.sourceEvent,
     },
-    projectionRow: { code: rowCode, localized: true },
-    checkpoint: { code: checkpointCode, localized: true },
+    projectionRow: { code: rowCode, localized: localized.projectionRow },
+    checkpoint: { code: checkpointCode, localized: localized.checkpoint },
     claimedCompositeDigest: {
       code: "COMPOSITE_DIGEST_MISMATCH",
-      localized:
-        claimedDigest !== projectionEvidence.afterCatchUp.compositeDigest,
+      detail: compositeError.message,
+      localized: localized.claimedCompositeDigest,
     },
-    result: "PASS",
+    result: Object.values(localized).every(Boolean) ? "PASS" : "FAIL",
   };
+}
+
+function assertCompositeDigest(claimedDigest, expectedDigest) {
+  if (claimedDigest === expectedDigest) return;
+  const error = new Error(
+    `claimed composite digest ${claimedDigest} does not match ${expectedDigest}`,
+  );
+  error.code = "COMPOSITE_DIGEST_MISMATCH";
+  throw error;
+}
+
+async function verifySensitivity() {
+  const taskWorkDirectory = path.join(taskDirectory, "work");
+  await mkdir(taskWorkDirectory, { recursive: true });
+  const mutationParent = await mkdtemp(
+    path.join(taskWorkDirectory, "sensitivity-mutant-"),
+  );
+  const mutationCheckout = path.join(mutationParent, "checkout");
+  let worktreeAdded = false;
+  try {
+    execFileSync(
+      "git",
+      ["worktree", "add", "--detach", mutationCheckout, implementationCommit],
+      { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
+    );
+    worktreeAdded = true;
+
+    const apiPath = path.join(
+      mutationCheckout,
+      "src/ledger/multi-user-chat-api.mjs",
+    );
+    const apiSource = await readFile(apiPath, "utf8");
+    const accessGuard =
+      "  if (!canReadChannel(state, channel, principalId)) throw accessDenied();";
+    assert.equal(
+      apiSource.split(accessGuard).length - 1,
+      1,
+      "sensitivity mutation anchor must remain unique",
+    );
+    await writeFile(
+      apiPath,
+      apiSource.replace(
+        accessGuard,
+        "  // sensitivity mutant: omit private channel membership recheck",
+      ),
+    );
+
+    const mutationArtifactDirectory = path.join(
+      mutationCheckout,
+      ".artifacts/e1-t08-sensitivity",
+    );
+    await mkdir(mutationArtifactDirectory, { recursive: true });
+    const mutationEnv = {
+      ...process.env,
+      E1_T08_IMPLEMENTATION_COMMIT: implementationCommit,
+      E1_T08_SKIP_GATES: "1",
+      E1_T08_SKIP_SENSITIVITY: "1",
+      TEST_ARTIFACT_DIR: mutationArtifactDirectory,
+      TEST_RUN_ID: `${runId}-access-mutant`,
+    };
+    delete mutationEnv.PROMOTE_EVIDENCE;
+    const install = runSensitivityCommand(
+      "pnpm",
+      ["install", "--frozen-lockfile"],
+      mutationCheckout,
+      mutationEnv,
+    );
+    assert.equal(install.exitCode, 0, install.output);
+    const verifier = runSensitivityCommand(
+      "node",
+      ["scripts/verify-e1-t08.mjs"],
+      mutationCheckout,
+      mutationEnv,
+    );
+    const verifierRejected = verifier.exitCode !== 0;
+    assert.equal(
+      verifierRejected,
+      true,
+      "access mutation must make the verifier fail",
+    );
+    return {
+      changedFile: "src/ledger/multi-user-chat-api.mjs",
+      mutation: "omit private channel membership recheck in assertReadable",
+      installExitCode: install.exitCode,
+      verifierExitCode: verifier.exitCode,
+      verifierRejected,
+      result: "PASS",
+    };
+  } finally {
+    if (worktreeAdded) {
+      try {
+        execFileSync(
+          "git",
+          ["worktree", "remove", "--force", mutationCheckout],
+          { cwd: root, stdio: "ignore" },
+        );
+      } catch {
+        // Preserve the original verifier result; cleanup is best effort.
+      }
+    }
+    await rm(mutationParent, { recursive: true, force: true });
+  }
 }
 
 function createProjection(directory, projectionId) {
@@ -1419,6 +1569,26 @@ function parseSseFrame(frame) {
     id: lines.find((line) => line.startsWith("id: "))?.slice(4) ?? null,
     name,
   };
+}
+
+function runSensitivityCommand(command, args, cwd, env) {
+  try {
+    execFileSync(command, args, {
+      cwd,
+      encoding: "utf8",
+      env,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    return { exitCode: 0, output: "" };
+  } catch (error) {
+    return {
+      exitCode: typeof error.status === "number" ? error.status : 1,
+      output: [error.stdout, error.stderr]
+        .filter(Boolean)
+        .map((value) => value.toString())
+        .join("\n"),
+    };
+  }
 }
 
 function assertImplementationBinding(commit) {

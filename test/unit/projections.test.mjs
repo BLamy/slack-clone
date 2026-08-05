@@ -7,8 +7,10 @@ import {
   createProjectionQueries,
   createProjectionStore,
   createProjectionWorker,
+  normalizeSourceRecords,
   PROJECTION_ERROR_CODES,
 } from "../../src/projections.mjs";
+import { canonicalSha256 } from "../../src/ledger/canonical-json.mjs";
 
 const WORKSPACE_ID = "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa";
 const OWNER_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb";
@@ -149,6 +151,23 @@ test("source provenance, checkpoint corruption, and row corruption fail closed",
     (error) =>
       error.code === PROJECTION_ERROR_CODES.REDUCER_VERSION_MISMATCH &&
       error.detail.includes("unsupported reducer"),
+  );
+});
+
+test("source event bytes cannot drift from their declared digest", async () => {
+  const fixture = await readFixture(conversationFixturePath);
+  const records = sourceRecords(fixture).map((record) => ({
+    ...record,
+    digest: canonicalSha256(record.event),
+  }));
+  const tampered = structuredClone(records);
+  tampered[0].event.serverTimestamp = "2026-08-03T00:00:00.000Z";
+
+  assert.throws(
+    () => normalizeSourceRecords(tampered, WORKSPACE_ID),
+    (error) =>
+      error.code === PROJECTION_ERROR_CODES.SOURCE_DIGEST_MISMATCH &&
+      error.detail.includes("does not match event bytes"),
   );
 });
 

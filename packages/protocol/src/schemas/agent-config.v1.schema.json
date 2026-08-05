@@ -1,0 +1,298 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stream-slack.local/schemas/agent-config.v1.schema.json",
+  "title": "Stream Slack AgentConfig v1",
+  "description": "Portable, versioned execution policy. Provider settings, credentials, environment maps, and startup commands are intentionally outside this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "instructions",
+    "context",
+    "trigger",
+    "delegation",
+    "concurrency",
+    "budgets",
+    "harness",
+    "sandbox",
+    "workspaceInputs",
+    "connectionGrants"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "instructions": { "$ref": "#/$defs/instructions" },
+    "context": { "$ref": "#/$defs/context" },
+    "trigger": { "$ref": "#/$defs/trigger" },
+    "delegation": { "$ref": "#/$defs/delegation" },
+    "concurrency": { "$ref": "#/$defs/concurrency" },
+    "budgets": { "$ref": "#/$defs/budgets" },
+    "harness": { "$ref": "#/$defs/harness" },
+    "sandbox": { "$ref": "#/$defs/sandbox" },
+    "workspaceInputs": { "$ref": "#/$defs/workspaceInputs" },
+    "connectionGrants": { "$ref": "#/$defs/connectionGrants" }
+  },
+  "$defs": {
+    "safeString": {
+      "type": "string",
+      "pattern": "^(?!.*(?:-----BEGIN [^-]*PRIVATE KEY-----|\\b(?:sk|rk|pk)-[A-Za-z0-9][A-Za-z0-9_-]{15,}\\b|\\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{20,}\\b|\\bxox[baprs]-[A-Za-z0-9-]{12,}\\b|\\bAKIA[0-9A-Z]{16}\\b|\\bAIza[0-9A-Za-z_-]{20,}\\b|\\beyJ[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}\\b|\\b(?:Bearer|Basic)\\s+[A-Za-z0-9._~+/=-]{12,}|\\b(?:access[_-]?token|api[_-]?key|client[_-]?secret|password|secret|token)\\s*[:=]\\s*[\"']?[A-Za-z0-9._~+/=-]{8,})).*$"
+    },
+    "instructions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["system", "task", "guardrails"],
+      "properties": {
+        "system": {
+          "allOf": [
+            { "$ref": "#/$defs/safeString" },
+            { "minLength": 1, "maxLength": 16000 }
+          ]
+        },
+        "task": {
+          "allOf": [{ "$ref": "#/$defs/safeString" }, { "maxLength": 16000 }]
+        },
+        "guardrails": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 32,
+          "items": {
+            "allOf": [
+              { "$ref": "#/$defs/safeString" },
+              { "minLength": 1, "maxLength": 2000 }
+            ]
+          }
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "includePrivate",
+        "includeThreadHistory",
+        "maxMessages",
+        "maxBytes"
+      ],
+      "properties": {
+        "scope": {
+          "enum": ["none", "current-channel", "current-thread", "workspace"]
+        },
+        "includePrivate": { "type": "boolean" },
+        "includeThreadHistory": { "type": "boolean" },
+        "maxMessages": { "type": "integer", "minimum": 0, "maximum": 10000 },
+        "maxBytes": { "type": "integer", "minimum": 0, "maximum": 10000000 }
+      }
+    },
+    "trigger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["events", "requireMention", "allowMessageEdits"],
+      "properties": {
+        "events": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": { "enum": ["manual", "mention"] }
+        },
+        "requireMention": { "type": "boolean" },
+        "allowMessageEdits": { "type": "boolean" }
+      }
+    },
+    "delegation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "maxDepth", "maxChildren", "allowCrossChannel"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "maxDepth": { "type": "integer", "minimum": 0, "maximum": 8 },
+        "maxChildren": { "type": "integer", "minimum": 0, "maximum": 16 },
+        "allowCrossChannel": { "type": "boolean" }
+      }
+    },
+    "concurrency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maxConcurrentRuns",
+        "maxConcurrentPerChannel",
+        "queueStrategy"
+      ],
+      "properties": {
+        "maxConcurrentRuns": { "type": "integer", "minimum": 1, "maximum": 32 },
+        "maxConcurrentPerChannel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8
+        },
+        "queueStrategy": { "enum": ["parallel", "serialize"] }
+      }
+    },
+    "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "timeoutSeconds",
+        "maxInputTokens",
+        "maxOutputTokens",
+        "maxTotalTokens",
+        "maxCostUsdCents"
+      ],
+      "properties": {
+        "timeoutSeconds": { "type": "integer", "minimum": 1, "maximum": 86400 },
+        "maxInputTokens": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        },
+        "maxOutputTokens": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        },
+        "maxTotalTokens": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2000000
+        },
+        "maxCostUsdCents": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        }
+      }
+    },
+    "providerSelection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["providerId", "providerVersion", "requiredCapabilities"],
+      "properties": {
+        "providerId": {
+          "enum": ["scripted", "codex", "claude-code", "fly-sprites"]
+        },
+        "providerVersion": { "const": "1.0.0" },
+        "requiredCapabilities": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 32,
+          "items": {
+            "enum": [
+              "cancellation",
+              "checkpoint-reconnect",
+              "ephemeral",
+              "persistent",
+              "streaming-exec",
+              "structured-output",
+              "tool-calls"
+            ]
+          }
+        }
+      }
+    },
+    "harness": {
+      "allOf": [
+        { "$ref": "#/$defs/providerSelection" },
+        {
+          "properties": {
+            "providerId": { "enum": ["scripted", "codex", "claude-code"] },
+            "requiredCapabilities": {
+              "items": {
+                "enum": ["cancellation", "structured-output", "tool-calls"]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "sandbox": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "providerId",
+        "providerVersion",
+        "requiredCapabilities",
+        "lifecycle",
+        "networkPolicy"
+      ],
+      "properties": {
+        "providerId": { "enum": ["scripted", "fly-sprites"] },
+        "providerVersion": { "const": "1.0.0" },
+        "requiredCapabilities": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 32,
+          "items": {
+            "enum": [
+              "checkpoint-reconnect",
+              "ephemeral",
+              "persistent",
+              "streaming-exec"
+            ]
+          }
+        },
+        "lifecycle": { "enum": ["ephemeral", "persistent"] },
+        "networkPolicy": { "const": "deny-all" }
+      }
+    },
+    "workspaceInputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "paths", "maxBytes"],
+      "properties": {
+        "source": { "enum": ["none", "repository", "workspace"] },
+        "paths": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "allOf": [
+              { "$ref": "#/$defs/safeString" },
+              {
+                "minLength": 1,
+                "maxLength": 240,
+                "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*//)[A-Za-z0-9._/-]+$"
+              }
+            ]
+          }
+        },
+        "maxBytes": { "type": "integer", "minimum": 0, "maximum": 100000000 }
+      }
+    },
+    "connectionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["connectionId", "grantId", "revision", "purpose"],
+      "properties": {
+        "connectionId": {
+          "type": "string",
+          "pattern": "^conn_[a-z0-9][a-z0-9_-]{0,63}$"
+        },
+        "grantId": {
+          "type": "string",
+          "pattern": "^grant_[a-z0-9][a-z0-9_-]{0,63}$"
+        },
+        "revision": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+        "purpose": {
+          "allOf": [
+            { "$ref": "#/$defs/safeString" },
+            { "minLength": 1, "maxLength": 160 }
+          ]
+        }
+      }
+    },
+    "connectionGrants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["refs", "maxCallsPerRun"],
+      "properties": {
+        "refs": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/connectionRef" }
+        },
+        "maxCallsPerRun": { "type": "integer", "minimum": 0, "maximum": 1000 }
+      }
+    }
+  }
+}

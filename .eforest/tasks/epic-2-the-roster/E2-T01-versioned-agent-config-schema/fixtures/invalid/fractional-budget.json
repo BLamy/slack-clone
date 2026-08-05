@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "instructions": {
+    "system": "You are a workspace assistant.",
+    "task": "Answer the current request.",
+    "guardrails": []
+  },
+  "context": {
+    "scope": "none",
+    "includePrivate": false,
+    "includeThreadHistory": false,
+    "maxMessages": 0,
+    "maxBytes": 0
+  },
+  "trigger": {
+    "events": ["manual"],
+    "requireMention": false,
+    "allowMessageEdits": false
+  },
+  "delegation": {
+    "enabled": false,
+    "maxDepth": 0,
+    "maxChildren": 0,
+    "allowCrossChannel": false
+  },
+  "concurrency": {
+    "maxConcurrentRuns": 1,
+    "maxConcurrentPerChannel": 1,
+    "queueStrategy": "serialize"
+  },
+  "budgets": {
+    "timeoutSeconds": 60.5,
+    "maxInputTokens": 100,
+    "maxOutputTokens": 100,
+    "maxTotalTokens": 200,
+    "maxCostUsdCents": 1
+  },
+  "harness": {
+    "providerId": "scripted",
+    "providerVersion": "1.0.0",
+    "requiredCapabilities": []
+  },
+  "sandbox": {
+    "providerId": "scripted",
+    "providerVersion": "1.0.0",
+    "requiredCapabilities": ["ephemeral"],
+    "lifecycle": "ephemeral",
+    "networkPolicy": "deny-all"
+  },
+  "workspaceInputs": {
+    "source": "none",
+    "paths": [],
+    "maxBytes": 0
+  },
+  "connectionGrants": {
+    "refs": [],
+    "maxCallsPerRun": 0
+  }
+}

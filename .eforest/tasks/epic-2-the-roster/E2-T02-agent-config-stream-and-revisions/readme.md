@@ -3,7 +3,7 @@ id: E2-T02
 epic: 2
 title: "Agent configuration stream and immutable revisions"
 priority: 202
-status: implemented
+status: refuted
 depends_on: [E2-T01]
 estimate: M
 capstone: false
@@ -82,3 +82,16 @@ explicit events. Secret resolution never occurs in this stream.
 - Claim: the E2-T02 config event schemas, stream append boundary, immutable revision reducer,
   optimistic concurrency, lifecycle transitions, upgrade path, fixtures, and cold verifier
   satisfy the acceptance criteria; awaiting a fresh independent critic.
+
+### Critic — 2026-08-05 — legacy-shaped revision shadowing
+
+- `VERDICT: refuted` from a fresh read-only Claude Code audit of implementation commit
+  `fca92859931312b1f01d097e6a474ec359b66903` and evidence commit `dbf1e4d`.
+- Blocking finding: `isLegacyAgentConfigRevision` routed any three-field
+  `agent.config.revised` payload to `reduceLegacyAgentConfigRevised`, even after a strict v1
+  revision chain existed. An independently appended legacy-shaped event therefore replaced the
+  whole agent record, erasing immutable revisions, source offsets, lifecycle state, and digests.
+  The critic reproduced this against the promoted seven-event fixture.
+- Required repair: legacy agent-config replay must be explicitly scoped to the E0-T05 compatibility
+  path; default E2 replay must reject the legacy-shaped payload with a typed refusal, and the
+  E2 verifier must cover the shadowing mutation. No product files were changed by the critic.

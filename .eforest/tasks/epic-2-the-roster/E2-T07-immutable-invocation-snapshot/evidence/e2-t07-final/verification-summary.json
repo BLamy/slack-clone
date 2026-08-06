@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E2-T07",
-  "runId": "e2-t07-cold-final-v2",
-  "implementationCommit": "4a69ba8238991613f51d73d6f8d26fdc87721d91",
+  "runId": "e2-t07-cold-final-v3",
+  "implementationCommit": "31101554e960a1033cb6e50dd6b43b03a17ddf7e",
   "result": "PASS",
   "replayDescription": "Replay: N/A (server invocation-resolution contract) + mitigation: source-bound snapshot manifests, canary scans, reconfiguration races, and digest tests",
   "skips": [],
@@ -69,6 +69,13 @@
         "sourceManifestChanged": true
       }
     ]
+  },
+  "snapshotIntegrity": {
+    "checkUseCode": "INVOCATION_SNAPSHOT_DIGEST_MISMATCH",
+    "replayCode": "INVOCATION_SNAPSHOT_DIGEST_MISMATCH",
+    "result": "PASS",
+    "tamperedField": "sourceManifest.config.stateDigest",
+    "tamperDetected": true
   },
   "sourceReferences": {
     "config": {
@@ -261,14 +268,16 @@
       "refusal-matrix.json",
       "revocation-races.json",
       "sensitivity.json",
+      "snapshot-integrity.json",
       "snapshot-manifest.json",
       "source-references.json",
       "verification-summary.json"
     ],
-    "publishedEvidenceLeaked": false
+    "publishedEvidenceLeaked": false,
+    "postVerifierTranscriptChecked": true
   },
   "sensitivity": {
-    "mutationCount": 4,
+    "mutationCount": 5,
     "mutations": [
       {
         "exitCode": 1,
@@ -291,6 +300,12 @@
       {
         "exitCode": 1,
         "mutation": "bind workspace input source to config source",
+        "result": "PASS",
+        "verifierDetectedMutant": true
+      },
+      {
+        "exitCode": 1,
+        "mutation": "disable snapshot digest verification",
         "result": "PASS",
         "verifierDetectedMutant": true
       }

@@ -13,9 +13,11 @@
     "refusal-matrix.json",
     "revocation-races.json",
     "sensitivity.json",
+    "snapshot-integrity.json",
     "snapshot-manifest.json",
     "source-references.json",
     "verification-summary.json"
   ],
-  "publishedEvidenceLeaked": false
+  "publishedEvidenceLeaked": false,
+  "postVerifierTranscriptChecked": true
 }

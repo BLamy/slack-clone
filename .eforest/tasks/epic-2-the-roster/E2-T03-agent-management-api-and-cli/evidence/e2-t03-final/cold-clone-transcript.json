@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "runId": "cold-e2-t03-1",
-  "implementationCommit": "50b793739414c621a385735cfd61b94d0760b330",
+  "runId": "cold-e2-t03-hardening-2",
+  "implementationCommit": "082bc33fee37936627d8de53005e4dcaada01ed4",
   "checkout": "disposable git worktree at the implementation commit",
   "commands": [
     {
-      "command": "git worktree add --detach <checkout> 50b793739414c621a385735cfd61b94d0760b330",
+      "command": "git worktree add --detach <checkout> 082bc33fee37936627d8de53005e4dcaada01ed4",
       "exitCode": 0
     },
     {

@@ -2,8 +2,10 @@
   "canaryAbsentEverywhere": true,
   "canaryRejectedByProtocol": "AGENT_CONFIG_SECRET_VALUE",
   "httpBodiesRedacted": true,
+  "providerErrorRedacted": true,
   "evidenceTranscriptsRedacted": true,
   "cliOutputRedacted": true,
+  "providerCliOutputRedacted": true,
   "subjectBindingOmittedFromPublicAgent": true,
   "result": "PASS"
 }

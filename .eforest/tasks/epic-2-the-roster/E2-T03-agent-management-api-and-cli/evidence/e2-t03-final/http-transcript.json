@@ -294,6 +294,17 @@
   },
   {
     "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee/config",
+    "requestBody": "redacted-json",
+    "status": 409,
+    "response": {
+      "ok": false,
+      "code": "DISPATCH_IDEMPOTENCY_CONFLICT",
+      "error": "idempotency key is already bound to a different request scope or payload"
+    }
+  },
+  {
+    "method": "POST",
     "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/activate",
     "requestBody": "redacted-json",
     "status": 200,
@@ -1123,6 +1134,17 @@
       "ok": false,
       "code": "AGENT_CONFIG_SECRET_VALUE",
       "error": "secret-shaped values may not be persisted in agent configuration"
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "status": 502,
+    "response": {
+      "ok": false,
+      "code": "PROVIDER_DOUBLE_FAILURE",
+      "error": "[REDACTED]"
     }
   },
   {

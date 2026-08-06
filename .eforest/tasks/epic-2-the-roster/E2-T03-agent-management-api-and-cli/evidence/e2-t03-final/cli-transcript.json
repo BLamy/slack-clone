@@ -522,6 +522,25 @@
   },
   {
     "args": [
+      "create",
+      "--workspace",
+      "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--idempotency-key",
+      "ik_tttttttttttttttttttttttttt",
+      "--input-json",
+      "[JSON]"
+    ],
+    "exitCode": 5,
+    "signal": null,
+    "stderr": "",
+    "stdout": {
+      "ok": false,
+      "code": "PROVIDER_DOUBLE_FAILURE",
+      "error": "[REDACTED]"
+    }
+  },
+  {
+    "args": [
       "revoke",
       "--workspace",
       "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",

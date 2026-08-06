@@ -1,0 +1,10 @@
+{
+  "checked": [
+    "snapshot JSON bytes",
+    "canonical snapshot bytes",
+    "source manifest",
+    "published refusal details"
+  ],
+  "leaked": false,
+  "result": "PASS"
+}

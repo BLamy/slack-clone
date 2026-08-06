@@ -1,0 +1,42 @@
+{
+  "canonicalByteLength": 7127,
+  "initialDigest": "sha256:470c2121c38bc9d4a720bf3cfab256c53cd2026c3bb62eefed292c6581529260",
+  "replayable": true,
+  "updates": [
+    {
+      "historicalDigest": "sha256:470c2121c38bc9d4a720bf3cfab256c53cd2026c3bb62eefed292c6581529260",
+      "name": "config revision",
+      "nextDigest": "sha256:02624697c389cfc7760359e9d5eab00eb50c28b98a75f9c1cfda4726bb22d81a",
+      "historicalBytesStable": true,
+      "sourceManifestChanged": true
+    },
+    {
+      "historicalDigest": "sha256:470c2121c38bc9d4a720bf3cfab256c53cd2026c3bb62eefed292c6581529260",
+      "name": "provider descriptor manifest",
+      "nextDigest": "sha256:db3903f067a4aeab37b7330d1e9d8b56b4d1f64e98dd807f7f940d3bb7097c77",
+      "historicalBytesStable": true,
+      "sourceManifestChanged": true
+    },
+    {
+      "historicalDigest": "sha256:470c2121c38bc9d4a720bf3cfab256c53cd2026c3bb62eefed292c6581529260",
+      "name": "membership revision",
+      "nextDigest": "sha256:6c9683bff668db733fcb1adde763052ce0ef371fb7a0e889ea32388cfddc593f",
+      "historicalBytesStable": true,
+      "sourceManifestChanged": true
+    },
+    {
+      "historicalDigest": "sha256:470c2121c38bc9d4a720bf3cfab256c53cd2026c3bb62eefed292c6581529260",
+      "name": "connection grant source",
+      "nextDigest": "sha256:cd4ccc230aad8209fb7679c9397524e5d2faf43f536da2d96c6ecd77a8bbd136",
+      "historicalBytesStable": true,
+      "sourceManifestChanged": true
+    },
+    {
+      "historicalDigest": "sha256:470c2121c38bc9d4a720bf3cfab256c53cd2026c3bb62eefed292c6581529260",
+      "name": "workspace input directory source",
+      "nextDigest": "sha256:d40e56eb5698f758d9542edd25780cfeb390cffb3074073436743ff13a4b21aa",
+      "historicalBytesStable": true,
+      "sourceManifestChanged": true
+    }
+  ]
+}

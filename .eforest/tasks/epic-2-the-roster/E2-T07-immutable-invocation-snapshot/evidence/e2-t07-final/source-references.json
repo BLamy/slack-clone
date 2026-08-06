@@ -1,0 +1,34 @@
+{
+  "config": {
+    "offset": "0000000000000030_aaaaaaaaaaaaaaaa",
+    "stateDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff/config"
+  },
+  "directory": {
+    "offset": "0000000000000040_bbbbbbbbbbbbbbbb",
+    "stateDigest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+    "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+  },
+  "workspaceInputs": {
+    "offset": "0000000000000040_bbbbbbbbbbbbbbbb",
+    "stateDigest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+    "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+  },
+  "connectionGrants": [
+    {
+      "offset": "0000000000000051_cccccccccccccccc",
+      "stateDigest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "stream": "connection:conn_a/config"
+    },
+    {
+      "offset": "0000000000000050_cccccccccccccccc",
+      "stateDigest": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+      "stream": "connection:conn_agrant_b/config"
+    }
+  ],
+  "providers": {
+    "manifestDigest": "sha256:751764325d1387da9404895128892e5a1e95005fb0bd45e27bd9dde42d6ec8b5",
+    "resolvedProviderDigest": "sha256:541df036a887331550882cddc8f8fb4b27366f24f1d7d632f66813476ea63116"
+  },
+  "snapshotDigest": "sha256:470c2121c38bc9d4a720bf3cfab256c53cd2026c3bb62eefed292c6581529260"
+}

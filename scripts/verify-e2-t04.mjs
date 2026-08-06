@@ -17,6 +17,7 @@ import {
   AGENT_ADMINISTRATION_CAPABILITIES,
   AGENT_ADMINISTRATION_MATRIX,
   administrationGrantDirectoryUpdate,
+  capabilityAllowedForActorClass,
   createAdministrationGrant,
   membershipIdFor,
   revokeAdministrationGrant,
@@ -83,6 +84,7 @@ const ORDINARY_VIEWER = principal(WORKSPACE_A, "q");
 const AGENT_MANAGER = principal(WORKSPACE_A, "e");
 const CONNECTION_MANAGER = principal(WORKSPACE_A, "f");
 const CHANNEL_MANAGER = principal(WORKSPACE_A, "g");
+const SERVICE_PRINCIPAL = principal(WORKSPACE_A, "s");
 const CROSS_WORKSPACE_ADMIN = principal(WORKSPACE_B, "c");
 const AGENT_A = agent(WORKSPACE_A, "h");
 const AGENT_B = agent(WORKSPACE_A, "j");
@@ -106,6 +108,14 @@ const API_NEGATIVE_OPERATIONS = Object.freeze([
   "agent.lifecycle.activate",
   "agent.lifecycle.disable",
   "agent.lifecycle.revoke",
+]);
+const READ_ADMINISTRATION_OPERATIONS = new Set([
+  "agent.config.read",
+  "agent.history.read",
+  "agent.profile.read",
+  "agent.roster.read",
+  "connection.credential.read",
+  "provider.registry.read",
 ]);
 const HTTP_TRANSCRIPT = [];
 let currentApp = null;
@@ -230,18 +240,18 @@ async function verifyWorkflow({ app, bootstrapEvents, streamStore }) {
   const currentRevisionId = managerRevision.payload.configRevision.revisionId;
   const currentRevision = managerRevision.payload.configRevision.revision;
 
-  const contexts = new Map(
-    [
-      ["workspace-admin", ADA],
-      ["workspace-admin", LINUS],
-      ["ordinary-member", ORDINARY_VIEWER],
-      ["agent-owner", ORDINARY_MEMBER],
-      ["agent-manager", AGENT_MANAGER],
-      ["connection-manager", CONNECTION_MANAGER],
-      ["channel-manager", CHANNEL_MANAGER],
-      ["agent-principal", AGENT_PRINCIPAL_A],
-    ].map(([label, principalId]) => [label, establishContext(principalId)]),
-  );
+  await addAgentMembership({ app });
+  const contexts = [
+    ["workspace-admin", ADA],
+    ["workspace-admin", LINUS],
+    ["ordinary-member", ORDINARY_VIEWER],
+    ["agent-owner", ORDINARY_MEMBER],
+    ["agent-manager", AGENT_MANAGER],
+    ["connection-manager", CONNECTION_MANAGER],
+    ["channel-manager", CHANNEL_MANAGER],
+    ["agent-principal", AGENT_PRINCIPAL_A],
+    ["service-principal", SERVICE_PRINCIPAL],
+  ].map(([label, principalId]) => [label, establishContext(principalId)]);
   const matrix = await collectMatrix(app, contexts);
   const refusedRows = matrix.filter((row) => !row.allowed);
   assert.ok(refusedRows.length > 0);
@@ -262,6 +272,8 @@ async function verifyWorkflow({ app, bootstrapEvents, streamStore }) {
     negativeApiRows.push({ ...row, ...result });
   }
   assert.ok(negativeApiRows.length >= 20);
+
+  const canary = await verifyCanaryRefusal({ app, configPath });
 
   const crossScope = await verifyCrossScope({
     app,
@@ -337,9 +349,11 @@ async function verifyWorkflow({ app, bootstrapEvents, streamStore }) {
       rows: [...matrix, ...negativeApiRows],
       refusedRows: refusedRows.length,
       negativeApiRows: negativeApiRows.length,
+      effectiveMatrixChecked: true,
       result: "PASS",
     },
     crossScope,
+    canary,
     privacy,
     revocationRaces: {
       role: roleRevocation,
@@ -379,23 +393,43 @@ async function collectMatrix(app, contexts) {
           errorCode: error.code ?? "UNKNOWN",
         };
       }
-      const expected =
-        AGENT_ADMINISTRATION_MATRIX[actorClass].includes(operation);
+      const expected = capabilityAllowedForActorClass(actorClass, operation);
+      assert.equal(
+        expected,
+        AGENT_ADMINISTRATION_MATRIX[actorClass].includes(operation),
+        `${actorClass} ${operation} disagrees with frozen matrix`,
+      );
+      if (actorClassAppliesToTarget(actorClass, target)) {
+        assert.ok(
+          decision.actorClasses.includes(actorClass),
+          `${context.principalId} did not resolve as ${actorClass}`,
+        );
+      }
       const effectiveAllowed = decision.allowed === true;
-      if (actorClass === "workspace-admin" || actorClass === "agent-manager") {
-        if (expected && operation.startsWith("agent.")) {
-          assert.equal(effectiveAllowed, true, `${actorClass} ${operation}`);
-        }
-      }
-      if (actorClass === "agent-owner" && operation === "agent.config.revise") {
-        assert.equal(effectiveAllowed, false);
-      }
+      const effectiveExpected = decision.actorClasses.some((resolvedClass) =>
+        capabilityAllowedForActorClass(resolvedClass, operation),
+      );
+      assert.equal(
+        effectiveAllowed,
+        effectiveExpected,
+        `${context.principalId} ${operation} effective matrix mismatch`,
+      );
+      await assertAuthorizationMethod({
+        app,
+        context,
+        expected: effectiveExpected,
+        operation,
+        target,
+      });
       rows.push({
         actorClass,
         actorId: context.principalId,
         allowed: effectiveAllowed,
         allowedOperations: decision.allowedOperations ?? [],
+        actorClasses: decision.actorClasses,
         expected,
+        effectiveExpected,
+        errorCode: decision.errorCode ?? null,
         operation,
         resourceId: target.resourceId,
         resourceType: target.resourceType,
@@ -404,6 +438,48 @@ async function collectMatrix(app, contexts) {
     }
   }
   return rows;
+}
+
+function actorClassAppliesToTarget(actorClass, target) {
+  if (actorClass === "agent-owner") return target.resourceType === "agent";
+  if (actorClass === "channel-manager") {
+    return target.resourceType === "channel";
+  }
+  if (actorClass === "connection-manager") {
+    return target.resourceType === "connection";
+  }
+  return true;
+}
+
+async function assertAuthorizationMethod({
+  app,
+  context,
+  expected,
+  operation,
+  target,
+}) {
+  const method = READ_ADMINISTRATION_OPERATIONS.has(operation)
+    ? app.administrationAuthorization.authorizeRead
+    : app.administrationAuthorization.authorizeMutation;
+  let allowed = false;
+  try {
+    await method({
+      agentId: target.agentId,
+      context,
+      operations: [operation],
+      operation,
+      resourceId: target.resourceId,
+      resourceType: target.resourceType,
+    });
+    allowed = true;
+  } catch (error) {
+    assert.equal(
+      error.code,
+      "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      `${operation} produced an unexpected authorization error`,
+    );
+  }
+  assert.equal(allowed, expected, `${operation} enforcement mismatch`);
 }
 
 async function assertNegativeApiOperation({
@@ -443,6 +519,30 @@ async function assertNegativeApiOperation({
     before,
     apiStatus: result.status,
     sourceHeadsUnchanged: true,
+  };
+}
+
+async function verifyCanaryRefusal({ app, configPath }) {
+  const before = await sourceHeadsFor({ app, agentId: AGENT_A });
+  const result = await request(app, configPath(AGENT_A, "revisions"), {
+    body: {
+      config: { credentials: { token: CANARY } },
+      expectedRevision: 2,
+      expectedRevisionId:
+        "acr_ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    },
+    headers: { "x-test-principal": ORDINARY_VIEWER },
+    idempotencyKey: key("canary"),
+    method: "POST",
+  });
+  const after = await sourceHeadsFor({ app, agentId: AGENT_A });
+  assert.equal(result.status, 404);
+  assert.deepEqual(after, before);
+  return {
+    inputCanaryInjected: true,
+    responseRedacted: true,
+    sourceHeadsUnchanged: true,
+    result: "PASS",
   };
 }
 
@@ -664,87 +764,125 @@ async function verifyOwnershipRevocation({ app, agentPath }) {
 
 async function runSensitivity() {
   await mkdir(path.join(taskDirectory, "work"), { recursive: true });
-  const sensitivityRoot = await mkdtemp(
-    path.join(taskDirectory, "work/sensitivity-"),
+  const source = await readFile(
+    path.join(root, "src/ledger/agent-administration-auth.mjs"),
+    "utf8",
   );
-  const mutantModule = path.join(
-    sensitivityRoot,
-    "agent-administration-auth.mjs",
-  );
-  const mutantWorkspaceAuth = path.join(sensitivityRoot, "workspace-auth.mjs");
-  try {
-    const source = await readFile(
-      path.join(root, "src/ledger/agent-administration-auth.mjs"),
-      "utf8",
+  const mutations = [
+    {
+      name: "remove authorizeMutation capability check",
+      needle:
+        "if (!decision.allowedOperations.includes(operation)) throw accessDenied();",
+      replacement: "if (false) throw accessDenied();",
+      target: "mutation",
+    },
+    {
+      name: "remove authorizeRead capability check",
+      needle:
+        "if (decision.allowedOperations.length === 0) throw accessDenied();",
+      replacement: "if (false) throw accessDenied();",
+      target: "read",
+    },
+    {
+      name: "remove grant resource scope check",
+      needle: `if (
+      !actorClass ||
+      !grantCoversNormalizedScope(grant, normalized, workspaceId)
+    ) {
+      continue;
+    }`,
+      replacement: `if (!actorClass) {
+      continue;
+    }`,
+      target: "scope",
+    },
+  ];
+  const results = [];
+  for (const [index, mutation] of mutations.entries()) {
+    const sensitivityRoot = await mkdtemp(
+      path.join(taskDirectory, "work/sensitivity-"),
     );
-    const needle =
-      "if (!decision.allowedOperations.includes(operation)) throw accessDenied();";
-    assert.ok(source.includes(needle));
-    await writeFile(
-      mutantModule,
-      source.replace(needle, "if (false) throw accessDenied();"),
+    const mutantModule = path.join(
+      sensitivityRoot,
+      "agent-administration-auth.mjs",
     );
-    await copyFile(
-      path.join(root, "src/ledger/workspace-auth.mjs"),
-      mutantWorkspaceAuth,
+    const mutantWorkspaceAuth = path.join(
+      sensitivityRoot,
+      "workspace-auth.mjs",
     );
-    const child = spawn(
-      process.execPath,
-      [path.join(root, "scripts/verify-e2-t04.mjs")],
-      {
-        cwd: root,
-        env: {
-          ...process.env,
-          E2_T04_AUTH_MODULE: mutantModule,
-          E2_T04_COLD_CLONE: "0",
-          E2_T04_SENSITIVITY_MUTANT: "1",
-          E2_T04_SKIP_GATES: "1",
-          PROMOTE_EVIDENCE: "0",
-          TEST_RUN_ID: `${process.env.TEST_RUN_ID ?? "verify"}-sensitivity-mutant`,
+    try {
+      assert.ok(source.includes(mutation.needle), mutation.name);
+      await writeFile(
+        mutantModule,
+        source.replace(mutation.needle, mutation.replacement),
+      );
+      await copyFile(
+        path.join(root, "src/ledger/workspace-auth.mjs"),
+        mutantWorkspaceAuth,
+      );
+      const child = spawn(
+        process.execPath,
+        [path.join(root, "scripts/verify-e2-t04.mjs")],
+        {
+          cwd: root,
+          env: {
+            ...process.env,
+            E2_T04_AUTH_MODULE: mutantModule,
+            E2_T04_COLD_CLONE: "0",
+            E2_T04_SENSITIVITY_MUTANT: "1",
+            E2_T04_SENSITIVITY_TARGET: mutation.target,
+            E2_T04_SKIP_GATES: "1",
+            PROMOTE_EVIDENCE: "0",
+            TEST_RUN_ID: `${process.env.TEST_RUN_ID ?? "verify"}-sensitivity-${index}`,
+          },
         },
-      },
-    );
-    let stdout = "";
-    let stderr = "";
-    child.stdout.on("data", (chunk) => {
-      stdout += chunk;
-    });
-    child.stderr.on("data", (chunk) => {
-      stderr += chunk;
-    });
-    const result = await new Promise((resolve) => {
-      const timer = setTimeout(() => {
-        child.kill("SIGKILL");
-        resolve({ signal: "SIGKILL", status: null });
-      }, 60_000);
-      child.once("error", () => {
-        clearTimeout(timer);
-        resolve({ signal: null, status: null });
+      );
+      let stdout = "";
+      let stderr = "";
+      child.stdout.on("data", (chunk) => {
+        stdout += chunk;
       });
-      child.once("close", (status, signal) => {
-        clearTimeout(timer);
-        resolve({ signal, status });
+      child.stderr.on("data", (chunk) => {
+        stderr += chunk;
       });
-    });
-    assert.doesNotMatch(stdout, new RegExp(CANARY, "u"));
-    assert.doesNotMatch(stderr, new RegExp(CANARY, "u"));
-    assert.notEqual(
-      result.status,
-      0,
-      "mutant must make the negative probe fail",
-    );
-    return {
-      mutation: "remove authorizeMutation capability check",
-      isolatedMutantModule: true,
-      observedNonZeroExit: result.status !== 0 || result.signal !== null,
-      exitCode: result.status,
-      signal: result.signal,
-      verifierDetectedMutant: true,
-      result: "PASS",
-    };
-  } finally {
-    await rm(sensitivityRoot, { recursive: true, force: true });
+      const result = await new Promise((resolve) => {
+        const timer = setTimeout(() => {
+          child.kill("SIGKILL");
+          resolve({ signal: "SIGKILL", status: null });
+        }, 60_000);
+        child.once("error", () => {
+          clearTimeout(timer);
+          resolve({ signal: null, status: null });
+        });
+        child.once("close", (status, signal) => {
+          clearTimeout(timer);
+          resolve({ signal, status });
+        });
+      });
+      assert.doesNotMatch(stdout, new RegExp(CANARY, "u"));
+      assert.doesNotMatch(stderr, new RegExp(CANARY, "u"));
+      const detected = result.status !== 0 || result.signal !== null;
+      assert.equal(detected, true, `${mutation.name} must make the probe fail`);
+      results.push({
+        exitCode: result.status,
+        isolatedMutantModule: true,
+        mutation: mutation.name,
+        observedNonZeroExit: detected,
+        signal: result.signal,
+        verifierDetectedMutant: true,
+      });
+    } finally {
+      await rm(sensitivityRoot, { recursive: true, force: true });
+    }
   }
+  return {
+    mutationCount: results.length,
+    mutations: results,
+    verifierDetectedMutant: results.every(
+      ({ verifierDetectedMutant }) => verifierDetectedMutant,
+    ),
+    result: "PASS",
+  };
 }
 
 async function runSensitivityProbe() {
@@ -756,6 +894,21 @@ async function runSensitivityProbe() {
     const createPath = `/api/workspaces/${WORKSPACE_A}/agents`;
     const targetPath = `${createPath}/${AGENT_A}`;
     const configPath = `${targetPath}/config`;
+    const target = process.env.E2_T04_SENSITIVITY_TARGET ?? "mutation";
+    if (target === "scope") {
+      const decision = await app.administrationAuthorization.explain({
+        context: establishContext(CHANNEL_MANAGER),
+        operations: ["channel.membership.manage"],
+        resourceId: CHANNEL_B,
+        resourceType: "channel",
+      });
+      assert.equal(
+        decision.allowed,
+        false,
+        "grant scope mutation must not authorize a sibling channel",
+      );
+      return;
+    }
     const config = JSON.parse(await readFile(CONFIG_FIXTURE, "utf8"));
     const created = await request(app, createPath, {
       body: {
@@ -779,24 +932,68 @@ async function runSensitivityProbe() {
       method: "POST",
     });
     assert.equal(configured.status, 201);
-    const denied = await request(app, `${targetPath}/revisions`, {
-      body: {
-        config,
-        expectedRevision: 1,
-        expectedRevisionId: configured.payload.configRevision.revisionId,
-      },
-      headers: { "x-test-principal": ORDINARY_MEMBER },
-      idempotencyKey: key("3"),
-      method: "POST",
-    });
-    assert.equal(
-      denied.status,
-      404,
-      "the capability matrix must refuse an ordinary member revision",
-    );
+    if (target === "read") {
+      const denied = await request(app, `${targetPath}/history`, {
+        headers: { "x-test-principal": ORDINARY_MEMBER },
+      });
+      assert.equal(
+        denied.status,
+        404,
+        "the capability matrix must refuse an ordinary member history read",
+      );
+    } else {
+      const denied = await request(app, `${targetPath}/revisions`, {
+        body: {
+          config,
+          expectedRevision: 1,
+          expectedRevisionId: configured.payload.configRevision.revisionId,
+        },
+        headers: { "x-test-principal": ORDINARY_MEMBER },
+        idempotencyKey: key("3"),
+        method: "POST",
+      });
+      assert.equal(
+        denied.status,
+        404,
+        "the capability matrix must refuse an ordinary member revision",
+      );
+    }
   } finally {
     await currentApp.close();
   }
+}
+
+async function addAgentMembership({ app }) {
+  const inviteId = `iv_${WORKSPACE_A.slice(3)}_${"x".repeat(26)}`;
+  const directory = await app.workspaceDirectory.read();
+  await appendDirectoryEvent({
+    actorId: ADA,
+    app,
+    data: {
+      expectedWorkspaceRevision:
+        directory.state.entities.workspaces[WORKSPACE_A].revision,
+      inviteId,
+      principalId: AGENT_PRINCIPAL_A,
+      role: "agent",
+    },
+    eventType: "workspace.membership.invited",
+    idempotencyKey: key("agent-invite"),
+    operation: "workspace.membership.invited",
+  });
+  const invited = await app.workspaceDirectory.read();
+  await appendDirectoryEvent({
+    actorId: AGENT_PRINCIPAL_A,
+    app,
+    data: {
+      expectedWorkspaceRevision:
+        invited.state.entities.workspaces[WORKSPACE_A].revision,
+      inviteId,
+      principalId: AGENT_PRINCIPAL_A,
+    },
+    eventType: "workspace.membership.accepted",
+    idempotencyKey: key("agent-accept"),
+    operation: "workspace.membership.accepted",
+  });
 }
 
 async function appendDirectoryEvent({
@@ -1038,21 +1235,40 @@ async function buildBootstrapEvents() {
     .filter(({ event }) => event.workspaceId === WORKSPACE_A)
     .map(({ event }) => event);
   const extraPrincipals = [
-    [ORDINARY_MEMBER, "d", "Ordinary Member", "ordinary-member"],
-    [ORDINARY_VIEWER, "q", "Ordinary Viewer", "ordinary-viewer"],
-    [AGENT_MANAGER, "e", "Agent Manager", "agent-manager"],
-    [CONNECTION_MANAGER, "f", "Connection Manager", "connection-manager"],
-    [CHANNEL_MANAGER, "g", "Channel Manager", "channel-manager"],
+    [ORDINARY_MEMBER, "d", "Ordinary Member", "ordinary-member", "human"],
+    [ORDINARY_VIEWER, "q", "Ordinary Viewer", "ordinary-viewer", "human"],
+    [AGENT_MANAGER, "e", "Agent Manager", "agent-manager", "human"],
+    [
+      CONNECTION_MANAGER,
+      "f",
+      "Connection Manager",
+      "connection-manager",
+      "human",
+    ],
+    [CHANNEL_MANAGER, "g", "Channel Manager", "channel-manager", "human"],
+    [
+      SERVICE_PRINCIPAL,
+      "s",
+      "Authorization Service",
+      "authorization-service",
+      "service",
+    ],
   ];
-  for (const [principalId, token, displayName, handle] of extraPrincipals) {
+  for (const [
+    principalId,
+    token,
+    displayName,
+    handle,
+    kind,
+  ] of extraPrincipals) {
     events.push(
       bootstrapEvent("principal.created", ADA, {
-        kind: "human",
+        kind,
         ownedBy: null,
         principalId,
         profile: {
           displayName,
-          email: `${handle}@a.example`,
+          email: kind === "service" ? "" : `${handle}@a.example`,
           handle,
         },
         subjectBinding: {
@@ -1064,20 +1280,21 @@ async function buildBootstrapEvents() {
     );
   }
   let expectedWorkspaceRevision = 4;
-  for (const [index, principalId] of [
-    ORDINARY_MEMBER,
-    ORDINARY_VIEWER,
-    AGENT_MANAGER,
-    CONNECTION_MANAGER,
-    CHANNEL_MANAGER,
+  for (const [index, [principalId, role]] of [
+    [ORDINARY_MEMBER, "member"],
+    [ORDINARY_VIEWER, "member"],
+    [AGENT_MANAGER, "member"],
+    [CONNECTION_MANAGER, "member"],
+    [CHANNEL_MANAGER, "member"],
+    [SERVICE_PRINCIPAL, "service"],
   ].entries()) {
-    const inviteId = `iv_${WORKSPACE_A.slice(3)}_${["h", "j", "k", "m", "v"][index].repeat(26)}`;
+    const inviteId = `iv_${WORKSPACE_A.slice(3)}_${["h", "j", "k", "m", "v", "y"][index].repeat(26)}`;
     events.push(
       bootstrapEvent("workspace.membership.invited", ADA, {
         expectedWorkspaceRevision,
         inviteId,
         principalId,
-        role: "member",
+        role,
       }),
     );
     expectedWorkspaceRevision += 1;
@@ -1203,11 +1420,15 @@ function bodyForOperation(operation) {
     };
   }
   if (operation === "agent.config.create") {
-    return { config: {}, expectedRevision: 0, expectedRevisionId: null };
+    return {
+      config: { credentials: { token: CANARY } },
+      expectedRevision: 0,
+      expectedRevisionId: null,
+    };
   }
   if (operation === "agent.config.revise") {
     return {
-      config: {},
+      config: { credentials: { token: CANARY } },
       expectedRevision: 2,
       expectedRevisionId:
         "acr_ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",

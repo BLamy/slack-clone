@@ -3,7 +3,7 @@ id: E2-T03
 epic: 2
 title: "Agent management API and machine-readable CLI"
 priority: 203
-status: pending
+status: in-progress
 depends_on: [E2-T02]
 estimate: L
 capstone: false

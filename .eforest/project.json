@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E2-T02 verified; no active queue gate.",
-  "updatedAt": "2026-08-05T18:53:58Z"
+  "statusReason": "E2-T03 in progress; agent management API and machine-readable CLI.",
+  "updatedAt": "2026-08-06T14:13:21Z"
 }

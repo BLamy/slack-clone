@@ -440,6 +440,7 @@ async function verifySensitivity(invalidFixturePath) {
   try {
     const modulePath = path.join(parent, "agent-config.mjs");
     const shaPath = path.join(parent, "sha256.mjs");
+    const providerRegistryPath = path.join(parent, "provider-registry.mjs");
     const source = await readFile(
       path.join(root, "packages/protocol/src/agent-config.mjs"),
       "utf8",
@@ -451,6 +452,10 @@ async function verifySensitivity(invalidFixturePath) {
       source.replace(guard, "if (!expected.has(key) && false) {"),
     );
     await cp(path.join(root, "packages/protocol/src/sha256.mjs"), shaPath);
+    await cp(
+      path.join(root, "packages/protocol/src/provider-registry.mjs"),
+      providerRegistryPath,
+    );
     const probePath = path.join(parent, "probe.mjs");
     await writeFile(
       probePath,

@@ -1,3 +1,8 @@
+import {
+  BUILTIN_PROVIDER_DESCRIPTORS,
+  createLegacyProviderRegistry,
+} from "./provider-registry.mjs";
+
 export const AGENT_CONFIG_SCHEMA_VERSION = 1;
 export const AGENT_CONFIG_PRIOR_SCHEMA_VERSIONS = Object.freeze([0]);
 
@@ -19,49 +24,9 @@ export const AGENT_CONFIG_ERROR_CODES = Object.freeze({
   UNSUPPORTED_SCHEMA_VERSION: "AGENT_CONFIG_UNSUPPORTED_SCHEMA_VERSION",
 });
 
-export const AGENT_CONFIG_PROVIDER_REGISTRY = Object.freeze({
-  harness: Object.freeze({
-    scripted: Object.freeze({
-      versions: Object.freeze(["1.0.0"]),
-      capabilities: Object.freeze(["structured-output", "tool-calls"]),
-    }),
-    codex: Object.freeze({
-      versions: Object.freeze(["1.0.0"]),
-      capabilities: Object.freeze([
-        "cancellation",
-        "structured-output",
-        "tool-calls",
-      ]),
-    }),
-    "claude-code": Object.freeze({
-      versions: Object.freeze(["1.0.0"]),
-      capabilities: Object.freeze([
-        "cancellation",
-        "structured-output",
-        "tool-calls",
-      ]),
-    }),
-  }),
-  sandbox: Object.freeze({
-    scripted: Object.freeze({
-      versions: Object.freeze(["1.0.0"]),
-      capabilities: Object.freeze([
-        "checkpoint-reconnect",
-        "ephemeral",
-        "persistent",
-      ]),
-    }),
-    "fly-sprites": Object.freeze({
-      versions: Object.freeze(["1.0.0"]),
-      capabilities: Object.freeze([
-        "checkpoint-reconnect",
-        "ephemeral",
-        "persistent",
-        "streaming-exec",
-      ]),
-    }),
-  }),
-});
+export const AGENT_CONFIG_PROVIDER_REGISTRY = createLegacyProviderRegistry(
+  BUILTIN_PROVIDER_DESCRIPTORS,
+);
 
 export const AGENT_CONFIG_TRIGGER_EVENTS = Object.freeze(["manual", "mention"]);
 export const AGENT_CONFIG_CONTEXT_SCOPES = Object.freeze([

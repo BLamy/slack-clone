@@ -6,6 +6,7 @@ export * from "./channels.mjs";
 export * from "./messages.mjs";
 export * from "./mentions.mjs";
 export * from "./workspace.mjs";
+export * from "./provider-registry.mjs";
 export * from "./agent-config.mjs";
 export * from "./agent-config-revisions.mjs";
 export * from "./agent-administration.mjs";

@@ -168,7 +168,8 @@
       "required": ["providerId", "providerVersion", "requiredCapabilities"],
       "properties": {
         "providerId": {
-          "enum": ["scripted", "codex", "claude-code", "fly-sprites"]
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{1,63}$"
         },
         "providerVersion": { "const": "1.0.0" },
         "requiredCapabilities": {
@@ -176,15 +177,8 @@
           "uniqueItems": true,
           "maxItems": 32,
           "items": {
-            "enum": [
-              "cancellation",
-              "checkpoint-reconnect",
-              "ephemeral",
-              "persistent",
-              "streaming-exec",
-              "structured-output",
-              "tool-calls"
-            ]
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,63}$"
           }
         }
       }
@@ -194,11 +188,9 @@
         { "$ref": "#/$defs/providerSelection" },
         {
           "properties": {
-            "providerId": { "enum": ["scripted", "codex", "claude-code"] },
-            "requiredCapabilities": {
-              "items": {
-                "enum": ["cancellation", "structured-output", "tool-calls"]
-              }
+            "providerId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{1,63}$"
             }
           }
         }
@@ -215,19 +207,18 @@
         "networkPolicy"
       ],
       "properties": {
-        "providerId": { "enum": ["scripted", "fly-sprites"] },
+        "providerId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{1,63}$"
+        },
         "providerVersion": { "const": "1.0.0" },
         "requiredCapabilities": {
           "type": "array",
           "uniqueItems": true,
           "maxItems": 32,
           "items": {
-            "enum": [
-              "checkpoint-reconnect",
-              "ephemeral",
-              "persistent",
-              "streaming-exec"
-            ]
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,63}$"
           }
         },
         "lifecycle": { "enum": ["ephemeral", "persistent"] },

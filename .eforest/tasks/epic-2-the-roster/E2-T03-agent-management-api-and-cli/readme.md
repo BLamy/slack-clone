@@ -3,7 +3,7 @@ id: E2-T03
 epic: 2
 title: "Agent management API and machine-readable CLI"
 priority: 203
-status: implemented
+status: verified
 depends_on: [E2-T02]
 estimate: L
 capstone: false
@@ -119,3 +119,24 @@ capability status, never broker credentials or hidden environment data.
   exit code `1` recorded.
 - Claim: the critic's evidence findings are repaired without changing the product contract;
   awaiting a final fresh independent critic.
+
+### Critic — 2026-08-06 — final independent verification
+
+- `VERDICT: verified` from a fresh read-only Claude Code audit of product implementation commit
+  `50b793739414c621a385735cfd61b94d0760b330`, verifier hardening through `082bc33`, and promoted
+  evidence commit `9c55068`.
+- The critic independently ran
+  `E2_T03_SKIP_GATES=1 TEST_RUN_ID=critic-e2-t03-final node scripts/verify-e2-t03.mjs` with
+  exit 0, reproducing directory state digest
+  `sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76` and config state
+  digest `sha256:b6e7620fedb0698a1810052ed4fa8c83ec4e2c3af1f1398e2f01f03bcd5101d4`.
+- It confirmed the promoted `cold-e2-t03-hardening-2` transcript is tied to `082bc33`, clean
+  before install, frozen-installed, emulator-built, and green across all five gates with
+  `skips: []`. It independently confirmed the real direct-append mutant exits 1 and ran an
+  unmutated-module control to show the injection path itself is valid.
+- It rechecked provider-error canary redaction, cross-agent idempotency conflicts, five lost-ack
+  retries with zero duplicates, append-stable cursors and unique history, restart digests, and
+  dispatch target counts. No blocking findings remained.
+- Replay: N/A (server/CLI administration surface) + mitigation: real-HTTP/CLI transcripts,
+  idempotent retry matrix, canary scan, and state replay.
+- Claim: E2-T03 is verified and satisfies its deliverables and acceptance criteria.

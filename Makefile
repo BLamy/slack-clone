@@ -60,7 +60,7 @@ verify-E2-T04:
 	@node scripts/cold-verify-e2-t04.mjs
 
 verify-E2-T05:
-	@node scripts/cold-verify-e2-t05.mjs
+	@E2_T05_ENTRYPOINT='make verify-E2-T05' node scripts/cold-verify-e2-t05.mjs
 
 verify-E1:
 	@node scripts/composed-verify-e1.mjs

@@ -34,6 +34,11 @@ const transcript = {
   schemaVersion: 1,
   runId,
   implementationCommit,
+  entrypoint: {
+    command:
+      process.env.E2_T05_ENTRYPOINT ?? "node scripts/cold-verify-e2-t05.mjs",
+    delegatedTo: "node scripts/cold-verify-e2-t05.mjs",
+  },
   checkout: "disposable git worktree at the implementation commit",
   commands: [],
 };

@@ -739,31 +739,53 @@ function refusal(name, callback, expectedCode) {
 }
 
 async function auditProviderBranching() {
-  const files = [path.join(root, "packages/protocol/src/agent-config.mjs")];
+  const auditRoot = process.env.E2_T05_SOURCE_AUDIT_ROOT
+    ? path.resolve(root, process.env.E2_T05_SOURCE_AUDIT_ROOT)
+    : root;
+  const files = [];
   for (const directory of [
-    path.join(root, "src"),
-    path.join(root, "packages/services/src"),
-    path.join(root, "packages/http/src"),
-    path.join(root, "packages/durable-streams/src"),
+    path.join(auditRoot, "src"),
+    path.join(auditRoot, "packages/services/src"),
+    path.join(auditRoot, "packages/http/src"),
+    path.join(auditRoot, "packages/durable-streams/src"),
+    path.join(auditRoot, "packages/protocol/src"),
+    path.join(auditRoot, "packages/reducers/src"),
   ]) {
-    files.push(...(await executableFiles(directory)));
+    files.push(
+      ...(await executableFiles(directory)).filter(
+        (file) => path.basename(file) !== "provider-registry.mjs",
+      ),
+    );
   }
   const patterns = [
     {
-      name: "provider-id equality branch",
-      pattern: /\bproviderId\s*!==?\s*["']|\bproviderId\s*===?\s*["']/u,
+      name: "provider-coordinate equality branch",
+      pattern:
+        /\b(?:providerId|providerName|providerKey)\b\s*(?:===|!==|==|!=)\s*(?:["'`][^"'`]*["'`]|[A-Z][A-Z0-9_]*\b|\b(?:providerId|providerName|providerKey)\b)|(?:["'`][^"'`]*["'`]|[A-Z][A-Z0-9_]*\b|\b(?:providerId|providerName|providerKey)\b)\s*(?:===|!==|==|!=)\s*\b(?:providerId|providerName|providerKey)\b/u,
     },
     {
-      name: "provider-name equality branch",
-      pattern: /\bproviderName\s*!==?\s*["']|\bproviderName\s*===?\s*["']/u,
+      name: "provider collection membership branch",
+      pattern:
+        /(?:\[[^\]\n]*(?:["'][^"']+["'])[^\]\n]*\]|\b[A-Z][A-Z0-9_]*\b)\s*\.\s*includes\(\s*(?:providerId|providerName|providerKey)\s*\)/u,
     },
     {
       name: "provider switch branch",
-      pattern: /\bswitch\s*\([^)]*\bprovider(?:Id|Name)\b/u,
+      pattern: /\bswitch\s*\([^)]*\bprovider(?:Id|Name|Key)\b/u,
+    },
+    {
+      name: "provider-coordinate method branch",
+      pattern:
+        /\b(?:providerId|providerName|providerKey)\b\s*\.\s*(?:startsWith|endsWith|includes)\s*\(/u,
+    },
+    {
+      name: "provider-id alias extraction",
+      pattern:
+        /\b(?:const|let|var)\s*\{\s*providerId\s*:\s*[A-Za-z_$][\w$]*\s*\}/u,
     },
   ];
   const offenses = [];
-  for (const file of [...new Set(files)]) {
+  const uniqueFiles = [...new Set(files)];
+  for (const file of uniqueFiles) {
     const source = await readFile(file, "utf8");
     for (const rule of patterns) {
       if (rule.pattern.test(source)) {
@@ -772,7 +794,7 @@ async function auditProviderBranching() {
     }
   }
   return {
-    scannedFiles: files.map((file) => path.relative(root, file)),
+    scannedFiles: uniqueFiles.map((file) => path.relative(root, file)),
     offenses,
     result: offenses.length === 0 ? "PASS" : "FAIL",
   };
@@ -820,39 +842,82 @@ async function runSensitivity() {
       name: "remove reciprocal compatibility refusal",
       needle: "if (!harnessSupportsSandbox || !sandboxSupportsHarness) {",
     },
+    {
+      name: "inject provider-specific orchestration branch",
+      sourceBranch: `
+const providerId = "codex";
+const CODEX_PROVIDER = "codex";
+if (providerId === CODEX_PROVIDER) {
+  throw new Error("provider branch");
+}
+const resolved = { harness: { providerKey: "harness:codex@1.0.0" } };
+if (resolved.harness.providerKey === "harness:codex@1.0.0") {
+  throw new Error("provider key branch");
+}
+`,
+    },
   ];
   const results = [];
   for (const mutation of mutations) {
-    assert.equal(source.split(mutation.needle).length - 1, 1, mutation.name);
     const sensitivityRoot = await mkdtemp(
       path.join(taskDirectory, "work/sensitivity-"),
     );
     const mutantModule = path.join(sensitivityRoot, "provider-registry.mjs");
     try {
-      await writeFile(
-        mutantModule,
-        source.replace(mutation.needle, "if (false) {"),
-      );
-      await copyFile(
-        path.join(root, "packages/protocol/src/sha256.mjs"),
-        path.join(sensitivityRoot, "sha256.mjs"),
-      );
+      if (mutation.needle) {
+        assert.equal(
+          source.split(mutation.needle).length - 1,
+          1,
+          mutation.name,
+        );
+        await writeFile(
+          mutantModule,
+          source.replace(mutation.needle, "if (false) {"),
+        );
+        await copyFile(
+          path.join(root, "packages/protocol/src/sha256.mjs"),
+          path.join(sensitivityRoot, "sha256.mjs"),
+        );
+      }
+      const sourceAuditRoot = path.join(sensitivityRoot, "audit-root");
+      if (mutation.sourceBranch) {
+        for (const directory of [
+          "src",
+          "packages/services/src",
+          "packages/http/src",
+          "packages/durable-streams/src",
+          "packages/protocol/src",
+          "packages/reducers/src",
+        ]) {
+          await mkdir(path.join(sourceAuditRoot, directory), {
+            recursive: true,
+          });
+        }
+        await writeFile(
+          path.join(sourceAuditRoot, "src/provider-branch.mjs"),
+          mutation.sourceBranch,
+        );
+      }
+      const childEnv = {
+        ...process.env,
+        E2_T05_IMPLEMENTATION_COMMIT: implementationCommit,
+        E2_T05_SENSITIVITY_CHILD: "1",
+        E2_T05_SKIP_GATES: "1",
+        PROMOTE_EVIDENCE: "0",
+        TEST_ARTIFACT_DIR: path.join(sensitivityRoot, "artifacts"),
+        TEST_RUN_ID: `${runId}-${mutation.name.replace(/[^a-z0-9]+/giu, "-")}`,
+      };
+      if (mutation.needle) childEnv.E2_T05_PROVIDER_MODULE = mutantModule;
+      if (mutation.sourceBranch) {
+        childEnv.E2_T05_SOURCE_AUDIT_ROOT = sourceAuditRoot;
+      }
       const result = spawnSync(
         process.execPath,
         [path.join(root, "scripts/verify-e2-t05.mjs")],
         {
           cwd: root,
           encoding: "utf8",
-          env: {
-            ...process.env,
-            E2_T05_IMPLEMENTATION_COMMIT: implementationCommit,
-            E2_T05_PROVIDER_MODULE: mutantModule,
-            E2_T05_SENSITIVITY_CHILD: "1",
-            E2_T05_SKIP_GATES: "1",
-            PROMOTE_EVIDENCE: "0",
-            TEST_ARTIFACT_DIR: path.join(sensitivityRoot, "artifacts"),
-            TEST_RUN_ID: `${runId}-${mutation.name.replace(/[^a-z0-9]+/giu, "-")}`,
-          },
+          env: childEnv,
         },
       );
       assert.notEqual(

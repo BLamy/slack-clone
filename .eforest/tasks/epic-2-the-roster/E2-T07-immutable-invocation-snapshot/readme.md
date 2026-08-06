@@ -3,7 +3,7 @@ id: E2-T07
 epic: 2
 title: "Immutable, capability-resolved invocation snapshot"
 priority: 207
-status: pending
+status: in-progress
 depends_on: [E2-T02, E2-T05]
 estimate: L
 capstone: false

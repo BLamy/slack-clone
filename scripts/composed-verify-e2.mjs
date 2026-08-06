@@ -51,6 +51,7 @@ const priorEvidenceTranscripts = [
   "E2-T04-agent-administration-authz",
   "E2-T05-provider-registry-and-capabilities",
   "E2-T06-agent-membership-and-presence",
+  "E2-T07-immutable-invocation-snapshot",
 ].map((taskDirectoryName) => {
   const evidenceName = taskDirectoryName.match(/^E2-T\d+/u)[0].toLowerCase();
   return path.join(

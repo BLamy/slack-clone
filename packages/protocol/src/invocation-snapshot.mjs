@@ -157,7 +157,6 @@ export function resolveInvocationSnapshotPayload(input = {}) {
   const configResult = resolveConfigRevision({
     agentId: normalizedAgentId,
     configState,
-    providerRegistry,
     source: sources.config,
     workspaceId,
   });
@@ -178,11 +177,6 @@ export function resolveInvocationSnapshotPayload(input = {}) {
     principalId: normalizedPrincipal.principalId,
     workspaceId,
   });
-  const providers = resolveProviders({
-    config: configResult.config,
-    providerConfigurations,
-    providerRegistry,
-  });
   const grants = resolveConnectionGrants({
     config: configResult.config,
     connectionGrants,
@@ -197,6 +191,11 @@ export function resolveInvocationSnapshotPayload(input = {}) {
     workspaceId,
   });
   const budget = resolveBudget(configResult.config.budgets, budgetUsage);
+  const providers = resolveProviders({
+    config: configResult.config,
+    providerConfigurations,
+    providerRegistry,
+  });
   const sourceManifest = {
     config: sources.config,
     directory: sources.directory,
@@ -372,13 +371,7 @@ export function invocationSnapshotDigest(value) {
   return digestCanonical(snapshotPayload(value));
 }
 
-function resolveConfigRevision({
-  agentId,
-  configState,
-  providerRegistry,
-  source,
-  workspaceId,
-}) {
+function resolveConfigRevision({ agentId, configState, source, workspaceId }) {
   if (!isRecord(configState)) {
     throw snapshotError(
       INVOCATION_SNAPSHOT_ERROR_CODES.AGENT_CONFIG_MISSING,
@@ -464,7 +457,9 @@ function resolveConfigRevision({
     );
   }
   try {
-    validateAgentConfig(revision.config, { providerRegistry });
+    validateAgentConfig(revision.config, {
+      providerRegistry: createConfigValidationRegistry(revision.config),
+    });
   } catch (error) {
     throw snapshotError(
       INVOCATION_SNAPSHOT_ERROR_CODES.AGENT_CONFIG_INVALID,
@@ -1194,6 +1189,19 @@ function normalizeSnapshotConfig(value) {
       ),
   );
   return config;
+}
+
+function createConfigValidationRegistry(config) {
+  return {
+    describe({ kind }) {
+      const selection = kind === "harness" ? config.harness : config.sandbox;
+      return {
+        capabilities: Array.isArray(selection?.requiredCapabilities)
+          ? selection.requiredCapabilities
+          : [],
+      };
+    },
+  };
 }
 
 function configDigest(value) {

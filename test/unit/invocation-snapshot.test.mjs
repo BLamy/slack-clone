@@ -275,6 +275,63 @@ test("binds source scope and projects no provider token or grant secret", () => 
   );
 });
 
+test("rejects non-provider authority before touching the provider registry", () => {
+  const base = makeInput();
+  const cases = [
+    {
+      connectionGrants: base.connectionGrants.map((grant) => ({
+        ...grant,
+        expiresAt: base.now,
+      })),
+    },
+    {
+      budgetUsage: {
+        costUsdCents: 0,
+        elapsedSeconds: 0,
+        inputTokens: 8001,
+        outputTokens: 0,
+        totalTokens: 8001,
+      },
+    },
+    {
+      connectionGrants: base.connectionGrants.map((grant) => ({
+        ...grant,
+        workspaceId: "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      })),
+    },
+  ];
+  for (const overrides of cases) {
+    const calls = { describe: 0, manifestDigest: 0, resolveConfiguration: 0 };
+    const registry = {
+      ...base.providerRegistry,
+      describe(...args) {
+        calls.describe += 1;
+        return base.providerRegistry.describe(...args);
+      },
+      manifestDigest(...args) {
+        calls.manifestDigest += 1;
+        return base.providerRegistry.manifestDigest(...args);
+      },
+      resolveConfiguration(...args) {
+        calls.resolveConfiguration += 1;
+        return base.providerRegistry.resolveConfiguration(...args);
+      },
+    };
+    assert.throws(
+      () =>
+        createInvocationSnapshot(
+          makeInput({ ...overrides, providerRegistry: registry }),
+        ),
+      /INVOCATION_SNAPSHOT/u,
+    );
+    assert.deepEqual(calls, {
+      describe: 0,
+      manifestDigest: 0,
+      resolveConfiguration: 0,
+    });
+  }
+});
+
 test("revalidates current authority after every referenced input is revoked", () => {
   const input = makeInput();
   const snapshot = createInvocationSnapshot(input);

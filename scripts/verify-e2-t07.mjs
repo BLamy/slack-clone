@@ -144,6 +144,14 @@ async function main() {
   await writeJson("revocation-races.json", result.revocationRaces);
   await writeJson("canary-scan.json", result.canaryScan);
   await writeJson("sensitivity.json", sensitivity);
+  const publishedEvidenceScan = await scanPublishedEvidence();
+  summary.canaryScan = {
+    ...summary.canaryScan,
+    evidenceFiles: publishedEvidenceScan.files,
+    publishedEvidenceLeaked: publishedEvidenceScan.leaked,
+  };
+  await writeJson("verification-summary.json", summary);
+  await writeJson("canary-scan.json", summary.canaryScan);
   console.log(
     JSON.stringify(
       {
@@ -179,14 +187,16 @@ async function verifyWorkflow() {
     snapshot.snapshotDigest,
     `sha256:${bytesToHex(await sha256(canonicalBytes))}`,
   );
-  assert.equal(
-    snapshot.snapshotDigest,
-    "sha256:470c2121c38bc9d4a720bf3cfab256c53cd2026c3bb62eefed292c6581529260",
-  );
-  assert.equal(
-    snapshot.providers.manifestDigest,
-    "sha256:751764325d1387da9404895128892e5a1e95005fb0bd45e27bd9dde42d6ec8b5",
-  );
+  if (process.env.E2_T07_SENSITIVITY_CHILD !== "1") {
+    assert.equal(
+      snapshot.snapshotDigest,
+      "sha256:470c2121c38bc9d4a720bf3cfab256c53cd2026c3bb62eefed292c6581529260",
+    );
+    assert.equal(
+      snapshot.providers.manifestDigest,
+      "sha256:751764325d1387da9404895128892e5a1e95005fb0bd45e27bd9dde42d6ec8b5",
+    );
+  }
   assert.equal(
     snapshot.sourceManifest.config.stream,
     BASE_SOURCE_HEADS.config.stream,
@@ -372,9 +382,23 @@ function verifyRefusalMatrix({ config, input }) {
   });
   const rows = [];
   const refuse = (name, overrides, expectedCode) => {
+    const providerRegistry =
+      overrides.providerRegistry ?? input.providerRegistry;
+    const providerRegistryCalls = {
+      describe: 0,
+      manifestDigest: 0,
+      resolveConfiguration: 0,
+    };
+    const providerResolutionInput = {
+      ...overrides,
+      providerRegistry: countProviderRegistryCalls(
+        providerRegistry,
+        providerRegistryCalls,
+      ),
+    };
     let error = null;
     try {
-      createInvocationSnapshot(makeInput(config, overrides));
+      createInvocationSnapshot(makeInput(config, providerResolutionInput));
     } catch (candidate) {
       error = candidate;
     }
@@ -385,10 +409,32 @@ function verifyRefusalMatrix({ config, input }) {
       false,
       `${name} leaked canary`,
     );
+    const providerResolutionRequired = [
+      "unhealthy provider",
+      "incompatible providers",
+    ].includes(name);
+    const providerResolutionCount = Object.values(providerRegistryCalls).reduce(
+      (sum, count) => sum + count,
+      0,
+    );
+    if (providerResolutionRequired) {
+      assert.ok(
+        providerResolutionCount > 0,
+        `${name} must check provider readiness`,
+      );
+    } else {
+      assert.equal(
+        providerResolutionCount,
+        0,
+        `${name} resolved a provider before refusal`,
+      );
+    }
     rows.push({
       code: error.code,
       detail: error.detail,
       name,
+      providerResolutionCalls: providerRegistryCalls,
+      providerSideEffects: 0,
       refused: true,
       sourceCode: error.sourceCode ?? null,
     });
@@ -470,36 +516,9 @@ function verifyRefusalMatrix({ config, input }) {
     INVOCATION_SNAPSHOT_ERROR_CODES.CONNECTION_GRANT_SCOPE_MISMATCH,
   );
 
-  const sideEffects = {
-    describe: 0,
-    manifestDigest: 0,
-    resolveConfiguration: 0,
-  };
-  const countedRegistry = countRegistrySideEffects(
-    input.providerRegistry,
-    sideEffects,
-  );
-  const disabled = makeInput(config, {
-    configState: { ...input.configState, runnable: false, status: "disabled" },
-    providerRegistry: countedRegistry,
-  });
-  assert.throws(
-    () => createInvocationSnapshot(disabled),
-    (error) => {
-      assert.equal(
-        error.code,
-        INVOCATION_SNAPSHOT_ERROR_CODES.AGENT_CONFIG_INACTIVE,
-      );
-      return true;
-    },
-  );
-  assert.deepEqual(sideEffects, {
-    describe: 0,
-    manifestDigest: 0,
-    resolveConfiguration: 0,
-  });
   return {
-    providerSideEffectsBeforeResolution: 0,
+    providerSideEffectsBeforeRefusal: 0,
+    providerResolutionCountedAcrossRows: true,
     rows,
     result: "PASS",
   };
@@ -598,9 +617,33 @@ function verifyCanaryIsolation({ config, input, snapshot }) {
   });
   const canarySnapshot = createInvocationSnapshot(canaryInput);
   const snapshotBytes = JSON.stringify(canarySnapshot);
+  const canonicalBytes = canonicalInvocationSnapshot(canarySnapshot);
   assert.equal(snapshotBytes.includes(CANARY), false);
+  assert.equal(canonicalBytes.includes(CANARY), false);
   assert.equal(snapshotBytes.includes("resolverToken"), false);
+  assert.equal(
+    JSON.stringify(canarySnapshot.sourceManifest).includes(CANARY),
+    false,
+  );
   assert.equal(JSON.stringify(snapshot).includes(CANARY), false);
+  assert.throws(
+    () =>
+      createInvocationSnapshot(
+        makeInput(config, {
+          connectionGrants: input.connectionGrants.map((grant, index) =>
+            index === 0 ? { ...grant, purpose: CANARY } : grant,
+          ),
+        }),
+      ),
+    (error) => {
+      assert.equal(
+        error.code,
+        INVOCATION_SNAPSHOT_ERROR_CODES.CONNECTION_GRANT_SCOPE_MISMATCH,
+      );
+      assert.equal(error.message.includes(CANARY), false);
+      return true;
+    },
+  );
   return {
     checked: [
       "snapshot JSON bytes",
@@ -611,6 +654,19 @@ function verifyCanaryIsolation({ config, input, snapshot }) {
     leaked: false,
     result: "PASS",
   };
+}
+
+async function scanPublishedEvidence() {
+  const files = [];
+  let leaked = false;
+  for (const filename of (await readdir(evidenceDirectory)).sort()) {
+    const filePath = path.join(evidenceDirectory, filename);
+    const contents = await readFile(filePath, "utf8");
+    files.push(filename);
+    if (contents.includes(CANARY)) leaked = true;
+  }
+  assert.equal(leaked, false, "promoted evidence contains the canary");
+  return { files, leaked };
 }
 
 async function runSensitivity() {
@@ -631,6 +687,11 @@ async function runSensitivity() {
       needle: "    config: sources.config,\n    directory: sources.directory,",
       replacement:
         "    config: sources.directory,\n    directory: sources.directory,",
+    },
+    {
+      name: "bind workspace input source to config source",
+      needle: "    workspaceInputs: inputs.source,",
+      replacement: "    workspaceInputs: sources.config,",
     },
   ];
   const results = [];
@@ -702,7 +763,7 @@ async function runSensitivity() {
   };
 }
 
-function countRegistrySideEffects(registry, counters) {
+function countProviderRegistryCalls(registry, counters) {
   return Object.freeze({
     ...registry,
     describe(...args) {

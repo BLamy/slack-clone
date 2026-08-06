@@ -3,7 +3,7 @@ id: E2-T08
 epic: 2
 title: "Capstone: configure, reconfigure, and revoke an agent"
 priority: 208
-status: pending
+status: in-progress
 depends_on: [E2-T04, E2-T06, E2-T07]
 estimate: L
 capstone: true

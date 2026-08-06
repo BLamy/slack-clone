@@ -698,12 +698,23 @@ function verifyCanaryIsolation({ config, input, snapshot }) {
 async function scanPublishedEvidence() {
   const files = [];
   let leaked = false;
-  for (const filename of (await readdir(evidenceDirectory)).sort()) {
-    const filePath = path.join(evidenceDirectory, filename);
-    const contents = await readFile(filePath, "utf8");
-    files.push(filename);
-    if (contents.includes(CANARY)) leaked = true;
+  async function visit(directory, relativeDirectory = "") {
+    const entries = await readdir(directory, { withFileTypes: true });
+    for (const entry of entries.sort((left, right) =>
+      left.name.localeCompare(right.name),
+    )) {
+      const relativePath = path.join(relativeDirectory, entry.name);
+      const filePath = path.join(directory, entry.name);
+      if (entry.isDirectory()) {
+        await visit(filePath, relativePath);
+        continue;
+      }
+      const contents = await readFile(filePath, "utf8");
+      files.push(relativePath);
+      if (contents.includes(CANARY)) leaked = true;
+    }
   }
+  await visit(evidenceDirectory);
   assert.equal(leaked, false, "promoted evidence contains the canary");
   return { files, leaked };
 }

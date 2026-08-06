@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const root = path.resolve(import.meta.dirname, "..");
@@ -45,6 +45,33 @@ const targetImplementationCommits = Object.fromEntries(
 const commands = [];
 let failure = null;
 const promote = process.env.PROMOTE_EVIDENCE === "1";
+const priorEvidenceTranscripts = [
+  "E2-T02-agent-config-stream-and-revisions",
+  "E2-T03-agent-management-api-and-cli",
+  "E2-T04-agent-administration-authz",
+  "E2-T05-provider-registry-and-capabilities",
+  "E2-T06-agent-membership-and-presence",
+].map((taskDirectoryName) => {
+  const evidenceName = taskDirectoryName.match(/^E2-T\d+/u)[0].toLowerCase();
+  return path.join(
+    root,
+    ".eforest/tasks/epic-2-the-roster",
+    taskDirectoryName,
+    "evidence",
+    `${evidenceName}-final`,
+    "cold-clone-transcript.json",
+  );
+});
+const preservedEvidence = new Map();
+for (const filename of priorEvidenceTranscripts) {
+  preservedEvidence.set(filename, await readFile(filename));
+}
+
+async function restorePriorEvidence() {
+  for (const [filename, contents] of preservedEvidence) {
+    await writeFile(filename, contents);
+  }
+}
 
 for (const target of targetOrder) {
   const startedAt = Date.now();
@@ -98,6 +125,8 @@ for (const target of targetOrder) {
     });
     failure = { exitCode, target };
     break;
+  } finally {
+    if (target !== "verify-E2-T08") await restorePriorEvidence();
   }
 }
 

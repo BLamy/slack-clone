@@ -3,7 +3,7 @@ id: E2-T07
 epic: 2
 title: "Immutable, capability-resolved invocation snapshot"
 priority: 207
-status: implemented
+status: verified
 depends_on: [E2-T02, E2-T05]
 estimate: L
 capstone: false
@@ -74,3 +74,10 @@ authorization: every privileged mutation still validates current lease and revoc
 - Evidence: `evidence/e2-t07-final/verification-summary.json`, `snapshot-manifest.json`, `snapshot-integrity.json`, `source-references.json`, `refusal-matrix.json`, `revocation-races.json`, `canary-scan.json`, `sensitivity.json`, and `cold-clone-transcript.json`.
 - Replay: N/A (server invocation-resolution contract) + mitigation: source-bound snapshot manifests, canary scans, reconfiguration races, and digest tests.
 - Claim: invocation resolution creates a canonical, deeply immutable, secret-free snapshot bound to exact config/provider/membership/context/budget/input/grant sources; current authorization re-resolves every authority and rejects revocation or drift without invalidating historical replay evidence.
+
+### Critic — 2026-08-06 — final independent verification
+
+- `VERDICT: verified` from a fresh independent read-only critic reviewing implementation commit `31101554e960a1033cb6e50dd6b43b03a17ddf7e`, evidence commit `5ed82ac`, the task specification, and the promoted v3 evidence.
+- The critic confirmed the deleted `sourceManifest.config.stateDigest` scratch snapshot is rejected by both replay and current-use checks with `INVOCATION_SNAPSHOT_DIGEST_MISMATCH`; focused unit coverage is 7/7 passing. It also confirmed the fifth sensitivity mutant disables digest verification and exits 1.
+- The critic confirmed the clean detached checkout, exact commit binding, all five cold gates with `skips: []`, eight refusal rows, five revocation races, source offsets/digests, and the final parent-written transcript’s inclusion in the post-verifier canary scan with no leakage. No finding refuted the implementation or evidence; no files or task status were changed by the critic.
+- Status: `verified`.

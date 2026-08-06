@@ -3,7 +3,7 @@ id: E2-T05
 epic: 2
 title: "Harness and sandbox provider registry with capability negotiation"
 priority: 205
-status: implemented
+status: verified
 depends_on: [E2-T01]
 estimate: L
 capstone: false
@@ -77,3 +77,11 @@ and resource ceilings.
 - Resolved digest: strict `AgentConfig` resolution reaches `resolveAgentConfigProviders` and records `sha256:541df036a887331550882cddc8f8fb4b27366f24f1d7d632f66813476ea63116`; three real-verifier sensitivity mutants, including injected provider branching, were detected.
 - Replay: N/A (server provider contract) + mitigation: conformance doubles, fail-closed compatibility matrix, registry manifests, and digest evidence.
 - Claim: exact provider IDs and versions resolve only through the versioned registry; provider-owned schemas, capabilities, readiness, implementation status, reciprocal compatibility, immutable descriptors, and canonical digests fence every runnable configuration, while AlmostNode and unimplemented production providers fail closed without provider-name orchestration branches or secret-shaped evidence.
+
+### Critic — 2026-08-06
+
+- Fresh independent `claude-code-subagent` read-only review: `VERDICT: verified`.
+- The critic independently recomputed the manifest digest, both resolved-provider digests, descriptor availability, strict AgentConfig wiring, typed refusal cases, reciprocal compatibility, implementation readiness, immutable descriptors, source-audit coverage across 38 files, and zero canary leakage.
+- The critic confirmed the tracked builder evidence and explicit `make verify-E2-T05` entrypoint, and verified that the third real-verifier sensitivity mutant injects provider branching and goes red alongside the capability and compatibility mutants.
+- No finding refuted the task or its evidence. Remaining observations were non-blocking lexical-audit limits outside the enumerated attack forms and future use-time fencing owned by later invocation/run tasks.
+- Status: `verified`.

@@ -887,6 +887,7 @@ async function verifyWorkflow({
 }
 
 async function runSensitivityMutant({ source }) {
+  await mkdir(path.join(taskDirectory, "work"), { recursive: true });
   const sensitivityRoot = await mkdtemp(
     path.join(taskDirectory, "work/sensitivity-"),
   );

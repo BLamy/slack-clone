@@ -1,0 +1,47 @@
+{
+  "mutationCount": 8,
+  "mutations": [
+    {
+      "mutation": "tamper config revision",
+      "verifierWentRed": true,
+      "detectorCode": "REDUCER_AGENT_CONFIG_INVALID_EVENT"
+    },
+    {
+      "mutation": "tamper provider descriptor",
+      "verifierWentRed": true,
+      "detectorCode": "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED"
+    },
+    {
+      "mutation": "tamper grant reference",
+      "verifierWentRed": true,
+      "detectorCode": "INVOCATION_SNAPSHOT_CONNECTION_GRANT_REVISION_MISMATCH"
+    },
+    {
+      "mutation": "tamper snapshot digest",
+      "verifierWentRed": true,
+      "detectorCode": "INVOCATION_SNAPSHOT_DIGEST_MISMATCH"
+    },
+    {
+      "mutation": "tamper directory source",
+      "verifierWentRed": true,
+      "detectorCode": "INVOCATION_SNAPSHOT_STALE_SOURCE"
+    },
+    {
+      "mutation": "tamper provider double",
+      "verifierWentRed": true,
+      "detectorCode": "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED"
+    },
+    {
+      "mutation": "replay a sibling-workspace resource",
+      "verifierWentRed": true,
+      "detectorCode": "SCOPED_404_AND_UNCHANGED_HEAD"
+    },
+    {
+      "mutation": "allow a post-revocation snapshot use",
+      "verifierWentRed": true,
+      "detectorCode": "REVOCATION_FENCE"
+    }
+  ],
+  "verifierDetectedMutant": true,
+  "result": "PASS"
+}

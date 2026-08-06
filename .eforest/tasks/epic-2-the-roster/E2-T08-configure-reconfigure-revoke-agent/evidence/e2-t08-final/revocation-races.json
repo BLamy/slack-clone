@@ -1,0 +1,32 @@
+{
+  "rows": [
+    {
+      "name": "provider health loss",
+      "code": "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED",
+      "refused": true
+    },
+    {
+      "name": "connection grant revocation",
+      "code": "INVOCATION_SNAPSHOT_CONNECTION_GRANT_REVOKED",
+      "refused": true
+    },
+    {
+      "name": "workspace membership removal",
+      "code": "INVOCATION_SNAPSHOT_MEMBERSHIP_INACTIVE",
+      "refused": true
+    },
+    {
+      "name": "historical snapshot after reconfiguration",
+      "code": "INVOCATION_SNAPSHOT_STALE_CONFIG",
+      "refused": true
+    }
+  ],
+  "snapshotAllowedBeforeRevocation": true,
+  "historicalReplayStillValid": true,
+  "sourceHeadsAfterRemoval": {
+    "directory": "0000000000000000_0000000000000043",
+    "stateDigest": "sha256:7db238c5f7f914e9aa840ec25b09b17ee3a53dcd77bf6b7306faf3948087a7c1"
+  },
+  "everyRaceRefused": true,
+  "result": "PASS"
+}

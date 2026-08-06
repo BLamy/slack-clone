@@ -1,0 +1,13 @@
+{
+  "before": {
+    "digest": "sha256:7c24cfbc162b2d5af2034f8a6e2bdbbe6f32eb1d4fe7189df799b0264a03210a",
+    "agentAvailability": "available",
+    "channelMember": true
+  },
+  "after": {
+    "digest": "sha256:f2f69e61fed462a27d48febf5b135683f556652cf8b311ccef74bbfc038471ed",
+    "agentAvailability": "disabled",
+    "channelMember": false
+  },
+  "sameHumanAndAgentRosterContract": true
+}

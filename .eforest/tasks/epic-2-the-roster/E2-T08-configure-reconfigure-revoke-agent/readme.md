@@ -3,7 +3,7 @@ id: E2-T08
 epic: 2
 title: "Capstone: configure, reconfigure, and revoke an agent"
 priority: 208
-status: in-progress
+status: implemented
 depends_on: [E2-T04, E2-T06, E2-T07]
 estimate: L
 capstone: true
@@ -65,3 +65,15 @@ ownership nor a historical snapshot can route around current authorization or re
    separately; the verifier must localize every mismatch.
 
 ## Verification log
+
+### Builder — 2026-08-06 — implementation and cold/composed proof
+
+- Exact implementation commit: `8d166e0de1d4a3954a1ef833efc3a39c3de60cbf`.
+- Exact cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e2-t08-cold-final-20260806d E2_T08_IMPLEMENTATION_COMMIT=8d166e0de1d4a3954a1ef833efc3a39c3de60cbf make verify-E2-T08`. The detached checkout was clean before install, initialized the pinned emulator, and ran all six gates with exit code 0 and `skips: []`: `pnpm format:check`, `pnpm format:check:e2-t08`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`.
+- Exact composed command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e2-composed-final-20260806b E2_T08_IMPLEMENTATION_COMMIT=8d166e0de1d4a3954a1ef833efc3a39c3de60cbf make verify-E2`. The composed transcript reports all eight targets in dependency order, every target exit code 0, every target bound to the implementation commit, `zeroSkips: true`, and `rootCheckoutCleanBeforeRun: true`.
+- Lifecycle and snapshot evidence: agent `draft -> active -> retired`, configuration revisions `[1, 2, 3]`; first snapshot digest `sha256:9bfadc4ee22498b80431367b333e642060ed33589bd2557f2490df9a9c1d22f1`, second snapshot digest `sha256:d7fbdebec9fd633e48d0df018a921e5a61262bd658fb0a6f914f498d7e0d47b4`, first snapshot bytes stable after reconfigure and revoke, and second snapshot canonical bytes differ. The role/authorization matrix covers 206 rows, including 49 refused rows with unchanged source heads and sibling-scope 404s.
+- Revocation and replay evidence: provider health loss, connection-grant revocation, workspace-membership removal, and stale historical-config use are refused with typed codes while pre-revocation and historical snapshots remain valid. Projection deletion plus source replay reproduces the roster, retired active-config state, revision history, and snapshot manifests to composite digest `sha256:8cfe699738d3eb50f8d9b9722ce46ef990031d84c01aa375bb6eb43ef6b34d47`; source records are directory `43` and config `6`.
+- Idempotency, tamper, and canary evidence covers retried create/config/lifecycle mutations, concurrent revision CAS, config/provider/grant/snapshot/directory tampering, API/CLI canaries, and published evidence. Sensitivity is `true`; the injected canary was absent from stream dumps, transcripts, provider doubles, and all 14 promoted evidence files.
+- Evidence: `evidence/e2-t08-final/verification-summary.json`, `http-transcript.json`, `cli-transcript.json`, `source-dumps.json`, `snapshot-manifests.json`, `role-matrix.json`, `roster.json`, `revocation-races.json`, `replay-composite.json`, `tamper-matrix.json`, `sensitivity.json`, `canary-scan.json`, `cold-clone-transcript.json`, and `composed-verify-transcript.json`.
+- Replay: N/A (server/CLI agent-control capstone) + mitigation: role matrix, revision/snapshot manifests, revocation race, canary scan, and composite stream replay.
+- Claim: the builder considers E2-T08 implemented and the cold/composed evidence complete; a fresh critic must independently attempt to refute the claim before this task can become `verified`.

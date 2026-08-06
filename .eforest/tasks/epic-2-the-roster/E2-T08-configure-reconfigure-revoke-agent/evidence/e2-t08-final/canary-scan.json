@@ -1,0 +1,30 @@
+{
+  "inputInjected": true,
+  "checked": [
+    "stream dumps",
+    "HTTP transcript",
+    "CLI transcript",
+    "snapshot manifests",
+    "provider doubles",
+    "published evidence"
+  ],
+  "leaked": false,
+  "result": "PASS",
+  "evidenceFiles": [
+    "canary-scan.json",
+    "cli-transcript.json",
+    "cold-clone-transcript.json",
+    "composed-verify-transcript.json",
+    "http-transcript.json",
+    "replay-composite.json",
+    "revocation-races.json",
+    "role-matrix.json",
+    "roster.json",
+    "sensitivity.json",
+    "snapshot-manifests.json",
+    "source-dumps.json",
+    "tamper-matrix.json",
+    "verification-summary.json"
+  ],
+  "publishedEvidenceLeaked": false
+}

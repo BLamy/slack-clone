@@ -1,0 +1,1068 @@
+[
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111/members/pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/invite",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": true,
+      "action": "invite",
+      "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+      "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+      "receipt": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "eventDigest": "sha256:32e4dedfdb20e10fd15bef72c9edf1a0ff153bad66bf20d210afc6b35ae585ac",
+        "idempotencyKey": "ik_channezzznvztezdzspatchz00",
+        "nextOffset": "0000000000000000_0000000000000041",
+        "operation": "channel.membership.invited",
+        "requestDigest": "sha256:b4e3fa6fad9cf29c6d0be3d4aaea0f501b1e208bc96a285915212112a1ac4b1e",
+        "status": "accepted",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    "status": 201
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111/members/pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/join",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": true,
+      "action": "join",
+      "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+      "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+      "receipt": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "eventDigest": "sha256:e8d67fcd8d0a649d32ad10376e2e1bdbe9f8a6a9af696205c08cd23b7d5cafab",
+        "idempotencyKey": "ik_channezzjzznzdzspatchz0007",
+        "nextOffset": "0000000000000000_0000000000000042",
+        "operation": "channel.membership.joined",
+        "requestDigest": "sha256:e9ea4bbcac0a8e70f9b5f180872dc63f0195fb0f4e64433a6f667a7b1616b330",
+        "status": "accepted",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    "status": 201
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_CONFIG_MISSING_FIELD",
+      "error": "field is required"
+    },
+    "status": 400
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/history",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/history",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/history",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/history",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/history",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/history",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/history",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "error": "workspace access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/activate",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/disable",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revoke",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/activate",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/disable",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revoke",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/activate",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/disable",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revoke",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/activate",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/disable",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revoke",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/activate",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/disable",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revoke",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/activate",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/disable",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revoke",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "error": "workspace access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "error": "workspace access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "error": "workspace access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/activate",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "error": "workspace access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/disable",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "error": "workspace access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revoke",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "error": "workspace access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "error": "workspace access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/channels/ch_bbbbbbbbbbbbbbbbbbbbbbbbbb_11111111111111111111111111/members/pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/invite",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "error": "workspace access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "requestBody": false,
+    "response": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "profile": {
+          "displayName": "E2-T08 Control Plane Agent",
+          "email": "e2-t08-agent@example.test",
+          "handle": "e2-t08-control-plane-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": {
+        "activeConfig": {
+          "schemaVersion": 1,
+          "instructions": {
+            "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+            "task": "Answer revision two using the same fenced policy.",
+            "guardrails": [
+              "Never disclose credentials or secret-shaped values.",
+              "Keep replies bounded and auditable."
+            ]
+          },
+          "context": {
+            "scope": "current-channel",
+            "includePrivate": false,
+            "includeThreadHistory": true,
+            "maxMessages": 50,
+            "maxBytes": 65536
+          },
+          "trigger": {
+            "events": [
+              "manual",
+              "mention"
+            ],
+            "requireMention": false,
+            "allowMessageEdits": false
+          },
+          "delegation": {
+            "enabled": false,
+            "maxDepth": 0,
+            "maxChildren": 0,
+            "allowCrossChannel": false
+          },
+          "concurrency": {
+            "maxConcurrentRuns": 4,
+            "maxConcurrentPerChannel": 1,
+            "queueStrategy": "serialize"
+          },
+          "budgets": {
+            "timeoutSeconds": 900,
+            "maxInputTokens": "[REDACTED]",
+            "maxOutputTokens": "[REDACTED]",
+            "maxTotalTokens": "[REDACTED]",
+            "maxCostUsdCents": 250
+          },
+          "harness": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "structured-output"
+            ]
+          },
+          "sandbox": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "ephemeral"
+            ],
+            "lifecycle": "ephemeral",
+            "networkPolicy": "deny-all"
+          },
+          "workspaceInputs": {
+            "source": "workspace",
+            "paths": [
+              "README.md",
+              "docs"
+            ],
+            "maxBytes": 1048576
+          },
+          "connectionGrants": {
+            "maxCallsPerRun": 2,
+            "refs": [
+              {
+                "connectionId": "conn_a",
+                "grantId": "grant_bgrant_c",
+                "purpose": "p",
+                "revision": 2
+              },
+              {
+                "connectionId": "conn_agrant_b",
+                "grantId": "grant_c",
+                "purpose": "p",
+                "revision": 2
+              }
+            ]
+          }
+        },
+        "activeRevisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39",
+        "headRevision": 2,
+        "lastRevisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39",
+        "runnable": true,
+        "status": "active"
+      },
+      "ok": true,
+      "source": {
+        "directoryDigest": "sha256:21136110b72420714addc9e707fdd7b5a6cb90635c8557030d421dad6312e473",
+        "directoryStateDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "configDigest": "sha256:a0483a101299fd3aa428c96e7ad8fdd3d2dcfb6e607eab6e1a8c28ba453105c2",
+        "configStateDigest": "sha256:892ea58dac4e39a05fbd5e2daab12b77a04de61c8a29a588916ed3c042c2664e"
+      }
+    },
+    "status": 200
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "profile": {
+          "displayName": "E2-T08 Control Plane Agent",
+          "email": "e2-t08-agent@example.test",
+          "handle": "e2-t08-control-plane-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configRevision": {
+        "configDigest": "sha256:c30df0ed2ab78aa2c537a736589619e288fceb6e5d1a309892c3ce6e487e1b02",
+        "revision": 3,
+        "revisionId": "acr_29f39cf8f52a9a91885c890b387b9fbdc8d8ba7150ff8e61734256ba2212ce7e"
+      },
+      "configuration": {
+        "activeConfig": {
+          "schemaVersion": 1,
+          "instructions": {
+            "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+            "task": "Answer revision two using the same fenced policy.",
+            "guardrails": [
+              "Never disclose credentials or secret-shaped values.",
+              "Keep replies bounded and auditable."
+            ]
+          },
+          "context": {
+            "scope": "current-channel",
+            "includePrivate": false,
+            "includeThreadHistory": true,
+            "maxMessages": 50,
+            "maxBytes": 65536
+          },
+          "trigger": {
+            "events": [
+              "manual",
+              "mention"
+            ],
+            "requireMention": false,
+            "allowMessageEdits": false
+          },
+          "delegation": {
+            "enabled": false,
+            "maxDepth": 0,
+            "maxChildren": 0,
+            "allowCrossChannel": false
+          },
+          "concurrency": {
+            "maxConcurrentRuns": 4,
+            "maxConcurrentPerChannel": 1,
+            "queueStrategy": "serialize"
+          },
+          "budgets": {
+            "timeoutSeconds": 900,
+            "maxInputTokens": "[REDACTED]",
+            "maxOutputTokens": "[REDACTED]",
+            "maxTotalTokens": "[REDACTED]",
+            "maxCostUsdCents": 250
+          },
+          "harness": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "structured-output"
+            ]
+          },
+          "sandbox": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "ephemeral"
+            ],
+            "lifecycle": "ephemeral",
+            "networkPolicy": "deny-all"
+          },
+          "workspaceInputs": {
+            "source": "workspace",
+            "paths": [
+              "README.md",
+              "docs"
+            ],
+            "maxBytes": 1048576
+          },
+          "connectionGrants": {
+            "maxCallsPerRun": 2,
+            "refs": [
+              {
+                "connectionId": "conn_a",
+                "grantId": "grant_bgrant_c",
+                "purpose": "p",
+                "revision": 2
+              },
+              {
+                "connectionId": "conn_agrant_b",
+                "grantId": "grant_c",
+                "purpose": "p",
+                "revision": 2
+              }
+            ]
+          }
+        },
+        "activeRevisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39",
+        "headRevision": 3,
+        "lastRevisionId": "acr_29f39cf8f52a9a91885c890b387b9fbdc8d8ba7150ff8e61734256ba2212ce7e",
+        "runnable": true,
+        "status": "active"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:1957a22501eb371743accf281e7b3529e433791905f130905c0949e919ddde96",
+        "eventDigest": "sha256:9a8f7c34ce38e7ae704cba2289b03e2cab5bff315077ce86982b532b244f6ea9",
+        "idempotencyKey": "ik_racezaz0069racezaz0069race",
+        "nextOffset": "0000000000000000_0000000000000005",
+        "operation": "agent.config.revised",
+        "requestDigest": "sha256:ddc8bbf3775b62647945104a62f49172453cc3d55e8a1c2710617065d64409e9",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:21136110b72420714addc9e707fdd7b5a6cb90635c8557030d421dad6312e473",
+        "directoryStateDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "configDigest": "sha256:9341c78a6254fbf1abec4367cbdba1463a47b0f181441423eda7d906989de277",
+        "configStateDigest": "sha256:bbdde1044345f4bb5425daf2ee2858528e47fa39f0f4607748e29f3b455a437c"
+      }
+    },
+    "status": 201
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_CONFIG_STREAM_STALE_REVISION",
+      "currentRevision": 3,
+      "currentRevisionId": "acr_29f39cf8f52a9a91885c890b387b9fbdc8d8ba7150ff8e61734256ba2212ce7e",
+      "error": "expected revision is not the current stream head",
+      "expectedRevision": 2,
+      "expectedRevisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39"
+    },
+    "status": 409
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "requestBody": false,
+    "response": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "profile": {
+          "displayName": "E2-T08 Control Plane Agent",
+          "email": "e2-t08-agent@example.test",
+          "handle": "e2-t08-control-plane-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": {
+        "activeConfig": {
+          "schemaVersion": 1,
+          "instructions": {
+            "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+            "task": "Answer revision two using the same fenced policy.",
+            "guardrails": [
+              "Never disclose credentials or secret-shaped values.",
+              "Keep replies bounded and auditable."
+            ]
+          },
+          "context": {
+            "scope": "current-channel",
+            "includePrivate": false,
+            "includeThreadHistory": true,
+            "maxMessages": 50,
+            "maxBytes": 65536
+          },
+          "trigger": {
+            "events": [
+              "manual",
+              "mention"
+            ],
+            "requireMention": false,
+            "allowMessageEdits": false
+          },
+          "delegation": {
+            "enabled": false,
+            "maxDepth": 0,
+            "maxChildren": 0,
+            "allowCrossChannel": false
+          },
+          "concurrency": {
+            "maxConcurrentRuns": 4,
+            "maxConcurrentPerChannel": 1,
+            "queueStrategy": "serialize"
+          },
+          "budgets": {
+            "timeoutSeconds": 900,
+            "maxInputTokens": "[REDACTED]",
+            "maxOutputTokens": "[REDACTED]",
+            "maxTotalTokens": "[REDACTED]",
+            "maxCostUsdCents": 250
+          },
+          "harness": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "structured-output"
+            ]
+          },
+          "sandbox": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "ephemeral"
+            ],
+            "lifecycle": "ephemeral",
+            "networkPolicy": "deny-all"
+          },
+          "workspaceInputs": {
+            "source": "workspace",
+            "paths": [
+              "README.md",
+              "docs"
+            ],
+            "maxBytes": 1048576
+          },
+          "connectionGrants": {
+            "maxCallsPerRun": 2,
+            "refs": [
+              {
+                "connectionId": "conn_a",
+                "grantId": "grant_bgrant_c",
+                "purpose": "p",
+                "revision": 2
+              },
+              {
+                "connectionId": "conn_agrant_b",
+                "grantId": "grant_c",
+                "purpose": "p",
+                "revision": 2
+              }
+            ]
+          }
+        },
+        "activeRevisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39",
+        "headRevision": 3,
+        "lastRevisionId": "acr_29f39cf8f52a9a91885c890b387b9fbdc8d8ba7150ff8e61734256ba2212ce7e",
+        "runnable": true,
+        "status": "active"
+      },
+      "ok": true,
+      "source": {
+        "directoryDigest": "sha256:d1c1c6de5d928c49e8195c5d9441e92071c791ab31be1a4d9d5e80e420c47244",
+        "directoryStateDigest": "sha256:7db238c5f7f914e9aa840ec25b09b17ee3a53dcd77bf6b7306faf3948087a7c1",
+        "configDigest": "sha256:9341c78a6254fbf1abec4367cbdba1463a47b0f181441423eda7d906989de277",
+        "configStateDigest": "sha256:bbdde1044345f4bb5425daf2ee2858528e47fa39f0f4607748e29f3b455a437c"
+      }
+    },
+    "status": 200
+  }
+]

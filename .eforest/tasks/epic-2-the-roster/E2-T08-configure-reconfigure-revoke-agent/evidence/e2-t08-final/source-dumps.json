@@ -1,0 +1,1561 @@
+{
+  "directory": {
+    "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+    "nextOffset": "0000000000000000_0000000000000043",
+    "stateDigest": "sha256:7db238c5f7f914e9aa840ec25b09b17ee3a53dcd77bf6b7306faf3948087a7c1",
+    "streamDigest": "sha256:d1c1c6de5d928c49e8195c5d9441e92071c791ab31be1a4d9d5e80e420c47244",
+    "records": [
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000001",
+        "data": {
+          "kind": "human",
+          "ownedBy": null,
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "profile": {
+            "displayName": "Ada Lovelace",
+            "email": "ada@a.example",
+            "handle": "ada"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "channel-a-ada"
+          }
+        },
+        "eventId": "ev_00000000000000000000000001",
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_00000000000000000000000001",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:01.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000002",
+        "data": {
+          "kind": "human",
+          "ownedBy": null,
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "profile": {
+            "displayName": "Linus Torvalds",
+            "email": "linus@a.example",
+            "handle": "linus"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "channel-a-linus"
+          }
+        },
+        "eventId": "ev_00000000000000000000000002",
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_00000000000000000000000002",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:02.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000003",
+        "data": {
+          "kind": "service",
+          "ownedBy": null,
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "profile": {
+            "displayName": "Audit Bot",
+            "email": "",
+            "handle": "audit-bot"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "channel-a-audit-bot"
+          }
+        },
+        "eventId": "ev_00000000000000000000000003",
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_00000000000000000000000003",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:03.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000006",
+        "data": {
+          "displayName": "Workspace A",
+          "ownerPrincipalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "eventId": "ev_00000000000000000000000006",
+        "eventType": "workspace.created",
+        "idempotencyKey": "ik_00000000000000000000000006",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:06.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000008",
+        "data": {
+          "expectedWorkspaceRevision": 1,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "role": "member"
+        },
+        "eventId": "ev_00000000000000000000000008",
+        "eventType": "workspace.membership.invited",
+        "idempotencyKey": "ik_00000000000000000000000008",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:08.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000009",
+        "data": {
+          "expectedWorkspaceRevision": 2,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+        },
+        "eventId": "ev_00000000000000000000000009",
+        "eventType": "workspace.membership.accepted",
+        "idempotencyKey": "ik_00000000000000000000000009",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:09.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000010",
+        "data": {
+          "expectedWorkspaceRevision": 3,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeef",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "role": "service"
+        },
+        "eventId": "ev_00000000000000000000000010",
+        "eventType": "workspace.membership.invited",
+        "idempotencyKey": "ik_00000000000000000000000010",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:10.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000011",
+        "data": {
+          "expectedWorkspaceRevision": 4,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeef",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
+        },
+        "eventId": "ev_00000000000000000000000011",
+        "eventType": "workspace.membership.accepted",
+        "idempotencyKey": "ik_00000000000000000000000011",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:11.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000014",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+          "creatorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "displayName": "general",
+          "kind": "public"
+        },
+        "eventId": "ev_00000000000000000000000014",
+        "eventType": "channel.created",
+        "idempotencyKey": "ik_00000000000000000000000014",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:14.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000015",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+          "creatorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "displayName": "incident-room",
+          "kind": "private"
+        },
+        "eventId": "ev_00000000000000000000000015",
+        "eventType": "channel.created",
+        "idempotencyKey": "ik_00000000000000000000000015",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:15.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000016",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+          "expectedChannelRevision": 1,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+        },
+        "eventId": "ev_00000000000000000000000016",
+        "eventType": "channel.membership.invited",
+        "idempotencyKey": "ik_00000000000000000000000016",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:16.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000017",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+          "expectedChannelRevision": 2,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+        },
+        "eventId": "ev_00000000000000000000000017",
+        "eventType": "channel.membership.joined",
+        "idempotencyKey": "ik_00000000000000000000000017",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:17.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000018",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+          "displayName": "town-square",
+          "expectedChannelRevision": 1
+        },
+        "eventId": "ev_00000000000000000000000018",
+        "eventType": "channel.renamed",
+        "idempotencyKey": "ik_00000000000000000000000018",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:18.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000019",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+          "expectedChannelRevision": 2,
+          "reason": "maintenance"
+        },
+        "eventId": "ev_00000000000000000000000019",
+        "eventType": "channel.archived",
+        "idempotencyKey": "ik_00000000000000000000000019",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:19.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000020",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+          "expectedChannelRevision": 3,
+          "reason": "maintenance-complete"
+        },
+        "eventId": "ev_00000000000000000000000020",
+        "eventType": "channel.unarchived",
+        "idempotencyKey": "ik_00000000000000000000000020",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:20.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000021",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+          "expectedChannelRevision": 3,
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+        },
+        "eventId": "ev_00000000000000000000000021",
+        "eventType": "channel.membership.left",
+        "idempotencyKey": "ik_00000000000000000000000021",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:21.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000022",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+          "expectedChannelRevision": 4,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+        },
+        "eventId": "ev_00000000000000000000000022",
+        "eventType": "channel.membership.invited",
+        "idempotencyKey": "ik_00000000000000000000000022",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:22.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000023",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222",
+          "expectedChannelRevision": 5,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+        },
+        "eventId": "ev_00000000000000000000000023",
+        "eventType": "channel.membership.joined",
+        "idempotencyKey": "ik_00000000000000000000000023",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:23.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000000024",
+        "data": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm",
+          "creatorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "participantIds": [
+            "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+            "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          ]
+        },
+        "eventId": "ev_00000000000000000000000024",
+        "eventType": "channel.direct.created",
+        "idempotencyKey": "ik_00000000000000000000000024",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:24.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001001",
+        "data": {
+          "kind": "human",
+          "ownedBy": null,
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "profile": {
+            "displayName": "Ordinary Member",
+            "email": "ordinary-member@a.example",
+            "handle": "ordinary-member"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "workspace-a-ordinary-member"
+          }
+        },
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_00000000000000000000001001",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001001",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001002",
+        "data": {
+          "kind": "human",
+          "ownedBy": null,
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "profile": {
+            "displayName": "Agent Manager",
+            "email": "agent-manager@a.example",
+            "handle": "agent-manager"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "workspace-a-agent-manager"
+          }
+        },
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_00000000000000000000001002",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001002",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001003",
+        "data": {
+          "kind": "human",
+          "ownedBy": null,
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+          "profile": {
+            "displayName": "Connection Manager",
+            "email": "connection-manager@a.example",
+            "handle": "connection-manager"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "workspace-a-connection-manager"
+          }
+        },
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_00000000000000000000001003",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001003",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001004",
+        "data": {
+          "kind": "human",
+          "ownedBy": null,
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+          "profile": {
+            "displayName": "Channel Manager",
+            "email": "channel-manager@a.example",
+            "handle": "channel-manager"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "workspace-a-channel-manager"
+          }
+        },
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_00000000000000000000001004",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001004",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001005",
+        "data": {
+          "kind": "human",
+          "ownedBy": null,
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "profile": {
+            "displayName": "Ordinary Viewer",
+            "email": "ordinary-viewer@a.example",
+            "handle": "ordinary-viewer"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "workspace-a-ordinary-viewer"
+          }
+        },
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_00000000000000000000001005",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001005",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001006",
+        "data": {
+          "expectedWorkspaceRevision": 5,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "role": "member"
+        },
+        "eventType": "workspace.membership.invited",
+        "idempotencyKey": "ik_00000000000000000000001006",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001006",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001007",
+        "data": {
+          "expectedWorkspaceRevision": 6,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee"
+        },
+        "eventType": "workspace.membership.accepted",
+        "idempotencyKey": "ik_00000000000000000000001007",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001007",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001008",
+        "data": {
+          "expectedWorkspaceRevision": 7,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_ssssssssssssssssssssssssss",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "role": "member"
+        },
+        "eventType": "workspace.membership.invited",
+        "idempotencyKey": "ik_00000000000000000000001008",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001008",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001009",
+        "data": {
+          "expectedWorkspaceRevision": 8,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_ssssssssssssssssssssssssss",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+        },
+        "eventType": "workspace.membership.accepted",
+        "idempotencyKey": "ik_00000000000000000000001009",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001009",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001010",
+        "data": {
+          "expectedWorkspaceRevision": 9,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_tttttttttttttttttttttttttt",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+          "role": "member"
+        },
+        "eventType": "workspace.membership.invited",
+        "idempotencyKey": "ik_00000000000000000000001010",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001010",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001011",
+        "data": {
+          "expectedWorkspaceRevision": 10,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_tttttttttttttttttttttttttt",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg"
+        },
+        "eventType": "workspace.membership.accepted",
+        "idempotencyKey": "ik_00000000000000000000001011",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001011",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001012",
+        "data": {
+          "expectedWorkspaceRevision": 11,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+          "role": "member"
+        },
+        "eventType": "workspace.membership.invited",
+        "idempotencyKey": "ik_00000000000000000000001012",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001012",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001013",
+        "data": {
+          "expectedWorkspaceRevision": 12,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh"
+        },
+        "eventType": "workspace.membership.accepted",
+        "idempotencyKey": "ik_00000000000000000000001013",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001013",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001014",
+        "data": {
+          "expectedWorkspaceRevision": 13,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_wwwwwwwwwwwwwwwwwwwwwwwwww",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "role": "member"
+        },
+        "eventType": "workspace.membership.invited",
+        "idempotencyKey": "ik_00000000000000000000001014",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001014",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001015",
+        "data": {
+          "expectedWorkspaceRevision": 14,
+          "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_wwwwwwwwwwwwwwwwwwwwwwwwww",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx"
+        },
+        "eventType": "workspace.membership.accepted",
+        "idempotencyKey": "ik_00000000000000000000001015",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001015",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001016",
+        "data": {
+          "entityType": "administration.grant",
+          "id": "grant:pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff:agent.manager:workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "revision": 1,
+          "value": {
+            "capability": "agent.manager",
+            "grantId": "grant:pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff:agent.manager:workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "resourceType": "workspace",
+            "revision": 1,
+            "status": "active",
+            "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        "eventType": "workspace.directory.updated",
+        "idempotencyKey": "ik_00000000000000000000001016",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001016",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001017",
+        "data": {
+          "entityType": "administration.grant",
+          "id": "grant:pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg:connection.manager:connection:cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+          "revision": 1,
+          "value": {
+            "capability": "connection.manager",
+            "grantId": "grant:pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg:connection.manager:connection:cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+            "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+            "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+            "resourceType": "connection",
+            "revision": 1,
+            "status": "active",
+            "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        "eventType": "workspace.directory.updated",
+        "idempotencyKey": "ik_00000000000000000000001017",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001017",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_00000000000000000000001018",
+        "data": {
+          "entityType": "administration.grant",
+          "id": "grant:pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh:channel.manager:channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+          "revision": 1,
+          "value": {
+            "capability": "channel.manager",
+            "grantId": "grant:pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh:channel.manager:channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+            "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+            "resourceId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+            "resourceType": "channel",
+            "revision": 1,
+            "status": "active",
+            "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        "eventType": "workspace.directory.updated",
+        "idempotencyKey": "ik_00000000000000000000001018",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_00000000000000000000001018",
+        "serverTimestamp": "2026-08-06T00:00:00.000Z"
+      },
+      {
+        "digest": "sha256:02e470131504bd7fdb782081a55e0c0257f18872e6952cd6e06a42ad1ff29e95",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "causation": null,
+          "correlationId": "cr_createz0001createz0001crea",
+          "data": {
+            "kind": "agent",
+            "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+            "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "profile": {
+              "displayName": "E2-T08 Control Plane Agent",
+              "email": "e2-t08-agent@example.test",
+              "handle": "e2-t08-control-plane-agent"
+            },
+            "subjectBinding": {
+              "audience": "stream-slack",
+              "issuer": "stream-slack",
+              "subject": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj"
+            }
+          },
+          "eventType": "principal.created",
+          "idempotencyKey": "ik_createz0001createz0001crea",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_createz0001createz0001crea",
+          "serverTimestamp": "2026-08-06T00:00:00.000Z"
+        },
+        "dispatch": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "expectedHead": "0000000000000000_0000000000000037",
+          "idempotencyKey": "ik_createz0001createz0001crea",
+          "operation": "agent.principal.create",
+          "requestDigest": "sha256:6ad3a8b8144ea49338db29f17fea0a4034bd36ffa7afb73d5575a02390d67516",
+          "schemaVersion": 1,
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "digest": "sha256:bc80aabbc96dc7966892e5ca6b9a4cb38546a62e8cda103a3b7747c26260f4f1",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "causation": null,
+          "correlationId": "cr_agentzwzrkspacezznvztez000",
+          "data": {
+            "expectedWorkspaceRevision": 15,
+            "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_pppppppppppppppppppppppppp",
+            "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "role": "agent"
+          },
+          "eventType": "workspace.membership.invited",
+          "idempotencyKey": "ik_agentzwzrkspacezznvztez000",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_00000000000000000000001019",
+          "serverTimestamp": "2026-08-06T00:00:00.000Z"
+        },
+        "dispatch": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "expectedHead": "0000000000000000_0000000000000038",
+          "idempotencyKey": "ik_agentzwzrkspacezznvztez000",
+          "operation": "workspace.membership.invited",
+          "requestDigest": "sha256:c91ce433daaa5da4b4a29c489bb1d184713b8917e3bbb4d55ca372daf5f3f191",
+          "schemaVersion": 1,
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "digest": "sha256:3c58299e9170aa55413c0da18c6284a4929fc9f46058697032284a517d33214e",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+          "causation": null,
+          "correlationId": "cr_agentzwzrkspacezacceptz000",
+          "data": {
+            "expectedWorkspaceRevision": 16,
+            "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_pppppppppppppppppppppppppp",
+            "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj"
+          },
+          "eventType": "workspace.membership.accepted",
+          "idempotencyKey": "ik_agentzwzrkspacezacceptz000",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_00000000000000000000001020",
+          "serverTimestamp": "2026-08-06T00:00:00.000Z"
+        },
+        "dispatch": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+          "expectedHead": "0000000000000000_0000000000000039",
+          "idempotencyKey": "ik_agentzwzrkspacezacceptz000",
+          "operation": "workspace.membership.accepted",
+          "requestDigest": "sha256:e5728cdca16d1d5c1e85e531172c8b692200b6eace662e55bade0ff54ab27a91",
+          "schemaVersion": 1,
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "digest": "sha256:d16a9009673ddb12a5a499b98d3b8449e81e95fac42f69ec2d2ba48d3d204f9e",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "causation": null,
+          "correlationId": "cr_channezzznvztez0006channez",
+          "data": {
+            "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+            "expectedChannelRevision": 4,
+            "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_pppppppppppppppppppppppppp"
+          },
+          "eventType": "channel.membership.invited",
+          "idempotencyKey": "ik_channezzznvztezdzspatchz00",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_00000000000000000000001021",
+          "serverTimestamp": "2026-08-06T00:00:00.000Z"
+        },
+        "dispatch": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "expectedHead": "0000000000000000_0000000000000040",
+          "idempotencyKey": "ik_channezzznvztezdzspatchz00",
+          "operation": "channel.membership.invited",
+          "requestDigest": "sha256:b4e3fa6fad9cf29c6d0be3d4aaea0f501b1e208bc96a285915212112a1ac4b1e",
+          "schemaVersion": 1,
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "digest": "sha256:98910951900c9cf129abcaa7943db3f60bb65f7c9d0d22c9050a2c5812aba851",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+          "causation": null,
+          "correlationId": "cr_channezzjzznz0008channezzj",
+          "data": {
+            "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+            "expectedChannelRevision": 5,
+            "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "inviteId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa_pppppppppppppppppppppppppp"
+          },
+          "eventType": "channel.membership.joined",
+          "idempotencyKey": "ik_channezzjzznzdzspatchz0007",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_00000000000000000000001022",
+          "serverTimestamp": "2026-08-06T00:00:00.000Z"
+        },
+        "dispatch": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+          "expectedHead": "0000000000000000_0000000000000041",
+          "idempotencyKey": "ik_channezzjzznzdzspatchz0007",
+          "operation": "channel.membership.joined",
+          "requestDigest": "sha256:e9ea4bbcac0a8e70f9b5f180872dc63f0195fb0f4e64433a6f667a7b1616b330",
+          "schemaVersion": 1,
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "digest": "sha256:62a771fb03e60e6809c35f99152e547c1b019c76cdcb32d0190ba296efde36c8",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "causation": null,
+          "correlationId": "cr_agentzwzrkspacezremzvez007",
+          "data": {
+            "expectedMembershipRevision": 1,
+            "expectedWorkspaceRevision": 17,
+            "membershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "reason": "e2-t08 revocation race"
+          },
+          "eventType": "workspace.membership.removed",
+          "idempotencyKey": "ik_agentzwzrkspacezremzvez007",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_00000000000000000000001027",
+          "serverTimestamp": "2026-08-06T00:00:00.000Z"
+        },
+        "dispatch": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "expectedHead": "0000000000000000_0000000000000042",
+          "idempotencyKey": "ik_agentzwzrkspacezremzvez007",
+          "operation": "workspace.membership.removed",
+          "requestDigest": "sha256:770e0d6677583dc15318c3e1fcc001777881589b3e41df3ed194fe1e0aafaf3e",
+          "schemaVersion": 1,
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    ]
+  },
+  "config": {
+    "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+    "nextOffset": "0000000000000000_0000000000000006",
+    "streamDigest": "sha256:2a2542af870f7bd450c72c5cbaf31934fc253e7c83603029c0dd306a2dd292a8",
+    "records": [
+      {
+        "digest": "sha256:f30496b7dcf9916b21853ef8eb34a32a64d36fbf906cf3ccd48f2b73159229bd",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "causation": null,
+          "correlationId": "cr_cznfzgzcreatez0002cznfzgzc",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "config": {
+              "schemaVersion": 1,
+              "instructions": {
+                "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+                "task": "Answer the current request using only the authorized context.",
+                "guardrails": [
+                  "Never disclose credentials or secret-shaped values.",
+                  "Keep replies bounded and auditable."
+                ]
+              },
+              "context": {
+                "scope": "current-channel",
+                "includePrivate": false,
+                "includeThreadHistory": true,
+                "maxMessages": 50,
+                "maxBytes": 65536
+              },
+              "trigger": {
+                "events": [
+                  "manual",
+                  "mention"
+                ],
+                "requireMention": false,
+                "allowMessageEdits": false
+              },
+              "delegation": {
+                "enabled": false,
+                "maxDepth": 0,
+                "maxChildren": 0,
+                "allowCrossChannel": false
+              },
+              "concurrency": {
+                "maxConcurrentRuns": 4,
+                "maxConcurrentPerChannel": 1,
+                "queueStrategy": "serialize"
+              },
+              "budgets": {
+                "timeoutSeconds": 900,
+                "maxInputTokens": 8000,
+                "maxOutputTokens": 4000,
+                "maxTotalTokens": 12000,
+                "maxCostUsdCents": 250
+              },
+              "harness": {
+                "providerId": "scripted",
+                "providerVersion": "1.0.0",
+                "requiredCapabilities": [
+                  "structured-output"
+                ]
+              },
+              "sandbox": {
+                "providerId": "scripted",
+                "providerVersion": "1.0.0",
+                "requiredCapabilities": [
+                  "ephemeral"
+                ],
+                "lifecycle": "ephemeral",
+                "networkPolicy": "deny-all"
+              },
+              "workspaceInputs": {
+                "source": "workspace",
+                "paths": [
+                  "README.md",
+                  "docs"
+                ],
+                "maxBytes": 1048576
+              },
+              "connectionGrants": {
+                "maxCallsPerRun": 2,
+                "refs": [
+                  {
+                    "connectionId": "conn_a",
+                    "grantId": "grant_bgrant_c",
+                    "purpose": "p",
+                    "revision": 1
+                  },
+                  {
+                    "connectionId": "conn_agrant_b",
+                    "grantId": "grant_c",
+                    "purpose": "p",
+                    "revision": 1
+                  }
+                ]
+              }
+            },
+            "configDigest": "sha256:985cb3cc8e3ddfb848768e8f058afad174135e97253eed9376953c0a820973c7",
+            "expectedRevision": 0,
+            "expectedRevisionId": null,
+            "predecessorRevisionId": null,
+            "revision": 1,
+            "revisionId": "acr_b0bc066ff12c66b8bdf8aafad1e56031399d2ca6743893e650ec0c406ee1198c"
+          },
+          "eventType": "agent.config.created",
+          "idempotencyKey": "ik_cznfzgzcreatez0002cznfzgzc",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_cznfzgzcreatez0002cznfzgzc",
+          "serverTimestamp": "2026-08-06T00:00:00.000Z"
+        },
+        "dispatch": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "expectedHead": "0000000000000000_0000000000000000",
+          "idempotencyKey": "ik_cznfzgzcreatez0002cznfzgzc",
+          "operation": "agent.config.created",
+          "requestDigest": "sha256:6e0fdafa16780cb28ab92eebb318b252805eed9a9bfbae93e4497fc3351ed6cf",
+          "schemaVersion": 1,
+          "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "digest": "sha256:730b3bc104fee1b6decbe53a0a829c5d3e364c8d22bcdc8093ef22da5293f067",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "causation": null,
+          "correlationId": "cr_actzvatez1z0009actzvatez1z",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "expectedRevision": 1,
+            "expectedRevisionId": "acr_b0bc066ff12c66b8bdf8aafad1e56031399d2ca6743893e650ec0c406ee1198c",
+            "revisionId": "acr_b0bc066ff12c66b8bdf8aafad1e56031399d2ca6743893e650ec0c406ee1198c"
+          },
+          "eventType": "agent.config.activated",
+          "idempotencyKey": "ik_actzvatez1z0009actzvatez1z",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_actzvatez1z0009actzvatez1z",
+          "serverTimestamp": "2026-08-06T00:00:00.000Z"
+        },
+        "dispatch": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "expectedHead": "0000000000000000_0000000000000001",
+          "idempotencyKey": "ik_actzvatez1z0009actzvatez1z",
+          "operation": "agent.config.activated",
+          "requestDigest": "sha256:1dde7f24bd23c6ad634313ec6d4809e1c9d099271037dbab05557082fbb8679a",
+          "schemaVersion": 1,
+          "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "digest": "sha256:0407f9136a417ee663ff902a297b5dc47c959f6360494ad9a29a542559e1b611",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "causation": null,
+          "correlationId": "cr_revzsez2z0012revzsez2z0012",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "config": {
+              "schemaVersion": 1,
+              "instructions": {
+                "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+                "task": "Answer revision two using the same fenced policy.",
+                "guardrails": [
+                  "Never disclose credentials or secret-shaped values.",
+                  "Keep replies bounded and auditable."
+                ]
+              },
+              "context": {
+                "scope": "current-channel",
+                "includePrivate": false,
+                "includeThreadHistory": true,
+                "maxMessages": 50,
+                "maxBytes": 65536
+              },
+              "trigger": {
+                "events": [
+                  "manual",
+                  "mention"
+                ],
+                "requireMention": false,
+                "allowMessageEdits": false
+              },
+              "delegation": {
+                "enabled": false,
+                "maxDepth": 0,
+                "maxChildren": 0,
+                "allowCrossChannel": false
+              },
+              "concurrency": {
+                "maxConcurrentRuns": 4,
+                "maxConcurrentPerChannel": 1,
+                "queueStrategy": "serialize"
+              },
+              "budgets": {
+                "timeoutSeconds": 900,
+                "maxInputTokens": 8000,
+                "maxOutputTokens": 4000,
+                "maxTotalTokens": 12000,
+                "maxCostUsdCents": 250
+              },
+              "harness": {
+                "providerId": "scripted",
+                "providerVersion": "1.0.0",
+                "requiredCapabilities": [
+                  "structured-output"
+                ]
+              },
+              "sandbox": {
+                "providerId": "scripted",
+                "providerVersion": "1.0.0",
+                "requiredCapabilities": [
+                  "ephemeral"
+                ],
+                "lifecycle": "ephemeral",
+                "networkPolicy": "deny-all"
+              },
+              "workspaceInputs": {
+                "source": "workspace",
+                "paths": [
+                  "README.md",
+                  "docs"
+                ],
+                "maxBytes": 1048576
+              },
+              "connectionGrants": {
+                "maxCallsPerRun": 2,
+                "refs": [
+                  {
+                    "connectionId": "conn_a",
+                    "grantId": "grant_bgrant_c",
+                    "purpose": "p",
+                    "revision": 2
+                  },
+                  {
+                    "connectionId": "conn_agrant_b",
+                    "grantId": "grant_c",
+                    "purpose": "p",
+                    "revision": 2
+                  }
+                ]
+              }
+            },
+            "configDigest": "sha256:605ae90106dfab2478bbf115803acfa2f53e33756a94bcd8b4df06519dee6553",
+            "expectedRevision": 1,
+            "expectedRevisionId": "acr_b0bc066ff12c66b8bdf8aafad1e56031399d2ca6743893e650ec0c406ee1198c",
+            "predecessorRevisionId": "acr_b0bc066ff12c66b8bdf8aafad1e56031399d2ca6743893e650ec0c406ee1198c",
+            "revision": 2,
+            "revisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39"
+          },
+          "eventType": "agent.config.revised",
+          "idempotencyKey": "ik_revzsez2z0012revzsez2z0012",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_revzsez2z0012revzsez2z0012",
+          "serverTimestamp": "2026-08-06T00:00:00.000Z"
+        },
+        "dispatch": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "expectedHead": "0000000000000000_0000000000000002",
+          "idempotencyKey": "ik_revzsez2z0012revzsez2z0012",
+          "operation": "agent.config.revised",
+          "requestDigest": "sha256:548d0f2c9e4dd357348f48f1883a1c3cf55aaf82ddbf990a6f18f489d2c7a774",
+          "schemaVersion": 1,
+          "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "digest": "sha256:8339c6fd89345d9bd753922493f7e07e465ce128eb8c8663fe8bf714b3b7b340",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "causation": null,
+          "correlationId": "cr_actzvatez2z0013actzvatez2z",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "expectedRevision": 2,
+            "expectedRevisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39",
+            "revisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39"
+          },
+          "eventType": "agent.config.activated",
+          "idempotencyKey": "ik_actzvatez2z0013actzvatez2z",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_actzvatez2z0013actzvatez2z",
+          "serverTimestamp": "2026-08-06T00:00:00.000Z"
+        },
+        "dispatch": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "expectedHead": "0000000000000000_0000000000000003",
+          "idempotencyKey": "ik_actzvatez2z0013actzvatez2z",
+          "operation": "agent.config.activated",
+          "requestDigest": "sha256:c0ad9352d7c4523ec8ecd1c930924db576df8a8592fc0c27e87218a8e8632f23",
+          "schemaVersion": 1,
+          "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "digest": "sha256:9a8f7c34ce38e7ae704cba2289b03e2cab5bff315077ce86982b532b244f6ea9",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "causation": null,
+          "correlationId": "cr_racezaz0069racezaz0069race",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "config": {
+              "schemaVersion": 1,
+              "instructions": {
+                "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+                "task": "concurrent revision alpha",
+                "guardrails": [
+                  "Never disclose credentials or secret-shaped values.",
+                  "Keep replies bounded and auditable."
+                ]
+              },
+              "context": {
+                "scope": "current-channel",
+                "includePrivate": false,
+                "includeThreadHistory": true,
+                "maxMessages": 50,
+                "maxBytes": 65536
+              },
+              "trigger": {
+                "events": [
+                  "manual",
+                  "mention"
+                ],
+                "requireMention": false,
+                "allowMessageEdits": false
+              },
+              "delegation": {
+                "enabled": false,
+                "maxDepth": 0,
+                "maxChildren": 0,
+                "allowCrossChannel": false
+              },
+              "concurrency": {
+                "maxConcurrentRuns": 4,
+                "maxConcurrentPerChannel": 1,
+                "queueStrategy": "serialize"
+              },
+              "budgets": {
+                "timeoutSeconds": 900,
+                "maxInputTokens": 8000,
+                "maxOutputTokens": 4000,
+                "maxTotalTokens": 12000,
+                "maxCostUsdCents": 250
+              },
+              "harness": {
+                "providerId": "scripted",
+                "providerVersion": "1.0.0",
+                "requiredCapabilities": [
+                  "structured-output"
+                ]
+              },
+              "sandbox": {
+                "providerId": "scripted",
+                "providerVersion": "1.0.0",
+                "requiredCapabilities": [
+                  "ephemeral"
+                ],
+                "lifecycle": "ephemeral",
+                "networkPolicy": "deny-all"
+              },
+              "workspaceInputs": {
+                "source": "workspace",
+                "paths": [
+                  "README.md",
+                  "docs"
+                ],
+                "maxBytes": 1048576
+              },
+              "connectionGrants": {
+                "maxCallsPerRun": 2,
+                "refs": [
+                  {
+                    "connectionId": "conn_a",
+                    "grantId": "grant_bgrant_c",
+                    "purpose": "p",
+                    "revision": 2
+                  },
+                  {
+                    "connectionId": "conn_agrant_b",
+                    "grantId": "grant_c",
+                    "purpose": "p",
+                    "revision": 2
+                  }
+                ]
+              }
+            },
+            "configDigest": "sha256:c30df0ed2ab78aa2c537a736589619e288fceb6e5d1a309892c3ce6e487e1b02",
+            "expectedRevision": 2,
+            "expectedRevisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39",
+            "predecessorRevisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39",
+            "revision": 3,
+            "revisionId": "acr_29f39cf8f52a9a91885c890b387b9fbdc8d8ba7150ff8e61734256ba2212ce7e"
+          },
+          "eventType": "agent.config.revised",
+          "idempotencyKey": "ik_racezaz0069racezaz0069race",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_racezaz0069racezaz0069race",
+          "serverTimestamp": "2026-08-06T00:00:00.000Z"
+        },
+        "dispatch": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "expectedHead": "0000000000000000_0000000000000004",
+          "idempotencyKey": "ik_racezaz0069racezaz0069race",
+          "operation": "agent.config.revised",
+          "requestDigest": "sha256:ddc8bbf3775b62647945104a62f49172453cc3d55e8a1c2710617065d64409e9",
+          "schemaVersion": 1,
+          "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "digest": "sha256:f6bdb8d565cdc483718ce2dbea8a327b5a074d69cfd610e87753d91ffa62657c",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "causation": null,
+          "correlationId": "cr_revzkez0072revzkez0072revz",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "expectedRevision": 3,
+            "expectedRevisionId": "acr_29f39cf8f52a9a91885c890b387b9fbdc8d8ba7150ff8e61734256ba2212ce7e"
+          },
+          "eventType": "agent.config.retired",
+          "idempotencyKey": "ik_revzkez0072revzkez0072revz",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_revzkez0072revzkez0072revz",
+          "serverTimestamp": "2026-08-06T00:00:00.000Z"
+        },
+        "dispatch": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "expectedHead": "0000000000000000_0000000000000005",
+          "idempotencyKey": "ik_revzkez0072revzkez0072revz",
+          "operation": "agent.config.retired",
+          "requestDigest": "sha256:9aaf7d739863a9b15748f3152acb350bcd5a3164a03ad5c7bbca093a04f769bf",
+          "schemaVersion": 1,
+          "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    ]
+  },
+  "audit": {
+    "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/audit",
+    "nextOffset": "0000000000000000_0000000000000000",
+    "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "records": []
+  },
+  "dispatch": {
+    "stream": "__stream_slack_dispatch_idempotency__",
+    "nextOffset": "0000000000000000_0000000000000012",
+    "streamDigest": "sha256:024d0eccf1428d067c1bf635e6327d70977a9c8464e5fe64b128b412b2b2da8e",
+    "records": [
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "eventDigest": "sha256:1512ee88922b58b9db43c02891befe7f11cd1ba8cb8cb9b6847b7bd9e64a8ac7",
+          "idempotencyKey": "ik_createz0001createz0001crea",
+          "nextOffset": "0000000000000000_0000000000000038",
+          "operation": "agent.principal.create",
+          "requestDigest": "sha256:6ad3a8b8144ea49338db29f17fea0a4034bd36ffa7afb73d5575a02390d67516",
+          "status": "accepted",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "eventDigest": "sha256:7b8acc203a1ab25d8d7980d95f83e71a3c6a80a90421ffe1c07251b515aa4745",
+          "idempotencyKey": "ik_cznfzgzcreatez0002cznfzgzc",
+          "nextOffset": "0000000000000000_0000000000000001",
+          "operation": "agent.config.created",
+          "requestDigest": "sha256:6e0fdafa16780cb28ab92eebb318b252805eed9a9bfbae93e4497fc3351ed6cf",
+          "status": "accepted",
+          "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "eventDigest": "sha256:d27d32ea514a561a82d0e48bcd20588da00f4a9e56eb1a845b9d1bb289daddb4",
+          "idempotencyKey": "ik_agentzwzrkspacezznvztez000",
+          "nextOffset": "0000000000000000_0000000000000039",
+          "operation": "workspace.membership.invited",
+          "requestDigest": "sha256:c91ce433daaa5da4b4a29c489bb1d184713b8917e3bbb4d55ca372daf5f3f191",
+          "status": "accepted",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+          "eventDigest": "sha256:4df9b7f0e02ee63821c297dc32911350deeed8fe230718f2788060368145be71",
+          "idempotencyKey": "ik_agentzwzrkspacezacceptz000",
+          "nextOffset": "0000000000000000_0000000000000040",
+          "operation": "workspace.membership.accepted",
+          "requestDigest": "sha256:e5728cdca16d1d5c1e85e531172c8b692200b6eace662e55bade0ff54ab27a91",
+          "status": "accepted",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "eventDigest": "sha256:32e4dedfdb20e10fd15bef72c9edf1a0ff153bad66bf20d210afc6b35ae585ac",
+          "idempotencyKey": "ik_channezzznvztezdzspatchz00",
+          "nextOffset": "0000000000000000_0000000000000041",
+          "operation": "channel.membership.invited",
+          "requestDigest": "sha256:b4e3fa6fad9cf29c6d0be3d4aaea0f501b1e208bc96a285915212112a1ac4b1e",
+          "status": "accepted",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+          "eventDigest": "sha256:e8d67fcd8d0a649d32ad10376e2e1bdbe9f8a6a9af696205c08cd23b7d5cafab",
+          "idempotencyKey": "ik_channezzjzznzdzspatchz0007",
+          "nextOffset": "0000000000000000_0000000000000042",
+          "operation": "channel.membership.joined",
+          "requestDigest": "sha256:e9ea4bbcac0a8e70f9b5f180872dc63f0195fb0f4e64433a6f667a7b1616b330",
+          "status": "accepted",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "eventDigest": "sha256:5faf0f72f5a7887371ea104c3689e58e58c735dd37a577919ab3865ff42dcf99",
+          "idempotencyKey": "ik_actzvatez1z0009actzvatez1z",
+          "nextOffset": "0000000000000000_0000000000000002",
+          "operation": "agent.config.activated",
+          "requestDigest": "sha256:1dde7f24bd23c6ad634313ec6d4809e1c9d099271037dbab05557082fbb8679a",
+          "status": "accepted",
+          "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "eventDigest": "sha256:4a13e6ecbcdbf8920dd7ae35ab2968427c26bd53d11a580c3baac678392aa949",
+          "idempotencyKey": "ik_revzsez2z0012revzsez2z0012",
+          "nextOffset": "0000000000000000_0000000000000003",
+          "operation": "agent.config.revised",
+          "requestDigest": "sha256:548d0f2c9e4dd357348f48f1883a1c3cf55aaf82ddbf990a6f18f489d2c7a774",
+          "status": "accepted",
+          "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "eventDigest": "sha256:72b7c13250dbd3f3858a6ab392c5b726734d74cddacfa5cb6ed3a0ef91571847",
+          "idempotencyKey": "ik_actzvatez2z0013actzvatez2z",
+          "nextOffset": "0000000000000000_0000000000000004",
+          "operation": "agent.config.activated",
+          "requestDigest": "sha256:c0ad9352d7c4523ec8ecd1c930924db576df8a8592fc0c27e87218a8e8632f23",
+          "status": "accepted",
+          "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "eventDigest": "sha256:1957a22501eb371743accf281e7b3529e433791905f130905c0949e919ddde96",
+          "idempotencyKey": "ik_racezaz0069racezaz0069race",
+          "nextOffset": "0000000000000000_0000000000000005",
+          "operation": "agent.config.revised",
+          "requestDigest": "sha256:ddc8bbf3775b62647945104a62f49172453cc3d55e8a1c2710617065d64409e9",
+          "status": "accepted",
+          "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "eventDigest": "sha256:4669c43481b71149b0e951da93a23aadd849d29c8d6cda9d865c76d250e218d3",
+          "idempotencyKey": "ik_agentzwzrkspacezremzvez007",
+          "nextOffset": "0000000000000000_0000000000000043",
+          "operation": "workspace.membership.removed",
+          "requestDigest": "sha256:770e0d6677583dc15318c3e1fcc001777881589b3e41df3ed194fe1e0aafaf3e",
+          "status": "accepted",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "eventDigest": "sha256:fa2b990d35a7f34ea8d8dd057e6ad2d7651ac1e33550508633b63308f01e319d",
+          "idempotencyKey": "ik_revzkez0072revzkez0072revz",
+          "nextOffset": "0000000000000000_0000000000000006",
+          "operation": "agent.config.retired",
+          "requestDigest": "sha256:9aaf7d739863a9b15748f3152acb350bcd5a3164a03ad5c7bbca093a04f769bf",
+          "status": "accepted",
+          "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "conn_agrant_b": {
+      "stream": "connection:conn_agrant_b/config",
+      "nextOffset": "0000000000000000_0000000000000002",
+      "streamDigest": "sha256:edb31229aa92a66d2fa930f10a822af5cecb14f6b3dc8147c1db5112f8fd3884",
+      "recordCount": 2
+    },
+    "conn_a": {
+      "stream": "connection:conn_a/config",
+      "nextOffset": "0000000000000000_0000000000000002",
+      "streamDigest": "sha256:b4c8d3f1f474041d5f786b52a9143d1ec50717e4c4cb1e620ff1499f16e3faba",
+      "recordCount": 2
+    }
+  }
+}

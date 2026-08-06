@@ -1,5 +1,5 @@
 {
-  "mutationCount": 3,
+  "mutationCount": 5,
   "mutations": [
     {
       "exitCode": 1,
@@ -18,6 +18,20 @@
     {
       "exitCode": 1,
       "mutation": "remove durable handle uniqueness",
+      "result": "PASS",
+      "verifier": "scripts/verify-e2-t06.mjs",
+      "verifierDetectedMutant": true
+    },
+    {
+      "exitCode": 1,
+      "mutation": "remove service-principal channel membership fence",
+      "result": "PASS",
+      "verifier": "scripts/verify-e2-t06.mjs",
+      "verifierDetectedMutant": true
+    },
+    {
+      "exitCode": 1,
+      "mutation": "remove durable reducer handle uniqueness",
       "result": "PASS",
       "verifier": "scripts/verify-e2-t06.mjs",
       "verifierDetectedMutant": true

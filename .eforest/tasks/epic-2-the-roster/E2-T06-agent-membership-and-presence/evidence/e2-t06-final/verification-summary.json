@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E2-T06",
-  "runId": "e2-t06-cold-final-v1",
-  "implementationCommit": "9fd3be18cf693aff4d5b65dee00b54c2baa460fb",
+  "runId": "e2-t06-cold-final-v2",
+  "implementationCommit": "be3560cf84fb84e6a8d636f73cab95fb1c78350e",
   "result": "PASS",
   "replayDescription": "Replay: N/A (server roster and presence projection) + mitigation: membership/readiness matrix, stale-heartbeat tests, manifests, and durable-state replay",
   "skips": [],
@@ -349,8 +349,21 @@
     "result": "PASS",
     "staleHeartbeatDoesNotGrant": true
   },
+  "canaryScan": {
+    "checkedOutputs": [
+      "verification-summary.json",
+      "roster-manifest.json",
+      "membership-matrix.json",
+      "readiness-inputs.json",
+      "durable-replay.json",
+      "transition-matrix.json"
+    ],
+    "input": "ephemeral readiness audit note",
+    "leaked": false,
+    "result": "PASS"
+  },
   "sensitivity": {
-    "mutationCount": 3,
+    "mutationCount": 5,
     "mutations": [
       {
         "exitCode": 1,
@@ -369,6 +382,20 @@
       {
         "exitCode": 1,
         "mutation": "remove durable handle uniqueness",
+        "result": "PASS",
+        "verifier": "scripts/verify-e2-t06.mjs",
+        "verifierDetectedMutant": true
+      },
+      {
+        "exitCode": 1,
+        "mutation": "remove service-principal channel membership fence",
+        "result": "PASS",
+        "verifier": "scripts/verify-e2-t06.mjs",
+        "verifierDetectedMutant": true
+      },
+      {
+        "exitCode": 1,
+        "mutation": "remove durable reducer handle uniqueness",
         "result": "PASS",
         "verifier": "scripts/verify-e2-t06.mjs",
         "verifierDetectedMutant": true

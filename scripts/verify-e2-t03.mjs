@@ -1,15 +1,22 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawn, spawnSync } from "node:child_process";
 import { createServer } from "node:http";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import {
+  copyFile,
+  mkdir,
+  mkdtemp,
+  readFile,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 import { canonicalSha256 } from "../src/ledger/canonical-json.mjs";
 import {
   createAgentConfigStream,
   replayAgentConfigStream,
 } from "../src/ledger/agent-config-stream.mjs";
-import { createAgentManagementApi } from "../src/ledger/agent-management.mjs";
 import { createDispatchDoor } from "../src/ledger/dispatch.mjs";
 import {
   bindWorkspaceRequest,
@@ -49,6 +56,11 @@ const implementationCommit = String(
       encoding: "utf8",
     }),
 ).trim();
+const agentManagementModulePath = pathToFileURL(
+  process.env.E2_T03_AGENT_MANAGEMENT_MODULE ??
+    path.join(root, "src/ledger/agent-management.mjs"),
+).href;
+const { createAgentManagementApi } = await import(agentManagementModulePath);
 const WORKSPACE_A = "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa";
 const WORKSPACE_B = "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb";
 const ADA = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb";
@@ -57,6 +69,7 @@ const OTHER_PRINCIPAL =
 const AGENT_A = `ag_${"a".repeat(26)}_${"d".repeat(26)}`;
 const AGENT_B = `ag_${"a".repeat(26)}_${"e".repeat(26)}`;
 const AGENT_C = `ag_${"a".repeat(26)}_${"f".repeat(26)}`;
+const AGENT_PROVIDER = `ag_${"a".repeat(26)}_${"g".repeat(26)}`;
 const PRINCIPAL_AGENT_A = `pr_${"a".repeat(26)}_${"d".repeat(26)}`;
 const PRINCIPAL_AGENT_B = `pr_${"a".repeat(26)}_${"e".repeat(26)}`;
 const PRINCIPAL_AGENT_C = `pr_${"a".repeat(26)}_${"f".repeat(26)}`;
@@ -75,7 +88,9 @@ const KEYS = Object.freeze({
   disable: key("m"),
   revoke: key("n"),
   revise: key("p"),
+  providerCanary: key("t"),
   staleRevision: key("q"),
+  crossAgentConfig: key("s"),
 });
 
 const httpTranscript = [];
@@ -374,6 +389,13 @@ async function verifyWorkflow({
     configCreateRetry.payload.receipt,
     "API and CLI must expose the same durable config-create receipt",
   );
+  const crossAgentConfig = await request(app, configPath(AGENT_B), {
+    body: { config, expectedRevision: 0, expectedRevisionId: null },
+    idempotencyKey: KEYS.configCreate,
+    method: "POST",
+  });
+  assert.equal(crossAgentConfig.status, 409);
+  assert.equal(crossAgentConfig.payload.code, "DISPATCH_IDEMPOTENCY_CONFLICT");
   const revisionOneId = configCreateRetry.payload.configRevision.revisionId;
   assert.match(revisionOneId, /^acr_[0-9a-f]{64}$/u);
 
@@ -605,6 +627,51 @@ async function verifyWorkflow({
   assert.doesNotMatch(canaryCli.stdout, new RegExp(CANARY, "u"));
   assert.doesNotMatch(canaryCli.stderr, new RegExp(CANARY, "u"));
 
+  const providerErrorApp = await createApp({
+    bootstrapEvents,
+    dispatchDoor: {
+      async dispatch() {
+        const error = new Error("provider double failed");
+        error.code = "PROVIDER_DOUBLE_FAILURE";
+        error.detail = CANARY;
+        error.statusCode = 502;
+        throw error;
+      },
+      async recover() {
+        return null;
+      },
+      close() {},
+    },
+    streamStore,
+  });
+  const appBeforeProviderCanary = currentApp;
+  currentApp = providerErrorApp;
+  const providerCanaryBody = {
+    ...createBody,
+    agentId: AGENT_PROVIDER,
+  };
+  const providerCanaryHttp = await request(providerErrorApp, createPath, {
+    body: providerCanaryBody,
+    idempotencyKey: KEYS.providerCanary,
+    method: "POST",
+  });
+  assert.equal(providerCanaryHttp.status, 502);
+  assert.equal(providerCanaryHttp.payload.error, "[REDACTED]");
+  const providerCanaryCli = await runCli([
+    "create",
+    "--workspace",
+    WORKSPACE_A,
+    "--idempotency-key",
+    KEYS.providerCanary,
+    "--input-json",
+    JSON.stringify(providerCanaryBody),
+  ]);
+  assert.equal(providerCanaryCli.status, 5);
+  assert.doesNotMatch(providerCanaryCli.stdout, new RegExp(CANARY, "u"));
+  assert.doesNotMatch(providerCanaryCli.stderr, new RegExp(CANARY, "u"));
+  currentApp = appBeforeProviderCanary;
+  await providerErrorApp.close();
+
   const finalList = await request(app, `${createPath}?limit=100`);
   assert.equal(finalList.status, 200);
   assert.deepEqual(
@@ -646,18 +713,11 @@ async function verifyWorkflow({
     source.includes("dispatch: dispatchDoor.dispatch") &&
     !source.includes("dispatch: streamStore.append");
   assert.equal(sourceGuard, true);
-  const mutantSource = source.replace(
-    "dispatch: dispatchDoor.dispatch",
-    "dispatch: streamStore.append",
-  );
-  assert.equal(
-    mutantSource.includes("dispatch: streamStore.append"),
-    true,
-    "the sensitivity mutant must replace the dispatch door",
-  );
+  const sensitivityRun = await runSensitivityMutant({ source });
+  const observedNonZeroExit =
+    Number.isInteger(sensitivityRun.status) && sensitivityRun.status !== 0;
   const verifierDetectedMutant =
-    !mutantSource.includes("dispatch: dispatchDoor.dispatch") &&
-    mutantSource.includes("dispatch: streamStore.append");
+    observedNonZeroExit || sensitivityRun.signal !== null;
   assert.equal(verifierDetectedMutant, true);
 
   const firstDirectoryTargetCount = countDispatchTargets(
@@ -715,8 +775,10 @@ async function verifyWorkflow({
     canaryAbsentEverywhere: true,
     canaryRejectedByProtocol: canaryHttp.payload.code,
     httpBodiesRedacted: true,
+    providerErrorRedacted: providerCanaryHttp.payload.error === "[REDACTED]",
     evidenceTranscriptsRedacted: true,
     cliOutputRedacted: true,
+    providerCliOutputRedacted: providerCanaryCli.payload.error === "[REDACTED]",
     subjectBindingOmittedFromPublicAgent: true,
     result: "PASS",
   };
@@ -725,6 +787,13 @@ async function verifyWorkflow({
       "replace agent-management dispatch door with direct stream append",
     verifierDetectedMutant,
     directTargetAppendAbsent: sourceGuard,
+    experiment: {
+      command: "E2_T03_SKIP_GATES=1 node scripts/verify-e2-t03.mjs",
+      isolatedMutantModule: true,
+      exitCode: sensitivityRun.status,
+      signal: sensitivityRun.signal,
+      observedNonZeroExit,
+    },
     result: "PASS",
   };
 
@@ -817,7 +886,89 @@ async function verifyWorkflow({
   };
 }
 
-async function createApp({ bootstrapEvents, streamStore }) {
+async function runSensitivityMutant({ source }) {
+  const sensitivityRoot = await mkdtemp(
+    path.join(taskDirectory, "work/sensitivity-"),
+  );
+  const mutantLedgerDirectory = path.join(sensitivityRoot, "src/ledger");
+  try {
+    await mkdir(mutantLedgerDirectory, { recursive: true });
+    for (const filename of [
+      "agent-config-stream.mjs",
+      "append-boundary.mjs",
+      "canonical-json.mjs",
+      "envelope.mjs",
+      "errors.mjs",
+      "identifiers.mjs",
+      "topology.mjs",
+    ]) {
+      await copyFile(
+        path.join(root, "src/ledger", filename),
+        path.join(mutantLedgerDirectory, filename),
+      );
+    }
+    const mutantSource = source.replace(
+      "dispatch: dispatchDoor.dispatch",
+      "dispatch: streamStore.append",
+    );
+    assert.notEqual(
+      mutantSource,
+      source,
+      "the sensitivity mutant must replace the dispatch door",
+    );
+    const mutantModule = path.join(
+      mutantLedgerDirectory,
+      "agent-management.mjs",
+    );
+    await writeFile(mutantModule, mutantSource);
+    const childArtifactDirectory = path.join(sensitivityRoot, "artifacts");
+    const child = spawn(process.execPath, ["scripts/verify-e2-t03.mjs"], {
+      cwd: root,
+      env: {
+        ...process.env,
+        E2_T03_AGENT_MANAGEMENT_MODULE: mutantModule,
+        E2_T03_COLD_CLONE: "0",
+        E2_T03_SKIP_GATES: "1",
+        PROMOTE_EVIDENCE: "0",
+        TEST_ARTIFACT_DIR: childArtifactDirectory,
+        TEST_RUN_ID: `${process.env.TEST_RUN_ID ?? "verify"}-sensitivity-mutant`,
+      },
+    });
+    let stdout = "";
+    let stderr = "";
+    child.stdout.on("data", (chunk) => {
+      stdout += chunk;
+    });
+    child.stderr.on("data", (chunk) => {
+      stderr += chunk;
+    });
+    const result = await new Promise((resolve) => {
+      const timer = setTimeout(() => {
+        child.kill("SIGKILL");
+        resolve({ signal: "SIGKILL", status: null });
+      }, 60_000);
+      child.once("error", () => {
+        clearTimeout(timer);
+        resolve({ signal: null, status: null });
+      });
+      child.once("close", (status, signal) => {
+        clearTimeout(timer);
+        resolve({ signal, status });
+      });
+    });
+    assert.doesNotMatch(stdout, new RegExp(CANARY, "u"));
+    assert.doesNotMatch(stderr, new RegExp(CANARY, "u"));
+    return result;
+  } finally {
+    await rm(sensitivityRoot, { recursive: true, force: true });
+  }
+}
+
+async function createApp({
+  bootstrapEvents,
+  dispatchDoor: injectedDispatchDoor = null,
+  streamStore,
+}) {
   const workspaceDirectory = createWorkspaceDirectoryAuthority({
     bootstrapEvents,
     streamStore,
@@ -848,11 +999,13 @@ async function createApp({ bootstrapEvents, streamStore }) {
     authorizeDispatch: authorizationCore.authorizeDispatch,
     authorizeRead: authorizationCore.authorizeRead,
   });
-  const dispatchDoor = createDispatchDoor({
-    authorize: () => true,
-    producerId: `verify-e2-t03-${Date.now()}-${Math.random()}`,
-    streamStore,
-  });
+  const dispatchDoor =
+    injectedDispatchDoor ??
+    createDispatchDoor({
+      authorize: () => true,
+      producerId: `verify-e2-t03-${Date.now()}-${Math.random()}`,
+      streamStore,
+    });
   const api = createAgentManagementApi({
     dispatchDoor,
     sessionUser: (request) => {
@@ -900,7 +1053,7 @@ async function createApp({ bootstrapEvents, streamStore }) {
     api,
     baseUrl: `http://127.0.0.1:${address.port}`,
     close: async () => {
-      dispatchDoor.close();
+      dispatchDoor.close?.();
       await new Promise((resolve) => {
         server.close(resolve);
       });

@@ -74,7 +74,7 @@ capability status, never broker credentials or hidden environment data.
   Evidence is under `evidence/e2-t03-final/`.
 - The final replay produced directory state digest
   `sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76` and config state
-  digest `sha256:b6e7620fedb0696a1810052ed4fa8c83ec4e2c3af1f1398e2f01f03bcd5101d4`, with six
+  digest `sha256:b6e7620fedb0698a1810052ed4fa8c83ec4e2c3af1f1398e2f01f03bcd5101d4`, with six
   logical config events and eight replayed source records.
 - The verifier records stable concurrent-append pagination, five lost acknowledgements with no
   duplicate effects and original receipts, redaction across HTTP/CLI/evidence, restart

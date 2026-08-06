@@ -2427,18 +2427,27 @@ async function writeJson(filename, value) {
 
 async function scanPublishedEvidence() {
   const files = [];
-  for (const filename of (await readdir(evidenceDirectory)).sort()) {
-    const contents = await readFile(
-      path.join(evidenceDirectory, filename),
-      "utf8",
-    );
-    assert.equal(
-      contents.includes(CANARY),
-      false,
-      `${filename} contains the canary`,
-    );
-    files.push(filename);
+  async function visit(directory, relativeDirectory = "") {
+    const entries = await readdir(directory, { withFileTypes: true });
+    for (const entry of entries.sort((left, right) =>
+      left.name.localeCompare(right.name),
+    )) {
+      const relativePath = path.join(relativeDirectory, entry.name);
+      const absolutePath = path.join(directory, entry.name);
+      if (entry.isDirectory()) {
+        await visit(absolutePath, relativePath);
+        continue;
+      }
+      const contents = await readFile(absolutePath, "utf8");
+      assert.equal(
+        contents.includes(CANARY),
+        false,
+        `${relativePath} contains the canary`,
+      );
+      files.push(relativePath);
+    }
   }
+  await visit(evidenceDirectory);
   return files;
 }
 

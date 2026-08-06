@@ -11,6 +11,7 @@ export * from "./agent-config.mjs";
 export * from "./agent-config-revisions.mjs";
 export * from "./agent-administration.mjs";
 export * from "./agent-roster.mjs";
+export * from "./invocation-snapshot.mjs";
 
 export function normalizeRoomId(roomId) {
   const normalized = String(roomId)

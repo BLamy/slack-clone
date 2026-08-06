@@ -43,6 +43,7 @@
     "verify:E2-T04": "node scripts/cold-verify-e2-t04.mjs",
     "verify:E2-T05": "node scripts/cold-verify-e2-t05.mjs",
     "verify:E2-T06": "node scripts/cold-verify-e2-t06.mjs",
+    "verify:E2-T07": "node scripts/cold-verify-e2-t07.mjs",
     "projection:E1-T07:rebuild": "node scripts/e1-t07-command.mjs rebuild",
     "projection:E1-T07:catch-up": "node scripts/e1-t07-command.mjs catch-up",
     "projection:E1-T07:corruption": "node scripts/e1-t07-command.mjs corruption",

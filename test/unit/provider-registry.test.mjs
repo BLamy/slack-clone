@@ -297,6 +297,84 @@ test("disabled, unhealthy, stale, removed, and incompatible providers never reso
           sandbox: { protocol: "scripted-sandbox-v1" },
         },
       }),
+    PROVIDER_REGISTRY_ERROR_CODES.PROVIDER_NOT_IMPLEMENTED,
+  );
+
+  const implementedDescriptors = structuredClone(BUILTIN_PROVIDER_DESCRIPTORS);
+  implementedDescriptors.find(
+    (descriptor) =>
+      descriptor.kind === "harness" && descriptor.providerId === "codex",
+  ).implementationStatus = "implemented";
+  implementedDescriptors.find(
+    (descriptor) =>
+      descriptor.kind === "sandbox" && descriptor.providerId === "fly-sprites",
+  ).implementationStatus = "implemented";
+  const implemented = createProviderRegistry({
+    descriptors: implementedDescriptors,
+  });
+  const ready = implemented
+    .updateStatus({
+      selection: {
+        kind: "harness",
+        providerId: "codex",
+        providerVersion: "1.0.0",
+      },
+      installed: true,
+      health: "healthy",
+    })
+    .updateStatus({
+      selection: {
+        kind: "sandbox",
+        providerId: "fly-sprites",
+        providerVersion: "1.0.0",
+      },
+      installed: true,
+      health: "healthy",
+    });
+  assert.doesNotThrow(() =>
+    ready.resolveConfiguration({
+      config: {
+        harness: {
+          providerId: "codex",
+          providerVersion: "1.0.0",
+          requiredCapabilities: [],
+        },
+        sandbox: {
+          providerId: "fly-sprites",
+          providerVersion: "1.0.0",
+          requiredCapabilities: ["ephemeral"],
+          lifecycle: "ephemeral",
+          networkPolicy: "deny-all",
+        },
+      },
+      providerConfigurations: {
+        harness: { protocol: "codex-harness-v1" },
+        sandbox: { protocol: "fly-sprites-sandbox-v1" },
+      },
+    }),
+  );
+  assertCode(
+    () =>
+      ready.resolveConfiguration({
+        config: {
+          harness: {
+            providerId: "codex",
+            providerVersion: "1.0.0",
+            requiredCapabilities: [],
+          },
+          sandbox: {
+            providerId: "scripted",
+            providerVersion: "1.0.0",
+            requiredCapabilities: ["ephemeral"],
+            lifecycle: "ephemeral",
+            networkPolicy: "deny-all",
+          },
+        },
+        providerConfigurations: {
+          harness: { protocol: "codex-harness-v1" },
+          sandbox: { protocol: "scripted-sandbox-v1" },
+        },
+      }),
     PROVIDER_REGISTRY_ERROR_CODES.INCOMPATIBLE_PROVIDERS,
   );
 });

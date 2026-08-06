@@ -5,6 +5,10 @@ export const PROVIDER_DESCRIPTOR_SCHEMA_VERSION = 1;
 export const PROVIDER_ADAPTER_INTERFACE_VERSION = 1;
 
 export const PROVIDER_KINDS = Object.freeze(["harness", "sandbox"]);
+export const PROVIDER_IMPLEMENTATION_STATES = Object.freeze([
+  "implemented",
+  "unimplemented",
+]);
 export const PROVIDER_HEALTH_STATES = Object.freeze([
   "healthy",
   "unhealthy",
@@ -23,6 +27,7 @@ export const PROVIDER_REGISTRY_ERROR_CODES = Object.freeze({
   MISSING_SELECTION: "PROVIDER_REGISTRY_MISSING_SELECTION",
   PROVIDER_DISABLED: "PROVIDER_REGISTRY_PROVIDER_DISABLED",
   PROVIDER_NOT_INSTALLED: "PROVIDER_REGISTRY_PROVIDER_NOT_INSTALLED",
+  PROVIDER_NOT_IMPLEMENTED: "PROVIDER_REGISTRY_PROVIDER_NOT_IMPLEMENTED",
   PROVIDER_STALE: "PROVIDER_REGISTRY_PROVIDER_STALE",
   PROVIDER_UNHEALTHY: "PROVIDER_REGISTRY_PROVIDER_UNHEALTHY",
   UNKNOWN_PROVIDER: "PROVIDER_REGISTRY_UNKNOWN_PROVIDER",
@@ -40,6 +45,7 @@ const DESCRIPTOR_KEYS = [
   "enabled",
   "expiresAt",
   "health",
+  "implementationStatus",
   "installed",
   "kind",
   "limits",
@@ -149,6 +155,11 @@ export function validateProviderDescriptor(
   assertBoolean(value.installed, `${path}.installed`);
   assertBoolean(value.enabled, `${path}.enabled`);
   assertEnum(value.health, PROVIDER_HEALTH_STATES, `${path}.health`);
+  assertEnum(
+    value.implementationStatus,
+    PROVIDER_IMPLEMENTATION_STATES,
+    `${path}.implementationStatus`,
+  );
   assertSafeInteger(value.observedAt, `${path}.observedAt`, 0);
   assertSafeInteger(value.expiresAt, `${path}.expiresAt`, 0);
   if (value.expiresAt <= value.observedAt) {
@@ -178,6 +189,7 @@ export function normalizeProviderDescriptor(value) {
     installed: value.installed,
     enabled: value.enabled,
     health: value.health,
+    implementationStatus: value.implementationStatus,
     observedAt: value.observedAt,
     expiresAt: value.expiresAt,
     capabilities: [...value.capabilities].sort(compareCodeUnits),
@@ -570,43 +582,6 @@ export function createScriptedProvider({ kind, providerId, providerVersion }) {
   return Object.freeze(adapter);
 }
 
-export function createLegacyProviderRegistry(
-  descriptors = BUILTIN_PROVIDER_DESCRIPTORS,
-) {
-  const result = PROVIDER_KINDS.map((kind) => {
-    const providers = new Map();
-    for (const descriptor of descriptors) {
-      if (descriptor.kind !== kind) continue;
-      const current = providers.get(descriptor.providerId) ?? {
-        versions: [],
-        capabilities: new Set(),
-      };
-      current.versions.push(descriptor.providerVersion);
-      for (const capability of descriptor.capabilities) {
-        current.capabilities.add(capability);
-      }
-      providers.set(descriptor.providerId, current);
-    }
-    return [
-      kind,
-      Object.freeze(
-        Object.fromEntries(
-          [...providers.entries()].map(([providerId, value]) => [
-            providerId,
-            Object.freeze({
-              versions: Object.freeze(value.versions.sort(compareCodeUnits)),
-              capabilities: Object.freeze(
-                [...value.capabilities].sort(compareCodeUnits),
-              ),
-            }),
-          ]),
-        ),
-      ),
-    ];
-  });
-  return Object.freeze(Object.fromEntries(result));
-}
-
 const MAX_DESCRIPTOR_TIME = Number.MAX_SAFE_INTEGER;
 
 export const BUILTIN_PROVIDER_DESCRIPTORS = Object.freeze(
@@ -616,6 +591,7 @@ export const BUILTIN_PROVIDER_DESCRIPTORS = Object.freeze(
       providerId: "scripted",
       providerVersion: "1.0.0",
       displayName: "Deterministic scripted harness",
+      implementationStatus: "implemented",
       installed: true,
       enabled: true,
       health: "healthy",
@@ -637,6 +613,7 @@ export const BUILTIN_PROVIDER_DESCRIPTORS = Object.freeze(
       providerId: "codex",
       providerVersion: "1.0.0",
       displayName: "Codex harness",
+      implementationStatus: "unimplemented",
       installed: false,
       enabled: true,
       health: "unknown",
@@ -662,6 +639,7 @@ export const BUILTIN_PROVIDER_DESCRIPTORS = Object.freeze(
       providerId: "claude-code",
       providerVersion: "1.0.0",
       displayName: "Claude Code harness",
+      implementationStatus: "unimplemented",
       installed: false,
       enabled: true,
       health: "unknown",
@@ -687,6 +665,7 @@ export const BUILTIN_PROVIDER_DESCRIPTORS = Object.freeze(
       providerId: "scripted",
       providerVersion: "1.0.0",
       displayName: "Deterministic scripted sandbox",
+      implementationStatus: "implemented",
       installed: true,
       enabled: true,
       health: "healthy",
@@ -713,6 +692,7 @@ export const BUILTIN_PROVIDER_DESCRIPTORS = Object.freeze(
       providerId: "fly-sprites",
       providerVersion: "1.0.0",
       displayName: "Fly Sprites sandbox",
+      implementationStatus: "unimplemented",
       installed: false,
       enabled: true,
       health: "unknown",
@@ -747,6 +727,7 @@ function createBuiltinDescriptor({
   providerId,
   providerVersion,
   displayName,
+  implementationStatus,
   installed,
   enabled,
   health,
@@ -762,6 +743,7 @@ function createBuiltinDescriptor({
     providerId,
     providerVersion,
     displayName,
+    implementationStatus,
     installed,
     enabled,
     health,
@@ -866,6 +848,14 @@ function assertRunnable(descriptor, now) {
       PROVIDER_REGISTRY_ERROR_CODES.PROVIDER_STALE,
       "$.provider.expiresAt",
       "provider descriptor health observation is stale",
+      key,
+    );
+  }
+  if (descriptor.implementationStatus !== "implemented") {
+    throw registryError(
+      PROVIDER_REGISTRY_ERROR_CODES.PROVIDER_NOT_IMPLEMENTED,
+      "$.provider.implementationStatus",
+      "provider is registered but has no implemented runtime adapter",
       key,
     );
   }
@@ -1007,6 +997,7 @@ function providerStatus(descriptor, now) {
       descriptor.installed &&
       descriptor.enabled &&
       descriptor.health === "healthy" &&
+      descriptor.implementationStatus === "implemented" &&
       !stale,
   });
 }

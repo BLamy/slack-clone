@@ -12,7 +12,14 @@ import {
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
-import {
+const root = path.resolve(import.meta.dirname, "..");
+const protocolModule = await import("@stream-slack/protocol");
+const providerModuleSpecifier = process.env.E2_T05_PROVIDER_MODULE
+  ? pathToFileURL(path.resolve(root, process.env.E2_T05_PROVIDER_MODULE)).href
+  : "@stream-slack/protocol";
+const providerModule = await import(providerModuleSpecifier);
+const { resolveAgentConfigProviders } = protocolModule;
+const {
   BUILTIN_PROVIDER_DESCRIPTORS,
   PROVIDER_KINDS,
   PROVIDER_REGISTRY_ERROR_CODES,
@@ -20,9 +27,7 @@ import {
   createProviderRegistry,
   createScriptedProvider,
   providerDescriptorDigest,
-} from "@stream-slack/protocol";
-
-const root = path.resolve(import.meta.dirname, "..");
+} = providerModule;
 const taskDirectory = path.join(
   root,
   ".eforest/tasks/epic-2-the-roster/E2-T05-provider-registry-and-capabilities",
@@ -75,19 +80,22 @@ async function main() {
       "promoted E2-T05 evidence must start from a clean tracked implementation tree",
     );
   }
-  if (process.env.E2_T05_SENSITIVITY_MUTANT === "1") {
-    await runSensitivityProbe();
-    return;
-  }
-
   const registry = createProviderRegistry();
   const sourceAudit = await auditProviderBranching();
   const manifest = registry.manifest();
   const conformance = verifyConformance();
   const matrix = verifyCompatibilityMatrix(registry);
-  const resolved = verifyResolvedDigests(registry);
+  const resolved = await verifyResolvedDigests(registry);
   const refusals = verifyRefusals(registry);
-  const sensitivity = await runSensitivity();
+  const sensitivity =
+    process.env.E2_T05_SENSITIVITY_CHILD === "1"
+      ? {
+          mutationCount: 0,
+          mutations: [],
+          result: "CHILD",
+          verifierDetectedMutant: true,
+        }
+      : await runSensitivity();
   const gates = runGates();
 
   assert.equal(sourceAudit.offenses.length, 0);
@@ -232,6 +240,49 @@ function verifyCompatibilityMatrix(registry) {
       });
     }
   }
+  const readyRegistry = createImplementationReadyRegistry();
+  const readyCodex = readyRegistry.describe({
+    kind: "harness",
+    providerId: "codex",
+    providerVersion: "1.0.0",
+  });
+  const scriptedSandbox = readyRegistry.describe({
+    kind: "sandbox",
+    providerId: "scripted",
+    providerVersion: "1.0.0",
+  });
+  let readyIncompatible;
+  try {
+    readyRegistry.resolveConfiguration({
+      config: {
+        harness: selection(readyCodex, []),
+        sandbox: selection(scriptedSandbox, ["ephemeral"]),
+      },
+      providerConfigurations: {
+        harness: providerConfiguration(readyCodex),
+        sandbox: providerConfiguration(scriptedSandbox),
+      },
+    });
+    readyIncompatible = { allowed: true, code: null };
+  } catch (error) {
+    readyIncompatible = { allowed: false, code: error.code };
+  }
+  assert.deepEqual(readyIncompatible, {
+    allowed: false,
+    code: PROVIDER_REGISTRY_ERROR_CODES.INCOMPATIBLE_PROVIDERS,
+  });
+  rows.push({
+    harnessProviderKey: providerKey(readyCodex),
+    sandboxProviderKey: providerKey(scriptedSandbox),
+    declaredByHarness: declares(readyCodex, scriptedSandbox),
+    declaredBySandbox: declares(scriptedSandbox, readyCodex),
+    harnessAvailable: readyRegistry.status(readyCodex).available,
+    sandboxAvailable: readyRegistry.status(scriptedSandbox).available,
+    expectedRunnable: false,
+    actual: readyIncompatible,
+    result: "PASS",
+    scenario: "ready-but-incompatible",
+  });
   assert.equal(rows.filter(({ actual }) => actual.allowed).length, 1);
   return {
     rows,
@@ -241,7 +292,25 @@ function verifyCompatibilityMatrix(registry) {
   };
 }
 
-function verifyResolvedDigests(registry) {
+function createImplementationReadyRegistry() {
+  const descriptors = structuredClone(BUILTIN_PROVIDER_DESCRIPTORS);
+  const codex = descriptors.find(
+    (descriptor) =>
+      descriptor.kind === "harness" && descriptor.providerId === "codex",
+  );
+  codex.implementationStatus = "implemented";
+  return createProviderRegistry({ descriptors }).updateStatus({
+    selection: {
+      kind: "harness",
+      providerId: "codex",
+      providerVersion: "1.0.0",
+    },
+    installed: true,
+    health: "healthy",
+  });
+}
+
+async function verifyResolvedDigests(registry) {
   const baseConfig = {
     harness: {
       providerId: "scripted",
@@ -297,6 +366,29 @@ function verifyResolvedDigests(registry) {
     providerConfigurations,
   });
   assert.notEqual(valid.resolvedProviderDigest, changed.resolvedProviderDigest);
+  const agentConfig = JSON.parse(
+    await readFile(
+      path.join(
+        root,
+        ".eforest/tasks/epic-2-the-roster/E2-T01-versioned-agent-config-schema/fixtures/valid/agent-config.v1.json",
+      ),
+      "utf8",
+    ),
+  );
+  const resolvedFromAgentConfig = resolveAgentConfigProviders(agentConfig, {
+    registry,
+    providerConfigurations,
+  });
+  assert.equal(
+    resolvedFromAgentConfig.harness.providerKey,
+    valid.harness.providerKey,
+    "AgentConfig resolution must use the strict provider registry",
+  );
+  assert.equal(
+    resolvedFromAgentConfig.sandbox.providerKey,
+    valid.sandbox.providerKey,
+    "AgentConfig resolution must use the strict sandbox registry",
+  );
   return {
     result: "PASS",
     valid: {
@@ -309,6 +401,11 @@ function verifyResolvedDigests(registry) {
         harness: valid.harness.requiredCapabilities,
         sandbox: valid.sandbox.requiredCapabilities,
       },
+    },
+    agentConfigResolution: {
+      harnessProviderKey: resolvedFromAgentConfig.harness.providerKey,
+      sandboxProviderKey: resolvedFromAgentConfig.sandbox.providerKey,
+      resolvedProviderDigest: resolvedFromAgentConfig.resolvedProviderDigest,
     },
     reorderedEquivalent: true,
     semanticMutationChangedDigest: true,
@@ -563,6 +660,35 @@ function verifyRefusals(registry) {
             sandbox: { protocol: "scripted-sandbox-v1" },
           },
         }),
+      PROVIDER_REGISTRY_ERROR_CODES.PROVIDER_NOT_IMPLEMENTED,
+    ),
+  );
+
+  const implementedReady = createImplementationReadyRegistry();
+  rows.push(
+    refusal(
+      "incompatible ready providers",
+      () =>
+        implementedReady.resolveConfiguration({
+          config: {
+            harness: {
+              providerId: "codex",
+              providerVersion: "1.0.0",
+              requiredCapabilities: [],
+            },
+            sandbox: {
+              providerId: "scripted",
+              providerVersion: "1.0.0",
+              requiredCapabilities: ["ephemeral"],
+              lifecycle: "ephemeral",
+              networkPolicy: "deny-all",
+            },
+          },
+          providerConfigurations: {
+            harness: { protocol: "codex-harness-v1" },
+            sandbox: { protocol: "scripted-sandbox-v1" },
+          },
+        }),
       PROVIDER_REGISTRY_ERROR_CODES.INCOMPATIBLE_PROVIDERS,
     ),
   );
@@ -587,7 +713,7 @@ function verifyRefusals(registry) {
       PROVIDER_REGISTRY_ERROR_CODES.DUPLICATE_CAPABILITY,
     ),
   );
-  assert.equal(rows.length, 15);
+  assert.equal(rows.length, 16);
   assert.equal(
     rows.every(({ result }) => result === "PASS"),
     true,
@@ -613,7 +739,7 @@ function refusal(name, callback, expectedCode) {
 }
 
 async function auditProviderBranching() {
-  const files = [];
+  const files = [path.join(root, "packages/protocol/src/agent-config.mjs")];
   for (const directory of [
     path.join(root, "src"),
     path.join(root, "packages/services/src"),
@@ -637,7 +763,7 @@ async function auditProviderBranching() {
     },
   ];
   const offenses = [];
-  for (const file of files) {
+  for (const file of [...new Set(files)]) {
     const source = await readFile(file, "utf8");
     for (const rule of patterns) {
       if (rule.pattern.test(source)) {
@@ -689,14 +815,10 @@ async function runSensitivity() {
     {
       name: "remove capability negotiation refusal",
       needle: "if (!descriptor.capabilities.includes(capability)) {",
-      expectedCode: PROVIDER_REGISTRY_ERROR_CODES.UNSUPPORTED_CAPABILITY,
-      probe: "capability",
     },
     {
       name: "remove reciprocal compatibility refusal",
       needle: "if (!harnessSupportsSandbox || !sandboxSupportsHarness) {",
-      expectedCode: PROVIDER_REGISTRY_ERROR_CODES.INCOMPATIBLE_PROVIDERS,
-      probe: "compatibility",
     },
   ];
   const results = [];
@@ -706,7 +828,6 @@ async function runSensitivity() {
       path.join(taskDirectory, "work/sensitivity-"),
     );
     const mutantModule = path.join(sensitivityRoot, "provider-registry.mjs");
-    const probePath = path.join(sensitivityRoot, "probe.mjs");
     try {
       await writeFile(
         mutantModule,
@@ -716,28 +837,35 @@ async function runSensitivity() {
         path.join(root, "packages/protocol/src/sha256.mjs"),
         path.join(sensitivityRoot, "sha256.mjs"),
       );
-      await writeFile(
-        probePath,
-        sensitivityProbeSource({
-          moduleUrl: pathToFileURL(mutantModule).href,
-          expectedCode: mutation.expectedCode,
-          probe: mutation.probe,
-        }),
+      const result = spawnSync(
+        process.execPath,
+        [path.join(root, "scripts/verify-e2-t05.mjs")],
+        {
+          cwd: root,
+          encoding: "utf8",
+          env: {
+            ...process.env,
+            E2_T05_IMPLEMENTATION_COMMIT: implementationCommit,
+            E2_T05_PROVIDER_MODULE: mutantModule,
+            E2_T05_SENSITIVITY_CHILD: "1",
+            E2_T05_SKIP_GATES: "1",
+            PROMOTE_EVIDENCE: "0",
+            TEST_ARTIFACT_DIR: path.join(sensitivityRoot, "artifacts"),
+            TEST_RUN_ID: `${runId}-${mutation.name.replace(/[^a-z0-9]+/giu, "-")}`,
+          },
+        },
       );
-      const result = spawnSync(process.execPath, [probePath], {
-        cwd: root,
-        encoding: "utf8",
-      });
-      assert.equal(
+      assert.notEqual(
         result.status,
-        7,
-        `${mutation.name} must make the probe go red`,
+        0,
+        `${mutation.name} must make the real verifier go red`,
       );
       assert.doesNotMatch(result.stdout, new RegExp(CANARY, "u"));
       assert.doesNotMatch(result.stderr, new RegExp(CANARY, "u"));
       results.push({
         mutation: mutation.name,
         exitCode: result.status,
+        verifier: "scripts/verify-e2-t05.mjs",
         verifierDetectedMutant: true,
         result: "PASS",
       });
@@ -753,55 +881,6 @@ async function runSensitivity() {
     ),
     result: "PASS",
   };
-}
-
-function sensitivityProbeSource({ moduleUrl, expectedCode, probe }) {
-  return `import { createProviderRegistry } from ${JSON.stringify(moduleUrl)};
-const registry = createProviderRegistry();
-try {
-  if (${JSON.stringify(probe)} === "capability") {
-    registry.resolve({
-      kind: "harness",
-      selection: {
-        providerId: "scripted",
-        providerVersion: "1.0.0",
-        requiredCapabilities: ["streaming-exec"],
-      },
-      providerConfiguration: { protocol: "scripted-harness-v1" },
-    });
-  } else {
-    const codexReady = registry.updateStatus({
-      selection: { kind: "harness", providerId: "codex", providerVersion: "1.0.0" },
-      installed: true,
-      health: "healthy",
-    });
-    codexReady.resolveConfiguration({
-      config: {
-        harness: {
-          providerId: "codex",
-          providerVersion: "1.0.0",
-          requiredCapabilities: [],
-        },
-        sandbox: {
-          providerId: "scripted",
-          providerVersion: "1.0.0",
-          requiredCapabilities: ["ephemeral"],
-          lifecycle: "ephemeral",
-          networkPolicy: "deny-all",
-        },
-      },
-      providerConfigurations: {
-        harness: { protocol: "codex-harness-v1" },
-        sandbox: { protocol: "scripted-sandbox-v1" },
-      },
-    });
-  }
-} catch (error) {
-  if (error.code === ${JSON.stringify(expectedCode)}) process.exit(0);
-  process.exit(2);
-}
-process.exit(7);
-`;
 }
 
 async function executableFiles(directory) {

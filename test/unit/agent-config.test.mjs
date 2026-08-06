@@ -9,7 +9,10 @@ import {
   AgentConfigValidationError,
   agentConfigDigest,
   canonicalAgentConfig,
+  createProviderRegistry,
   encodeAgentConfig,
+  PROVIDER_REGISTRY_ERROR_CODES,
+  resolveAgentConfigProviders,
   upgradeAgentConfig,
   validateAgentConfig,
 } from "@stream-slack/protocol";
@@ -58,6 +61,68 @@ test("v0 upgrade maps every required policy field without permissive defaults", 
     allowCrossChannel: false,
   });
   assert.deepEqual(upgradeAgentConfig(legacy), upgraded);
+});
+
+test("AgentConfig uses registry descriptors and explicit resolution enforces readiness", async () => {
+  const config = await fixture("valid/agent-config.v1.json");
+  const registry = createProviderRegistry();
+  const resolved = resolveAgentConfigProviders(config, {
+    registry,
+    providerConfigurations: {
+      harness: { protocol: "scripted-harness-v1" },
+      sandbox: { protocol: "scripted-sandbox-v1" },
+    },
+  });
+  assert.equal(resolved.compatibility.status, "compatible");
+
+  const codexConfig = structuredClone(config);
+  codexConfig.harness.providerId = "codex";
+  codexConfig.sandbox.providerId = "fly-sprites";
+  assert.doesNotThrow(() => validateAgentConfig(codexConfig));
+  assert.throws(
+    () =>
+      resolveAgentConfigProviders(codexConfig, {
+        registry,
+        providerConfigurations: {
+          harness: { protocol: "codex-harness-v1" },
+          sandbox: { protocol: "fly-sprites-sandbox-v1" },
+        },
+      }),
+    (error) =>
+      error.code === PROVIDER_REGISTRY_ERROR_CODES.PROVIDER_NOT_INSTALLED,
+  );
+
+  const readyUnimplemented = registry
+    .updateStatus({
+      selection: {
+        kind: "harness",
+        providerId: "codex",
+        providerVersion: "1.0.0",
+      },
+      installed: true,
+      health: "healthy",
+    })
+    .updateStatus({
+      selection: {
+        kind: "sandbox",
+        providerId: "fly-sprites",
+        providerVersion: "1.0.0",
+      },
+      installed: true,
+      health: "healthy",
+    });
+  assert.throws(
+    () =>
+      resolveAgentConfigProviders(codexConfig, {
+        registry: readyUnimplemented,
+        providerConfigurations: {
+          harness: { protocol: "codex-harness-v1" },
+          sandbox: { protocol: "fly-sprites-sandbox-v1" },
+        },
+      }),
+    (error) =>
+      error.code === PROVIDER_REGISTRY_ERROR_CODES.PROVIDER_NOT_IMPLEMENTED,
+  );
 });
 
 test("invalid fixture corpus fails with stable typed paths and refusal codes", async () => {

@@ -1,6 +1,6 @@
 import {
-  BUILTIN_PROVIDER_DESCRIPTORS,
-  createLegacyProviderRegistry,
+  PROVIDER_REGISTRY_ERROR_CODES,
+  createProviderRegistry,
 } from "./provider-registry.mjs";
 
 export const AGENT_CONFIG_SCHEMA_VERSION = 1;
@@ -24,9 +24,7 @@ export const AGENT_CONFIG_ERROR_CODES = Object.freeze({
   UNSUPPORTED_SCHEMA_VERSION: "AGENT_CONFIG_UNSUPPORTED_SCHEMA_VERSION",
 });
 
-export const AGENT_CONFIG_PROVIDER_REGISTRY = createLegacyProviderRegistry(
-  BUILTIN_PROVIDER_DESCRIPTORS,
-);
+const DEFAULT_PROVIDER_REGISTRY = createProviderRegistry();
 
 export const AGENT_CONFIG_TRIGGER_EVENTS = Object.freeze(["manual", "mention"]);
 export const AGENT_CONFIG_CONTEXT_SCOPES = Object.freeze([
@@ -146,7 +144,10 @@ export class AgentConfigValidationError extends Error {
   }
 }
 
-export function validateAgentConfig(value) {
+export function validateAgentConfig(
+  value,
+  { providerRegistry = DEFAULT_PROVIDER_REGISTRY } = {},
+) {
   assertPlainObject(value, "$.agentConfig");
   if (!Object.hasOwn(value, "schemaVersion")) {
     throw agentConfigError(
@@ -166,12 +167,24 @@ export function validateAgentConfig(value) {
   validateProviderSelection(
     value.harness,
     "$.agentConfig.harness",
-    AGENT_CONFIG_PROVIDER_REGISTRY.harness,
+    "harness",
+    providerRegistry,
   );
-  validateSandbox(value.sandbox);
+  validateSandbox(value.sandbox, providerRegistry);
   validateWorkspaceInputs(value.workspaceInputs);
   validateConnectionGrants(value.connectionGrants);
   return value;
+}
+
+export function resolveAgentConfigProviders(
+  value,
+  { registry = DEFAULT_PROVIDER_REGISTRY, providerConfigurations } = {},
+) {
+  validateAgentConfig(value, { providerRegistry: registry });
+  return registry.resolveConfiguration({
+    config: value,
+    providerConfigurations,
+  });
 }
 
 export function normalizeAgentConfig(value) {
@@ -430,7 +443,8 @@ function validateBudgets(value) {
 function validateProviderSelection(
   value,
   path,
-  registry,
+  kind,
+  providerRegistry,
   expectedKeys = PROVIDER_KEYS,
 ) {
   assertExactObject(value, expectedKeys, path);
@@ -468,22 +482,30 @@ function validateProviderSelection(
   });
   assertUnique(value.requiredCapabilities, `${path}.requiredCapabilities`);
   let provider;
-  for (const [providerId, candidate] of Object.entries(registry)) {
-    if (providerId === value.providerId) provider = candidate;
-  }
-  if (!provider) {
-    throw agentConfigError(
-      AGENT_CONFIG_ERROR_CODES.UNKNOWN_PROVIDER,
-      `${path}.providerId`,
-      "provider is not registered",
-    );
-  }
-  if (!provider.versions.includes(value.providerVersion)) {
-    throw agentConfigError(
-      AGENT_CONFIG_ERROR_CODES.UNSUPPORTED_PROVIDER_VERSION,
-      `${path}.providerVersion`,
-      "provider version is not registered",
-    );
+  try {
+    provider = providerRegistry.describe({
+      kind,
+      providerId: value.providerId,
+      providerVersion: value.providerVersion,
+    });
+  } catch (error) {
+    if (error.code === PROVIDER_REGISTRY_ERROR_CODES.UNKNOWN_PROVIDER) {
+      throw agentConfigError(
+        AGENT_CONFIG_ERROR_CODES.UNKNOWN_PROVIDER,
+        `${path}.providerId`,
+        "provider is not registered",
+      );
+    }
+    if (
+      error.code === PROVIDER_REGISTRY_ERROR_CODES.UNSUPPORTED_PROVIDER_VERSION
+    ) {
+      throw agentConfigError(
+        AGENT_CONFIG_ERROR_CODES.UNSUPPORTED_PROVIDER_VERSION,
+        `${path}.providerVersion`,
+        "provider version is not registered",
+      );
+    }
+    throw error;
   }
   for (const [index, capability] of value.requiredCapabilities.entries()) {
     if (!provider.capabilities.includes(capability)) {
@@ -496,13 +518,14 @@ function validateProviderSelection(
   }
 }
 
-function validateSandbox(value) {
+function validateSandbox(value, providerRegistry) {
   const path = "$.agentConfig.sandbox";
   assertExactObject(value, SANDBOX_KEYS, path);
   validateProviderSelection(
     value,
     path,
-    AGENT_CONFIG_PROVIDER_REGISTRY.sandbox,
+    "sandbox",
+    providerRegistry,
     SANDBOX_KEYS,
   );
   assertEnum(value.lifecycle, AGENT_CONFIG_LIFECYCLES, `${path}.lifecycle`);

@@ -23,9 +23,11 @@ from `@stream-slack/protocol`; the structural JSON Schema is
 | `connectionGrants` | Later connection control plane owns the grant and revision references.                    | Every reference requires `connectionId`, `grantId`, `revision`, and purpose; values are never embedded. |
 
 The configuration stream in E2-T02 is authoritative for revisions. The provider registry is
-represented as versioned descriptors in `@stream-slack/protocol`; `AgentConfig` validation derives
-its legacy selection view from that same descriptor data. E2-T05 resolves exact provider snapshots
-without adding provider-specific branches to orchestration.
+represented as versioned descriptors in `@stream-slack/protocol`; `AgentConfig` validation queries
+that descriptor registry directly. A runnable configuration must then call
+`resolveAgentConfigProviders`, which validates provider-owned settings, readiness, and reciprocal
+compatibility before returning immutable provider snapshots and digests. E2-T05 resolves exact
+provider snapshots without adding provider-specific branches to orchestration.
 
 ## Revision stream
 

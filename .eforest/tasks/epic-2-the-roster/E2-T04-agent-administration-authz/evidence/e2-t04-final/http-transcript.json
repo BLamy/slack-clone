@@ -1,0 +1,758 @@
+[
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "response": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "profile": {
+          "displayName": "Authorization Matrix Agent",
+          "email": "matrix-agent@example.test",
+          "handle": "authorization-matrix-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": null,
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:9f298c3a7fb3b93e4a20cc5e58b2ce453e239ebb1dbc9c52aef5c750fb69adc3",
+        "eventDigest": "sha256:a541dace17f34684d9106588b929b16504a2b048e4aa6f24f43328aa7f9a64db",
+        "idempotencyKey": "ik_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "nextOffset": "0000000000000000_0000000000000028",
+        "operation": "agent.principal.create",
+        "requestDigest": "sha256:8c1c13a65e0e03ae991ff1267c4ba134637151a38641c0074a2a0a0857d54e91",
+        "status": "accepted",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+      },
+      "source": {
+        "directoryDigest": "sha256:cab89d06d825968fca0fb11e0c4977ffb5ac71a88d1d76e1e7484de4ed391f96",
+        "directoryStateDigest": "sha256:8fe79defd0737c00424b94f47325da9c66f3c9f7b676522923116372a050084a",
+        "configDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "configStateDigest": "sha256:5cf94f8d2c751a7bb659c69a5439634bda3f02b846bc490527219a903da099d0"
+      }
+    },
+    "status": 201
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/config",
+    "requestBody": "redacted-json",
+    "response": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "profile": {
+          "displayName": "Authorization Matrix Agent",
+          "email": "matrix-agent@example.test",
+          "handle": "authorization-matrix-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configRevision": {
+        "configDigest": "sha256:985cb3cc8e3ddfb848768e8f058afad174135e97253eed9376953c0a820973c7",
+        "revision": 1,
+        "revisionId": "acr_526e70dd641bf94e52143bdc5860bff6f861d53956e20230b17ca6db7a7b2168"
+      },
+      "configuration": {
+        "activeConfig": null,
+        "activeRevisionId": null,
+        "headRevision": 1,
+        "lastRevisionId": "acr_526e70dd641bf94e52143bdc5860bff6f861d53956e20230b17ca6db7a7b2168",
+        "runnable": false,
+        "status": "draft"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:7ed0514aa7ae3231738786919b001a46ae6dc733027e897fffa37fa1a3a02c43",
+        "eventDigest": "sha256:130fe15e6bfc5a77ded26c14761c0c73f2feb23e9117e3b227ad2a3d5a4a8894",
+        "idempotencyKey": "ik_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "nextOffset": "0000000000000000_0000000000000001",
+        "operation": "agent.config.created",
+        "requestDigest": "sha256:5d6220346fecce112e61d48f42d4e54d83bb68c1002e05139a9694b481eb584e",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:cab89d06d825968fca0fb11e0c4977ffb5ac71a88d1d76e1e7484de4ed391f96",
+        "directoryStateDigest": "sha256:8fe79defd0737c00424b94f47325da9c66f3c9f7b676522923116372a050084a",
+        "configDigest": "sha256:5bfed28099b93f3246c2901b8b2a6b54b69caaa6ba52dd07c86faa22a221243a",
+        "configStateDigest": "sha256:603b19dc661a531a31e15a3c8b0346ca49221ed2a85e87a17383559ba46ae7b3"
+      }
+    },
+    "status": 201
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+    "requestBody": false,
+    "response": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "profile": {
+          "displayName": "Authorization Matrix Agent",
+          "email": "matrix-agent@example.test",
+          "handle": "authorization-matrix-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": null,
+      "ok": true,
+      "source": {
+        "directoryDigest": "sha256:cab89d06d825968fca0fb11e0c4977ffb5ac71a88d1d76e1e7484de4ed391f96",
+        "directoryStateDigest": "sha256:8fe79defd0737c00424b94f47325da9c66f3c9f7b676522923116372a050084a",
+        "configDigest": "sha256:5bfed28099b93f3246c2901b8b2a6b54b69caaa6ba52dd07c86faa22a221243a",
+        "configStateDigest": "sha256:603b19dc661a531a31e15a3c8b0346ca49221ed2a85e87a17383559ba46ae7b3"
+      }
+    },
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+    "requestBody": false,
+    "response": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "profile": {
+          "displayName": "Authorization Matrix Agent",
+          "email": "matrix-agent@example.test",
+          "handle": "authorization-matrix-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": {
+        "activeConfig": null,
+        "activeRevisionId": null,
+        "headRevision": 1,
+        "lastRevisionId": "acr_526e70dd641bf94e52143bdc5860bff6f861d53956e20230b17ca6db7a7b2168",
+        "runnable": false,
+        "status": "draft"
+      },
+      "ok": true,
+      "source": {
+        "directoryDigest": "sha256:cab89d06d825968fca0fb11e0c4977ffb5ac71a88d1d76e1e7484de4ed391f96",
+        "directoryStateDigest": "sha256:8fe79defd0737c00424b94f47325da9c66f3c9f7b676522923116372a050084a",
+        "configDigest": "sha256:5bfed28099b93f3246c2901b8b2a6b54b69caaa6ba52dd07c86faa22a221243a",
+        "configStateDigest": "sha256:603b19dc661a531a31e15a3c8b0346ca49221ed2a85e87a17383559ba46ae7b3"
+      }
+    },
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "profile": {
+          "displayName": "Authorization Matrix Agent",
+          "email": "matrix-agent@example.test",
+          "handle": "authorization-matrix-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configRevision": {
+        "configDigest": "sha256:bf99c5161ff793a09aa89e3e2dada907037b4207902ecd5cc994fa346bb2891a",
+        "revision": 2,
+        "revisionId": "acr_bc2364f1bde52e5ec52b279ad624e6a94f40862a2a88175f718971bce6a2f5cf"
+      },
+      "configuration": {
+        "activeConfig": null,
+        "activeRevisionId": null,
+        "headRevision": 2,
+        "lastRevisionId": "acr_bc2364f1bde52e5ec52b279ad624e6a94f40862a2a88175f718971bce6a2f5cf",
+        "runnable": false,
+        "status": "draft"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:d0b4ea1df97a9b766437c7be02492f94d0977652e75d483653f24e69a0eacc18",
+        "eventDigest": "sha256:1e7700004ee2d0a000ebd867c3c3529cab640231b6c527b4560545c584f55fad",
+        "idempotencyKey": "ik_cccccccccccccccccccccccccc",
+        "nextOffset": "0000000000000000_0000000000000002",
+        "operation": "agent.config.revised",
+        "requestDigest": "sha256:40f321b56fb476286ac1be59c4be16238e727b2b8389c49681da6135585b247d",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:cab89d06d825968fca0fb11e0c4977ffb5ac71a88d1d76e1e7484de4ed391f96",
+        "directoryStateDigest": "sha256:8fe79defd0737c00424b94f47325da9c66f3c9f7b676522923116372a050084a",
+        "configDigest": "sha256:225e7011f569b35380589561f6986317fb1f90d8f6c16107c033e9f999125c51",
+        "configStateDigest": "sha256:6278316567cf8f1cbd10cf03b9557b58bb8f570c750c4a9da00a1382fc135079"
+      }
+    },
+    "status": 201
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/history",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/config",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/activate",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/disable",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/revoke",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/history",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/config",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/activate",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/disable",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/revoke",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/history",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/config",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/activate",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/disable",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/revoke",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/history",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/config",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/activate",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/disable",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/revoke",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/history",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/config",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/activate",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/disable",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/revoke",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/history",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/config",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/activate",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/disable",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/revoke",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "error": "workspace access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "error": "workspace access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/history",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_zzzzzzzzzzzzzzzzzzzzzzzzzz/history",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh/revisions",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  }
+]

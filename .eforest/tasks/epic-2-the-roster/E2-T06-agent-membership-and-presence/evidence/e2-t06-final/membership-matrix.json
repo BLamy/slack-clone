@@ -1,0 +1,37 @@
+{
+  "agent": {
+    "channelMembership": "active",
+    "kind": "agent",
+    "workspaceMembership": "active"
+  },
+  "human": {
+    "channelMembershipContract": "same channel.membership.invited/joined events",
+    "kind": "human",
+    "workspaceMembershipContract": "same workspace.membership.invited/accepted events"
+  },
+  "ownerCapabilityRefused": true,
+  "rows": [
+    {
+      "kind": "human",
+      "directory": true,
+      "channelMembership": true
+    },
+    {
+      "kind": "agent",
+      "directory": true,
+      "channelMembership": true
+    },
+    {
+      "kind": "service",
+      "directory": true,
+      "channelMembership": false
+    }
+  ],
+  "serviceExcluded": true,
+  "sharedEventTypes": [
+    "workspace.membership.invited",
+    "workspace.membership.accepted",
+    "channel.membership.invited",
+    "channel.membership.joined"
+  ]
+}

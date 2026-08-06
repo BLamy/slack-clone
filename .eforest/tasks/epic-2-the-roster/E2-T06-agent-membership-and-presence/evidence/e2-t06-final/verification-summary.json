@@ -1,0 +1,380 @@
+{
+  "schemaVersion": 1,
+  "task": "E2-T06",
+  "runId": "e2-t06-cold-final-v1",
+  "implementationCommit": "9fd3be18cf693aff4d5b65dee00b54c2baa460fb",
+  "result": "PASS",
+  "replayDescription": "Replay: N/A (server roster and presence projection) + mitigation: membership/readiness matrix, stale-heartbeat tests, manifests, and durable-state replay",
+  "skips": [],
+  "gates": {
+    "format:check": {
+      "command": "pnpm format:check",
+      "exitCode": 0
+    },
+    "lint": {
+      "command": "pnpm lint",
+      "exitCode": 0
+    },
+    "typecheck": {
+      "command": "pnpm typecheck",
+      "exitCode": 0
+    },
+    "test": {
+      "command": "pnpm test",
+      "exitCode": 0
+    },
+    "build": {
+      "command": "pnpm build",
+      "exitCode": 0
+    }
+  },
+  "replay": {
+    "authority": "workspace:<id>/directory",
+    "finalStateDigest": "sha256:8a61ade8616a7c8814669220cf22e7606130be08dea91ce4e19e98aaa57f717e",
+    "offsets": [
+      {
+        "offset": "0000000000000000_0000000000000001",
+        "stateDigest": "sha256:b00745db16925c84b5bf3b2bdf9d73d82058cbf3bb0deecd4c8ac70c4757b023"
+      },
+      {
+        "offset": "0000000000000000_0000000000000002",
+        "stateDigest": "sha256:0baa1bc424e0b20102c1fe64e2cadc5a5dad68cc73cad89be939ec2731114d07"
+      },
+      {
+        "offset": "0000000000000000_0000000000000003",
+        "stateDigest": "sha256:4e87e2ca8a4d9dae6dbda9c370b8280e26dcadf74b22afa16e50b8fe66f5621e"
+      },
+      {
+        "offset": "0000000000000000_0000000000000004",
+        "stateDigest": "sha256:b77d83820d9996972d6078845eea5aa687a295eb4fa7685924887b95dfac6edf"
+      },
+      {
+        "offset": "0000000000000000_0000000000000005",
+        "stateDigest": "sha256:7f95bbf41fc0c189f675740a8065f0510ba9ae31bac4435cc387dc21aba3a0d4"
+      },
+      {
+        "offset": "0000000000000000_0000000000000006",
+        "stateDigest": "sha256:8fc19613a971d8057ea88ff1ea2c22d3e36bd1daf953887fda57cc6922bdcf38"
+      },
+      {
+        "offset": "0000000000000000_0000000000000007",
+        "stateDigest": "sha256:533816bb26328b3d7e37c6e6016aed4dd4a85b62546dbe294d572885f8fd37f7"
+      },
+      {
+        "offset": "0000000000000000_0000000000000008",
+        "stateDigest": "sha256:eafb2480ea1a9ff2facd8106be864edcd4e0dc590ae741826dbaf1d47b5c7b6f"
+      },
+      {
+        "offset": "0000000000000000_0000000000000009",
+        "stateDigest": "sha256:f15932b8f1d90f3a71a2e4999f0c9539854772f1921e3cb56b2906175db6f959"
+      },
+      {
+        "offset": "0000000000000000_0000000000000010",
+        "stateDigest": "sha256:944a88963e87a1430d4746382c10432fdf72e92bc3c2edf40393ee8f50fb9d87"
+      },
+      {
+        "offset": "0000000000000000_0000000000000011",
+        "stateDigest": "sha256:440ef103d6965e5a0ef89ca12dac6681235fde8b72fb5a659e114c92a378cfba"
+      },
+      {
+        "offset": "0000000000000000_0000000000000012",
+        "stateDigest": "sha256:369d702291a19a8800437c2f553ab84bf371ff47a9789af6892610a9ab5695fe"
+      },
+      {
+        "offset": "0000000000000000_0000000000000013",
+        "stateDigest": "sha256:c0281c0a6cb3be169cbfc8c7be3d94a1cdc497f3388857c438f4d3162a6c3e86"
+      },
+      {
+        "offset": "0000000000000000_0000000000000014",
+        "stateDigest": "sha256:02106c05a511a2b775c874aeb708a3d1262154ebb4050ade9b46354f1da4688c"
+      },
+      {
+        "offset": "0000000000000000_0000000000000015",
+        "stateDigest": "sha256:759c97e4599e628b74aebe1c92d1458cf266c2bfdf9c789693da488aa21e2e3b"
+      },
+      {
+        "offset": "0000000000000000_0000000000000016",
+        "stateDigest": "sha256:e6bd8f10b6516eabbaeff4bc0a5449fbf2edfba9883671ea9a2bbee0143f6a2e"
+      },
+      {
+        "offset": "0000000000000000_0000000000000017",
+        "stateDigest": "sha256:b4affd7336ebebb01a8a522464c450c768e15eebfd842dee3174f0e6136be5fc"
+      },
+      {
+        "offset": "0000000000000000_0000000000000018",
+        "stateDigest": "sha256:8cb9297a46014cf60ca44792d097199fae4adec5eba2aa3d7f8c1f43b714f923"
+      },
+      {
+        "offset": "0000000000000000_0000000000000019",
+        "stateDigest": "sha256:532c86a93e6dac00d9af44f3078e60b713879d625a0d3519fe189fa0f70a04ec"
+      },
+      {
+        "offset": "0000000000000000_0000000000000020",
+        "stateDigest": "sha256:3d1820e57c53e58517f7e375d457970decc1b229bc7724344754afb122935291"
+      },
+      {
+        "offset": "0000000000000000_0000000000000021",
+        "stateDigest": "sha256:f5e46cf3c7f295863ca9d8ebe60209ec32530acbd48e725ffd2c067accc5056e"
+      },
+      {
+        "offset": "0000000000000000_0000000000000022",
+        "stateDigest": "sha256:78eec90ed5c3270ca3494e281d575810580b3221c34326595aa9422aede2b748"
+      },
+      {
+        "offset": "0000000000000000_0000000000000023",
+        "stateDigest": "sha256:c3addb3081a7bb12db7bfedb5f1f4408ec813910b7189a6732d5640922b2377a"
+      },
+      {
+        "offset": "0000000000000000_0000000000000024",
+        "stateDigest": "sha256:8d3ef0e3b88ab74d01d293c40c6b695521b47cf4b6e2af6d3b8b57f53613e9bb"
+      },
+      {
+        "offset": "0000000000000000_0000000000000025",
+        "stateDigest": "sha256:96dcb6da63ef7173c3345d5456e06e218295347b90deb46007288fd3b5f8fc9c"
+      },
+      {
+        "offset": "0000000000000000_0000000000000026",
+        "stateDigest": "sha256:744b4f625abde8519f1a1c46dae9251873308bcf6ff7c2ad87dce18f4353dde2"
+      },
+      {
+        "offset": "0000000000000000_0000000000000027",
+        "stateDigest": "sha256:2d7e898b12fd57aea6ea88d232b619b2f2c27029d0c429135288a3904931827d"
+      },
+      {
+        "offset": "0000000000000000_0000000000000028",
+        "stateDigest": "sha256:64701521bc45ecabdc1066f1c78133c26c1ff5e213e2585b0eaa9be78f933fd9"
+      },
+      {
+        "offset": "0000000000000000_0000000000000029",
+        "stateDigest": "sha256:0513eb1f0052aeb9d7a9e7157c87ec5c8e409b1fd17aa8602a8d2637ff724681"
+      },
+      {
+        "offset": "0000000000000000_0000000000000030",
+        "stateDigest": "sha256:8a392c787fd26e97d0440fa916e2c3c6f2d0ee522ff7b7f576111529076a7fc3"
+      },
+      {
+        "offset": "0000000000000000_0000000000000031",
+        "stateDigest": "sha256:d9db5030021d5682e2d1f4e67f629fd2598cb4bd13d54ce1c6e932c842ea84ed"
+      },
+      {
+        "offset": "0000000000000000_0000000000000032",
+        "stateDigest": "sha256:a8859e748e26d912152b3744f60b5eb6719f6b42c0639cddaa90254fe31a86d3"
+      },
+      {
+        "offset": "0000000000000000_0000000000000033",
+        "stateDigest": "sha256:3630c8bb2f7b0127168d2ad7f58dc4fd5f3029c6167dc1f5ab1aca8ef16722ac"
+      },
+      {
+        "offset": "0000000000000000_0000000000000034",
+        "stateDigest": "sha256:8a61ade8616a7c8814669220cf22e7606130be08dea91ce4e19e98aaa57f717e"
+      }
+    ],
+    "recordCount": 34,
+    "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+  },
+  "roster": {
+    "agentCount": 1,
+    "channelCount": 3,
+    "directoryKinds": [
+      "human",
+      "service",
+      "human",
+      "agent"
+    ],
+    "rosterDigest": "sha256:6339894cf3e0c29cffbd3506f5af58df03422adf19f31f114134098ea8dee8a3",
+    "serviceChatMember": false,
+    "streamStateDigest": "sha256:8a61ade8616a7c8814669220cf22e7606130be08dea91ce4e19e98aaa57f717e",
+    "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "membership": {
+    "agent": {
+      "channelMembership": "active",
+      "kind": "agent",
+      "workspaceMembership": "active"
+    },
+    "human": {
+      "channelMembershipContract": "same channel.membership.invited/joined events",
+      "kind": "human",
+      "workspaceMembershipContract": "same workspace.membership.invited/accepted events"
+    },
+    "ownerCapabilityRefused": true,
+    "rows": [
+      {
+        "kind": "human",
+        "directory": true,
+        "channelMembership": true
+      },
+      {
+        "kind": "agent",
+        "directory": true,
+        "channelMembership": true
+      },
+      {
+        "kind": "service",
+        "directory": true,
+        "channelMembership": false
+      }
+    ],
+    "serviceExcluded": true,
+    "sharedEventTypes": [
+      "workspace.membership.invited",
+      "workspace.membership.accepted",
+      "channel.membership.invited",
+      "channel.membership.joined"
+    ]
+  },
+  "readiness": {
+    "providerCount": 2,
+    "providers": [
+      {
+        "kind": "harness",
+        "providerId": "scripted",
+        "providerVersion": "1.0.0",
+        "providerKey": "harness:scripted@1.0.0",
+        "status": {
+          "installed": true,
+          "enabled": true,
+          "health": "healthy",
+          "observedAt": 0,
+          "expiresAt": 9007199254740991,
+          "stale": false,
+          "available": true
+        }
+      },
+      {
+        "kind": "sandbox",
+        "providerId": "scripted",
+        "providerVersion": "1.0.0",
+        "providerKey": "sandbox:scripted@1.0.0",
+        "status": {
+          "installed": true,
+          "enabled": true,
+          "health": "healthy",
+          "observedAt": 0,
+          "expiresAt": 9007199254740991,
+          "stale": false,
+          "available": true
+        }
+      }
+    ],
+    "registryManifestDigest": "sha256:751764325d1387da9404895128892e5a1e95005fb0bd45e27bd9dde42d6ec8b5"
+  },
+  "transitions": {
+    "maxPresenceTtlMs": 60000,
+    "rows": [
+      {
+        "availability": "available",
+        "name": "active prerequisites",
+        "reasonCodes": [],
+        "runnable": true
+      },
+      {
+        "availability": "busy",
+        "name": "fresh busy presence",
+        "reasonCodes": [],
+        "runnable": true
+      },
+      {
+        "availability": "available",
+        "name": "stale heartbeat",
+        "reasonCodes": [],
+        "runnable": true
+      },
+      {
+        "availability": "available",
+        "name": "sibling workspace heartbeat",
+        "reasonCodes": [],
+        "runnable": true
+      },
+      {
+        "availability": "unavailable",
+        "name": "suspended membership",
+        "reasonCodes": [
+          "WORKSPACE_MEMBERSHIP_INACTIVE"
+        ],
+        "runnable": false
+      },
+      {
+        "availability": "unavailable",
+        "name": "removed membership",
+        "reasonCodes": [
+          "WORKSPACE_MEMBERSHIP_INACTIVE"
+        ],
+        "runnable": false
+      },
+      {
+        "availability": "disabled",
+        "name": "disabled configuration",
+        "reasonCodes": [
+          "CONFIG_DISABLED",
+          "CONFIG_NOT_RUNNABLE"
+        ],
+        "runnable": false
+      },
+      {
+        "availability": "unavailable",
+        "name": "invalid configuration",
+        "reasonCodes": [
+          "CONFIG_INVALID"
+        ],
+        "runnable": false
+      },
+      {
+        "availability": "unavailable",
+        "name": "provider health loss",
+        "reasonCodes": [
+          "PROVIDER_UNHEALTHY"
+        ],
+        "runnable": false
+      },
+      {
+        "availability": "unavailable",
+        "name": "provider readiness expiry",
+        "reasonCodes": [
+          "PROVIDER_STALE"
+        ],
+        "runnable": false
+      },
+      {
+        "availability": "disabled",
+        "name": "unknown agent heartbeat",
+        "reasonCodes": [
+          "PRINCIPAL_NOT_FOUND",
+          "WORKSPACE_MEMBERSHIP_MISSING",
+          "CONFIG_MISSING"
+        ],
+        "runnable": false
+      }
+    ],
+    "result": "PASS",
+    "staleHeartbeatDoesNotGrant": true
+  },
+  "sensitivity": {
+    "mutationCount": 3,
+    "mutations": [
+      {
+        "exitCode": 1,
+        "mutation": "remove immutable principal-kind labeling",
+        "result": "PASS",
+        "verifier": "scripts/verify-e2-t06.mjs",
+        "verifierDetectedMutant": true
+      },
+      {
+        "exitCode": 1,
+        "mutation": "remove provider-stale prerequisite",
+        "result": "PASS",
+        "verifier": "scripts/verify-e2-t06.mjs",
+        "verifierDetectedMutant": true
+      },
+      {
+        "exitCode": 1,
+        "mutation": "remove durable handle uniqueness",
+        "result": "PASS",
+        "verifier": "scripts/verify-e2-t06.mjs",
+        "verifierDetectedMutant": true
+      }
+    ],
+    "result": "PASS",
+    "verifierDetectedMutant": true
+  }
+}

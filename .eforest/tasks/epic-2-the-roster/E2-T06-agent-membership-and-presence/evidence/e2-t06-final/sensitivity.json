@@ -1,0 +1,28 @@
+{
+  "mutationCount": 3,
+  "mutations": [
+    {
+      "exitCode": 1,
+      "mutation": "remove immutable principal-kind labeling",
+      "result": "PASS",
+      "verifier": "scripts/verify-e2-t06.mjs",
+      "verifierDetectedMutant": true
+    },
+    {
+      "exitCode": 1,
+      "mutation": "remove provider-stale prerequisite",
+      "result": "PASS",
+      "verifier": "scripts/verify-e2-t06.mjs",
+      "verifierDetectedMutant": true
+    },
+    {
+      "exitCode": 1,
+      "mutation": "remove durable handle uniqueness",
+      "result": "PASS",
+      "verifier": "scripts/verify-e2-t06.mjs",
+      "verifierDetectedMutant": true
+    }
+  ],
+  "result": "PASS",
+  "verifierDetectedMutant": true
+}

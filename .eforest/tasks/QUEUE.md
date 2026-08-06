@@ -8,7 +8,7 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-1. **E2-T06** — Agent membership and derived availability presence *(builder working)*
+1. **E2-T06** — Agent membership and derived availability presence *(awaiting independent critic)*
 
 ## Next up (dependencies satisfied)
 
@@ -46,7 +46,7 @@ No task unlocks directly.
 - [x] ` 203` [E2-T03](epic-2-the-roster/E2-T03-agent-management-api-and-cli/readme.md) — Agent management API and machine-readable CLI *(deps: E2-T02)*
 - [x] ` 204` [E2-T04](epic-2-the-roster/E2-T04-agent-administration-authz/readme.md) — Agent administration authorization and separation of duties *(deps: E2-T03)*
 - [x] ` 205` [E2-T05](epic-2-the-roster/E2-T05-provider-registry-and-capabilities/readme.md) — Harness and sandbox provider registry with capability negotiation *(deps: E2-T01)*
-- [~] ` 206` [E2-T06](epic-2-the-roster/E2-T06-agent-membership-and-presence/readme.md) — Agent membership and derived availability presence *(deps: E2-T03, E2-T05)*
+- [?] ` 206` [E2-T06](epic-2-the-roster/E2-T06-agent-membership-and-presence/readme.md) — Agent membership and derived availability presence *(deps: E2-T03, E2-T05)*
 - [ ] ` 207` [E2-T07](epic-2-the-roster/E2-T07-immutable-invocation-snapshot/readme.md) — Immutable, capability-resolved invocation snapshot *(deps: E2-T02, E2-T05)*
 - [ ] ` 208` [E2-T08](epic-2-the-roster/E2-T08-configure-reconfigure-revoke-agent/readme.md) — Capstone: configure, reconfigure, and revoke an agent **[CAPSTONE]** *(deps: E2-T04, E2-T06, E2-T07)*
 

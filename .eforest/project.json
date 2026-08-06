@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E2-T03 verified; E2-T04 and E2-T05 are the next eligible queue gates.",
-  "updatedAt": "2026-08-06T14:13:21Z"
+  "statusReason": "E2-T04 is the active queue gate.",
+  "updatedAt": "2026-08-06T16:03:18Z"
 }

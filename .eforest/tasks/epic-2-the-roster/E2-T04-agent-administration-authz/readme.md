@@ -3,7 +3,7 @@ id: E2-T04
 epic: 2
 title: "Agent administration authorization and separation of duties"
 priority: 204
-status: pending
+status: in-progress
 depends_on: [E2-T03]
 estimate: L
 capstone: false

@@ -3,7 +3,7 @@ id: E2-T05
 epic: 2
 title: "Harness and sandbox provider registry with capability negotiation"
 priority: 205
-status: pending
+status: in-progress
 depends_on: [E2-T01]
 estimate: L
 capstone: false

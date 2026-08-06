@@ -90,6 +90,14 @@ try {
     command: "pnpm install --frozen-lockfile",
     exitCode: install.code,
   });
+  const emulatorBuild = await run("pnpm", ["setup:emulate"], {
+    name: "cold-emulator-build",
+    cwd: checkout,
+  });
+  transcript.commands.push({
+    command: "pnpm setup:emulate",
+    exitCode: emulatorBuild.code,
+  });
   const verifier = await run("node", ["scripts/verify-e2-t04.mjs"], {
     name: "verify-E2-T04",
     cwd: checkout,

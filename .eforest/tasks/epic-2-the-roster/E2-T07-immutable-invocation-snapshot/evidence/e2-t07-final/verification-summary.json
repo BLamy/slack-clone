@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E2-T07",
-  "runId": "e2-t07-cold-final",
-  "implementationCommit": "0b9c7275e4fe74e55c973b6aa9cc800bfcfa68e4",
+  "runId": "e2-t07-cold-final-v2",
+  "implementationCommit": "4a69ba8238991613f51d73d6f8d26fdc87721d91",
   "result": "PASS",
   "replayDescription": "Replay: N/A (server invocation-resolution contract) + mitigation: source-bound snapshot manifests, canary scans, reconfiguration races, and digest tests",
   "skips": [],
@@ -105,12 +105,19 @@
     "snapshotDigest": "sha256:470c2121c38bc9d4a720bf3cfab256c53cd2026c3bb62eefed292c6581529260"
   },
   "refusalMatrix": {
-    "providerSideEffectsBeforeResolution": 0,
+    "providerSideEffectsBeforeRefusal": 0,
+    "providerResolutionCountedAcrossRows": true,
     "rows": [
       {
         "code": "INVOCATION_SNAPSHOT_AGENT_CONFIG_INACTIVE",
         "detail": "agent configuration is not active and runnable",
         "name": "disabled configuration",
+        "providerResolutionCalls": {
+          "describe": 0,
+          "manifestDigest": 0,
+          "resolveConfiguration": 0
+        },
+        "providerSideEffects": 0,
         "refused": true,
         "sourceCode": null
       },
@@ -118,6 +125,12 @@
         "code": "INVOCATION_SNAPSHOT_MEMBERSHIP_INACTIVE",
         "detail": "workspace membership is not active",
         "name": "suspended membership",
+        "providerResolutionCalls": {
+          "describe": 0,
+          "manifestDigest": 0,
+          "resolveConfiguration": 0
+        },
+        "providerSideEffects": 0,
         "refused": true,
         "sourceCode": null
       },
@@ -125,6 +138,12 @@
         "code": "INVOCATION_SNAPSHOT_MEMBERSHIP_INACTIVE",
         "detail": "workspace membership is outside the requested agent scope",
         "name": "non-member principal reference",
+        "providerResolutionCalls": {
+          "describe": 0,
+          "manifestDigest": 0,
+          "resolveConfiguration": 0
+        },
+        "providerSideEffects": 0,
         "refused": true,
         "sourceCode": null
       },
@@ -132,6 +151,12 @@
         "code": "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED",
         "detail": "exact provider selections did not resolve as runnable",
         "name": "unhealthy provider",
+        "providerResolutionCalls": {
+          "describe": 2,
+          "manifestDigest": 0,
+          "resolveConfiguration": 1
+        },
+        "providerSideEffects": 0,
         "refused": true,
         "sourceCode": "PROVIDER_REGISTRY_PROVIDER_UNHEALTHY"
       },
@@ -139,6 +164,12 @@
         "code": "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED",
         "detail": "exact provider selections did not resolve as runnable",
         "name": "incompatible providers",
+        "providerResolutionCalls": {
+          "describe": 2,
+          "manifestDigest": 0,
+          "resolveConfiguration": 1
+        },
+        "providerSideEffects": 0,
         "refused": true,
         "sourceCode": "PROVIDER_REGISTRY_INCOMPATIBLE_PROVIDERS"
       },
@@ -146,6 +177,12 @@
         "code": "INVOCATION_SNAPSHOT_CONNECTION_GRANT_EXPIRED",
         "detail": "connection grant has expired",
         "name": "expired grant",
+        "providerResolutionCalls": {
+          "describe": 0,
+          "manifestDigest": 0,
+          "resolveConfiguration": 0
+        },
+        "providerSideEffects": 0,
         "refused": true,
         "sourceCode": null
       },
@@ -153,6 +190,12 @@
         "code": "INVOCATION_SNAPSHOT_BUDGET_EXCEEDED",
         "detail": "current invocation usage exceeds the immutable budget",
         "name": "over-budget invocation",
+        "providerResolutionCalls": {
+          "describe": 0,
+          "manifestDigest": 0,
+          "resolveConfiguration": 0
+        },
+        "providerSideEffects": 0,
         "refused": true,
         "sourceCode": null
       },
@@ -160,6 +203,12 @@
         "code": "INVOCATION_SNAPSHOT_CONNECTION_GRANT_SCOPE_MISMATCH",
         "detail": "connection grant is outside the agent, purpose, or workspace scope",
         "name": "cross-workspace connection grant",
+        "providerResolutionCalls": {
+          "describe": 0,
+          "manifestDigest": 0,
+          "resolveConfiguration": 0
+        },
+        "providerSideEffects": 0,
         "refused": true,
         "sourceCode": null
       }
@@ -205,10 +254,21 @@
       "published refusal details"
     ],
     "leaked": false,
-    "result": "PASS"
+    "result": "PASS",
+    "evidenceFiles": [
+      "canary-scan.json",
+      "cold-clone-transcript.json",
+      "refusal-matrix.json",
+      "revocation-races.json",
+      "sensitivity.json",
+      "snapshot-manifest.json",
+      "source-references.json",
+      "verification-summary.json"
+    ],
+    "publishedEvidenceLeaked": false
   },
   "sensitivity": {
-    "mutationCount": 3,
+    "mutationCount": 4,
     "mutations": [
       {
         "exitCode": 1,
@@ -225,6 +285,12 @@
       {
         "exitCode": 1,
         "mutation": "bind source manifest config to directory source",
+        "result": "PASS",
+        "verifierDetectedMutant": true
+      },
+      {
+        "exitCode": 1,
+        "mutation": "bind workspace input source to config source",
         "result": "PASS",
         "verifierDetectedMutant": true
       }

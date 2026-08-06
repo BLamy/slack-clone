@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "runId": "e2-t07-cold-final",
-  "implementationCommit": "0b9c7275e4fe74e55c973b6aa9cc800bfcfa68e4",
+  "runId": "e2-t07-cold-final-v2",
+  "implementationCommit": "4a69ba8238991613f51d73d6f8d26fdc87721d91",
   "entrypoint": {
     "command": "make verify-E2-T07",
     "delegatedTo": "node scripts/cold-verify-e2-t07.mjs"
@@ -9,7 +9,7 @@
   "checkout": "disposable git worktree at the implementation commit",
   "commands": [
     {
-      "command": "git worktree add --detach <checkout> 0b9c7275e4fe74e55c973b6aa9cc800bfcfa68e4",
+      "command": "git worktree add --detach <checkout> 4a69ba8238991613f51d73d6f8d26fdc87721d91",
       "exitCode": 0
     },
     {

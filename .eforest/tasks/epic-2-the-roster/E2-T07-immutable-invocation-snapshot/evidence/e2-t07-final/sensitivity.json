@@ -1,5 +1,5 @@
 {
-  "mutationCount": 3,
+  "mutationCount": 4,
   "mutations": [
     {
       "exitCode": 1,
@@ -16,6 +16,12 @@
     {
       "exitCode": 1,
       "mutation": "bind source manifest config to directory source",
+      "result": "PASS",
+      "verifierDetectedMutant": true
+    },
+    {
+      "exitCode": 1,
+      "mutation": "bind workspace input source to config source",
       "result": "PASS",
       "verifierDetectedMutant": true
     }

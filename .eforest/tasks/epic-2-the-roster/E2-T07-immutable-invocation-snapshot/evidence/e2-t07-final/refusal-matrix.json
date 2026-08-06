@@ -1,10 +1,17 @@
 {
-  "providerSideEffectsBeforeResolution": 0,
+  "providerSideEffectsBeforeRefusal": 0,
+  "providerResolutionCountedAcrossRows": true,
   "rows": [
     {
       "code": "INVOCATION_SNAPSHOT_AGENT_CONFIG_INACTIVE",
       "detail": "agent configuration is not active and runnable",
       "name": "disabled configuration",
+      "providerResolutionCalls": {
+        "describe": 0,
+        "manifestDigest": 0,
+        "resolveConfiguration": 0
+      },
+      "providerSideEffects": 0,
       "refused": true,
       "sourceCode": null
     },
@@ -12,6 +19,12 @@
       "code": "INVOCATION_SNAPSHOT_MEMBERSHIP_INACTIVE",
       "detail": "workspace membership is not active",
       "name": "suspended membership",
+      "providerResolutionCalls": {
+        "describe": 0,
+        "manifestDigest": 0,
+        "resolveConfiguration": 0
+      },
+      "providerSideEffects": 0,
       "refused": true,
       "sourceCode": null
     },
@@ -19,6 +32,12 @@
       "code": "INVOCATION_SNAPSHOT_MEMBERSHIP_INACTIVE",
       "detail": "workspace membership is outside the requested agent scope",
       "name": "non-member principal reference",
+      "providerResolutionCalls": {
+        "describe": 0,
+        "manifestDigest": 0,
+        "resolveConfiguration": 0
+      },
+      "providerSideEffects": 0,
       "refused": true,
       "sourceCode": null
     },
@@ -26,6 +45,12 @@
       "code": "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED",
       "detail": "exact provider selections did not resolve as runnable",
       "name": "unhealthy provider",
+      "providerResolutionCalls": {
+        "describe": 2,
+        "manifestDigest": 0,
+        "resolveConfiguration": 1
+      },
+      "providerSideEffects": 0,
       "refused": true,
       "sourceCode": "PROVIDER_REGISTRY_PROVIDER_UNHEALTHY"
     },
@@ -33,6 +58,12 @@
       "code": "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED",
       "detail": "exact provider selections did not resolve as runnable",
       "name": "incompatible providers",
+      "providerResolutionCalls": {
+        "describe": 2,
+        "manifestDigest": 0,
+        "resolveConfiguration": 1
+      },
+      "providerSideEffects": 0,
       "refused": true,
       "sourceCode": "PROVIDER_REGISTRY_INCOMPATIBLE_PROVIDERS"
     },
@@ -40,6 +71,12 @@
       "code": "INVOCATION_SNAPSHOT_CONNECTION_GRANT_EXPIRED",
       "detail": "connection grant has expired",
       "name": "expired grant",
+      "providerResolutionCalls": {
+        "describe": 0,
+        "manifestDigest": 0,
+        "resolveConfiguration": 0
+      },
+      "providerSideEffects": 0,
       "refused": true,
       "sourceCode": null
     },
@@ -47,6 +84,12 @@
       "code": "INVOCATION_SNAPSHOT_BUDGET_EXCEEDED",
       "detail": "current invocation usage exceeds the immutable budget",
       "name": "over-budget invocation",
+      "providerResolutionCalls": {
+        "describe": 0,
+        "manifestDigest": 0,
+        "resolveConfiguration": 0
+      },
+      "providerSideEffects": 0,
       "refused": true,
       "sourceCode": null
     },
@@ -54,6 +97,12 @@
       "code": "INVOCATION_SNAPSHOT_CONNECTION_GRANT_SCOPE_MISMATCH",
       "detail": "connection grant is outside the agent, purpose, or workspace scope",
       "name": "cross-workspace connection grant",
+      "providerResolutionCalls": {
+        "describe": 0,
+        "manifestDigest": 0,
+        "resolveConfiguration": 0
+      },
+      "providerSideEffects": 0,
       "refused": true,
       "sourceCode": null
     }

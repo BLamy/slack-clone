@@ -6,5 +6,16 @@
     "published refusal details"
   ],
   "leaked": false,
-  "result": "PASS"
+  "result": "PASS",
+  "evidenceFiles": [
+    "canary-scan.json",
+    "cold-clone-transcript.json",
+    "refusal-matrix.json",
+    "revocation-races.json",
+    "sensitivity.json",
+    "snapshot-manifest.json",
+    "source-references.json",
+    "verification-summary.json"
+  ],
+  "publishedEvidenceLeaked": false
 }

@@ -10,6 +10,7 @@ import {
 import { readJson, sendJson } from "@stream-slack/http";
 
 import { digestEventEnvelope, issueEventEnvelope } from "./envelope.mjs";
+import { createAgentAdministrationAuthorization } from "./agent-administration-auth.mjs";
 import {
   createAgentConfigStream,
   AgentConfigStreamError,
@@ -58,6 +59,7 @@ export function createAgentManagementApi({
   workspaceAuthorization,
   workspaceDirectory,
   workspaceId,
+  agentAdministrationAuthorization = null,
 }) {
   if (!dispatchDoor || typeof dispatchDoor.dispatch !== "function") {
     throw new TypeError("agent management requires a dispatch door");
@@ -87,6 +89,19 @@ export function createAgentManagementApi({
     }
   }
   validateWorkspaceId(workspaceId);
+  const administrationAuthorization =
+    agentAdministrationAuthorization ??
+    createAgentAdministrationAuthorization({
+      readDirectory: workspaceDirectory.read,
+      workspaceId,
+    });
+  for (const method of ["authorizeMutation", "authorizeRead"]) {
+    if (typeof administrationAuthorization?.[method] !== "function") {
+      throw new TypeError(
+        `agent management administration authorization requires ${method}`,
+      );
+    }
+  }
 
   function configStream(agentId) {
     return createAgentConfigStream({
@@ -131,9 +146,15 @@ export function createAgentManagementApi({
         await workspaceAuthorization.authorizeRead(context, {
           capability: "workspace.directory.read",
         });
+        const authorization = await administrationAuthorization.authorizeRead({
+          agentId,
+          context,
+          operations: readOperations({ agentId, resource, url }),
+        });
         const result = await readOperation({
           agentId,
           context,
+          includeConfiguration: authorization.includeConfiguration,
           resource,
           url,
         });
@@ -167,15 +188,21 @@ export function createAgentManagementApi({
         context,
         {
           capability: "workspace.directory.mutate",
-          dispatch: () =>
-            mutateOperation({
+          dispatch: async () => {
+            await administrationAuthorization.authorizeMutation({
+              agentId,
+              context,
+              operation: mutationOperation({ agentId, resource }),
+            });
+            return mutateOperation({
               agentId,
               body,
               context,
               idempotencyKey,
               resource,
               workspaceId: context.workspaceId,
-            }),
+            });
+          },
         },
       );
       sendJson(response, result.httpStatus ?? 200, result.body ?? result);
@@ -186,7 +213,12 @@ export function createAgentManagementApi({
     }
   }
 
-  async function readOperation({ agentId, resource, url }) {
+  async function readOperation({
+    agentId,
+    includeConfiguration,
+    resource,
+    url,
+  }) {
     if (!agentId) {
       if (url.searchParams.has("agentId")) {
         throw invalidRequest("agentId belongs in the path");
@@ -194,7 +226,7 @@ export function createAgentManagementApi({
       const page = parsePage(url, "agents");
       return listAgents(page);
     }
-    validateAgentId(agentId);
+    validateAgentId(agentId, { expectedWorkspaceId: workspaceId });
     if (url.searchParams.has("workspaceId")) {
       throw invalidRequest("workspaceId belongs in the path");
     }
@@ -211,7 +243,7 @@ export function createAgentManagementApi({
         "configuration reads are part of the agent resource",
       );
     }
-    return getAgent(agentId);
+    return getAgent(agentId, { includeConfiguration });
   }
 
   async function mutateOperation({
@@ -241,7 +273,7 @@ export function createAgentManagementApi({
         httpStatus: 201,
       };
     }
-    validateAgentId(agentId);
+    validateAgentId(agentId, { expectedWorkspaceId: workspaceId });
     if (resource === "config") {
       return {
         body: await createConfig({
@@ -323,8 +355,10 @@ export function createAgentManagementApi({
     }
     const agentId =
       body.agentId ?? `ag_${workspaceId.slice(3)}_${idempotencyKey.slice(3)}`;
-    validateAgentId(agentId);
-    const principalId = principalIdForAgentId(agentId);
+    validateAgentId(agentId, { expectedWorkspaceId: workspaceId });
+    const principalId = principalIdForAgentId(agentId, {
+      expectedWorkspaceId: workspaceId,
+    });
     const existing = directory.state.entities.principals?.[principalId];
     if (existing && !hasDispatchTarget(directory.records, idempotencyKey)) {
       throw new AgentManagementError(
@@ -476,9 +510,11 @@ export function createAgentManagementApi({
     };
   }
 
-  async function getAgent(agentId) {
+  async function getAgent(agentId, { includeConfiguration = true } = {}) {
     const directory = await workspaceDirectory.read();
-    const principalId = principalIdForAgentId(agentId);
+    const principalId = principalIdForAgentId(agentId, {
+      expectedWorkspaceId: workspaceId,
+    });
     const principal = directory.state.entities.principals?.[principalId];
     if (!principal || principal.kind !== "agent") {
       throw notFound("agent principal was not found");
@@ -488,7 +524,9 @@ export function createAgentManagementApi({
     const configState = snapshot.state.entities.agents?.[agentId] ?? null;
     return {
       agent: publicPrincipal(principal, agentId),
-      configuration: publicConfigState(configState),
+      configuration: includeConfiguration
+        ? publicConfigState(configState)
+        : null,
       ok: true,
       source: {
         directoryDigest: directory.streamDigest,
@@ -507,7 +545,9 @@ export function createAgentManagementApi({
     const selected = order.slice(start, start + page.limit);
     const agents = [];
     for (const agentId of selected) {
-      agents.push((await getAgent(agentId)).agent);
+      agents.push(
+        (await getAgent(agentId, { includeConfiguration: false })).agent,
+      );
     }
     const nextIndex = start + selected.length;
     return {
@@ -586,7 +626,9 @@ export function createAgentManagementApi({
   }
 
   async function requireAgent(agentId) {
-    const principalId = principalIdForAgentId(agentId);
+    const principalId = principalIdForAgentId(agentId, {
+      expectedWorkspaceId: workspaceId,
+    });
     const principal = await workspaceDirectory.lookupPrincipal(
       workspaceId,
       principalId,
@@ -656,9 +698,9 @@ export function createAgentManagementApi({
   return Object.freeze({ handleApi });
 }
 
-function validateAgentId(agentId) {
+function validateAgentId(agentId, { expectedWorkspaceId } = {}) {
   try {
-    return validateAgentConfigAgentId(agentId);
+    return validateAgentConfigAgentId(agentId, { expectedWorkspaceId });
   } catch (error) {
     throw invalidRequest(error?.detail ?? "agentId is invalid");
   }
@@ -752,8 +794,8 @@ function publicPrincipal(principal, agentId) {
   };
 }
 
-function principalIdForAgentId(agentId) {
-  validateAgentId(agentId);
+function principalIdForAgentId(agentId, { expectedWorkspaceId } = {}) {
+  validateAgentId(agentId, { expectedWorkspaceId });
   return `pr_${agentId.slice(3)}`;
 }
 
@@ -887,6 +929,23 @@ function decodeSegment(value, name) {
 
 function resourceIsHistory(pathname) {
   return pathname.endsWith("/history");
+}
+
+function readOperations({ agentId, resource, url }) {
+  if (!agentId) return ["agent.roster.read"];
+  if (resourceIsHistory(url.pathname)) return ["agent.history.read"];
+  if (resource !== null) return ["agent.profile.read"];
+  return ["agent.profile.read", "agent.config.read"];
+}
+
+function mutationOperation({ agentId, resource }) {
+  if (!agentId) return "agent.create";
+  if (resource === "config") return "agent.config.create";
+  if (resource === "revisions") return "agent.config.revise";
+  if (resource === "activate") return "agent.lifecycle.activate";
+  if (resource === "disable") return "agent.lifecycle.disable";
+  if (resource === "revoke") return "agent.lifecycle.revoke";
+  return "agent.config.revise";
 }
 
 function assertExactKeys(value, expectedKeys) {

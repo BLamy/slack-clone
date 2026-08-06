@@ -8,6 +8,7 @@ export * from "./mentions.mjs";
 export * from "./workspace.mjs";
 export * from "./agent-config.mjs";
 export * from "./agent-config-revisions.mjs";
+export * from "./agent-administration.mjs";
 
 export function normalizeRoomId(roomId) {
   const normalized = String(roomId)

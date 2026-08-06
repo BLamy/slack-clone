@@ -17,6 +17,7 @@ import { createChatService } from "@stream-slack/services";
 import { createAuth0Client } from "./auth0-client.mjs";
 import { createInboundHttpServer } from "./http-server.mjs";
 import { createAgentManagementApi } from "./ledger/agent-management.mjs";
+import { createAgentAdministrationAuthorization } from "./ledger/agent-administration-auth.mjs";
 import { canonicalSha256 } from "./ledger/canonical-json.mjs";
 import { createDispatchDoor } from "./ledger/dispatch.mjs";
 import {
@@ -330,6 +331,12 @@ const workspaceAuthorization = Object.freeze({
   authorizeRead: workspaceAuthorizationCore.authorizeRead,
   authorizeSubscription: workspaceAuthorizationCore.authorizeSubscription,
 });
+const agentAdministrationAuthorization = createAgentAdministrationAuthorization(
+  {
+    readDirectory: workspaceDirectory.read,
+    workspaceId: CHAT_WORKSPACE_ID,
+  },
+);
 const dispatchDoor = createDispatchDoor({
   authorize: ({ actorId }) =>
     [...sessions.values()].some((session) => session.user.sub === actorId),
@@ -365,6 +372,7 @@ const agentManagementHttp = createAgentManagementApi({
   workspaceAuthorization,
   workspaceDirectory,
   workspaceId: CHAT_WORKSPACE_ID,
+  agentAdministrationAuthorization,
 });
 
 const contentTypes = new Map([

@@ -89,7 +89,7 @@ const PRINCIPAL_REQUEST_KEYS = [
 const INDEX_RECORD_KEYS = ["kind", "receipt"];
 const INDEX_RECORD_KIND = "dispatch.accepted";
 const SAFE_OPERATION = /^[a-z][a-z0-9._:-]{0,127}$/u;
-const SAFE_STREAM = /^[A-Za-z0-9:_-]{1,200}$/u;
+const SAFE_STREAM = /^[A-Za-z0-9:_/-]{1,200}$/u;
 const DIGEST_PATTERN = /^sha256:[0-9a-f]{64}$/u;
 const OPAQUE_CHECKPOINT_MAX_BYTES = 512;
 
@@ -203,10 +203,8 @@ export function createDispatchDoor({
     return producerSequences.get(stream) ?? 0;
   }
 
-  async function dispatch(request, { signal, context = null } = {}) {
-    validateDispatchRequest(request);
+  async function authorizeRequest(request, { signal, context = null } = {}) {
     const requestDigest = dispatchRequestDigest(request);
-    const idempotencyKey = request.idempotencyKey;
     const authorization = await authorize(request, {
       context,
       requestDigest,
@@ -219,12 +217,69 @@ export function createDispatchDoor({
         { requestDigest, statusCode: 403 },
       );
     }
+    return requestDigest;
+  }
+
+  async function dispatch(request, { signal, context = null } = {}) {
+    validateDispatchRequest(request);
+    const requestDigest = await authorizeRequest(request, { context, signal });
+    const idempotencyKey = request.idempotencyKey;
 
     return serialize(keyTails, idempotencyKey, () =>
       serialize(streamTails, request.stream, () =>
         performDispatch({ request, requestDigest, signal }),
       ),
     );
+  }
+
+  async function recover(request, { signal, context = null } = {}) {
+    validateDispatchRequest(request);
+    const requestDigest = await authorizeRequest(request, { context, signal });
+    return serialize(keyTails, request.idempotencyKey, () =>
+      performRecovery({ request, requestDigest, signal }),
+    );
+  }
+
+  async function performRecovery({ request, requestDigest, signal }) {
+    const indexSnapshot = await readStream(idempotencyStream, signal);
+    const indexed = findIndexedReceipt(
+      indexSnapshot.records,
+      request.idempotencyKey,
+    );
+    if (indexed) {
+      assertReceiptMatchesRequest(indexed, request, requestDigest);
+      const targetSnapshot = await readStream(request.stream, signal);
+      const targetEvent = findTargetEvent(
+        targetSnapshot.records,
+        request.idempotencyKey,
+      );
+      if (!targetEvent) {
+        throw durabilityGap(
+          requestDigest,
+          `receipt for ${request.idempotencyKey} has no target event`,
+        );
+      }
+      assertMetadataMatchesRequest(
+        targetEvent.dispatch,
+        request,
+        requestDigest,
+      );
+      return resultFromReceipt(indexed, targetSnapshot, targetEvent);
+    }
+
+    const targetSnapshot = await readStream(request.stream, signal);
+    const targetEvent = findTargetEvent(
+      targetSnapshot.records,
+      request.idempotencyKey,
+    );
+    if (!targetEvent) return null;
+    return recoverTargetReceipt({
+      request,
+      requestDigest,
+      signal,
+      snapshot: targetSnapshot,
+      event: targetEvent,
+    });
   }
 
   async function performDispatch({ request, requestDigest, signal }) {
@@ -477,7 +532,7 @@ export function createDispatchDoor({
     producerSequences.clear();
   }
 
-  return Object.freeze({ close, dispatch });
+  return Object.freeze({ close, dispatch, recover });
 }
 
 export function validatePrincipalDispatchRequest(value) {

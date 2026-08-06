@@ -9,7 +9,11 @@ import {
 import { replayRecords } from "@stream-slack/reducers";
 
 import { appendIssuedEvent } from "./append-boundary.mjs";
-import { EVENT_ENVELOPE_SCHEMA_VERSION } from "./envelope.mjs";
+import {
+  digestEventEnvelope,
+  EVENT_ENVELOPE_SCHEMA_VERSION,
+  issueEventEnvelope,
+} from "./envelope.mjs";
 import { streamNames } from "./topology.mjs";
 
 export const AGENT_CONFIG_STREAM_ERROR_CODES = Object.freeze({
@@ -52,6 +56,8 @@ export class AgentConfigStreamError extends Error {
 
 export function createAgentConfigStream({
   agentId,
+  dispatch = null,
+  recover = null,
   producerEpoch = 0,
   producerId = null,
   streamStore,
@@ -71,6 +77,12 @@ export function createAgentConfigStream({
   if (producerId !== null && typeof producerId !== "string") {
     throw new TypeError("agent config producerId must be a string or null");
   }
+  if (dispatch !== null && typeof dispatch !== "function") {
+    throw new TypeError("agent config dispatch must be a function or null");
+  }
+  if (recover !== null && typeof recover !== "function") {
+    throw new TypeError("agent config recover must be a function or null");
+  }
   if (!Number.isSafeInteger(producerEpoch) || producerEpoch < 0) {
     throw new TypeError(
       "agent config producerEpoch must be a non-negative safe integer",
@@ -81,10 +93,13 @@ export function createAgentConfigStream({
 
   async function read({ signal } = {}) {
     const snapshot = await streamStore.read(stream, "-1", { signal });
+    const replay = replayAgentConfigStream(snapshot.records);
     return {
       ...snapshot,
+      replay,
       stream,
-      state: replayAgentConfigStream(snapshot.records).finalState,
+      state: replay.finalState,
+      stateDigest: replay.finalStateDigest,
     };
   }
 
@@ -107,6 +122,29 @@ export function createAgentConfigStream({
     const snapshot = await readSnapshot(request?.signal);
     const current = currentAgentConfig(snapshot.records);
     const expected = expectedHead(request, current);
+    if (recover) {
+      const recovered = await recoverExisting({
+        data: revisionData({
+          agentId,
+          config: normalizeAgentConfig(request?.config),
+          expected,
+          headRevision: expected.revision,
+        }),
+        eventType:
+          operation === "create"
+            ? "agent.config.created"
+            : "agent.config.revised",
+        request,
+        snapshot,
+      });
+      if (recovered) {
+        return {
+          ...recovered,
+          revision: recovered.event.data.revision,
+          revisionId: recovered.event.data.revisionId,
+        };
+      }
+    }
     assertExpectedHead(expected, current);
     if (current?.status === "retired") {
       throw new AgentConfigStreamError(
@@ -117,23 +155,14 @@ export function createAgentConfigStream({
     }
 
     const config = normalizeAgentConfig(request?.config);
-    const configDigest = agentConfigDigest(config);
-    const data = {
-      agentId,
-      config,
-      configDigest,
-      expectedRevision: expected.revision,
-      expectedRevisionId: expected.revisionId,
-      predecessorRevisionId: expected.revisionId,
-      revision: (current?.headRevision ?? 0) + 1,
-      revisionId: agentConfigRevisionId({
-        agentId,
-        configDigest,
-        revision: (current?.headRevision ?? 0) + 1,
-      }),
-    };
     const eventType =
       operation === "create" ? "agent.config.created" : "agent.config.revised";
+    const data = revisionData({
+      agentId,
+      config,
+      expected,
+      headRevision: current?.headRevision ?? 0,
+    });
     validateRevisionData(eventType, data, workspaceId);
     const committed = await appendEvent({
       data,
@@ -178,6 +207,15 @@ export function createAgentConfigStream({
       );
     }
     const expected = expectedHead(request, current);
+    if (recover) {
+      const recovered = await recoverExisting({
+        data: lifecycleData(eventType, request, expected, agentId),
+        eventType,
+        request,
+        snapshot,
+      });
+      if (recovered) return recovered;
+    }
     assertExpectedHead(expected, current);
     assertLifecycleAllowed(eventType, request, current);
     const data = {
@@ -202,16 +240,8 @@ export function createAgentConfigStream({
   }
 
   async function appendEvent({ data, eventType, request, snapshot }) {
-    const input = {
-      actorId: request?.actorId,
-      causation: request?.causation ?? null,
-      correlationId: request?.correlationId,
-      data,
-      eventType,
-      idempotencyKey: request?.idempotencyKey,
-      schemaVersion: EVENT_ENVELOPE_SCHEMA_VERSION,
-      workspaceId,
-    };
+    const input = eventInput({ data, eventType, request, workspaceId });
+    let dispatchReceipt = null;
     const producer =
       producerId === null
         ? undefined
@@ -223,6 +253,29 @@ export function createAgentConfigStream({
     try {
       const committed = await appendIssuedEvent({
         append: async ({ digest, envelope }) => {
+          if (dispatch) {
+            const dispatched = await dispatch(
+              {
+                actorId: request?.actorId,
+                expectedHead: snapshot.nextOffset,
+                idempotencyKey: request?.idempotencyKey,
+                operation: eventType,
+                payload: { digest, event: envelope },
+                stream,
+                workspaceId,
+              },
+              {
+                context: request?.dispatchContext ?? null,
+                signal: request?.signal,
+              },
+            );
+            dispatchReceipt = dispatched.receipt;
+            return {
+              appendResult: { nextOffset: dispatched.receipt.nextOffset },
+              digest,
+              envelope,
+            };
+          }
           const appendResult = await streamStore.append(
             stream,
             { digest, event: envelope },
@@ -245,6 +298,7 @@ export function createAgentConfigStream({
         digest: committed.digest,
         event: committed.envelope,
         nextOffset: committed.appendResult.nextOffset,
+        receipt: dispatchReceipt,
         stream,
       };
     } catch (error) {
@@ -270,6 +324,51 @@ export function createAgentConfigStream({
     return streamStore.read(stream, "-1", { signal });
   }
 
+  async function recoverExisting({ data, eventType, request, snapshot }) {
+    if (!recover || !request?.idempotencyKey) return null;
+    const input = eventInput({ data, eventType, request, workspaceId });
+    const envelope = issueEventEnvelope(input, {
+      clock: request?.clock ?? (() => new Date()),
+      eventId: request?.eventId,
+    });
+    const digest = digestEventEnvelope(envelope);
+    const recovered = await recover(
+      {
+        actorId: request?.actorId,
+        expectedHead: snapshot.nextOffset,
+        idempotencyKey: request?.idempotencyKey,
+        operation: eventType,
+        payload: { digest, event: envelope },
+        stream,
+        workspaceId,
+      },
+      {
+        context: request?.dispatchContext ?? null,
+        signal: request?.signal,
+      },
+    );
+    if (!recovered) return null;
+    const recoveredEnvelope = recovered.event?.event ?? recovered.event;
+    if (
+      recoveredEnvelope?.eventType !== eventType ||
+      recoveredEnvelope?.eventId !== envelope.eventId ||
+      recoveredEnvelope?.data?.agentId !== agentId
+    ) {
+      throw new AgentConfigStreamError(
+        AGENT_CONFIG_STREAM_ERROR_CODES.INVALID_STATE,
+        "idempotent dispatch receipt does not match the requested agent configuration event",
+        { statusCode: 409 },
+      );
+    }
+    return {
+      digest,
+      event: recoveredEnvelope,
+      nextOffset: recovered.receipt.nextOffset,
+      receipt: recovered.receipt,
+      stream,
+    };
+  }
+
   return Object.freeze({
     activate,
     create,
@@ -279,6 +378,46 @@ export function createAgentConfigStream({
     retire,
     stream,
   });
+}
+
+function eventInput({ data, eventType, request, workspaceId }) {
+  return {
+    actorId: request?.actorId,
+    causation: request?.causation ?? null,
+    correlationId: request?.correlationId,
+    data,
+    eventType,
+    idempotencyKey: request?.idempotencyKey,
+    schemaVersion: EVENT_ENVELOPE_SCHEMA_VERSION,
+    workspaceId,
+  };
+}
+
+function revisionData({ agentId, config, expected, headRevision }) {
+  const configDigest = agentConfigDigest(config);
+  const revision = headRevision + 1;
+  return {
+    agentId,
+    config,
+    configDigest,
+    expectedRevision: expected.revision,
+    expectedRevisionId: expected.revisionId,
+    predecessorRevisionId: expected.revisionId,
+    revision,
+    revisionId: agentConfigRevisionId({ agentId, configDigest, revision }),
+  };
+}
+
+function lifecycleData(eventType, request, expected, agentId) {
+  const data = {
+    agentId,
+    expectedRevision: expected.revision,
+    expectedRevisionId: expected.revisionId,
+  };
+  if (eventType === "agent.config.activated") {
+    data.revisionId = request?.revisionId;
+  }
+  return data;
 }
 
 export function replayAgentConfigStream(records) {
@@ -315,9 +454,14 @@ function currentAgentConfig(records) {
 }
 
 function expectedHead(request, current) {
-  const revision = request?.expectedRevision ?? current?.headRevision ?? 0;
+  const revision =
+    request && Object.hasOwn(request, "expectedRevision")
+      ? request.expectedRevision
+      : (current?.headRevision ?? 0);
   const revisionId =
-    request?.expectedRevisionId ?? current?.lastRevisionId ?? null;
+    request && Object.hasOwn(request, "expectedRevisionId")
+      ? request.expectedRevisionId
+      : (current?.lastRevisionId ?? null);
   if (!Number.isSafeInteger(revision) || revision < 0) {
     throw new AgentConfigStreamError(
       AGENT_CONFIG_STREAM_ERROR_CODES.INVALID_REQUEST,

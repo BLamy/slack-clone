@@ -41,6 +41,14 @@ export function createWorkspaceDirectoryAuthority({
     return replay.finalState.entities.memberships?.[membershipId] ?? null;
   }
 
+  async function lookupPrincipal(requestedWorkspaceId, principalId) {
+    if (requestedWorkspaceId !== workspaceId) return null;
+    validatePrincipalId(principalId, { expectedWorkspaceId: workspaceId });
+    await ensureReady();
+    const replay = await readReplay();
+    return replay.finalState.entities.principals?.[principalId] ?? null;
+  }
+
   async function lookupPrincipalBySubject(
     requestedWorkspaceId,
     authenticatedSubject,
@@ -55,6 +63,19 @@ export function createWorkspaceDirectoryAuthority({
           sameSubjectBinding(principal.subjectBinding, authenticatedSubject),
       ) ?? null
     );
+  }
+
+  async function read({ signal } = {}) {
+    await ensureReady();
+    const snapshot = await streamStore.read(stream, "-1", { signal });
+    const replay = await readReplay(snapshot);
+    return {
+      ...snapshot,
+      replay,
+      state: replay.finalState,
+      stateDigest: replay.finalStateDigest,
+      stream,
+    };
   }
 
   function ensureReady() {
@@ -111,7 +132,8 @@ export function createWorkspaceDirectoryAuthority({
   }
 
   function assertBootstrapPrefix(records) {
-    for (let index = 0; index < records.length; index += 1) {
+    const prefixLength = Math.min(records.length, bootstrapEvents.length);
+    for (let index = 0; index < prefixLength; index += 1) {
       const actual = records[index]?.event ?? records[index];
       const expected = bootstrapEvents[index];
       if (actual?.eventId !== expected?.eventId) {
@@ -124,7 +146,9 @@ export function createWorkspaceDirectoryAuthority({
 
   return Object.freeze({
     lookupMembership,
+    lookupPrincipal,
     lookupPrincipalBySubject,
+    read,
     get ready() {
       return ensureReady();
     },

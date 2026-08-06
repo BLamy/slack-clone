@@ -146,6 +146,27 @@ const NETWORK_DOORS = Object.freeze([
     allowedExports: new Set(),
   }),
   Object.freeze({
+    exact: "scripts/agent-management-cli.mjs",
+    allowAmbient: true,
+    allowOfficialClient: false,
+    provider: false,
+    allowedExports: new Set(),
+  }),
+  Object.freeze({
+    exact: "scripts/verify-e2-t03.mjs",
+    allowAmbient: true,
+    allowOfficialClient: false,
+    provider: false,
+    allowedExports: new Set(),
+  }),
+  Object.freeze({
+    exact: "scripts/cold-verify-e2-t03.mjs",
+    allowAmbient: true,
+    allowOfficialClient: false,
+    provider: false,
+    allowedExports: new Set(),
+  }),
+  Object.freeze({
     exact: "src/auth0-client.mjs",
     allowAmbient: true,
     allowOfficialClient: false,

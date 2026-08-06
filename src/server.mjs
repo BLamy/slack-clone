@@ -16,6 +16,7 @@ import { createChatService } from "@stream-slack/services";
 
 import { createAuth0Client } from "./auth0-client.mjs";
 import { createInboundHttpServer } from "./http-server.mjs";
+import { createAgentManagementApi } from "./ledger/agent-management.mjs";
 import { canonicalSha256 } from "./ledger/canonical-json.mjs";
 import { createDispatchDoor } from "./ledger/dispatch.mjs";
 import {
@@ -357,6 +358,14 @@ const chatHttp = createChatHttpDelivery({
   sessionUser,
   workspaceAuthorization,
 });
+const agentManagementHttp = createAgentManagementApi({
+  dispatchDoor,
+  sessionUser,
+  streamStore,
+  workspaceAuthorization,
+  workspaceDirectory,
+  workspaceId: CHAT_WORKSPACE_ID,
+});
 
 const contentTypes = new Map([
   [".css", "text/css; charset=utf-8"],
@@ -435,6 +444,12 @@ const server = createInboundHttpServer(async (request, response) => {
   try {
     if (await handleAuth(request, response, url)) return;
     if (url.pathname.startsWith("/api/")) {
+      const agentHandled = await agentManagementHttp.handleApi(
+        request,
+        response,
+        url,
+      );
+      if (agentHandled) return;
       const handled = await chatHttp.handleApi(request, response, url);
       if (!handled) sendJson(response, 404, { ok: false, error: "Not found" });
       return;

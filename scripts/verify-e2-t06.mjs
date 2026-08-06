@@ -20,13 +20,18 @@ import {
 } from "@stream-slack/protocol";
 import { createChannelAuthorization } from "../src/ledger/channel-auth.mjs";
 import { establishWorkspaceContext } from "../src/ledger/workspace-auth.mjs";
-import { validateAndReplayDump } from "../src/ledger/replay.mjs";
+import { normalizeDump } from "../src/ledger/replay.mjs";
 
 const rosterModule = process.env.E2_T06_ROSTER_MODULE
   ? await import(
       pathToFileURL(path.resolve(process.env.E2_T06_ROSTER_MODULE)).href
     )
   : await import("@stream-slack/protocol");
+const reducerModule = process.env.E2_T06_REDUCER_MODULE
+  ? await import(
+      pathToFileURL(path.resolve(process.env.E2_T06_REDUCER_MODULE)).href
+    )
+  : await import("@stream-slack/reducers");
 const {
   AGENT_PRESENCE_DEFAULT_TTL_MS,
   AGENT_PRESENCE_MAX_TTL_MS,
@@ -78,6 +83,12 @@ const CONFIG_PATH = path.join(
   ".eforest/tasks/epic-2-the-roster/E2-T01-versioned-agent-config-schema/fixtures/valid/agent-config.v1.json",
 );
 const CANARY = "Bearer e2-t06-presence-canary-123456789";
+const EXPECTED_DURABLE_STATE_DIGEST =
+  "sha256:8a61ade8616a7c8814669220cf22e7606130be08dea91ce4e19e98aaa57f717e";
+const EXPECTED_READINESS_MANIFEST_DIGEST =
+  "sha256:751764325d1387da9404895128892e5a1e95005fb0bd45e27bd9dde42d6ec8b5";
+const EXPECTED_ROSTER_DIGEST =
+  "sha256:6339894cf3e0c29cffbd3506f5af58df03422adf19f31f114134098ea8dee8a3";
 
 await main();
 
@@ -128,6 +139,7 @@ async function main() {
     membership: result.membership,
     readiness: result.readiness,
     transitions: result.transitions,
+    canaryScan: result.canaryScan,
     sensitivity,
   };
   await writeJson("verification-summary.json", summary);
@@ -163,6 +175,7 @@ async function verifyWorkflow() {
     activeConfig: config,
     activeRevisionId:
       "acr_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    auditNote: CANARY,
     runnable: true,
     status: "active",
   };
@@ -250,6 +263,11 @@ async function verifyWorkflow() {
     recordCount: dump.records.length,
     stream: `workspace:${WORKSPACE_A}/directory`,
   };
+  assert.equal(
+    replayEvidence.finalStateDigest,
+    EXPECTED_DURABLE_STATE_DIGEST,
+    "durable replay digest changed from the pinned E2-T06 fixture",
+  );
   const rosterEvidence = {
     agentCount: roster.directory.filter(({ kind }) => kind === "agent").length,
     channelCount: roster.channels.length,
@@ -259,7 +277,20 @@ async function verifyWorkflow() {
     streamStateDigest: replay.finalStateDigest,
     workspaceId: WORKSPACE_A,
   };
+  assert.equal(
+    rosterEvidence.rosterDigest,
+    EXPECTED_ROSTER_DIGEST,
+    "roster digest changed from the pinned E2-T06 fixture",
+  );
+  const canaryScan = verifyCanaryIsolation({
+    membership: matrix,
+    readiness,
+    replay: replayEvidence,
+    roster: rosterEvidence,
+    transitions,
+  });
   return {
+    canaryScan,
     result: "PASS",
     membership: matrix,
     readiness,
@@ -499,10 +530,50 @@ function readinessManifest(registry, config) {
     providers.every(({ status }) => status.available),
     true,
   );
+  const registryManifestDigest = registry.manifestDigest();
+  assert.equal(
+    registryManifestDigest,
+    EXPECTED_READINESS_MANIFEST_DIGEST,
+    "provider registry digest changed from the pinned E2-T06 fixture",
+  );
   return {
     providerCount: providers.length,
     providers,
-    registryManifestDigest: registry.manifestDigest(),
+    registryManifestDigest,
+  };
+}
+
+function verifyCanaryIsolation({
+  membership,
+  readiness,
+  replay,
+  roster,
+  transitions,
+}) {
+  const publishedEvidence = {
+    membership,
+    readiness,
+    replay,
+    roster,
+    transitions,
+  };
+  assert.equal(
+    JSON.stringify(publishedEvidence).includes(CANARY),
+    false,
+    "published E2-T06 evidence leaked the readiness canary",
+  );
+  return {
+    checkedOutputs: [
+      "verification-summary.json",
+      "roster-manifest.json",
+      "membership-matrix.json",
+      "readiness-inputs.json",
+      "durable-replay.json",
+      "transition-matrix.json",
+    ],
+    input: "ephemeral readiness audit note",
+    leaked: false,
+    result: "PASS",
   };
 }
 
@@ -768,29 +839,76 @@ function verifyAvailabilityTransitions({
 }
 
 async function runSensitivity() {
-  const sourceDirectory = path.join(root, "packages/protocol/src");
   await mkdir(path.join(taskDirectory, "work"), { recursive: true });
   const mutations = [
     {
+      module: "roster",
       name: "remove immutable principal-kind labeling",
+      file: "agent-roster.mjs",
       needle: "kind: principal.kind,",
       replacement: 'kind: "human",',
     },
     {
+      module: "roster",
       name: "remove provider-stale prerequisite",
+      file: "agent-roster.mjs",
       needle: "} else if (provider.stale) {",
       replacement: "} else if (false && provider.stale) {",
     },
     {
+      module: "roster",
       name: "remove durable handle uniqueness",
+      file: "agent-roster.mjs",
       needle: `  validateUniquePrincipalHandles(principalRecords, {
     expectedWorkspaceId: normalizedWorkspaceId,
   });`,
       replacement: "  // handle uniqueness mutant",
     },
+    {
+      module: "reducer",
+      name: "remove service-principal channel membership fence",
+      file: "index.mjs",
+      needle: `  if (principal.kind === "service") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_PARTICIPANT_SERVICE,
+      "service principals may not join conversations",
+      "principalId",
+      context,
+    );
+  }
+  if (data.principalId !== context.envelope.actorId) {`,
+      replacement: `  // service-principal membership fence mutant
+  if (data.principalId !== context.envelope.actorId) {`,
+    },
+    {
+      module: "reducer",
+      name: "remove durable reducer handle uniqueness",
+      file: "index.mjs",
+      needle: `  if (
+    principalHandleMatches(
+      state,
+      context.envelope.workspaceId,
+      data.profile.handle,
+    ).length > 0
+  ) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_DUPLICATE_HANDLE,
+      "principal handle is already assigned to another workspace principal",
+      "profile.handle",
+      context,
+    );
+  }`,
+      replacement: "  // reducer handle uniqueness mutant",
+    },
   ];
   const results = [];
   for (const mutation of mutations) {
+    const sourceDirectory = path.join(
+      root,
+      mutation.module === "reducer"
+        ? "packages/reducers/src"
+        : "packages/protocol/src",
+    );
     const sensitivityRoot = await mkdtemp(
       path.join(taskDirectory, "work/sensitivity-"),
     );
@@ -805,23 +923,35 @@ async function runSensitivity() {
         }
       }
       const source = await readFile(
-        path.join(sourceDirectory, "agent-roster.mjs"),
+        path.join(sourceDirectory, mutation.file),
         "utf8",
       );
       assert.equal(source.split(mutation.needle).length - 1, 1, mutation.name);
       await writeFile(
-        path.join(sensitivityRoot, "agent-roster.mjs"),
+        path.join(sensitivityRoot, mutation.file),
         source.replace(mutation.needle, mutation.replacement),
       );
       const childEnv = {
         ...process.env,
-        E2_T06_ROSTER_MODULE: path.join(sensitivityRoot, "agent-roster.mjs"),
         E2_T06_SENSITIVITY_CHILD: "1",
         E2_T06_SKIP_GATES: "1",
         PROMOTE_EVIDENCE: "0",
         TEST_ARTIFACT_DIR: path.join(sensitivityRoot, "artifacts"),
         TEST_RUN_ID: `${runId}-${mutation.name.replace(/[^a-z0-9]+/giu, "-")}`,
       };
+      if (mutation.module === "reducer") {
+        childEnv.E2_T06_REDUCER_MODULE = path.join(
+          sensitivityRoot,
+          mutation.file,
+        );
+        delete childEnv.E2_T06_ROSTER_MODULE;
+      } else {
+        childEnv.E2_T06_ROSTER_MODULE = path.join(
+          sensitivityRoot,
+          mutation.file,
+        );
+        delete childEnv.E2_T06_REDUCER_MODULE;
+      }
       const child = spawnSync(
         process.execPath,
         [path.join(root, "scripts/verify-e2-t06.mjs")],
@@ -853,6 +983,14 @@ async function runSensitivity() {
       ({ verifierDetectedMutant }) => verifierDetectedMutant,
     ),
   };
+}
+
+function validateAndReplayDump(value) {
+  const records = normalizeDump(value);
+  return reducerModule.replayRecords(records, {
+    allowLegacyAgentConfigRevisions: value?.task === "E0-T05",
+    allowLegacyCompactMessages: value?.task === "E0-T05",
+  });
 }
 
 function runGates() {

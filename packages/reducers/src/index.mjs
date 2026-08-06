@@ -76,6 +76,7 @@ export const REDUCER_ERROR_CODES = Object.freeze({
   MALFORMED_ENVELOPE: "REDUCER_MALFORMED_ENVELOPE",
   OFFSET_REUSED: "REDUCER_OFFSET_REUSED",
   PRINCIPAL_DUPLICATE_SUBJECT: "REDUCER_PRINCIPAL_DUPLICATE_SUBJECT",
+  PRINCIPAL_DUPLICATE_HANDLE: "REDUCER_PRINCIPAL_DUPLICATE_HANDLE",
   PRINCIPAL_INVALID_KIND: "REDUCER_PRINCIPAL_INVALID_KIND",
   PRINCIPAL_INVALID_OWNER: "REDUCER_PRINCIPAL_INVALID_OWNER",
   PRINCIPAL_INVALID_PROFILE: "REDUCER_PRINCIPAL_INVALID_PROFILE",
@@ -1684,6 +1685,20 @@ function reducePrincipalCreated(state, data, context) {
       );
     }
   }
+  if (
+    principalHandleMatches(
+      state,
+      context.envelope.workspaceId,
+      data.profile.handle,
+    ).length > 0
+  ) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_DUPLICATE_HANDLE,
+      "principal handle is already assigned to another workspace principal",
+      "profile.handle",
+      context,
+    );
+  }
 
   state.entities.principals = setKey(principals, data.principalId, {
     kind: data.kind,
@@ -1716,6 +1731,20 @@ function reducePrincipalProfileUpdated(state, data, context) {
       REDUCER_ERROR_CODES.PRINCIPAL_PROFILE_REVISION,
       `profile revision must advance from ${current.profileRevision} to ${current.profileRevision + 1}`,
       "revision",
+      context,
+    );
+  }
+  if (
+    principalHandleMatches(
+      state,
+      context.envelope.workspaceId,
+      data.profile.handle,
+    ).some((principal) => principal.principalId !== data.principalId)
+  ) {
+    failPrincipal(
+      REDUCER_ERROR_CODES.PRINCIPAL_DUPLICATE_HANDLE,
+      "principal handle is already assigned to another workspace principal",
+      "profile.handle",
       context,
     );
   }
@@ -2095,7 +2124,19 @@ function reduceChannelMembershipJoined(state, data, context) {
   const channel = requireChannel(state, data.channelId, context);
   assertChannelRevision(data.expectedChannelRevision, channel, context);
   assertPrincipalId(data.principalId, "principalId", context);
-  requireActiveWorkspacePrincipal(state, data.principalId, context);
+  const principal = requireActiveWorkspacePrincipal(
+    state,
+    data.principalId,
+    context,
+  );
+  if (principal.kind === "service") {
+    failChannel(
+      REDUCER_ERROR_CODES.CHANNEL_PARTICIPANT_SERVICE,
+      "service principals may not join conversations",
+      "principalId",
+      context,
+    );
+  }
   if (data.principalId !== context.envelope.actorId) {
     failChannel(
       REDUCER_ERROR_CODES.CHANNEL_SCOPE_MISMATCH,

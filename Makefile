@@ -1,4 +1,4 @@
-.PHONY: verify-E0 verify-E0-T01 verify-E0-T02 verify-E0-T03 verify-E0-T04 verify-E0-T05 verify-E0-T06 verify-E0-T07 verify-E1 verify-E1-T01 verify-E1-T02 verify-E1-T03 verify-E1-T04 verify-E1-T05 verify-E1-T06 verify-E1-T07 verify-E1-T08 verify-E2-T01 verify-E2-T02 verify-E2-T03 verify-E2-T04 verify-E2-T05 projection-E1-T07-rebuild projection-E1-T07-catch-up projection-E1-T07-corruption projection-E1-T07-shadow
+.PHONY: verify-E0 verify-E0-T01 verify-E0-T02 verify-E0-T03 verify-E0-T04 verify-E0-T05 verify-E0-T06 verify-E0-T07 verify-E1 verify-E1-T01 verify-E1-T02 verify-E1-T03 verify-E1-T04 verify-E1-T05 verify-E1-T06 verify-E1-T07 verify-E1-T08 verify-E2-T01 verify-E2-T02 verify-E2-T03 verify-E2-T04 verify-E2-T05 verify-E2-T06 projection-E1-T07-rebuild projection-E1-T07-catch-up projection-E1-T07-corruption projection-E1-T07-shadow
 
 verify-E0: verify-E0-T01 verify-E0-T02 verify-E0-T03 verify-E0-T04 verify-E0-T05 verify-E0-T06 verify-E0-T07
 
@@ -61,6 +61,9 @@ verify-E2-T04:
 
 verify-E2-T05:
 	@E2_T05_ENTRYPOINT='make verify-E2-T05' node scripts/cold-verify-e2-t05.mjs
+
+verify-E2-T06:
+	@E2_T06_ENTRYPOINT='make verify-E2-T06' node scripts/cold-verify-e2-t06.mjs
 
 verify-E1:
 	@node scripts/composed-verify-e1.mjs

@@ -1,4 +1,12 @@
-import { copyFile, mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import {
+  copyFile,
+  mkdir,
+  mkdtemp,
+  readFile,
+  readdir,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import path from "node:path";
 
@@ -25,6 +33,7 @@ const taskDirectory = path.join(
   ".eforest/tasks/epic-2-the-roster/E2-T07-immutable-invocation-snapshot",
 );
 const evidenceDirectory = path.join(taskDirectory, "evidence/e2-t07-final");
+const CANARY = "Bearer e2-t07-invocation-canary-123456789";
 await mkdir(evidenceDirectory, { recursive: true });
 const workDirectory = path.join(taskDirectory, "work");
 await mkdir(workDirectory, { recursive: true });
@@ -122,6 +131,7 @@ try {
     for (const filename of [
       "verification-summary.json",
       "snapshot-manifest.json",
+      "snapshot-integrity.json",
       "source-references.json",
       "refusal-matrix.json",
       "revocation-races.json",
@@ -149,6 +159,29 @@ await writeFile(
   path.join(evidenceDirectory, "cold-clone-transcript.json"),
   `${JSON.stringify(transcript, null, 2)}\n`,
 );
+
+const finalEvidenceFiles = (await readdir(evidenceDirectory)).sort();
+let publishedEvidenceLeaked = false;
+for (const filename of finalEvidenceFiles) {
+  const contents = await readFile(
+    path.join(evidenceDirectory, filename),
+    "utf8",
+  );
+  if (contents.includes(CANARY)) publishedEvidenceLeaked = true;
+}
+if (publishedEvidenceLeaked) {
+  throw new Error("promoted E2-T07 evidence contains the canary");
+}
+const canaryScanPath = path.join(evidenceDirectory, "canary-scan.json");
+const canaryScan = JSON.parse(await readFile(canaryScanPath, "utf8"));
+canaryScan.evidenceFiles = finalEvidenceFiles;
+canaryScan.postVerifierTranscriptChecked = true;
+canaryScan.publishedEvidenceLeaked = false;
+await writeFile(canaryScanPath, `${JSON.stringify(canaryScan, null, 2)}\n`);
+const summaryPath = path.join(evidenceDirectory, "verification-summary.json");
+const summary = JSON.parse(await readFile(summaryPath, "utf8"));
+summary.canaryScan = canaryScan;
+await writeFile(summaryPath, `${JSON.stringify(summary, null, 2)}\n`);
 
 console.log(
   JSON.stringify(

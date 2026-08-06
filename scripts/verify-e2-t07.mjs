@@ -131,6 +131,7 @@ async function main() {
         : [],
     gates,
     snapshot: result.snapshot,
+    snapshotIntegrity: result.snapshotIntegrity,
     sourceReferences: result.sourceReferences,
     refusalMatrix: result.refusalMatrix,
     revocationRaces: result.revocationRaces,
@@ -139,6 +140,7 @@ async function main() {
   };
   await writeJson("verification-summary.json", summary);
   await writeJson("snapshot-manifest.json", result.snapshot);
+  await writeJson("snapshot-integrity.json", result.snapshotIntegrity);
   await writeJson("source-references.json", result.sourceReferences);
   await writeJson("refusal-matrix.json", result.refusalMatrix);
   await writeJson("revocation-races.json", result.revocationRaces);
@@ -258,6 +260,7 @@ async function verifyWorkflow() {
     input,
     snapshot,
   });
+  const snapshotIntegrity = verifySnapshotIntegrity({ input, snapshot });
   const refusalMatrix = verifyRefusalMatrix({ config, input });
   const revocationRaces = verifyRevocationRaces({ config, input, snapshot });
   const canaryScan = verifyCanaryIsolation({ config, input, snapshot });
@@ -267,6 +270,7 @@ async function verifyWorkflow() {
     refusalMatrix,
     result: "PASS",
     revocationRaces,
+    snapshotIntegrity,
     snapshot: {
       canonicalByteLength: canonicalBytes.length,
       initialDigest: snapshot.snapshotDigest,
@@ -360,6 +364,41 @@ function verifyReconfigurationRaces({
         canonicalInvocationSnapshot(snapshot),
     };
   });
+}
+
+function verifySnapshotIntegrity({ input, snapshot }) {
+  const tampered = structuredClone(snapshot);
+  delete tampered.sourceManifest.config.stateDigest;
+
+  let replayError = null;
+  try {
+    replayInvocationSnapshot(tampered);
+  } catch (error) {
+    replayError = error;
+  }
+  assert.ok(replayError, "tampered snapshot replay must fail");
+  assert.equal(
+    replayError.code,
+    INVOCATION_SNAPSHOT_ERROR_CODES.SNAPSHOT_DIGEST_MISMATCH,
+  );
+
+  const decision = checkInvocationSnapshotUse({
+    ...input,
+    snapshot: tampered,
+  });
+  assert.equal(decision.allowed, false);
+  assert.equal(
+    decision.code,
+    INVOCATION_SNAPSHOT_ERROR_CODES.SNAPSHOT_DIGEST_MISMATCH,
+  );
+
+  return {
+    checkUseCode: decision.code,
+    replayCode: replayError.code,
+    result: "PASS",
+    tamperedField: "sourceManifest.config.stateDigest",
+    tamperDetected: true,
+  };
 }
 
 function verifyRefusalMatrix({ config, input }) {
@@ -692,6 +731,11 @@ async function runSensitivity() {
       name: "bind workspace input source to config source",
       needle: "    workspaceInputs: inputs.source,",
       replacement: "    workspaceInputs: sources.config,",
+    },
+    {
+      name: "disable snapshot digest verification",
+      needle: "if (value.snapshotDigest !== expected) {",
+      replacement: "if (false && value.snapshotDigest !== expected) {",
     },
   ];
   const results = [];

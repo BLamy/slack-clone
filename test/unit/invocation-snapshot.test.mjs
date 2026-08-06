@@ -83,6 +83,29 @@ test("resolves a frozen canonical snapshot and replays its exact bytes", () => {
   assert.equal(replay.snapshotDigest, snapshot.snapshotDigest);
 });
 
+test("rejects a scratch snapshot with a deleted source digest", () => {
+  const input = makeInput();
+  const snapshot = createInvocationSnapshot(input);
+  const tampered = structuredClone(snapshot);
+  delete tampered.sourceManifest.config.stateDigest;
+
+  assert.throws(
+    () => replayInvocationSnapshot(tampered),
+    (error) =>
+      error.code === INVOCATION_SNAPSHOT_ERROR_CODES.SNAPSHOT_DIGEST_MISMATCH,
+  );
+
+  const decision = checkInvocationSnapshotUse({
+    ...input,
+    snapshot: tampered,
+  });
+  assert.equal(decision.allowed, false);
+  assert.equal(
+    decision.code,
+    INVOCATION_SNAPSHOT_ERROR_CODES.SNAPSHOT_DIGEST_MISMATCH,
+  );
+});
+
 test("keeps historical bytes stable while a later resolution gets a new digest", () => {
   const input = makeInput();
   const snapshot = createInvocationSnapshot(input);

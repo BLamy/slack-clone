@@ -1,0 +1,106 @@
+{
+  "rows": [
+    {
+      "harnessProviderKey": "harness:claude-code@1.0.0",
+      "sandboxProviderKey": "sandbox:fly-sprites@1.0.0",
+      "declaredByHarness": true,
+      "declaredBySandbox": true,
+      "harnessAvailable": false,
+      "sandboxAvailable": false,
+      "expectedRunnable": false,
+      "actual": {
+        "allowed": false,
+        "code": "PROVIDER_REGISTRY_PROVIDER_NOT_INSTALLED"
+      },
+      "result": "PASS"
+    },
+    {
+      "harnessProviderKey": "harness:claude-code@1.0.0",
+      "sandboxProviderKey": "sandbox:scripted@1.0.0",
+      "declaredByHarness": false,
+      "declaredBySandbox": false,
+      "harnessAvailable": false,
+      "sandboxAvailable": true,
+      "expectedRunnable": false,
+      "actual": {
+        "allowed": false,
+        "code": "PROVIDER_REGISTRY_PROVIDER_NOT_INSTALLED"
+      },
+      "result": "PASS"
+    },
+    {
+      "harnessProviderKey": "harness:codex@1.0.0",
+      "sandboxProviderKey": "sandbox:fly-sprites@1.0.0",
+      "declaredByHarness": true,
+      "declaredBySandbox": true,
+      "harnessAvailable": false,
+      "sandboxAvailable": false,
+      "expectedRunnable": false,
+      "actual": {
+        "allowed": false,
+        "code": "PROVIDER_REGISTRY_PROVIDER_NOT_INSTALLED"
+      },
+      "result": "PASS"
+    },
+    {
+      "harnessProviderKey": "harness:codex@1.0.0",
+      "sandboxProviderKey": "sandbox:scripted@1.0.0",
+      "declaredByHarness": false,
+      "declaredBySandbox": false,
+      "harnessAvailable": false,
+      "sandboxAvailable": true,
+      "expectedRunnable": false,
+      "actual": {
+        "allowed": false,
+        "code": "PROVIDER_REGISTRY_PROVIDER_NOT_INSTALLED"
+      },
+      "result": "PASS"
+    },
+    {
+      "harnessProviderKey": "harness:scripted@1.0.0",
+      "sandboxProviderKey": "sandbox:fly-sprites@1.0.0",
+      "declaredByHarness": false,
+      "declaredBySandbox": false,
+      "harnessAvailable": true,
+      "sandboxAvailable": false,
+      "expectedRunnable": false,
+      "actual": {
+        "allowed": false,
+        "code": "PROVIDER_REGISTRY_PROVIDER_NOT_INSTALLED"
+      },
+      "result": "PASS"
+    },
+    {
+      "harnessProviderKey": "harness:scripted@1.0.0",
+      "sandboxProviderKey": "sandbox:scripted@1.0.0",
+      "declaredByHarness": true,
+      "declaredBySandbox": true,
+      "harnessAvailable": true,
+      "sandboxAvailable": true,
+      "expectedRunnable": true,
+      "actual": {
+        "allowed": true,
+        "code": null
+      },
+      "result": "PASS"
+    },
+    {
+      "harnessProviderKey": "harness:codex@1.0.0",
+      "sandboxProviderKey": "sandbox:scripted@1.0.0",
+      "declaredByHarness": false,
+      "declaredBySandbox": false,
+      "harnessAvailable": true,
+      "sandboxAvailable": true,
+      "expectedRunnable": false,
+      "actual": {
+        "allowed": false,
+        "code": "PROVIDER_REGISTRY_INCOMPATIBLE_PROVIDERS"
+      },
+      "result": "PASS",
+      "scenario": "ready-but-incompatible"
+    }
+  ],
+  "runnableRows": 1,
+  "refusedRows": 6,
+  "result": "PASS"
+}

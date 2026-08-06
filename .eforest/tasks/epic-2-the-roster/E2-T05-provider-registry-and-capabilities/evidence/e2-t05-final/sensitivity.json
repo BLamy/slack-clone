@@ -1,0 +1,28 @@
+{
+  "mutationCount": 3,
+  "mutations": [
+    {
+      "mutation": "remove capability negotiation refusal",
+      "exitCode": 1,
+      "verifier": "scripts/verify-e2-t05.mjs",
+      "verifierDetectedMutant": true,
+      "result": "PASS"
+    },
+    {
+      "mutation": "remove reciprocal compatibility refusal",
+      "exitCode": 1,
+      "verifier": "scripts/verify-e2-t05.mjs",
+      "verifierDetectedMutant": true,
+      "result": "PASS"
+    },
+    {
+      "mutation": "inject provider-specific orchestration branch",
+      "exitCode": 1,
+      "verifier": "scripts/verify-e2-t05.mjs",
+      "verifierDetectedMutant": true,
+      "result": "PASS"
+    }
+  ],
+  "verifierDetectedMutant": true,
+  "result": "PASS"
+}

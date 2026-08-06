@@ -1,0 +1,298 @@
+{
+  "schemaVersion": 1,
+  "now": 0,
+  "providers": [
+    {
+      "descriptorSchemaVersion": 1,
+      "kind": "harness",
+      "providerId": "claude-code",
+      "providerVersion": "1.0.0",
+      "displayName": "Claude Code harness",
+      "installed": false,
+      "enabled": true,
+      "health": "unknown",
+      "implementationStatus": "unimplemented",
+      "observedAt": 0,
+      "expiresAt": 9007199254740991,
+      "capabilities": [
+        "cancellation",
+        "structured-output",
+        "tool-calls"
+      ],
+      "limits": {
+        "maxConcurrentRuns": 8,
+        "maxInputBytes": 1000000,
+        "maxOutputBytes": 1000000,
+        "maxWallClockSeconds": 3600
+      },
+      "configSchema": {
+        "schemaVersion": 1,
+        "schemaId": "urn:stream-slack:provider:harness-claude-code:v1",
+        "type": "object",
+        "required": [
+          "protocol"
+        ],
+        "properties": {
+          "protocol": {
+            "type": "string",
+            "enum": [
+              "claude-code-harness-v1"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "compatibleWith": [
+        {
+          "kind": "sandbox",
+          "providerId": "fly-sprites",
+          "providerVersion": "1.0.0"
+        }
+      ],
+      "status": {
+        "installed": false,
+        "enabled": true,
+        "health": "unknown",
+        "observedAt": 0,
+        "expiresAt": 9007199254740991,
+        "stale": false,
+        "available": false
+      }
+    },
+    {
+      "descriptorSchemaVersion": 1,
+      "kind": "harness",
+      "providerId": "codex",
+      "providerVersion": "1.0.0",
+      "displayName": "Codex harness",
+      "installed": false,
+      "enabled": true,
+      "health": "unknown",
+      "implementationStatus": "unimplemented",
+      "observedAt": 0,
+      "expiresAt": 9007199254740991,
+      "capabilities": [
+        "cancellation",
+        "structured-output",
+        "tool-calls"
+      ],
+      "limits": {
+        "maxConcurrentRuns": 8,
+        "maxInputBytes": 1000000,
+        "maxOutputBytes": 1000000,
+        "maxWallClockSeconds": 3600
+      },
+      "configSchema": {
+        "schemaVersion": 1,
+        "schemaId": "urn:stream-slack:provider:harness-codex:v1",
+        "type": "object",
+        "required": [
+          "protocol"
+        ],
+        "properties": {
+          "protocol": {
+            "type": "string",
+            "enum": [
+              "codex-harness-v1"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "compatibleWith": [
+        {
+          "kind": "sandbox",
+          "providerId": "fly-sprites",
+          "providerVersion": "1.0.0"
+        }
+      ],
+      "status": {
+        "installed": false,
+        "enabled": true,
+        "health": "unknown",
+        "observedAt": 0,
+        "expiresAt": 9007199254740991,
+        "stale": false,
+        "available": false
+      }
+    },
+    {
+      "descriptorSchemaVersion": 1,
+      "kind": "harness",
+      "providerId": "scripted",
+      "providerVersion": "1.0.0",
+      "displayName": "Deterministic scripted harness",
+      "installed": true,
+      "enabled": true,
+      "health": "healthy",
+      "implementationStatus": "implemented",
+      "observedAt": 0,
+      "expiresAt": 9007199254740991,
+      "capabilities": [
+        "cancellation",
+        "structured-output",
+        "tool-calls"
+      ],
+      "limits": {
+        "maxConcurrentRuns": 8,
+        "maxInputBytes": 1000000,
+        "maxOutputBytes": 1000000,
+        "maxWallClockSeconds": 3600
+      },
+      "configSchema": {
+        "schemaVersion": 1,
+        "schemaId": "urn:stream-slack:provider:harness-scripted:v1",
+        "type": "object",
+        "required": [
+          "protocol"
+        ],
+        "properties": {
+          "protocol": {
+            "type": "string",
+            "enum": [
+              "scripted-harness-v1"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "compatibleWith": [
+        {
+          "kind": "sandbox",
+          "providerId": "scripted",
+          "providerVersion": "1.0.0"
+        }
+      ],
+      "status": {
+        "installed": true,
+        "enabled": true,
+        "health": "healthy",
+        "observedAt": 0,
+        "expiresAt": 9007199254740991,
+        "stale": false,
+        "available": true
+      }
+    },
+    {
+      "descriptorSchemaVersion": 1,
+      "kind": "sandbox",
+      "providerId": "fly-sprites",
+      "providerVersion": "1.0.0",
+      "displayName": "Fly Sprites sandbox",
+      "installed": false,
+      "enabled": true,
+      "health": "unknown",
+      "implementationStatus": "unimplemented",
+      "observedAt": 0,
+      "expiresAt": 9007199254740991,
+      "capabilities": [
+        "checkpoint-reconnect",
+        "ephemeral",
+        "persistent",
+        "streaming-exec"
+      ],
+      "limits": {
+        "maxConcurrentRuns": 4,
+        "maxInputBytes": 10000000,
+        "maxOutputBytes": 10000000,
+        "maxWallClockSeconds": 7200
+      },
+      "configSchema": {
+        "schemaVersion": 1,
+        "schemaId": "urn:stream-slack:provider:sandbox-fly-sprites:v1",
+        "type": "object",
+        "required": [
+          "protocol"
+        ],
+        "properties": {
+          "protocol": {
+            "type": "string",
+            "enum": [
+              "fly-sprites-sandbox-v1"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "compatibleWith": [
+        {
+          "kind": "harness",
+          "providerId": "claude-code",
+          "providerVersion": "1.0.0"
+        },
+        {
+          "kind": "harness",
+          "providerId": "codex",
+          "providerVersion": "1.0.0"
+        }
+      ],
+      "status": {
+        "installed": false,
+        "enabled": true,
+        "health": "unknown",
+        "observedAt": 0,
+        "expiresAt": 9007199254740991,
+        "stale": false,
+        "available": false
+      }
+    },
+    {
+      "descriptorSchemaVersion": 1,
+      "kind": "sandbox",
+      "providerId": "scripted",
+      "providerVersion": "1.0.0",
+      "displayName": "Deterministic scripted sandbox",
+      "installed": true,
+      "enabled": true,
+      "health": "healthy",
+      "implementationStatus": "implemented",
+      "observedAt": 0,
+      "expiresAt": 9007199254740991,
+      "capabilities": [
+        "checkpoint-reconnect",
+        "ephemeral",
+        "persistent",
+        "streaming-exec"
+      ],
+      "limits": {
+        "maxConcurrentRuns": 4,
+        "maxInputBytes": 10000000,
+        "maxOutputBytes": 10000000,
+        "maxWallClockSeconds": 7200
+      },
+      "configSchema": {
+        "schemaVersion": 1,
+        "schemaId": "urn:stream-slack:provider:sandbox-scripted:v1",
+        "type": "object",
+        "required": [
+          "protocol"
+        ],
+        "properties": {
+          "protocol": {
+            "type": "string",
+            "enum": [
+              "scripted-sandbox-v1"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "compatibleWith": [
+        {
+          "kind": "harness",
+          "providerId": "scripted",
+          "providerVersion": "1.0.0"
+        }
+      ],
+      "status": {
+        "installed": true,
+        "enabled": true,
+        "health": "healthy",
+        "observedAt": 0,
+        "expiresAt": 9007199254740991,
+        "stale": false,
+        "available": true
+      }
+    }
+  ]
+}

@@ -3,7 +3,7 @@ id: E2-T05
 epic: 2
 title: "Harness and sandbox provider registry with capability negotiation"
 priority: 205
-status: in-progress
+status: implemented
 depends_on: [E2-T01]
 estimate: L
 capstone: false
@@ -66,3 +66,14 @@ and resource ceilings.
    reach epic refutes roadmap isolation.
 
 ## Verification log
+
+### Builder — 2026-08-06 — implementation and cold proof
+
+- Exact implementation commit: `cc0e4cdc0e17ad9789264fd5c9e26da10166e063`.
+- Exact cold command: `PROMOTE_EVIDENCE=1 E2_T05_IMPLEMENTATION_COMMIT=cc0e4cdc0e17ad9789264fd5c9e26da10166e063 TEST_RUN_ID=e2-t05-cold-final-v4 make verify-E2-T05`. The detached checkout was clean before install, initialized the pinned emulator, and recorded `make verify-E2-T05` as the entrypoint; every cold child command exited 0 with `skips: []`.
+- Gates: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` all exited 0 in the cold verifier; the full suite reported 148 passing tests.
+- Evidence: `evidence/e2-t05-final/verification-summary.json`, `registry-manifest.json`, `compatibility-matrix.json`, `refusals.json`, `resolved-provider-digests.json`, `conformance.json`, `sensitivity.json`, and `cold-clone-transcript.json`.
+- Registry: five exact versioned descriptors, two available scripted providers, three unavailable production providers, manifest digest `sha256:751764325d1387da9404895128892e5a1e95005fb0bd45e27bd9dde42d6ec8b5`; compatibility matrix has seven rows with one runnable and six refused; 16 typed refusal cases; source audit scans 38 files with zero offenses.
+- Resolved digest: strict `AgentConfig` resolution reaches `resolveAgentConfigProviders` and records `sha256:541df036a887331550882cddc8f8fb4b27366f24f1d7d632f66813476ea63116`; three real-verifier sensitivity mutants, including injected provider branching, were detected.
+- Replay: N/A (server provider contract) + mitigation: conformance doubles, fail-closed compatibility matrix, registry manifests, and digest evidence.
+- Claim: exact provider IDs and versions resolve only through the versioned registry; provider-owned schemas, capabilities, readiness, implementation status, reciprocal compatibility, immutable descriptors, and canonical digests fence every runnable configuration, while AlmostNode and unimplemented production providers fail closed without provider-name orchestration branches or secret-shaped evidence.

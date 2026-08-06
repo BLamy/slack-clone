@@ -1,0 +1,27 @@
+{
+  "result": "PASS",
+  "valid": {
+    "resolvedProviderDigest": "sha256:b9f170ade477472339a214b1a8ef85dd5a308ea9d4f341e02febe2ef70e5c800",
+    "harnessDescriptorDigest": "sha256:847eadb14caa74f2ca5fb1522eb95e3b71c9c82aec4e6e0b58bd076a81fbe512",
+    "sandboxDescriptorDigest": "sha256:693a5264c3850844f3d7f337df063f7e561edea236762d208a15a13b84a82c1e",
+    "harnessConfigurationDigest": "sha256:624c818a7aba79fe8c5a2adbfc11ea3e0977bbbad37a28e886d2cdffbad30342",
+    "sandboxConfigurationDigest": "sha256:fc558a03fbaf8cd822136a5049c1af348de02d726c26b4a4f542a44faa855823",
+    "requiredCapabilities": {
+      "harness": [
+        "structured-output",
+        "tool-calls"
+      ],
+      "sandbox": [
+        "ephemeral",
+        "persistent"
+      ]
+    }
+  },
+  "agentConfigResolution": {
+    "harnessProviderKey": "harness:scripted@1.0.0",
+    "sandboxProviderKey": "sandbox:scripted@1.0.0",
+    "resolvedProviderDigest": "sha256:541df036a887331550882cddc8f8fb4b27366f24f1d7d632f66813476ea63116"
+  },
+  "reorderedEquivalent": true,
+  "semanticMutationChangedDigest": true
+}

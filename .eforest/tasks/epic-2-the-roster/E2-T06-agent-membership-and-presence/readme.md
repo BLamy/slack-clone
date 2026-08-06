@@ -3,7 +3,7 @@ id: E2-T06
 epic: 2
 title: "Agent membership and derived availability presence"
 priority: 206
-status: implemented
+status: verified
 depends_on: [E2-T03, E2-T05]
 estimate: M
 capstone: false
@@ -75,3 +75,12 @@ may affect display presence but cannot grant access or survive as hidden truth.
 - Evidence: `evidence/e2-t06-final/verification-summary.json`, `roster-manifest.json`, `membership-matrix.json`, `readiness-inputs.json`, `durable-replay.json`, `transition-matrix.json`, `sensitivity.json`, and `cold-clone-transcript.json`.
 - Replay: N/A (server roster and presence projection) + mitigation: membership/readiness matrix, stale-heartbeat tests, manifests, and durable-state replay.
 - Claim: humans and agents share the durable membership contracts while service principals remain non-chat principals; agent availability is fail-closed on membership, configuration, and exact provider readiness, and ephemeral busy/idle signals affect only bounded display state and cannot override durable authorization or replayed state.
+
+### Critic — 2026-08-06
+
+VERDICT: verified
+
+- A fresh independent tool-enabled critic reviewed the exact implementation, hardened verifier, and promoted evidence. `E2_T06_SKIP_GATES=1 TEST_RUN_ID=e2-t06-critic-followup node scripts/verify-e2-t06.mjs` exited 0 and reproduced 34 records, durable digest `sha256:8a61ade8616a7c8814669220cf22e7606130be08dea91ce4e19e98aaa57f717e`, and roster digest `sha256:6339894cf3e0c29cffbd3506f5af58df03422adf19f31f114134098ea8dee8a3`.
+- The critic independently passed fresh-ID attacks for service-principal join, owner channel-capability spoofing, duplicate handles, stale/sibling/unknown heartbeats, disabled configuration, removed membership, and transient-presence deletion. The disposable no-PROMOTE `make verify-E2-T06` run passed with `skips: []`; all five gates exited 0.
+- The critic confirmed the five sensitivity mutants all exit 1, the readiness canary remains absent from published evidence/output, the pinned digests match, and the exact Replay literal is present. No finding refuted the implementation or evidence.
+- Status: `verified`.

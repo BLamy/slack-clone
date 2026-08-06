@@ -1,0 +1,1222 @@
+[
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "status": 400,
+    "response": {
+      "ok": false,
+      "code": "AGENT_MANAGEMENT_INVALID_REQUEST",
+      "error": "Idempotency-Key header is required for mutations"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": false,
+    "status": 401,
+    "response": {
+      "ok": false,
+      "code": "AGENT_MANAGEMENT_AUTHENTICATION_REQUIRED",
+      "error": "an authenticated workspace session is required"
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "status": 404,
+    "response": {
+      "ok": false,
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "error": "workspace access denied"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_bbbbbbbbbbbbbbbbbbbbbbbbbb/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+    "requestBody": false,
+    "status": 404,
+    "response": {
+      "ok": false,
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "error": "workspace access denied"
+    }
+  },
+  {
+    "droppedResponse": true,
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json"
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "status": 201,
+    "response": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "profile": {
+          "displayName": "Verifier Agent",
+          "email": "verifier@example.test",
+          "handle": "verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": null,
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:d7d65b9025466cba59c80d5303d9303d56fddf120779d001d28d068ce0e07ac2",
+        "eventDigest": "sha256:3761d2e7058e06a675bf99a1aecd3e1fb5a0363f45ee3b92ec15e747f6d1ca2e",
+        "idempotencyKey": "ik_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "nextOffset": "0000000000000000_0000000000000007",
+        "operation": "agent.principal.create",
+        "requestDigest": "sha256:e2aad4d0703592c280bc9fc408aa95b7898a2f43276f8f8b98029665e72a58a1",
+        "status": "accepted",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+      },
+      "source": {
+        "directoryDigest": "sha256:335e0f7569343e0b8b9e97e74e9ed7aabd64bdb55fa4c75c102f32985d94c168",
+        "directoryStateDigest": "sha256:4654a81ebb41e87a68dfb745163d1d55144aea3eced4d47219e89b1b16a5a1de",
+        "configDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "configStateDigest": "sha256:5cf94f8d2c751a7bb659c69a5439634bda3f02b846bc490527219a903da099d0"
+      }
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "status": 409,
+    "response": {
+      "ok": false,
+      "code": "DISPATCH_IDEMPOTENCY_CONFLICT",
+      "error": "idempotency key is already bound to a different request scope or payload"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents?limit=1",
+    "requestBody": false,
+    "status": 200,
+    "response": {
+      "agents": [
+        {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "kind": "agent",
+          "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "profile": {
+            "displayName": "Verifier Agent",
+            "email": "verifier@example.test",
+            "handle": "verifier-agent"
+          },
+          "profileRevision": 1,
+          "status": "active"
+        }
+      ],
+      "nextCursor": "%7B%22index%22%3A1%2C%22kind%22%3A%22agents%22%2C%22version%22%3A1%7D",
+      "ok": true,
+      "page": {
+        "limit": 1,
+        "returned": 1,
+        "start": 0,
+        "streamDigest": "sha256:42b937871bd011a6d8db60f0147fc7dad675b14f1d137adbf75de26af366b479",
+        "stateDigest": "sha256:8eda7fa9757f9c7dc85c5037251eff5ee5c5a4879ebaf184242ff95eb0f646db"
+      }
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents?limit=1&cursor=%7B%22index%22%3A1%2C%22kind%22%3A%22agents%22%2C%22version%22%3A1%7D",
+    "requestBody": false,
+    "status": 200,
+    "response": {
+      "agents": [
+        {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "kind": "agent",
+          "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "profile": {
+            "displayName": "Second Verifier Agent",
+            "email": "second-verifier@example.test",
+            "handle": "second-verifier-agent"
+          },
+          "profileRevision": 1,
+          "status": "active"
+        }
+      ],
+      "nextCursor": "%7B%22index%22%3A2%2C%22kind%22%3A%22agents%22%2C%22version%22%3A1%7D",
+      "ok": true,
+      "page": {
+        "limit": 1,
+        "returned": 1,
+        "start": 1,
+        "streamDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "stateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76"
+      }
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents?limit=1&cursor=%7B%22index%22%3A2%2C%22kind%22%3A%22agents%22%2C%22version%22%3A1%7D",
+    "requestBody": false,
+    "status": 200,
+    "response": {
+      "agents": [
+        {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "kind": "agent",
+          "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "profile": {
+            "displayName": "Third Verifier Agent",
+            "email": "third-verifier@example.test",
+            "handle": "third-verifier-agent"
+          },
+          "profileRevision": 1,
+          "status": "active"
+        }
+      ],
+      "nextCursor": null,
+      "ok": true,
+      "page": {
+        "limit": 1,
+        "returned": 1,
+        "start": 2,
+        "streamDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "stateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76"
+      }
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents?cursor=not-a-valid-cursor",
+    "requestBody": false,
+    "status": 400,
+    "response": {
+      "ok": false,
+      "code": "AGENT_MANAGEMENT_INVALID_CURSOR",
+      "error": "cursor is not a valid opaque pagination cursor"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+    "requestBody": false,
+    "status": 200,
+    "response": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "profile": {
+          "displayName": "Verifier Agent",
+          "email": "verifier@example.test",
+          "handle": "verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": null,
+      "ok": true,
+      "source": {
+        "directoryDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+        "configDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "configStateDigest": "sha256:5cf94f8d2c751a7bb659c69a5439634bda3f02b846bc490527219a903da099d0"
+      }
+    }
+  },
+  {
+    "droppedResponse": true,
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config",
+    "requestBody": "redacted-json"
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config",
+    "requestBody": "redacted-json",
+    "status": 201,
+    "response": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "profile": {
+          "displayName": "Verifier Agent",
+          "email": "verifier@example.test",
+          "handle": "verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configRevision": {
+        "configDigest": "sha256:985cb3cc8e3ddfb848768e8f058afad174135e97253eed9376953c0a820973c7",
+        "revision": 1,
+        "revisionId": "acr_830d4b027060063bf272fc4968fea6ddab60587fa790c19bc9e8beb8702edd36"
+      },
+      "configuration": {
+        "activeConfig": null,
+        "activeRevisionId": null,
+        "headRevision": 1,
+        "lastRevisionId": "acr_830d4b027060063bf272fc4968fea6ddab60587fa790c19bc9e8beb8702edd36",
+        "runnable": false,
+        "status": "draft"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:096e77129ed9e54e17c95dfa84e494e0017ba8a7982337aaccc011fccb22c6a1",
+        "eventDigest": "sha256:52107a55443cae8c4de60805f567623ca5b645d54b60c7bdcd0f209376f61399",
+        "idempotencyKey": "ik_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "nextOffset": "0000000000000000_0000000000000001",
+        "operation": "agent.config.created",
+        "requestDigest": "sha256:5ece75bd7371178377726fb31f545b66a488e02c268f98f6850d68e31a6f0510",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+        "configDigest": "sha256:d7d304fc7fdd39fbbb376ded838d0d478d22204495bdfbf63f1500b44b1cf355",
+        "configStateDigest": "sha256:a954bb15d15aaa82e1c56d7a561843c73bdf8913eb30e08ab1ce860b8d05673c"
+      }
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/activate",
+    "requestBody": "redacted-json",
+    "status": 200,
+    "response": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "profile": {
+          "displayName": "Verifier Agent",
+          "email": "verifier@example.test",
+          "handle": "verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": {
+        "activeConfig": {
+          "schemaVersion": 1,
+          "instructions": {
+            "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+            "task": "Answer the current request using only the authorized context.",
+            "guardrails": [
+              "Never disclose credentials or secret-shaped values.",
+              "Keep replies bounded and auditable."
+            ]
+          },
+          "context": {
+            "scope": "current-channel",
+            "includePrivate": false,
+            "includeThreadHistory": true,
+            "maxMessages": 50,
+            "maxBytes": 65536
+          },
+          "trigger": {
+            "events": [
+              "manual",
+              "mention"
+            ],
+            "requireMention": false,
+            "allowMessageEdits": false
+          },
+          "delegation": {
+            "enabled": false,
+            "maxDepth": 0,
+            "maxChildren": 0,
+            "allowCrossChannel": false
+          },
+          "concurrency": {
+            "maxConcurrentRuns": 4,
+            "maxConcurrentPerChannel": 1,
+            "queueStrategy": "serialize"
+          },
+          "budgets": {
+            "timeoutSeconds": 900,
+            "maxInputTokens": "[REDACTED]",
+            "maxOutputTokens": "[REDACTED]",
+            "maxTotalTokens": "[REDACTED]",
+            "maxCostUsdCents": 250
+          },
+          "harness": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "structured-output"
+            ]
+          },
+          "sandbox": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "ephemeral"
+            ],
+            "lifecycle": "ephemeral",
+            "networkPolicy": "deny-all"
+          },
+          "workspaceInputs": {
+            "source": "workspace",
+            "paths": [
+              "README.md",
+              "docs"
+            ],
+            "maxBytes": 1048576
+          },
+          "connectionGrants": {
+            "maxCallsPerRun": 2,
+            "refs": [
+              {
+                "connectionId": "conn_a",
+                "grantId": "grant_bgrant_c",
+                "purpose": "p",
+                "revision": 1
+              },
+              {
+                "connectionId": "conn_agrant_b",
+                "grantId": "grant_c",
+                "purpose": "p",
+                "revision": 1
+              }
+            ]
+          }
+        },
+        "activeRevisionId": "acr_830d4b027060063bf272fc4968fea6ddab60587fa790c19bc9e8beb8702edd36",
+        "headRevision": 1,
+        "lastRevisionId": "acr_830d4b027060063bf272fc4968fea6ddab60587fa790c19bc9e8beb8702edd36",
+        "runnable": true,
+        "status": "active"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:2089448365b50263d99a5686350eba887e85fd818db977f005a4e2198e920e25",
+        "eventDigest": "sha256:6098338dbb2f129158c16c20eb6c42bb1fac4b367d8f372f8a05de654b169ebe",
+        "idempotencyKey": "ik_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "nextOffset": "0000000000000000_0000000000000002",
+        "operation": "agent.config.activated",
+        "requestDigest": "sha256:fbc5b82ee98379dc512cef9602801e449dab91f40dfe1f596a84b3cf2f4630f2",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+        "configDigest": "sha256:a0a5250f9c74dc19bf9ccccdade322aa17aed68c2ed96a1c9643e6247f02ea45",
+        "configStateDigest": "sha256:46bc03a8c42e26111b61a2649a80dc183979f0f1bb0c07adf36e1d7d49a3ee02"
+      }
+    }
+  },
+  {
+    "droppedResponse": true,
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/revisions",
+    "requestBody": "redacted-json"
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/revisions",
+    "requestBody": "redacted-json",
+    "status": 201,
+    "response": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "profile": {
+          "displayName": "Verifier Agent",
+          "email": "verifier@example.test",
+          "handle": "verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configRevision": {
+        "configDigest": "sha256:0351a26188a83910146eab2b87b814199c6f9519c0ed6368cdcde6b29efe7c42",
+        "revision": 2,
+        "revisionId": "acr_f692b867be8779b297834459a27f7a1b992b75ca338749649cc57f5ac72d578e"
+      },
+      "configuration": {
+        "activeConfig": {
+          "schemaVersion": 1,
+          "instructions": {
+            "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+            "task": "Answer the current request using only the authorized context.",
+            "guardrails": [
+              "Never disclose credentials or secret-shaped values.",
+              "Keep replies bounded and auditable."
+            ]
+          },
+          "context": {
+            "scope": "current-channel",
+            "includePrivate": false,
+            "includeThreadHistory": true,
+            "maxMessages": 50,
+            "maxBytes": 65536
+          },
+          "trigger": {
+            "events": [
+              "manual",
+              "mention"
+            ],
+            "requireMention": false,
+            "allowMessageEdits": false
+          },
+          "delegation": {
+            "enabled": false,
+            "maxDepth": 0,
+            "maxChildren": 0,
+            "allowCrossChannel": false
+          },
+          "concurrency": {
+            "maxConcurrentRuns": 4,
+            "maxConcurrentPerChannel": 1,
+            "queueStrategy": "serialize"
+          },
+          "budgets": {
+            "timeoutSeconds": 900,
+            "maxInputTokens": "[REDACTED]",
+            "maxOutputTokens": "[REDACTED]",
+            "maxTotalTokens": "[REDACTED]",
+            "maxCostUsdCents": 250
+          },
+          "harness": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "structured-output"
+            ]
+          },
+          "sandbox": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "ephemeral"
+            ],
+            "lifecycle": "ephemeral",
+            "networkPolicy": "deny-all"
+          },
+          "workspaceInputs": {
+            "source": "workspace",
+            "paths": [
+              "README.md",
+              "docs"
+            ],
+            "maxBytes": 1048576
+          },
+          "connectionGrants": {
+            "maxCallsPerRun": 2,
+            "refs": [
+              {
+                "connectionId": "conn_a",
+                "grantId": "grant_bgrant_c",
+                "purpose": "p",
+                "revision": 1
+              },
+              {
+                "connectionId": "conn_agrant_b",
+                "grantId": "grant_c",
+                "purpose": "p",
+                "revision": 1
+              }
+            ]
+          }
+        },
+        "activeRevisionId": "acr_830d4b027060063bf272fc4968fea6ddab60587fa790c19bc9e8beb8702edd36",
+        "headRevision": 2,
+        "lastRevisionId": "acr_f692b867be8779b297834459a27f7a1b992b75ca338749649cc57f5ac72d578e",
+        "runnable": true,
+        "status": "active"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:5e569e13438482adc0d479d152f1e88ab24c5a92936507c5b933f546b4c227d0",
+        "eventDigest": "sha256:17e877ad888d0ffe6c8acae942b9908d56030e7d194c9add910fce4bd96078a1",
+        "idempotencyKey": "ik_pppppppppppppppppppppppppp",
+        "nextOffset": "0000000000000000_0000000000000003",
+        "operation": "agent.config.revised",
+        "requestDigest": "sha256:3b450a121cc0844641f833604d50b9f602d25425a1a9c26a0dc01c2412fdac1d",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+        "configDigest": "sha256:daca554661e9aa03f7debabf533aa163322115482485156b87243ba834056eaf",
+        "configStateDigest": "sha256:ae228faebf8d4b8f6a8271e6b3b3713d8312015db103ebb36d1d7faa3a1364d7"
+      }
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/revisions",
+    "requestBody": "redacted-json",
+    "status": 409,
+    "response": {
+      "ok": false,
+      "code": "AGENT_CONFIG_STREAM_STALE_REVISION",
+      "currentRevision": 2,
+      "currentRevisionId": "acr_f692b867be8779b297834459a27f7a1b992b75ca338749649cc57f5ac72d578e",
+      "error": "expected revision is not the current stream head",
+      "expectedRevision": 1,
+      "expectedRevisionId": "acr_830d4b027060063bf272fc4968fea6ddab60587fa790c19bc9e8beb8702edd36"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/history?limit=2",
+    "requestBody": false,
+    "status": 200,
+    "response": {
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+      "entries": [
+        {
+          "config": {
+            "schemaVersion": 1,
+            "instructions": {
+              "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+              "task": "Answer the current request using only the authorized context.",
+              "guardrails": [
+                "Never disclose credentials or secret-shaped values.",
+                "Keep replies bounded and auditable."
+              ]
+            },
+            "context": {
+              "scope": "current-channel",
+              "includePrivate": false,
+              "includeThreadHistory": true,
+              "maxMessages": 50,
+              "maxBytes": 65536
+            },
+            "trigger": {
+              "events": [
+                "manual",
+                "mention"
+              ],
+              "requireMention": false,
+              "allowMessageEdits": false
+            },
+            "delegation": {
+              "enabled": false,
+              "maxDepth": 0,
+              "maxChildren": 0,
+              "allowCrossChannel": false
+            },
+            "concurrency": {
+              "maxConcurrentRuns": 4,
+              "maxConcurrentPerChannel": 1,
+              "queueStrategy": "serialize"
+            },
+            "budgets": {
+              "timeoutSeconds": 900,
+              "maxInputTokens": "[REDACTED]",
+              "maxOutputTokens": "[REDACTED]",
+              "maxTotalTokens": "[REDACTED]",
+              "maxCostUsdCents": 250
+            },
+            "harness": {
+              "providerId": "scripted",
+              "providerVersion": "1.0.0",
+              "requiredCapabilities": [
+                "structured-output"
+              ]
+            },
+            "sandbox": {
+              "providerId": "scripted",
+              "providerVersion": "1.0.0",
+              "requiredCapabilities": [
+                "ephemeral"
+              ],
+              "lifecycle": "ephemeral",
+              "networkPolicy": "deny-all"
+            },
+            "workspaceInputs": {
+              "source": "workspace",
+              "paths": [
+                "README.md",
+                "docs"
+              ],
+              "maxBytes": 1048576
+            },
+            "connectionGrants": {
+              "maxCallsPerRun": 2,
+              "refs": [
+                {
+                  "connectionId": "conn_a",
+                  "grantId": "grant_bgrant_c",
+                  "purpose": "p",
+                  "revision": 1
+                },
+                {
+                  "connectionId": "conn_agrant_b",
+                  "grantId": "grant_c",
+                  "purpose": "p",
+                  "revision": 1
+                }
+              ]
+            }
+          },
+          "configDigest": "sha256:985cb3cc8e3ddfb848768e8f058afad174135e97253eed9376953c0a820973c7",
+          "eventId": "ev_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "expectedRevision": 0,
+          "kind": "revision",
+          "predecessorRevisionId": null,
+          "revision": 1,
+          "revisionId": "acr_830d4b027060063bf272fc4968fea6ddab60587fa790c19bc9e8beb8702edd36",
+          "sourceOffset": "0000000000000000_0000000000000001"
+        },
+        {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "eventId": "ev_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+          "eventType": "agent.config.activated",
+          "kind": "lifecycle",
+          "revisionId": "acr_830d4b027060063bf272fc4968fea6ddab60587fa790c19bc9e8beb8702edd36",
+          "sourceOffset": "0000000000000000_0000000000000002",
+          "statusAfter": "active",
+          "statusBefore": "draft"
+        }
+      ],
+      "nextCursor": "%7B%22index%22%3A2%2C%22kind%22%3A%22history%22%2C%22version%22%3A1%7D",
+      "ok": true,
+      "page": {
+        "limit": 2,
+        "returned": 2,
+        "start": 0,
+        "streamDigest": "sha256:daca554661e9aa03f7debabf533aa163322115482485156b87243ba834056eaf",
+        "stateDigest": "sha256:ae228faebf8d4b8f6a8271e6b3b3713d8312015db103ebb36d1d7faa3a1364d7"
+      }
+    }
+  },
+  {
+    "droppedResponse": true,
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/disable",
+    "requestBody": "redacted-json"
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/disable",
+    "requestBody": "redacted-json",
+    "status": 200,
+    "response": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "profile": {
+          "displayName": "Verifier Agent",
+          "email": "verifier@example.test",
+          "handle": "verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": {
+        "activeConfig": null,
+        "activeRevisionId": null,
+        "headRevision": 2,
+        "lastRevisionId": "acr_f692b867be8779b297834459a27f7a1b992b75ca338749649cc57f5ac72d578e",
+        "runnable": false,
+        "status": "disabled"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:d293bad105f60b9deff8712a4419f3da8ccaf81a1a7b6f3bbe578aaaa2569609",
+        "eventDigest": "sha256:357b6ec688ddae6dc21b012721b27c1edb6a7dcf9b3a7277571f73ceb2ea2fba",
+        "idempotencyKey": "ik_mmmmmmmmmmmmmmmmmmmmmmmmmm",
+        "nextOffset": "0000000000000000_0000000000000004",
+        "operation": "agent.config.disabled",
+        "requestDigest": "sha256:e5d110853fa55327bdb8c535ce2a2db9a4a86c933bbd40f7f66f105e158fe2f9",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+        "configDigest": "sha256:0d9dc6b101219e0ea59873f27039aa7dc372c4fa86130e9a5da178643d3c0b8e",
+        "configStateDigest": "sha256:8d37c7d0e01a6f33989d585f080cd1902b000fbed2310f9fbef399b34412e287"
+      }
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/activate",
+    "requestBody": "redacted-json",
+    "status": 200,
+    "response": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "profile": {
+          "displayName": "Verifier Agent",
+          "email": "verifier@example.test",
+          "handle": "verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": {
+        "activeConfig": {
+          "schemaVersion": 1,
+          "instructions": {
+            "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+            "task": "Answer the current request using only the authorized context.",
+            "guardrails": [
+              "Never disclose credentials or secret-shaped values.",
+              "Keep replies bounded and auditable."
+            ]
+          },
+          "context": {
+            "scope": "current-channel",
+            "includePrivate": false,
+            "includeThreadHistory": true,
+            "maxMessages": 50,
+            "maxBytes": 65536
+          },
+          "trigger": {
+            "events": [
+              "manual",
+              "mention"
+            ],
+            "requireMention": false,
+            "allowMessageEdits": false
+          },
+          "delegation": {
+            "enabled": false,
+            "maxDepth": 0,
+            "maxChildren": 0,
+            "allowCrossChannel": false
+          },
+          "concurrency": {
+            "maxConcurrentRuns": 4,
+            "maxConcurrentPerChannel": 1,
+            "queueStrategy": "serialize"
+          },
+          "budgets": {
+            "timeoutSeconds": 900,
+            "maxInputTokens": "[REDACTED]",
+            "maxOutputTokens": "[REDACTED]",
+            "maxTotalTokens": "[REDACTED]",
+            "maxCostUsdCents": 250
+          },
+          "harness": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "structured-output"
+            ]
+          },
+          "sandbox": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "ephemeral"
+            ],
+            "lifecycle": "ephemeral",
+            "networkPolicy": "deny-all"
+          },
+          "workspaceInputs": {
+            "source": "workspace",
+            "paths": [
+              "README.md",
+              "docs"
+            ],
+            "maxBytes": 1048576
+          },
+          "connectionGrants": {
+            "maxCallsPerRun": 2,
+            "refs": [
+              {
+                "connectionId": "conn_a",
+                "grantId": "grant_bgrant_c",
+                "purpose": "p",
+                "revision": 1
+              },
+              {
+                "connectionId": "conn_agrant_b",
+                "grantId": "grant_c",
+                "purpose": "p",
+                "revision": 1
+              }
+            ]
+          }
+        },
+        "activeRevisionId": "acr_f692b867be8779b297834459a27f7a1b992b75ca338749649cc57f5ac72d578e",
+        "headRevision": 2,
+        "lastRevisionId": "acr_f692b867be8779b297834459a27f7a1b992b75ca338749649cc57f5ac72d578e",
+        "runnable": true,
+        "status": "active"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:68ed252d99cf1f77fdfac6f35c7f888c9eb0a06b7ae6ac08520723d797dbe637",
+        "eventDigest": "sha256:86bfa5c3143ec366c615094ccb46472fa9753df89ed4aefa061cd0bed8bd9598",
+        "idempotencyKey": "ik_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "nextOffset": "0000000000000000_0000000000000005",
+        "operation": "agent.config.activated",
+        "requestDigest": "sha256:ee7ed4c21a38dc73a1dc35977f55785d480a9d2deaf15092fdfeb1d1f8b65e50",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+        "configDigest": "sha256:3562d8f54fbd97c34d0cb7d062bb7ca122e4df2dfcf140d089e41d4d6a2a2131",
+        "configStateDigest": "sha256:6804c1d753b9ec4734c3e6ed07ed135a64147e9b6d460bce96023144aa6df162"
+      }
+    }
+  },
+  {
+    "droppedResponse": true,
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/revoke",
+    "requestBody": "redacted-json"
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/revoke",
+    "requestBody": "redacted-json",
+    "status": 200,
+    "response": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "profile": {
+          "displayName": "Verifier Agent",
+          "email": "verifier@example.test",
+          "handle": "verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": {
+        "activeConfig": null,
+        "activeRevisionId": null,
+        "headRevision": 2,
+        "lastRevisionId": "acr_f692b867be8779b297834459a27f7a1b992b75ca338749649cc57f5ac72d578e",
+        "runnable": false,
+        "status": "retired"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:c5e8f0db7ba43ce9c3541d1ac0315cf9d900071d9feb44ece0aab02c20bfa523",
+        "eventDigest": "sha256:ca04590c3e2938e7150b5b28bbfb6b500210f9158197a447d371f4cfccaa47e8",
+        "idempotencyKey": "ik_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "nextOffset": "0000000000000000_0000000000000006",
+        "operation": "agent.config.retired",
+        "requestDigest": "sha256:96a76f8f23853e6dbcd8877aed7068b25fd3ceca1d615d96dfeaec4655f81b28",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+        "configDigest": "sha256:98eab8974bee892af70a5978c530b2664b0d3e7156740d05e04c23b988075da5",
+        "configStateDigest": "sha256:b6e7620fedb0698a1810052ed4fa8c83ec4e2c3af1f1398e2f01f03bcd5101d4"
+      },
+      "revoked": true
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/history?limit=2&cursor=%7B%22index%22%3A2%2C%22kind%22%3A%22history%22%2C%22version%22%3A1%7D",
+    "requestBody": false,
+    "status": 200,
+    "response": {
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+      "entries": [
+        {
+          "config": {
+            "schemaVersion": 1,
+            "instructions": {
+              "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+              "task": "Answer the current request using only the authorized context.",
+              "guardrails": [
+                "Never disclose credentials or secret-shaped values.",
+                "Keep replies bounded and auditable."
+              ]
+            },
+            "context": {
+              "scope": "current-channel",
+              "includePrivate": false,
+              "includeThreadHistory": true,
+              "maxMessages": 50,
+              "maxBytes": 65536
+            },
+            "trigger": {
+              "events": [
+                "manual",
+                "mention"
+              ],
+              "requireMention": false,
+              "allowMessageEdits": false
+            },
+            "delegation": {
+              "enabled": false,
+              "maxDepth": 0,
+              "maxChildren": 0,
+              "allowCrossChannel": false
+            },
+            "concurrency": {
+              "maxConcurrentRuns": 4,
+              "maxConcurrentPerChannel": 1,
+              "queueStrategy": "serialize"
+            },
+            "budgets": {
+              "timeoutSeconds": 900,
+              "maxInputTokens": "[REDACTED]",
+              "maxOutputTokens": "[REDACTED]",
+              "maxTotalTokens": "[REDACTED]",
+              "maxCostUsdCents": 250
+            },
+            "harness": {
+              "providerId": "scripted",
+              "providerVersion": "1.0.0",
+              "requiredCapabilities": [
+                "structured-output"
+              ]
+            },
+            "sandbox": {
+              "providerId": "scripted",
+              "providerVersion": "1.0.0",
+              "requiredCapabilities": [
+                "ephemeral"
+              ],
+              "lifecycle": "ephemeral",
+              "networkPolicy": "deny-all"
+            },
+            "workspaceInputs": {
+              "source": "workspace",
+              "paths": [
+                "README.md",
+                "docs"
+              ],
+              "maxBytes": 1048576
+            },
+            "connectionGrants": {
+              "maxCallsPerRun": 2,
+              "refs": [
+                {
+                  "connectionId": "conn_a",
+                  "grantId": "grant_bgrant_c",
+                  "purpose": "p",
+                  "revision": 1
+                },
+                {
+                  "connectionId": "conn_agrant_b",
+                  "grantId": "grant_c",
+                  "purpose": "p",
+                  "revision": 1
+                }
+              ]
+            }
+          },
+          "configDigest": "sha256:0351a26188a83910146eab2b87b814199c6f9519c0ed6368cdcde6b29efe7c42",
+          "eventId": "ev_pppppppppppppppppppppppppp",
+          "expectedRevision": 1,
+          "kind": "revision",
+          "predecessorRevisionId": "acr_830d4b027060063bf272fc4968fea6ddab60587fa790c19bc9e8beb8702edd36",
+          "revision": 2,
+          "revisionId": "acr_f692b867be8779b297834459a27f7a1b992b75ca338749649cc57f5ac72d578e",
+          "sourceOffset": "0000000000000000_0000000000000003"
+        },
+        {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "eventId": "ev_mmmmmmmmmmmmmmmmmmmmmmmmmm",
+          "eventType": "agent.config.disabled",
+          "kind": "lifecycle",
+          "revisionId": null,
+          "sourceOffset": "0000000000000000_0000000000000004",
+          "statusAfter": "disabled",
+          "statusBefore": "active"
+        }
+      ],
+      "nextCursor": "%7B%22index%22%3A4%2C%22kind%22%3A%22history%22%2C%22version%22%3A1%7D",
+      "ok": true,
+      "page": {
+        "limit": 2,
+        "returned": 2,
+        "start": 2,
+        "streamDigest": "sha256:98eab8974bee892af70a5978c530b2664b0d3e7156740d05e04c23b988075da5",
+        "stateDigest": "sha256:b6e7620fedb0698a1810052ed4fa8c83ec4e2c3af1f1398e2f01f03bcd5101d4"
+      }
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/history?limit=2&cursor=%7B%22index%22%3A4%2C%22kind%22%3A%22history%22%2C%22version%22%3A1%7D",
+    "requestBody": false,
+    "status": 200,
+    "response": {
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+      "entries": [
+        {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "eventId": "ev_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+          "eventType": "agent.config.activated",
+          "kind": "lifecycle",
+          "revisionId": "acr_f692b867be8779b297834459a27f7a1b992b75ca338749649cc57f5ac72d578e",
+          "sourceOffset": "0000000000000000_0000000000000005",
+          "statusAfter": "active",
+          "statusBefore": "disabled"
+        },
+        {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "eventId": "ev_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+          "eventType": "agent.config.retired",
+          "kind": "lifecycle",
+          "revisionId": null,
+          "sourceOffset": "0000000000000000_0000000000000006",
+          "statusAfter": "retired",
+          "statusBefore": "active"
+        }
+      ],
+      "nextCursor": null,
+      "ok": true,
+      "page": {
+        "limit": 2,
+        "returned": 2,
+        "start": 4,
+        "streamDigest": "sha256:98eab8974bee892af70a5978c530b2664b0d3e7156740d05e04c23b988075da5",
+        "stateDigest": "sha256:b6e7620fedb0698a1810052ed4fa8c83ec4e2c3af1f1398e2f01f03bcd5101d4"
+      }
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/history?cursor=%7B%22index%22%3A0%2C%22kind%22%3A%22agents%22%2C%22version%22%3A1%7D",
+    "requestBody": false,
+    "status": 400,
+    "response": {
+      "ok": false,
+      "code": "AGENT_MANAGEMENT_INVALID_CURSOR",
+      "error": "cursor is not a valid opaque pagination cursor"
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff/config",
+    "requestBody": "redacted-json",
+    "status": 400,
+    "response": {
+      "ok": false,
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "error": "secret-shaped values may not be persisted in agent configuration"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents?limit=100",
+    "requestBody": false,
+    "status": 200,
+    "response": {
+      "agents": [
+        {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "kind": "agent",
+          "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "profile": {
+            "displayName": "Verifier Agent",
+            "email": "verifier@example.test",
+            "handle": "verifier-agent"
+          },
+          "profileRevision": 1,
+          "status": "active"
+        },
+        {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "kind": "agent",
+          "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "profile": {
+            "displayName": "Second Verifier Agent",
+            "email": "second-verifier@example.test",
+            "handle": "second-verifier-agent"
+          },
+          "profileRevision": 1,
+          "status": "active"
+        },
+        {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "kind": "agent",
+          "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "profile": {
+            "displayName": "Third Verifier Agent",
+            "email": "third-verifier@example.test",
+            "handle": "third-verifier-agent"
+          },
+          "profileRevision": 1,
+          "status": "active"
+        }
+      ],
+      "nextCursor": null,
+      "ok": true,
+      "page": {
+        "limit": 100,
+        "returned": 3,
+        "start": 0,
+        "streamDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "stateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76"
+      }
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+    "requestBody": false,
+    "status": 200,
+    "response": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "profile": {
+          "displayName": "Verifier Agent",
+          "email": "verifier@example.test",
+          "handle": "verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": {
+        "activeConfig": null,
+        "activeRevisionId": null,
+        "headRevision": 2,
+        "lastRevisionId": "acr_f692b867be8779b297834459a27f7a1b992b75ca338749649cc57f5ac72d578e",
+        "runnable": false,
+        "status": "retired"
+      },
+      "ok": true,
+      "source": {
+        "directoryDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+        "configDigest": "sha256:98eab8974bee892af70a5978c530b2664b0d3e7156740d05e04c23b988075da5",
+        "configStateDigest": "sha256:b6e7620fedb0698a1810052ed4fa8c83ec4e2c3af1f1398e2f01f03bcd5101d4"
+      }
+    }
+  }
+]

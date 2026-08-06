@@ -1,0 +1,10 @@
+{
+  "agentPages": 2,
+  "appendedAgentAfterFirstPage": true,
+  "historyPages": 3,
+  "historyRows": 6,
+  "noDuplicateHistoryEventIds": true,
+  "noDuplicateListRows": true,
+  "invalidCursorCases": 2,
+  "result": "PASS"
+}

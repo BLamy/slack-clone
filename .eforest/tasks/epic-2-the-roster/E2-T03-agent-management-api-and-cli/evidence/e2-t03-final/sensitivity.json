@@ -1,0 +1,6 @@
+{
+  "mutation": "replace agent-management dispatch door with direct stream append",
+  "verifierDetectedMutant": true,
+  "directTargetAppendAbsent": true,
+  "result": "PASS"
+}

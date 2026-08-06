@@ -3,7 +3,7 @@ id: E2-T03
 epic: 2
 title: "Agent management API and machine-readable CLI"
 priority: 203
-status: in-progress
+status: implemented
 depends_on: [E2-T02]
 estimate: L
 capstone: false
@@ -62,3 +62,25 @@ capability status, never broker credentials or hidden environment data.
 5. Bypass the API by appending directly in a scratch command; source/import guards must fail.
 
 ## Verification log
+
+### Builder — 2026-08-06 — implementation and cold proof
+
+- Exact implementation commit: `50b793739414c621a385735cfd61b94d0760b330`.
+- Exact cold command:
+  `PROMOTE_EVIDENCE=1 E2_T03_IMPLEMENTATION_COMMIT=50b793739414c621a385735cfd61b94d0760b330
+  TEST_RUN_ID=cold-e2-t03-1 make verify-E2-T03`. The detached checkout was clean before
+  install, hydrated and built the pinned emulator, and passed `pnpm format:check`, `pnpm lint`,
+  `pnpm typecheck`, `pnpm test`, and `pnpm build`; all child commands exited 0 with `skips: []`.
+  Evidence is under `evidence/e2-t03-final/`.
+- The final replay produced directory state digest
+  `sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76` and config state
+  digest `sha256:b6e7620fedb0696a1810052ed4fa8c83ec4e2c3af1f1398e2f01f03bcd5101d4`, with six
+  logical config events and eight replayed source records.
+- The verifier records stable concurrent-append pagination, five lost acknowledgements with no
+  duplicate effects and original receipts, redaction across HTTP/CLI/evidence, restart
+  reconstruction, and a direct-append sensitivity mutant detected by the verifier.
+- Replay: N/A (server/CLI administration surface) + mitigation: real-HTTP/CLI transcripts,
+  idempotent retry matrix, canary scan, and state replay.
+- Claim: the E2-T03 agent management API, machine-readable CLI, dispatch/idempotency wiring,
+  pagination, redaction, restart proof, and cold verifier satisfy the acceptance criteria;
+  awaiting a fresh independent critic.

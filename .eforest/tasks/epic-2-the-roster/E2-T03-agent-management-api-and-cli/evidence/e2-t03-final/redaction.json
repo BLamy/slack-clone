@@ -1,0 +1,9 @@
+{
+  "canaryAbsentEverywhere": true,
+  "canaryRejectedByProtocol": "AGENT_CONFIG_SECRET_VALUE",
+  "httpBodiesRedacted": true,
+  "evidenceTranscriptsRedacted": true,
+  "cliOutputRedacted": true,
+  "subjectBindingOmittedFromPublicAgent": true,
+  "result": "PASS"
+}

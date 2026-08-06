@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "task": "E2-T03",
+  "runId": "cold-e2-t03-1",
+  "implementationCommit": "50b793739414c621a385735cfd61b94d0760b330",
+  "result": "PASS",
+  "replay": "Replay: N/A (server/CLI administration surface) + mitigation: real-HTTP/CLI transcripts, idempotent retry matrix, canary scan, and state replay",
+  "skips": [],
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "exitCode": 0,
+      "name": "format"
+    },
+    {
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "name": "lint"
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "name": "typecheck"
+    },
+    {
+      "command": "pnpm test",
+      "exitCode": 0,
+      "name": "test"
+    },
+    {
+      "command": "pnpm build",
+      "exitCode": 0,
+      "name": "build"
+    }
+  ],
+  "pagination": {
+    "agentPages": 2,
+    "appendedAgentAfterFirstPage": true,
+    "historyPages": 3,
+    "historyRows": 6,
+    "noDuplicateHistoryEventIds": true,
+    "noDuplicateListRows": true,
+    "invalidCursorCases": 2,
+    "result": "PASS"
+  },
+  "retries": {
+    "attemptedMutations": [
+      "agent create",
+      "config create",
+      "config revise",
+      "config disable",
+      "config revoke"
+    ],
+    "duplicateDirectoryEvents": 0,
+    "duplicateConfigEvents": 0,
+    "everyMutationReturnedOriginalReceipt": true,
+    "lostAcknowledgements": 5,
+    "noDuplicateLogicalEffects": true,
+    "result": "PASS"
+  },
+  "redaction": {
+    "canaryAbsentEverywhere": true,
+    "canaryRejectedByProtocol": "AGENT_CONFIG_SECRET_VALUE",
+    "httpBodiesRedacted": true,
+    "evidenceTranscriptsRedacted": true,
+    "cliOutputRedacted": true,
+    "subjectBindingOmittedFromPublicAgent": true,
+    "result": "PASS"
+  },
+  "restart": {
+    "sameReceiptAfterRestart": true,
+    "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+    "configStateDigest": "sha256:b6e7620fedb0698a1810052ed4fa8c83ec4e2c3af1f1398e2f01f03bcd5101d4",
+    "historyEventCount": 8,
+    "processStateRebuilt": true,
+    "result": "PASS"
+  },
+  "sensitivity": {
+    "mutation": "replace agent-management dispatch door with direct stream append",
+    "verifierDetectedMutant": true,
+    "directTargetAppendAbsent": true,
+    "result": "PASS"
+  },
+  "finalReplay": {
+    "directoryDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+    "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+    "configDigest": "sha256:98eab8974bee892af70a5978c530b2664b0d3e7156740d05e04c23b988075da5",
+    "configStateDigest": "sha256:b6e7620fedb0698a1810052ed4fa8c83ec4e2c3af1f1398e2f01f03bcd5101d4",
+    "configEventCount": 6,
+    "directoryTargetEventCount": 3,
+    "dispatchIndexCount": 9,
+    "historyEventIds": [
+      "ev_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "ev_pppppppppppppppppppppppppp",
+      "ev_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "ev_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+      "ev_pppppppppppppppppppppppppp",
+      "ev_mmmmmmmmmmmmmmmmmmmmmmmmmm",
+      "ev_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+      "ev_nnnnnnnnnnnnnnnnnnnnnnnnnn"
+    ],
+    "finalStatus": "retired",
+    "replayedAfterRestart": true
+  }
+}

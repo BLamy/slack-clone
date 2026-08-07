@@ -586,6 +586,7 @@ function verifyReducerIntegration(fixture, journal) {
 }
 
 async function verifySensitivity() {
+  await mkdir(path.join(taskDirectory, "work"), { recursive: true });
   const mutations = [
     {
       label: "queue-proof-binding",

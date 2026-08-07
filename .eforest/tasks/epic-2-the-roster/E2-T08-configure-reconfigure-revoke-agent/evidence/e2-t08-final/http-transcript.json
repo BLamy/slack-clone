@@ -5,7 +5,17 @@
     "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
     "requestBody": "redacted-json",
     "response": "client-aborted-after-durable-append",
-    "status": "client-aborted"
+    "status": "client-aborted",
+    "operation": "create"
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+    "requestBody": "redacted-json",
+    "response": "client-aborted-after-durable-append",
+    "status": "client-aborted",
+    "operation": "config-create"
   },
   {
     "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -54,6 +64,33 @@
       }
     },
     "status": 201
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/activate",
+    "requestBody": "redacted-json",
+    "response": "client-aborted-after-durable-append",
+    "status": "client-aborted",
+    "operation": "activate"
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revisions",
+    "requestBody": "redacted-json",
+    "response": "client-aborted-after-durable-append",
+    "status": "client-aborted",
+    "operation": "revise"
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/activate",
+    "requestBody": "redacted-json",
+    "response": "client-aborted-after-durable-append",
+    "status": "client-aborted",
+    "operation": "activate"
   },
   {
     "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
@@ -1068,8 +1105,8 @@
       "source": {
         "directoryDigest": "sha256:f8c8273b17b2df70df54421b33de220fdd3154c72838358a092a20fdcf1362e6",
         "directoryStateDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
-        "configDigest": "sha256:a0483a101299fd3aa428c96e7ad8fdd3d2dcfb6e607eab6e1a8c28ba453105c2",
-        "configStateDigest": "sha256:892ea58dac4e39a05fbd5e2daab12b77a04de61c8a29a588916ed3c042c2664e"
+        "configDigest": "sha256:1b0ba6539a7eb849f84533ad58e603e8c5730d92c2737212d4653ae0465c8dea",
+        "configStateDigest": "sha256:afb8b48a66a020b4295a3f7bd0f34c53d26a6ebfdc61508c69469555ed925490"
       }
     },
     "status": 200
@@ -1204,8 +1241,8 @@
       "source": {
         "directoryDigest": "sha256:f8c8273b17b2df70df54421b33de220fdd3154c72838358a092a20fdcf1362e6",
         "directoryStateDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
-        "configDigest": "sha256:4a4a18b8d5dd7838a4e16a2d52ab925ff991e6f5ca281ea3fc973a15d177124e",
-        "configStateDigest": "sha256:2fa70e0cf50cfed47c8ce145e08e95cf13579283f0e03af4658be667200b9580"
+        "configDigest": "sha256:2c58e87e45f963e9321e8a125a0611a2d721ed942d2a13c4942eae3dc4ca6301",
+        "configStateDigest": "sha256:a08c0f0abc84375631b0d955ddb9ae10ef0a6a2c0bdc067931374b277f483a60"
       }
     },
     "status": 201
@@ -1341,10 +1378,19 @@
       "source": {
         "directoryDigest": "sha256:a16bba46b73ba2db856993709ea5478fed536e473b84aed66531b45e3ac28c8e",
         "directoryStateDigest": "sha256:b6ab65ab76905f3a2181d504e919d7a5d89b3de2abcd99046eb103dab9653d71",
-        "configDigest": "sha256:4a4a18b8d5dd7838a4e16a2d52ab925ff991e6f5ca281ea3fc973a15d177124e",
-        "configStateDigest": "sha256:2fa70e0cf50cfed47c8ce145e08e95cf13579283f0e03af4658be667200b9580"
+        "configDigest": "sha256:2c58e87e45f963e9321e8a125a0611a2d721ed942d2a13c4942eae3dc4ca6301",
+        "configStateDigest": "sha256:a08c0f0abc84375631b0d955ddb9ae10ef0a6a2c0bdc067931374b277f483a60"
       }
     },
     "status": 200
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/revoke",
+    "requestBody": "redacted-json",
+    "response": "client-aborted-after-durable-append",
+    "status": "client-aborted",
+    "operation": "revoke"
   }
 ]

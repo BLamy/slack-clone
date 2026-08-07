@@ -916,15 +916,15 @@
   "config": {
     "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
     "nextOffset": "0000000000000000_0000000000000006",
-    "streamDigest": "sha256:541f5a3397dbf730bd8bc3fa7f6f0e04db259d3ba6d048b3671f00a8baeb40fa",
-    "stateDigest": "sha256:f3593733ca9f5421ab1980fa542d31115bd54d2b60eb1c5e32f3657d54ce4735",
+    "streamDigest": "sha256:343243cdcab2b38567f178a4d08b872a765bd3219bcd1f0fd46a60ad0b5857a3",
+    "stateDigest": "sha256:31b821c392868544fd44dd5853a3640cb2a3bf175d7229d564dc3d46bfcf957a",
     "records": [
       {
-        "digest": "sha256:f30496b7dcf9916b21853ef8eb34a32a64d36fbf906cf3ccd48f2b73159229bd",
+        "digest": "sha256:db54a87615b48304c5cfa7655076a015174619519a41a0bc381becd68f4868e4",
         "event": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
           "causation": null,
-          "correlationId": "cr_cznfzgzcreatez0002cznfzgzc",
+          "correlationId": "cr_cznfzgzcreatezzzstzackz000",
           "data": {
             "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
             "config": {
@@ -1020,29 +1020,29 @@
             "revisionId": "acr_b0bc066ff12c66b8bdf8aafad1e56031399d2ca6743893e650ec0c406ee1198c"
           },
           "eventType": "agent.config.created",
-          "idempotencyKey": "ik_cznfzgzcreatez0002cznfzgzc",
+          "idempotencyKey": "ik_cznfzgzcreatezzzstzackz000",
           "schemaVersion": 1,
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
-          "eventId": "ev_cznfzgzcreatez0002cznfzgzc",
+          "eventId": "ev_cznfzgzcreatezzzstzackz000",
           "serverTimestamp": "2026-08-06T00:00:00.000Z"
         },
         "dispatch": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
           "expectedHead": "0000000000000000_0000000000000000",
-          "idempotencyKey": "ik_cznfzgzcreatez0002cznfzgzc",
+          "idempotencyKey": "ik_cznfzgzcreatezzzstzackz000",
           "operation": "agent.config.created",
-          "requestDigest": "sha256:6e0fdafa16780cb28ab92eebb318b252805eed9a9bfbae93e4497fc3351ed6cf",
+          "requestDigest": "sha256:b3b448972c2ea83b9f0defecffccab97c7885eb1d334ebd1a85e6485a1ad2163",
           "schemaVersion": 1,
           "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
         }
       },
       {
-        "digest": "sha256:730b3bc104fee1b6decbe53a0a829c5d3e364c8d22bcdc8093ef22da5293f067",
+        "digest": "sha256:63b7fda5c5e6ce53c40c4337af84a2991475dfc9a5f477a24faec6f7c97c3a3a",
         "event": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
           "causation": null,
-          "correlationId": "cr_actzvatez1z0009actzvatez1z",
+          "correlationId": "cr_actzvatez1zzzstzackz0009ac",
           "data": {
             "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
             "expectedRevision": 1,
@@ -1050,29 +1050,29 @@
             "revisionId": "acr_b0bc066ff12c66b8bdf8aafad1e56031399d2ca6743893e650ec0c406ee1198c"
           },
           "eventType": "agent.config.activated",
-          "idempotencyKey": "ik_actzvatez1z0009actzvatez1z",
+          "idempotencyKey": "ik_actzvatez1zzzstzackz0009ac",
           "schemaVersion": 1,
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
-          "eventId": "ev_actzvatez1z0009actzvatez1z",
+          "eventId": "ev_actzvatez1zzzstzackz0009ac",
           "serverTimestamp": "2026-08-06T00:00:00.000Z"
         },
         "dispatch": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
           "expectedHead": "0000000000000000_0000000000000001",
-          "idempotencyKey": "ik_actzvatez1z0009actzvatez1z",
+          "idempotencyKey": "ik_actzvatez1zzzstzackz0009ac",
           "operation": "agent.config.activated",
-          "requestDigest": "sha256:1dde7f24bd23c6ad634313ec6d4809e1c9d099271037dbab05557082fbb8679a",
+          "requestDigest": "sha256:f45b5a1e43262f819f3e15ecfb4ae56a6c7cc4f419a4db394394eed9ebd84107",
           "schemaVersion": 1,
           "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
         }
       },
       {
-        "digest": "sha256:0407f9136a417ee663ff902a297b5dc47c959f6360494ad9a29a542559e1b611",
+        "digest": "sha256:340063e6eec10bcfdeaf924e8f9f9058ce321fa163bf3474a39c09d428db66df",
         "event": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
           "causation": null,
-          "correlationId": "cr_revzsez2z0012revzsez2z0012",
+          "correlationId": "cr_revzsez2zzzstzackz0012revz",
           "data": {
             "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
             "config": {
@@ -1168,29 +1168,29 @@
             "revisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39"
           },
           "eventType": "agent.config.revised",
-          "idempotencyKey": "ik_revzsez2z0012revzsez2z0012",
+          "idempotencyKey": "ik_revzsez2zzzstzackz0012revz",
           "schemaVersion": 1,
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
-          "eventId": "ev_revzsez2z0012revzsez2z0012",
+          "eventId": "ev_revzsez2zzzstzackz0012revz",
           "serverTimestamp": "2026-08-06T00:00:00.000Z"
         },
         "dispatch": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
           "expectedHead": "0000000000000000_0000000000000002",
-          "idempotencyKey": "ik_revzsez2z0012revzsez2z0012",
+          "idempotencyKey": "ik_revzsez2zzzstzackz0012revz",
           "operation": "agent.config.revised",
-          "requestDigest": "sha256:548d0f2c9e4dd357348f48f1883a1c3cf55aaf82ddbf990a6f18f489d2c7a774",
+          "requestDigest": "sha256:3e64748cfd4487125013afb2a27ba3170732ff4b83b75f3a515923b031de1a03",
           "schemaVersion": 1,
           "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
         }
       },
       {
-        "digest": "sha256:8339c6fd89345d9bd753922493f7e07e465ce128eb8c8663fe8bf714b3b7b340",
+        "digest": "sha256:4b156639509f057ee6145a60a17eb2509149442358a490cc0de1bc19fb58f482",
         "event": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
           "causation": null,
-          "correlationId": "cr_actzvatez2z0013actzvatez2z",
+          "correlationId": "cr_actzvatez2zzzstzackz0013ac",
           "data": {
             "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
             "expectedRevision": 2,
@@ -1198,18 +1198,18 @@
             "revisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39"
           },
           "eventType": "agent.config.activated",
-          "idempotencyKey": "ik_actzvatez2z0013actzvatez2z",
+          "idempotencyKey": "ik_actzvatez2zzzstzackz0013ac",
           "schemaVersion": 1,
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
-          "eventId": "ev_actzvatez2z0013actzvatez2z",
+          "eventId": "ev_actzvatez2zzzstzackz0013ac",
           "serverTimestamp": "2026-08-06T00:00:00.000Z"
         },
         "dispatch": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
           "expectedHead": "0000000000000000_0000000000000003",
-          "idempotencyKey": "ik_actzvatez2z0013actzvatez2z",
+          "idempotencyKey": "ik_actzvatez2zzzstzackz0013ac",
           "operation": "agent.config.activated",
-          "requestDigest": "sha256:c0ad9352d7c4523ec8ecd1c930924db576df8a8592fc0c27e87218a8e8632f23",
+          "requestDigest": "sha256:e558f101fd8fc710e4511aff2d49e4ba99c11272204b62f48bfe8ac48d0d76da",
           "schemaVersion": 1,
           "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -1373,7 +1373,7 @@
   "dispatch": {
     "stream": "__stream_slack_dispatch_idempotency__",
     "nextOffset": "0000000000000000_0000000000000012",
-    "streamDigest": "sha256:39f15bed057c4007f91487ffdd0a785e7e9f1ce38e77df6d347c5c237ee440a8",
+    "streamDigest": "sha256:0633bf3a364d19d25f36f42b08adce962f7eb2b1b71edbb6e6acaa7abb2cc040",
     "records": [
       {
         "kind": "dispatch.accepted",
@@ -1393,11 +1393,11 @@
         "kind": "dispatch.accepted",
         "receipt": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
-          "eventDigest": "sha256:7b8acc203a1ab25d8d7980d95f83e71a3c6a80a90421ffe1c07251b515aa4745",
-          "idempotencyKey": "ik_cznfzgzcreatez0002cznfzgzc",
+          "eventDigest": "sha256:7457eafb19b5881255f416f88c1ad047f0aba1e335f24b18a1b3c3aa48734feb",
+          "idempotencyKey": "ik_cznfzgzcreatezzzstzackz000",
           "nextOffset": "0000000000000000_0000000000000001",
           "operation": "agent.config.created",
-          "requestDigest": "sha256:6e0fdafa16780cb28ab92eebb318b252805eed9a9bfbae93e4497fc3351ed6cf",
+          "requestDigest": "sha256:b3b448972c2ea83b9f0defecffccab97c7885eb1d334ebd1a85e6485a1ad2163",
           "status": "accepted",
           "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -1463,11 +1463,11 @@
         "kind": "dispatch.accepted",
         "receipt": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
-          "eventDigest": "sha256:5faf0f72f5a7887371ea104c3689e58e58c735dd37a577919ab3865ff42dcf99",
-          "idempotencyKey": "ik_actzvatez1z0009actzvatez1z",
+          "eventDigest": "sha256:29ebdf293d0b2e82104cf12b352b2bf27f4e9952e22dfe1a570329296e41c945",
+          "idempotencyKey": "ik_actzvatez1zzzstzackz0009ac",
           "nextOffset": "0000000000000000_0000000000000002",
           "operation": "agent.config.activated",
-          "requestDigest": "sha256:1dde7f24bd23c6ad634313ec6d4809e1c9d099271037dbab05557082fbb8679a",
+          "requestDigest": "sha256:f45b5a1e43262f819f3e15ecfb4ae56a6c7cc4f419a4db394394eed9ebd84107",
           "status": "accepted",
           "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -1477,11 +1477,11 @@
         "kind": "dispatch.accepted",
         "receipt": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
-          "eventDigest": "sha256:4a13e6ecbcdbf8920dd7ae35ab2968427c26bd53d11a580c3baac678392aa949",
-          "idempotencyKey": "ik_revzsez2z0012revzsez2z0012",
+          "eventDigest": "sha256:eb336f66344688cf5962a358ef7bf443ef1841e6c69a4e5ffa3fdcaa6bd62305",
+          "idempotencyKey": "ik_revzsez2zzzstzackz0012revz",
           "nextOffset": "0000000000000000_0000000000000003",
           "operation": "agent.config.revised",
-          "requestDigest": "sha256:548d0f2c9e4dd357348f48f1883a1c3cf55aaf82ddbf990a6f18f489d2c7a774",
+          "requestDigest": "sha256:3e64748cfd4487125013afb2a27ba3170732ff4b83b75f3a515923b031de1a03",
           "status": "accepted",
           "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -1491,11 +1491,11 @@
         "kind": "dispatch.accepted",
         "receipt": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
-          "eventDigest": "sha256:72b7c13250dbd3f3858a6ab392c5b726734d74cddacfa5cb6ed3a0ef91571847",
-          "idempotencyKey": "ik_actzvatez2z0013actzvatez2z",
+          "eventDigest": "sha256:baf544b67f7df482a228c1cf28ccfbfbdf64166236ebdda226f49383b6853fc4",
+          "idempotencyKey": "ik_actzvatez2zzzstzackz0013ac",
           "nextOffset": "0000000000000000_0000000000000004",
           "operation": "agent.config.activated",
-          "requestDigest": "sha256:c0ad9352d7c4523ec8ecd1c930924db576df8a8592fc0c27e87218a8e8632f23",
+          "requestDigest": "sha256:e558f101fd8fc710e4511aff2d49e4ba99c11272204b62f48bfe8ac48d0d76da",
           "status": "accepted",
           "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"

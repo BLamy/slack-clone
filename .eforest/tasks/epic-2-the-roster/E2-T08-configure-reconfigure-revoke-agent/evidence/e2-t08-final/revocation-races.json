@@ -45,6 +45,7 @@
   "result": "PASS",
   "actualConfigRevoke": {
     "appendObservedBeforeResponse": true,
+    "clientAbortedAfterDurableAppend": true,
     "configStatusAfterDurableRetire": "retired",
     "historicalSnapshotUseRefused": true,
     "code": "INVOCATION_SNAPSHOT_AGENT_CONFIG_INACTIVE",

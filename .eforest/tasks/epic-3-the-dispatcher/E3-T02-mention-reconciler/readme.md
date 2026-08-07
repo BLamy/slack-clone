@@ -3,7 +3,7 @@ id: E3-T02
 epic: 3
 title: "Idempotent mention-to-invocation reconciler"
 priority: 302
-status: in-progress
+status: implemented
 depends_on: [E1-T06, E3-T01]
 estimate: L
 capstone: false
@@ -65,3 +65,18 @@ non-runnable outcome rather than disappearing or launching with a silent fallbac
    race verifier must fail.
 
 ## Verification log
+
+- 2026-08-07 builder handoff: commit `53a2a6efe71ba31bf62129523e6542c1d0c35f85`. Cold command
+  `PROMOTE_EVIDENCE=1 make verify-E3-T02` passed from a clean detached checkout after
+  `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`;
+  the test run recorded 165 unit tests and 5 integration tests. Evidence is in
+  `evidence/e3-t02-final/` (`source-manifest.json`, `checkpoint-manifest.json`,
+  `invocation-receipts.json`, `duplicate-race.json`, `crash-schedules.json`,
+  `outcomes.json`, `source-attacks.json`, `replay-digests.json`, `sensitivity.json`,
+  `cold-clone-transcript.json`, and `verification-summary.json`). The hundred-way race
+  converged to one invocation/checkpoint and one receipt; all five crash/lost-ack schedules
+  resumed to one invocation/checkpoint; source/checkpoint scope attacks were refused; and
+  the random-ID mutation made the race verifier exit non-zero. Replay: N/A (headless stream
+  reconciler) + mitigation: source and checkpoint manifests, hundred-way race, crash
+  schedules, and replay digests. Claim: the deterministic reconciler is implemented and
+  ready for a fresh critic; it is not yet verified.

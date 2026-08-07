@@ -1,0 +1,35 @@
+{
+  "attacks": [
+    {
+      "attack": "forged-offset",
+      "invocationCount": 0,
+      "observedCode": "MENTION_RECONCILER_SOURCE_INVALID",
+      "refused": true
+    },
+    {
+      "attack": "forged-event-digest",
+      "invocationCount": 0,
+      "observedCode": "MENTION_RECONCILER_SOURCE_INVALID",
+      "refused": true
+    },
+    {
+      "attack": "foreign-agent",
+      "invocationCount": 0,
+      "observedCode": "MENTION_RECONCILER_SOURCE_INVALID",
+      "refused": true
+    },
+    {
+      "attack": "foreign-workspace",
+      "invocationCount": 0,
+      "observedCode": "MENTION_RECONCILER_SOURCE_SCOPE",
+      "refused": true
+    },
+    {
+      "attack": "cross-wired-checkpoint",
+      "invocationCount": 0,
+      "observedCode": "MENTION_RECONCILER_CHECKPOINT_SCOPE",
+      "refused": true
+    }
+  ],
+  "result": "PASS"
+}

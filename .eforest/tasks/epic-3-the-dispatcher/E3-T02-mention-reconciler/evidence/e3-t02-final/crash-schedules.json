@@ -1,0 +1,35 @@
+{
+  "schedules": [
+    {
+      "boundary": "source-read",
+      "finalCheckpointCount": 1,
+      "finalInvocationCount": 1,
+      "resumed": true
+    },
+    {
+      "boundary": "snapshot-resolved",
+      "finalCheckpointCount": 1,
+      "finalInvocationCount": 1,
+      "resumed": true
+    },
+    {
+      "boundary": "invocation-appended",
+      "finalCheckpointCount": 1,
+      "finalInvocationCount": 1,
+      "resumed": true
+    },
+    {
+      "boundary": "before-checkpoint-acknowledgement",
+      "finalCheckpointCount": 1,
+      "finalInvocationCount": 1,
+      "resumed": true
+    },
+    {
+      "boundary": "lost-acknowledgement",
+      "finalCheckpointCount": 1,
+      "finalInvocationCount": 1,
+      "resumed": true
+    }
+  ],
+  "result": "PASS"
+}

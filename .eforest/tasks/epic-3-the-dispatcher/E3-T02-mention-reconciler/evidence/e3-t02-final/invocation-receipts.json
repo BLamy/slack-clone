@@ -1,0 +1,22 @@
+{
+  "records": [
+    {
+      "eventId": "ev_a948214f9d10994ee47101a98f",
+      "invocationId": "iv_17ba4a33075026486fbabc36b3",
+      "policyDigest": "sha256:c20cf1c51f54590b128bc764bf8497ab7a94ea9ce620802972b6e3e353f6c4a0",
+      "snapshotDigest": "sha256:1836af3f6877963b8b299df17298d30898c60ec944cc701fab53849d077a765c",
+      "snapshotRef": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000002_0000000000000002",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+      },
+      "sourceTrigger": {
+        "digest": "sha256:a0e93a776d075a14351f85adda445cd5890ed3f246fab144cd140d264c3e1d67",
+        "offset": "0000000000000001_0000000000000001",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    }
+  ],
+  "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations",
+  "streamDigest": "sha256:28bf712ef0b4c14df5ec1f120e5dd1dd2fd1a4ed70595d283e24744ce3960119"
+}

@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E3-T02 builder is working on the idempotent mention-to-invocation reconciler.",
-  "updatedAt": "2026-08-07T06:15:00Z"
+  "statusReason": "E3-T02 is implemented with promoted cold evidence and is awaiting a fresh critic.",
+  "updatedAt": "2026-08-07T12:11:51Z"
 }

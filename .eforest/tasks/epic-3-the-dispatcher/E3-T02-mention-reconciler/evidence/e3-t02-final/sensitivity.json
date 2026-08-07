@@ -1,0 +1,7 @@
+{
+  "mutation": "replace source-bound invocation ID with randomness",
+  "verifierCommand": "node --test test/unit/mention-reconciler.test.mjs",
+  "verifierExitCode": 1,
+  "verifierRejected": true,
+  "result": "PASS"
+}

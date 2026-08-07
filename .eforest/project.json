@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E3-T02 is verified with promoted cold evidence; E3-T03 is the next eligible gate.",
-  "updatedAt": "2026-08-07T12:51:27Z"
+  "statusReason": "E3-T03 is in progress on the verified E3-T01 and E3-T02 contracts.",
+  "updatedAt": "2026-08-07T16:23:38Z"
 }

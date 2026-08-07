@@ -3,7 +3,7 @@ id: E3-T03
 epic: 3
 title: "Durable run queue, fenced worker leases, and scoped capabilities"
 priority: 303
-status: pending
+status: in-progress
 depends_on: [E3-T01, E3-T02]
 estimate: L
 capstone: false

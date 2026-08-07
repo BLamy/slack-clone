@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "runId": "e3-t04-cold-final-v3",
-  "implementationCommit": "ad22ed625c8cac2e2ac510335b3ae058cd72249a",
+  "runId": "e3-t04-cold-final-v4",
+  "implementationCommit": "a49084e5336b1dce9f2cc5ac72207bd200b139d9",
   "entrypoint": {
     "command": "make verify-E3-T04",
     "delegatedTo": "node scripts/verify-e3-t04.mjs"
@@ -9,19 +9,19 @@
   "checkout": "disposable git worktree at the implementation commit",
   "commands": [
     {
-      "command": "git worktree add --detach <checkout> ad22ed625c8cac2e2ac510335b3ae058cd72249a",
-      "durationMs": 306,
+      "command": "git worktree add --detach <checkout> a49084e5336b1dce9f2cc5ac72207bd200b139d9",
+      "durationMs": 1038,
       "exitCode": 0,
       "stderrBytes": 0,
       "stderrPreview": "",
       "stderrSha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "stdoutBytes": 54,
-      "stdoutPreview": "HEAD is now at ad22ed6 Cover E3-T04 budget truncation\n",
-      "stdoutSha256": "sha256:e8bfaca4fb10da3da5afd801435c0b0ea4d89ca3bae693d2652302363a423502"
+      "stdoutBytes": 59,
+      "stdoutPreview": "HEAD is now at a49084e Cover E3-T04 item and [REDACTED]\n",
+      "stdoutSha256": "sha256:e454d063256f783f32168fdf8677d032bca366be859fb509bd0b4bb0fd208e50"
     },
     {
       "command": "git submodule update --init --recursive",
-      "durationMs": 2266,
+      "durationMs": 2738,
       "exitCode": 0,
       "stderrBytes": 0,
       "stderrPreview": "",
@@ -32,7 +32,7 @@
     },
     {
       "command": "git status --porcelain --untracked-files=all",
-      "durationMs": 113,
+      "durationMs": 172,
       "exitCode": 0,
       "stderrBytes": 0,
       "stderrPreview": "",
@@ -43,36 +43,36 @@
     },
     {
       "command": "pnpm install --frozen-lockfile",
-      "durationMs": 1354,
+      "durationMs": 3013,
       "exitCode": 0,
       "stderrBytes": 0,
       "stderrPreview": "",
       "stderrSha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "stdoutBytes": 831,
-      "stdoutPreview": "Scope: all 6 workspace projects\nLockfile is up to date, resolution step is skipped\nProgress: resolved 1, reused 0, downloaded 0, added 0\nPackages: +158\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\nProgress: resolved 158, reused 158, downloaded 0, added 158, done\n.../node_modules/protobufjs postinstall$ node scripts/postinstall\n.../node_modules/protobufjs postinstall: Done\n\ndependencies:\n+ @stream-slack/durable-streams 0.1.0 <- packages/durable-streams\n+ @stream-slack/http 0.1.0 <- packages/http\n+ @stream-slack/protocol 0.1.0 <- packages/protocol\n+ @stream-slack/reducers 0.1.0 <- packages/reducers\n+ @stream-slack/services 0.1.0 <- packages/services\n\ndevDependencies:\n+ @playwright/test 1.61.1\n+ @replayio/playwright 5.0.3\n+ eslint 10.8.0\n+ prettier 3.9.6\n\nDone in 1.2s using pnpm v11.2.2\n",
-      "stdoutSha256": "sha256:7cf61a878f43d82e485671e45dc7022ef498dfe246e5da0a3a74390ecf36fa9b"
+      "stdoutBytes": 890,
+      "stdoutPreview": "Scope: all 6 workspace projects\nLockfile is up to date, resolution step is skipped\nProgress: resolved 1, reused 0, downloaded 0, added 0\nPackages: +158\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\nProgress: resolved 158, reused 158, downloaded 0, added 75\nProgress: resolved 158, reused 158, downloaded 0, added 158, done\n.../node_modules/protobufjs postinstall$ node scripts/postinstall\n.../node_modules/protobufjs postinstall: Done\n\ndependencies:\n+ @stream-slack/durable-streams 0.1.0 <- packages/durable-streams\n+ @stream-slack/http 0.1.0 <- packages/http\n+ @stream-slack/protocol 0.1.0 <- packages/protocol\n+ @stream-slack/reducers 0.1.0 <- packages/reducers\n+ @stream-slack/services 0.1.0 <- packages/services\n\ndevDependencies:\n+ @playwright/test 1.61.1\n+ @replayio/playwright 5.0.3\n+ eslint 10.8.0\n+ prettier 3.9.6\n\nDone in 2.8s using pnpm v11.2.2\n",
+      "stdoutSha256": "sha256:993e08cd0e3cb1c0b5645652de028781b703eb9a13195bbc4ffc8e26842e85eb"
     },
     {
       "command": "pnpm setup:emulate",
-      "durationMs": 45402,
+      "durationMs": 123420,
       "exitCode": 0,
       "stderrBytes": 0,
       "stderrPreview": "",
       "stderrSha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "stdoutBytes": 29176,
-      "stdoutPreview": "WVQMFHQM.js                2.07 KB\nESM dist/dist-VKQCYP4Z.js                 75.85 KB\nESM dist/dist-Z7ZRJIRP.js                 46.48 KB\nESM dist/dist-BTN4DDIK.js                 144.17 KB\nESM dist/dist-OKZGYXA6.js                 198.92 KB\nESM dist/helpers-LXLP3DFE-PEPB2NAS.js     388.00 B\nESM dist/index.js                         59.13 KB\nESM dist/dist-LLBSQQWC.js                 414.94 KB\nESM dist/dist-O2HI4ZBX.js                 36.81 KB\nESM dist/dist-I4XUSYHS.js                 114.32 KB\nESM dist/dist-CG4HQISS.js                 27.52 KB\nESM dist/chunk-WSJ6II32.js                52.54 KB\nESM dist/chunk-PZ5AY32C.js                233.00 B\nESM dist/dist-KUMIQPJP.js                 84.16 KB\nESM dist/dist-JO6D2EV6.js.map             151.66 KB\nESM dist/dist-IZ5KDTSJ.js.map             130.51 KB\nESM dist/dist-GQXOI2Y2.js.map             120.56 KB\nESM dist/dist-MNUVWLIT.js.map             103.24 KB\nESM dist/chunk-WVQMFHQM.js.map            3.60 KB\nESM dist/dist-NDJDEDCT.js.map             70.72 KB\nESM dist/dist-Z7ZRJIRP.js.map             125.94 KB\nESM dist/dist-VKQCYP4Z.js.map             178.74 KB\nESM dist/dist-BTN4DDIK.js.map             313.17 KB\nESM dist/dist-OKZGYXA6.js.map             409.91 KB\nESM dist/helpers-LXLP3DFE-PEPB2NAS.js.map 71.00 B\nESM dist/dist-O2HI4ZBX.js.map             106.72 KB\nESM dist/dist-I4XUSYHS.js.map             254.58 KB\nESM dist/dist-CG4HQISS.js.map             90.31 KB\nESM dist/chunk-PZ5AY32C.js.map            71.00 B\nESM dist/dist-KUMIQPJP.js.map             192.44 KB\nESM dist/index.js.map                     141.26 KB\nESM dist/dist-LLBSQQWC.js.map             817.06 KB\nESM dist/chunk-WSJ6II32.js.map            106.89 KB\nESM dist/dist-JHLHCH44.js.map             1.47 MB\nESM ⚡️ Build success in 1361ms\n[emulate-cli] ESM dist/dist-JO6D2EV6.js                 62.85 KB\nESM dist/dist-GQXOI2Y2.js                 42.31 KB\nESM dist/dist-Z7ZRJIRP.js                 46.48 KB\nESM dist/dist-MNUVWLIT.js                 32.71 KB\nESM dist/dist-NDJDEDCT.js                 35.64 KB\nESM dist/dist-VKQCYP4Z.js                 75.85 KB\nESM dist/helpers-LXLP3DFE-PEPB2NAS.js     388.00 B\nESM dist/chunk-WVQMFHQM.js                2.07 KB\nESM dist/dist-I4XUSYHS.js                 114.32 KB\nESM dist/api.js                           49.20 KB\nESM dist/dist-CG4HQISS.js                 27.52 KB\nESM dist/dist-O2HI4ZBX.js                 36.81 KB\nESM dist/dist-KUMIQPJP.js                 84.16 KB\nESM dist/chunk-WSJ6II32.js                52.54 KB\nESM dist/chunk-PZ5AY32C.js                233.00 B\nESM dist/dist-JHLHCH44.js                 511.88 KB\nESM dist/dist-BTN4DDIK.js                 144.17 KB\nESM dist/dist-OKZGYXA6.js                 198.92 KB\nESM dist/dist-LLBSQQWC.js                 414.94 KB\nESM dist/dist-IZ5KDTSJ.js                 47.51 KB\nESM dist/dist-GQXOI2Y2.js.map             120.56 KB\nESM dist/dist-Z7ZRJIRP.js.map             125.94 KB\nESM dist/dist-MNUVWLIT.js.map             103.24 KB\nESM dist/dist-NDJDEDCT.js.map             70.72 KB\nESM dist/dist-VKQCYP4Z.js.map             178.74 KB\nESM dist/helpers-LXLP3DFE-PEPB2NAS.js.map 71.00 B\nESM dist/chunk-WVQMFHQM.js.map            3.60 KB\nESM dist/dist-CG4HQISS.js.map             90.31 KB\nESM dist/dist-O2HI4ZBX.js.map             106.72 KB\nESM dist/dist-JO6D2EV6.js.map             151.66 KB\nESM dist/chunk-PZ5AY32C.js.map            71.00 B\nESM dist/chunk-WSJ6II32.js.map            106.89 KB\nESM dist/dist-KUMIQPJP.js.map             192.44 KB\nESM dist/dist-BTN4DDIK.js.map             313.17 KB\nESM dist/dist-I4XUSYHS.js.map             254.58 KB\nESM dist/api.js.map                       122.47 KB\nESM dist/dist-OKZGYXA6.js.map             409.91 KB\nESM dist/dist-IZ5KDTSJ.js.map             130.51 KB\nESM dist/dist-LLBSQQWC.js.map             817.06 KB\nESM dist/dist-JHLHCH44.js.map             1.47 MB\nESM ⚡️ Build success in 1373ms\n[emulate-cli] DTS ⚡️ Build success in 1312ms\n[emulate-cli] DTS dist/api.d.ts 787.00 B\nPASS emulator installed and built from its lockfile\n",
-      "stdoutSha256": "sha256:18066d10b93713a4c7f56746a167dd895c4c1c95981f9401e3ddd236db475b90"
+      "stdoutBytes": 29984,
+      "stdoutPreview": "SM dist/chunk-WVQMFHQM.js                2.07 KB\nESM dist/dist-Z7ZRJIRP.js                 46.48 KB\nESM dist/dist-I4XUSYHS.js                 114.32 KB\nESM dist/dist-LLBSQQWC.js                 414.94 KB\nESM dist/dist-OKZGYXA6.js                 198.92 KB\nESM dist/dist-CG4HQISS.js                 27.52 KB\nESM dist/dist-O2HI4ZBX.js                 36.81 KB\nESM dist/dist-KUMIQPJP.js                 84.16 KB\nESM dist/chunk-WSJ6II32.js                52.54 KB\nESM dist/chunk-PZ5AY32C.js                233.00 B\nESM dist/dist-GQXOI2Y2.js                 42.31 KB\nESM dist/dist-JO6D2EV6.js                 62.85 KB\nESM dist/dist-BTN4DDIK.js                 144.17 KB\nESM dist/index.js                         59.13 KB\nESM dist/dist-MNUVWLIT.js.map             103.24 KB\nESM dist/dist-NDJDEDCT.js.map             70.72 KB\nESM dist/chunk-WVQMFHQM.js.map            3.60 KB\nESM dist/dist-VKQCYP4Z.js.map             178.74 KB\nESM dist/dist-Z7ZRJIRP.js.map             125.94 KB\nESM dist/dist-I4XUSYHS.js.map             254.58 KB\nESM dist/dist-OKZGYXA6.js.map             409.91 KB\nESM dist/dist-O2HI4ZBX.js.map             106.72 KB\nESM dist/dist-KUMIQPJP.js.map             192.44 KB\nESM dist/dist-IZ5KDTSJ.js.map             130.51 KB\nESM dist/chunk-PZ5AY32C.js.map            71.00 B\nESM dist/chunk-WSJ6II32.js.map            106.89 KB\nESM dist/dist-CG4HQISS.js.map             90.31 KB\nESM dist/helpers-LXLP3DFE-PEPB2NAS.js.map 71.00 B\nESM dist/dist-GQXOI2Y2.js.map             120.56 KB\nESM dist/dist-BTN4DDIK.js.map             313.17 KB\nESM dist/index.js.map                     141.26 KB\nESM dist/dist-JHLHCH44.js.map             1.47 MB\nESM dist/dist-LLBSQQWC.js.map             817.06 KB\nESM dist/dist-JO6D2EV6.js.map             151.66 KB\nESM ⚡️ Build success in 3008ms\n[emulate-cli] ESM dist/dist-JO6D2EV6.js                 62.85 KB\nESM dist/dist-GQXOI2Y2.js                 42.31 KB\nESM dist/dist-IZ5KDTSJ.js                 47.51 KB\nESM dist/dist-MNUVWLIT.js                 32.71 KB\nESM dist/dist-Z7ZRJIRP.js                 46.48 KB\nESM dist/dist-NDJDEDCT.js                 35.64 KB\nESM dist/dist-VKQCYP4Z.js                 75.85 KB\nESM dist/chunk-WVQMFHQM.js                2.07 KB\nESM dist/api.js                           49.20 KB\nESM dist/dist-I4XUSYHS.js                 114.32 KB\nESM dist/dist-LLBSQQWC.js                 414.94 KB\nESM dist/dist-BTN4DDIK.js                 144.17 KB\nESM dist/dist-CG4HQISS.js                 27.52 KB\nESM dist/dist-O2HI4ZBX.js                 36.81 KB\nESM dist/dist-KUMIQPJP.js                 84.16 KB\nESM dist/chunk-WSJ6II32.js                52.54 KB\nESM dist/chunk-PZ5AY32C.js                233.00 B\nESM dist/helpers-LXLP3DFE-PEPB2NAS.js     388.00 B\nESM dist/dist-JHLHCH44.js                 511.88 KB\nESM dist/dist-OKZGYXA6.js                 198.92 KB\nESM dist/dist-JO6D2EV6.js.map             151.66 KB\nESM dist/dist-Z7ZRJIRP.js.map             125.94 KB\nESM dist/dist-NDJDEDCT.js.map             70.72 KB\nESM dist/chunk-WVQMFHQM.js.map            3.60 KB\nESM dist/dist-MNUVWLIT.js.map             103.24 KB\nESM dist/dist-CG4HQISS.js.map             90.31 KB\nESM dist/dist-O2HI4ZBX.js.map             106.72 KB\nESM dist/chunk-WSJ6II32.js.map            106.89 KB\nESM dist/chunk-PZ5AY32C.js.map            71.00 B\nESM dist/dist-GQXOI2Y2.js.map             120.56 KB\nESM dist/helpers-LXLP3DFE-PEPB2NAS.js.map 71.00 B\nESM dist/dist-VKQCYP4Z.js.map             178.74 KB\nESM dist/dist-I4XUSYHS.js.map             254.58 KB\nESM dist/dist-IZ5KDTSJ.js.map             130.51 KB\nESM dist/api.js.map                       122.47 KB\nESM dist/dist-KUMIQPJP.js.map             192.44 KB\nESM dist/dist-OKZGYXA6.js.map             409.91 KB\nESM dist/dist-BTN4DDIK.js.map             313.17 KB\nESM dist/dist-LLBSQQWC.js.map             817.06 KB\nESM dist/dist-JHLHCH44.js.map             1.47 MB\nESM ⚡️ Build success in 3080ms\n[emulate-cli] DTS ⚡️ Build success in 3931ms\nDTS dist/api.d.ts 787.00 B\nPASS emulator installed and built from its lockfile\n",
+      "stdoutSha256": "sha256:71b845c2f7941c771c1ec1f05bd06e87ec4cefc5c184b77b59106ddb6cf7cf86"
     },
     {
       "command": "node scripts/verify-e3-t04.mjs",
-      "durationMs": 120371,
+      "durationMs": 110268,
       "exitCode": 0,
       "stderrBytes": 0,
       "stderrPreview": "",
       "stderrSha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "stdoutBytes": 32834,
+      "stdoutBytes": 33261,
       "stdoutPreview": "00000000000\",\n            \"stream\": \"channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\"\n          }\n        },\n        {\n          \"id\": \"message:old\",\n          \"reason\": \"message-limit\",\n          \"sourceRange\": {\n            \"endOffset\": \"0000000000000003_0000000000000000\",\n            \"startOffset\": \"0000000000000003_0000000000000000\",\n            \"stream\": \"channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\"\n          }\n        }\n      ]\n    },\n    \"reversedInputByteParity\": true\n  },\n  \"trustBoundary\": {\n    \"result\": \"PASS\",\n    \"instructionTrust\": [\n      \"trusted-instructions\"\n    ],\n    \"contentTrust\": [\n      {\n        \"id\": \"message:root\",\n        \"trust\": \"untrusted-content\",\n        \"contentKind\": \"conversation-message\"\n      },\n      {\n        \"id\": \"message:reply\",\n        \"trust\": \"untrusted-content\",\n        \"contentKind\": \"conversation-message\"\n      },\n      {\n        \"id\": \"workspace-file:docs/readme.md\",\n        \"trust\": \"untrusted-content\",\n        \"contentKind\": \"workspace-file\"\n      }\n    ],\n    \"[REDACTED]\n    \"injectionCannotChangePolicy\": true,\n    \"structuralInstructionSeparation\": true\n  },\n  \"replayEvidence\": {\n    \"result\": \"PASS\",\n    \"packDigest\": \"sha256:2e15baf66fe66555415c49fef7fb7c150dbb6d15a40e287fc517f72a3f326c7f\",\n    \"canonicalBytes\": 4611,\n    \"freshProcessDigest\": \"sha256:2e15baf66fe66555415c49fef7fb7c150dbb6d15a40e287fc517f72a3f326c7f\",\n    \"freshProcessBytes\": 4611,\n    \"byteIdentical\": true,\n    \"tamperRefused\": true\n  },\n  \"refusals\": {\n    \"result\": \"PASS\",\n    \"cases\": [\n      {\n        \"label\": \"archived-channel\",\n        \"code\": \"CONTEXT_PACK_CHANNEL_INACTIVE\",\n        \"refused\": true\n      },\n      {\n        \"label\": \"revoked-workspace\",\n        \"code\": \"CONTEXT_PACK_MEMBERSHIP_INACTIVE\",\n        \"refused\": true\n      },\n      {\n        \"label\": \"source-head-drift\",\n        \"code\": \"CONTEXT_PACK_SOURCE_HEAD\",\n        \"refused\": true\n      },\n      {\n        \"label\": \"workspace-path\",\n        \"code\": \"CONTEXT_PACK_WORKSPACE_INPUT_SCOPE\",\n        \"refused\": true\n      },\n      {\n        \"label\": \"instruction-source\",\n        \"code\": \"CONTEXT_PACK_INSTRUCTION_SCOPE\",\n        \"refused\": true\n      },\n      {\n        \"label\": \"unauthorized-source-head\",\n        \"code\": \"CONTEXT_PACK_SOURCE_SCOPE\",\n        \"refused\": true\n      },\n      {\n        \"label\": \"wrong-thread-root\",\n        \"code\": \"CONTEXT_PACK_TRIGGER_INVALID\",\n        \"refused\": true\n      },\n      {\n        \"label\": \"deleted-trigger\",\n        \"code\": \"CONTEXT_PACK_TRIGGER_INVALID\",\n        \"refused\": true\n      }\n    ]\n  },\n  \"sensitivity\": {\n    \"result\": \"PASS\",\n    \"mutationCount\": 3,\n    \"controlExitCode\": 0,\n    \"controlPassed\": true,\n    \"verifierDetectedMutant\": true,\n    \"results\": [\n      {\n        \"label\": \"source-head-binding\",\n        \"verifierExitCode\": 1,\n        \"detected\": true\n      },\n      {\n        \"label\": \"private-scope-fence\",\n        \"verifierExitCode\": 1,\n        \"detected\": true\n      },\n      {\n        \"label\": \"instruction-source-fence\",\n        \"verifierExitCode\": 1,\n        \"detected\": true\n      }\n    ]\n  },\n  \"canaryScan\": {\n    \"files\": [\n      {\n        \"leaked\": false,\n        \"name\": \"acl-canaries.json\"\n      },\n      {\n        \"leaked\": false,\n        \"name\": \"canary-scan.json\"\n      },\n      {\n        \"leaked\": false,\n        \"name\": \"cold-clone-transcript.json\"\n      },\n      {\n        \"leaked\": false,\n        \"name\": \"pack-manifest.json\"\n      },\n      {\n        \"leaked\": false,\n        \"name\": \"refusal-matrix.json\"\n      },\n      {\n        \"leaked\": false,\n        \"name\": \"replay-digests.json\"\n      },\n      {\n        \"leaked\": false,\n        \"name\": \"sensitivity.json\"\n      },\n      {\n        \"leaked\": false,\n        \"name\": \"truncation.json\"\n      },\n      {\n        \"leaked\": false,\n        \"name\": \"trust-boundary.json\"\n      },\n      {\n        \"leaked\": false,\n        \"name\": \"verification-summary.json\"\n      }\n    ],\n    \"leaked\": false\n  }\n}\n",
-      "stdoutSha256": "sha256:bae105fc7a2baf03f1a2fa919f1d28ea8bc3b7257b749211a6cff170b48991ef"
+      "stdoutSha256": "sha256:238d4a5c28ac7ae97ce74617d5cb5c87530db0f1e078c477a4177cb71c33cc16"
     }
   ],
   "cleanCheckoutBeforeInstall": true,

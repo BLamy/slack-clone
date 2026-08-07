@@ -103,6 +103,28 @@
       }
     ]
   },
+  "itemBudget": {
+    "maxItems": 2,
+    "accounting": {
+      "attachmentBytes": 0,
+      "bytes": 609,
+      "estimatedTokens": 12,
+      "historyItems": 1,
+      "items": 2
+    },
+    "omittedCount": 3
+  },
+  "tokenBudget": {
+    "maxEstimatedTokens": 12,
+    "accounting": {
+      "attachmentBytes": 0,
+      "bytes": 609,
+      "estimatedTokens": 12,
+      "historyItems": 1,
+      "items": 2
+    },
+    "omittedCount": 3
+  },
   "attachment": {
     "reason": "attachment-limit",
     "sourceRange": {

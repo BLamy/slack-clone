@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E3-T04",
-  "runId": "e3-t04-cold-final-v3",
-  "implementationCommit": "ad22ed625c8cac2e2ac510335b3ae058cd72249a",
+  "runId": "e3-t04-cold-final-v4",
+  "implementationCommit": "a49084e5336b1dce9f2cc5ac72207bd200b139d9",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "replay": "Replay: N/A (server context assembly) + mitigation: source-citation manifest, ACL canaries, deterministic truncation corpus, and byte/digest parity",
@@ -10,31 +10,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 5359,
+      "durationMs": 16381,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 4172,
+      "durationMs": 9789,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 32951,
+      "durationMs": 28589,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 71684,
+      "durationMs": 42883,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 1887,
+      "durationMs": 1253,
       "name": "build",
       "result": "PASS"
     }
@@ -292,6 +292,28 @@
           }
         }
       ]
+    },
+    "itemBudget": {
+      "maxItems": 2,
+      "accounting": {
+        "attachmentBytes": 0,
+        "bytes": 609,
+        "estimatedTokens": 12,
+        "historyItems": 1,
+        "items": 2
+      },
+      "omittedCount": 3
+    },
+    "tokenBudget": {
+      "maxEstimatedTokens": 12,
+      "accounting": {
+        "attachmentBytes": 0,
+        "bytes": 609,
+        "estimatedTokens": 12,
+        "historyItems": 1,
+        "items": 2
+      },
+      "omittedCount": 3
     },
     "attachment": {
       "reason": "attachment-limit",

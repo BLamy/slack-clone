@@ -1,36 +1,36 @@
 {
   "schemaVersion": 1,
-  "implementationCommit": "dfcbd102928aca4a803350b741f0c97ebe21e829",
-  "runId": "e3-t05-cold-final-20260807-v2",
+  "implementationCommit": "3e9f66c4456bed51e14bee3ab2291e03f5d82c77",
+  "runId": "e3-t05-cold-final-20260807-v3",
   "replay": "Replay: N/A (server scheduling and recursion policy) + mitigation: burst schedules, durable causation graphs, cycle/fairness matrix, and replay digests",
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 4609,
+      "durationMs": 3107,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 4663,
+      "durationMs": 3356,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 18707,
+      "durationMs": 8646,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 29809,
+      "durationMs": 20722,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 1953,
+      "durationMs": 589,
       "name": "build",
       "result": "PASS"
     }
@@ -41,8 +41,8 @@
   "terminalDispositionCount": 3,
   "sensitivity": {
     "controlExitCode": 0,
-    "detectedCount": 4,
-    "mutationCount": 4,
+    "detectedCount": 5,
+    "mutationCount": 5,
     "result": "PASS",
     "results": [
       {
@@ -63,6 +63,11 @@
       {
         "detected": true,
         "label": "aggregate-budget-accumulator",
+        "verifierExitCode": 1
+      },
+      {
+        "detected": true,
+        "label": "aggregate-budget-narrowing",
         "verifierExitCode": 1
       }
     ]

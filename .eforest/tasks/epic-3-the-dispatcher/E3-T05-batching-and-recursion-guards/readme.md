@@ -66,13 +66,13 @@ Cycles are detected from durable causation chains, not process-local sets.
 
 ## Verification log
 
-### Builder repair — 2026-08-07 — commit `dfcbd102928aca4a803350b741f0c97ebe21e829`
+### Builder repair — 2026-08-07 — commit `3e9f66c4456bed51e14bee3ab2291e03f5d82c77`
 
-- Cold proof: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e3-t05-cold-final-20260807-v2 E3_T05_IMPLEMENTATION_COMMIT=dfcbd102928aca4a803350b741f0c97ebe21e829 make verify-E3-T05` exited 0 from a detached clean worktree after submodule initialization, frozen install, and emulator setup.
+- Cold proof: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e3-t05-cold-final-20260807-v3 E3_T05_IMPLEMENTATION_COMMIT=3e9f66c4456bed51e14bee3ab2291e03f5d82c77 make verify-E3-T05` exited 0 from a detached clean worktree after submodule initialization, frozen install, and emulator setup.
 - Gates: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` all passed. The promoted transcript records command output hashes and the clean checkout proof in `evidence/e3-t05-final/cold-clone-transcript.json`.
 - Evidence: `batch-manifest.json` records two deterministic batches, one provider call for three source members, and three terminal dispositions; `concurrency-keys.json`, `fairness.json`, `causation-graph.json`, `refusals.json`, `aggregate-budget.json`, and `replay-digests.json` record the queue, key, causation, typed refusal, fairness, sibling-budget, and replay claims.
 - Guard matrix: seven non-running refusals cover self-authored, quoted/code, edit, retry, agent-reply, and replay sources; delegation-required, revoked, cycle, depth, fan-out, concurrency, and aggregate-budget breaches are typed before provider execution.
-- Aggregate budget repair: admitted siblings share a root accumulator in deterministic source-offset order; the second sibling in `aggregate-budget.json` sees the first sibling's usage and is refused before provider execution.
-- Sensitivity: `sensitivity.json` shows all four detached mutations (self-trigger fence, cycle fence, conversation-key fence, and aggregate-budget accumulator) were detected by the verifier; `canary-scan.json` reports no leaked values across the promoted evidence.
+- Aggregate budget repair: admitted siblings share a root accumulator in deterministic source-offset order; the second sibling in `aggregate-budget.json` declares a wider budget but inherits the smaller root budget, sees the first sibling's usage, and is refused before provider execution.
+- Sensitivity: `sensitivity.json` shows all five detached mutations (self-trigger fence, cycle fence, conversation-key fence, aggregate-budget accumulator, and aggregate-budget narrowing) were detected by the verifier; `canary-scan.json` reports no leaked values across the promoted evidence.
 - Replay: `Replay: N/A (server scheduling and recursion policy) + mitigation: burst schedules, durable causation graphs, cycle/fairness matrix, and replay digests`.
 - Claim: E3-T05 deliverables are implemented, the earlier aggregate-budget gap is repaired, and the exact diff plus cold evidence are ready for a fresh critic; no browser recording is applicable to this server-only task.

@@ -122,5 +122,11 @@
       }
     }
   ],
+  "secondDeclaredBudget": {
+    "costUsdCents": 100,
+    "inputTokens": 100,
+    "outputTokens": 100,
+    "totalTokens": 200
+  },
   "scheduleDigest": "sha256:9f6aebe6fc2e5c8f393b86a98b930eb007b10981e9613986c399ff08a16172e5"
 }

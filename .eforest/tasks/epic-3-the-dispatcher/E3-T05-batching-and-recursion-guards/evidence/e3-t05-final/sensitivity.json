@@ -1,7 +1,7 @@
 {
   "controlExitCode": 0,
-  "detectedCount": 4,
-  "mutationCount": 4,
+  "detectedCount": 5,
+  "mutationCount": 5,
   "result": "PASS",
   "results": [
     {
@@ -22,6 +22,11 @@
     {
       "detected": true,
       "label": "aggregate-budget-accumulator",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "aggregate-budget-narrowing",
       "verifierExitCode": 1
     }
   ]

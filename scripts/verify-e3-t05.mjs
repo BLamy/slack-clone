@@ -260,6 +260,10 @@ async function verifyFunctional() {
     aggregateFirstGraph.aggregateUsageAfter,
     aggregateCases.first.estimatedUsage,
   );
+  assert.deepEqual(
+    aggregateSecondGraph.aggregateBudget,
+    aggregateCases.aggregateBudget,
+  );
   assert.equal(aggregateSecondGraph.aggregateUsageAfter, null);
 
   const completed = completeConversationBatch(
@@ -290,6 +294,7 @@ async function verifyFunctional() {
       budget: aggregateCases.aggregateBudget,
       decisions: aggregateSchedule.decisions,
       entries: aggregateSchedule.causationGraph,
+      secondDeclaredBudget: aggregateCases.secondDeclaredBudget,
       scheduleDigest: aggregateSchedule.scheduleDigest,
     },
     concurrencyKeys: {
@@ -499,13 +504,20 @@ function aggregateBudgetMatrix() {
     outputTokens: 8,
     totalTokens: 23,
   };
+  const secondDeclaredBudget = {
+    costUsdCents: 100,
+    inputTokens: 100,
+    outputTokens: 100,
+    totalTokens: 200,
+  };
   first.causation.aggregateBudget = aggregateBudget;
-  second.causation.aggregateBudget = { ...aggregateBudget };
+  second.causation.aggregateBudget = secondDeclaredBudget;
   return {
     aggregateBudget,
     first,
     items: [second, first],
     second,
+    secondDeclaredBudget,
   };
 }
 
@@ -546,6 +558,14 @@ async function runSensitivity() {
     ? maxUsage(priorUsage, item.causation.aggregateUsage)
     : item.causation.aggregateUsage;`,
       replacement: "const before = item.causation.aggregateUsage;",
+    },
+    {
+      file: "packages/protocol/src/conversation-scheduling.mjs",
+      label: "aggregate-budget-narrowing",
+      needle: `const budget = priorBudget
+    ? minBudget(priorBudget, item.causation.aggregateBudget)
+    : item.causation.aggregateBudget;`,
+      replacement: "const budget = item.causation.aggregateBudget;",
     },
   ];
   const results = [];

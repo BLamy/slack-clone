@@ -331,7 +331,12 @@ test("aggregate budgets accumulate across admitted siblings in source order", ()
     totalTokens: 23,
   };
   first.causation.aggregateBudget = aggregateBudget;
-  second.causation.aggregateBudget = { ...aggregateBudget };
+  second.causation.aggregateBudget = {
+    costUsdCents: 100,
+    inputTokens: 100,
+    outputTokens: 100,
+    totalTokens: 200,
+  };
 
   const schedule = planConversationSchedule({
     queued: [second, first],
@@ -356,6 +361,7 @@ test("aggregate budgets accumulate across admitted siblings in source order", ()
   );
   assert.deepEqual(secondGraph.aggregateUsageBefore, first.estimatedUsage);
   assert.deepEqual(firstGraph.aggregateUsageAfter, first.estimatedUsage);
+  assert.deepEqual(secondGraph.aggregateBudget, aggregateBudget);
   assert.equal(secondGraph.aggregateUsageAfter, null);
 });
 

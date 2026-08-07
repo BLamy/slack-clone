@@ -3,7 +3,7 @@ id: E2-T08
 epic: 2
 title: "Capstone: configure, reconfigure, and revoke an agent"
 priority: 208
-status: implemented
+status: in-progress
 depends_on: [E2-T04, E2-T06, E2-T07]
 estimate: L
 capstone: true
@@ -77,3 +77,9 @@ ownership nor a historical snapshot can route around current authorization or re
 - Evidence: `evidence/e2-t08-final/verification-summary.json`, `http-transcript.json`, `cli-transcript.json`, `source-dumps.json`, `snapshot-manifests.json`, `role-matrix.json`, `roster.json`, `revocation-races.json`, `replay-composite.json`, `tamper-matrix.json`, `sensitivity.json`, `canary-scan.json`, `cold-clone-transcript.json`, and `composed-verify-transcript.json`.
 - Replay: N/A (server/CLI agent-control capstone) + mitigation: role matrix, revision/snapshot manifests, revocation race, canary scan, and composite stream replay.
 - Claim: the builder considers E2-T08 implemented and the cold/composed evidence complete; a fresh critic must independently attempt to refute the claim before this task can become `verified`.
+
+### Critic — 2026-08-06 — independent verification
+
+- `VERDICT: refuted` from fresh independent agent `019fd982-c106-7183-af36-c2ec282c51f4`, which reviewed implementation commit `8d166e0de1d4a3954a1ef833efc3a39c3de60cbf`, evidence commit `e0ec6d2`, the task specification, and the promoted evidence without editing the worktree.
+- The critic confirmed the cold/composed manifests are internally consistent, all commands exit 0, skips are empty, snapshot and composite digests are reproducible, and the planted canary is absent. It found proof gaps requiring remediation: projection replay reused the live stream store and omitted connection records/other sources; revocation checks were sequential/synthetic and did not check actual CLI revoke use; sensitivity rows self-reported instead of running a defect mutant; lost-ack/idempotency attacks were incomplete; connection negatives were policy explanations rather than route calls; and post-revoke historical-byte stability was asserted without a comparison.
+- Status: `in-progress`; builder must repair the evidence apparatus and obtain a fresh critic verdict.

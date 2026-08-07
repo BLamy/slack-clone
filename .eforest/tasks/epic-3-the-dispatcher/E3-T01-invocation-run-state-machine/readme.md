@@ -3,7 +3,7 @@ id: E3-T01
 epic: 3
 title: "Invocation and run state machine on durable streams"
 priority: 301
-status: implemented
+status: verified
 depends_on: [E2]
 estimate: L
 capstone: false
@@ -203,3 +203,16 @@ VERDICT: refuted
 - Evidence: `evidence/e3-t01-final/verification-summary.json`, `prefix-replay.json`, `invalid-offsets.json`, `binding-audit.json`, `bounded-records.json`, `terminal-races.json`, `sensitivity.json`, `canary-scan.json`, and `cold-clone-transcript.json`.
 - Replay: N/A (server run protocol) + mitigation: lifecycle corpus, source-reference audit, secret canary scan, and per-prefix replay digests.
 - Claim: the AC5 secret-boundary refutation is repaired and E3-T01 is implemented; a new fresh critic must independently attempt to refute the exact remediation diff and promoted evidence before this task can become `verified`.
+
+### Critic — 2026-08-07 — final independent verification
+
+VERDICT: verified
+
+- Reviewed the complete E3-T01 contract, the verified E2-T07 immutable snapshot contract and E2-T08 capstone contract, the prior refutation at `579e7cf503f0d71f8024f5e959d69461b745488c`, the exact product remediation `cef7c4b0184832433ca1fcb00e406b23542888ff`, handoff/evidence commit `e21ccde36cf664b9ecf5fc9a76c922bfcca45930`, the complete protocol/reducer/verifier/wrapper diff, the pinned lifecycle fixture, and all nine promoted files under `evidence/e3-t01-final/`.
+- Required plain cold command: `E3_T01_IMPLEMENTATION_COMMIT=cef7c4b0184832433ca1fcb00e406b23542888ff TEST_RUN_ID=e3-t01-critic-plain-secret-fixed-20260807 make verify-E3-T01` exited `0`. The disposable checkout was detached at the exact implementation commit and clean before install; `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (161 unit tests and 5 Playwright tests), and `pnpm build` all passed. The parent-written plain report was `/tmp/e3-t01-critic-plain-secret-fixed-20260807-artifact/`; its `cold-clone-transcript.json` reports `cleanCheckoutBeforeInstall: true`, and the main checkout plus promoted evidence hashes were unchanged.
+- Independent fresh-ID attacks used workspace `ws_gggggggggggggggggggggggggg`, agent `ag_gggggggggggggggggggggggggg_kkkkkkkkkkkkkkkkkkkkkkkkkk`, run `rn_gggggggggggggggggggggggggg_mmmmmmmmmmmmmmmmmmmmmmmmmm`, and invocation `iv_gggggggggggggggggggggggggg`. A schema-valid regressing transition was refused at `0000000000000005_bbbbbbbbbbbbbbbb` with `INVOCATION_RUN_INVALID_TRANSITION`; fresh agent, snapshot, trigger, invocation, and cross-workspace reuse were refused at `0000000000000002_bbbbbbbbbbbbbbbb` with `INVOCATION_RUN_BINDING_MISMATCH` or `INVOCATION_RUN_INVALID_SOURCE`.
+- The fresh provider-token-shaped `failureCode` `sk-abcdefghijklmnop` and fresh artifact name `Bearer e3-t01-critic-artifact-canary-20260807` were each rejected by direct validation and by replay before state application with `INVOCATION_RUN_SECRET_VALUE` at offsets `0000000000000006_dddddddddddddddd` and `0000000000000006_eeeeeeeeeeeeeeee`. Fresh raw-output and oversized-summary attacks were refused with `INVOCATION_RUN_INVALID_DATA`. Four independent shared-running-head terminal races each produced one winner and refused the contender with `INVOCATION_RUN_TERMINAL_IMMUTABLE`.
+- Independently recomputed the promoted and plain 14-prefix digests against `fixtures/lifecycle-corpus.v1.json`: both matched final digest `sha256:4088e18c0f69fa8565f81b57efbbe3f270034db0cd95caf2352cea4a52cbe4eb`, with network and query-store use false. The promoted sensitivity rows remain green, and an independent disposable mutant replacing `hasSecret` with `return false` made `node --test test/unit/invocation-run.test.mjs` exit `1` at the canary assertion. The cold wrapper’s regular-file scan covered all nine evidence files, included the transcript, and reported no canary or credential leak.
+- Evidence: `evidence/e3-t01-final/verification-summary.json`, `prefix-replay.json`, `invalid-offsets.json`, `binding-audit.json`, `bounded-records.json`, `terminal-races.json`, `sensitivity.json`, `canary-scan.json`, and `cold-clone-transcript.json`.
+- Replay: N/A (server run protocol) + mitigation: lifecycle corpus, source-reference audit, secret canary scan, and per-prefix replay digests.
+- Claim: all acceptance criteria and the prior secret-boundary refutation survived fresh execution and independent attacks; E3-T01 is verified and E3-T02 may start.

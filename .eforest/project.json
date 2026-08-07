@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E3-T01 secret-boundary remediation is implemented and awaiting a fresh adversarial verification.",
+  "statusReason": "E3-T01 is verified and the queue may advance to E3-T02.",
   "updatedAt": "2026-08-07T06:00:00Z"
 }

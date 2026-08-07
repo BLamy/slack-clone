@@ -688,10 +688,13 @@ export function createRunLeaseCoordinator({
     });
   }
 
-  async function heartbeat({ capability, now = clock(), runId }) {
+  async function heartbeat({ capability, now = clock(), runId, workerId }) {
     return withLock(async () => {
       const normalizedNow = normalizeDate(now);
-      const { digest, lease } = assertCapability(capability, { runId });
+      const { digest, lease } = assertCapability(capability, {
+        runId,
+        workerId,
+      });
       if (Date.parse(lease.expiresAt) <= normalizedNow.getTime()) {
         await expireOne(lease, normalizedNow);
         throw new RunQueueError(
@@ -726,10 +729,11 @@ export function createRunLeaseCoordinator({
     now = clock(),
     reason = "released",
     runId,
+    workerId,
   }) {
     return withLock(async () => {
       const normalizedNow = normalizeDate(now);
-      const { lease } = assertCapability(capability, { runId });
+      const { lease } = assertCapability(capability, { runId, workerId });
       if (Date.parse(lease.expiresAt) <= normalizedNow.getTime()) {
         await expireOne(lease, normalizedNow);
         throw new RunQueueError(
@@ -758,6 +762,7 @@ export function createRunLeaseCoordinator({
     mutate: operation,
     now = clock(),
     runId,
+    workerId,
   }) {
     return withLock(async () => {
       if (typeof operation !== "function") {
@@ -767,6 +772,7 @@ export function createRunLeaseCoordinator({
       const { digest, lease } = assertCapability(capability, {
         endpoint,
         runId,
+        workerId,
       });
       if (Date.parse(lease.expiresAt) <= normalizedNow.getTime()) {
         await expireOne(lease, normalizedNow);

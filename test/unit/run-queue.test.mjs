@@ -151,6 +151,15 @@ test("heartbeat, capability scope, expiry, and reacquisition fence stale workers
     }),
     (error) => error.code === "RUN_QUEUE_CAPABILITY_SCOPE",
   );
+  await assert.rejects(
+    coordinator.mutate({
+      capability: first.capability,
+      mutate: () => "must-not-run",
+      runId: entry.runId,
+      workerId: "other-worker",
+    }),
+    (error) => error.code === "RUN_QUEUE_CAPABILITY_SCOPE",
+  );
 
   const expired = await coordinator.expire({
     now: new Date("2026-08-07T00:00:02.000Z"),

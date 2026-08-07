@@ -367,7 +367,10 @@ async function verifyLeaseSchedules(fixture) {
             now: new Date("2026-08-07T00:00:02.100Z"),
             runId: entry.runId,
           };
-    await assert.rejects(coordinator[method](input));
+    await assert.rejects(
+      coordinator[method](input),
+      (error) => error.code === "RUN_QUEUE_CAPABILITY_INVALID",
+    );
   }
   const second = await coordinator.acquire({
     entry,
@@ -393,6 +396,11 @@ async function verifyLeaseSchedules(fixture) {
     heartbeatCount: 1,
     expiredCount: expired.length,
     staleWorkerRefusals: 3,
+    staleWorkerErrorCodes: [
+      "RUN_QUEUE_CAPABILITY_INVALID",
+      "RUN_QUEUE_CAPABILITY_INVALID",
+      "RUN_QUEUE_CAPABILITY_INVALID",
+    ],
     journal,
     result: "PASS",
   };
@@ -517,6 +525,15 @@ async function verifyCapabilityScopes(fixture) {
   await assert.rejects(
     coordinator.mutate({
       capability: lease.capability,
+      mutate: () => calls.push("worker"),
+      runId: queue.entries[0].runId,
+      workerId: "other-worker",
+    }),
+    (error) => error.code === "RUN_QUEUE_CAPABILITY_SCOPE",
+  );
+  await assert.rejects(
+    coordinator.mutate({
+      capability: lease.capability,
       mutate: () => calls.push("run"),
       runId: foreignRun.lease.runId,
     }),
@@ -575,6 +592,7 @@ async function verifyCapabilityScopes(fixture) {
   return {
     attemptedScopes: [
       "endpoint",
+      "worker",
       "active-foreign-run",
       "foreign-agent-coordinator",
       "foreign-workspace-coordinator",

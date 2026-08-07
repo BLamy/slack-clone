@@ -16,6 +16,8 @@ import {
   validateInvocationRequestedData,
   validateRunLifecycleData,
   validateRunRecordData,
+  RUN_LEASE_EVENT_TYPES_V1,
+  validateRunLeaseEventData,
 } from "@stream-slack/protocol";
 
 import {
@@ -44,6 +46,7 @@ export const REDUCER_EVENT_TYPES_V1 = Object.freeze([
   "workspace.invocation.requested",
   "run.lifecycle.changed",
   ...RUN_RECORD_EVENT_TYPES_V1,
+  ...RUN_LEASE_EVENT_TYPES_V1,
   "connection.config.revised",
   "workspace.audit.recorded",
   "projection.checkpointed",
@@ -320,6 +323,12 @@ export const REDUCER_REGISTRY_V1 = Object.freeze({
   "run.artifact.recorded": reduceRunArtifactRecorded,
   "run.result.recorded": reduceRunResultRecorded,
   "run.failure.recorded": reduceRunFailureRecorded,
+  ...Object.fromEntries(
+    RUN_LEASE_EVENT_TYPES_V1.map((eventType) => [
+      eventType,
+      reduceRunLeaseEvent,
+    ]),
+  ),
   "connection.config.revised": reduceConnectionConfigRevised,
   "workspace.audit.recorded": reduceAuditRecorded,
   "projection.checkpointed": reduceProjectionCheckpointed,
@@ -1898,6 +1907,161 @@ function reduceRunFailureRecorded(state, data, context) {
       offset: context.offset,
     };
   });
+}
+
+function reduceRunLeaseEvent(state, data, context) {
+  let normalized;
+  try {
+    normalized = validateRunLeaseEventData(context.envelope.eventType, data, {
+      expectedWorkspaceId: context.envelope.workspaceId,
+    });
+  } catch (error) {
+    failRun(
+      error.code ?? "INVOCATION_RUN_INVALID_DATA",
+      error.detail ?? "run lease event data is invalid",
+      error.path?.replace(/^\$\.event\.data\.?/u, "") || "data",
+      context,
+    );
+  }
+  if (!sourcesEqual(context.envelope.causation, normalized.sourceRef)) {
+    failRun(
+      "INVOCATION_RUN_INVALID_SOURCE",
+      "run lease causation must equal its source reference",
+      "sourceRef",
+      context,
+    );
+  }
+  const current = getKey(state.entities.runs, normalized.runId);
+  if (!current) {
+    failRun(
+      "INVOCATION_RUN_INVALID_STATE",
+      "run lease event cannot precede the initial lifecycle event",
+      "runId",
+      context,
+    );
+  }
+  assertRunEnvelopeBinding(current, context);
+  if (
+    current.invocationId !== normalized.invocationId ||
+    current.agentId !== normalized.agentId
+  ) {
+    failRun(
+      "INVOCATION_RUN_BINDING_MISMATCH",
+      "run lease event does not match the immutable run binding",
+      "binding",
+      context,
+    );
+  }
+  const next = copyJson(current);
+  const currentLease = next.lease ?? null;
+  const eventType = context.envelope.eventType;
+  if (eventType === "run.lease.acquired") {
+    if (currentLease) {
+      failRun(
+        "INVOCATION_RUN_DUPLICATE_RECORD",
+        "a run may have only one active lease",
+        "leaseId",
+        context,
+      );
+    }
+    const attempt = getKey(next.attempts, normalized.attemptId);
+    if (
+      !attempt ||
+      next.activeAttemptId !== normalized.attemptId ||
+      attempt.attemptNumber !== normalized.attemptNumber ||
+      attempt.leaseGeneration !== normalized.leaseGeneration
+    ) {
+      failRun(
+        "INVOCATION_RUN_BINDING_MISMATCH",
+        "acquired lease does not match the active attempt fence",
+        "leaseGeneration",
+        context,
+      );
+    }
+    const expectedGeneration = next.leaseFenceGeneration ?? 1;
+    if (normalized.leaseGeneration !== expectedGeneration) {
+      failRun(
+        "INVOCATION_RUN_INVALID_STATE",
+        `lease generation must be ${expectedGeneration}`,
+        "leaseGeneration",
+        context,
+      );
+    }
+    next.lease = {
+      ...copyJson(normalized),
+      acquiredEventId: context.envelope.eventId,
+      acquiredOffset: context.offset,
+      lastHeartbeatAt: null,
+    };
+    next.leaseFenceGeneration = normalized.leaseGeneration;
+  } else {
+    assertCurrentLease(currentLease, normalized, context);
+    if (eventType === "run.lease.heartbeat") {
+      next.lease = {
+        ...currentLease,
+        expiresAt: normalized.expiresAt,
+        lastHeartbeatAt: context.envelope.serverTimestamp,
+        heartbeatEventId: context.envelope.eventId,
+        heartbeatOffset: context.offset,
+      };
+    } else {
+      next.lease = null;
+      next.leaseFenceGeneration = normalized.leaseGeneration + 1;
+    }
+  }
+  next.eventCount += 1;
+  next.leaseHistory = [
+    ...(next.leaseHistory ?? []),
+    {
+      eventId: context.envelope.eventId,
+      eventType,
+      leaseGeneration: normalized.leaseGeneration,
+      offset: context.offset,
+      workerId: normalized.workerId,
+    },
+  ];
+  state.entities.runs = setKey(state.entities.runs, normalized.runId, next);
+}
+
+function assertCurrentLease(currentLease, normalized, context) {
+  if (!currentLease) {
+    failRun(
+      "INVOCATION_RUN_INVALID_STATE",
+      "run lease event requires an active lease",
+      "leaseId",
+      context,
+    );
+  }
+  const leaseBindings = [
+    ["leaseId", currentLease.leaseId, normalized.leaseId],
+    ["attemptId", currentLease.attemptId, normalized.attemptId],
+    ["workerId", currentLease.workerId, normalized.workerId],
+    ["queueDigest", currentLease.queueDigest, normalized.queueDigest],
+    ["entryDigest", currentLease.entryDigest, normalized.entryDigest],
+    [
+      "capabilityDigest",
+      currentLease.capabilityDigest,
+      normalized.capabilityDigest,
+    ],
+  ];
+  for (const [field, currentValue, nextValue] of leaseBindings) {
+    if (currentValue !== nextValue) {
+      failRun(
+        "INVOCATION_RUN_BINDING_MISMATCH",
+        `run lease ${field} does not match the active lease`,
+        field,
+        context,
+      );
+    }
+  }
+  if (currentLease.leaseGeneration !== normalized.leaseGeneration) {
+    failRun(
+      "INVOCATION_RUN_BINDING_MISMATCH",
+      "run lease generation does not match the active lease",
+      "leaseGeneration",
+      context,
+    );
+  }
 }
 
 function reduceRunRecord(state, eventType, data, context, apply) {

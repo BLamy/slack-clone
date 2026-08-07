@@ -13,6 +13,7 @@ export * from "./agent-administration.mjs";
 export * from "./agent-roster.mjs";
 export * from "./invocation-snapshot.mjs";
 export * from "./invocation-run.mjs";
+export * from "./run-queue.mjs";
 
 export function normalizeRoomId(roomId) {
   const normalized = String(roomId)

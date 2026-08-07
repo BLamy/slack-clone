@@ -79,14 +79,6 @@ const DELEGATION_KEYS = [
 ];
 
 export class ConversationSchedulingError extends Error {
-  constructor(code, detail, path = "$") {
-    super(`${code} at ${path}: ${detail}`);
-    this.name = "ConversationSchedulingError";
-    this.code = code;
-    this.detail = detail;
-    this.path = path;
-  }
-
   toJSON() {
     return {
       code: this.code,
@@ -760,9 +752,13 @@ function refusalFor(item, { childCounts, delegatedConcurrency }) {
   if (ancestors.length > item.policy.delegation.maxDepth) {
     return CONVERSATION_SCHEDULER_ERROR_CODES.DELEGATION_DEPTH;
   }
-  const parent = item.causation.parentInvocationId;
-  if (!parent) return CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_CAUSATION;
-  if ((childCounts.get(parent) ?? 0) >= item.policy.delegation.maxChildren) {
+  const parentInvocationId = item.causation.parentInvocationId;
+  if (!parentInvocationId)
+    return CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_CAUSATION;
+  if (
+    (childCounts.get(parentInvocationId) ?? 0) >=
+    item.policy.delegation.maxChildren
+  ) {
     return CONVERSATION_SCHEDULER_ERROR_CODES.DELEGATION_FANOUT;
   }
   if ((delegatedConcurrency.get(item.agentId) ?? 0) >= grant.maxConcurrent) {
@@ -922,8 +918,13 @@ function validateSource(value, workspaceId, path) {
       `${sourcePath}.mentionKind`,
       "mention kind is not registered",
     );
-  for (const key of ["isAgentReply", "isEdit", "isReplay", "isRetry"]) {
-    if (typeof value[key] !== "boolean")
+  for (const [key, flag] of [
+    ["isAgentReply", value.isAgentReply],
+    ["isEdit", value.isEdit],
+    ["isReplay", value.isReplay],
+    ["isRetry", value.isRetry],
+  ]) {
+    if (typeof flag !== "boolean")
       fail(
         CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_SOURCE,
         `${sourcePath}.${key}`,
@@ -1091,14 +1092,34 @@ function validateCausation(value, workspaceId, agentId, path) {
 
 function validateBudget(value, path) {
   assertExactKeys(value, BUDGET_KEYS, path);
-  for (const key of BUDGET_KEYS) {
-    if (!Number.isSafeInteger(value[key]) || value[key] < 0)
-      fail(
-        CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_POLICY,
-        `${path}.${key}`,
-        "budget values must be non-negative safe integers",
-      );
-  }
+  validateBoundedInteger(
+    value.maxCostUsdCents,
+    `${path}.maxCostUsdCents`,
+    CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_POLICY,
+    "budget values must be non-negative safe integers",
+    0,
+  );
+  validateBoundedInteger(
+    value.maxInputTokens,
+    `${path}.maxInputTokens`,
+    CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_POLICY,
+    "budget values must be non-negative safe integers",
+    0,
+  );
+  validateBoundedInteger(
+    value.maxOutputTokens,
+    `${path}.maxOutputTokens`,
+    CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_POLICY,
+    "budget values must be non-negative safe integers",
+    0,
+  );
+  validateBoundedInteger(
+    value.maxTotalTokens,
+    `${path}.maxTotalTokens`,
+    CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_POLICY,
+    "budget values must be non-negative safe integers",
+    0,
+  );
   if (
     value.maxTotalTokens < value.maxInputTokens ||
     value.maxTotalTokens < value.maxOutputTokens
@@ -1112,14 +1133,22 @@ function validateBudget(value, path) {
 
 function validateConcurrency(value, path) {
   assertExactKeys(value, CONCURRENCY_KEYS, path);
-  for (const key of ["maxConcurrentPerChannel", "maxConcurrentRuns"]) {
-    if (!Number.isSafeInteger(value[key]) || value[key] < 1 || value[key] > 32)
-      fail(
-        CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_POLICY,
-        `${path}.${key}`,
-        "concurrency must be between one and 32",
-      );
-  }
+  validateBoundedInteger(
+    value.maxConcurrentPerChannel,
+    `${path}.maxConcurrentPerChannel`,
+    CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_POLICY,
+    "concurrency must be between one and 32",
+    1,
+    32,
+  );
+  validateBoundedInteger(
+    value.maxConcurrentRuns,
+    `${path}.maxConcurrentRuns`,
+    CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_POLICY,
+    "concurrency must be between one and 32",
+    1,
+    32,
+  );
   if (!["parallel", "serialize"].includes(value.queueStrategy))
     fail(
       CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_POLICY,
@@ -1154,14 +1183,22 @@ function validateDelegation(value, path) {
       path,
       "delegation booleans are required",
     );
-  for (const key of ["maxChildren", "maxDepth"]) {
-    if (!Number.isSafeInteger(value[key]) || value[key] < 0 || value[key] > 32)
-      fail(
-        CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_POLICY,
-        `${path}.${key}`,
-        "delegation limits must be bounded integers",
-      );
-  }
+  validateBoundedInteger(
+    value.maxChildren,
+    `${path}.maxChildren`,
+    CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_POLICY,
+    "delegation limits must be bounded integers",
+    0,
+    32,
+  );
+  validateBoundedInteger(
+    value.maxDepth,
+    `${path}.maxDepth`,
+    CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_POLICY,
+    "delegation limits must be bounded integers",
+    0,
+    32,
+  );
   if (
     !value.enabled &&
     (value.maxChildren !== 0 || value.maxDepth !== 0 || value.allowCrossChannel)
@@ -1181,14 +1218,34 @@ function validateDelegation(value, path) {
 
 function validateUsage(value, path) {
   assertExactKeys(value, USAGE_KEYS, path);
-  for (const key of USAGE_KEYS) {
-    if (!Number.isSafeInteger(value[key]) || value[key] < 0)
-      fail(
-        CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_DATA,
-        `${path}.${key}`,
-        "usage values must be non-negative safe integers",
-      );
-  }
+  validateBoundedInteger(
+    value.costUsdCents,
+    `${path}.costUsdCents`,
+    CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_DATA,
+    "usage values must be non-negative safe integers",
+    0,
+  );
+  validateBoundedInteger(
+    value.inputTokens,
+    `${path}.inputTokens`,
+    CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_DATA,
+    "usage values must be non-negative safe integers",
+    0,
+  );
+  validateBoundedInteger(
+    value.outputTokens,
+    `${path}.outputTokens`,
+    CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_DATA,
+    "usage values must be non-negative safe integers",
+    0,
+  );
+  validateBoundedInteger(
+    value.totalTokens,
+    `${path}.totalTokens`,
+    CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_DATA,
+    "usage values must be non-negative safe integers",
+    0,
+  );
   if (value.totalTokens !== value.inputTokens + value.outputTokens)
     fail(
       CONVERSATION_SCHEDULER_ERROR_CODES.INVALID_DATA,
@@ -1305,9 +1362,12 @@ function incrementCount(map, key) {
 }
 
 function addUsage(left, right) {
-  return Object.fromEntries(
-    USAGE_KEYS.map((key) => [key, left[key] + right[key]]),
-  );
+  return {
+    costUsdCents: left.costUsdCents + right.costUsdCents,
+    inputTokens: left.inputTokens + right.inputTokens,
+    outputTokens: left.outputTokens + right.outputTokens,
+    totalTokens: left.totalTokens + right.totalTokens,
+  };
 }
 
 function withinUsage(usage, budget) {
@@ -1367,7 +1427,24 @@ function hex(bytes) {
 }
 
 function fail(code, path, detail) {
-  throw new ConversationSchedulingError(code, detail, path);
+  const error = new ConversationSchedulingError(
+    `${code} at ${path}: ${detail}`,
+  );
+  error.name = "ConversationSchedulingError";
+  error.code = code;
+  error.detail = detail;
+  error.path = path;
+  throw error;
+}
+
+function validateBoundedInteger(value, path, code, detail, minimum, maximum) {
+  if (
+    !Number.isSafeInteger(value) ||
+    value < minimum ||
+    (maximum !== undefined && value > maximum)
+  ) {
+    fail(code, path, detail);
+  }
 }
 
 function assertExactKeys(value, keys, path) {

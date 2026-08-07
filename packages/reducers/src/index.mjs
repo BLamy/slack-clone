@@ -9,6 +9,13 @@ import {
   normalizeReactionName,
   validateConversationText,
   validateMessageContentType,
+  RUN_RECORD_EVENT_TYPES_V1,
+  allowedRunTransition,
+  isTerminalRunState,
+  sourcesEqual,
+  validateInvocationRequestedData,
+  validateRunLifecycleData,
+  validateRunRecordData,
 } from "@stream-slack/protocol";
 
 import {
@@ -36,6 +43,7 @@ export const REDUCER_EVENT_TYPES_V1 = Object.freeze([
   ...AGENT_CONFIG_REVISION_EVENT_TYPES_V1,
   "workspace.invocation.requested",
   "run.lifecycle.changed",
+  ...RUN_RECORD_EVENT_TYPES_V1,
   "connection.config.revised",
   "workspace.audit.recorded",
   "projection.checkpointed",
@@ -305,6 +313,13 @@ export const REDUCER_REGISTRY_V1 = Object.freeze({
   "agent.config.retired": reduceAgentConfigRetired,
   "workspace.invocation.requested": reduceInvocationRequested,
   "run.lifecycle.changed": reduceRunLifecycleChanged,
+  "run.activity.recorded": reduceRunActivityRecorded,
+  "run.usage.recorded": reduceRunUsageRecorded,
+  "run.approval.requested": reduceRunApprovalRequested,
+  "run.approval.decided": reduceRunApprovalDecided,
+  "run.artifact.recorded": reduceRunArtifactRecorded,
+  "run.result.recorded": reduceRunResultRecorded,
+  "run.failure.recorded": reduceRunFailureRecorded,
   "connection.config.revised": reduceConnectionConfigRevised,
   "workspace.audit.recorded": reduceAuditRecorded,
   "projection.checkpointed": reduceProjectionCheckpointed,
@@ -1491,6 +1506,155 @@ function failAgentConfig(code, detail, field, context) {
 }
 
 function reduceInvocationRequested(state, data, context) {
+  if (
+    !Object.hasOwn(data, "schemaVersion") &&
+    Object.hasOwn(data, "channelId") &&
+    Object.hasOwn(data, "prompt")
+  ) {
+    reduceLegacyInvocationRequested(state, data, context);
+    return;
+  }
+  const normalized = validateInvocationRunData(
+    validateInvocationRequestedData,
+    data,
+    context,
+  );
+  if (!sourcesEqual(context.envelope.causation, normalized.sourceTrigger)) {
+    failRun(
+      "INVOCATION_RUN_INVALID_SOURCE",
+      "invocation causation must equal its source trigger",
+      "sourceTrigger",
+      context,
+    );
+  }
+  assertUnique(
+    state.entities.invocations,
+    normalized.invocationId,
+    "invocationId",
+    context,
+  );
+  state.entities.invocations = setKey(
+    state.entities.invocations,
+    normalized.invocationId,
+    {
+      ...copyJson(normalized),
+      sourceEventId: context.envelope.eventId,
+      sourceOffset: context.offset,
+      status: "requested",
+      workspaceId: context.envelope.workspaceId,
+    },
+  );
+}
+
+function reduceRunLifecycleChanged(state, data, context) {
+  if (!Object.hasOwn(data, "schemaVersion")) {
+    reduceLegacyRunLifecycleChanged(state, data, context);
+    return;
+  }
+  const normalized = validateInvocationRunData(
+    validateRunLifecycleData,
+    data,
+    context,
+  );
+  if (!sourcesEqual(context.envelope.causation, normalized.sourceRef)) {
+    failRun(
+      "INVOCATION_RUN_INVALID_SOURCE",
+      "run causation must equal its source reference",
+      "sourceRef",
+      context,
+    );
+  }
+  const current = getKey(state.entities.runs, data.runId);
+  if (!current) {
+    if (normalized.from !== null || normalized.to !== "requested") {
+      failRun(
+        "INVOCATION_RUN_INVALID_TRANSITION",
+        "first run event must transition null to requested",
+        "to",
+        context,
+      );
+    }
+    const binding = normalized.binding;
+    if (!sourcesEqual(binding.invocationRef, normalized.sourceRef)) {
+      failRun(
+        "INVOCATION_RUN_INVALID_SOURCE",
+        "initial run sourceRef must equal binding.invocationRef",
+        "sourceRef",
+        context,
+      );
+    }
+    const run = {
+      activeAttemptId: null,
+      agentId: binding.agentId,
+      approvals: {},
+      artifacts: {},
+      attempts: {},
+      correlationId: binding.correlationId,
+      eventCount: 1,
+      failure: null,
+      history: [runHistoryEntry(normalized, context)],
+      invocationId: normalized.invocationId,
+      invocationRef: binding.invocationRef,
+      policy: copyJson(binding.policy),
+      policyDigest: binding.policyDigest,
+      result: null,
+      runId: normalized.runId,
+      sequence: normalized.sequence,
+      snapshotDigest: binding.snapshotDigest,
+      snapshotRef: binding.snapshotRef,
+      sourceTrigger: binding.sourceTrigger,
+      status: normalized.to,
+      terminal: null,
+      usage: emptyUsage(),
+      workspaceId: context.envelope.workspaceId,
+    };
+    assertRunEnvelopeBinding(run, context);
+    state.entities.runs = setKey(state.entities.runs, normalized.runId, run);
+    return;
+  }
+  assertRunEnvelopeBinding(current, context);
+  assertRunWritable(current, context);
+  if (normalized.invocationId !== current.invocationId) {
+    failRun(
+      "INVOCATION_RUN_BINDING_MISMATCH",
+      "run event invocationId does not match the immutable run binding",
+      "invocationId",
+      context,
+    );
+  }
+  if (normalized.sequence !== current.sequence + 1) {
+    failRun(
+      "INVOCATION_RUN_INVALID_STATE",
+      `run event sequence must be ${current.sequence + 1}`,
+      "sequence",
+      context,
+    );
+  }
+  if (
+    normalized.from !== current.status ||
+    !allowedRunTransition(normalized.from, normalized.to)
+  ) {
+    failRun(
+      "INVOCATION_RUN_INVALID_TRANSITION",
+      `run cannot transition from ${String(current.status)} to ${normalized.to}`,
+      "to",
+      context,
+    );
+  }
+  const next = copyJson(current);
+  applyRunAttemptTransition(next, normalized, context);
+  next.eventCount += 1;
+  next.history.push(runHistoryEntry(normalized, context));
+  next.sequence = normalized.sequence;
+  next.status = normalized.to;
+  if (isTerminalRunState(normalized.to)) {
+    assertTerminalOutcome(next, normalized, context);
+    next.terminal = copyJson(normalized.terminal);
+  }
+  state.entities.runs = setKey(state.entities.runs, normalized.runId, next);
+}
+
+function reduceLegacyInvocationRequested(state, data, context) {
   assertData(
     data,
     ["invocationId", "agentId", "channelId", "prompt"],
@@ -1521,14 +1685,17 @@ function reduceInvocationRequested(state, data, context) {
   );
 }
 
-function reduceRunLifecycleChanged(state, data, context) {
+function reduceLegacyRunLifecycleChanged(state, data, context) {
   assertData(data, ["runId", "from", "to"], ["invocationId"], context);
   assertToken(data.runId, "runId", context);
-  assertTransitionValue(data.from, "from", context);
+  if (data.from !== null) assertToken(data.from, "from", context);
   assertToken(data.to, "to", context);
   const current = getKey(state.entities.runs, data.runId);
   const currentState = current?.to ?? null;
-  if (data.from !== currentState || !allowedTransition(data.from, data.to)) {
+  if (
+    data.from !== currentState ||
+    !allowedLegacyTransition(data.from, data.to)
+  ) {
     failReducer(
       REDUCER_ERROR_CODES.ILLEGAL_TRANSITION,
       `run cannot transition from ${String(currentState)} to ${data.to}`,
@@ -1543,6 +1710,480 @@ function reduceRunLifecycleChanged(state, data, context) {
     invocationId: data.invocationId ?? current?.invocationId ?? null,
     runId: data.runId,
     to: data.to,
+  });
+}
+
+function reduceRunActivityRecorded(state, data, context) {
+  reduceRunRecord(state, "run.activity.recorded", data, context, (run) => {
+    run.activity = [
+      ...(run.activity ?? []),
+      {
+        ...copyJson(data),
+        eventId: context.envelope.eventId,
+        offset: context.offset,
+      },
+    ];
+  });
+}
+
+function reduceRunUsageRecorded(state, data, context) {
+  reduceRunRecord(state, "run.usage.recorded", data, context, (run) => {
+    const usage = run.usage ?? emptyUsage();
+    run.usage = {
+      costUsdCents: boundedUsageSum(
+        usage.costUsdCents,
+        data.costUsdCents,
+        "costUsdCents",
+        context,
+      ),
+      inputTokens: boundedUsageSum(
+        usage.inputTokens,
+        data.inputTokens,
+        "inputTokens",
+        context,
+      ),
+      outputBytes: boundedUsageSum(
+        usage.outputBytes,
+        data.outputBytes,
+        "outputBytes",
+        context,
+      ),
+      outputTokens: boundedUsageSum(
+        usage.outputTokens,
+        data.outputTokens,
+        "outputTokens",
+        context,
+      ),
+      totalTokens: boundedUsageSum(
+        usage.totalTokens,
+        data.totalTokens,
+        "totalTokens",
+        context,
+      ),
+      wallTimeMs: boundedUsageSum(
+        usage.wallTimeMs,
+        data.wallTimeMs,
+        "wallTimeMs",
+        context,
+      ),
+    };
+  });
+}
+
+function reduceRunApprovalRequested(state, data, context) {
+  reduceRunRecord(state, "run.approval.requested", data, context, (run) => {
+    if (run.status !== "awaiting-approval") {
+      failRun(
+        "INVOCATION_RUN_INVALID_STATE",
+        "approval requests require awaiting-approval run state",
+        "approvalId",
+        context,
+      );
+    }
+    if (Object.hasOwn(run.approvals, data.approvalId)) {
+      failRun(
+        "INVOCATION_RUN_DUPLICATE_RECORD",
+        "approvalId was already requested",
+        "approvalId",
+        context,
+      );
+    }
+    run.approvals = setKey(run.approvals, data.approvalId, {
+      ...copyJson(data),
+      decision: null,
+      eventId: context.envelope.eventId,
+      offset: context.offset,
+    });
+  });
+}
+
+function reduceRunApprovalDecided(state, data, context) {
+  reduceRunRecord(state, "run.approval.decided", data, context, (run) => {
+    if (run.status !== "awaiting-approval") {
+      failRun(
+        "INVOCATION_RUN_INVALID_STATE",
+        "approval decisions require awaiting-approval run state",
+        "approvalId",
+        context,
+      );
+    }
+    const approval = getKey(run.approvals, data.approvalId);
+    if (!approval) {
+      failRun(
+        "INVOCATION_RUN_INVALID_STATE",
+        "approval decision has no durable request",
+        "approvalId",
+        context,
+      );
+    }
+    if (approval.decision !== null) {
+      failRun(
+        "INVOCATION_RUN_DUPLICATE_RECORD",
+        "approval decision is immutable",
+        "approvalId",
+        context,
+      );
+    }
+    run.approvals = setKey(run.approvals, data.approvalId, {
+      ...approval,
+      decision: data.decision,
+      decisionEventId: context.envelope.eventId,
+      decisionOffset: context.offset,
+    });
+  });
+}
+
+function reduceRunArtifactRecorded(state, data, context) {
+  reduceRunRecord(state, "run.artifact.recorded", data, context, (run) => {
+    if (Object.hasOwn(run.artifacts, data.artifactId)) {
+      failRun(
+        "INVOCATION_RUN_DUPLICATE_RECORD",
+        "artifactId was already recorded",
+        "artifactId",
+        context,
+      );
+    }
+    run.artifacts = setKey(run.artifacts, data.artifactId, {
+      ...copyJson(data),
+      eventId: context.envelope.eventId,
+      offset: context.offset,
+    });
+  });
+}
+
+function reduceRunResultRecorded(state, data, context) {
+  reduceRunRecord(state, "run.result.recorded", data, context, (run) => {
+    if (run.result !== null) {
+      failRun(
+        "INVOCATION_RUN_DUPLICATE_RECORD",
+        "a run may record only one immutable result",
+        "resultRef",
+        context,
+      );
+    }
+    run.result = {
+      ...copyJson(data),
+      eventId: context.envelope.eventId,
+      offset: context.offset,
+    };
+  });
+}
+
+function reduceRunFailureRecorded(state, data, context) {
+  reduceRunRecord(state, "run.failure.recorded", data, context, (run) => {
+    if (run.failure !== null) {
+      failRun(
+        "INVOCATION_RUN_DUPLICATE_RECORD",
+        "a run may record only one immutable failure",
+        "failureCode",
+        context,
+      );
+    }
+    run.failure = {
+      ...copyJson(data),
+      eventId: context.envelope.eventId,
+      offset: context.offset,
+    };
+  });
+}
+
+function reduceRunRecord(state, eventType, data, context, apply) {
+  const normalized = validateInvocationRunData(
+    (value, options) => validateRunRecordData(eventType, value, options),
+    data,
+    context,
+  );
+  const current = getKey(state.entities.runs, normalized.runId);
+  if (!current) {
+    failRun(
+      "INVOCATION_RUN_INVALID_STATE",
+      "run record cannot precede the initial lifecycle event",
+      "runId",
+      context,
+    );
+  }
+  assertRunEnvelopeBinding(current, context);
+  assertRunWritable(current, context);
+  if (normalized.invocationId !== current.invocationId) {
+    failRun(
+      "INVOCATION_RUN_BINDING_MISMATCH",
+      "run record invocationId does not match the immutable run binding",
+      "invocationId",
+      context,
+    );
+  }
+  if (normalized.sequence !== current.sequence + 1) {
+    failRun(
+      "INVOCATION_RUN_INVALID_STATE",
+      `run record sequence must be ${current.sequence + 1}`,
+      "sequence",
+      context,
+    );
+  }
+  const attempt = getKey(current.attempts, normalized.attemptId);
+  if (!attempt || attempt.attemptId !== current.activeAttemptId) {
+    failRun(
+      "INVOCATION_RUN_BINDING_MISMATCH",
+      "run record attemptId is not the active attempt",
+      "attemptId",
+      context,
+    );
+  }
+  if (!["running", "awaiting-approval"].includes(attempt.status)) {
+    failRun(
+      "INVOCATION_RUN_INVALID_STATE",
+      "run records require a started, non-terminal attempt",
+      "attemptId",
+      context,
+    );
+  }
+  if (
+    ["run.approval.requested", "run.approval.decided"].includes(eventType) &&
+    current.status !== "awaiting-approval"
+  ) {
+    failRun(
+      "INVOCATION_RUN_INVALID_STATE",
+      "approval records require awaiting-approval run state",
+      "attemptId",
+      context,
+    );
+  }
+  const next = copyJson(current);
+  apply(next);
+  next.eventCount += 1;
+  next.history.push({
+    eventId: context.envelope.eventId,
+    eventType,
+    offset: context.offset,
+    sequence: normalized.sequence,
+  });
+  next.sequence = normalized.sequence;
+  state.entities.runs = setKey(state.entities.runs, normalized.runId, next);
+}
+
+function applyRunAttemptTransition(run, data, context) {
+  const hasAttempt = data.attemptId !== null;
+  if (data.to === "leased") {
+    if (run.status !== "queued" || !hasAttempt) {
+      failRun(
+        "INVOCATION_RUN_INVALID_TRANSITION",
+        "queued to leased must create an attempt",
+        "attemptId",
+        context,
+      );
+    }
+    if (Object.hasOwn(run.attempts, data.attemptId)) {
+      failRun(
+        "INVOCATION_RUN_DUPLICATE_RECORD",
+        "attemptId already exists on this run",
+        "attemptId",
+        context,
+      );
+    }
+    const attemptCount = Object.keys(run.attempts).length;
+    if (data.attemptNumber !== attemptCount + 1) {
+      failRun(
+        "INVOCATION_RUN_INVALID_STATE",
+        `attemptNumber must be ${attemptCount + 1}`,
+        "attemptNumber",
+        context,
+      );
+    }
+    run.attempts = setKey(run.attempts, data.attemptId, {
+      attemptId: data.attemptId,
+      attemptNumber: data.attemptNumber,
+      history: [
+        {
+          eventId: context.envelope.eventId,
+          offset: context.offset,
+          sequence: data.sequence,
+          status: "leased",
+        },
+      ],
+      leaseGeneration: data.leaseGeneration,
+      status: "leased",
+    });
+    run.activeAttemptId = data.attemptId;
+    return;
+  }
+
+  if (data.to === "cancelled" && run.status === "queued" && !hasAttempt) {
+    run.activeAttemptId = null;
+    return;
+  }
+  if (
+    data.to === "queued" &&
+    ["requested", "retry"].includes(run.status) &&
+    !hasAttempt
+  ) {
+    run.activeAttemptId = null;
+    return;
+  }
+  const attempt = hasAttempt ? getKey(run.attempts, data.attemptId) : null;
+  if (!attempt || attempt.attemptId !== run.activeAttemptId) {
+    failRun(
+      "INVOCATION_RUN_BINDING_MISMATCH",
+      "lifecycle attemptId is not the active attempt",
+      "attemptId",
+      context,
+    );
+  }
+  if (
+    attempt.attemptNumber !== data.attemptNumber ||
+    attempt.leaseGeneration !== data.leaseGeneration
+  ) {
+    failRun(
+      "INVOCATION_RUN_BINDING_MISMATCH",
+      "lifecycle attempt fence does not match the active attempt",
+      "leaseGeneration",
+      context,
+    );
+  }
+  const expectedFrom = attemptStatusForRun(data.from);
+  if (expectedFrom !== attempt.status) {
+    failRun(
+      "INVOCATION_RUN_INVALID_TRANSITION",
+      `attempt cannot transition from ${attempt.status} with run state ${data.from}`,
+      "from",
+      context,
+    );
+  }
+  const nextStatus = attemptStatusForRun(data.to);
+  if (nextStatus !== null) {
+    attempt.status = nextStatus;
+    attempt.history.push({
+      eventId: context.envelope.eventId,
+      offset: context.offset,
+      sequence: data.sequence,
+      status: nextStatus,
+    });
+  }
+  if (data.to === "retry") return;
+  if (data.to === "queued") {
+    run.activeAttemptId = null;
+  }
+  if (isTerminalRunState(data.to)) {
+    run.activeAttemptId = null;
+  }
+}
+
+function attemptStatusForRun(state) {
+  if (state === null || state === "requested" || state === "queued")
+    return null;
+  return state;
+}
+
+function assertTerminalOutcome(run, data, context) {
+  if (data.to === "completed") {
+    if (
+      !run.result ||
+      !sourcesEqual(run.result.resultRef, data.terminal.resultRef)
+    ) {
+      failRun(
+        "INVOCATION_RUN_INVALID_STATE",
+        "completed terminal result must cite the recorded result reference",
+        "terminal.resultRef",
+        context,
+      );
+    }
+  }
+  if (data.to === "failed") {
+    if (!run.failure || run.failure.failureCode !== data.terminal.failureCode) {
+      failRun(
+        "INVOCATION_RUN_INVALID_STATE",
+        "failed terminal outcome must cite the recorded failure code",
+        "terminal.failureCode",
+        context,
+      );
+    }
+  }
+}
+
+function assertRunEnvelopeBinding(run, context) {
+  if (
+    context.envelope.workspaceId !== run.workspaceId ||
+    context.envelope.correlationId !== run.correlationId
+  ) {
+    failRun(
+      "INVOCATION_RUN_BINDING_MISMATCH",
+      "event workspace or correlation does not match immutable run binding",
+      "correlationId",
+      context,
+    );
+  }
+}
+
+function assertRunWritable(run, context) {
+  if (run.terminal !== null || isTerminalRunState(run.status)) {
+    failRun(
+      "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+      "terminal run cannot accept another event",
+      "runId",
+      context,
+    );
+  }
+}
+
+function runHistoryEntry(data, context) {
+  return {
+    eventId: context.envelope.eventId,
+    eventType: context.envelope.eventType,
+    from: data.from,
+    offset: context.offset,
+    sequence: data.sequence,
+    to: data.to,
+  };
+}
+
+function emptyUsage() {
+  return {
+    costUsdCents: 0,
+    inputTokens: 0,
+    outputBytes: 0,
+    outputTokens: 0,
+    totalTokens: 0,
+    wallTimeMs: 0,
+  };
+}
+
+function boundedUsageSum(current, increment, field, context) {
+  const nextValue = current + increment;
+  if (!Number.isSafeInteger(nextValue) || nextValue > 1_000_000_000) {
+    failRun(
+      "INVOCATION_RUN_INVALID_DATA",
+      `usage total for ${field} exceeds the bounded accounting range`,
+      field,
+      context,
+    );
+  }
+  return nextValue;
+}
+
+function validateInvocationRunData(validator, data, context) {
+  try {
+    return validator(data, {
+      expectedCorrelationId: context.envelope.correlationId,
+      expectedWorkspaceId: context.envelope.workspaceId,
+    });
+  } catch (error) {
+    failRun(
+      error?.code ?? REDUCER_ERROR_CODES.INVALID_EVENT_DATA,
+      error?.detail ?? "invocation/run event data is invalid",
+      fieldFromProtocolPath(error?.path),
+      context,
+    );
+  }
+}
+
+function fieldFromProtocolPath(path) {
+  if (typeof path !== "string") return "data";
+  return path.replace(/^\$\.event\.data\.?/u, "") || "data";
+}
+
+function failRun(code, detail, field, context) {
+  throw reducerError(code, detail, {
+    offset: context.offset,
+    path: `$.event.data.${field}`,
   });
 }
 
@@ -3395,10 +4036,6 @@ function assertStream(value, key, context) {
   }
 }
 
-function assertTransitionValue(value, key, context) {
-  if (value !== null) assertToken(value, key, context);
-}
-
 function assertRevision(value, key, context) {
   if (!Number.isSafeInteger(value) || value < 1) {
     failReducer(
@@ -3421,7 +4058,7 @@ function assertUnique(map, key, field, context) {
   }
 }
 
-function allowedTransition(from, to) {
+function allowedLegacyTransition(from, to) {
   if (from === null) return to === "queued";
   if (from === "queued") return to === "running" || to === "cancelled";
   if (from === "running") {

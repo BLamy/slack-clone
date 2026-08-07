@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "task": "E3-T01",
+  "validLifecycle": [
+    "workspace.invocation.requested",
+    "run.lifecycle.changed:null->requested",
+    "run.lifecycle.changed:requested->queued",
+    "run.lifecycle.changed:queued->leased",
+    "run.lifecycle.changed:leased->running",
+    "run.activity.recorded",
+    "run.usage.recorded",
+    "run.lifecycle.changed:running->awaiting-approval",
+    "run.approval.requested",
+    "run.approval.decided",
+    "run.lifecycle.changed:awaiting-approval->running",
+    "run.artifact.recorded",
+    "run.result.recorded",
+    "run.lifecycle.changed:running->completed"
+  ],
+  "terminalStates": ["completed", "failed", "timed-out", "cancelled"],
+  "invalidMutationFields": [
+    "state",
+    "sequence",
+    "runId",
+    "attemptId",
+    "sourceRef",
+    "usage",
+    "terminal"
+  ],
+  "boundedRecordTypes": [
+    "activity",
+    "usage",
+    "approval",
+    "artifact",
+    "result",
+    "failure"
+  ]
+}

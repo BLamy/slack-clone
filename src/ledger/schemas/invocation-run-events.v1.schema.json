@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stream-slack.local/schemas/invocation-run-events.v1.schema.json",
+  "title": "Stream Slack invocation and run events v1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "invocationId": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,200}$" },
+    "runId": {
+      "type": "string",
+      "pattern": "^rn_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "agentId": {
+      "type": "string",
+      "pattern": "^ag_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "attemptId": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,200}$" },
+    "sequence": { "type": "integer", "minimum": 1 },
+    "from": { "type": ["string", "null"] },
+    "to": { "type": "string" },
+    "attemptNumber": { "type": ["integer", "null"], "minimum": 1 },
+    "leaseGeneration": { "type": ["integer", "null"], "minimum": 1 },
+    "sourceRef": { "$ref": "source-reference.v1.schema.json" },
+    "sourceTrigger": { "$ref": "source-reference.v1.schema.json" },
+    "snapshotRef": { "$ref": "source-reference.v1.schema.json" },
+    "promptRef": { "$ref": "source-reference.v1.schema.json" },
+    "snapshotDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "policyDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "correlationId": {
+      "type": "string",
+      "pattern": "^cr_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "triggerType": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,200}$" },
+    "terminal": { "type": ["object", "null"] },
+    "binding": { "type": ["object", "null"] },
+    "kind": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,200}$" },
+    "summary": { "type": ["string", "null"], "maxLength": 512 },
+    "contentRef": {
+      "oneOf": [
+        { "$ref": "source-reference.v1.schema.json" },
+        { "type": "null" }
+      ]
+    },
+    "inputTokens": { "type": "integer", "minimum": 0, "maximum": 1000000000 },
+    "outputTokens": { "type": "integer", "minimum": 0, "maximum": 1000000000 },
+    "totalTokens": { "type": "integer", "minimum": 0, "maximum": 1000000000 },
+    "costUsdCents": { "type": "integer", "minimum": 0, "maximum": 1000000000 },
+    "wallTimeMs": { "type": "integer", "minimum": 0, "maximum": 1000000000 },
+    "outputBytes": { "type": "integer", "minimum": 0, "maximum": 1000000000 },
+    "approvalId": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,200}$" },
+    "action": { "type": "string", "maxLength": 512 },
+    "requestRef": { "$ref": "source-reference.v1.schema.json" },
+    "decision": { "enum": ["approved", "denied"] },
+    "artifactId": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,200}$" },
+    "mediaType": { "type": "string", "maxLength": 512 },
+    "name": { "type": "string", "maxLength": 512 },
+    "byteLength": { "type": "integer", "minimum": 0, "maximum": 1000000000 },
+    "resultRef": { "$ref": "source-reference.v1.schema.json" },
+    "failureCode": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,200}$" },
+    "retryable": { "type": "boolean" },
+    "detailRef": {
+      "oneOf": [
+        { "$ref": "source-reference.v1.schema.json" },
+        { "type": "null" }
+      ]
+    }
+  }
+}

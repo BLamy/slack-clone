@@ -935,17 +935,57 @@ function verifyBoundedRecords(records, expectedRecordTypes) {
 }
 
 function verifyCanaryIsolation(records) {
-  const canaryRecords = structuredClone(records);
-  canaryRecords[5].event.data.summary =
-    "Bearer e3-t01-verifier-canary-123456789";
-  let error = null;
-  try {
-    replayRecords(canaryRecords);
-  } catch (candidate) {
-    error = candidate;
-  }
-  assert.equal(error?.code, "INVOCATION_RUN_SECRET_VALUE");
+  const failed = buildLifecycleRecords({ terminal: "failed" });
+  const artifact = buildLifecycleRecords();
+  const cases = [
+    [
+      "activity-summary",
+      records,
+      5,
+      (data) => {
+        data.summary = "Bearer e3-t01-verifier-canary-123456789";
+      },
+    ],
+    [
+      "failure-code",
+      failed.records,
+      failed.records.findIndex(
+        ({ event }) => event.eventType === "run.failure.recorded",
+      ),
+      (data) => {
+        data.failureCode = "sk-abcdefghijklmnop";
+      },
+    ],
+    [
+      "artifact-name",
+      artifact.records,
+      artifact.records.findIndex(
+        ({ event }) => event.eventType === "run.artifact.recorded",
+      ),
+      (data) => {
+        data.name = "Bearer e3-t01-verifier-artifact-canary";
+      },
+    ],
+  ].map(([attack, sourceRecords, recordIndex, mutate]) => {
+    const canaryRecords = structuredClone(sourceRecords);
+    mutate(canaryRecords[recordIndex].event.data);
+    let error = null;
+    try {
+      replayRecords(canaryRecords);
+    } catch (candidate) {
+      error = candidate;
+    }
+    assert.equal(error?.code, "INVOCATION_RUN_SECRET_VALUE", attack);
+    assert.equal(error?.offset, canaryRecords[recordIndex].offset, attack);
+    return {
+      attack,
+      observedCode: error.code,
+      offset: error.offset,
+      refused: true,
+    };
+  });
   return {
+    attacks: cases,
     canaryRejected: true,
     result: "PASS",
   };

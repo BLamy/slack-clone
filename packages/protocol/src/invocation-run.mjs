@@ -788,11 +788,16 @@ function assertScopedId(value, kind, path) {
 }
 
 function assertToken(value, path) {
-  if (typeof value !== "string" || !TOKEN_PATTERN.test(value)) {
+  const secret = hasSecret(value);
+  if (typeof value !== "string" || !TOKEN_PATTERN.test(value) || secret) {
     fail(
-      INVOCATION_RUN_ERROR_CODES.INVALID_DATA,
+      secret
+        ? INVOCATION_RUN_ERROR_CODES.SECRET_VALUE
+        : INVOCATION_RUN_ERROR_CODES.INVALID_DATA,
       path,
-      "value must be a bounded token",
+      secret
+        ? "value must not contain credential material"
+        : "value must be a bounded token",
     );
   }
 }

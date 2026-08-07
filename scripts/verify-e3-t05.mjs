@@ -6,6 +6,7 @@ import {
   readFile,
   readdir,
   rm,
+  symlink,
   writeFile,
 } from "node:fs/promises";
 import path from "node:path";
@@ -471,6 +472,16 @@ async function runSensitivity() {
         },
       );
       added = true;
+      const protocolLink = path.join(
+        checkout,
+        "node_modules/@stream-slack/protocol",
+      );
+      await mkdir(path.dirname(protocolLink), { recursive: true });
+      await symlink(
+        path.join(checkout, "packages/protocol"),
+        protocolLink,
+        "dir",
+      );
       const file = path.join(checkout, mutation.file);
       const source = await readFile(file, "utf8");
       const occurrences = source.split(mutation.needle).length - 1;

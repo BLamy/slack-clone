@@ -247,6 +247,7 @@ async function verifyWorkflow({ app, streamStore }) {
     expectedRevision: 0,
     expectedRevisionId: null,
   };
+  const lostAcknowledgementEvidence = [];
 
   const createIdempotencyKey = nextKey("create-lost-ack");
   const lostCreate = await runLostAckCreate({
@@ -262,6 +263,11 @@ async function verifyWorkflow({ app, streamStore }) {
   });
   assert.equal(createRetry.payload.agent.agentId, AGENT_A);
   assert.equal(lostCreate.durableEventCount, 1);
+  lostAcknowledgementEvidence.push({
+    command: "create",
+    durableEventCount: lostCreate.durableEventCount,
+    clientAborted: lostCreate.clientAborted,
+  });
   const changedCreate = await runCli("create", {
     actorId: AGENT_MANAGER,
     body: {
@@ -276,23 +282,34 @@ async function verifyWorkflow({ app, streamStore }) {
   });
   assert.notEqual(changedCreate.exitCode, 0);
 
-  const configCreate = await runCli("config-create", {
-    actorId: AGENT_MANAGER,
-    agentId: AGENT_A,
+  const configCreateKey = nextKey("config-create-lost-ack");
+  const lostConfigCreate = await runLostAckMutation({
+    app,
     body: configCreateBody,
-    idempotencyKey: nextKey("config-create"),
+    eventType: "agent.config.created",
+    idempotencyKey: configCreateKey,
+    operation: "config-create",
+    pathname: `/api/workspaces/${WORKSPACE_A}/agents/${AGENT_A}/config`,
+    stream: streamNames.agentConfig(WORKSPACE_A, AGENT_A),
+    streamStore,
   });
   const configCreateRetry = await runCli("config-create", {
     actorId: AGENT_MANAGER,
     agentId: AGENT_A,
     body: configCreateBody,
-    idempotencyKey: configCreate.idempotencyKey,
+    idempotencyKey: configCreateKey,
   });
-  const firstRevisionId = configCreate.payload.configRevision.revisionId;
+  const firstRevisionId = configCreateRetry.payload.configRevision.revisionId;
+  assert.equal(lostConfigCreate.durableEventCount, 1);
   assert.equal(
     configCreateRetry.payload.configRevision.revisionId,
     firstRevisionId,
   );
+  lostAcknowledgementEvidence.push({
+    command: "config-create",
+    durableEventCount: lostConfigCreate.durableEventCount,
+    clientAborted: lostConfigCreate.clientAborted,
+  });
 
   await appendAgentWorkspaceMembership({ app });
   const invite = await request(app, channelPath("invite"), {
@@ -314,27 +331,35 @@ async function verifyWorkflow({ app, streamStore }) {
   });
   assert.equal(join.status, 201);
 
-  const activate = await runCli("activate", {
-    actorId: AGENT_MANAGER,
-    agentId: AGENT_A,
-    body: {
-      expectedRevision: 1,
-      expectedRevisionId: firstRevisionId,
-      revisionId: firstRevisionId,
-    },
-    idempotencyKey: nextKey("activate-1"),
+  const activateBody = {
+    expectedRevision: 1,
+    expectedRevisionId: firstRevisionId,
+    revisionId: firstRevisionId,
+  };
+  const activateKey = nextKey("activate-1-lost-ack");
+  const lostActivate = await runLostAckMutation({
+    app,
+    body: activateBody,
+    eventType: "agent.config.activated",
+    idempotencyKey: activateKey,
+    operation: "activate",
+    pathname: `/api/workspaces/${WORKSPACE_A}/agents/${AGENT_A}/activate`,
+    stream: streamNames.agentConfig(WORKSPACE_A, AGENT_A),
+    streamStore,
   });
   const activateRetry = await runCli("activate", {
     actorId: AGENT_MANAGER,
     agentId: AGENT_A,
-    body: {
-      expectedRevision: 1,
-      expectedRevisionId: firstRevisionId,
-      revisionId: firstRevisionId,
-    },
-    idempotencyKey: activate.idempotencyKey,
+    body: activateBody,
+    idempotencyKey: activateKey,
   });
+  assert.equal(lostActivate.durableEventCount, 1);
   assert.equal(activateRetry.payload.configuration.status, "active");
+  lostAcknowledgementEvidence.push({
+    command: "activate",
+    durableEventCount: lostActivate.durableEventCount,
+    clientAborted: lostActivate.clientAborted,
+  });
 
   const baseRegistry = createProviderRegistry({ now: 0 });
   const providerRegistryV2 = baseRegistry
@@ -390,45 +415,72 @@ async function verifyWorkflow({ app, streamStore }) {
     ),
   );
 
-  const configRevision = await runCli("revise", {
-    actorId: AGENT_MANAGER,
-    agentId: AGENT_A,
-    body: {
-      config: config2,
-      expectedRevision: 1,
-      expectedRevisionId: firstRevisionId,
-    },
-    idempotencyKey: nextKey("revise-2"),
+  const configRevisionBody = {
+    config: config2,
+    expectedRevision: 1,
+    expectedRevisionId: firstRevisionId,
+  };
+  const configRevisionKey = nextKey("revise-2-lost-ack");
+  const lostConfigRevision = await runLostAckMutation({
+    app,
+    body: configRevisionBody,
+    eventType: "agent.config.revised",
+    idempotencyKey: configRevisionKey,
+    operation: "revise",
+    pathname: `/api/workspaces/${WORKSPACE_A}/agents/${AGENT_A}/revisions`,
+    stream: streamNames.agentConfig(WORKSPACE_A, AGENT_A),
+    streamStore,
   });
   const configRevisionRetry = await runCli("revise", {
     actorId: AGENT_MANAGER,
     agentId: AGENT_A,
-    body: {
-      config: config2,
-      expectedRevision: 1,
-      expectedRevisionId: firstRevisionId,
-    },
-    idempotencyKey: configRevision.idempotencyKey,
+    body: configRevisionBody,
+    idempotencyKey: configRevisionKey,
   });
-  const secondRevisionId = configRevision.payload.configRevision.revisionId;
+  const secondRevisionId =
+    configRevisionRetry.payload.configRevision.revisionId;
+  assert.equal(lostConfigRevision.durableEventCount, 1);
   assert.equal(
     configRevisionRetry.payload.configRevision.revisionId,
     secondRevisionId,
   );
+  lostAcknowledgementEvidence.push({
+    command: "revise",
+    durableEventCount: lostConfigRevision.durableEventCount,
+    clientAborted: lostConfigRevision.clientAborted,
+  });
+  const activateSecondBody = {
+    expectedRevision: 2,
+    expectedRevisionId: secondRevisionId,
+    revisionId: secondRevisionId,
+  };
+  const activateSecondKey = nextKey("activate-2-lost-ack");
+  const lostActivateSecond = await runLostAckMutation({
+    app,
+    body: activateSecondBody,
+    eventType: "agent.config.activated",
+    idempotencyKey: activateSecondKey,
+    operation: "activate",
+    pathname: `/api/workspaces/${WORKSPACE_A}/agents/${AGENT_A}/activate`,
+    stream: streamNames.agentConfig(WORKSPACE_A, AGENT_A),
+    streamStore,
+  });
   const activateSecond = await runCli("activate", {
     actorId: AGENT_MANAGER,
     agentId: AGENT_A,
-    body: {
-      expectedRevision: 2,
-      expectedRevisionId: secondRevisionId,
-      revisionId: secondRevisionId,
-    },
-    idempotencyKey: nextKey("activate-2"),
+    body: activateSecondBody,
+    idempotencyKey: activateSecondKey,
   });
+  assert.equal(lostActivateSecond.durableEventCount, 1);
   assert.equal(
     activateSecond.payload.configuration.activeRevisionId,
     secondRevisionId,
   );
+  lostAcknowledgementEvidence.push({
+    command: "activate",
+    durableEventCount: lostActivateSecond.durableEventCount,
+    clientAborted: lostActivateSecond.clientAborted,
+  });
 
   await appendConnectionRevision({
     actorId: CONNECTION_MANAGER,
@@ -514,6 +566,7 @@ async function verifyWorkflow({ app, streamStore }) {
 
   const headBeforeRevoke = await managerConfigHead({ app });
   const actualRevokeRace = await verifyActualRevokeRace({
+    app,
     secondSnapshotBundle,
     streamStore,
     expectedRevision: headBeforeRevoke.revision,
@@ -531,6 +584,22 @@ async function verifyWorkflow({ app, streamStore }) {
   });
   assert.equal(revoke.payload.revoked, true);
   assert.equal(revokeRetry.payload.revoked, true);
+  lostAcknowledgementEvidence.push({
+    command: "revoke",
+    durableEventCount: actualRevokeRace.lostAck.durableEventCount,
+    clientAborted: actualRevokeRace.lostAck.clientAborted,
+  });
+  assert.deepEqual(
+    lostAcknowledgementEvidence.map(({ command }) => command),
+    ["create", "config-create", "activate", "revise", "activate", "revoke"],
+  );
+  assert.equal(
+    lostAcknowledgementEvidence.every(
+      ({ clientAborted, durableEventCount }) =>
+        clientAborted && durableEventCount === 1,
+    ),
+    true,
+  );
   const firstByteStableAfterRevoke =
     JSON.stringify(firstSnapshotBundle.snapshot) === firstSnapshotBytes;
   assert.equal(firstByteStableAfterRevoke, true);
@@ -603,6 +672,11 @@ async function verifyWorkflow({ app, streamStore }) {
         duplicatePrincipalEvents: lostCreate.durableEventCount,
         changedPayloadExitCode: changedCreate.exitCode,
         changedPayloadRefused: changedCreate.exitCode !== 0,
+        lostAcknowledgementCommands: lostAcknowledgementEvidence,
+        everyMutatingCliCommandLostAcked: lostAcknowledgementEvidence.every(
+          ({ clientAborted, durableEventCount }) =>
+            clientAborted && durableEventCount === 1,
+        ),
       },
       historyEntries: history.payload.entries.length,
       canaryRefusal: canary,
@@ -674,7 +748,32 @@ async function verifyWorkflow({ app, streamStore }) {
 }
 
 async function runLostAckCreate({ app, body, idempotencyKey, streamStore }) {
-  const pathname = `/api/workspaces/${WORKSPACE_A}/agents`;
+  return runLostAckMutation({
+    app,
+    body,
+    eventType: "principal.created",
+    idempotencyKey,
+    operation: "create",
+    pathname: `/api/workspaces/${WORKSPACE_A}/agents`,
+    stream: app.workspaceDirectory.stream,
+    streamStore,
+  });
+}
+
+async function runLostAckMutation({
+  actorId = AGENT_MANAGER,
+  afterDurableAppend = null,
+  app,
+  body,
+  eventType,
+  idempotencyKey,
+  method = "POST",
+  operation,
+  pathname,
+  stream: targetStream,
+  streamStore,
+}) {
+  const bodyText = JSON.stringify(body);
   let resolveObserved;
   let resolveRelease;
   let resolveClosed;
@@ -692,8 +791,8 @@ async function runLostAckCreate({ app, body, idempotencyKey, streamStore }) {
   streamStore.setAppendHook(async ({ record, stream }) => {
     const event = record?.event ?? record;
     if (
-      stream === app.workspaceDirectory.stream &&
-      event?.eventType === "principal.created" &&
+      stream === targetStream &&
+      event?.eventType === eventType &&
       event?.idempotencyKey === idempotencyKey
     ) {
       resolveObserved();
@@ -707,12 +806,12 @@ async function runLostAckCreate({ app, body, idempotencyKey, streamStore }) {
       headers: {
         Accept: "application/json",
         Connection: "close",
-        "Content-Length": Buffer.byteLength(JSON.stringify(body)),
+        "Content-Length": Buffer.byteLength(bodyText),
         "Content-Type": "application/json",
         "Idempotency-Key": idempotencyKey,
-        "x-test-principal": AGENT_MANAGER,
+        "x-test-principal": actorId,
       },
-      method: "POST",
+      method,
     },
     (response) => {
       response.resume();
@@ -724,9 +823,10 @@ async function runLostAckCreate({ app, body, idempotencyKey, streamStore }) {
     resolveClosed();
   });
   client.once("close", resolveClosed);
-  client.end(JSON.stringify(body));
+  client.end(bodyText);
   try {
     await observed;
+    await afterDurableAppend?.();
     clientAborted = true;
     client.destroy();
     resolveRelease();
@@ -736,25 +836,34 @@ async function runLostAckCreate({ app, body, idempotencyKey, streamStore }) {
       `unexpected lost-ack client error ${requestError?.code ?? "none"}`,
     );
     const durableEventCount = streamStore
-      .peek(app.workspaceDirectory.stream)
-      .filter(({ event }) => event?.idempotencyKey === idempotencyKey).length;
+      .peek(targetStream)
+      .filter((record) => {
+        const event = record?.event ?? record;
+        return (
+          event?.eventType === eventType &&
+          event?.idempotencyKey === idempotencyKey
+        );
+      }).length;
     assert.equal(durableEventCount, 1);
     HTTP_TRANSCRIPT.push({
-      actor: AGENT_MANAGER,
-      method: "POST",
+      actor: actorId,
+      method,
       path: pathname,
       requestBody: "redacted-json",
       response: "client-aborted-after-durable-append",
       status: "client-aborted",
+      operation,
     });
-    return { clientAborted, durableEventCount };
+    return { clientAborted, durableEventCount, operation };
   } finally {
+    client.destroy();
     resolveRelease();
     streamStore.setAppendHook(null);
   }
 }
 
 async function verifyActualRevokeRace({
+  app,
   expectedRevision,
   expectedRevisionId,
   secondSnapshotBundle,
@@ -762,68 +871,56 @@ async function verifyActualRevokeRace({
 }) {
   const idempotencyKey = nextKey("revoke-race");
   const body = { expectedRevision, expectedRevisionId };
-  let resolveObserved;
-  let resolveRelease;
-  const observed = new Promise((resolve) => {
-    resolveObserved = resolve;
+  let retiredSnapshot;
+  let retiredState;
+  let decision;
+  const lostAck = await runLostAckMutation({
+    app,
+    afterDurableAppend: async () => {
+      retiredSnapshot = await createAgentConfigStream({
+        agentId: AGENT_A,
+        streamStore,
+        workspaceId: WORKSPACE_A,
+      }).read();
+      retiredState = retiredSnapshot.state.entities.agents?.[AGENT_A];
+      decision = checkInvocationSnapshotUse({
+        ...secondSnapshotBundle.input,
+        configState: retiredState,
+        snapshot: secondSnapshotBundle.snapshot,
+      });
+      assert.equal(decision.allowed, false);
+      assert.equal(decision.code, "INVOCATION_SNAPSHOT_AGENT_CONFIG_INACTIVE");
+    },
+    body,
+    eventType: "agent.config.retired",
+    idempotencyKey,
+    operation: "revoke",
+    pathname: `/api/workspaces/${WORKSPACE_A}/agents/${AGENT_A}/revoke`,
+    stream: streamNames.agentConfig(WORKSPACE_A, AGENT_A),
+    streamStore,
   });
-  const release = new Promise((resolve) => {
-    resolveRelease = resolve;
+  const revoke = await runCli("revoke", {
+    actorId: AGENT_MANAGER,
+    agentId: AGENT_A,
+    body,
+    idempotencyKey,
   });
-  streamStore.setAppendHook(async ({ record, stream }) => {
-    const event = record?.event ?? record;
-    if (
-      stream === streamNames.agentConfig(WORKSPACE_A, AGENT_A) &&
-      event?.eventType === "agent.config.retired" &&
-      event?.data?.agentId === AGENT_A &&
-      event?.idempotencyKey === idempotencyKey
-    ) {
-      resolveObserved();
-      await release;
-    }
-  });
-  let revokePromise;
-  try {
-    revokePromise = runCli("revoke", {
-      actorId: AGENT_MANAGER,
-      agentId: AGENT_A,
-      body,
-      idempotencyKey,
-    });
-    await observed;
-    const retiredSnapshot = await createAgentConfigStream({
-      agentId: AGENT_A,
-      streamStore,
-      workspaceId: WORKSPACE_A,
-    }).read();
-    const retiredState = retiredSnapshot.state.entities.agents?.[AGENT_A];
-    const decision = checkInvocationSnapshotUse({
-      ...secondSnapshotBundle.input,
-      configState: retiredState,
-      snapshot: secondSnapshotBundle.snapshot,
-    });
-    assert.equal(decision.allowed, false);
-    assert.equal(decision.code, "INVOCATION_SNAPSHOT_AGENT_CONFIG_INACTIVE");
-    resolveRelease();
-    const revoke = await revokePromise;
-    assert.equal(revoke.payload.revoked, true);
-    return {
-      revoke,
-      evidence: {
-        appendObservedBeforeResponse: true,
-        configStatusAfterDurableRetire: retiredState.status,
-        historicalSnapshotUseRefused: true,
-        code: decision.code,
-        requestIdempotencyKey: idempotencyKey,
-        sourceOffset: retiredSnapshot.nextOffset,
-        historicalSnapshotBytesWereNotMutated: true,
-        result: "PASS",
-      },
-    };
-  } finally {
-    resolveRelease();
-    streamStore.setAppendHook(null);
-  }
+  assert.equal(revoke.payload.revoked, true);
+  return {
+    lostAck,
+    revoke,
+    evidence: {
+      appendObservedBeforeResponse: lostAck.clientAborted,
+      clientAbortedAfterDurableAppend: lostAck.clientAborted,
+      configStatusAfterDurableRetire: retiredState.status,
+      historicalSnapshotUseRefused: true,
+      code: decision.code,
+      requestIdempotencyKey: idempotencyKey,
+      sourceOffset: retiredSnapshot.nextOffset,
+      historicalSnapshotBytesWereNotMutated: true,
+      result: "PASS",
+    },
+  };
 }
 
 async function verifyCanaryRefusal({

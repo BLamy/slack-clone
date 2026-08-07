@@ -26,6 +26,5 @@
     "tamper-matrix.json",
     "verification-summary.json"
   ],
-  "publishedEvidenceLeaked": false,
-  "postVerifierTranscriptChecked": true
+  "publishedEvidenceLeaked": false
 }

@@ -30,9 +30,16 @@ const taskDirectory = path.join(
   root,
   ".eforest/tasks/epic-3-the-dispatcher/E3-T01-invocation-run-state-machine",
 );
+const promoteEvidence = process.env.PROMOTE_EVIDENCE === "1";
 const evidenceDirectory = path.join(taskDirectory, "evidence/e3-t01-final");
+const reportDirectory = promoteEvidence
+  ? evidenceDirectory
+  : path.resolve(
+      root,
+      process.env.TEST_ARTIFACT_DIR ?? path.join(".artifacts", "e3-t01-cold", runId),
+    );
 const workDirectory = path.join(taskDirectory, "work");
-await mkdir(evidenceDirectory, { recursive: true });
+await mkdir(reportDirectory, { recursive: true });
 await mkdir(workDirectory, { recursive: true });
 const disposableParent = await mkdtemp(path.join(workDirectory, "cold-clone-"));
 const checkout = path.join(disposableParent, "checkout");
@@ -119,26 +126,26 @@ try {
     exitCode: 0,
   });
   transcript.result = "PASS";
-  if (process.env.PROMOTE_EVIDENCE === "1") {
-    const coldEvidenceDirectory = path.join(
-      checkout,
-      ".eforest/tasks/epic-3-the-dispatcher/E3-T01-invocation-run-state-machine/evidence/e3-t01-final",
+  const verifierEvidenceDirectory = promoteEvidence
+    ? path.join(
+        checkout,
+        ".eforest/tasks/epic-3-the-dispatcher/E3-T01-invocation-run-state-machine/evidence/e3-t01-final",
+      )
+    : artifactDirectory;
+  for (const filename of [
+    "verification-summary.json",
+    "prefix-replay.json",
+    "invalid-offsets.json",
+    "binding-audit.json",
+    "bounded-records.json",
+    "terminal-races.json",
+    "canary-scan.json",
+    "sensitivity.json",
+  ]) {
+    await copyFile(
+      path.join(verifierEvidenceDirectory, filename),
+      path.join(reportDirectory, filename),
     );
-    for (const filename of [
-      "verification-summary.json",
-      "prefix-replay.json",
-      "invalid-offsets.json",
-      "binding-audit.json",
-      "bounded-records.json",
-      "terminal-races.json",
-      "canary-scan.json",
-      "sensitivity.json",
-    ]) {
-      await copyFile(
-        path.join(coldEvidenceDirectory, filename),
-        path.join(evidenceDirectory, filename),
-      );
-    }
   }
 } finally {
   if (worktreeAdded) {
@@ -155,31 +162,35 @@ try {
 }
 
 await writeFile(
-  path.join(evidenceDirectory, "cold-clone-transcript.json"),
+  path.join(reportDirectory, "cold-clone-transcript.json"),
   `${JSON.stringify(transcript, null, 2)}\n`,
 );
-const finalFiles = (await readdir(evidenceDirectory)).sort();
-for (const filename of finalFiles) {
-  const contents = await readFile(
-    path.join(evidenceDirectory, filename),
-    "utf8",
+const evidenceScan = await scanReportFiles(reportDirectory);
+if (evidenceScan.leaked) {
+  throw new Error(
+    `E3-T01 evidence contains credential material: ${evidenceScan.files.find((file) => file.leaked)?.name ?? "unknown"}`,
   );
-  if (/Bearer\s+e3-t01-|PRIVATE KEY|api[_-]?key\s*[:=]/iu.test(contents)) {
-    throw new Error(
-      `promoted E3-T01 evidence contains credential material: ${filename}`,
-    );
-  }
 }
-const canaryScanPath = path.join(evidenceDirectory, "canary-scan.json");
+const canaryScanPath = path.join(reportDirectory, "canary-scan.json");
 const canaryScan = JSON.parse(await readFile(canaryScanPath, "utf8"));
-canaryScan.evidenceFiles = finalFiles;
-canaryScan.postVerifierTranscriptChecked = true;
-canaryScan.publishedEvidenceLeaked = false;
+canaryScan.evidenceFiles = evidenceScan.files.map(({ name }) => name);
+canaryScan.postVerifierTranscriptChecked = evidenceScan.files.some(
+  ({ name }) => name === "cold-clone-transcript.json",
+);
+canaryScan.publishedEvidenceLeaked = evidenceScan.leaked;
+canaryScan.canaryPresentInPublishedEvidence = evidenceScan.leaked;
+if (!canaryScan.postVerifierTranscriptChecked) {
+  throw new Error("E3-T01 transcript was not included in the evidence scan");
+}
 await writeFile(canaryScanPath, `${JSON.stringify(canaryScan, null, 2)}\n`);
-const summaryPath = path.join(evidenceDirectory, "verification-summary.json");
+const summaryPath = path.join(reportDirectory, "verification-summary.json");
 const summary = JSON.parse(await readFile(summaryPath, "utf8"));
 summary.canaryScan = canaryScan;
 await writeFile(summaryPath, `${JSON.stringify(summary, null, 2)}\n`);
+const finalEvidenceScan = await scanReportFiles(reportDirectory);
+if (finalEvidenceScan.leaked) {
+  throw new Error("E3-T01 evidence leaked credential material after scan update");
+}
 
 console.log(
   JSON.stringify(
@@ -188,3 +199,24 @@ console.log(
     2,
   ),
 );
+
+async function scanReportFiles(directory) {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    if (!entry.isFile()) continue;
+    const contents = await readFile(path.join(directory, entry.name), "utf8");
+    files.push({
+      leaked: /e3-t01-verifier-canary-|Bearer\s+e3-t01-|PRIVATE KEY|api[_-]?key\s*[:=]/iu.test(
+        contents,
+      ),
+      name: entry.name,
+    });
+  }
+  return {
+    files: files.sort(({ name: left }, { name: right }) =>
+      left.localeCompare(right),
+    ),
+    leaked: files.some(({ leaked }) => leaked),
+  };
+}

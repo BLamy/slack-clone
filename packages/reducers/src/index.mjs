@@ -1583,6 +1583,19 @@ function reduceRunLifecycleChanged(state, data, context) {
         context,
       );
     }
+    const invocation = getKey(
+      state.entities.invocations,
+      normalized.invocationId,
+    );
+    if (!invocation) {
+      failRun(
+        "INVOCATION_RUN_BINDING_MISMATCH",
+        "initial run must bind an existing invocation",
+        "invocationId",
+        context,
+      );
+    }
+    assertInvocationBinding(invocation, binding, context);
     const run = {
       activeAttemptId: null,
       agentId: binding.agentId,
@@ -2108,6 +2121,25 @@ function assertRunEnvelopeBinding(run, context) {
       "INVOCATION_RUN_BINDING_MISMATCH",
       "event workspace or correlation does not match immutable run binding",
       "correlationId",
+      context,
+    );
+  }
+}
+
+function assertInvocationBinding(invocation, binding, context) {
+  if (
+    invocation.workspaceId !== context.envelope.workspaceId ||
+    invocation.agentId !== binding.agentId ||
+    invocation.correlationId !== binding.correlationId ||
+    invocation.snapshotDigest !== binding.snapshotDigest ||
+    !sourcesEqual(invocation.snapshotRef, binding.snapshotRef) ||
+    !sourcesEqual(invocation.sourceTrigger, binding.sourceTrigger) ||
+    invocation.policyDigest !== binding.policyDigest
+  ) {
+    failRun(
+      "INVOCATION_RUN_BINDING_MISMATCH",
+      "initial run binding does not match the durable invocation",
+      "binding",
       context,
     );
   }

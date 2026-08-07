@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import {
+  mkdir,
+  mkdtemp,
+  readFile,
+  readdir,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import path from "node:path";
 
 import {
@@ -16,10 +23,16 @@ import {
 const WORKSPACE_ID = "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa";
 const ACTOR_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb";
 const AGENT_ID = "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc";
+const OTHER_AGENT_ID =
+  "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee";
 const RUN_ID = "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd";
 const INVOCATION_ID = "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa";
 const CHANNEL_STREAM =
   "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb";
+const SAME_WORKSPACE_OTHER_CHANNEL =
+  "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee";
+const OTHER_WORKSPACE_CHANNEL =
+  "channel:ch_bbbbbbbbbbbbbbbbbbbbbbbbbb_eeeeeeeeeeeeeeeeeeeeeeeeee";
 const SNAPSHOT_STREAM =
   "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc/config";
 const RESULT_STREAM =
@@ -74,12 +87,58 @@ assert.equal(corpus.task, "E3-T01");
 assert.equal(corpus.schemaVersion, 1);
 
 const complete = buildLifecycleRecords();
+assert.deepEqual(
+  describeLifecycle(complete.records),
+  corpus.validLifecycle,
+  "lifecycle fixture must describe the generated valid corpus",
+);
+assert.deepEqual(corpus.terminalStates, [
+  "completed",
+  "failed",
+  "timed-out",
+  "cancelled",
+]);
+assert.deepEqual(corpus.invalidMutationFields, [
+  "state",
+  "sequence",
+  "runId",
+  "attemptId",
+  "sourceRef",
+  "usage",
+  "terminal",
+]);
+assert.deepEqual(corpus.boundedRecordTypes, [
+  "activity",
+  "usage",
+  "approval",
+  "artifact",
+  "result",
+  "failure",
+]);
 const first = replayRecords(complete.records);
 const second = replayRecords(structuredClone(complete.records));
 assert.equal(first.finalStateDigest, second.finalStateDigest);
 assert.deepEqual(
-  first.prefixes.map(({ offset, stateDigest }) => ({ offset, stateDigest })),
-  second.prefixes.map(({ offset, stateDigest }) => ({ offset, stateDigest })),
+  first.prefixes.map(({ index, offset, stateDigest }) => ({
+    index,
+    offset,
+    stateDigest,
+  })),
+  second.prefixes.map(({ index, offset, stateDigest }) => ({
+    index,
+    offset,
+    stateDigest,
+  })),
+);
+assert.equal(first.finalStateDigest, corpus.replay.finalStateDigest);
+assert.deepEqual(
+  first.prefixes.map(({ index, offset, stateDigest }) => ({
+    index,
+    offset,
+    stateDigest,
+  })),
+  corpus.replay.perPrefixDigests,
+  "replay must match the pinned fixture digests",
 );
 const run = first.finalState.entities.runs[RUN_ID];
 assert.equal(run.status, "completed");
@@ -95,10 +154,16 @@ assert.deepEqual(run.usage, {
 });
 assert.equal(run.result.resultRef.digest, complete.resultRef.digest);
 
-const invalidOffsets = verifyInvalidMutations(complete.records);
+const invalidOffsets = verifyInvalidMutations(
+  complete.records,
+  corpus.invalidMutationFields,
+);
 const bindingAudit = verifyBindingAudit(complete);
-const terminalRaces = verifyTerminalRaces();
-const boundedRecords = verifyBoundedRecords(complete.records);
+const terminalRaces = verifyTerminalRaces(corpus.terminalStates);
+const boundedRecords = verifyBoundedRecords(
+  complete.records,
+  corpus.boundedRecordTypes,
+);
 const canaryScan = verifyCanaryIsolation(complete.records);
 const sensitivityEvidence =
   process.env.E3_T01_SKIP_SENSITIVITY === "1"
@@ -172,10 +237,6 @@ const summary = {
 };
 
 await writeJson(
-  path.join(evidenceDirectory, "verification-summary.json"),
-  summary,
-);
-await writeJson(
   path.join(evidenceDirectory, "prefix-replay.json"),
   replayEvidence,
 );
@@ -200,8 +261,55 @@ await writeJson(
   path.join(evidenceDirectory, "sensitivity.json"),
   sensitivityEvidence,
 );
+await writeJson(
+  path.join(evidenceDirectory, "verification-summary.json"),
+  summary,
+);
+const evidenceScan = await scanEvidenceDirectory(evidenceDirectory);
+const publishedCanaryScan = {
+  ...canaryScan,
+  canaryPresentInPublishedEvidence: evidenceScan.leaked,
+  evidenceFiles: evidenceScan.files,
+  postVerifierEvidenceScanCompleted: evidenceScan.checked,
+  publishedEvidenceLeaked: evidenceScan.leaked,
+};
+summary.canaryScan = publishedCanaryScan;
+await writeJson(
+  path.join(evidenceDirectory, "canary-scan.json"),
+  publishedCanaryScan,
+);
+await writeJson(
+  path.join(evidenceDirectory, "verification-summary.json"),
+  summary,
+);
 
 console.log(JSON.stringify(summary, null, 2));
+
+async function scanEvidenceDirectory(directory) {
+  const files = (await readdir(directory, { withFileTypes: true }))
+    .filter((entry) => entry.isFile())
+    .map((entry) => entry.name)
+    .sort();
+  let leaked = false;
+  for (const filename of files) {
+    const contents = await readFile(path.join(directory, filename), "utf8");
+    if (
+      /e3-t01-verifier-canary-|PRIVATE KEY|api[_-]?key\s*[:=]|Bearer\s+[A-Za-z0-9._~+/=-]{12,}/iu.test(
+        contents,
+      )
+    ) {
+      leaked = true;
+    }
+  }
+  return { checked: true, files, leaked };
+}
+
+function describeLifecycle(records) {
+  return records.map(({ event }) => {
+    if (event.eventType !== "run.lifecycle.changed") return event.eventType;
+    return `${event.eventType}:${String(event.data.from)}->${event.data.to}`;
+  });
+}
 
 function buildLifecycleRecords({ terminal = "completed" } = {}) {
   const sourceTrigger = sourceReference(
@@ -449,7 +557,7 @@ function buildLifecycleRecords({ terminal = "completed" } = {}) {
   return { records, resultRef: null, sourceTrigger, binding, invocationData };
 }
 
-function verifyInvalidMutations(records) {
+function verifyInvalidMutations(records, expectedFields) {
   const cases = [
     [
       "state",
@@ -513,6 +621,11 @@ function verifyInvalidMutations(records) {
       "INVOCATION_RUN_INVALID_STATE",
     ],
   ];
+  assert.deepEqual(
+    cases.map(([name]) => name),
+    expectedFields,
+    "invalid mutation fixture must cover the verifier matrix",
+  );
   return cases.map(([name, recordIndex, mutate, expectedCode]) => {
     const mutated = structuredClone(records);
     mutated[recordIndex].event.data = mutate(mutated[recordIndex].event.data);
@@ -559,6 +672,70 @@ function verifyBindingAudit(complete) {
       workspaceId: WORKSPACE_ID,
     }),
   );
+  const reuseAttacks = [
+    [
+      "agent",
+      (records) => {
+        records[1].event.data.binding.agentId = OTHER_AGENT_ID;
+      },
+      "INVOCATION_RUN_BINDING_MISMATCH",
+    ],
+    [
+      "snapshot-digest",
+      (records) => {
+        records[1].event.data.binding.snapshotDigest = digest("9");
+      },
+      "INVOCATION_RUN_BINDING_MISMATCH",
+    ],
+    [
+      "source-trigger",
+      (records) => {
+        records[1].event.data.binding.sourceTrigger = sourceReference(
+          SAME_WORKSPACE_OTHER_CHANNEL,
+          offset(94),
+          digest("9"),
+        );
+      },
+      "INVOCATION_RUN_BINDING_MISMATCH",
+    ],
+    [
+      "invocation",
+      (records) => {
+        records[1].event.data.invocationId = "iv_bbbbbbbbbbbbbbbbbbbbbbbbbb";
+      },
+      "INVOCATION_RUN_BINDING_MISMATCH",
+    ],
+    [
+      "workspace",
+      (records) => {
+        records[1].event.data.binding.sourceTrigger = sourceReference(
+          OTHER_WORKSPACE_CHANNEL,
+          offset(95),
+          digest("9"),
+        );
+      },
+      "INVOCATION_RUN_INVALID_SOURCE",
+    ],
+  ].map(([name, mutate, expectedCode]) => {
+    const mutated = structuredClone(complete.records);
+    mutate(mutated);
+    let error = null;
+    try {
+      replayRecords(mutated);
+    } catch (candidate) {
+      error = candidate;
+    }
+    assert.ok(error, `${name} binding reuse must be rejected`);
+    assert.equal(error.code, expectedCode, name);
+    assert.equal(error.offset, mutated[1].offset, name);
+    return {
+      attack: name,
+      expectedCode,
+      observedCode: error.code,
+      offset: error.offset,
+      refused: true,
+    };
+  });
   return {
     agentId: invocation.agentId,
     correlationId: invocation.correlationId,
@@ -566,50 +743,147 @@ function verifyBindingAudit(complete) {
     runId: runRequested.runId,
     snapshotDigest: invocation.snapshotDigest,
     sourceTrigger: invocation.sourceTrigger,
+    reuseAttacks,
     result: "PASS",
   };
 }
 
-function verifyTerminalRaces() {
-  const rows = ["completed", "failed", "timed-out", "cancelled"].map(
-    (terminal) => {
-      const candidate = buildLifecycleRecords({ terminal });
-      const replay = replayRecords(candidate.records);
-      assert.equal(replay.finalState.entities.runs[RUN_ID].status, terminal);
-      return {
-        terminal,
-        finalStateDigest: replay.finalStateDigest,
-        result: "one-terminal-winner",
-      };
-    },
-  );
+function verifyTerminalRaces(expectedTerminals) {
+  const winner = buildLifecycleRecords({ terminal: "completed" });
+  const sharedHead = winner.records.at(-1);
+  const rows = expectedTerminals.map((terminal, index) => {
+    const candidateRecords = structuredClone(winner.records);
+    const candidateData = {
+      attemptId: "at_1",
+      attemptNumber: 1,
+      binding: null,
+      from: "completed",
+      invocationId: INVOCATION_ID,
+      leaseGeneration: 1,
+      runId: RUN_ID,
+      schemaVersion: 1,
+      sequence: 14,
+      sourceRef: sourceReference(
+        `run:${RUN_ID}`,
+        sharedHead.offset,
+        digestEventEnvelope(sharedHead.event),
+      ),
+      terminal: {
+        failureCode: terminal === "failed" ? "provider_failed" : null,
+        kind: terminal,
+        reasonCode:
+          terminal === "timed-out"
+            ? "deadline"
+            : terminal === "cancelled"
+              ? "requested"
+              : null,
+        resultRef:
+          terminal === "completed"
+            ? winner.resultRef
+            : null,
+      },
+      to: terminal,
+    };
+    const event = eventEnvelope(
+      index === 0 ? "z" : "y",
+      "run.lifecycle.changed",
+      candidateData,
+      candidateData.sourceRef,
+    );
+    candidateRecords.push({
+      event,
+      offset: offset(15),
+    });
+    let error = null;
+    try {
+      replayRecords(candidateRecords);
+    } catch (candidate) {
+      error = candidate;
+    }
+    assert.equal(error?.code, "INVOCATION_RUN_TERMINAL_IMMUTABLE", terminal);
+    assert.equal(error?.offset, offset(15), terminal);
+    return {
+      attemptedTerminal: terminal,
+      expectedCode: "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+      observedCode: error.code,
+      offset: error.offset,
+      refused: true,
+      sharedHeadOffset: sharedHead.offset,
+      winner: "completed",
+    };
+  });
   return {
     candidates: rows,
-    oneWinnerPerExpectedHead: true,
+    sharedHeadOffset: sharedHead.offset,
+    terminalWinner: "completed",
+    oneWinnerPerExpectedHead:
+      winner.records.at(-1).event.data.to === "completed" &&
+      rows.every((row) => row.refused),
     result: "PASS",
   };
 }
 
-function verifyBoundedRecords(records) {
-  const text = JSON.stringify(records);
-  for (const forbidden of [
-    "credentials",
-    "providerToken",
-    "processOutput",
-    "environment",
-    "password",
-  ]) {
-    assert.equal(
-      text.includes(forbidden),
-      false,
-      `forbidden field ${forbidden} leaked`,
-    );
-  }
+function verifyBoundedRecords(records, expectedRecordTypes) {
+  const activityIndex = records.findIndex(
+    ({ event }) => event.eventType === "run.activity.recorded",
+  );
+  assert.notEqual(activityIndex, -1, "fixture must include an activity record");
+  const attacks = [
+    [
+      "unrestricted-output-field",
+      (data) => {
+        data.processOutput = "raw provider output";
+      },
+      "INVOCATION_RUN_INVALID_DATA",
+    ],
+    [
+      "oversized-summary",
+      (data) => {
+        data.summary = "x".repeat(513);
+      },
+      "INVOCATION_RUN_INVALID_DATA",
+    ],
+  ].map(([attack, mutate, expectedCode]) => {
+    const mutated = structuredClone(records);
+    mutate(mutated[activityIndex].event.data);
+    let error = null;
+    try {
+      replayRecords(mutated);
+    } catch (candidate) {
+      error = candidate;
+    }
+    assert.ok(error, `${attack} must be rejected before append`);
+    assert.equal(error.code, expectedCode, attack);
+    assert.equal(error.offset, mutated[activityIndex].offset, attack);
+    return {
+      attack,
+      expectedCode,
+      observedCode: error.code,
+      offset: error.offset,
+      refused: true,
+    };
+  });
+  assert.deepEqual(expectedRecordTypes, [
+    "activity",
+    "usage",
+    "approval",
+    "artifact",
+    "result",
+    "failure",
+  ]);
   return {
     contentReferencesOnly: true,
+    attacks,
     rawProviderOutputFields: 0,
     rawSecretFields: 0,
     recordCount: records.length,
+    recordTypes: expectedRecordTypes,
+    rejectedOversizedFields: attacks.filter(
+      ({ attack }) => attack === "oversized-summary",
+    ).length,
+    rejectedRawProviderOutputFields: attacks.filter(
+      ({ attack }) => attack === "unrestricted-output-field",
+    ).length,
     result: "PASS",
   };
 }
@@ -627,82 +901,109 @@ function verifyCanaryIsolation(records) {
   assert.equal(error?.code, "INVOCATION_RUN_SECRET_VALUE");
   return {
     canaryRejected: true,
-    canaryPresentInPublishedEvidence: false,
     result: "PASS",
   };
 }
 
 async function verifySensitivity() {
   await mkdir(path.join(taskDirectory, "work"), { recursive: true });
-  const parent = await mkdtemp(
-    path.join(taskDirectory, "work", "sensitivity-"),
-  );
-  const checkout = path.join(parent, "checkout");
-  let added = false;
-  try {
-    execFileSync(
-      "git",
-      ["worktree", "add", "--detach", checkout, implementationCommit],
-      {
-        cwd: root,
-        stdio: "ignore",
-      },
-    );
-    added = true;
-    const modulePath = path.join(
-      checkout,
-      "packages/protocol/src/invocation-run.mjs",
-    );
-    let source = await readFile(modulePath, "utf8");
-    const anchor = `function hasSecret(value) {
+  const mutations = [
+    {
+      anchor: `function hasSecret(value) {
   return (
     typeof value === "string" &&
     SECRET_PATTERNS.some((pattern) => pattern.test(value))
   );
-}`;
-    assert.equal(
-      source.split(anchor).length - 1,
-      1,
-      "sensitivity anchor must remain unique",
+}`,
+      file: "packages/protocol/src/invocation-run.mjs",
+      label: "disable secret canary rejection",
+      replacement: "function hasSecret() { return false; }",
+      command: ["node", "--test", "test/unit/invocation-run.test.mjs"],
+    },
+    {
+      anchor: 'if (data.to === "completed") {',
+      file: "packages/reducers/src/index.mjs",
+      label: "disable completed-result terminal check",
+      replacement: "if (false) {",
+      command: ["node", "scripts/verify-e3-t01.mjs"],
+      nestedVerifier: true,
+    },
+  ];
+  const results = [];
+  for (const mutation of mutations) {
+    const parent = await mkdtemp(
+      path.join(taskDirectory, "work", "sensitivity-"),
     );
-    source = source.replace(anchor, "function hasSecret() { return false; }");
-    await writeFile(modulePath, source);
-    execFileSync("pnpm", ["install", "--frozen-lockfile"], {
-      cwd: checkout,
-      env: process.env,
-      stdio: "ignore",
-    });
-    let exitCode = 0;
+    const checkout = path.join(parent, "checkout");
+    let added = false;
     try {
-      execFileSync("node", ["--test", "test/unit/invocation-run.test.mjs"], {
+      execFileSync(
+        "git",
+        ["worktree", "add", "--detach", checkout, implementationCommit],
+        {
+          cwd: root,
+          stdio: "ignore",
+        },
+      );
+      added = true;
+      const modulePath = path.join(checkout, mutation.file);
+      let source = await readFile(modulePath, "utf8");
+      assert.equal(
+        source.split(mutation.anchor).length - 1,
+        1,
+        `${mutation.label} anchor must remain unique`,
+      );
+      source = source.replace(mutation.anchor, mutation.replacement);
+      await writeFile(modulePath, source);
+      execFileSync("pnpm", ["install", "--frozen-lockfile"], {
         cwd: checkout,
         env: process.env,
         stdio: "ignore",
       });
-    } catch (error) {
-      exitCode = typeof error.status === "number" ? error.status : 1;
-    }
-    assert.notEqual(
-      exitCode,
-      0,
-      "secret-redaction mutation must make the verifier fail",
-    );
-    return {
-      mutation: "disable secret canary rejection",
-      verifierCommand: "node --test test/unit/invocation-run.test.mjs",
-      verifierExitCode: exitCode,
-      verifierRejected: true,
-      result: "PASS",
-    };
-  } finally {
-    if (added) {
-      execFileSync("git", ["worktree", "remove", "--force", checkout], {
-        cwd: root,
-        stdio: "ignore",
+      let exitCode = 0;
+      const environment = {
+        ...process.env,
+        E3_T01_IMPLEMENTATION_COMMIT: implementationCommit,
+        E3_T01_SKIP_GATES: mutation.nestedVerifier ? "1" : process.env.E3_T01_SKIP_GATES,
+        E3_T01_SKIP_SENSITIVITY: mutation.nestedVerifier ? "1" : process.env.E3_T01_SKIP_SENSITIVITY,
+        PROMOTE_EVIDENCE: "0",
+        TEST_ARTIFACT_DIR: mutation.nestedVerifier
+          ? path.join(parent, "nested-artifacts")
+          : process.env.TEST_ARTIFACT_DIR,
+        TEST_RUN_ID: `${runId}-${mutation.label.replaceAll(" ", "-")}`,
+      };
+      try {
+        execFileSync(mutation.command[0], mutation.command.slice(1), {
+          cwd: checkout,
+          env: environment,
+          stdio: "ignore",
+        });
+      } catch (error) {
+        exitCode = typeof error.status === "number" ? error.status : 1;
+      }
+      assert.notEqual(
+        exitCode,
+        0,
+        `${mutation.label} must make the verifier fail`,
+      );
+      results.push({
+        mutation: mutation.label,
+        verifierCommand: mutation.command.join(" "),
+        verifierExitCode: exitCode,
+        verifierRejected: true,
+        result: "PASS",
       });
+    } finally {
+      if (added) {
+        execFileSync("git", ["worktree", "remove", "--force", checkout], {
+          cwd: root,
+          stdio: "ignore",
+        });
+      }
+      await rm(parent, { recursive: true, force: true });
     }
-    await rm(parent, { recursive: true, force: true });
   }
+  return { mutations: results, result: "PASS" };
 }
 
 function eventEnvelope(letter, eventType, data, causation) {

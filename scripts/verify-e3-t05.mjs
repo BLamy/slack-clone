@@ -539,6 +539,14 @@ async function runSensitivity() {
       needle: "if (activeKeys.has(key)) {",
       replacement: "if (false) {",
     },
+    {
+      file: "packages/protocol/src/conversation-scheduling.mjs",
+      label: "aggregate-budget-accumulator",
+      needle: `const before = priorUsage
+    ? maxUsage(priorUsage, item.causation.aggregateUsage)
+    : item.causation.aggregateUsage;`,
+      replacement: "const before = item.causation.aggregateUsage;",
+    },
   ];
   const results = [];
   for (const mutation of mutations) {

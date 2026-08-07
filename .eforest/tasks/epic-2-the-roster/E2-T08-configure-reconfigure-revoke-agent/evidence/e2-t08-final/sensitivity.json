@@ -1,5 +1,5 @@
 {
-  "mutationCount": 8,
+  "mutationCount": 9,
   "mutations": [
     {
       "mutation": "tamper config revision",
@@ -40,6 +40,12 @@
       "mutation": "allow a post-revocation snapshot use",
       "verifierWentRed": true,
       "detectorCode": "REVOCATION_FENCE"
+    },
+    {
+      "mutation": "mutate replay composite source digest",
+      "verifierWentRed": true,
+      "detectorCode": "REPLAY_COMPOSITE_INTEGRITY",
+      "exitCode": 1
     }
   ],
   "verifierDetectedMutant": true,

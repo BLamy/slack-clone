@@ -1,5 +1,13 @@
 [
   {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents",
+    "requestBody": "redacted-json",
+    "response": "client-aborted-after-durable-append",
+    "status": "client-aborted"
+  },
+  {
     "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
     "method": "POST",
     "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/channels/ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111/members/pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/invite",
@@ -648,6 +656,268 @@
     "status": 404
   },
   {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.reference.bind",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.grant.manage",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.credential.read",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.reference.bind",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.grant.manage",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.credential.read",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.reference.bind",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.grant.manage",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.credential.read",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.reference.bind",
+    "requestBody": "redacted-json",
+    "response": {
+      "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+      "connectionId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+      "ok": true,
+      "operation": "connection.reference.bind",
+      "source": {
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+        "directoryHead": "0000000000000000_0000000000000042"
+      }
+    },
+    "status": 200
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.grant.manage",
+    "requestBody": "redacted-json",
+    "response": {
+      "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+      "connectionId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+      "ok": true,
+      "operation": "connection.grant.manage",
+      "source": {
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+        "directoryHead": "0000000000000000_0000000000000042"
+      }
+    },
+    "status": 200
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.credential.read",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.reference.bind",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.grant.manage",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.credential.read",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.reference.bind",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.grant.manage",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.credential.read",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "AGENT_ADMINISTRATION_ACCESS_DENIED",
+      "error": "agent administration access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.reference.bind",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "error": "workspace access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.grant.manage",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "error": "workspace access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+    "method": "GET",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.credential.read",
+    "requestBody": false,
+    "response": {
+      "ok": false,
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "error": "workspace access denied"
+    },
+    "status": 404
+  },
+  {
     "actor": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
     "method": "GET",
     "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/agents/ag_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd",
@@ -663,6 +933,18 @@
     "actor": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
     "method": "POST",
     "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/channels/ch_bbbbbbbbbbbbbbbbbbbbbbbbbb_11111111111111111111111111/members/pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/invite",
+    "requestBody": "redacted-json",
+    "response": {
+      "ok": false,
+      "code": "WORKSPACE_ACCESS_DENIED",
+      "error": "workspace access denied"
+    },
+    "status": 404
+  },
+  {
+    "actor": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+    "method": "POST",
+    "path": "/api/workspaces/ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/connections/cn_bbbbbbbbbbbbbbbbbbbbbbbbbb_nnnnnnnnnnnnnnnnnnnnnnnnnn/connection.grant.manage",
     "requestBody": "redacted-json",
     "response": {
       "ok": false,
@@ -784,8 +1066,8 @@
       },
       "ok": true,
       "source": {
-        "directoryDigest": "sha256:21136110b72420714addc9e707fdd7b5a6cb90635c8557030d421dad6312e473",
-        "directoryStateDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:f8c8273b17b2df70df54421b33de220fdd3154c72838358a092a20fdcf1362e6",
+        "directoryStateDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "configDigest": "sha256:a0483a101299fd3aa428c96e7ad8fdd3d2dcfb6e607eab6e1a8c28ba453105c2",
         "configStateDigest": "sha256:892ea58dac4e39a05fbd5e2daab12b77a04de61c8a29a588916ed3c042c2664e"
       }
@@ -910,20 +1192,20 @@
       },
       "ok": true,
       "receipt": {
-        "dispatchEventDigest": "sha256:1957a22501eb371743accf281e7b3529e433791905f130905c0949e919ddde96",
-        "eventDigest": "sha256:9a8f7c34ce38e7ae704cba2289b03e2cab5bff315077ce86982b532b244f6ea9",
-        "idempotencyKey": "ik_racezaz0069racezaz0069race",
+        "dispatchEventDigest": "sha256:aa954d39047cc4793e060a8824a7f53748807d97118287586957eef53c79054b",
+        "eventDigest": "sha256:6bde9fe167d35ed64a995f44d239990950aa847cd257bf255a1b56f5236870dd",
+        "idempotencyKey": "ik_racezaz0084racezaz0084race",
         "nextOffset": "0000000000000000_0000000000000005",
         "operation": "agent.config.revised",
-        "requestDigest": "sha256:ddc8bbf3775b62647945104a62f49172453cc3d55e8a1c2710617065d64409e9",
+        "requestDigest": "sha256:af1cfe0fd231844357959b5f7eb5c3efaa29e6e0a6152b66fa72ac5d426a6953",
         "status": "accepted",
         "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
       },
       "source": {
-        "directoryDigest": "sha256:21136110b72420714addc9e707fdd7b5a6cb90635c8557030d421dad6312e473",
-        "directoryStateDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
-        "configDigest": "sha256:9341c78a6254fbf1abec4367cbdba1463a47b0f181441423eda7d906989de277",
-        "configStateDigest": "sha256:bbdde1044345f4bb5425daf2ee2858528e47fa39f0f4607748e29f3b455a437c"
+        "directoryDigest": "sha256:f8c8273b17b2df70df54421b33de220fdd3154c72838358a092a20fdcf1362e6",
+        "directoryStateDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+        "configDigest": "sha256:4a4a18b8d5dd7838a4e16a2d52ab925ff991e6f5ca281ea3fc973a15d177124e",
+        "configStateDigest": "sha256:2fa70e0cf50cfed47c8ce145e08e95cf13579283f0e03af4658be667200b9580"
       }
     },
     "status": 201
@@ -1057,10 +1339,10 @@
       },
       "ok": true,
       "source": {
-        "directoryDigest": "sha256:d1c1c6de5d928c49e8195c5d9441e92071c791ab31be1a4d9d5e80e420c47244",
-        "directoryStateDigest": "sha256:7db238c5f7f914e9aa840ec25b09b17ee3a53dcd77bf6b7306faf3948087a7c1",
-        "configDigest": "sha256:9341c78a6254fbf1abec4367cbdba1463a47b0f181441423eda7d906989de277",
-        "configStateDigest": "sha256:bbdde1044345f4bb5425daf2ee2858528e47fa39f0f4607748e29f3b455a437c"
+        "directoryDigest": "sha256:a16bba46b73ba2db856993709ea5478fed536e473b84aed66531b45e3ac28c8e",
+        "directoryStateDigest": "sha256:b6ab65ab76905f3a2181d504e919d7a5d89b3de2abcd99046eb103dab9653d71",
+        "configDigest": "sha256:4a4a18b8d5dd7838a4e16a2d52ab925ff991e6f5ca281ea3fc973a15d177124e",
+        "configStateDigest": "sha256:2fa70e0cf50cfed47c8ce145e08e95cf13579283f0e03af4658be667200b9580"
       }
     },
     "status": 200

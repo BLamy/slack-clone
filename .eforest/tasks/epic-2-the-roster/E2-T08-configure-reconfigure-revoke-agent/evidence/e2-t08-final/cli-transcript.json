@@ -21,67 +21,39 @@
       "configuration": null,
       "ok": true,
       "receipt": {
-        "dispatchEventDigest": "sha256:1512ee88922b58b9db43c02891befe7f11cd1ba8cb8cb9b6847b7bd9e64a8ac7",
-        "eventDigest": "sha256:02e470131504bd7fdb782081a55e0c0257f18872e6952cd6e06a42ad1ff29e95",
-        "idempotencyKey": "ik_createz0001createz0001crea",
+        "dispatchEventDigest": "sha256:ca8b23923b138c19ac8ed58ce34f8d43bc7bb3e8d0fb1ffedde39c7e3c8cdaba",
+        "eventDigest": "sha256:881fc2f79e6c43e6e6e2a849ec80a92b22527f78a20ad8370e6afe141f292584",
+        "idempotencyKey": "ik_createzzzstzackz0001create",
         "nextOffset": "0000000000000000_0000000000000038",
         "operation": "agent.principal.create",
-        "requestDigest": "sha256:6ad3a8b8144ea49338db29f17fea0a4034bd36ffa7afb73d5575a02390d67516",
+        "requestDigest": "sha256:16577505f1361b6bab40cf42fcdc074500b86c7c541db54c8612a527cb8aa21e",
         "status": "accepted",
         "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
       },
       "source": {
-        "directoryDigest": "sha256:764233037e5cd2a1be7c5710920d6dd29538f7653dcded2d2e7e60c043e6a561",
-        "directoryStateDigest": "sha256:706afffbbc952937f5e0fb293ece9477e36f59d60352335322b6279de436dee7",
+        "directoryDigest": "sha256:ac8078ec5e2afd8fdb5304d340bbfc92bb9a980acca23e969320dcc49a60dd94",
+        "directoryStateDigest": "sha256:71858116ab2faac266ac2714a3c4c85770d75b80509ad07bbd4618a902dce1fa",
         "configDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "configStateDigest": "sha256:5cf94f8d2c751a7bb659c69a5439634bda3f02b846bc490527219a903da099d0"
       }
     },
     "stderr": false,
     "input": "redacted-json",
-    "idempotencyKey": "ik_createz0001createz0001crea"
+    "idempotencyKey": "ik_createzzzstzackz0001create"
   },
   {
     "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
     "command": "create",
     "agent": null,
-    "exitCode": 0,
+    "exitCode": 4,
     "output": {
-      "agent": {
-        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
-        "kind": "agent",
-        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
-        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
-        "profile": {
-          "displayName": "E2-T08 Control Plane Agent",
-          "email": "e2-t08-agent@example.test",
-          "handle": "e2-t08-control-plane-agent"
-        },
-        "profileRevision": 1,
-        "status": "active"
-      },
-      "configuration": null,
-      "ok": true,
-      "receipt": {
-        "dispatchEventDigest": "sha256:1512ee88922b58b9db43c02891befe7f11cd1ba8cb8cb9b6847b7bd9e64a8ac7",
-        "eventDigest": "sha256:02e470131504bd7fdb782081a55e0c0257f18872e6952cd6e06a42ad1ff29e95",
-        "idempotencyKey": "ik_createz0001createz0001crea",
-        "nextOffset": "0000000000000000_0000000000000038",
-        "operation": "agent.principal.create",
-        "requestDigest": "sha256:6ad3a8b8144ea49338db29f17fea0a4034bd36ffa7afb73d5575a02390d67516",
-        "status": "accepted",
-        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
-      },
-      "source": {
-        "directoryDigest": "sha256:764233037e5cd2a1be7c5710920d6dd29538f7653dcded2d2e7e60c043e6a561",
-        "directoryStateDigest": "sha256:706afffbbc952937f5e0fb293ece9477e36f59d60352335322b6279de436dee7",
-        "configDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-        "configStateDigest": "sha256:5cf94f8d2c751a7bb659c69a5439634bda3f02b846bc490527219a903da099d0"
-      }
+      "ok": false,
+      "code": "DISPATCH_IDEMPOTENCY_CONFLICT",
+      "error": "idempotency key is already bound to a different request scope or payload"
     },
     "stderr": false,
     "input": "redacted-json",
-    "idempotencyKey": "ik_createz0001createz0001crea"
+    "idempotencyKey": "ik_createzzzstzackz0001create"
   },
   {
     "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
@@ -127,8 +99,8 @@
         "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
       },
       "source": {
-        "directoryDigest": "sha256:764233037e5cd2a1be7c5710920d6dd29538f7653dcded2d2e7e60c043e6a561",
-        "directoryStateDigest": "sha256:706afffbbc952937f5e0fb293ece9477e36f59d60352335322b6279de436dee7",
+        "directoryDigest": "sha256:ac8078ec5e2afd8fdb5304d340bbfc92bb9a980acca23e969320dcc49a60dd94",
+        "directoryStateDigest": "sha256:71858116ab2faac266ac2714a3c4c85770d75b80509ad07bbd4618a902dce1fa",
         "configDigest": "sha256:dde870ea9fc57b470c66981cfb49bdcb0e652059ce8ca8738d5c2b05c2013516",
         "configStateDigest": "sha256:c3c4e7f79b43efc83581150b536e3d288c0da6c68e4e023a9dd9d98cc9e31788"
       }
@@ -181,8 +153,8 @@
         "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
       },
       "source": {
-        "directoryDigest": "sha256:764233037e5cd2a1be7c5710920d6dd29538f7653dcded2d2e7e60c043e6a561",
-        "directoryStateDigest": "sha256:706afffbbc952937f5e0fb293ece9477e36f59d60352335322b6279de436dee7",
+        "directoryDigest": "sha256:ac8078ec5e2afd8fdb5304d340bbfc92bb9a980acca23e969320dcc49a60dd94",
+        "directoryStateDigest": "sha256:71858116ab2faac266ac2714a3c4c85770d75b80509ad07bbd4618a902dce1fa",
         "configDigest": "sha256:dde870ea9fc57b470c66981cfb49bdcb0e652059ce8ca8738d5c2b05c2013516",
         "configStateDigest": "sha256:c3c4e7f79b43efc83581150b536e3d288c0da6c68e4e023a9dd9d98cc9e31788"
       }
@@ -314,8 +286,8 @@
         "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
       },
       "source": {
-        "directoryDigest": "sha256:21136110b72420714addc9e707fdd7b5a6cb90635c8557030d421dad6312e473",
-        "directoryStateDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:f8c8273b17b2df70df54421b33de220fdd3154c72838358a092a20fdcf1362e6",
+        "directoryStateDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "configDigest": "sha256:7454581205413907c471a195ba29862c7ecf9c99ecd6f4f3653381d04f93814d",
         "configStateDigest": "sha256:c4a0b3fbd1c125be0cecdf4e3ad11b88a15cb0ae97e231037bca350e9bd1deb4"
       }
@@ -447,8 +419,8 @@
         "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
       },
       "source": {
-        "directoryDigest": "sha256:21136110b72420714addc9e707fdd7b5a6cb90635c8557030d421dad6312e473",
-        "directoryStateDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:f8c8273b17b2df70df54421b33de220fdd3154c72838358a092a20fdcf1362e6",
+        "directoryStateDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "configDigest": "sha256:7454581205413907c471a195ba29862c7ecf9c99ecd6f4f3653381d04f93814d",
         "configStateDigest": "sha256:c4a0b3fbd1c125be0cecdf4e3ad11b88a15cb0ae97e231037bca350e9bd1deb4"
       }
@@ -585,8 +557,8 @@
         "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
       },
       "source": {
-        "directoryDigest": "sha256:21136110b72420714addc9e707fdd7b5a6cb90635c8557030d421dad6312e473",
-        "directoryStateDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:f8c8273b17b2df70df54421b33de220fdd3154c72838358a092a20fdcf1362e6",
+        "directoryStateDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "configDigest": "sha256:28267ebd7c711ed658529b3946de6802a37abcddaeebc75eb4d51fcf6d507750",
         "configStateDigest": "sha256:fd63f66e86b7c45ed3796ec540b3e7642626999f8929e3f20f98795e0cfa2076"
       }
@@ -723,8 +695,8 @@
         "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
       },
       "source": {
-        "directoryDigest": "sha256:21136110b72420714addc9e707fdd7b5a6cb90635c8557030d421dad6312e473",
-        "directoryStateDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:f8c8273b17b2df70df54421b33de220fdd3154c72838358a092a20fdcf1362e6",
+        "directoryStateDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "configDigest": "sha256:28267ebd7c711ed658529b3946de6802a37abcddaeebc75eb4d51fcf6d507750",
         "configStateDigest": "sha256:fd63f66e86b7c45ed3796ec540b3e7642626999f8929e3f20f98795e0cfa2076"
       }
@@ -856,8 +828,8 @@
         "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
       },
       "source": {
-        "directoryDigest": "sha256:21136110b72420714addc9e707fdd7b5a6cb90635c8557030d421dad6312e473",
-        "directoryStateDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:f8c8273b17b2df70df54421b33de220fdd3154c72838358a092a20fdcf1362e6",
+        "directoryStateDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "configDigest": "sha256:a0483a101299fd3aa428c96e7ad8fdd3d2dcfb6e607eab6e1a8c28ba453105c2",
         "configStateDigest": "sha256:892ea58dac4e39a05fbd5e2daab12b77a04de61c8a29a588916ed3c042c2664e"
       }
@@ -909,26 +881,26 @@
       },
       "ok": true,
       "receipt": {
-        "dispatchEventDigest": "sha256:fa2b990d35a7f34ea8d8dd057e6ad2d7651ac1e33550508633b63308f01e319d",
-        "eventDigest": "sha256:f6bdb8d565cdc483718ce2dbea8a327b5a074d69cfd610e87753d91ffa62657c",
-        "idempotencyKey": "ik_revzkez0072revzkez0072revz",
+        "dispatchEventDigest": "sha256:ddb90daecf68657a0a33504d60f519295d7b7aa64e06d32a2d7d97f0ea224f98",
+        "eventDigest": "sha256:27cc02be22bdd9388ec3d6acbccde23dc7243af95144faaa1d25be3e8c4e4244",
+        "idempotencyKey": "ik_revzkezracez0089revzkezrac",
         "nextOffset": "0000000000000000_0000000000000006",
         "operation": "agent.config.retired",
-        "requestDigest": "sha256:9aaf7d739863a9b15748f3152acb350bcd5a3164a03ad5c7bbca093a04f769bf",
+        "requestDigest": "sha256:4a20703b628da0726e0da721dfc910a40ec5cd39a7cd556bbfed3140a216adc1",
         "status": "accepted",
         "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
       },
       "source": {
-        "directoryDigest": "sha256:d1c1c6de5d928c49e8195c5d9441e92071c791ab31be1a4d9d5e80e420c47244",
-        "directoryStateDigest": "sha256:7db238c5f7f914e9aa840ec25b09b17ee3a53dcd77bf6b7306faf3948087a7c1",
-        "configDigest": "sha256:2a2542af870f7bd450c72c5cbaf31934fc253e7c83603029c0dd306a2dd292a8",
-        "configStateDigest": "sha256:84d7f5f94029981f085e5a422fbc2efa64b2cd70d680313ba57c7a4fd0f96c3b"
+        "directoryDigest": "sha256:a16bba46b73ba2db856993709ea5478fed536e473b84aed66531b45e3ac28c8e",
+        "directoryStateDigest": "sha256:b6ab65ab76905f3a2181d504e919d7a5d89b3de2abcd99046eb103dab9653d71",
+        "configDigest": "sha256:541f5a3397dbf730bd8bc3fa7f6f0e04db259d3ba6d048b3671f00a8baeb40fa",
+        "configStateDigest": "sha256:f3593733ca9f5421ab1980fa542d31115bd54d2b60eb1c5e32f3657d54ce4735"
       },
       "revoked": true
     },
     "stderr": false,
     "input": "redacted-json",
-    "idempotencyKey": "ik_revzkez0072revzkez0072revz"
+    "idempotencyKey": "ik_revzkezracez0089revzkezrac"
   },
   {
     "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
@@ -959,26 +931,26 @@
       },
       "ok": true,
       "receipt": {
-        "dispatchEventDigest": "sha256:fa2b990d35a7f34ea8d8dd057e6ad2d7651ac1e33550508633b63308f01e319d",
-        "eventDigest": "sha256:f6bdb8d565cdc483718ce2dbea8a327b5a074d69cfd610e87753d91ffa62657c",
-        "idempotencyKey": "ik_revzkez0072revzkez0072revz",
+        "dispatchEventDigest": "sha256:ddb90daecf68657a0a33504d60f519295d7b7aa64e06d32a2d7d97f0ea224f98",
+        "eventDigest": "sha256:27cc02be22bdd9388ec3d6acbccde23dc7243af95144faaa1d25be3e8c4e4244",
+        "idempotencyKey": "ik_revzkezracez0089revzkezrac",
         "nextOffset": "0000000000000000_0000000000000006",
         "operation": "agent.config.retired",
-        "requestDigest": "sha256:9aaf7d739863a9b15748f3152acb350bcd5a3164a03ad5c7bbca093a04f769bf",
+        "requestDigest": "sha256:4a20703b628da0726e0da721dfc910a40ec5cd39a7cd556bbfed3140a216adc1",
         "status": "accepted",
         "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
       },
       "source": {
-        "directoryDigest": "sha256:d1c1c6de5d928c49e8195c5d9441e92071c791ab31be1a4d9d5e80e420c47244",
-        "directoryStateDigest": "sha256:7db238c5f7f914e9aa840ec25b09b17ee3a53dcd77bf6b7306faf3948087a7c1",
-        "configDigest": "sha256:2a2542af870f7bd450c72c5cbaf31934fc253e7c83603029c0dd306a2dd292a8",
-        "configStateDigest": "sha256:84d7f5f94029981f085e5a422fbc2efa64b2cd70d680313ba57c7a4fd0f96c3b"
+        "directoryDigest": "sha256:a16bba46b73ba2db856993709ea5478fed536e473b84aed66531b45e3ac28c8e",
+        "directoryStateDigest": "sha256:b6ab65ab76905f3a2181d504e919d7a5d89b3de2abcd99046eb103dab9653d71",
+        "configDigest": "sha256:541f5a3397dbf730bd8bc3fa7f6f0e04db259d3ba6d048b3671f00a8baeb40fa",
+        "configStateDigest": "sha256:f3593733ca9f5421ab1980fa542d31115bd54d2b60eb1c5e32f3657d54ce4735"
       },
       "revoked": true
     },
     "stderr": false,
     "input": "redacted-json",
-    "idempotencyKey": "ik_revzkez0072revzkez0072revz"
+    "idempotencyKey": "ik_revzkezracez0089revzkezrac"
   },
   {
     "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
@@ -1285,7 +1257,7 @@
             }
           },
           "configDigest": "sha256:c30df0ed2ab78aa2c537a736589619e288fceb6e5d1a309892c3ce6e487e1b02",
-          "eventId": "ev_racezaz0069racezaz0069race",
+          "eventId": "ev_racezaz0084racezaz0084race",
           "expectedRevision": 2,
           "kind": "revision",
           "predecessorRevisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39",
@@ -1295,7 +1267,7 @@
         },
         {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
-          "eventId": "ev_revzkez0072revzkez0072revz",
+          "eventId": "ev_revzkezracez0089revzkezrac",
           "eventType": "agent.config.retired",
           "kind": "lifecycle",
           "revisionId": null,
@@ -1310,8 +1282,8 @@
         "limit": 20,
         "returned": 6,
         "start": 0,
-        "streamDigest": "sha256:2a2542af870f7bd450c72c5cbaf31934fc253e7c83603029c0dd306a2dd292a8",
-        "stateDigest": "sha256:84d7f5f94029981f085e5a422fbc2efa64b2cd70d680313ba57c7a4fd0f96c3b"
+        "streamDigest": "sha256:541f5a3397dbf730bd8bc3fa7f6f0e04db259d3ba6d048b3671f00a8baeb40fa",
+        "stateDigest": "sha256:f3593733ca9f5421ab1980fa542d31115bd54d2b60eb1c5e32f3657d54ce4735"
       }
     },
     "stderr": false,

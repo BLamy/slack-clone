@@ -2,8 +2,8 @@
   "directory": {
     "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
     "nextOffset": "0000000000000000_0000000000000043",
-    "stateDigest": "sha256:7db238c5f7f914e9aa840ec25b09b17ee3a53dcd77bf6b7306faf3948087a7c1",
-    "streamDigest": "sha256:d1c1c6de5d928c49e8195c5d9441e92071c791ab31be1a4d9d5e80e420c47244",
+    "stateDigest": "sha256:b6ab65ab76905f3a2181d504e919d7a5d89b3de2abcd99046eb103dab9653d71",
+    "streamDigest": "sha256:a16bba46b73ba2db856993709ea5478fed536e473b84aed66531b45e3ac28c8e",
     "records": [
       {
         "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -724,11 +724,11 @@
         "serverTimestamp": "2026-08-06T00:00:00.000Z"
       },
       {
-        "digest": "sha256:02e470131504bd7fdb782081a55e0c0257f18872e6952cd6e06a42ad1ff29e95",
+        "digest": "sha256:881fc2f79e6c43e6e6e2a849ec80a92b22527f78a20ad8370e6afe141f292584",
         "event": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
           "causation": null,
-          "correlationId": "cr_createz0001createz0001crea",
+          "correlationId": "cr_createzzzstzackz0001create",
           "data": {
             "kind": "agent",
             "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
@@ -745,18 +745,18 @@
             }
           },
           "eventType": "principal.created",
-          "idempotencyKey": "ik_createz0001createz0001crea",
+          "idempotencyKey": "ik_createzzzstzackz0001create",
           "schemaVersion": 1,
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
-          "eventId": "ev_createz0001createz0001crea",
+          "eventId": "ev_createzzzstzackz0001create",
           "serverTimestamp": "2026-08-06T00:00:00.000Z"
         },
         "dispatch": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
           "expectedHead": "0000000000000000_0000000000000037",
-          "idempotencyKey": "ik_createz0001createz0001crea",
+          "idempotencyKey": "ik_createzzzstzackz0001create",
           "operation": "agent.principal.create",
-          "requestDigest": "sha256:6ad3a8b8144ea49338db29f17fea0a4034bd36ffa7afb73d5575a02390d67516",
+          "requestDigest": "sha256:16577505f1361b6bab40cf42fcdc074500b86c7c541db54c8612a527cb8aa21e",
           "schemaVersion": 1,
           "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -882,11 +882,11 @@
         }
       },
       {
-        "digest": "sha256:62a771fb03e60e6809c35f99152e547c1b019c76cdcb32d0190ba296efde36c8",
+        "digest": "sha256:f412c179711867144e19bf6273875baa952bd2e15370c9a82e9823e57e9cb45a",
         "event": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
           "causation": null,
-          "correlationId": "cr_agentzwzrkspacezremzvez007",
+          "correlationId": "cr_agentzwzrkspacezremzvez008",
           "data": {
             "expectedMembershipRevision": 1,
             "expectedWorkspaceRevision": 17,
@@ -894,18 +894,18 @@
             "reason": "e2-t08 revocation race"
           },
           "eventType": "workspace.membership.removed",
-          "idempotencyKey": "ik_agentzwzrkspacezremzvez007",
+          "idempotencyKey": "ik_agentzwzrkspacezremzvez008",
           "schemaVersion": 1,
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
-          "eventId": "ev_00000000000000000000001027",
+          "eventId": "ev_00000000000000000000001029",
           "serverTimestamp": "2026-08-06T00:00:00.000Z"
         },
         "dispatch": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
           "expectedHead": "0000000000000000_0000000000000042",
-          "idempotencyKey": "ik_agentzwzrkspacezremzvez007",
+          "idempotencyKey": "ik_agentzwzrkspacezremzvez008",
           "operation": "workspace.membership.removed",
-          "requestDigest": "sha256:770e0d6677583dc15318c3e1fcc001777881589b3e41df3ed194fe1e0aafaf3e",
+          "requestDigest": "sha256:b2584a4a7446ba68ee2bd08c61113110dc069dc0ed000b131875b0ef9e4c1c29",
           "schemaVersion": 1,
           "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -916,7 +916,8 @@
   "config": {
     "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
     "nextOffset": "0000000000000000_0000000000000006",
-    "streamDigest": "sha256:2a2542af870f7bd450c72c5cbaf31934fc253e7c83603029c0dd306a2dd292a8",
+    "streamDigest": "sha256:541f5a3397dbf730bd8bc3fa7f6f0e04db259d3ba6d048b3671f00a8baeb40fa",
+    "stateDigest": "sha256:f3593733ca9f5421ab1980fa542d31115bd54d2b60eb1c5e32f3657d54ce4735",
     "records": [
       {
         "digest": "sha256:f30496b7dcf9916b21853ef8eb34a32a64d36fbf906cf3ccd48f2b73159229bd",
@@ -1215,11 +1216,11 @@
         }
       },
       {
-        "digest": "sha256:9a8f7c34ce38e7ae704cba2289b03e2cab5bff315077ce86982b532b244f6ea9",
+        "digest": "sha256:6bde9fe167d35ed64a995f44d239990950aa847cd257bf255a1b56f5236870dd",
         "event": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
           "causation": null,
-          "correlationId": "cr_racezaz0069racezaz0069race",
+          "correlationId": "cr_racezaz0084racezaz0084race",
           "data": {
             "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
             "config": {
@@ -1315,47 +1316,47 @@
             "revisionId": "acr_29f39cf8f52a9a91885c890b387b9fbdc8d8ba7150ff8e61734256ba2212ce7e"
           },
           "eventType": "agent.config.revised",
-          "idempotencyKey": "ik_racezaz0069racezaz0069race",
+          "idempotencyKey": "ik_racezaz0084racezaz0084race",
           "schemaVersion": 1,
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
-          "eventId": "ev_racezaz0069racezaz0069race",
+          "eventId": "ev_racezaz0084racezaz0084race",
           "serverTimestamp": "2026-08-06T00:00:00.000Z"
         },
         "dispatch": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
           "expectedHead": "0000000000000000_0000000000000004",
-          "idempotencyKey": "ik_racezaz0069racezaz0069race",
+          "idempotencyKey": "ik_racezaz0084racezaz0084race",
           "operation": "agent.config.revised",
-          "requestDigest": "sha256:ddc8bbf3775b62647945104a62f49172453cc3d55e8a1c2710617065d64409e9",
+          "requestDigest": "sha256:af1cfe0fd231844357959b5f7eb5c3efaa29e6e0a6152b66fa72ac5d426a6953",
           "schemaVersion": 1,
           "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
         }
       },
       {
-        "digest": "sha256:f6bdb8d565cdc483718ce2dbea8a327b5a074d69cfd610e87753d91ffa62657c",
+        "digest": "sha256:27cc02be22bdd9388ec3d6acbccde23dc7243af95144faaa1d25be3e8c4e4244",
         "event": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
           "causation": null,
-          "correlationId": "cr_revzkez0072revzkez0072revz",
+          "correlationId": "cr_revzkezracez0089revzkezrac",
           "data": {
             "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
             "expectedRevision": 3,
             "expectedRevisionId": "acr_29f39cf8f52a9a91885c890b387b9fbdc8d8ba7150ff8e61734256ba2212ce7e"
           },
           "eventType": "agent.config.retired",
-          "idempotencyKey": "ik_revzkez0072revzkez0072revz",
+          "idempotencyKey": "ik_revzkezracez0089revzkezrac",
           "schemaVersion": 1,
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
-          "eventId": "ev_revzkez0072revzkez0072revz",
+          "eventId": "ev_revzkezracez0089revzkezrac",
           "serverTimestamp": "2026-08-06T00:00:00.000Z"
         },
         "dispatch": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
           "expectedHead": "0000000000000000_0000000000000005",
-          "idempotencyKey": "ik_revzkez0072revzkez0072revz",
+          "idempotencyKey": "ik_revzkezracez0089revzkezrac",
           "operation": "agent.config.retired",
-          "requestDigest": "sha256:9aaf7d739863a9b15748f3152acb350bcd5a3164a03ad5c7bbca093a04f769bf",
+          "requestDigest": "sha256:4a20703b628da0726e0da721dfc910a40ec5cd39a7cd556bbfed3140a216adc1",
           "schemaVersion": 1,
           "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -1372,17 +1373,17 @@
   "dispatch": {
     "stream": "__stream_slack_dispatch_idempotency__",
     "nextOffset": "0000000000000000_0000000000000012",
-    "streamDigest": "sha256:024d0eccf1428d067c1bf635e6327d70977a9c8464e5fe64b128b412b2b2da8e",
+    "streamDigest": "sha256:39f15bed057c4007f91487ffdd0a785e7e9f1ce38e77df6d347c5c237ee440a8",
     "records": [
       {
         "kind": "dispatch.accepted",
         "receipt": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
-          "eventDigest": "sha256:1512ee88922b58b9db43c02891befe7f11cd1ba8cb8cb9b6847b7bd9e64a8ac7",
-          "idempotencyKey": "ik_createz0001createz0001crea",
+          "eventDigest": "sha256:ca8b23923b138c19ac8ed58ce34f8d43bc7bb3e8d0fb1ffedde39c7e3c8cdaba",
+          "idempotencyKey": "ik_createzzzstzackz0001create",
           "nextOffset": "0000000000000000_0000000000000038",
           "operation": "agent.principal.create",
-          "requestDigest": "sha256:6ad3a8b8144ea49338db29f17fea0a4034bd36ffa7afb73d5575a02390d67516",
+          "requestDigest": "sha256:16577505f1361b6bab40cf42fcdc074500b86c7c541db54c8612a527cb8aa21e",
           "status": "accepted",
           "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -1504,11 +1505,11 @@
         "kind": "dispatch.accepted",
         "receipt": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
-          "eventDigest": "sha256:1957a22501eb371743accf281e7b3529e433791905f130905c0949e919ddde96",
-          "idempotencyKey": "ik_racezaz0069racezaz0069race",
+          "eventDigest": "sha256:aa954d39047cc4793e060a8824a7f53748807d97118287586957eef53c79054b",
+          "idempotencyKey": "ik_racezaz0084racezaz0084race",
           "nextOffset": "0000000000000000_0000000000000005",
           "operation": "agent.config.revised",
-          "requestDigest": "sha256:ddc8bbf3775b62647945104a62f49172453cc3d55e8a1c2710617065d64409e9",
+          "requestDigest": "sha256:af1cfe0fd231844357959b5f7eb5c3efaa29e6e0a6152b66fa72ac5d426a6953",
           "status": "accepted",
           "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -1518,11 +1519,11 @@
         "kind": "dispatch.accepted",
         "receipt": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
-          "eventDigest": "sha256:4669c43481b71149b0e951da93a23aadd849d29c8d6cda9d865c76d250e218d3",
-          "idempotencyKey": "ik_agentzwzrkspacezremzvez007",
+          "eventDigest": "sha256:a0116a87681f879b4a3b1c9c710a82dfd7542732ca4364a2a16ad23458fd211b",
+          "idempotencyKey": "ik_agentzwzrkspacezremzvez008",
           "nextOffset": "0000000000000000_0000000000000043",
           "operation": "workspace.membership.removed",
-          "requestDigest": "sha256:770e0d6677583dc15318c3e1fcc001777881589b3e41df3ed194fe1e0aafaf3e",
+          "requestDigest": "sha256:b2584a4a7446ba68ee2bd08c61113110dc069dc0ed000b131875b0ef9e4c1c29",
           "status": "accepted",
           "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -1532,11 +1533,11 @@
         "kind": "dispatch.accepted",
         "receipt": {
           "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
-          "eventDigest": "sha256:fa2b990d35a7f34ea8d8dd057e6ad2d7651ac1e33550508633b63308f01e319d",
-          "idempotencyKey": "ik_revzkez0072revzkez0072revz",
+          "eventDigest": "sha256:ddb90daecf68657a0a33504d60f519295d7b7aa64e06d32a2d7d97f0ea224f98",
+          "idempotencyKey": "ik_revzkezracez0089revzkezrac",
           "nextOffset": "0000000000000000_0000000000000006",
           "operation": "agent.config.retired",
-          "requestDigest": "sha256:9aaf7d739863a9b15748f3152acb350bcd5a3164a03ad5c7bbca093a04f769bf",
+          "requestDigest": "sha256:4a20703b628da0726e0da721dfc910a40ec5cd39a7cd556bbfed3140a216adc1",
           "status": "accepted",
           "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
           "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -1547,15 +1548,165 @@
   "connections": {
     "conn_agrant_b": {
       "stream": "connection:conn_agrant_b/config",
-      "nextOffset": "0000000000000000_0000000000000002",
-      "streamDigest": "sha256:edb31229aa92a66d2fa930f10a822af5cecb14f6b3dc8147c1db5112f8fd3884",
-      "recordCount": 2
+      "nextOffset": "0000000000000000_0000000000000003",
+      "streamDigest": "sha256:dfe2992929c890a7988ec622a59146594e05d628a63dcb61f59c16bffab67b4d",
+      "recordCount": 3,
+      "records": [
+        {
+          "digest": "sha256:51140d2172c324f7ce21b488275b89b1549af9928d19ec1cc8fd799cd79ef1ac",
+          "event": {
+            "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+            "causation": null,
+            "correlationId": "cr_cznnectzznz1z0z0010cznnect",
+            "data": {
+              "connectionId": "conn_agrant_b",
+              "metadata": {
+                "agent": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+                "grantRevision": 1,
+                "provider": "scripted",
+                "status": "active"
+              },
+              "revision": 1
+            },
+            "eventType": "connection.config.revised",
+            "idempotencyKey": "ik_cznnectzznz1z0z0010cznnect",
+            "schemaVersion": 1,
+            "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "eventId": "ev_00000000000000000000001023",
+            "serverTimestamp": "2026-08-06T00:00:00.000Z"
+          }
+        },
+        {
+          "digest": "sha256:df90744f2dd74e09e555d722787f85f72a9928591c33c67dadb671c1dced6a80",
+          "event": {
+            "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+            "causation": null,
+            "correlationId": "cr_cznnectzznz2z0z0014cznnect",
+            "data": {
+              "connectionId": "conn_agrant_b",
+              "metadata": {
+                "agent": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+                "grantRevision": 2,
+                "provider": "scripted",
+                "status": "active"
+              },
+              "revision": 2
+            },
+            "eventType": "connection.config.revised",
+            "idempotencyKey": "ik_cznnectzznz2z0z0014cznnect",
+            "schemaVersion": 1,
+            "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "eventId": "ev_00000000000000000000001025",
+            "serverTimestamp": "2026-08-06T00:00:00.000Z"
+          }
+        },
+        {
+          "digest": "sha256:df0ae4c49e2865b6c2c46a25eebca692677e94c2959e26c072448a272a2c0abf",
+          "event": {
+            "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+            "causation": null,
+            "correlationId": "cr_cznnectzznz3z0z0086cznnect",
+            "data": {
+              "connectionId": "conn_agrant_b",
+              "metadata": {
+                "agent": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+                "grantRevision": 2,
+                "provider": "scripted",
+                "status": "revoked"
+              },
+              "revision": 3
+            },
+            "eventType": "connection.config.revised",
+            "idempotencyKey": "ik_cznnectzznz3z0z0086cznnect",
+            "schemaVersion": 1,
+            "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "eventId": "ev_00000000000000000000001027",
+            "serverTimestamp": "2026-08-06T00:00:00.000Z"
+          }
+        }
+      ],
+      "stateDigest": "sha256:6d7c568c82cdc523cbdd717bcf5ab9df380811cdce36f26f0502ca84643a3bef"
     },
     "conn_a": {
       "stream": "connection:conn_a/config",
-      "nextOffset": "0000000000000000_0000000000000002",
-      "streamDigest": "sha256:b4c8d3f1f474041d5f786b52a9143d1ec50717e4c4cb1e620ff1499f16e3faba",
-      "recordCount": 2
+      "nextOffset": "0000000000000000_0000000000000003",
+      "streamDigest": "sha256:62d3b1c0005c7ba689aa54117cfd77eb28d205d1ff674d31d12abe92b9884b8c",
+      "recordCount": 3,
+      "records": [
+        {
+          "digest": "sha256:52d90ae10c7fbc9d6377911fce3b7f2b2201599f3a6bd7db71cae5c34e40ba70",
+          "event": {
+            "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+            "causation": null,
+            "correlationId": "cr_cznnectzznz1z1z0011cznnect",
+            "data": {
+              "connectionId": "conn_a",
+              "metadata": {
+                "agent": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+                "grantRevision": 1,
+                "provider": "scripted",
+                "status": "active"
+              },
+              "revision": 1
+            },
+            "eventType": "connection.config.revised",
+            "idempotencyKey": "ik_cznnectzznz1z1z0011cznnect",
+            "schemaVersion": 1,
+            "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "eventId": "ev_00000000000000000000001024",
+            "serverTimestamp": "2026-08-06T00:00:00.000Z"
+          }
+        },
+        {
+          "digest": "sha256:1d7b19b5c998700e07c0fe2381d1ec4a093dd98b3c0b552e0acab479e77be3e5",
+          "event": {
+            "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+            "causation": null,
+            "correlationId": "cr_cznnectzznz2z1z0015cznnect",
+            "data": {
+              "connectionId": "conn_a",
+              "metadata": {
+                "agent": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+                "grantRevision": 2,
+                "provider": "scripted",
+                "status": "active"
+              },
+              "revision": 2
+            },
+            "eventType": "connection.config.revised",
+            "idempotencyKey": "ik_cznnectzznz2z1z0015cznnect",
+            "schemaVersion": 1,
+            "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "eventId": "ev_00000000000000000000001026",
+            "serverTimestamp": "2026-08-06T00:00:00.000Z"
+          }
+        },
+        {
+          "digest": "sha256:2cf68bc166fa7dbc9578f23e2f8cbd3e18ec93945de3093f9cc9934ebd3d705d",
+          "event": {
+            "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+            "causation": null,
+            "correlationId": "cr_cznnectzznz3z1z0087cznnect",
+            "data": {
+              "connectionId": "conn_a",
+              "metadata": {
+                "agent": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+                "grantRevision": 2,
+                "provider": "scripted",
+                "status": "revoked"
+              },
+              "revision": 3
+            },
+            "eventType": "connection.config.revised",
+            "idempotencyKey": "ik_cznnectzznz3z1z0087cznnect",
+            "schemaVersion": 1,
+            "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "eventId": "ev_00000000000000000000001028",
+            "serverTimestamp": "2026-08-06T00:00:00.000Z"
+          }
+        }
+      ],
+      "stateDigest": "sha256:09cce2137fdae750eb0256693ce20a9bd4d24b252fe1f20b259063e60c9c0626"
     }
   }
 }

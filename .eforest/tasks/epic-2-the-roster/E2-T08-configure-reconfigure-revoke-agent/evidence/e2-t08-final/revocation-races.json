@@ -8,7 +8,9 @@
     {
       "name": "connection grant revocation",
       "code": "INVOCATION_SNAPSHOT_CONNECTION_GRANT_REVOKED",
-      "refused": true
+      "refused": true,
+      "durableSourceRevision": 3,
+      "grantRevision": 2
     },
     {
       "name": "workspace membership removal",
@@ -25,8 +27,31 @@
   "historicalReplayStillValid": true,
   "sourceHeadsAfterRemoval": {
     "directory": "0000000000000000_0000000000000043",
-    "stateDigest": "sha256:7db238c5f7f914e9aa840ec25b09b17ee3a53dcd77bf6b7306faf3948087a7c1"
+    "stateDigest": "sha256:b6ab65ab76905f3a2181d504e919d7a5d89b3de2abcd99046eb103dab9653d71"
+  },
+  "connectionGrantRevocation": {
+    "sourceRevision": 3,
+    "configuredGrantRevision": 2,
+    "statuses": [
+      "revoked",
+      "revoked"
+    ],
+    "sourceDigests": [
+      "sha256:62d3b1c0005c7ba689aa54117cfd77eb28d205d1ff674d31d12abe92b9884b8c",
+      "sha256:dfe2992929c890a7988ec622a59146594e05d628a63dcb61f59c16bffab67b4d"
+    ]
   },
   "everyRaceRefused": true,
-  "result": "PASS"
+  "result": "PASS",
+  "actualConfigRevoke": {
+    "appendObservedBeforeResponse": true,
+    "configStatusAfterDurableRetire": "retired",
+    "historicalSnapshotUseRefused": true,
+    "code": "INVOCATION_SNAPSHOT_AGENT_CONFIG_INACTIVE",
+    "requestIdempotencyKey": "ik_revzkezracez0089revzkezrac",
+    "sourceOffset": "0000000000000000_0000000000000006",
+    "historicalSnapshotBytesWereNotMutated": true,
+    "result": "PASS"
+  },
+  "historicalFirstSnapshotStableAfterRevoke": true
 }

@@ -93,7 +93,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -110,7 +110,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -127,7 +127,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -144,7 +144,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -161,7 +161,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -178,7 +178,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -195,7 +195,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -212,7 +212,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -229,7 +229,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -246,7 +246,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -263,7 +263,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -280,7 +280,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -297,7 +297,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -314,7 +314,7 @@
       "resourceId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
       "resourceType": "channel",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -331,7 +331,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -348,7 +348,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -365,7 +365,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -383,7 +383,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -401,7 +401,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -419,7 +419,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -437,7 +437,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -455,7 +455,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -473,7 +473,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -491,7 +491,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -509,7 +509,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -527,7 +527,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -545,7 +545,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -563,7 +563,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -581,7 +581,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -599,7 +599,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -617,7 +617,7 @@
       "resourceId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
       "resourceType": "channel",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -635,7 +635,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -653,7 +653,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -671,7 +671,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -688,7 +688,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -705,7 +705,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -722,7 +722,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -739,7 +739,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -756,7 +756,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -774,7 +774,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -792,7 +792,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -810,7 +810,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -828,7 +828,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -846,7 +846,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -864,7 +864,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -882,7 +882,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -900,7 +900,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -917,7 +917,7 @@
       "resourceId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
       "resourceType": "channel",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -934,7 +934,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -951,7 +951,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -968,7 +968,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -985,7 +985,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1002,7 +1002,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1019,7 +1019,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1036,7 +1036,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1053,7 +1053,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1070,7 +1070,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1087,7 +1087,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1104,7 +1104,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1121,7 +1121,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1138,7 +1138,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1155,7 +1155,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1172,7 +1172,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1189,7 +1189,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1207,7 +1207,7 @@
       "resourceId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
       "resourceType": "channel",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1224,7 +1224,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1241,7 +1241,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1258,7 +1258,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1275,7 +1275,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1292,7 +1292,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1309,7 +1309,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1326,7 +1326,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1343,7 +1343,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1360,7 +1360,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1377,7 +1377,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1394,7 +1394,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1411,7 +1411,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1428,7 +1428,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1445,7 +1445,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1462,7 +1462,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1479,7 +1479,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1496,7 +1496,7 @@
       "resourceId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
       "resourceType": "channel",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1514,7 +1514,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1532,7 +1532,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1550,7 +1550,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1567,7 +1567,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1584,7 +1584,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1601,7 +1601,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1618,7 +1618,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1635,7 +1635,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1652,7 +1652,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1669,7 +1669,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1686,7 +1686,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1703,7 +1703,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1720,7 +1720,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1737,7 +1737,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1754,7 +1754,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1771,7 +1771,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1788,7 +1788,7 @@
       "resourceId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
       "resourceType": "channel",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1805,7 +1805,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1822,7 +1822,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1839,7 +1839,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1856,7 +1856,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1873,7 +1873,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1890,7 +1890,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1907,7 +1907,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1924,7 +1924,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1941,7 +1941,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1958,7 +1958,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1975,7 +1975,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -1992,7 +1992,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2009,7 +2009,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2026,7 +2026,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2043,7 +2043,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2060,7 +2060,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2077,7 +2077,7 @@
       "resourceId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
       "resourceType": "channel",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2094,7 +2094,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2111,7 +2111,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2128,7 +2128,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2145,7 +2145,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2162,7 +2162,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2179,7 +2179,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2196,7 +2196,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2213,7 +2213,7 @@
       "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "resourceType": "workspace",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2230,7 +2230,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2247,7 +2247,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2264,7 +2264,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2281,7 +2281,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2298,7 +2298,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2315,7 +2315,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2332,7 +2332,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2349,7 +2349,7 @@
       "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "resourceType": "agent",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2366,7 +2366,7 @@
       "resourceId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
       "resourceType": "channel",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2383,7 +2383,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2400,7 +2400,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2417,7 +2417,7 @@
       "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
       "resourceType": "connection",
       "source": {
-        "directoryDigest": "sha256:77e021a6e4a2111e6038b63c2ea4957b4c1375975a883810d8a55d64ea42e4cf",
+        "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
         "directoryHead": "0000000000000000_0000000000000042"
       }
     },
@@ -2817,168 +2817,168 @@
       "actorClass": "agent-owner",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
       "operation": "connection.reference.bind",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "agent-owner",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
       "operation": "connection.grant.manage",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "agent-owner",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
       "operation": "connection.credential.read",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "ordinary-member",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
       "operation": "connection.reference.bind",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "ordinary-member",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
       "operation": "connection.grant.manage",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "ordinary-member",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
       "operation": "connection.credential.read",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "agent-principal",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "operation": "connection.reference.bind",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "agent-principal",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "operation": "connection.grant.manage",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "agent-principal",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "operation": "connection.credential.read",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "connection-manager",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
       "operation": "connection.reference.bind",
+      "status": 200,
       "allowed": true,
-      "errorCode": null,
       "refusedUnauthorized": false
     },
     {
       "actorClass": "connection-manager",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
       "operation": "connection.grant.manage",
+      "status": 200,
       "allowed": true,
-      "errorCode": null,
       "refusedUnauthorized": false
     },
     {
       "actorClass": "connection-manager",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
       "operation": "connection.credential.read",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "channel-manager",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
       "operation": "connection.reference.bind",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "channel-manager",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
       "operation": "connection.grant.manage",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "channel-manager",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
       "operation": "connection.credential.read",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "service-principal",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
       "operation": "connection.reference.bind",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "service-principal",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
       "operation": "connection.grant.manage",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "service-principal",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
       "operation": "connection.credential.read",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "mismatched-workspace-admin",
       "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
       "operation": "connection.reference.bind",
+      "status": 404,
       "allowed": false,
-      "errorCode": "WORKSPACE_ACCESS_DENIED",
       "refusedUnauthorized": true
     },
     {
       "actorClass": "mismatched-workspace-admin",
       "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
       "operation": "connection.grant.manage",
+      "status": 404,
       "allowed": false,
-      "errorCode": "WORKSPACE_ACCESS_DENIED",
       "refusedUnauthorized": true
     },
     {
       "actorClass": "mismatched-workspace-admin",
       "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
       "operation": "connection.credential.read",
+      "status": 404,
       "allowed": false,
-      "errorCode": "WORKSPACE_ACCESS_DENIED",
       "refusedUnauthorized": true
     }
   ],
@@ -2988,168 +2988,168 @@
       "actorClass": "agent-owner",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
       "operation": "connection.reference.bind",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "agent-owner",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
       "operation": "connection.grant.manage",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "agent-owner",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
       "operation": "connection.credential.read",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "ordinary-member",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
       "operation": "connection.reference.bind",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "ordinary-member",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
       "operation": "connection.grant.manage",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "ordinary-member",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
       "operation": "connection.credential.read",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "agent-principal",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "operation": "connection.reference.bind",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "agent-principal",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "operation": "connection.grant.manage",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "agent-principal",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
       "operation": "connection.credential.read",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "connection-manager",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
       "operation": "connection.reference.bind",
+      "status": 200,
       "allowed": true,
-      "errorCode": null,
       "refusedUnauthorized": false
     },
     {
       "actorClass": "connection-manager",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
       "operation": "connection.grant.manage",
+      "status": 200,
       "allowed": true,
-      "errorCode": null,
       "refusedUnauthorized": false
     },
     {
       "actorClass": "connection-manager",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
       "operation": "connection.credential.read",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "channel-manager",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
       "operation": "connection.reference.bind",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "channel-manager",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
       "operation": "connection.grant.manage",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "channel-manager",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
       "operation": "connection.credential.read",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "service-principal",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
       "operation": "connection.reference.bind",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "service-principal",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
       "operation": "connection.grant.manage",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "service-principal",
       "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
       "operation": "connection.credential.read",
+      "status": 404,
       "allowed": false,
-      "errorCode": null,
       "refusedUnauthorized": true
     },
     {
       "actorClass": "mismatched-workspace-admin",
       "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
       "operation": "connection.reference.bind",
+      "status": 404,
       "allowed": false,
-      "errorCode": "WORKSPACE_ACCESS_DENIED",
       "refusedUnauthorized": true
     },
     {
       "actorClass": "mismatched-workspace-admin",
       "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
       "operation": "connection.grant.manage",
+      "status": 404,
       "allowed": false,
-      "errorCode": "WORKSPACE_ACCESS_DENIED",
       "refusedUnauthorized": true
     },
     {
       "actorClass": "mismatched-workspace-admin",
       "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
       "operation": "connection.credential.read",
+      "status": 404,
       "allowed": false,
-      "errorCode": "WORKSPACE_ACCESS_DENIED",
       "refusedUnauthorized": true
     }
   ],
@@ -3165,8 +3165,14 @@
       "status": 404,
       "sourceHeadsUnchanged": true,
       "existenceLeak": false
+    },
+    {
+      "name": "sibling connection",
+      "status": 404,
+      "sourceHeadsUnchanged": true,
+      "existenceLeak": false
     }
   ],
-  "refusedRows": 49,
+  "refusedRows": 68,
   "result": "PASS"
 }

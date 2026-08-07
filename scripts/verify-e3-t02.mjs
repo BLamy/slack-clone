@@ -11,7 +11,14 @@ import {
 import path from "node:path";
 
 import {
+  agentConfigDigest,
+  agentConfigRevisionId,
+  checkInvocationSnapshotUse,
+  createInvocationSnapshot,
+  createProviderRegistry,
   deriveMentionInvocationId,
+  INVOCATION_SNAPSHOT_ERROR_CODES,
+  membershipIdFor,
   validateMentionFacts,
 } from "@stream-slack/protocol";
 import { replayRecords } from "@stream-slack/reducers";
@@ -37,8 +44,22 @@ const CHANNEL_STREAM = streamNames.channel(WORKSPACE_ID, CHANNEL_ID);
 const INVOCATION_STREAM = streamNames.workspaceInvocations(WORKSPACE_ID);
 const AUDIT_STREAM = streamNames.workspaceAudit(WORKSPACE_ID);
 const ALPHABET = "abcdefghjkmnpqrstvwxyz";
-
+const CANARY = "Bearer e3-t02-verifier-canary-should-not-persist";
 const root = path.resolve(import.meta.dirname, "..");
+const CONFIG = JSON.parse(
+  await readFile(
+    path.join(
+      root,
+      ".eforest/tasks/epic-2-the-roster/E2-T01-versioned-agent-config-schema/fixtures/valid/agent-config.v1.json",
+    ),
+    "utf8",
+  ),
+);
+const PROVIDER_CONFIGURATIONS = {
+  harness: { protocol: "scripted-harness-v1" },
+  sandbox: { protocol: "scripted-sandbox-v1" },
+};
+
 const taskDirectory = path.join(
   root,
   ".eforest/tasks/epic-3-the-dispatcher/E3-T02-mention-reconciler",
@@ -87,6 +108,7 @@ await mkdir(evidenceDirectory, { recursive: true });
 const race = await verifyDuplicateRace();
 const crashes = await verifyCrashSchedules();
 const outcomes = await verifyNonRunnableOutcomes();
+const resolutionRaces = await verifyResolutionRaces();
 const attacks = await verifySourceAndCheckpointAttacks();
 const replay = await verifyReplayDigests(race);
 const sensitivity =
@@ -160,6 +182,20 @@ const invocationManifest = {
   stream: INVOCATION_STREAM,
   streamDigest: race.invocations.streamDigest,
 };
+const snapshotManifest = {
+  records: [
+    {
+      agentId: race.snapshot.agentId,
+      configSource: race.snapshot.sourceManifest.config,
+      context: race.snapshot.context,
+      membership: race.snapshot.membership,
+      snapshotDigest: race.snapshot.snapshotDigest,
+      sourceManifest: race.snapshot.sourceManifest,
+      workspaceId: race.snapshot.workspaceId,
+    },
+  ],
+  result: "PASS",
+};
 const summary = {
   attacks,
   canaryScan: null,
@@ -169,6 +205,7 @@ const summary = {
   implementationCommit,
   implementationTreeCleanAtStart: promoteEvidence,
   nonRunnableOutcomes: outcomes,
+  resolutionRaces,
   replayEvidence: replay,
   replayUploadAttempted: false,
   result: "PASS",
@@ -191,11 +228,19 @@ await writeJson(
   invocationManifest,
 );
 await writeJson(
+  path.join(evidenceDirectory, "snapshot-manifest.json"),
+  snapshotManifest,
+);
+await writeJson(
   path.join(evidenceDirectory, "duplicate-race.json"),
   race.report,
 );
 await writeJson(path.join(evidenceDirectory, "crash-schedules.json"), crashes);
 await writeJson(path.join(evidenceDirectory, "outcomes.json"), outcomes);
+await writeJson(
+  path.join(evidenceDirectory, "resolution-races.json"),
+  resolutionRaces,
+);
 await writeJson(path.join(evidenceDirectory, "source-attacks.json"), attacks);
 await writeJson(path.join(evidenceDirectory, "replay-digests.json"), replay);
 await writeJson(path.join(evidenceDirectory, "sensitivity.json"), sensitivity);
@@ -301,6 +346,7 @@ async function verifyDuplicateRace() {
       source: source.reference,
     },
     source: await store.read(CHANNEL_STREAM),
+    snapshot,
   };
 }
 
@@ -369,55 +415,52 @@ async function verifyNonRunnableOutcomes() {
   const store = createMemoryStore();
   const targets = [
     {
-      code: MENTION_RECONCILER_ERROR_CODES.TARGET_NOT_AGENT,
       kind: "human",
       label: "human",
       letter: "f",
+      expectedCode: MENTION_RECONCILER_ERROR_CODES.TARGET_NOT_AGENT,
     },
     {
-      code: MENTION_RECONCILER_ERROR_CODES.TARGET_KIND,
       label: "service",
       letter: "g",
+      expectedCode: INVOCATION_SNAPSHOT_ERROR_CODES.MEMBERSHIP_INACTIVE,
+      state: { principalKind: "service" },
     },
     {
-      code: "INVOCATION_SNAPSHOT_AGENT_CONFIG_INACTIVE",
       label: "disabled",
       letter: "h",
+      expectedCode: INVOCATION_SNAPSHOT_ERROR_CODES.AGENT_CONFIG_INACTIVE,
+      state: { configStatus: "disabled" },
     },
     {
-      code: "INVOCATION_SNAPSHOT_MEMBERSHIP_INACTIVE",
       label: "suspended",
       letter: "j",
+      expectedCode: INVOCATION_SNAPSHOT_ERROR_CODES.MEMBERSHIP_INACTIVE,
+      state: { membershipStatus: "suspended" },
     },
     {
-      code: MENTION_RECONCILER_ERROR_CODES.TARGET_REMOVED,
       label: "removed",
       letter: "k",
+      expectedCode: INVOCATION_SNAPSHOT_ERROR_CODES.MEMBERSHIP_INACTIVE,
+      state: { membershipStatus: "removed" },
     },
     {
-      code: MENTION_RECONCILER_ERROR_CODES.TARGET_NOT_MEMBER,
       label: "non-member",
       letter: "m",
+      expectedCode: INVOCATION_SNAPSHOT_ERROR_CODES.MEMBERSHIP_INACTIVE,
+      state: { membershipStatus: "non-member" },
     },
     {
-      code: "INVOCATION_SNAPSHOT_AGENT_CONFIG_INVALID",
       label: "invalid-config",
       letter: "n",
+      expectedCode: INVOCATION_SNAPSHOT_ERROR_CODES.AGENT_CONFIG_INVALID,
+      state: { invalidConfig: true },
     },
     {
-      code: "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED",
       label: "unavailable-provider",
       letter: "p",
-    },
-    {
-      code: "INVOCATION_SNAPSHOT_STALE_CONFIG",
-      label: "stale-config",
-      letter: "q",
-    },
-    {
-      code: "INVOCATION_SNAPSHOT_STALE_MEMBERSHIP",
-      label: "stale-membership",
-      letter: "r",
+      expectedCode: INVOCATION_SNAPSHOT_ERROR_CODES.PROVIDER_RESOLUTION_REFUSED,
+      state: { providerUnavailable: true },
     },
   ];
   const mappings = new Map();
@@ -448,13 +491,29 @@ async function verifyNonRunnableOutcomes() {
   });
   const reconciler = createReconciler({
     door,
-    resolveTarget: async ({ agentId }) => ({
-      code:
-        mappings.get(agentId)?.code ??
-        MENTION_RECONCILER_ERROR_CODES.SNAPSHOT_REFUSED,
-      hiddenConfig: "Bearer e3-t02-verifier-canary-should-not-persist",
-      status: "non-runnable",
-    }),
+    resolveTarget: async ({ agentId, sourceTrigger }) => {
+      const target = mappings.get(agentId);
+      assert.ok(target, `missing lifecycle fixture for ${agentId}`);
+      try {
+        return {
+          snapshot: createInvocationSnapshot(
+            snapshotInputFor({
+              agentId,
+              canary: CANARY,
+              sourceTrigger,
+              state: target.state,
+            }),
+          ),
+          status: "eligible",
+        };
+      } catch (error) {
+        assert.equal(error.code, target.expectedCode, target.label);
+        return {
+          code: error.code,
+          status: "non-runnable",
+        };
+      }
+    },
     store,
   });
   await reconciler.reconcile({ limit: 100 });
@@ -464,7 +523,7 @@ async function verifyNonRunnableOutcomes() {
   assert.equal(audits.records.length, targets.length);
   const codes = audits.records.map((record) => record.event.data.detail.code);
   for (const target of targets)
-    assert.ok(codes.includes(target.code), target.label);
+    assert.ok(codes.includes(target.expectedCode), target.label);
   assert.equal(
     JSON.stringify(audits.records).includes("verifier-canary"),
     false,
@@ -475,8 +534,99 @@ async function verifyNonRunnableOutcomes() {
     codes: [...new Set(codes)].sort(),
     invocationCount: invocations.records.length,
     noHiddenConfigurationLeak: true,
+    stateDriven: true,
     result: "PASS",
   };
+}
+
+async function verifyResolutionRaces() {
+  const cases = [
+    {
+      label: "config-change-during-resolution",
+      changedState: { configChanged: true },
+      expectedCode: INVOCATION_SNAPSHOT_ERROR_CODES.STALE_CONFIG,
+    },
+    {
+      label: "membership-change-during-resolution",
+      changedState: { membershipChanged: true },
+      expectedCode: INVOCATION_SNAPSHOT_ERROR_CODES.STALE_MEMBERSHIP,
+    },
+  ];
+  const rows = [];
+  for (const testCase of cases) {
+    const store = createMemoryStore();
+    seedSource(store, {
+      mentions: [agentMention(AGENT_PRINCIPAL_ID, "helper")],
+      text: "@helper",
+    });
+    let attempts = 0;
+    const door = createDispatchDoor({
+      producerId: `e3-t02-resolution-${testCase.label}`,
+      streamStore: store,
+    });
+    const reconciler = createReconciler({
+      door,
+      resolveTarget: async ({ agentId, sourceTrigger }) => {
+        attempts += 1;
+        if (attempts === 1) {
+          const historical = createInvocationSnapshot(
+            snapshotInputFor({ agentId, sourceTrigger }),
+          );
+          const current = checkInvocationSnapshotUse({
+            ...snapshotInputFor({
+              agentId,
+              sourceTrigger,
+              state: testCase.changedState,
+            }),
+            snapshot: historical,
+          });
+          assert.equal(current.allowed, false, testCase.label);
+          assert.equal(current.code, testCase.expectedCode, testCase.label);
+          return { code: current.code, status: "retry" };
+        }
+        return {
+          snapshot: createInvocationSnapshot(
+            snapshotInputFor({ agentId, sourceTrigger }),
+          ),
+          status: "eligible",
+        };
+      },
+      store,
+    });
+    const first = await reconciler.reconcile();
+    assert.equal(first.retry.code, testCase.expectedCode, testCase.label);
+    assert.equal(first.processed[0].status, "retry", testCase.label);
+    const beforeRetry = await store.read(INVOCATION_STREAM);
+    const beforeRetryCheckpoints = await store.read(
+      reconciler.checkpointStream,
+    );
+    assert.equal(beforeRetry.records.length, 0, testCase.label);
+    assert.equal(beforeRetryCheckpoints.records.length, 0, testCase.label);
+    const second = await reconciler.reconcile();
+    const invocations = await store.read(INVOCATION_STREAM);
+    const checkpoints = await store.read(reconciler.checkpointStream);
+    assert.equal(second.processed[0].status, "reconciled", testCase.label);
+    assert.equal(invocations.records.length, 1, testCase.label);
+    assert.equal(checkpoints.records.length, 1, testCase.label);
+    door.close();
+    rows.push({
+      attempts,
+      checkpointCountAfterRetry: checkpoints.records.length,
+      firstAttempt: {
+        code: first.retry.code,
+        checkpointCount: beforeRetryCheckpoints.records.length,
+        invocationCount: beforeRetry.records.length,
+        status: first.processed[0].status,
+      },
+      label: testCase.label,
+      secondAttempt: {
+        checkpointCount: checkpoints.records.length,
+        invocationCount: invocations.records.length,
+        status: second.processed[0].status,
+      },
+    });
+  }
+  return { result: "PASS", rows };
 }
 
 async function verifySourceAndCheckpointAttacks() {
@@ -772,28 +922,138 @@ function seedSource(store, { mentions, text }) {
 }
 
 function snapshotFor({ agentId, sourceTrigger }) {
-  const configStream = streamNames.agentConfig(WORKSPACE_ID, agentId);
-  return {
-    config: {
-      agentConfig: {
-        budgets: {
-          maxCostUsdCents: 100,
-          maxInputTokens: 1000,
-          maxOutputTokens: 1000,
-          maxTotalTokens: 2000,
-          timeoutSeconds: 60,
+  return createInvocationSnapshot(snapshotInputFor({ agentId, sourceTrigger }));
+}
+
+function snapshotInputFor({ agentId, canary = null, state = {} }) {
+  const config = structuredClone(CONFIG);
+  if (state.configChanged) {
+    config.instructions.task = "Use the updated source-fenced configuration.";
+  }
+  if (state.invalidConfig) {
+    config.harness.requiredCapabilities = "not-an-array";
+  }
+  const revision = state.configChanged ? 2 : 1;
+  const configDigest = state.invalidConfig
+    ? canonicalSha256(config)
+    : agentConfigDigest(config);
+  const configSourceOffset = state.configChanged ? offset(3) : offset(2);
+  const configSource = {
+    offset: configSourceOffset,
+    stateDigest: state.configChanged ? digest("c") : digest("b"),
+    stream: streamNames.agentConfig(WORKSPACE_ID, agentId),
+  };
+  const directorySource = {
+    offset: offset(4),
+    stateDigest: digest("d"),
+    stream: streamNames.workspaceDirectory(WORKSPACE_ID),
+  };
+  const revisionId = agentConfigRevisionId({
+    agentId,
+    configDigest,
+    revision,
+  });
+  const principalId = `pr_${agentId.slice(3)}`;
+  const configState = {
+    activeConfig: config,
+    activeRevisionId: revisionId,
+    revisions: [
+      {
+        agentId,
+        config,
+        configDigest,
+        revision,
+        revisionId,
+        sourceOffset: configSourceOffset,
+        workspaceId: WORKSPACE_ID,
+      },
+    ],
+    runnable: true,
+    status: "active",
+  };
+  if (state.configStatus) {
+    configState.runnable = false;
+    configState.status = state.configStatus;
+  }
+  if (canary) configState.resolverCanary = canary;
+
+  const principal = {
+    kind: state.principalKind ?? "agent",
+    principalId,
+    profileRevision: 2,
+    status: "active",
+  };
+  const membershipPrincipalId =
+    state.membershipStatus === "non-member" ? principalFor("z") : principalId;
+  const workspaceMembership = {
+    membershipId: membershipIdFor(WORKSPACE_ID, membershipPrincipalId),
+    principalId: membershipPrincipalId,
+    revision: state.membershipChanged ? 8 : 7,
+    role: "agent",
+    status:
+      state.membershipStatus && state.membershipStatus !== "non-member"
+        ? state.membershipStatus
+        : "active",
+    workspaceId: WORKSPACE_ID,
+  };
+  const providerRegistry = state.providerUnavailable
+    ? createProviderRegistry({ now: 0 }).updateStatus({
+        health: "unhealthy",
+        selection: {
+          kind: "harness",
+          providerId: "scripted",
+          providerVersion: "1.0.0",
         },
-      },
+      })
+    : createProviderRegistry({ now: 0 });
+  const now = 100;
+  const connectionGrants = config.connectionGrants.refs.map((ref, index) => ({
+    ...ref,
+    agentId,
+    expiresAt: now + 400,
+    sourceOffset: offset(50 + index),
+    sourceStream: `connection:${ref.connectionId}/config`,
+    stateDigest: digest(String(6 + index)),
+    status: "active",
+    workspaceId: WORKSPACE_ID,
+  }));
+  return {
+    agentId,
+    budgetUsage: null,
+    channelMembership: {
+      channelId: CHANNEL_ID,
+      principalId,
+      revision: 4,
+      status: "active",
     },
-    hiddenConfig: "Bearer e3-t02-verifier-canary-should-not-persist",
-    snapshotDigest: canonicalSha256({ agentId, sourceTrigger, revision: 1 }),
-    sourceManifest: {
-      config: {
-        offset: offset(2),
-        stateDigest: digest("b"),
-        stream: configStream,
-      },
+    configState,
+    connectionGrants,
+    context: {
+      channelId: CHANNEL_ID,
+      scope: "current-channel",
+      threadId: null,
     },
+    now,
+    principal,
+    providerConfigurations: structuredClone(PROVIDER_CONFIGURATIONS),
+    providerRegistry,
+    sourceHeads: {
+      config: configSource,
+      directory: directorySource,
+    },
+    workspaceInputManifest: {
+      files: [
+        { bytes: 10, digest: digest("e"), path: "README.md" },
+        { bytes: 20, digest: digest("f"), path: "docs/index.md" },
+      ],
+      maxBytes: config.workspaceInputs.maxBytes,
+      paths: [...config.workspaceInputs.paths],
+      source: config.workspaceInputs.source,
+      sourceOffset: directorySource.offset,
+      sourceStream: directorySource.stream,
+      stateDigest: directorySource.stateDigest,
+    },
+    workspaceMembership,
   };
 }
 

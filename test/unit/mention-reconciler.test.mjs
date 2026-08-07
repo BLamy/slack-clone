@@ -1,8 +1,15 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
+  agentConfigDigest,
+  agentConfigRevisionId,
+  createInvocationSnapshot,
+  createProviderRegistry,
   deriveMentionInvocationId,
+  INVOCATION_SNAPSHOT_ERROR_CODES,
+  membershipIdFor,
   validateMentionFacts,
 } from "@stream-slack/protocol";
 import { canonicalSha256 } from "../../src/ledger/canonical-json.mjs";
@@ -26,6 +33,16 @@ const AGENT_ID = "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd";
 const HUMAN_PRINCIPAL_ID =
   "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee";
 const CONFIG_STREAM = `agent:${AGENT_ID}/config`;
+const CONFIG = JSON.parse(
+  await readFile(
+    ".eforest/tasks/epic-2-the-roster/E2-T01-versioned-agent-config-schema/fixtures/valid/agent-config.v1.json",
+    "utf8",
+  ),
+);
+const PROVIDER_CONFIGURATIONS = {
+  harness: { protocol: "scripted-harness-v1" },
+  sandbox: { protocol: "scripted-sandbox-v1" },
+};
 
 test("mention reconciler binds one deterministic invocation and checkpoint", async () => {
   const store = createMemoryStore({ appendDelayMs: 1 });
@@ -132,6 +149,61 @@ test("replaying after every crash boundary does not duplicate the logical effect
   }
 });
 
+test("retryable snapshot resolution does not advance the source checkpoint", async () => {
+  const store = createMemoryStore();
+  const source = seedMention(store, {
+    mentions: [agentMention()],
+    text: "@helper",
+  });
+  const snapshot = snapshotFor(source);
+  const door = createDispatchDoor({
+    producerId: "retry-resolution-unit-door",
+    streamStore: store,
+  });
+  let attempts = 0;
+  const reconciler = createReconciler({
+    door,
+    resolveTarget: async () => {
+      attempts += 1;
+      if (attempts === 1) {
+        return {
+          code: INVOCATION_SNAPSHOT_ERROR_CODES.STALE_CONFIG,
+          status: "retry",
+        };
+      }
+      return { snapshot, status: "eligible" };
+    },
+    store,
+  });
+
+  const first = await reconciler.reconcile();
+  assert.equal(first.retry.code, INVOCATION_SNAPSHOT_ERROR_CODES.STALE_CONFIG);
+  assert.equal(first.processed[0].status, "retry");
+  assert.equal(
+    (await store.read(streamNames.workspaceInvocations(WORKSPACE_ID))).records
+      .length,
+    0,
+  );
+  assert.equal(
+    (await store.read(reconciler.checkpointStream)).records.length,
+    0,
+  );
+
+  const second = await reconciler.reconcile();
+  assert.equal(second.processed[0].status, "reconciled");
+  assert.equal(
+    (await store.read(streamNames.workspaceInvocations(WORKSPACE_ID))).records
+      .length,
+    1,
+  );
+  assert.equal(
+    (await store.read(reconciler.checkpointStream)).records.length,
+    1,
+  );
+  assert.equal(attempts, 2);
+  door.close();
+});
+
 test("non-runnable targets become typed audit outcomes without invocation or config leakage", async () => {
   const store = createMemoryStore();
   seedMention(store, {
@@ -145,7 +217,7 @@ test("non-runnable targets become typed audit outcomes without invocation or con
   await createReconciler({
     door,
     resolveTarget: async () => ({
-      code: MENTION_RECONCILER_ERROR_CODES.TARGET_NOT_MEMBER,
+      code: INVOCATION_SNAPSHOT_ERROR_CODES.MEMBERSHIP_INACTIVE,
       status: "non-runnable",
       hiddenConfig: "must-not-persist",
     }),
@@ -165,7 +237,7 @@ test("non-runnable targets become typed audit outcomes without invocation or con
     audits.records.map((record) => record.event.data.detail.code).sort(),
     [
       MENTION_RECONCILER_ERROR_CODES.TARGET_NOT_AGENT,
-      MENTION_RECONCILER_ERROR_CODES.TARGET_NOT_MEMBER,
+      INVOCATION_SNAPSHOT_ERROR_CODES.MEMBERSHIP_INACTIVE,
     ].sort(),
   );
 });
@@ -294,29 +366,97 @@ function seedMention(store, { digestOverride = null, mentions, text }) {
   return { event, reference };
 }
 
-function snapshotFor(source) {
-  return {
+function snapshotFor() {
+  const configDigest = agentConfigDigest(CONFIG);
+  const revisionId = agentConfigRevisionId({
+    agentId: AGENT_ID,
+    configDigest,
+    revision: 1,
+  });
+  const sourceHeads = {
     config: {
-      agentConfig: {
-        budgets: {
-          maxCostUsdCents: 100,
-          maxInputTokens: 1000,
-          maxOutputTokens: 1000,
-          maxTotalTokens: 2000,
-          timeoutSeconds: 60,
-        },
-      },
+      offset: offset(2),
+      stateDigest: digest("b"),
+      stream: CONFIG_STREAM,
     },
-    snapshotDigest: digest("c"),
-    sourceManifest: {
-      config: {
-        offset: offset(2),
-        stateDigest: digest("b"),
-        stream: CONFIG_STREAM,
-      },
+    directory: {
+      offset: offset(3),
+      stateDigest: digest("d"),
+      stream: `workspace:${WORKSPACE_ID}/directory`,
     },
-    source,
   };
+  return createInvocationSnapshot({
+    agentId: AGENT_ID,
+    budgetUsage: null,
+    channelMembership: {
+      channelId: CHANNEL_ID,
+      principalId: AGENT_PRINCIPAL_ID,
+      revision: 4,
+      status: "active",
+    },
+    configState: {
+      activeConfig: CONFIG,
+      activeRevisionId: revisionId,
+      revisions: [
+        {
+          agentId: AGENT_ID,
+          config: CONFIG,
+          configDigest,
+          revision: 1,
+          revisionId,
+          sourceOffset: sourceHeads.config.offset,
+          workspaceId: WORKSPACE_ID,
+        },
+      ],
+      runnable: true,
+      status: "active",
+    },
+    connectionGrants: CONFIG.connectionGrants.refs.map((ref, index) => ({
+      ...ref,
+      agentId: AGENT_ID,
+      expiresAt: 500,
+      sourceOffset: offset(50 + index),
+      sourceStream: `connection:${ref.connectionId}/config`,
+      stateDigest: digest(String(6 + index)),
+      status: "active",
+      workspaceId: WORKSPACE_ID,
+    })),
+    context: {
+      channelId: CHANNEL_ID,
+      scope: "current-channel",
+      threadId: null,
+    },
+    now: 100,
+    principal: {
+      kind: "agent",
+      principalId: AGENT_PRINCIPAL_ID,
+      profileRevision: 2,
+      status: "active",
+    },
+    providerConfigurations: PROVIDER_CONFIGURATIONS,
+    providerRegistry: createProviderRegistry({ now: 0 }),
+    sourceHeads,
+    workspaceInputManifest: {
+      files: [
+        { bytes: 10, digest: digest("e"), path: "README.md" },
+        { bytes: 20, digest: digest("f"), path: "docs/index.md" },
+      ],
+      maxBytes: CONFIG.workspaceInputs.maxBytes,
+      paths: [...CONFIG.workspaceInputs.paths],
+      source: CONFIG.workspaceInputs.source,
+      sourceOffset: sourceHeads.directory.offset,
+      sourceStream: sourceHeads.directory.stream,
+      stateDigest: sourceHeads.directory.stateDigest,
+    },
+    workspaceMembership: {
+      membershipId: membershipIdFor(WORKSPACE_ID, AGENT_PRINCIPAL_ID),
+      principalId: AGENT_PRINCIPAL_ID,
+      revision: 7,
+      role: "agent",
+      status: "active",
+      workspaceId: WORKSPACE_ID,
+    },
+  });
 }
 
 function agentMention(startByte = 0) {

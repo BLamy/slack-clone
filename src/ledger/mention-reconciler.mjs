@@ -2,7 +2,9 @@ import {
   deriveInvocationCorrelationId,
   deriveMentionInvocationId,
   deriveMentionInvocationIdempotencyKey,
+  INVOCATION_SNAPSHOT_ERROR_CODES,
   policyDigest,
+  replayInvocationSnapshot,
   validateMentionFacts,
   validatePrincipalId,
   validateWorkspaceId,
@@ -29,21 +31,25 @@ const CHECKPOINT_EVENT_TYPE = "projection.checkpointed";
 const INVOCATION_EVENT_TYPE = "workspace.invocation.requested";
 const AUDIT_EVENT_TYPE = "workspace.audit.recorded";
 const DEFAULT_MAX_RETRIES = 8;
+const RETRYABLE_RESOLUTION_CODES = new Set([
+  INVOCATION_SNAPSHOT_ERROR_CODES.STALE_CONFIG,
+  INVOCATION_SNAPSHOT_ERROR_CODES.STALE_CONTEXT,
+  INVOCATION_SNAPSHOT_ERROR_CODES.STALE_GRANT,
+  INVOCATION_SNAPSHOT_ERROR_CODES.STALE_MEMBERSHIP,
+  INVOCATION_SNAPSHOT_ERROR_CODES.STALE_PROVIDER,
+  INVOCATION_SNAPSHOT_ERROR_CODES.STALE_SOURCE,
+  INVOCATION_SNAPSHOT_ERROR_CODES.STALE_WORKSPACE_INPUT,
+]);
 
 export const MENTION_RECONCILER_ERROR_CODES = Object.freeze({
   CHECKPOINT_CORRUPT: "MENTION_RECONCILER_CHECKPOINT_CORRUPT",
   CHECKPOINT_SCOPE: "MENTION_RECONCILER_CHECKPOINT_SCOPE",
   CONFIG_INVALID: "MENTION_RECONCILER_CONFIG_INVALID",
   INVOCATION_BINDING: "MENTION_RECONCILER_INVOCATION_BINDING",
-  PROVIDER_UNAVAILABLE: "MENTION_RECONCILER_PROVIDER_UNAVAILABLE",
   SNAPSHOT_REFUSED: "MENTION_RECONCILER_SNAPSHOT_REFUSED",
   SOURCE_INVALID: "MENTION_RECONCILER_SOURCE_INVALID",
   SOURCE_SCOPE: "MENTION_RECONCILER_SOURCE_SCOPE",
-  TARGET_DISABLED: "MENTION_RECONCILER_TARGET_DISABLED",
-  TARGET_KIND: "MENTION_RECONCILER_TARGET_KIND",
   TARGET_NOT_AGENT: "MENTION_RECONCILER_TARGET_NOT_AGENT",
-  TARGET_NOT_MEMBER: "MENTION_RECONCILER_TARGET_NOT_MEMBER",
-  TARGET_REMOVED: "MENTION_RECONCILER_TARGET_REMOVED",
 });
 
 export class MentionReconcilerError extends Error {
@@ -294,13 +300,20 @@ export function createMentionReconciler({
       if (
         !result ||
         result.status === "non-runnable" ||
-        result.eligible === false ||
-        result.status === "retry"
+        result.eligible === false
       ) {
         return {
           status: "non-runnable",
           code: normalizeOutcomeCode(
             result?.code ?? MENTION_RECONCILER_ERROR_CODES.SNAPSHOT_REFUSED,
+          ),
+        };
+      }
+      if (result.status === "retry") {
+        return {
+          status: "retry",
+          code: normalizeOutcomeCode(
+            result.code ?? MENTION_RECONCILER_ERROR_CODES.SNAPSHOT_REFUSED,
           ),
         };
       }
@@ -311,8 +324,23 @@ export function createMentionReconciler({
           code: MENTION_RECONCILER_ERROR_CODES.CONFIG_INVALID,
         };
       }
-      return { snapshot, status: "eligible" };
+      return {
+        snapshot: validateResolvedSnapshot(snapshot, {
+          agentId,
+          channelId,
+          workspaceId,
+          sourceTrigger,
+        }),
+        status: "eligible",
+      };
     } catch (error) {
+      if (isRetryableResolutionError(error)) {
+        return {
+          code: normalizeOutcomeCode(error.code),
+          status: "retry",
+        };
+      }
+      if (!error?.code) throw error;
       return {
         status: "non-runnable",
         code: normalizeOutcomeCode(error?.code),
@@ -390,6 +418,23 @@ export function createMentionReconciler({
         sourceTrigger,
       });
       if (target.status !== "eligible") {
+        if (target.status === "retry") {
+          await onBoundary("snapshot-retry", {
+            agentId,
+            code: target.code,
+            source: sourceTrigger,
+          });
+          return {
+            effects,
+            result: {
+              retry: { agentId, code: target.code },
+              source: sourceTrigger,
+              status: "retry",
+              targets,
+              triggerType: event.eventType,
+            },
+          };
+        }
         const outcome = {
           agentId,
           code: target.code,
@@ -681,6 +726,22 @@ export function createMentionReconciler({
         },
       });
       const result = await reconcileSourceRecord(source.next, { signal });
+      if (result.result.status === "retry") {
+        return Object.freeze({
+          checkpoint,
+          processed: [
+            ...processed,
+            {
+              ...result.result,
+              effects: result.effects,
+            },
+          ],
+          projectionId: resolvedProjectionId,
+          retry: result.result.retry,
+          sourceHead: source.sourceHead,
+          sourceStream,
+        });
+      }
       const nextCheckpoint = await appendCheckpoint({
         record: source.next,
         result,
@@ -710,6 +771,33 @@ export function createMentionReconciler({
     reconcile,
     sourceStream,
   });
+}
+
+function validateResolvedSnapshot(
+  snapshot,
+  { agentId, channelId, workspaceId },
+) {
+  const replayed = replayInvocationSnapshot(snapshot);
+  const expectedConfigStream = streamNames.agentConfig(workspaceId, agentId);
+  const expectedDirectoryStream = streamNames.workspaceDirectory(workspaceId);
+  const configSource = replayed.sourceManifest?.config;
+  const directorySource = replayed.sourceManifest?.directory;
+  if (
+    replayed.workspaceId !== workspaceId ||
+    replayed.agentId !== agentId ||
+    replayed.context?.channelId !== channelId ||
+    !configSource ||
+    configSource.stream !== expectedConfigStream ||
+    replayed.config?.sourceStateDigest !== configSource.stateDigest ||
+    !directorySource ||
+    directorySource.stream !== expectedDirectoryStream
+  ) {
+    throw new MentionReconcilerError(
+      MENTION_RECONCILER_ERROR_CODES.SNAPSHOT_REFUSED,
+      "resolved snapshot is not bound to the reconciler workspace, channel, or agent config source",
+    );
+  }
+  return replayed;
 }
 
 function createInvocationEnvelope({
@@ -931,6 +1019,12 @@ function isStaleFence(error) {
   return (
     error instanceof DispatchRefusalError &&
     error.code === DISPATCH_REFUSAL_CODES.STALE_FENCE
+  );
+}
+
+function isRetryableResolutionError(error) {
+  return (
+    error?.retryable === true || RETRYABLE_RESOLUTION_CODES.has(error?.code)
   );
 }
 

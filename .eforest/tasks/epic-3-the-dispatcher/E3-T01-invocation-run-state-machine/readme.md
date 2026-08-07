@@ -3,7 +3,7 @@ id: E3-T01
 epic: 3
 title: "Invocation and run state machine on durable streams"
 priority: 301
-status: pending
+status: in-progress
 depends_on: [E2]
 estimate: L
 capstone: false

@@ -3,7 +3,7 @@ id: E2-T08
 epic: 2
 title: "Capstone: configure, reconfigure, and revoke an agent"
 priority: 208
-status: implemented
+status: in-progress
 depends_on: [E2-T04, E2-T06, E2-T07]
 estimate: L
 capstone: true
@@ -95,3 +95,8 @@ ownership nor a historical snapshot can route around current authorization or re
 - Evidence: `evidence/e2-t08-final/verification-summary.json`, `http-transcript.json`, `cli-transcript.json`, `source-dumps.json`, `snapshot-manifests.json`, `role-matrix.json`, `roster.json`, `revocation-races.json`, `replay-composite.json`, `tamper-matrix.json`, `sensitivity.json`, `canary-scan.json`, `cold-clone-transcript.json`, and `composed-verify-transcript.json`.
 - Replay: N/A (server/CLI agent-control capstone) + mitigation: role matrix, revision/snapshot manifests, revocation race, canary scan, and composite stream replay.
 - Claim: the builder considers the critic’s proof gaps repaired and E2-T08 implemented; a second fresh critic must independently attempt to refute this replacement evidence before the task can become `verified`.
+### Critic — 2026-08-06 — second independent verification
+
+- `VERDICT: refuted` from fresh independent agent `019fd9a7-e735-7343-8aca-063b3df1f265`, which reviewed remediation commit `399d3c0fe1d914719966e408ae296b90c31e20b3`, evidence commit `a773882`, the task specification, and the promoted cold/composed evidence without editing the worktree.
+- The critic independently confirmed the fresh source-seeded replay, durable grant revocation, actual in-flight config fencing, HTTP-backed connection matrix, exact digests, canary scan, and disposable replay-integrity mutant. It found one remaining proof gap: adversarial item 3 requires retrying every mutating CLI command after a simulated lost acknowledgement, but only `create` used a client-aborted request; config-create, both activate calls, revise, and revoke were retried only after successful acknowledgement.
+- Status: `in-progress`; builder must exercise client-aborted-after-durable-append plus same-key retry for every mutating CLI operation, then obtain a fresh critic verdict.

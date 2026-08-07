@@ -1,7 +1,7 @@
 {
   "controlExitCode": 0,
-  "detectedCount": 3,
-  "mutationCount": 3,
+  "detectedCount": 4,
+  "mutationCount": 4,
   "result": "PASS",
   "results": [
     {
@@ -17,6 +17,11 @@
     {
       "detected": true,
       "label": "conversation-key-fence",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "aggregate-budget-accumulator",
       "verifierExitCode": 1
     }
   ]

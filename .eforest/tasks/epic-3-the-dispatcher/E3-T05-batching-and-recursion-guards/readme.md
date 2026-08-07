@@ -66,9 +66,9 @@ Cycles are detected from durable causation chains, not process-local sets.
 
 ## Verification log
 
-### Builder repair — 2026-08-07 — commit `573c21329dc2fb80d96c2219309d9084c2276457`
+### Builder repair — 2026-08-07 — commit `dfcbd102928aca4a803350b741f0c97ebe21e829`
 
-- Cold proof: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e3-t05-cold-repaired-20260807 E3_T05_IMPLEMENTATION_COMMIT=573c21329dc2fb80d96c2219309d9084c2276457 make verify-E3-T05` exited 0 from a detached clean worktree after submodule initialization, frozen install, and emulator setup.
+- Cold proof: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e3-t05-cold-final-20260807-v2 E3_T05_IMPLEMENTATION_COMMIT=dfcbd102928aca4a803350b741f0c97ebe21e829 make verify-E3-T05` exited 0 from a detached clean worktree after submodule initialization, frozen install, and emulator setup.
 - Gates: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` all passed. The promoted transcript records command output hashes and the clean checkout proof in `evidence/e3-t05-final/cold-clone-transcript.json`.
 - Evidence: `batch-manifest.json` records two deterministic batches, one provider call for three source members, and three terminal dispositions; `concurrency-keys.json`, `fairness.json`, `causation-graph.json`, `refusals.json`, `aggregate-budget.json`, and `replay-digests.json` record the queue, key, causation, typed refusal, fairness, sibling-budget, and replay claims.
 - Guard matrix: seven non-running refusals cover self-authored, quoted/code, edit, retry, agent-reply, and replay sources; delegation-required, revoked, cycle, depth, fan-out, concurrency, and aggregate-budget breaches are typed before provider execution.

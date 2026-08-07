@@ -1,4 +1,24 @@
 {
+  "attacks": [
+    {
+      "attack": "activity-summary",
+      "observedCode": "INVOCATION_RUN_SECRET_VALUE",
+      "offset": "0000000000000006_aaaaaaaaaaaaaaaa",
+      "refused": true
+    },
+    {
+      "attack": "failure-code",
+      "observedCode": "INVOCATION_RUN_SECRET_VALUE",
+      "offset": "0000000000000006_aaaaaaaaaaaaaaaa",
+      "refused": true
+    },
+    {
+      "attack": "artifact-name",
+      "observedCode": "INVOCATION_RUN_SECRET_VALUE",
+      "offset": "0000000000000012_aaaaaaaaaaaaaaaa",
+      "refused": true
+    }
+  ],
   "canaryRejected": true,
   "result": "PASS",
   "canaryPresentInPublishedEvidence": false,

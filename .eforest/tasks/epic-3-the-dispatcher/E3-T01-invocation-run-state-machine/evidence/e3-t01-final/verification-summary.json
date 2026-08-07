@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E3-T01",
-  "runId": "e3-t01-cold-remediated-20260807",
-  "implementationCommit": "803cbee0aa182857806ecf27162b12d2897dd590",
+  "runId": "e3-t01-cold-secret-fixed-20260807",
+  "implementationCommit": "cef7c4b0184832433ca1fcb00e406b23542888ff",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "replay": "Replay: N/A (server run protocol) + mitigation: lifecycle corpus, source-reference audit, secret canary scan, and per-prefix replay digests",
@@ -10,31 +10,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 3979,
+      "durationMs": 2610,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 3430,
+      "durationMs": 2714,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 7572,
+      "durationMs": 6549,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 20480,
+      "durationMs": 19392,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 674,
+      "durationMs": 480,
       "name": "build",
       "result": "PASS"
     }
@@ -123,6 +123,26 @@
     "result": "PASS"
   },
   "canaryScan": {
+    "attacks": [
+      {
+        "attack": "activity-summary",
+        "observedCode": "INVOCATION_RUN_SECRET_VALUE",
+        "offset": "0000000000000006_aaaaaaaaaaaaaaaa",
+        "refused": true
+      },
+      {
+        "attack": "failure-code",
+        "observedCode": "INVOCATION_RUN_SECRET_VALUE",
+        "offset": "0000000000000006_aaaaaaaaaaaaaaaa",
+        "refused": true
+      },
+      {
+        "attack": "artifact-name",
+        "observedCode": "INVOCATION_RUN_SECRET_VALUE",
+        "offset": "0000000000000012_aaaaaaaaaaaaaaaa",
+        "refused": true
+      }
+    ],
     "canaryRejected": true,
     "result": "PASS",
     "canaryPresentInPublishedEvidence": false,

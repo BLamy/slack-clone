@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E3-T01 is refuted on AC5: failureCode accepts a provider-token-shaped value; the queue remains blocked pending remediation and a fresh critic.",
-  "updatedAt": "2026-08-07T05:40:00Z"
+  "statusReason": "E3-T01 secret-boundary remediation is implemented and awaiting a fresh adversarial verification.",
+  "updatedAt": "2026-08-07T06:00:00Z"
 }

@@ -3,7 +3,7 @@ id: E3-T01
 epic: 3
 title: "Invocation and run state machine on durable streams"
 priority: 301
-status: in-progress
+status: implemented
 depends_on: [E2]
 estimate: L
 capstone: false
@@ -193,3 +193,13 @@ VERDICT: refuted
 - Independent fresh-ID reducer attack accepted a valid five-record lifecycle, refused `running -> queued` at `0000000000000006_bbbbbbbbbbbbbbbb` with `INVOCATION_RUN_INVALID_TRANSITION`, refused same-workspace trigger reuse with `INVOCATION_RUN_BINDING_MISMATCH`, and refused cross-workspace trigger reuse with `INVOCATION_RUN_INVALID_SOURCE`. A disposable provenance mutant replacing `assertInvocationBinding` with a no-op made `node scripts/verify-e3-t01.mjs` exit `1` at `scripts/verify-e3-t01.mjs:728` when the fresh agent-reuse attack was accepted.
 - **AC5 is refuted by a product-level secret-boundary defect.** `run.failure.recorded` validates `failureCode` through `assertToken` at `packages/protocol/src/invocation-run.mjs:377-397`; `assertToken` at `:790-798` enforces only the token grammar and never calls the defined secret matcher at `:65-75`. An independent command passed the fresh provider-token-shaped canary `sk-abcdefghijklmnop` to `validateRunRecordData("run.failure.recorded", ...)` and exited `0` with the canary accepted. The reducer then persists this field through `reduceRunFailureRecorded`; the committed canary attack only covers an activity `summary` at `scripts/verify-e3-t01.mjs:937-950`, so the promoted evidence does not detect this error-field leak.
 - Required remediation: reject secret-shaped values in all persisted token metadata (or use an explicit failure-code allowlist), add an error/artifact canary attack, and rerun the cold/promoted proof with a fresh critic. Task remains non-verified; E3-T02 stays blocked.
+
+### Builder — 2026-08-07 — secret metadata remediation and fresh cold proof
+
+- Exact remediation commit: `cef7c4b0184832433ca1fcb00e406b23542888ff`. `assertToken` now applies the same secret matcher used by other persisted text fields, so provider-token-shaped failure codes and other bounded token metadata are refused before reduction.
+- Exact plain cold command: `E3_T01_IMPLEMENTATION_COMMIT=cef7c4b0184832433ca1fcb00e406b23542888ff TEST_RUN_ID=e3-t01-plain-secret-fixed-20260807 make verify-E3-T01`. It exited 0 from a clean disposable checkout, left committed evidence unchanged, and passed all five gates, 161 unit tests, 5 Playwright tests, and build.
+- Exact promoted cold command: `PROMOTE_EVIDENCE=1 E3_T01_IMPLEMENTATION_COMMIT=cef7c4b0184832433ca1fcb00e406b23542888ff TEST_RUN_ID=e3-t01-cold-secret-fixed-20260807 make verify-E3-T01`. It exited 0 with `implementationTreeCleanAtStart: true`; the promoted evidence scan found no canary or credential pattern.
+- Secret-boundary evidence now independently attacks activity summary, failure code (`sk-abcdefghijklmnop`), and artifact name canaries. All three were refused with `INVOCATION_RUN_SECRET_VALUE` at their exact offsets. The replay final digest remains `sha256:4088e18c0f69fa8565f81b57efbbe3f270034db0cd95caf2352cea4a52cbe4eb`, with identical twice-replayed prefixes and network/query-store use false.
+- Evidence: `evidence/e3-t01-final/verification-summary.json`, `prefix-replay.json`, `invalid-offsets.json`, `binding-audit.json`, `bounded-records.json`, `terminal-races.json`, `sensitivity.json`, `canary-scan.json`, and `cold-clone-transcript.json`.
+- Replay: N/A (server run protocol) + mitigation: lifecycle corpus, source-reference audit, secret canary scan, and per-prefix replay digests.
+- Claim: the AC5 secret-boundary refutation is repaired and E3-T01 is implemented; a new fresh critic must independently attempt to refute the exact remediation diff and promoted evidence before this task can become `verified`.

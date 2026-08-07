@@ -3,7 +3,7 @@ id: E3-T01
 epic: 3
 title: "Invocation and run state machine on durable streams"
 priority: 301
-status: implemented
+status: in-progress
 depends_on: [E2]
 estimate: L
 capstone: false
@@ -183,3 +183,13 @@ an independent critic can execute `make verify-E3-T01`.
 - Evidence: `evidence/e3-t01-final/verification-summary.json`, `prefix-replay.json`, `invalid-offsets.json`, `binding-audit.json`, `bounded-records.json`, `terminal-races.json`, `sensitivity.json`, `canary-scan.json`, and `cold-clone-transcript.json`.
 - Replay: N/A (server run protocol) + mitigation: lifecycle corpus, source-reference audit, secret canary scan, and per-prefix replay digests.
 - Claim: the builder considers the six prior refutation findings repaired and E3-T01 implemented; a new fresh critic must independently attempt to refute the exact remediation diff and promoted evidence before this task can become `verified`.
+
+### Critic — 2026-08-07 — independent remediation review
+
+VERDICT: refuted
+
+- Reviewed the complete task contract, E2-T07 snapshot contract, remediation commits `4e5a85201bcc94276526887288e7538dcb13e0db` and `803cbee0aa182857806ecf27162b12d2897dd590`, handoff/evidence commit `2ac4f2f1b5156da2ea2d0b3177c608a20a02b1a4`, all changed protocol/reducer/verifier/wrapper files, the pinned fixture, and all nine promoted files under `evidence/e3-t01-final/`.
+- Required plain cold command: `E3_T01_IMPLEMENTATION_COMMIT=803cbee0aa182857806ecf27162b12d2897dd590 TEST_RUN_ID=e3-t01-critic-plain-20260807a make verify-E3-T01` exited `0` from a clean detached checkout. Format, lint, typecheck, test (161 unit tests), Playwright (5 tests), and build all passed. Independent plain rows matched the promoted `prefix-replay.json`, `invalid-offsets.json`, `binding-audit.json`, `bounded-records.json`, `terminal-races.json`, `sensitivity.json`, and `canary-scan.json`; the main checkout and promoted evidence remained unchanged. Evidence: `evidence/e3-t01-final/cold-clone-transcript.json`, `verification-summary.json`.
+- Independent fresh-ID reducer attack accepted a valid five-record lifecycle, refused `running -> queued` at `0000000000000006_bbbbbbbbbbbbbbbb` with `INVOCATION_RUN_INVALID_TRANSITION`, refused same-workspace trigger reuse with `INVOCATION_RUN_BINDING_MISMATCH`, and refused cross-workspace trigger reuse with `INVOCATION_RUN_INVALID_SOURCE`. A disposable provenance mutant replacing `assertInvocationBinding` with a no-op made `node scripts/verify-e3-t01.mjs` exit `1` at `scripts/verify-e3-t01.mjs:728` when the fresh agent-reuse attack was accepted.
+- **AC5 is refuted by a product-level secret-boundary defect.** `run.failure.recorded` validates `failureCode` through `assertToken` at `packages/protocol/src/invocation-run.mjs:377-397`; `assertToken` at `:790-798` enforces only the token grammar and never calls the defined secret matcher at `:65-75`. An independent command passed the fresh provider-token-shaped canary `sk-abcdefghijklmnop` to `validateRunRecordData("run.failure.recorded", ...)` and exited `0` with the canary accepted. The reducer then persists this field through `reduceRunFailureRecorded`; the committed canary attack only covers an activity `summary` at `scripts/verify-e3-t01.mjs:937-950`, so the promoted evidence does not detect this error-field leak.
+- Required remediation: reject secret-shaped values in all persisted token metadata (or use an explicit failure-code allowlist), add an error/artifact canary attack, and rerun the cold/promoted proof with a fresh critic. Task remains non-verified; E3-T02 stays blocked.

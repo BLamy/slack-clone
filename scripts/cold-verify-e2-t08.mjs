@@ -173,7 +173,10 @@ await writeFile(
   path.join(destination, "cold-clone-transcript.json"),
   `${JSON.stringify(transcript, null, 2)}\n`,
 );
-const finalEvidenceFiles = (await readdir(destination)).sort();
+const finalEvidenceFiles = (await readdir(destination, { withFileTypes: true }))
+  .filter((entry) => entry.isFile())
+  .map((entry) => entry.name)
+  .sort();
 for (const filename of finalEvidenceFiles) {
   const contents = await readFile(path.join(destination, filename), "utf8");
   if (contents.includes(CANARY)) {

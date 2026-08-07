@@ -1769,17 +1769,21 @@ function assertExactKeys(value, keys, path, { optional = [] } = {}) {
 }
 
 function assertPlain(value, path) {
-  if (
-    !value ||
-    typeof value !== "object" ||
-    Array.isArray(value) ||
-    Object.getPrototypeOf(value) !== Object.prototype
-  )
+  if (!value || typeof value !== "object" || Array.isArray(value))
     throw contextPackError(
       CONTEXT_PACK_ERROR_CODES.INPUT_INVALID,
       "value must be a plain object",
       path,
     );
+  try {
+    canonicalJson(value, path);
+  } catch {
+    throw contextPackError(
+      CONTEXT_PACK_ERROR_CODES.INPUT_INVALID,
+      "value must be a plain object",
+      path,
+    );
+  }
 }
 
 function assertText(value, path, min, max) {

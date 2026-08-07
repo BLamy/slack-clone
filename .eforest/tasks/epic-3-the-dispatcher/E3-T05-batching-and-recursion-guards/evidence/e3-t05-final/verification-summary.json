@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "implementationCommit": "817396af20de9c9309588d464dc01d8ea7db7646",
+  "runId": "e3-t05-cold-final-20260807",
+  "replay": "Replay: N/A (server scheduling and recursion policy) + mitigation: burst schedules, durable causation graphs, cycle/fairness matrix, and replay digests",
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "durationMs": 3317,
+      "name": "format",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "durationMs": 2611,
+      "name": "lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "durationMs": 13484,
+      "name": "typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "durationMs": 20259,
+      "name": "tests",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm build",
+      "durationMs": 645,
+      "name": "build",
+      "result": "PASS"
+    }
+  ],
+  "queueOrderCount": 4,
+  "batchCount": 2,
+  "refusalCount": 7,
+  "terminalDispositionCount": 3,
+  "sensitivity": {
+    "controlExitCode": 0,
+    "detectedCount": 3,
+    "mutationCount": 3,
+    "result": "PASS",
+    "results": [
+      {
+        "detected": true,
+        "label": "self-trigger-fence",
+        "verifierExitCode": 1
+      },
+      {
+        "detected": true,
+        "label": "cycle-fence",
+        "verifierExitCode": 1
+      },
+      {
+        "detected": true,
+        "label": "conversation-key-fence",
+        "verifierExitCode": 1
+      }
+    ]
+  },
+  "canaryScan": {
+    "files": 10,
+    "leaked": false,
+    "transcriptChecked": true
+  }
+}

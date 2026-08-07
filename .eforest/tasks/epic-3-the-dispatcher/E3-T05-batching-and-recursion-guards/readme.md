@@ -3,7 +3,7 @@ id: E3-T05
 epic: 3
 title: "Per-conversation batching, serialization, and recursion guards"
 priority: 305
-status: in-progress
+status: implemented
 depends_on: [E3-T02, E3-T03]
 estimate: L
 capstone: false
@@ -65,3 +65,13 @@ Cycles are detected from durable causation chains, not process-local sets.
    must fail.
 
 ## Verification log
+
+### Builder — 2026-08-07 — commit `817396af20de9c9309588d464dc01d8ea7db7646`
+
+- Cold proof: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e3-t05-cold-final-20260807 E3_T05_IMPLEMENTATION_COMMIT=817396af20de9c9309588d464dc01d8ea7db7646 make verify-E3-T05` exited 0 from a detached clean worktree after submodule initialization, frozen install, and emulator setup.
+- Gates: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` all passed. The promoted transcript records command output hashes and the clean checkout proof in `evidence/e3-t05-final/cold-clone-transcript.json`.
+- Evidence: `batch-manifest.json` records two deterministic batches, one provider call for three source members, and three terminal dispositions; `concurrency-keys.json`, `fairness.json`, `causation-graph.json`, `refusals.json`, and `replay-digests.json` record the queue, key, causation, typed refusal, fairness, and replay claims.
+- Guard matrix: seven non-running refusals cover self-authored, quoted/code, edit, retry, agent-reply, and replay sources; delegation-required, revoked, cycle, depth, fan-out, concurrency, and aggregate-budget breaches are typed before provider execution.
+- Sensitivity: `sensitivity.json` shows all three detached mutations (self-trigger fence, cycle fence, and conversation-key fence) were detected by the verifier; `canary-scan.json` reports no leaked values across the promoted evidence.
+- Replay: `Replay: N/A (server scheduling and recursion policy) + mitigation: burst schedules, durable causation graphs, cycle/fairness matrix, and replay digests`.
+- Claim: E3-T05 deliverables are implemented and the exact diff plus cold evidence are ready for a fresh critic; no browser recording is applicable to this server-only task.

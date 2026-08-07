@@ -1,0 +1,174 @@
+{
+  "entries": [
+    {
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+      "ancestors": [],
+      "depth": 0,
+      "invocationId": "iv_qqqqqqqqqqqqqqqqqqqqqqqqqq",
+      "parentInvocationId": null,
+      "rootInvocationId": "iv_qqqqqqqqqqqqqqqqqqqqqqqqqq",
+      "sourceTrigger": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000030_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+      "ancestors": [
+        {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "sourceRef": {
+            "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "offset": "0000000000000030_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        }
+      ],
+      "depth": 1,
+      "invocationId": "iv_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+      "parentInvocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "rootInvocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "sourceTrigger": {
+        "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "offset": "0000000000000031_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+      "ancestors": [
+        {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "invocationId": "iv_ssssssssssssssssssssssssss",
+          "sourceRef": {
+            "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "offset": "0000000000000032_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        }
+      ],
+      "depth": 1,
+      "invocationId": "iv_ssssssssssssssssssssssssss",
+      "parentInvocationId": "iv_ssssssssssssssssssssssssss",
+      "rootInvocationId": "iv_ssssssssssssssssssssssssss",
+      "sourceTrigger": {
+        "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "offset": "0000000000000032_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+      "ancestors": [
+        {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "sourceRef": {
+            "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "offset": "0000000000000033_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "invocationId": "iv_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "sourceRef": {
+            "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "offset": "0000000000000033_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        }
+      ],
+      "depth": 2,
+      "invocationId": "iv_tttttttttttttttttttttttttt",
+      "parentInvocationId": "iv_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "rootInvocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "sourceTrigger": {
+        "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "offset": "0000000000000033_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+      "ancestors": [
+        {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "sourceRef": {
+            "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "offset": "0000000000000033_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        }
+      ],
+      "depth": 1,
+      "invocationId": "iv_vvvvvvvvvvvvvvvvvvvvvvvvvv",
+      "parentInvocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "rootInvocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "sourceTrigger": {
+        "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "offset": "0000000000000034_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+      "ancestors": [
+        {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "invocationId": "iv_zzzzzzzzzzzzzzzzzzzzzzzzzz",
+          "sourceRef": {
+            "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "offset": "0000000000000037_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        }
+      ],
+      "depth": 1,
+      "invocationId": "iv_zzzzzzzzzzzzzzzzzzzzzzzzzz",
+      "parentInvocationId": "iv_zzzzzzzzzzzzzzzzzzzzzzzzzz",
+      "rootInvocationId": "iv_zzzzzzzzzzzzzzzzzzzzzzzzzz",
+      "sourceTrigger": {
+        "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "offset": "0000000000000038_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+      "ancestors": [
+        {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "invocationId": "iv_yyyyyyyyyyyyyyyyyyyyyyyyyy",
+          "sourceRef": {
+            "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "offset": "0000000000000038_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        }
+      ],
+      "depth": 1,
+      "invocationId": "iv_kkkkkkkkkkkkkkkkkkkkkkkkkk",
+      "parentInvocationId": "iv_yyyyyyyyyyyyyyyyyyyyyyyyyy",
+      "rootInvocationId": "iv_yyyyyyyyyyyyyyyyyyyyyyyyyy",
+      "sourceTrigger": {
+        "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "offset": "0000000000000039_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    }
+  ],
+  "expected": {
+    "iv_qqqqqqqqqqqqqqqqqqqqqqqqqq": "CONVERSATION_SCHEDULER_DELEGATION_REQUIRED",
+    "iv_rrrrrrrrrrrrrrrrrrrrrrrrrr": "CONVERSATION_SCHEDULER_DELEGATION_REVOKED",
+    "iv_ssssssssssssssssssssssssss": "CONVERSATION_SCHEDULER_CYCLE",
+    "iv_tttttttttttttttttttttttttt": "CONVERSATION_SCHEDULER_DELEGATION_DEPTH",
+    "iv_vvvvvvvvvvvvvvvvvvvvvvvvvv": "CONVERSATION_SCHEDULER_DELEGATION_FANOUT",
+    "iv_zzzzzzzzzzzzzzzzzzzzzzzzzz": "CONVERSATION_SCHEDULER_DELEGATION_CONCURRENCY",
+    "iv_kkkkkkkkkkkkkkkkkkkkkkkkkk": "CONVERSATION_SCHEDULER_BUDGET_EXCEEDED"
+  },
+  "scheduleDigest": "sha256:7a379e6b280c27ca0b2d7597d6c454a0b0d72ccd34d86eef9df9591465d649f1"
+}

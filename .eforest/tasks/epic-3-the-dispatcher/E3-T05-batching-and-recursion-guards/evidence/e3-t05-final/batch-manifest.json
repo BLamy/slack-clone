@@ -1,0 +1,97 @@
+{
+  "batches": [
+    {
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+      "batchId": "bt_0be1f52de5cbd3e18382def24b",
+      "conversationKey": "ck_6c49ad5a3bb1537786f7931e88",
+      "memberInvocationIds": [
+        "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "iv_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "iv_cccccccccccccccccccccccccc"
+      ],
+      "members": [
+        {
+          "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "invocationRef": {
+            "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "offset": "0000000000000001_0000000000000000",
+            "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+          },
+          "order": 0,
+          "sourceTrigger": {
+            "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "offset": "0000000000000001_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        {
+          "invocationId": "iv_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "invocationRef": {
+            "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "offset": "0000000000000002_0000000000000000",
+            "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+          },
+          "order": 1,
+          "sourceTrigger": {
+            "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "offset": "0000000000000002_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        {
+          "invocationId": "iv_cccccccccccccccccccccccccc",
+          "invocationRef": {
+            "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "offset": "0000000000000003_0000000000000000",
+            "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+          },
+          "order": 2,
+          "sourceTrigger": {
+            "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "offset": "0000000000000003_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        }
+      ],
+      "policyDigest": "sha256:b7443f8f279a492d6d36ea362852da49c1d7ed1df527d8375e362cff9f71c9f5",
+      "snapshotDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "sourceInvocationCount": 1,
+      "status": "admitted",
+      "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+      "batchId": "bt_fb50560306b118c2f5a0d18d99",
+      "conversationKey": "ck_f55872df013121924a6c004140",
+      "memberInvocationIds": [
+        "iv_dddddddddddddddddddddddddd"
+      ],
+      "members": [
+        {
+          "invocationId": "iv_dddddddddddddddddddddddddd",
+          "invocationRef": {
+            "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "offset": "0000000000000004_0000000000000000",
+            "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+          },
+          "order": 0,
+          "sourceTrigger": {
+            "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "offset": "0000000000000004_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        }
+      ],
+      "policyDigest": "sha256:b7443f8f279a492d6d36ea362852da49c1d7ed1df527d8375e362cff9f71c9f5",
+      "snapshotDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "sourceInvocationCount": 1,
+      "status": "admitted",
+      "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "completedDigest": "sha256:d27567213c2ef081de8efb12e02a99ef644969613b6f469f68c47a063d23d676",
+  "providerCalls": 1,
+  "replayedTerminalCount": 3,
+  "scheduleDigest": "sha256:fbfcb5bd6973dadd6e1ac21523e4086266802c3c4432f096b9f75e179192c338",
+  "terminalDispositionCount": 3
+}

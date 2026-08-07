@@ -1,0 +1,7 @@
+{
+  "agentRevocationFenced": true,
+  "workspaceSuspensionFenced": true,
+  "callbackCalls": 0,
+  "finalFenceGeneration": 3,
+  "result": "PASS"
+}

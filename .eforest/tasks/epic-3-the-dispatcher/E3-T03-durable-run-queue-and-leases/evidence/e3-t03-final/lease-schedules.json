@@ -1,0 +1,191 @@
+{
+  "firstGeneration": 1,
+  "secondGeneration": 2,
+  "heartbeatCount": 1,
+  "expiredCount": 1,
+  "staleWorkerRefusals": 3,
+  "staleWorkerErrorCodes": [
+    "RUN_QUEUE_CAPABILITY_INVALID",
+    "RUN_QUEUE_CAPABILITY_INVALID",
+    "RUN_QUEUE_CAPABILITY_INVALID"
+  ],
+  "journal": [
+    {
+      "digest": "sha256:33d71120872df4fc7c3bb88ffd34b6a5dbceb4964ba619ad0069768aefbdd208",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": {
+          "digest": "sha256:a1ec2881e1ac4386431fa0ec2367acf7242513d8230228912c3fe698d11eb42b",
+          "offset": "0000000000000105_0000000000000000",
+          "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+        },
+        "correlationId": "cr_29e63db92154e4a851bbd1960d",
+        "data": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+          "attemptNumber": 1,
+          "capabilityDigest": "sha256:326371936a9739f4e700b36836c52b3d136acd95cdac01eaa60dad6fed9fe2d1",
+          "endpoints": [
+            "run.events.write"
+          ],
+          "entryDigest": "sha256:5f7af8c47efd071b95723e00dfb129dc0b2bb18817785992aed4e5e65799f98b",
+          "expiresAt": "2026-08-07T00:00:01.000Z",
+          "invocationId": "iv_ffffffffffffffffffffffffff",
+          "issuedAt": "2026-08-07T00:00:00.000Z",
+          "leaseGeneration": 1,
+          "leaseId": "ls_0dd12221fa127e909d72a13f8b",
+          "queueDigest": "sha256:ac5983f8a2127f4cc762f7ffd6a0679411b82c1a0db64acb537b9bd2a36e22a8",
+          "reason": null,
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "schemaVersion": 1,
+          "sourceRef": {
+            "digest": "sha256:a1ec2881e1ac4386431fa0ec2367acf7242513d8230228912c3fe698d11eb42b",
+            "offset": "0000000000000105_0000000000000000",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "workerId": "partitioned-worker"
+        },
+        "eventType": "run.lease.acquired",
+        "idempotencyKey": "ik_81c9e3ea9b9d4023dda211f086",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_81c9e3ea9b9d4023dda211f086",
+        "serverTimestamp": "2026-08-07T00:00:00.000Z"
+      },
+      "offset": "0000000000000001_0000000000000000"
+    },
+    {
+      "digest": "sha256:a8813a3c6597bc62d06b4fb104a25cf6dd33dd6ffc832b8e01f96cf0aa96084d",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": {
+          "digest": "sha256:a1ec2881e1ac4386431fa0ec2367acf7242513d8230228912c3fe698d11eb42b",
+          "offset": "0000000000000105_0000000000000000",
+          "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+        },
+        "correlationId": "cr_29e63db92154e4a851bbd1960d",
+        "data": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+          "attemptNumber": 1,
+          "capabilityDigest": "sha256:326371936a9739f4e700b36836c52b3d136acd95cdac01eaa60dad6fed9fe2d1",
+          "endpoints": [
+            "run.events.write"
+          ],
+          "entryDigest": "sha256:5f7af8c47efd071b95723e00dfb129dc0b2bb18817785992aed4e5e65799f98b",
+          "expiresAt": "2026-08-07T00:00:01.500Z",
+          "invocationId": "iv_ffffffffffffffffffffffffff",
+          "issuedAt": "2026-08-07T00:00:00.500Z",
+          "leaseGeneration": 1,
+          "leaseId": "ls_0dd12221fa127e909d72a13f8b",
+          "queueDigest": "sha256:ac5983f8a2127f4cc762f7ffd6a0679411b82c1a0db64acb537b9bd2a36e22a8",
+          "reason": null,
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "schemaVersion": 1,
+          "sourceRef": {
+            "digest": "sha256:a1ec2881e1ac4386431fa0ec2367acf7242513d8230228912c3fe698d11eb42b",
+            "offset": "0000000000000105_0000000000000000",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "workerId": "partitioned-worker"
+        },
+        "eventType": "run.lease.heartbeat",
+        "idempotencyKey": "ik_699c618ffd76113a2e20d98465",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_699c618ffd76113a2e20d98465",
+        "serverTimestamp": "2026-08-07T00:00:00.500Z"
+      },
+      "offset": "0000000000000002_0000000000000000"
+    },
+    {
+      "digest": "sha256:7172137d37937805f738c60acdb9d524515ab2e6d208ae242d007ca9cd55baeb",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": {
+          "digest": "sha256:a1ec2881e1ac4386431fa0ec2367acf7242513d8230228912c3fe698d11eb42b",
+          "offset": "0000000000000105_0000000000000000",
+          "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+        },
+        "correlationId": "cr_29e63db92154e4a851bbd1960d",
+        "data": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+          "attemptNumber": 1,
+          "capabilityDigest": "sha256:326371936a9739f4e700b36836c52b3d136acd95cdac01eaa60dad6fed9fe2d1",
+          "endpoints": [
+            "run.events.write"
+          ],
+          "entryDigest": "sha256:5f7af8c47efd071b95723e00dfb129dc0b2bb18817785992aed4e5e65799f98b",
+          "expiresAt": "2026-08-07T00:00:01.500Z",
+          "invocationId": "iv_ffffffffffffffffffffffffff",
+          "issuedAt": "2026-08-07T00:00:02.000Z",
+          "leaseGeneration": 1,
+          "leaseId": "ls_0dd12221fa127e909d72a13f8b",
+          "queueDigest": "sha256:ac5983f8a2127f4cc762f7ffd6a0679411b82c1a0db64acb537b9bd2a36e22a8",
+          "reason": "lease-expired",
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "schemaVersion": 1,
+          "sourceRef": {
+            "digest": "sha256:a1ec2881e1ac4386431fa0ec2367acf7242513d8230228912c3fe698d11eb42b",
+            "offset": "0000000000000105_0000000000000000",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "workerId": "partitioned-worker"
+        },
+        "eventType": "run.lease.expired",
+        "idempotencyKey": "ik_e39d8d3bb0502293b259de8b90",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_e39d8d3bb0502293b259de8b90",
+        "serverTimestamp": "2026-08-07T00:00:02.000Z"
+      },
+      "offset": "0000000000000003_0000000000000000"
+    },
+    {
+      "digest": "sha256:35fdcd86a2a0a4e2ac4f3aa79e8426f72701de3d718189f59d2b682553831a44",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": {
+          "digest": "sha256:a1ec2881e1ac4386431fa0ec2367acf7242513d8230228912c3fe698d11eb42b",
+          "offset": "0000000000000105_0000000000000000",
+          "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+        },
+        "correlationId": "cr_29e63db92154e4a851bbd1960d",
+        "data": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "attemptId": "at_0bb924f68cca7df3d85c8420dc",
+          "attemptNumber": 1,
+          "capabilityDigest": "sha256:69c795e7e8b50b9cd6e6b5e781ad80dce6553ad3a75f688e62a4f70e0c9bd0cf",
+          "endpoints": [
+            "run.events.write"
+          ],
+          "entryDigest": "sha256:5f7af8c47efd071b95723e00dfb129dc0b2bb18817785992aed4e5e65799f98b",
+          "expiresAt": "2026-08-07T00:00:03.100Z",
+          "invocationId": "iv_ffffffffffffffffffffffffff",
+          "issuedAt": "2026-08-07T00:00:02.100Z",
+          "leaseGeneration": 2,
+          "leaseId": "ls_433874da906e6e66fa5312b39c",
+          "queueDigest": "sha256:ac5983f8a2127f4cc762f7ffd6a0679411b82c1a0db64acb537b9bd2a36e22a8",
+          "reason": null,
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "schemaVersion": 1,
+          "sourceRef": {
+            "digest": "sha256:a1ec2881e1ac4386431fa0ec2367acf7242513d8230228912c3fe698d11eb42b",
+            "offset": "0000000000000105_0000000000000000",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "workerId": "replacement-worker"
+        },
+        "eventType": "run.lease.acquired",
+        "idempotencyKey": "ik_5b2741daa9bc892be6180ac6b8",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_5b2741daa9bc892be6180ac6b8",
+        "serverTimestamp": "2026-08-07T00:00:02.100Z"
+      },
+      "offset": "0000000000000004_0000000000000000"
+    }
+  ],
+  "result": "PASS"
+}

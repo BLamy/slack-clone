@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "runId": "e3-t03-final-cold-20260807",
+  "implementationCommit": "d679aa608e1d12ae048b253fcea6dfb470178fc6",
+  "entrypoint": {
+    "command": "make verify-E3-T03",
+    "delegatedTo": "node scripts/verify-e3-t03.mjs"
+  },
+  "checkout": "disposable git worktree at the implementation commit",
+  "commands": [
+    {
+      "command": "git worktree add --detach <checkout> d679aa608e1d12ae048b253fcea6dfb470178fc6",
+      "exitCode": 0
+    },
+    {
+      "command": "git submodule update --init --recursive",
+      "exitCode": 0
+    },
+    {
+      "command": "git status --porcelain --untracked-files=all",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm setup:emulate",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/verify-e3-t03.mjs",
+      "exitCode": 0
+    }
+  ],
+  "cleanCheckoutBeforeInstall": true,
+  "result": "PASS"
+}

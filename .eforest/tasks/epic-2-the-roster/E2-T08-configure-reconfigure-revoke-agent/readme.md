@@ -3,7 +3,7 @@ id: E2-T08
 epic: 2
 title: "Capstone: configure, reconfigure, and revoke an agent"
 priority: 208
-status: in-progress
+status: implemented
 depends_on: [E2-T04, E2-T06, E2-T07]
 estimate: L
 capstone: true
@@ -83,3 +83,15 @@ ownership nor a historical snapshot can route around current authorization or re
 - `VERDICT: refuted` from fresh independent agent `019fd982-c106-7183-af36-c2ec282c51f4`, which reviewed implementation commit `8d166e0de1d4a3954a1ef833efc3a39c3de60cbf`, evidence commit `e0ec6d2`, the task specification, and the promoted evidence without editing the worktree.
 - The critic confirmed the cold/composed manifests are internally consistent, all commands exit 0, skips are empty, snapshot and composite digests are reproducible, and the planted canary is absent. It found proof gaps requiring remediation: projection replay reused the live stream store and omitted connection records/other sources; revocation checks were sequential/synthetic and did not check actual CLI revoke use; sensitivity rows self-reported instead of running a defect mutant; lost-ack/idempotency attacks were incomplete; connection negatives were policy explanations rather than route calls; and post-revoke historical-byte stability was asserted without a comparison.
 - Status: `in-progress`; builder must repair the evidence apparatus and obtain a fresh critic verdict.
+
+### Builder — 2026-08-06 — remediation and replacement cold/composed proof
+
+- Remediation implementation commit: `399d3c0fe1d914719966e408ae296b90c31e20b3`. It replaces live-store replay with a fresh source-seeded store, includes connection/audit/dispatch source records, adds durable grant revocation, checks actual CLI revoke fencing before the response returns, exercises a client-aborted create followed by idempotent retry and changed-payload refusal, routes connection authorization through HTTP, and runs a disposable verifier mutant that must exit 1.
+- Exact cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e2-t08-cold-remedied-20260806 E2_T08_IMPLEMENTATION_COMMIT=399d3c0fe1d914719966e408ae296b90c31e20b3 make verify-E2-T08`. The detached checkout was clean before install, initialized the pinned emulator, and all six gates exited 0 with `skips: []`: `pnpm format:check`, `pnpm format:check:e2-t08`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`.
+- Exact composed command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e2-composed-remedied-20260806 E2_T08_IMPLEMENTATION_COMMIT=399d3c0fe1d914719966e408ae296b90c31e20b3 make verify-E2`. All eight targets passed in dependency order with exit code 0 and no skips; prior targets ran at composed checkout `4f25b5c200e32cc1fd1642a5bbedef8d4a15b6a4`, E2-T08 ran at the exact remediation commit, and `rootCheckoutCleanBeforeRun: true`.
+- Replacement evidence: lifecycle `draft -> active -> retired`, revisions `[1, 2, 3]`; first snapshot digest `sha256:96c7fc75926851d76ee79e1ed3a4f2ffd29e507f210f8fe9231e8bbeeba2dcd4`, second snapshot digest `sha256:00ac02fe291c2e45491821eecc675a6e0321c658e4432452f0a95beffa2ac0e5`, and first bytes remain stable after reconfigure and revoke. The matrix has 206 rows, 68 refused rows, HTTP-backed connection rows, and sibling agent/channel/connection 404s with unchanged heads.
+- Revocation and replay evidence: both grants are durably revoked at source revision 3 while config references revision 2; the actual revoke append is observed before the response and a concurrent snapshot-use check refuses with `INVOCATION_SNAPSHOT_AGENT_CONFIG_INACTIVE`. A fresh replay store seeded from directory `43`, config `6`, connection `3 + 3`, audit `0`, and dispatch `12` records reproduces roster/config/history/snapshots and all source stream digests to composite `sha256:1d3d11ba552484ceb61b3b51a0bc633da054a9b4736f94f3638ec3c943b96095`.
+- Idempotency and sensitivity evidence: the client-aborted create leaves exactly one durable principal event; the same-key retry succeeds and a changed payload exits 4/refuses. Nine sensitivity mutations are recorded, including a disposable replay-composite source-digest mutant whose verifier exit code is 1. Canary scanning reports no leak in the promoted evidence set.
+- Evidence: `evidence/e2-t08-final/verification-summary.json`, `http-transcript.json`, `cli-transcript.json`, `source-dumps.json`, `snapshot-manifests.json`, `role-matrix.json`, `roster.json`, `revocation-races.json`, `replay-composite.json`, `tamper-matrix.json`, `sensitivity.json`, `canary-scan.json`, `cold-clone-transcript.json`, and `composed-verify-transcript.json`.
+- Replay: N/A (server/CLI agent-control capstone) + mitigation: role matrix, revision/snapshot manifests, revocation race, canary scan, and composite stream replay.
+- Claim: the builder considers the critic’s proof gaps repaired and E2-T08 implemented; a second fresh critic must independently attempt to refute this replacement evidence before the task can become `verified`.

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "task": "E2-T08",
-  "runId": "e2-t08-cold-remedied-20260806",
+  "runId": "e2-composed-remedied-20260806",
   "implementationCommit": "399d3c0fe1d914719966e408ae296b90c31e20b3",
   "result": "PASS",
   "replayDescription": "Replay: N/A (server/CLI agent-control capstone) + mitigation: role matrix, revision/snapshot manifests, revocation race, canary scan, and composite stream replay",
@@ -3684,7 +3684,6 @@
       "tamper-matrix.json",
       "verification-summary.json"
     ],
-    "publishedEvidenceLeaked": false,
-    "postVerifierTranscriptChecked": true
+    "publishedEvidenceLeaked": false
   }
 }

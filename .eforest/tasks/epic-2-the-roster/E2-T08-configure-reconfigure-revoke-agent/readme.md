@@ -3,7 +3,7 @@ id: E2-T08
 epic: 2
 title: "Capstone: configure, reconfigure, and revoke an agent"
 priority: 208
-status: in-progress
+status: implemented
 depends_on: [E2-T04, E2-T06, E2-T07]
 estimate: L
 capstone: true
@@ -100,3 +100,14 @@ ownership nor a historical snapshot can route around current authorization or re
 - `VERDICT: refuted` from fresh independent agent `019fd9a7-e735-7343-8aca-063b3df1f265`, which reviewed remediation commit `399d3c0fe1d914719966e408ae296b90c31e20b3`, evidence commit `a773882`, the task specification, and the promoted cold/composed evidence without editing the worktree.
 - The critic independently confirmed the fresh source-seeded replay, durable grant revocation, actual in-flight config fencing, HTTP-backed connection matrix, exact digests, canary scan, and disposable replay-integrity mutant. It found one remaining proof gap: adversarial item 3 requires retrying every mutating CLI command after a simulated lost acknowledgement, but only `create` used a client-aborted request; config-create, both activate calls, revise, and revoke were retried only after successful acknowledgement.
 - Status: `in-progress`; builder must exercise client-aborted-after-durable-append plus same-key retry for every mutating CLI operation, then obtain a fresh critic verdict.
+
+### Builder — 2026-08-06 — final lost-ack remediation cold/composed proof
+
+- Final implementation commit: `f23695f3d6f3ff92802304ae9d5bd815ad9fb001`. The verifier now drives a client-aborted-after-durable-append HTTP request and same-key CLI retry for every mutating control-plane operation in the scenario: `create`, `config-create`, both `activate` transitions, `revise`, and `revoke`; each target stream contains exactly one matching durable event.
+- Exact cold command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e2-t08-cold-final-20260806e E2_T08_IMPLEMENTATION_COMMIT=f23695f3d6f3ff92802304ae9d5bd815ad9fb001 make verify-E2-T08`. The detached checkout was clean before install, initialized the pinned emulator, and all six gates passed with exit code 0 and `skips: []`: `pnpm format:check`, `pnpm format:check:e2-t08`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`; unit/integration and Playwright checks were green.
+- Exact composed command: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e2-composed-final-20260806c E2_T08_IMPLEMENTATION_COMMIT=f23695f3d6f3ff92802304ae9d5bd815ad9fb001 make verify-E2`. All eight targets passed in dependency order, every target exited 0, `zeroSkips: true`, `rootCheckoutCleanBeforeRun: true`, and the final E2-T08 target was bound to `f23695f3d6f3ff92802304ae9d5bd815ad9fb001`.
+- Final workflow evidence: lifecycle `draft -> active -> retired`, configuration revisions `[1, 2, 3]`; first snapshot digest `sha256:237e2c373a9c6b4139fe90d13e32c74396878ea7567e63558681eb1e1a334b2f`, second snapshot digest `sha256:e3eb2aff9e07b08d55cf113ce2c1e1b82ab28ee0eeead18f22ace95282ab56b1`, and replay composite digest `sha256:7d3a6eaee703f6081d877d9365d4cf2e94f676cd6152f126e79105ba85ebe141`. The authorization matrix has 206 rows; sensitivity is true; all canary scans are clean.
+- Lost-ack evidence records six client-aborted operations with `durableEventCount: 1` and `clientAborted: true`, all same-key retries recovered, and changed-payload create retry exited 4/refused. The actual revoke race observes the durable retired event before the client response, refuses historical snapshot use with `INVOCATION_SNAPSHOT_AGENT_CONFIG_INACTIVE`, durably revokes both connection grants, and verifies historical snapshot bytes remain stable.
+- Evidence: `evidence/e2-t08-final/verification-summary.json`, `http-transcript.json`, `cli-transcript.json`, `source-dumps.json`, `snapshot-manifests.json`, `role-matrix.json`, `roster.json`, `revocation-races.json`, `replay-composite.json`, `tamper-matrix.json`, `sensitivity.json`, `canary-scan.json`, `cold-clone-transcript.json`, and `composed-verify-transcript.json`.
+- Replay: N/A (server/CLI agent-control capstone) + mitigation: role matrix, revision/snapshot manifests, revocation race, canary scan, and composite stream replay.
+- Claim: the builder considers the remaining lost-ack proof gap closed and E2-T08 implemented; a third fresh critic must independently verify the exact final diff and promoted evidence before this task can become `verified`.

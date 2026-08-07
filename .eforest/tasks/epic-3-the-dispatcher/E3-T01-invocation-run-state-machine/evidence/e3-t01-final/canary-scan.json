@@ -1,0 +1,18 @@
+{
+  "canaryRejected": true,
+  "canaryPresentInPublishedEvidence": false,
+  "result": "PASS",
+  "evidenceFiles": [
+    "binding-audit.json",
+    "bounded-records.json",
+    "canary-scan.json",
+    "cold-clone-transcript.json",
+    "invalid-offsets.json",
+    "prefix-replay.json",
+    "sensitivity.json",
+    "terminal-races.json",
+    "verification-summary.json"
+  ],
+  "postVerifierTranscriptChecked": true,
+  "publishedEvidenceLeaked": false
+}

@@ -8,7 +8,7 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-1. **E3-T01** — Invocation and run state machine on durable streams *(builder working)*
+1. **E3-T01** — Invocation and run state machine on durable streams *(awaiting independent critic)*
 
 ## Next up (dependencies satisfied)
 
@@ -52,7 +52,7 @@ No new task may start until **E3-T01** clears the gate.
 
 ## Epic 3 — `epic-3-the-dispatcher`
 
-- [~] ` 301` [E3-T01](epic-3-the-dispatcher/E3-T01-invocation-run-state-machine/readme.md) — Invocation and run state machine on durable streams *(deps: E2)*
+- [?] ` 301` [E3-T01](epic-3-the-dispatcher/E3-T01-invocation-run-state-machine/readme.md) — Invocation and run state machine on durable streams *(deps: E2)*
 - [ ] ` 302` [E3-T02](epic-3-the-dispatcher/E3-T02-mention-reconciler/readme.md) — Idempotent mention-to-invocation reconciler *(deps: E1-T06, E3-T01)*
 - [ ] ` 303` [E3-T03](epic-3-the-dispatcher/E3-T03-durable-run-queue-and-leases/readme.md) — Durable run queue, fenced worker leases, and scoped capabilities *(deps: E3-T01, E3-T02)*
 - [ ] ` 304` [E3-T04](epic-3-the-dispatcher/E3-T04-bounded-context-pack/readme.md) — Bounded, ACL-safe context pack with durable citations *(deps: E3-T02)*

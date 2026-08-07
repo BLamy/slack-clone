@@ -1,0 +1,26 @@
+{
+  "candidates": [
+    {
+      "terminal": "completed",
+      "finalStateDigest": "sha256:4088e18c0f69fa8565f81b57efbbe3f270034db0cd95caf2352cea4a52cbe4eb",
+      "result": "one-terminal-winner"
+    },
+    {
+      "terminal": "failed",
+      "finalStateDigest": "sha256:244e533bf587e64d13a3037c5474c6aecf1db71938c57e6d9d5da16d3f89732d",
+      "result": "one-terminal-winner"
+    },
+    {
+      "terminal": "timed-out",
+      "finalStateDigest": "sha256:55c07b444d576559514e031f31e4fb42f7e26f97d039c4af4781b996392b3a77",
+      "result": "one-terminal-winner"
+    },
+    {
+      "terminal": "cancelled",
+      "finalStateDigest": "sha256:07802079dd2ce76d72ccb8b0681bdc7f901cf5baabecdbbcbb24bd62da108a85",
+      "result": "one-terminal-winner"
+    }
+  ],
+  "oneWinnerPerExpectedHead": true,
+  "result": "PASS"
+}

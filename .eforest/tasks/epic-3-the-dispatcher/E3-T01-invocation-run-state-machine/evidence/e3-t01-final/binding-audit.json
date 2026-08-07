@@ -1,0 +1,13 @@
+{
+  "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+  "correlationId": "cr_8e5d064dd79a76c1490c3f1b7c",
+  "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+  "snapshotDigest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+  "sourceTrigger": {
+    "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "offset": "0000000000000090_aaaaaaaaaaaaaaaa",
+    "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "result": "PASS"
+}

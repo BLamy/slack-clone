@@ -11,6 +11,7 @@ import {
 import path from "node:path";
 
 import {
+  createQueueProof,
   deriveInvocationCorrelationId,
   deriveRunQueueId,
   policyDigest,
@@ -34,6 +35,11 @@ const ACTOR_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb";
 const AGENT_ID = "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc";
 const CHANNEL_STREAM = `channel:${CHANNEL_ID}`;
 const CONFIG_STREAM = `agent:${AGENT_ID}/config`;
+const OTHER_AGENT_ID =
+  "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd";
+const OTHER_ACTOR_ID =
+  "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc";
+const OTHER_WORKSPACE_ID = "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb";
 const NOW = new Date("2026-08-07T00:00:00.000Z");
 
 const root = path.resolve(import.meta.dirname, "..");
@@ -464,6 +470,7 @@ async function verifyCapabilityScopes(fixture) {
   const coordinator = createRunLeaseCoordinator({
     actorId: ACTOR_ID,
     clock: () => NOW,
+    maxActiveLeasesPerAgent: 3,
     queueProjection: queue,
     tokenFactory: () =>
       `rcap_${String(tokenIndex++).padStart(43, "u").slice(-43)}`,
@@ -473,6 +480,29 @@ async function verifyCapabilityScopes(fixture) {
     entry: queue.entries[0],
     queueProof: queue.proof,
     workerId: "scope-worker",
+  });
+  const foreignRun = await coordinator.acquire({
+    entry: queue.entries[1],
+    queueProof: queue.proof,
+    workerId: "foreign-run-worker",
+  });
+  const otherAgentQueue = queueForAgent(queue, OTHER_AGENT_ID);
+  const otherAgentCoordinator = createRunLeaseCoordinator({
+    actorId: ACTOR_ID,
+    clock: () => NOW,
+    queueProjection: otherAgentQueue,
+    tokenFactory: () =>
+      `rcap_${String(tokenIndex++).padStart(43, "v").slice(-43)}`,
+    workspaceId: WORKSPACE_ID,
+  });
+  await otherAgentCoordinator.acquire({
+    entry: otherAgentQueue.entries[0],
+    queueProof: otherAgentQueue.proof,
+    workerId: "other-agent-worker",
+  });
+  const otherWorkspaceCoordinator = createRunLeaseCoordinator({
+    actorId: OTHER_ACTOR_ID,
+    workspaceId: OTHER_WORKSPACE_ID,
   });
   const calls = [];
   await assert.rejects(
@@ -488,12 +518,25 @@ async function verifyCapabilityScopes(fixture) {
     coordinator.mutate({
       capability: lease.capability,
       mutate: () => calls.push("run"),
-      runId: queue.entries[1].runId,
+      runId: foreignRun.lease.runId,
     }),
-    (error) =>
-      ["RUN_QUEUE_LEASE_NOT_FOUND", "RUN_QUEUE_CAPABILITY_SCOPE"].includes(
-        error.code,
-      ),
+    (error) => error.code === "RUN_QUEUE_CAPABILITY_SCOPE",
+  );
+  await assert.rejects(
+    otherAgentCoordinator.mutate({
+      capability: lease.capability,
+      mutate: () => calls.push("agent"),
+      runId: otherAgentQueue.entries[0].runId,
+    }),
+    (error) => error.code === "RUN_QUEUE_CAPABILITY_INVALID",
+  );
+  await assert.rejects(
+    otherWorkspaceCoordinator.mutate({
+      capability: lease.capability,
+      mutate: () => calls.push("workspace"),
+      runId: queue.entries[0].runId,
+    }),
+    (error) => error.code === "RUN_QUEUE_CAPABILITY_INVALID",
   );
   await assert.rejects(
     coordinator.mutate({
@@ -503,11 +546,46 @@ async function verifyCapabilityScopes(fixture) {
     }),
     (error) => error.code === "RUN_QUEUE_CAPABILITY_INVALID",
   );
+  await coordinator.expire({ now: new Date("2026-08-07T00:01:00.000Z") });
+  await assert.rejects(
+    coordinator.mutate({
+      capability: lease.capability,
+      mutate: () => calls.push("post-expiry"),
+      runId: queue.entries[0].runId,
+    }),
+    (error) => error.code === "RUN_QUEUE_CAPABILITY_INVALID",
+  );
+  const reacquired = await coordinator.acquire({
+    entry: queue.entries[0],
+    now: new Date("2026-08-07T00:01:00.100Z"),
+    queueProof: queue.proof,
+    workerId: "generation-two-worker",
+  });
+  assert.equal(reacquired.lease.leaseGeneration, 2);
+  assert.notEqual(reacquired.lease.attemptId, lease.lease.attemptId);
+  await assert.rejects(
+    coordinator.mutate({
+      capability: lease.capability,
+      mutate: () => calls.push("generation"),
+      runId: queue.entries[0].runId,
+    }),
+    (error) => error.code === "RUN_QUEUE_CAPABILITY_INVALID",
+  );
   assert.deepEqual(calls, []);
   return {
-    attemptedScopes: ["endpoint", "run", "forged-token"],
+    attemptedScopes: [
+      "endpoint",
+      "active-foreign-run",
+      "foreign-agent-coordinator",
+      "foreign-workspace-coordinator",
+      "post-expiry",
+      "generation-two",
+      "forged-token",
+    ],
     callbackCalls: calls.length,
     storedCapabilityDigest: lease.lease.capabilityDigest,
+    reacquiredAttemptId: reacquired.lease.attemptId,
+    reacquiredGeneration: reacquired.lease.leaseGeneration,
     bearerPersisted: false,
     result: "PASS",
   };
@@ -521,10 +599,48 @@ function verifyLeaseReplay(fixture, journal) {
   assert.equal(first.finalStateDigest, second.finalStateDigest);
   assert.deepEqual(first.prefixes, second.prefixes);
   assert.equal(JSON.stringify(journal).includes("rcap_"), false);
+  const staleGenerationEvent = issueEventEnvelope(
+    {
+      actorId: journal[0].event.actorId,
+      causation: journal[0].event.causation,
+      correlationId: journal[0].event.correlationId,
+      data: structuredClone(journal[0].event.data),
+      eventType: "run.lease.acquired",
+      idempotencyKey: deriveRunQueueId("ik", {
+        kind: "stale-generation",
+        runId: journal[0].event.data.runId,
+      }),
+      schemaVersion: 1,
+      workspaceId: WORKSPACE_ID,
+    },
+    {
+      clock: () => new Date("2026-08-07T00:00:03.000Z"),
+      eventId: deriveRunQueueId("ev", {
+        kind: "stale-generation",
+        runId: journal[0].event.data.runId,
+      }),
+    },
+  );
+  assert.throws(
+    () =>
+      replayRunLeaseEvents(
+        [
+          ...journal.slice(0, 3),
+          {
+            digest: digestEventEnvelope(staleGenerationEvent),
+            event: staleGenerationEvent,
+            offset: offset(4),
+          },
+        ],
+        { workspaceId: WORKSPACE_ID },
+      ),
+    (error) => error.code === "RUN_QUEUE_LEASE_STALE",
+  );
   return {
     finalStateDigest: first.finalStateDigest,
     perPrefixDigests: first.prefixes,
     replayedTwiceWithIdenticalDigest: true,
+    staleGenerationRefused: true,
     capabilityValuesPersisted: false,
     result: "PASS",
   };
@@ -579,6 +695,7 @@ function verifyReducerIntegration(fixture, journal) {
   assert.equal(run.leaseHistory.length, reducerJournal.length);
   return {
     finalRunStatus: run.status,
+    finalLease: run.lease,
     leaseHistoryCount: run.leaseHistory.length,
     finalStateDigest: replay.finalStateDigest,
     result: "PASS",
@@ -602,7 +719,41 @@ async function verifySensitivity() {
       replacement:
         "if (false && request.endpoint && !lease.endpoints.includes(request.endpoint)) {",
     },
+    {
+      label: "lease-generation-fence",
+      target: "src/ledger/run-queue.mjs",
+      needle: "if (data.leaseGeneration !== required) {",
+      replacement: "if (false) {",
+    },
   ];
+  const controlParent = await mkdtemp(
+    path.join(taskDirectory, "work", "sensitivity-control-"),
+  );
+  const controlCheckout = path.join(controlParent, "checkout");
+  let controlAdded = false;
+  let control;
+  try {
+    execFileSync(
+      "git",
+      ["worktree", "add", "--detach", controlCheckout, implementationCommit],
+      { cwd: root, stdio: "ignore" },
+    );
+    controlAdded = true;
+    control = await runSensitivityChild(controlCheckout, "control");
+  } finally {
+    if (controlAdded) {
+      execFileSync("git", ["worktree", "remove", "--force", controlCheckout], {
+        cwd: root,
+        stdio: "ignore",
+      });
+    }
+    await rm(controlParent, { recursive: true, force: true });
+  }
+  assert.equal(
+    control.exitCode,
+    0,
+    `unmutated verifier control failed with exit code ${control.exitCode}`,
+  );
   const results = [];
   for (const mutation of mutations) {
     const parent = await mkdtemp(
@@ -627,25 +778,12 @@ async function verifySensitivity() {
         targetPath,
         original.replace(mutation.needle, mutation.replacement),
       );
-      const result = (() => {
-        try {
-          execFileSync(process.execPath, ["scripts/verify-e3-t03.mjs"], {
-            cwd: checkout,
-            env: {
-              ...process.env,
-              E3_T03_IMPLEMENTATION_COMMIT: implementationCommit,
-              E3_T03_SKIP_GATES: "1",
-              E3_T03_SKIP_SENSITIVITY: "1",
-              TEST_RUN_ID: `${runId}-${mutation.label}`,
-            },
-            stdio: "pipe",
-          });
-          return { exitCode: 0 };
-        } catch (error) {
-          return { exitCode: error.status ?? 1 };
-        }
-      })();
-      assert.notEqual(result.exitCode, 0);
+      const result = await runSensitivityChild(checkout, mutation.label);
+      assert.notEqual(
+        result.exitCode,
+        0,
+        `${mutation.label} mutant unexpectedly passed the verifier`,
+      );
       results.push({
         label: mutation.label,
         verifierExitCode: result.exitCode,
@@ -663,9 +801,38 @@ async function verifySensitivity() {
   }
   return {
     mutationCount: results.length,
+    controlExitCode: control.exitCode,
+    controlPassed: true,
     verifierDetectedMutant: true,
     results,
   };
+
+  async function runSensitivityChild(checkout, label) {
+    const cwd = checkout ?? root;
+    try {
+      execFileSync(process.execPath, ["scripts/verify-e3-t03.mjs"], {
+        cwd,
+        env: {
+          ...process.env,
+          E3_T03_IMPLEMENTATION_COMMIT: implementationCommit,
+          E3_T03_SKIP_GATES: "1",
+          E3_T03_SKIP_SENSITIVITY: "1",
+          PROMOTE_EVIDENCE: "0",
+          TEST_ARTIFACT_DIR: path.join(
+            cwd,
+            ".artifacts",
+            "e3-t03-sensitivity",
+            label,
+          ),
+          TEST_RUN_ID: `${runId}-${label}`,
+        },
+        stdio: "pipe",
+      });
+      return { exitCode: 0 };
+    } catch (error) {
+      return { exitCode: error.status ?? 1 };
+    }
+  }
 }
 
 function buildStreamFixture(count) {
@@ -894,6 +1061,22 @@ function queueDigestForProof(proof) {
     workspaceId: proof.workspaceId,
   };
   return canonicalSha256(payload);
+}
+
+function queueForAgent(queue, agentId) {
+  const entries = [{ ...queue.entries[0], agentId }];
+  const proof = createQueueProof({
+    entries,
+    invocationStreamDigest: queue.invocationStreamDigest,
+    runStreamDigest: queue.runStreamDigest,
+    workspaceId: WORKSPACE_ID,
+  });
+  return {
+    ...queue,
+    entries,
+    proof,
+    queueDigest: proof.queueDigest,
+  };
 }
 
 async function writeJson(filename, value) {

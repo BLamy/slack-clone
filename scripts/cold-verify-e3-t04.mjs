@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import {
   copyFile,
   mkdir,
@@ -70,55 +71,42 @@ const evidenceFiles = [
 let worktreeAdded = false;
 
 try {
-  execFileSync(
+  await runLogged(
     "git",
     ["worktree", "add", "--detach", checkout, implementationCommit],
-    { cwd: root, stdio: "ignore" },
+    {
+      cwd: root,
+      displayCommand: `git worktree add --detach <checkout> ${implementationCommit}`,
+    },
   );
   worktreeAdded = true;
-  transcript.commands.push({
-    command: `git worktree add --detach <checkout> ${implementationCommit}`,
-    exitCode: 0,
-  });
-  execFileSync("git", ["submodule", "update", "--init", "--recursive"], {
+  await runLogged("git", ["submodule", "update", "--init", "--recursive"], {
     cwd: checkout,
-    stdio: "ignore",
+    displayCommand: "git submodule update --init --recursive",
   });
-  transcript.commands.push({
-    command: "git submodule update --init --recursive",
-    exitCode: 0,
-  });
-  const clean = execFileSync(
+  const clean = await runLogged(
     "git",
     ["status", "--porcelain", "--untracked-files=all"],
-    { cwd: checkout, encoding: "utf8" },
+    {
+      cwd: checkout,
+      displayCommand: "git status --porcelain --untracked-files=all",
+    },
   );
   if (clean.trim() !== "") {
     throw new Error(`disposable checkout is not clean: ${clean.trim()}`);
   }
   transcript.cleanCheckoutBeforeInstall = true;
-  transcript.commands.push({
-    command: "git status --porcelain --untracked-files=all",
-    exitCode: 0,
-  });
-  execFileSync("pnpm", ["install", "--frozen-lockfile"], {
+  await runLogged("pnpm", ["install", "--frozen-lockfile"], {
     cwd: checkout,
-    stdio: "inherit",
+    displayCommand: "pnpm install --frozen-lockfile",
   });
-  transcript.commands.push({
-    command: "pnpm install --frozen-lockfile",
-    exitCode: 0,
-  });
-  execFileSync("pnpm", ["setup:emulate"], {
+  await runLogged("pnpm", ["setup:emulate"], {
     cwd: checkout,
-    stdio: "inherit",
+    displayCommand: "pnpm setup:emulate",
   });
-  transcript.commands.push({
-    command: "pnpm setup:emulate",
-    exitCode: 0,
-  });
-  execFileSync("node", ["scripts/verify-e3-t04.mjs"], {
+  await runLogged("node", ["scripts/verify-e3-t04.mjs"], {
     cwd: checkout,
+    displayCommand: "node scripts/verify-e3-t04.mjs",
     env: {
       ...process.env,
       E3_T04_COLD_CLONE: "1",
@@ -129,11 +117,6 @@ try {
       TEST_ARTIFACT_DIR: artifactDirectory,
       TEST_RUN_ID: runId,
     },
-    stdio: "inherit",
-  });
-  transcript.commands.push({
-    command: "node scripts/verify-e3-t04.mjs",
-    exitCode: 0,
   });
   transcript.result = "PASS";
   const verifierEvidenceDirectory = promoteEvidence
@@ -199,6 +182,12 @@ if (finalEvidenceScan.leaked) {
     "E3-T04 evidence leaked credential material after scan update",
   );
 }
+canaryScan.files = finalEvidenceScan.files;
+canaryScan.leaked = finalEvidenceScan.leaked;
+canaryScan.finalEvidenceChecked = true;
+await writeFile(canaryScanPath, `${JSON.stringify(canaryScan, null, 2)}\n`);
+summary.canaryScan = canaryScan;
+await writeFile(summaryPath, `${JSON.stringify(summary, null, 2)}\n`);
 
 console.log(
   JSON.stringify(
@@ -228,4 +217,72 @@ async function scanReportFiles(directory) {
     ),
     leaked: files.some((file) => file.leaked),
   };
+}
+
+async function runLogged(command, args, { cwd, displayCommand, env } = {}) {
+  const startedAt = Date.now();
+  try {
+    const stdout = execFileSync(command, args, {
+      cwd,
+      encoding: "utf8",
+      env: env ?? process.env,
+      maxBuffer: 10 * 1024 * 1024,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    transcript.commands.push(
+      commandEvidence({
+        command: displayCommand ?? [command, ...args].join(" "),
+        durationMs: Date.now() - startedAt,
+        exitCode: 0,
+        stderr: "",
+        stdout,
+      }),
+    );
+    return stdout;
+  } catch (error) {
+    const stdout = String(error.stdout ?? "");
+    const stderr = String(error.stderr ?? "");
+    transcript.commands.push(
+      commandEvidence({
+        command: displayCommand ?? [command, ...args].join(" "),
+        durationMs: Date.now() - startedAt,
+        exitCode: error.status ?? 1,
+        stderr,
+        stdout,
+      }),
+    );
+    throw error;
+  }
+}
+
+function commandEvidence({ command, durationMs, exitCode, stderr, stdout }) {
+  return {
+    command,
+    durationMs,
+    exitCode,
+    stderrBytes: Buffer.byteLength(stderr),
+    stderrPreview: redactOutput(stderr),
+    stderrSha256: digestOutput(stderr),
+    stdoutBytes: Buffer.byteLength(stdout),
+    stdoutPreview: redactOutput(stdout),
+    stdoutSha256: digestOutput(stdout),
+  };
+}
+
+function digestOutput(value) {
+  return `sha256:${createHash("sha256").update(value).digest("hex")}`;
+}
+
+function redactOutput(value) {
+  return value
+    .replace(
+      /(?:api[_-]?key|authorization|bearer|password|secret|token)\s*[:=]?[^\n]*/giu,
+      "[REDACTED]",
+    )
+    .replace(/test_token_[A-Za-z0-9_-]+/gu, "[REDACTED]")
+    .replace(
+      /sibling-canary|ambient-value-must-not-enter-the-pack/giu,
+      "[CANARY-REDACTED]",
+    )
+    .slice(-4000);
 }

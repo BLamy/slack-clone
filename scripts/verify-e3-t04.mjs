@@ -723,18 +723,25 @@ async function runSensitivityWorktree(label) {
 
 async function runSensitivityChild(checkout, label) {
   try {
-    execFileSync(
-      process.execPath,
-      ["scripts/context-pack-sensitivity-child.mjs"],
-      {
-        cwd: checkout,
-        env: {
-          ...process.env,
-          E3_T04_SENSITIVITY_LABEL: label,
-        },
-        stdio: "pipe",
+    execFileSync(process.execPath, ["scripts/verify-e3-t04.mjs"], {
+      cwd: checkout,
+      env: {
+        ...process.env,
+        E3_T04_IMPLEMENTATION_COMMIT: implementationCommit,
+        E3_T04_SKIP_GATES: "1",
+        E3_T04_SKIP_SENSITIVITY: "1",
+        PROMOTE_EVIDENCE: "0",
+        TEST_ARTIFACT_DIR: path.join(
+          checkout,
+          ".artifacts",
+          "e3-t04-sensitivity",
+          label,
+        ),
+        TEST_RUN_ID: `${runId}-${label}`,
       },
-    );
+      maxBuffer: 10 * 1024 * 1024,
+      stdio: "pipe",
+    });
     return { exitCode: 0 };
   } catch (error) {
     return { exitCode: error.status ?? 1 };

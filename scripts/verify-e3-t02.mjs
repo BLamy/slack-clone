@@ -651,6 +651,7 @@ async function verifyReplayDigests(race) {
 }
 
 async function verifySensitivity() {
+  await mkdir(path.join(taskDirectory, "work"), { recursive: true });
   const parent = await mkdtemp(
     path.join(taskDirectory, "work", "sensitivity-"),
   );

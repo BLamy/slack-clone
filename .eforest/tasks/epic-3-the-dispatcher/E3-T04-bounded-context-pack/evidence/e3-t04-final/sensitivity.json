@@ -1,0 +1,24 @@
+{
+  "result": "PASS",
+  "mutationCount": 3,
+  "controlExitCode": 0,
+  "controlPassed": true,
+  "verifierDetectedMutant": true,
+  "results": [
+    {
+      "label": "source-head-binding",
+      "verifierExitCode": 1,
+      "detected": true
+    },
+    {
+      "label": "private-scope-fence",
+      "verifierExitCode": 1,
+      "detected": true
+    },
+    {
+      "label": "instruction-source-fence",
+      "verifierExitCode": 1,
+      "detected": true
+    }
+  ]
+}

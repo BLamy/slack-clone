@@ -1,0 +1,113 @@
+{
+  "result": "PASS",
+  "fullPackDigest": "sha256:2e15baf66fe66555415c49fef7fb7c150dbb6d15a40e287fc517f72a3f326c7f",
+  "boundedPackDigest": "sha256:54e35255009e410300e965c09bfd0d8b0d9ff8ea37c1105ad871cc66ee1a8633",
+  "boundedCanonicalBytes": 4657,
+  "boundedAccounting": {
+    "attachmentBytes": 11,
+    "bytes": 748,
+    "estimatedTokens": 15,
+    "historyItems": 1,
+    "items": 3
+  },
+  "boundedIncluded": [
+    {
+      "id": "message:root",
+      "ordinal": 1,
+      "sourceRange": {
+        "endOffset": "0000000000000001_0000000000000000",
+        "startOffset": "0000000000000001_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "id": "workspace-file:docs/readme.md",
+      "ordinal": 2,
+      "sourceRange": {
+        "endOffset": "0000000000000005_0000000000000000",
+        "startOffset": "0000000000000005_0000000000000000",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+      }
+    }
+  ],
+  "boundedOmitted": [
+    {
+      "id": "message:reply",
+      "reason": "message-limit",
+      "sourceRange": {
+        "endOffset": "0000000000000002_0000000000000000",
+        "startOffset": "0000000000000002_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "bytes": 12,
+      "estimatedTokens": 3
+    },
+    {
+      "id": "message:old",
+      "reason": "message-limit",
+      "sourceRange": {
+        "endOffset": "0000000000000003_0000000000000000",
+        "startOffset": "0000000000000003_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "bytes": 13,
+      "estimatedTokens": 4
+    }
+  ],
+  "historyDepthOmitted": [
+    {
+      "id": "message:old",
+      "sourceRange": {
+        "endOffset": "0000000000000003_0000000000000000",
+        "startOffset": "0000000000000003_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    }
+  ],
+  "attachment": {
+    "reason": "attachment-limit",
+    "sourceRange": {
+      "endOffset": "0000000000000001_0000000000000000",
+      "startOffset": "0000000000000001_0000000000000000",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "accounting": {
+      "attachmentBytes": 11,
+      "bytes": 925,
+      "estimatedTokens": 18,
+      "historyItems": 2,
+      "items": 4
+    }
+  },
+  "unicode": {
+    "packDigest": "sha256:4ed05c3f6d3bc5e9f932c8d01b5a4e30957f6e324760c9be0133ef0a219793a2",
+    "accounting": {
+      "attachmentBytes": 11,
+      "bytes": 748,
+      "estimatedTokens": 15,
+      "historyItems": 1,
+      "items": 3
+    },
+    "omitted": [
+      {
+        "id": "message:reply",
+        "reason": "message-limit",
+        "sourceRange": {
+          "endOffset": "0000000000000002_0000000000000000",
+          "startOffset": "0000000000000002_0000000000000000",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      },
+      {
+        "id": "message:old",
+        "reason": "message-limit",
+        "sourceRange": {
+          "endOffset": "0000000000000003_0000000000000000",
+          "startOffset": "0000000000000003_0000000000000000",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      }
+    ]
+  },
+  "reversedInputByteParity": true
+}

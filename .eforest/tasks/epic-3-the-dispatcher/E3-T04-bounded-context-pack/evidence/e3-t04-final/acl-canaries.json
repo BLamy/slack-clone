@@ -1,0 +1,28 @@
+{
+  "result": "PASS",
+  "siblingCanaryAbsent": true,
+  "ambientProcessValueAbsent": true,
+  "refusalCodes": [
+    {
+      "label": "private-channel",
+      "code": "CONTEXT_PACK_PRIVATE_SCOPE",
+      "refused": true
+    },
+    {
+      "label": "direct-channel",
+      "code": "CONTEXT_PACK_PRIVATE_SCOPE",
+      "refused": true
+    },
+    {
+      "label": "removed-channel-membership",
+      "code": "CONTEXT_PACK_MEMBERSHIP_INACTIVE",
+      "refused": true
+    },
+    {
+      "label": "revoked-workspace-membership",
+      "code": "CONTEXT_PACK_MEMBERSHIP_INACTIVE",
+      "refused": true
+    }
+  ],
+  "authorizedStreamsOnly": true
+}

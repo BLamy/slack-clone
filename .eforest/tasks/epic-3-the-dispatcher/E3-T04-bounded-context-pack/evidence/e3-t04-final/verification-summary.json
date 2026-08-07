@@ -1,0 +1,469 @@
+{
+  "schemaVersion": 1,
+  "task": "E3-T04",
+  "runId": "e3-t04-cold-final-v2",
+  "implementationCommit": "557cde0cb5d6925297217227311c850f4478dadf",
+  "implementationTreeCleanAtStart": true,
+  "result": "PASS",
+  "replay": "Replay: N/A (server context assembly) + mitigation: source-citation manifest, ACL canaries, deterministic truncation corpus, and byte/digest parity",
+  "replayUploadAttempted": false,
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "durationMs": 3213,
+      "name": "format",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "durationMs": 2881,
+      "name": "lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "durationMs": 7657,
+      "name": "typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "durationMs": 21019,
+      "name": "tests",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm build",
+      "durationMs": 544,
+      "name": "build",
+      "result": "PASS"
+    }
+  ],
+  "manifest": {
+    "result": "PASS",
+    "packDigest": "sha256:2e15baf66fe66555415c49fef7fb7c150dbb6d15a40e287fc517f72a3f326c7f",
+    "canonicalBytes": 4611,
+    "accounting": {
+      "attachmentBytes": 11,
+      "bytes": 925,
+      "estimatedTokens": 18,
+      "historyItems": 2,
+      "items": 4
+    },
+    "sourceHeads": [
+      {
+        "digest": "sha256:1d137b6339b853b9a1fea9673a77020faf0f0631dce82c4b9ab9d450be92a6f3",
+        "offset": "0000000000000004_0000000000000000",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+      },
+      {
+        "digest": "sha256:a550503fa2909b8f6cc5fdbf808973c1c66bd998f054c5d9f03ecebd5b4329cf",
+        "offset": "0000000000000003_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      {
+        "digest": "sha256:5b8912c967e8730d0bd6855dd2005176f7845489198d4730c1ef43d5842430e4",
+        "offset": "0000000000000005_0000000000000000",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+      }
+    ],
+    "included": [
+      {
+        "citation": {
+          "contentKind": "conversation-message",
+          "eventDigest": "sha256:163b5771446ce6dc777ba882ed046be08f30d90c92b2531c5c1c0b0ff695c14c",
+          "offset": "0000000000000001_0000000000000000",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "contentKind": "conversation-message",
+        "id": "message:root",
+        "ordinal": 1,
+        "trust": "untrusted-content",
+        "sourceRange": {
+          "endOffset": "0000000000000001_0000000000000000",
+          "startOffset": "0000000000000001_0000000000000000",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      },
+      {
+        "citation": {
+          "contentKind": "conversation-message",
+          "eventDigest": "sha256:311d997efbe70e2dba988ac422cc49368d979ba56dc7356820c75f9fb99096af",
+          "offset": "0000000000000002_0000000000000000",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "contentKind": "conversation-message",
+        "id": "message:reply",
+        "ordinal": 2,
+        "trust": "untrusted-content",
+        "sourceRange": {
+          "endOffset": "0000000000000002_0000000000000000",
+          "startOffset": "0000000000000002_0000000000000000",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      },
+      {
+        "citation": {
+          "contentKind": "workspace-file",
+          "eventDigest": "sha256:5b8912c967e8730d0bd6855dd2005176f7845489198d4730c1ef43d5842430e4",
+          "offset": "0000000000000005_0000000000000000",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+        },
+        "contentKind": "workspace-file",
+        "id": "workspace-file:docs/readme.md",
+        "ordinal": 3,
+        "trust": "untrusted-content",
+        "sourceRange": {
+          "endOffset": "0000000000000005_0000000000000000",
+          "startOffset": "0000000000000005_0000000000000000",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+        }
+      }
+    ],
+    "instructions": [
+      {
+        "citation": {
+          "contentKind": "agent-instruction",
+          "eventDigest": "sha256:1d137b6339b853b9a1fea9673a77020faf0f0631dce82c4b9ab9d450be92a6f3",
+          "offset": "0000000000000004_0000000000000000",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+        },
+        "id": "task",
+        "revision": 2,
+        "trust": "trusted-instructions"
+      }
+    ],
+    "omitted": [
+      {
+        "bytes": 13,
+        "citation": {
+          "contentKind": "conversation-message",
+          "eventDigest": "sha256:a550503fa2909b8f6cc5fdbf808973c1c66bd998f054c5d9f03ecebd5b4329cf",
+          "offset": "0000000000000003_0000000000000000",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "contentKind": "conversation-message",
+        "estimatedTokens": 4,
+        "id": "message:old",
+        "reason": "message-limit",
+        "sourceRange": {
+          "endOffset": "0000000000000003_0000000000000000",
+          "startOffset": "0000000000000003_0000000000000000",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "trust": "untrusted-content"
+      }
+    ]
+  },
+  "acl": {
+    "result": "PASS",
+    "siblingCanaryAbsent": true,
+    "ambientProcessValueAbsent": true,
+    "refusalCodes": [
+      {
+        "label": "private-channel",
+        "code": "CONTEXT_PACK_PRIVATE_SCOPE",
+        "refused": true
+      },
+      {
+        "label": "direct-channel",
+        "code": "CONTEXT_PACK_PRIVATE_SCOPE",
+        "refused": true
+      },
+      {
+        "label": "removed-channel-membership",
+        "code": "CONTEXT_PACK_MEMBERSHIP_INACTIVE",
+        "refused": true
+      },
+      {
+        "label": "revoked-workspace-membership",
+        "code": "CONTEXT_PACK_MEMBERSHIP_INACTIVE",
+        "refused": true
+      }
+    ],
+    "authorizedStreamsOnly": true
+  },
+  "truncation": {
+    "result": "PASS",
+    "fullPackDigest": "sha256:2e15baf66fe66555415c49fef7fb7c150dbb6d15a40e287fc517f72a3f326c7f",
+    "boundedPackDigest": "sha256:54e35255009e410300e965c09bfd0d8b0d9ff8ea37c1105ad871cc66ee1a8633",
+    "boundedCanonicalBytes": 4657,
+    "boundedAccounting": {
+      "attachmentBytes": 11,
+      "bytes": 748,
+      "estimatedTokens": 15,
+      "historyItems": 1,
+      "items": 3
+    },
+    "boundedIncluded": [
+      {
+        "id": "message:root",
+        "ordinal": 1,
+        "sourceRange": {
+          "endOffset": "0000000000000001_0000000000000000",
+          "startOffset": "0000000000000001_0000000000000000",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      },
+      {
+        "id": "workspace-file:docs/readme.md",
+        "ordinal": 2,
+        "sourceRange": {
+          "endOffset": "0000000000000005_0000000000000000",
+          "startOffset": "0000000000000005_0000000000000000",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+        }
+      }
+    ],
+    "boundedOmitted": [
+      {
+        "id": "message:reply",
+        "reason": "message-limit",
+        "sourceRange": {
+          "endOffset": "0000000000000002_0000000000000000",
+          "startOffset": "0000000000000002_0000000000000000",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "bytes": 12,
+        "estimatedTokens": 3
+      },
+      {
+        "id": "message:old",
+        "reason": "message-limit",
+        "sourceRange": {
+          "endOffset": "0000000000000003_0000000000000000",
+          "startOffset": "0000000000000003_0000000000000000",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "bytes": 13,
+        "estimatedTokens": 4
+      }
+    ],
+    "historyDepthOmitted": [
+      {
+        "id": "message:old",
+        "sourceRange": {
+          "endOffset": "0000000000000003_0000000000000000",
+          "startOffset": "0000000000000003_0000000000000000",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      }
+    ],
+    "attachment": {
+      "reason": "attachment-limit",
+      "sourceRange": {
+        "endOffset": "0000000000000001_0000000000000000",
+        "startOffset": "0000000000000001_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "accounting": {
+        "attachmentBytes": 11,
+        "bytes": 925,
+        "estimatedTokens": 18,
+        "historyItems": 2,
+        "items": 4
+      }
+    },
+    "unicode": {
+      "packDigest": "sha256:4ed05c3f6d3bc5e9f932c8d01b5a4e30957f6e324760c9be0133ef0a219793a2",
+      "accounting": {
+        "attachmentBytes": 11,
+        "bytes": 748,
+        "estimatedTokens": 15,
+        "historyItems": 1,
+        "items": 3
+      },
+      "omitted": [
+        {
+          "id": "message:reply",
+          "reason": "message-limit",
+          "sourceRange": {
+            "endOffset": "0000000000000002_0000000000000000",
+            "startOffset": "0000000000000002_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        {
+          "id": "message:old",
+          "reason": "message-limit",
+          "sourceRange": {
+            "endOffset": "0000000000000003_0000000000000000",
+            "startOffset": "0000000000000003_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        }
+      ]
+    },
+    "reversedInputByteParity": true
+  },
+  "trustBoundary": {
+    "result": "PASS",
+    "instructionTrust": [
+      "trusted-instructions"
+    ],
+    "contentTrust": [
+      {
+        "id": "message:root",
+        "trust": "untrusted-content",
+        "contentKind": "conversation-message"
+      },
+      {
+        "id": "message:reply",
+        "trust": "untrusted-content",
+        "contentKind": "conversation-message"
+      },
+      {
+        "id": "workspace-file:docs/readme.md",
+        "trust": "untrusted-content",
+        "contentKind": "workspace-file"
+      }
+    ],
+    "authorizationOutsidePack": true,
+    "injectionCannotChangePolicy": true,
+    "structuralInstructionSeparation": true
+  },
+  "replayEvidence": {
+    "result": "PASS",
+    "packDigest": "sha256:2e15baf66fe66555415c49fef7fb7c150dbb6d15a40e287fc517f72a3f326c7f",
+    "canonicalBytes": 4611,
+    "freshProcessDigest": "sha256:2e15baf66fe66555415c49fef7fb7c150dbb6d15a40e287fc517f72a3f326c7f",
+    "freshProcessBytes": 4611,
+    "byteIdentical": true,
+    "tamperRefused": true
+  },
+  "refusals": {
+    "result": "PASS",
+    "cases": [
+      {
+        "label": "archived-channel",
+        "code": "CONTEXT_PACK_CHANNEL_INACTIVE",
+        "refused": true
+      },
+      {
+        "label": "revoked-workspace",
+        "code": "CONTEXT_PACK_MEMBERSHIP_INACTIVE",
+        "refused": true
+      },
+      {
+        "label": "source-head-drift",
+        "code": "CONTEXT_PACK_SOURCE_HEAD",
+        "refused": true
+      },
+      {
+        "label": "workspace-path",
+        "code": "CONTEXT_PACK_WORKSPACE_INPUT_SCOPE",
+        "refused": true
+      },
+      {
+        "label": "instruction-source",
+        "code": "CONTEXT_PACK_INSTRUCTION_SCOPE",
+        "refused": true
+      },
+      {
+        "label": "unauthorized-source-head",
+        "code": "CONTEXT_PACK_SOURCE_SCOPE",
+        "refused": true
+      },
+      {
+        "label": "wrong-thread-root",
+        "code": "CONTEXT_PACK_TRIGGER_INVALID",
+        "refused": true
+      },
+      {
+        "label": "deleted-trigger",
+        "code": "CONTEXT_PACK_TRIGGER_INVALID",
+        "refused": true
+      }
+    ]
+  },
+  "sensitivity": {
+    "result": "PASS",
+    "mutationCount": 3,
+    "controlExitCode": 0,
+    "controlPassed": true,
+    "verifierDetectedMutant": true,
+    "results": [
+      {
+        "label": "source-head-binding",
+        "verifierExitCode": 1,
+        "detected": true
+      },
+      {
+        "label": "private-scope-fence",
+        "verifierExitCode": 1,
+        "detected": true
+      },
+      {
+        "label": "instruction-source-fence",
+        "verifierExitCode": 1,
+        "detected": true
+      }
+    ]
+  },
+  "canaryScan": {
+    "files": [
+      {
+        "leaked": false,
+        "name": "acl-canaries.json"
+      },
+      {
+        "leaked": false,
+        "name": "canary-scan.json"
+      },
+      {
+        "leaked": false,
+        "name": "cold-clone-transcript.json"
+      },
+      {
+        "leaked": false,
+        "name": "pack-manifest.json"
+      },
+      {
+        "leaked": false,
+        "name": "refusal-matrix.json"
+      },
+      {
+        "leaked": false,
+        "name": "replay-digests.json"
+      },
+      {
+        "leaked": false,
+        "name": "sensitivity.json"
+      },
+      {
+        "leaked": false,
+        "name": "truncation.json"
+      },
+      {
+        "leaked": false,
+        "name": "trust-boundary.json"
+      },
+      {
+        "leaked": false,
+        "name": "verification-summary.json"
+      }
+    ],
+    "leaked": false,
+    "evidenceFiles": [
+      "acl-canaries.json",
+      "canary-scan.json",
+      "cold-clone-transcript.json",
+      "pack-manifest.json",
+      "refusal-matrix.json",
+      "replay-digests.json",
+      "sensitivity.json",
+      "truncation.json",
+      "trust-boundary.json",
+      "verification-summary.json"
+    ],
+    "postVerifierTranscriptChecked": true,
+    "publishedEvidenceLeaked": false,
+    "canaryPresentInPublishedEvidence": false,
+    "finalEvidenceChecked": true
+  }
+}

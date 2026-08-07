@@ -3,7 +3,7 @@ id: E3-T02
 epic: 3
 title: "Idempotent mention-to-invocation reconciler"
 priority: 302
-status: pending
+status: in-progress
 depends_on: [E1-T06, E3-T01]
 estimate: L
 capstone: false

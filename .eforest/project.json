@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E3-T01 is verified and the queue may advance to E3-T02.",
-  "updatedAt": "2026-08-07T06:00:00Z"
+  "statusReason": "E3-T02 builder is working on the idempotent mention-to-invocation reconciler.",
+  "updatedAt": "2026-08-07T06:15:00Z"
 }

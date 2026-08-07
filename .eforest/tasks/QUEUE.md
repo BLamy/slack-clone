@@ -8,11 +8,16 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-No task is currently in progress, awaiting verification, or refuted.
+1. **E3-T02** — Idempotent mention-to-invocation reconciler *(builder working)*
 
 ## Next up (dependencies satisfied)
 
-1. **E3-T02** — Idempotent mention-to-invocation reconciler
+No new task may start until **E3-T02** clears the gate.
+
+## Unlocks when E3-T02 verifies
+
+1. **E3-T03** — Durable run queue, fenced worker leases, and scoped capabilities
+1. **E3-T04** — Bounded, ACL-safe context pack with durable citations
 
 ## Epic 0 — `epic-0-the-ledger`
 
@@ -49,7 +54,7 @@ No task is currently in progress, awaiting verification, or refuted.
 ## Epic 3 — `epic-3-the-dispatcher`
 
 - [x] ` 301` [E3-T01](epic-3-the-dispatcher/E3-T01-invocation-run-state-machine/readme.md) — Invocation and run state machine on durable streams *(deps: E2)*
-- [ ] ` 302` [E3-T02](epic-3-the-dispatcher/E3-T02-mention-reconciler/readme.md) — Idempotent mention-to-invocation reconciler *(deps: E1-T06, E3-T01)*
+- [~] ` 302` [E3-T02](epic-3-the-dispatcher/E3-T02-mention-reconciler/readme.md) — Idempotent mention-to-invocation reconciler *(deps: E1-T06, E3-T01)*
 - [ ] ` 303` [E3-T03](epic-3-the-dispatcher/E3-T03-durable-run-queue-and-leases/readme.md) — Durable run queue, fenced worker leases, and scoped capabilities *(deps: E3-T01, E3-T02)*
 - [ ] ` 304` [E3-T04](epic-3-the-dispatcher/E3-T04-bounded-context-pack/readme.md) — Bounded, ACL-safe context pack with durable citations *(deps: E3-T02)*
 - [ ] ` 305` [E3-T05](epic-3-the-dispatcher/E3-T05-batching-and-recursion-guards/readme.md) — Per-conversation batching, serialization, and recursion guards *(deps: E3-T02, E3-T03)*

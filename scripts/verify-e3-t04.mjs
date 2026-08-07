@@ -375,6 +375,27 @@ function verifyDeterministicTruncation({ input }) {
     true,
   );
 
+  const minimalInput = structuredClone(input);
+  minimalInput.workspaceInputs = [];
+  minimalInput.sourceHeads = minimalInput.sourceHeads.filter(
+    ({ stream }) =>
+      stream !== `workspace:${CONTEXT_PACK_FIXTURE.workspaceId}/directory`,
+  );
+  minimalInput.policy.maxMessages = 1;
+  const minimalPack = assembleContextPack(minimalInput);
+  const budgetInput = structuredClone(input);
+  budgetInput.policy.maxMessages = 50;
+  budgetInput.policy.maxBytes = minimalPack.accounting.bytes;
+  const budgetPack = assembleContextPack(budgetInput);
+  const budgetOmissions = budgetPack.omitted.filter(
+    ({ reason }) => reason === "budget",
+  );
+  assert.equal(budgetOmissions.length > 0, true);
+  assert.equal(
+    budgetPack.items.some(({ id }) => id === "message:root"),
+    true,
+  );
+
   const attachmentInput = structuredClone(input);
   attachmentInput.policy.maxAttachmentBytes = 32;
   attachmentInput.attachments = [
@@ -439,6 +460,15 @@ function verifyDeterministicTruncation({ input }) {
     historyDepthOmitted: depthPack.omitted
       .filter(({ reason }) => reason === "history-depth")
       .map(({ id, sourceRange }) => ({ id, sourceRange })),
+    budget: {
+      maxBytes: budgetPack.policy.maxBytes,
+      accounting: budgetPack.accounting,
+      omitted: budgetOmissions.map(({ id, reason, sourceRange }) => ({
+        id,
+        reason,
+        sourceRange,
+      })),
+    },
     attachment: {
       reason: attachmentOmission.reason,
       sourceRange: attachmentOmission.sourceRange,

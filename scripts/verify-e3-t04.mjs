@@ -396,6 +396,31 @@ function verifyDeterministicTruncation({ input }) {
     true,
   );
 
+  const itemBudgetInput = structuredClone(input);
+  itemBudgetInput.policy.maxItems = 2;
+  itemBudgetInput.policy.maxMessages = 50;
+  const itemBudgetPack = assembleContextPack(itemBudgetInput);
+  assert.equal(itemBudgetPack.accounting.items <= 2, true);
+  assert.equal(
+    itemBudgetPack.omitted.some(({ reason }) => reason === "budget"),
+    true,
+  );
+
+  const tokenBudgetInput = structuredClone(input);
+  tokenBudgetInput.policy.maxEstimatedTokens =
+    minimalPack.accounting.estimatedTokens;
+  tokenBudgetInput.policy.maxMessages = 50;
+  const tokenBudgetPack = assembleContextPack(tokenBudgetInput);
+  assert.equal(
+    tokenBudgetPack.accounting.estimatedTokens <=
+      tokenBudgetPack.policy.maxEstimatedTokens,
+    true,
+  );
+  assert.equal(
+    tokenBudgetPack.omitted.some(({ reason }) => reason === "budget"),
+    true,
+  );
+
   const attachmentInput = structuredClone(input);
   attachmentInput.policy.maxAttachmentBytes = 32;
   attachmentInput.attachments = [
@@ -468,6 +493,20 @@ function verifyDeterministicTruncation({ input }) {
         reason,
         sourceRange,
       })),
+    },
+    itemBudget: {
+      maxItems: itemBudgetPack.policy.maxItems,
+      accounting: itemBudgetPack.accounting,
+      omittedCount: itemBudgetPack.omitted.filter(
+        ({ reason }) => reason === "budget",
+      ).length,
+    },
+    tokenBudget: {
+      maxEstimatedTokens: tokenBudgetPack.policy.maxEstimatedTokens,
+      accounting: tokenBudgetPack.accounting,
+      omittedCount: tokenBudgetPack.omitted.filter(
+        ({ reason }) => reason === "budget",
+      ).length,
     },
     attachment: {
       reason: attachmentOmission.reason,

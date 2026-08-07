@@ -1,7 +1,7 @@
 {
   "canaryRejected": true,
-  "canaryPresentInPublishedEvidence": false,
   "result": "PASS",
+  "canaryPresentInPublishedEvidence": false,
   "evidenceFiles": [
     "binding-audit.json",
     "bounded-records.json",
@@ -13,6 +13,7 @@
     "terminal-races.json",
     "verification-summary.json"
   ],
-  "postVerifierTranscriptChecked": true,
-  "publishedEvidenceLeaked": false
+  "postVerifierEvidenceScanCompleted": true,
+  "publishedEvidenceLeaked": false,
+  "postVerifierTranscriptChecked": true
 }

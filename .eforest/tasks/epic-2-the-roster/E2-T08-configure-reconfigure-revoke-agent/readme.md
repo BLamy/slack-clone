@@ -3,7 +3,7 @@ id: E2-T08
 epic: 2
 title: "Capstone: configure, reconfigure, and revoke an agent"
 priority: 208
-status: implemented
+status: verified
 depends_on: [E2-T04, E2-T06, E2-T07]
 estimate: L
 capstone: true
@@ -129,3 +129,9 @@ ownership nor a historical snapshot can route around current authorization or re
 - Sensitivity and canary evidence: 9 targeted mutations go red, including the disposable replay-composite source-digest mutant; `sensitivity: true`, canary scan `PASS`, and `publishedEvidenceLeaked: false`. Evidence files are `evidence/e2-t08-final/verification-summary.json`, `http-transcript.json`, `cli-transcript.json`, `source-dumps.json`, `snapshot-manifests.json`, `role-matrix.json`, `roster.json`, `revocation-races.json`, `replay-composite.json`, `tamper-matrix.json`, `sensitivity.json`, `canary-scan.json`, `cold-clone-transcript.json`, and `composed-verify-transcript.json`.
 - Replay: N/A (server/CLI agent-control capstone) + mitigation: role matrix, revision/snapshot manifests, revocation race, canary scan, and composite stream replay.
 - Claim: the wrapper gap is closed and E2-T08 is implemented; a fourth fresh critic must independently verify the exact diff, plain/promoted/composed proof, and committed evidence before this task can become `verified`.
+
+### Critic — 2026-08-06 — fourth independent verification
+
+- `VERDICT: verified` from fresh independent agent `019fda10-7cb1-7c83-a543-f60a45375e92`, which reviewed the exact implementation commit `db4ff223843b19ce0a5630a7af23804a074f259f`, promoted evidence commit `49d0f2639f96f6a3e755c7acafa2af2606fba108`, composed evidence commit `e5c382d323d7a536ae4bf2ca578296ef52d7f45f`, and handoff commit `1473865359cf163c86815afed9cec1308cecede9` without editing the worktree.
+- The critic reran the plain cold command and confirmed 158 tests, 5 Playwright tests, six gates, zero skips, and a successful post-verifier artifact scan. It verified the `Dirent.isFile()` filter at `scripts/cold-verify-e2-t08.mjs:176`, independently recomputed both snapshot digests and composite digest `sha256:7d3a6eaee703f6081d877d9365d4cf2e94f676cd6152f126e79105ba85ebe141`, confirmed all six lost-ack operations, 206 authorization rows, revoke/grant fencing, fresh replay, canary pass, and the nine-mutation sensitivity mutant exiting 1.
+- Status: `verified`; the main tracked worktree was clean after the critic run.

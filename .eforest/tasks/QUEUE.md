@@ -8,7 +8,7 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-1. **E2-T08** — Capstone: configure, reconfigure, and revoke an agent *(awaiting independent critic)*
+1. **E2-T08** — Capstone: configure, reconfigure, and revoke an agent *(builder working)*
 
 ## Next up (dependencies satisfied)
 
@@ -48,7 +48,7 @@ No new task may start until **E2-T08** clears the gate.
 - [x] ` 205` [E2-T05](epic-2-the-roster/E2-T05-provider-registry-and-capabilities/readme.md) — Harness and sandbox provider registry with capability negotiation *(deps: E2-T01)*
 - [x] ` 206` [E2-T06](epic-2-the-roster/E2-T06-agent-membership-and-presence/readme.md) — Agent membership and derived availability presence *(deps: E2-T03, E2-T05)*
 - [x] ` 207` [E2-T07](epic-2-the-roster/E2-T07-immutable-invocation-snapshot/readme.md) — Immutable, capability-resolved invocation snapshot *(deps: E2-T02, E2-T05)*
-- [?] ` 208` [E2-T08](epic-2-the-roster/E2-T08-configure-reconfigure-revoke-agent/readme.md) — Capstone: configure, reconfigure, and revoke an agent **[CAPSTONE]** *(deps: E2-T04, E2-T06, E2-T07)*
+- [~] ` 208` [E2-T08](epic-2-the-roster/E2-T08-configure-reconfigure-revoke-agent/readme.md) — Capstone: configure, reconfigure, and revoke an agent **[CAPSTONE]** *(deps: E2-T04, E2-T06, E2-T07)*
 
 ## Epic 3 — `epic-3-the-dispatcher`
 

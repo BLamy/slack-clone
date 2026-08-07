@@ -3,7 +3,7 @@ id: E2-T08
 epic: 2
 title: "Capstone: configure, reconfigure, and revoke an agent"
 priority: 208
-status: implemented
+status: in-progress
 depends_on: [E2-T04, E2-T06, E2-T07]
 estimate: L
 capstone: true
@@ -111,3 +111,9 @@ ownership nor a historical snapshot can route around current authorization or re
 - Evidence: `evidence/e2-t08-final/verification-summary.json`, `http-transcript.json`, `cli-transcript.json`, `source-dumps.json`, `snapshot-manifests.json`, `role-matrix.json`, `roster.json`, `revocation-races.json`, `replay-composite.json`, `tamper-matrix.json`, `sensitivity.json`, `canary-scan.json`, `cold-clone-transcript.json`, and `composed-verify-transcript.json`.
 - Replay: N/A (server/CLI agent-control capstone) + mitigation: role matrix, revision/snapshot manifests, revocation race, canary scan, and composite stream replay.
 - Claim: the builder considers the remaining lost-ack proof gap closed and E2-T08 implemented; a third fresh critic must independently verify the exact final diff and promoted evidence before this task can become `verified`.
+
+### Critic — 2026-08-06 — third independent verification
+
+- `VERDICT: refuted` from fresh independent agent `019fd9c7-310f-74a2-9232-3717dbcd61de`, which reviewed implementation commit `f23695f3d6f3ff92802304ae9d5bd815ad9fb001`, evidence commit `4c5b125`, and the task specification without editing the worktree.
+- The critic independently confirmed the final verifier and composed manifest, all six lost-ack operations with one durable matching event and successful retries, revoke fencing and snapshot stability, connection revocation, fresh replay, role matrix, canary/tamper coverage, and disposable sensitivity mutant. It found one wrapper gap: plain `make verify-E2-T08` exits 2 after the verifier passes because `scripts/cold-verify-e2-t08.mjs` scans artifact directory entries as files and reads the generated `playwright/` and `sensitivity-mutant/` directories, causing `EISDIR`; promoted mode masks this by writing directly into the evidence directory.
+- Status: `in-progress`; builder must make artifact scanning regular-file-safe, then rerun the plain cold target and obtain a fresh critic verdict.

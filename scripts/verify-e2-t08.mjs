@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawn, spawnSync } from "node:child_process";
-import { createServer } from "node:http";
+import { createServer, request as httpRequest } from "node:http";
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -94,6 +94,7 @@ const AGENT_PRINCIPAL_A = `pr_${AGENT_A.slice(3)}`;
 const GENERAL_CHANNEL_ID = `ch_${WORKSPACE_A.slice(3)}_${"1".repeat(26)}`;
 const SIBLING_CHANNEL_ID = `ch_${WORKSPACE_B.slice(3)}_${"1".repeat(26)}`;
 const CONNECTION_A = `cn_${WORKSPACE_A.slice(3)}_${"n".repeat(26)}`;
+const CROSS_WORKSPACE_CONNECTION = `cn_${WORKSPACE_B.slice(3)}_${"n".repeat(26)}`;
 const CANARY = "Bearer e2-t08-agent-control-canary-123456789";
 const CONFIG_PATH = path.join(
   root,
@@ -131,7 +132,7 @@ async function main() {
       app,
       streamStore,
     });
-    const sensitivity = runSensitivityProbes(workflow);
+    const sensitivity = await runSensitivityProbes(workflow);
     const gates = runGates();
     assert.equal(sensitivity.verifierDetectedMutant, true);
 
@@ -247,18 +248,33 @@ async function verifyWorkflow({ app, streamStore }) {
     expectedRevisionId: null,
   };
 
-  const createFirst = await runCli("create", {
-    actorId: AGENT_MANAGER,
+  const createIdempotencyKey = nextKey("create-lost-ack");
+  const lostCreate = await runLostAckCreate({
+    app,
     body: createBody,
-    idempotencyKey: nextKey("create"),
+    idempotencyKey: createIdempotencyKey,
+    streamStore,
   });
   const createRetry = await runCli("create", {
     actorId: AGENT_MANAGER,
     body: createBody,
-    idempotencyKey: createFirst.idempotencyKey,
+    idempotencyKey: createIdempotencyKey,
   });
-  assert.equal(createFirst.payload.agent.agentId, AGENT_A);
   assert.equal(createRetry.payload.agent.agentId, AGENT_A);
+  assert.equal(lostCreate.durableEventCount, 1);
+  const changedCreate = await runCli("create", {
+    actorId: AGENT_MANAGER,
+    body: {
+      ...createBody,
+      profile: {
+        ...createBody.profile,
+        displayName: "Changed idempotency payload",
+      },
+    },
+    expectSuccess: false,
+    idempotencyKey: createIdempotencyKey,
+  });
+  assert.notEqual(changedCreate.exitCode, 0);
 
   const configCreate = await runCli("config-create", {
     actorId: AGENT_MANAGER,
@@ -492,19 +508,18 @@ async function verifyWorkflow({ app, streamStore }) {
     firstSnapshotBundle,
     providerRegistryV2,
     secondSnapshotBundle,
+    streamStore,
   });
   debug("revocation races");
 
   const headBeforeRevoke = await managerConfigHead({ app });
-  const revoke = await runCli("revoke", {
-    actorId: AGENT_MANAGER,
-    agentId: AGENT_A,
-    body: {
-      expectedRevision: headBeforeRevoke.revision,
-      expectedRevisionId: headBeforeRevoke.revisionId,
-    },
-    idempotencyKey: nextKey("revoke"),
+  const actualRevokeRace = await verifyActualRevokeRace({
+    secondSnapshotBundle,
+    streamStore,
+    expectedRevision: headBeforeRevoke.revision,
+    expectedRevisionId: headBeforeRevoke.revisionId,
   });
+  const revoke = actualRevokeRace.revoke;
   const revokeRetry = await runCli("revoke", {
     actorId: AGENT_MANAGER,
     agentId: AGENT_A,
@@ -516,6 +531,12 @@ async function verifyWorkflow({ app, streamStore }) {
   });
   assert.equal(revoke.payload.revoked, true);
   assert.equal(revokeRetry.payload.revoked, true);
+  const firstByteStableAfterRevoke =
+    JSON.stringify(firstSnapshotBundle.snapshot) === firstSnapshotBytes;
+  assert.equal(firstByteStableAfterRevoke, true);
+  revocationRaces.actualConfigRevoke = actualRevokeRace.evidence;
+  revocationRaces.historicalFirstSnapshotStableAfterRevoke =
+    firstByteStableAfterRevoke;
 
   const tamperMatrix = verifyTamperMatrix({
     firstSnapshot: firstSnapshotBundle.snapshot,
@@ -537,8 +558,15 @@ async function verifyWorkflow({ app, streamStore }) {
     rosterAfter,
     secondSnapshot: secondSnapshotBundle.snapshot,
     sourceDumps,
-    streamStore,
   });
+  if (process.env.E2_T08_MUTATION === "replay-digest") {
+    replay.directoryStateDigest = `sha256:${"0".repeat(64)}`;
+  }
+  assert.equal(
+    replay.compositeDigest,
+    canonicalSha256(replayCompositePayload(replay)),
+    "replay composite integrity detector did not detect a mutated source digest",
+  );
   debug("projection replay");
 
   const history = await runCli("history", {
@@ -569,7 +597,13 @@ async function verifyWorkflow({ app, streamStore }) {
       secondSnapshotByteLength: secondSnapshotBytes.length,
       firstSnapshotReplayable: true,
       secondSnapshotReplayable: true,
-      historicalSnapshotsStableAfterRevoke: true,
+      historicalSnapshotsStableAfterRevoke: firstByteStableAfterRevoke,
+      idempotency: {
+        lostAcknowledgementRecovered: lostCreate.clientAborted,
+        duplicatePrincipalEvents: lostCreate.durableEventCount,
+        changedPayloadExitCode: changedCreate.exitCode,
+        changedPayloadRefused: changedCreate.exitCode !== 0,
+      },
       historyEntries: history.payload.entries.length,
       canaryRefusal: canary,
     },
@@ -601,7 +635,7 @@ async function verifyWorkflow({ app, streamStore }) {
         replayable: true,
       },
       firstByteStableAfterReconfigure: true,
-      firstByteStableAfterRevoke: true,
+      firstByteStableAfterRevoke,
       differentCanonicalDigests: true,
     },
     matrix,
@@ -637,6 +671,159 @@ async function verifyWorkflow({ app, streamStore }) {
       sameHumanAndAgentRosterContract: true,
     },
   };
+}
+
+async function runLostAckCreate({ app, body, idempotencyKey, streamStore }) {
+  const pathname = `/api/workspaces/${WORKSPACE_A}/agents`;
+  let resolveObserved;
+  let resolveRelease;
+  let resolveClosed;
+  const observed = new Promise((resolve) => {
+    resolveObserved = resolve;
+  });
+  const release = new Promise((resolve) => {
+    resolveRelease = resolve;
+  });
+  const closed = new Promise((resolve) => {
+    resolveClosed = resolve;
+  });
+  let clientAborted = false;
+  let requestError = null;
+  streamStore.setAppendHook(async ({ record, stream }) => {
+    const event = record?.event ?? record;
+    if (
+      stream === app.workspaceDirectory.stream &&
+      event?.eventType === "principal.created" &&
+      event?.idempotencyKey === idempotencyKey
+    ) {
+      resolveObserved();
+      await release;
+    }
+  });
+  const target = new URL(pathname, app.baseUrl);
+  const client = httpRequest(
+    target,
+    {
+      headers: {
+        Accept: "application/json",
+        Connection: "close",
+        "Content-Length": Buffer.byteLength(JSON.stringify(body)),
+        "Content-Type": "application/json",
+        "Idempotency-Key": idempotencyKey,
+        "x-test-principal": AGENT_MANAGER,
+      },
+      method: "POST",
+    },
+    (response) => {
+      response.resume();
+      response.once("close", resolveClosed);
+    },
+  );
+  client.once("error", (error) => {
+    requestError = error;
+    resolveClosed();
+  });
+  client.once("close", resolveClosed);
+  client.end(JSON.stringify(body));
+  try {
+    await observed;
+    clientAborted = true;
+    client.destroy();
+    resolveRelease();
+    await closed;
+    assert.ok(
+      requestError === null || requestError.code === "ECONNRESET",
+      `unexpected lost-ack client error ${requestError?.code ?? "none"}`,
+    );
+    const durableEventCount = streamStore
+      .peek(app.workspaceDirectory.stream)
+      .filter(({ event }) => event?.idempotencyKey === idempotencyKey).length;
+    assert.equal(durableEventCount, 1);
+    HTTP_TRANSCRIPT.push({
+      actor: AGENT_MANAGER,
+      method: "POST",
+      path: pathname,
+      requestBody: "redacted-json",
+      response: "client-aborted-after-durable-append",
+      status: "client-aborted",
+    });
+    return { clientAborted, durableEventCount };
+  } finally {
+    resolveRelease();
+    streamStore.setAppendHook(null);
+  }
+}
+
+async function verifyActualRevokeRace({
+  expectedRevision,
+  expectedRevisionId,
+  secondSnapshotBundle,
+  streamStore,
+}) {
+  const idempotencyKey = nextKey("revoke-race");
+  const body = { expectedRevision, expectedRevisionId };
+  let resolveObserved;
+  let resolveRelease;
+  const observed = new Promise((resolve) => {
+    resolveObserved = resolve;
+  });
+  const release = new Promise((resolve) => {
+    resolveRelease = resolve;
+  });
+  streamStore.setAppendHook(async ({ record, stream }) => {
+    const event = record?.event ?? record;
+    if (
+      stream === streamNames.agentConfig(WORKSPACE_A, AGENT_A) &&
+      event?.eventType === "agent.config.retired" &&
+      event?.data?.agentId === AGENT_A &&
+      event?.idempotencyKey === idempotencyKey
+    ) {
+      resolveObserved();
+      await release;
+    }
+  });
+  let revokePromise;
+  try {
+    revokePromise = runCli("revoke", {
+      actorId: AGENT_MANAGER,
+      agentId: AGENT_A,
+      body,
+      idempotencyKey,
+    });
+    await observed;
+    const retiredSnapshot = await createAgentConfigStream({
+      agentId: AGENT_A,
+      streamStore,
+      workspaceId: WORKSPACE_A,
+    }).read();
+    const retiredState = retiredSnapshot.state.entities.agents?.[AGENT_A];
+    const decision = checkInvocationSnapshotUse({
+      ...secondSnapshotBundle.input,
+      configState: retiredState,
+      snapshot: secondSnapshotBundle.snapshot,
+    });
+    assert.equal(decision.allowed, false);
+    assert.equal(decision.code, "INVOCATION_SNAPSHOT_AGENT_CONFIG_INACTIVE");
+    resolveRelease();
+    const revoke = await revokePromise;
+    assert.equal(revoke.payload.revoked, true);
+    return {
+      revoke,
+      evidence: {
+        appendObservedBeforeResponse: true,
+        configStatusAfterDurableRetire: retiredState.status,
+        historicalSnapshotUseRefused: true,
+        code: decision.code,
+        requestIdempotencyKey: idempotencyKey,
+        sourceOffset: retiredSnapshot.nextOffset,
+        historicalSnapshotBytesWereNotMutated: true,
+        result: "PASS",
+      },
+    };
+  } finally {
+    resolveRelease();
+    streamStore.setAppendHook(null);
+  }
 }
 
 async function verifyCanaryRefusal({
@@ -857,62 +1044,75 @@ async function verifyRoleMatrix({
   );
 
   const connectionRows = [];
+  const connectionBaseline = await sourceHeadsFor({ app, streamStore });
   for (const [actorClass, actorId] of negativeActors) {
     for (const operation of [
       "connection.reference.bind",
       "connection.grant.manage",
       "connection.credential.read",
     ]) {
-      let decision;
-      try {
-        decision = await app.administrationAuthorization.explain({
-          agentId: null,
-          context: establishContext(actorId),
-          operations: [operation],
-          resourceId: CONNECTION_A,
-          resourceType: "connection",
-        });
-      } catch (error) {
-        decision = { allowed: false, errorCode: error.code ?? "ACCESS_DENIED" };
-      }
-      assert.equal(
-        decision.allowed === true,
+      const allowed =
         actorClass === "connection-manager" &&
-          ["connection.reference.bind", "connection.grant.manage"].includes(
-            operation,
-          ),
-      );
+        ["connection.reference.bind", "connection.grant.manage"].includes(
+          operation,
+        );
+      const result = await request(app, connectionPath(operation), {
+        actorId,
+        body: operation === "connection.credential.read" ? null : {},
+        idempotencyKey:
+          operation === "connection.credential.read"
+            ? null
+            : nextKey("matrix-connection"),
+        method: operation === "connection.credential.read" ? "GET" : "POST",
+      });
+      assert.equal(result.status, allowed ? 200 : 404);
       connectionRows.push({
         actorClass,
         actorId,
         operation,
-        allowed: decision.allowed === true,
-        errorCode: decision.errorCode ?? null,
-        refusedUnauthorized: !(decision.allowed === true),
+        status: result.status,
+        allowed,
+        refusedUnauthorized: !allowed,
       });
     }
   }
+  const connectionAfter = await sourceHeadsFor({ app, streamStore });
+  assert.deepEqual(
+    connectionAfter,
+    connectionBaseline,
+    "connection authorization matrix moved a source head",
+  );
 
   const crossScope = [];
-  for (const [name, pathname] of [
-    [
-      "sibling agent",
-      `/api/workspaces/${WORKSPACE_A}/agents/${CROSS_WORKSPACE_AGENT}`,
-    ],
-    [
-      "sibling channel",
-      `/api/workspaces/${WORKSPACE_A}/channels/${SIBLING_CHANNEL_ID}/members/${AGENT_PRINCIPAL_A}/invite`,
-    ],
+  for (const { body, method, name, pathname } of [
+    {
+      body: null,
+      method: "GET",
+      name: "sibling agent",
+      pathname: `/api/workspaces/${WORKSPACE_A}/agents/${CROSS_WORKSPACE_AGENT}`,
+    },
+    {
+      body: { inviteId: nextInviteId(), principalId: AGENT_PRINCIPAL_A },
+      method: "POST",
+      name: "sibling channel",
+      pathname: `/api/workspaces/${WORKSPACE_A}/channels/${SIBLING_CHANNEL_ID}/members/${AGENT_PRINCIPAL_A}/invite`,
+    },
+    {
+      body: {},
+      method: "POST",
+      name: "sibling connection",
+      pathname: connectionPath(
+        "connection.grant.manage",
+        CROSS_WORKSPACE_CONNECTION,
+      ),
+    },
   ]) {
     const before = await sourceHeadsFor({ app, streamStore });
     const result = await request(app, pathname, {
       actorId: CROSS_WORKSPACE_ADMIN,
-      body:
-        name === "sibling agent"
-          ? null
-          : { inviteId: nextInviteId(), principalId: AGENT_PRINCIPAL_A },
+      body,
       idempotencyKey: nextKey("cross"),
-      method: name === "sibling agent" ? "GET" : "POST",
+      method,
     });
     const after = await sourceHeadsFor({ app, streamStore });
     assert.equal(result.status, 404);
@@ -933,7 +1133,9 @@ async function verifyRoleMatrix({
     negativeRows: negativeRows.length,
     connectionRows,
     crossScope,
-    refusedRows: negativeRows.filter(({ status }) => status === 404).length,
+    refusedRows:
+      negativeRows.filter(({ status }) => status === 404).length +
+      connectionRows.filter(({ allowed }) => !allowed).length,
     result: "PASS",
   };
 }
@@ -1001,6 +1203,7 @@ async function verifyRevocationRaces({
   firstSnapshotBundle,
   providerRegistryV2,
   secondSnapshotBundle,
+  streamStore,
 }) {
   const providerUnhealthy = providerRegistryV2.updateStatus({
     selection: {
@@ -1021,9 +1224,18 @@ async function verifyRevocationRaces({
     "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED",
   );
 
-  const revokedGrants = secondSnapshotBundle.input.connectionGrants.map(
-    (grant) => ({ ...grant, status: "revoked" }),
-  );
+  await appendConnectionRevision({
+    actorId: CONNECTION_MANAGER,
+    grantRevision: 2,
+    revision: 3,
+    status: "revoked",
+    streamStore,
+  });
+  const revokedGrants = await connectionGrantsFor({
+    config: secondSnapshotBundle.input.config,
+    revision: 2,
+    streamStore,
+  });
   const grantDecision = checkInvocationSnapshotUse({
     ...secondSnapshotBundle.input,
     connectionGrants: revokedGrants,
@@ -1084,6 +1296,8 @@ async function verifyRevocationRaces({
         name: "connection grant revocation",
         code: grantDecision.code,
         refused: true,
+        durableSourceRevision: 3,
+        grantRevision: 2,
       },
       {
         name: "workspace membership removal",
@@ -1101,6 +1315,12 @@ async function verifyRevocationRaces({
     sourceHeadsAfterRemoval: {
       directory: directoryAfterRemoval.nextOffset,
       stateDigest: directoryAfterRemoval.stateDigest,
+    },
+    connectionGrantRevocation: {
+      sourceRevision: 3,
+      configuredGrantRevision: 2,
+      statuses: revokedGrants.map(({ status }) => status),
+      sourceDigests: revokedGrants.map(({ stateDigest }) => stateDigest),
     },
     everyRaceRefused: true,
     result: "PASS",
@@ -1211,26 +1431,27 @@ async function verifyProjectionReplay({
   rosterAfter,
   secondSnapshot,
   sourceDumps,
-  streamStore,
 }) {
+  const replayStore = createMemoryStore();
+  await seedReplayStore({ replayStore, sourceDumps });
+  const replayedSources = await replayedSourceMetadata({
+    replayStore,
+    sourceDumps,
+  });
   const replayedDirectory = createWorkspaceDirectoryAuthority({
     bootstrapEvents: [],
-    streamStore,
+    streamStore: replayStore,
     workspaceId: WORKSPACE_A,
   });
   const directory = await replayedDirectory.read();
-  const durableReplay = validateAndReplayDump({
-    records: sourceDumps.directory.records.map((record, index) => ({
-      event: record.event ?? record,
-      offset: offsetFor(index + 1),
-    })),
-  });
+  const durableReplay = replaySourceDump(sourceDumps.directory);
   const configStream = createAgentConfigStream({
     agentId: AGENT_A,
-    streamStore,
+    streamStore: replayStore,
     workspaceId: WORKSPACE_A,
   });
   const config = await configStream.read();
+  const configReplay = replaySourceDump(sourceDumps.config);
   const configState = config.state.entities.agents?.[AGENT_A] ?? null;
   const replayedRoster = buildAgentRoster({
     activeRuns: [],
@@ -1240,13 +1461,25 @@ async function verifyProjectionReplay({
     state: directory.state,
     workspaceId: WORKSPACE_A,
   });
+  const connectionReplays = {};
+  for (const [connectionId, dump] of Object.entries(sourceDumps.connections)) {
+    const replay = replaySourceDump(dump);
+    assert.equal(replay.finalStateDigest, dump.stateDigest);
+    connectionReplays[connectionId] = {
+      stream: dump.stream,
+      recordCount: dump.records.length,
+      finalStateDigest: replay.finalStateDigest,
+      sourceStreamDigest: dump.streamDigest,
+    };
+  }
   assert.equal(
     agentRosterDigest(replayedRoster),
     agentRosterDigest(rosterAfter),
   );
-  assert.equal(config.stateDigest, configState ? config.stateDigest : null);
+  assert.equal(config.stateDigest, sourceDumps.config.stateDigest);
   assert.equal(directory.stateDigest, sourceDumps.directory.stateDigest);
   assert.equal(directory.stateDigest, durableReplay.finalStateDigest);
+  assert.equal(configReplay.finalStateDigest, sourceDumps.config.stateDigest);
   assert.equal(
     replayInvocationSnapshot(firstSnapshot).snapshotDigest,
     firstSnapshot.snapshotDigest,
@@ -1267,6 +1500,45 @@ async function verifyProjectionReplay({
     status: configState?.status ?? null,
     transitions: configState?.transitions ?? [],
   });
+  const connectionStreams = Object.fromEntries(
+    Object.entries(sourceDumps.connections).map(([connectionId, dump]) => [
+      connectionId,
+      {
+        nextOffset: dump.nextOffset,
+        recordCount: dump.recordCount,
+        stateDigest: dump.stateDigest,
+        stream: dump.stream,
+        streamDigest: dump.streamDigest,
+      },
+    ]),
+  );
+  const sourceStreams = {
+    audit: {
+      nextOffset: sourceDumps.audit.nextOffset,
+      recordCount: sourceDumps.audit.records.length,
+      stream: sourceDumps.audit.stream,
+      streamDigest: sourceDumps.audit.streamDigest,
+    },
+    config: {
+      nextOffset: sourceDumps.config.nextOffset,
+      recordCount: sourceDumps.config.records.length,
+      stream: sourceDumps.config.stream,
+      streamDigest: sourceDumps.config.streamDigest,
+    },
+    connections: connectionStreams,
+    directory: {
+      nextOffset: sourceDumps.directory.nextOffset,
+      recordCount: sourceDumps.directory.records.length,
+      stream: sourceDumps.directory.stream,
+      streamDigest: sourceDumps.directory.streamDigest,
+    },
+    dispatch: {
+      nextOffset: sourceDumps.dispatch.nextOffset,
+      recordCount: sourceDumps.dispatch.records.length,
+      stream: sourceDumps.dispatch.stream,
+      streamDigest: sourceDumps.dispatch.streamDigest,
+    },
+  };
   const composite = {
     directoryStateDigest: directory.stateDigest,
     configStateDigest: config.stateDigest,
@@ -1276,29 +1548,114 @@ async function verifyProjectionReplay({
     historyDigest,
     rosterDigest: agentRosterDigest(replayedRoster),
     snapshotManifestDigest,
-    connectionStreams: sourceDumps.connections,
-    sourceStreams: {
-      directory: directory.stream,
-      config: config.stream,
-    },
+    connectionStreams,
+    sourceStreams,
   };
   return {
     ...composite,
     compositeDigest: canonicalSha256(composite),
+    connectionReplays,
     projectionDeletedAndReplayed: true,
+    freshReplayStore: true,
+    sourceStreamsSeeded: replayedSources.every(({ identical }) => identical),
+    replayedSources,
     rosterReproduced: true,
     activeConfigReproduced: true,
     revisionHistoryReproduced: true,
     snapshotManifestsReproduced: true,
+    connectionStateReproduced: Object.values(connectionReplays).every(
+      ({ finalStateDigest }, index) =>
+        finalStateDigest ===
+        Object.values(sourceDumps.connections)[index].stateDigest,
+    ),
+    auditAndDispatchRoundTrips: replayedSources
+      .filter(({ key }) => key === "audit" || key === "dispatch")
+      .every(({ identical }) => identical),
     sourceRecordCounts: {
-      directory: sourceDumps.directory.records.length,
+      audit: sourceDumps.audit.records.length,
       config: sourceDumps.config.records.length,
+      connections: Object.fromEntries(
+        Object.entries(sourceDumps.connections).map(([key, dump]) => [
+          key,
+          dump.records.length,
+        ]),
+      ),
+      directory: sourceDumps.directory.records.length,
+      dispatch: sourceDumps.dispatch.records.length,
     },
     result: "PASS",
   };
 }
 
-function runSensitivityProbes(workflow) {
+function replayCompositePayload(value) {
+  return {
+    activeConfigStatus: value.activeConfigStatus,
+    activeRevisionId: value.activeRevisionId,
+    configStateDigest: value.configStateDigest,
+    configStreamDigest: value.configStreamDigest,
+    connectionStreams: value.connectionStreams,
+    directoryStateDigest: value.directoryStateDigest,
+    historyDigest: value.historyDigest,
+    rosterDigest: value.rosterDigest,
+    snapshotManifestDigest: value.snapshotManifestDigest,
+    sourceStreams: value.sourceStreams,
+  };
+}
+
+function replaySourceDump(dump) {
+  return validateAndReplayDump({
+    records: dump.records.map((record, index) => ({
+      event: record.event ?? record,
+      offset: offsetFor(index + 1),
+    })),
+  });
+}
+
+async function seedReplayStore({ replayStore, sourceDumps }) {
+  const dumps = [
+    sourceDumps.directory,
+    sourceDumps.config,
+    sourceDumps.audit,
+    sourceDumps.dispatch,
+    ...Object.values(sourceDumps.connections),
+  ];
+  for (const dump of dumps) {
+    for (const [index, record] of dump.records.entries()) {
+      await replayStore.append(dump.stream, record, {
+        streamSeq: offsetFor(index),
+      });
+    }
+  }
+}
+
+async function replayedSourceMetadata({ replayStore, sourceDumps }) {
+  const namedDumps = [
+    ["directory", sourceDumps.directory],
+    ["config", sourceDumps.config],
+    ["audit", sourceDumps.audit],
+    ["dispatch", sourceDumps.dispatch],
+    ...Object.entries(sourceDumps.connections).map(([key, dump]) => [
+      `connection:${key}`,
+      dump,
+    ]),
+  ];
+  const results = [];
+  for (const [key, dump] of namedDumps) {
+    const replayed = await replayStore.read(dump.stream, "-1");
+    const identical = replayed.streamDigest === dump.streamDigest;
+    assert.equal(identical, true, `${key} source stream changed during replay`);
+    results.push({
+      key,
+      stream: dump.stream,
+      recordCount: replayed.records.length,
+      streamDigest: replayed.streamDigest,
+      identical,
+    });
+  }
+  return results;
+}
+
+async function runSensitivityProbes(workflow) {
   const rows = [];
   for (const row of workflow.tamperMatrix.rows) {
     assert.equal(row.detected, true);
@@ -1323,6 +1680,14 @@ function runSensitivityProbes(workflow) {
     verifierWentRed: true,
     detectorCode: "REVOCATION_FENCE",
   });
+  const mutant = await runVerifierMutant();
+  assert.notEqual(mutant.exitCode, 0);
+  rows.push({
+    mutation: "mutate replay composite source digest",
+    verifierWentRed: mutant.exitCode !== 0,
+    detectorCode: "REPLAY_COMPOSITE_INTEGRITY",
+    exitCode: mutant.exitCode,
+  });
   return {
     mutationCount: rows.length,
     mutations: rows,
@@ -1331,6 +1696,44 @@ function runSensitivityProbes(workflow) {
     ),
     result: "PASS",
   };
+}
+
+async function runVerifierMutant() {
+  const mutantArtifact = path.join(artifactRoot, "sensitivity-mutant");
+  await mkdir(mutantArtifact, { recursive: true });
+  const childEnv = { ...process.env };
+  delete childEnv.PROMOTE_EVIDENCE;
+  childEnv.E2_T08_IMPLEMENTATION_COMMIT = implementationCommit;
+  childEnv.E2_T08_MUTATION = "replay-digest";
+  childEnv.E2_T08_SKIP_GATES = "1";
+  childEnv.TEST_ARTIFACT_DIR = mutantArtifact;
+  return new Promise((resolve, reject) => {
+    const child = spawn(
+      process.execPath,
+      [path.join(root, "scripts/verify-e2-t08.mjs")],
+      {
+        cwd: root,
+        env: childEnv,
+      },
+    );
+    let stdout = "";
+    let stderr = "";
+    child.stdout.on("data", (chunk) => {
+      stdout += chunk;
+    });
+    child.stderr.on("data", (chunk) => {
+      stderr += chunk;
+    });
+    child.once("error", reject);
+    child.once("close", (exitCode, signal) => {
+      assert.equal(stdout.includes(CANARY), false);
+      assert.equal(stderr.includes(CANARY), false);
+      resolve({
+        exitCode: typeof exitCode === "number" ? exitCode : signal ? 1 : 0,
+        stderr: stderr.slice(-500),
+      });
+    });
+  });
 }
 
 async function makeSnapshotBundle({
@@ -1456,24 +1859,32 @@ async function connectionGrantsFor({ config, revision, streamStore }) {
   for (const ref of config.connectionGrants.refs) {
     const stream = connectionStream(ref.connectionId);
     const snapshot = await streamStore.read(stream, "-1");
+    const latest = snapshot.records.at(-1)?.event?.data ?? {};
+    const metadata = latest.metadata ?? {};
     grants.push({
       agentId: AGENT_A,
       connectionId: ref.connectionId,
       expiresAt: 10_000,
       grantId: ref.grantId,
       purpose: ref.purpose,
-      revision,
+      revision: metadata.grantRevision ?? revision,
       sourceOffset: snapshot.nextOffset,
       sourceStream: stream,
       stateDigest: snapshot.streamDigest,
-      status: "active",
+      status: metadata.status ?? "active",
       workspaceId: WORKSPACE_A,
     });
   }
   return grants;
 }
 
-async function appendConnectionRevision({ actorId, revision, streamStore }) {
+async function appendConnectionRevision({
+  actorId,
+  revision,
+  grantRevision = revision,
+  status = "active",
+  streamStore,
+}) {
   for (const [index, connectionId] of ["conn_agrant_b", "conn_a"].entries()) {
     const stream = connectionStream(connectionId);
     const snapshot = await streamStore.read(stream, "-1");
@@ -1487,8 +1898,9 @@ async function appendConnectionRevision({ actorId, revision, streamStore }) {
           connectionId,
           metadata: {
             agent: AGENT_A,
-            grantRevision: revision,
+            grantRevision,
             provider: "scripted",
+            status,
           },
           revision,
         },
@@ -1509,10 +1921,11 @@ async function appendConnectionRevision({ actorId, revision, streamStore }) {
 
 async function sourceDumpsFor({ app, streamStore }) {
   const directory = await app.workspaceDirectory.read();
-  const config = await streamStore.read(
-    streamNames.agentConfig(WORKSPACE_A, AGENT_A),
-    "-1",
-  );
+  const config = await createAgentConfigStream({
+    agentId: AGENT_A,
+    streamStore,
+    workspaceId: WORKSPACE_A,
+  }).read();
   const audit = await streamStore.read(
     streamNames.workspaceAudit(WORKSPACE_A),
     "-1",
@@ -1529,6 +1942,13 @@ async function sourceDumpsFor({ app, streamStore }) {
       nextOffset: snapshot.nextOffset,
       streamDigest: snapshot.streamDigest,
       recordCount: snapshot.records.length,
+      records: snapshot.records,
+      stateDigest: validateAndReplayDump({
+        records: snapshot.records.map((record, index) => ({
+          event: record.event ?? record,
+          offset: offsetFor(index + 1),
+        })),
+      }).finalStateDigest,
     };
   }
   return {
@@ -1545,6 +1965,7 @@ async function sourceDumpsFor({ app, streamStore }) {
       stream: streamNames.agentConfig(WORKSPACE_A, AGENT_A),
       nextOffset: config.nextOffset,
       streamDigest: config.streamDigest,
+      stateDigest: config.stateDigest,
       records: config.records,
     },
     audit: {
@@ -1789,6 +2210,18 @@ async function createApp({ bootstrapEvents, streamStore }) {
       }
       if (handledByAgentApi) return;
       if (
+        await handleConnectionApi({
+          administrationAuthorization,
+          request,
+          response,
+          sessionUser,
+          url,
+          workspaceAuthorization,
+        })
+      ) {
+        return;
+      }
+      if (
         await handleChannelApi({
           channelAuthorization,
           dispatchDoor,
@@ -1837,6 +2270,65 @@ async function createApp({ bootstrapEvents, streamStore }) {
     streamStore,
     workspaceDirectory,
   };
+}
+
+async function handleConnectionApi({
+  administrationAuthorization,
+  request,
+  response,
+  sessionUser,
+  url,
+  workspaceAuthorization,
+}) {
+  const match = url.pathname.match(
+    /^\/api\/workspaces\/([^/]+)\/connections\/([^/]+)\/(connection\.(?:reference\.bind|grant\.manage|credential\.read))$/u,
+  );
+  if (!match) return false;
+  if (!["GET", "POST"].includes(request.method)) {
+    sendJson(response, 405, { ok: false, code: "METHOD_NOT_ALLOWED" });
+    return true;
+  }
+  const user = sessionUser(request);
+  if (!user?.sub) {
+    sendJson(response, 401, { ok: false, code: "AUTHENTICATION_REQUIRED" });
+    return true;
+  }
+  const workspaceId = decodeURIComponent(match[1]);
+  const connectionId = decodeURIComponent(match[2]);
+  const operation = decodeURIComponent(match[3]);
+  if (workspaceId !== WORKSPACE_A) {
+    sendJson(response, 404, { ok: false, code: "NOT_FOUND" });
+    return true;
+  }
+  const context = await workspaceAuthorization.contextForRequest({
+    request,
+    url,
+    user,
+  });
+  const authorization =
+    operation === "connection.credential.read"
+      ? await administrationAuthorization.authorizeRead({
+          agentId: null,
+          context,
+          operations: [operation],
+          resourceId: connectionId,
+          resourceType: "connection",
+        })
+      : await administrationAuthorization.authorizeMutation({
+          agentId: null,
+          context,
+          operation,
+          resourceId: connectionId,
+          resourceType: "connection",
+        });
+  sendJson(response, 200, {
+    actor: context.principalId,
+    connectionId,
+    ok: true,
+    operation,
+    source: authorization.source,
+  });
+  return true;
 }
 
 async function handleChannelApi({
@@ -2147,6 +2639,10 @@ function channelPath(action) {
   return `/api/workspaces/${WORKSPACE_A}/channels/${GENERAL_CHANNEL_ID}/members/${AGENT_PRINCIPAL_A}/${action}`;
 }
 
+function connectionPath(operation, connectionId = CONNECTION_A) {
+  return `/api/workspaces/${WORKSPACE_A}/connections/${connectionId}/${operation}`;
+}
+
 function establishContext(principalId) {
   return establishWorkspaceContext({
     authenticatedPrincipalId: principalId,
@@ -2311,6 +2807,7 @@ function bootstrapEvent(eventType, actorId, data) {
 
 function createMemoryStore() {
   const streams = new Map();
+  let appendHook = null;
   return {
     async append(stream, record, { streamSeq } = {}) {
       const entries = streams.get(stream) ?? [];
@@ -2327,6 +2824,13 @@ function createMemoryStore() {
       };
       entries.push(entry);
       streams.set(stream, entries);
+      if (appendHook) {
+        await appendHook({
+          offset: entry.offset,
+          record: structuredClone(record),
+          stream,
+        });
+      }
       return { nextOffset: entry.offset };
     },
     async ensure(stream) {
@@ -2345,6 +2849,12 @@ function createMemoryStore() {
       return (streams.get(stream) ?? []).map(({ record }) =>
         structuredClone(record),
       );
+    },
+    setAppendHook(hook) {
+      if (hook !== null && typeof hook !== "function") {
+        throw new TypeError("append hook must be a function or null");
+      }
+      appendHook = hook;
     },
   };
 }

@@ -466,6 +466,47 @@ export function deriveInvocationCorrelationId({
 
 export const invocationCorrelationId = deriveInvocationCorrelationId;
 
+export function deriveMentionInvocationId({
+  agentId,
+  sourceTrigger,
+  workspaceId,
+}) {
+  assertScopedId(agentId, "agent", "$.agentId");
+  assertSourceReference(sourceTrigger, "$.sourceTrigger", workspaceId, {
+    channelOnly: true,
+  });
+  if (
+    typeof workspaceId !== "string" ||
+    !/^ws_[0-9a-hjkmnp-tv-z]{26}$/u.test(workspaceId)
+  ) {
+    fail(
+      INVOCATION_RUN_ERROR_CODES.INVALID_DATA,
+      "$.workspaceId",
+      "workspaceId is not canonical",
+    );
+  }
+  return `iv_${hex(
+    sha256Digest(canonicalJson({ agentId, sourceTrigger, workspaceId })),
+  ).slice(0, 26)}`;
+}
+
+export function deriveMentionInvocationIdempotencyKey({
+  agentId,
+  sourceTrigger,
+  workspaceId,
+}) {
+  const invocationId = deriveMentionInvocationId({
+    agentId,
+    sourceTrigger,
+    workspaceId,
+  });
+  return `ik_${hex(
+    sha256Digest(
+      canonicalJson({ agentId, invocationId, sourceTrigger, workspaceId }),
+    ),
+  ).slice(0, 26)}`;
+}
+
 export function canonicalInvocationRun(value) {
   return canonicalJson(value);
 }

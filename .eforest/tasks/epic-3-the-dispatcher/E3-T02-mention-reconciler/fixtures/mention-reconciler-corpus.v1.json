@@ -1,0 +1,39 @@
+{
+  "task": "E3-T02",
+  "schemaVersion": 1,
+  "race": {
+    "duplicateDeliveries": 100,
+    "effectiveInvocations": 1,
+    "effectiveCheckpoints": 1
+  },
+  "crashBoundaries": [
+    "source-read",
+    "snapshot-resolved",
+    "invocation-appended",
+    "before-checkpoint-acknowledgement",
+    "lost-acknowledgement"
+  ],
+  "nonRunnableTargets": [
+    "human",
+    "service",
+    "disabled",
+    "suspended",
+    "removed",
+    "non-member",
+    "invalid-config",
+    "unavailable-provider",
+    "stale-config",
+    "stale-membership"
+  ],
+  "attacks": [
+    "duplicate-delivery",
+    "checkpoint-regression",
+    "forged-offset",
+    "forged-event-digest",
+    "foreign-agent",
+    "foreign-workspace",
+    "cross-wired-checkpoint",
+    "random-id-mutant"
+  ],
+  "replay": "Replay: N/A (headless stream reconciler) + mitigation: source and checkpoint manifests, hundred-way race, crash schedules, and replay digests"
+}

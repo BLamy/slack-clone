@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E3-T04",
-  "runId": "e3-t04-cold-final-v2",
-  "implementationCommit": "557cde0cb5d6925297217227311c850f4478dadf",
+  "runId": "e3-t04-cold-final-v3",
+  "implementationCommit": "ad22ed625c8cac2e2ac510335b3ae058cd72249a",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "replay": "Replay: N/A (server context assembly) + mitigation: source-citation manifest, ACL canaries, deterministic truncation corpus, and byte/digest parity",
@@ -10,31 +10,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 3213,
+      "durationMs": 5359,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 2881,
+      "durationMs": 4172,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 7657,
+      "durationMs": 32951,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 21019,
+      "durationMs": 71684,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 544,
+      "durationMs": 1887,
       "name": "build",
       "result": "PASS"
     }
@@ -254,6 +254,45 @@
         }
       }
     ],
+    "budget": {
+      "maxBytes": 609,
+      "accounting": {
+        "attachmentBytes": 0,
+        "bytes": 609,
+        "estimatedTokens": 12,
+        "historyItems": 1,
+        "items": 2
+      },
+      "omitted": [
+        {
+          "id": "message:reply",
+          "reason": "budget",
+          "sourceRange": {
+            "endOffset": "0000000000000002_0000000000000000",
+            "startOffset": "0000000000000002_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        {
+          "id": "message:old",
+          "reason": "budget",
+          "sourceRange": {
+            "endOffset": "0000000000000003_0000000000000000",
+            "startOffset": "0000000000000003_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        {
+          "id": "workspace-file:docs/readme.md",
+          "reason": "budget",
+          "sourceRange": {
+            "endOffset": "0000000000000005_0000000000000000",
+            "startOffset": "0000000000000005_0000000000000000",
+            "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+          }
+        }
+      ]
+    },
     "attachment": {
       "reason": "attachment-limit",
       "sourceRange": {

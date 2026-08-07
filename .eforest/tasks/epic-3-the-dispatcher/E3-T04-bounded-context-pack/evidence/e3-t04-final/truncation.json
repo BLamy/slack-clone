@@ -64,6 +64,45 @@
       }
     }
   ],
+  "budget": {
+    "maxBytes": 609,
+    "accounting": {
+      "attachmentBytes": 0,
+      "bytes": 609,
+      "estimatedTokens": 12,
+      "historyItems": 1,
+      "items": 2
+    },
+    "omitted": [
+      {
+        "id": "message:reply",
+        "reason": "budget",
+        "sourceRange": {
+          "endOffset": "0000000000000002_0000000000000000",
+          "startOffset": "0000000000000002_0000000000000000",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      },
+      {
+        "id": "message:old",
+        "reason": "budget",
+        "sourceRange": {
+          "endOffset": "0000000000000003_0000000000000000",
+          "startOffset": "0000000000000003_0000000000000000",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      },
+      {
+        "id": "workspace-file:docs/readme.md",
+        "reason": "budget",
+        "sourceRange": {
+          "endOffset": "0000000000000005_0000000000000000",
+          "startOffset": "0000000000000005_0000000000000000",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+        }
+      }
+    ]
+  },
   "attachment": {
     "reason": "attachment-limit",
     "sourceRange": {

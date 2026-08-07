@@ -3,7 +3,7 @@ id: E3-T05
 epic: 3
 title: "Per-conversation batching, serialization, and recursion guards"
 priority: 305
-status: pending
+status: in-progress
 depends_on: [E3-T02, E3-T03]
 estimate: L
 capstone: false

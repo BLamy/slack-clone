@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "runId": "e3-t05-cold-final-20260807",
-  "implementationCommit": "817396af20de9c9309588d464dc01d8ea7db7646",
+  "runId": "e3-t05-cold-repaired-20260807",
+  "implementationCommit": "573c21329dc2fb80d96c2219309d9084c2276457",
   "entrypoint": {
     "command": "make verify-E3-T05",
     "delegatedTo": "node scripts/verify-e3-t05.mjs"
@@ -9,19 +9,19 @@
   "checkout": "disposable git worktree at the implementation commit",
   "commands": [
     {
-      "command": "git worktree add --detach <checkout> 817396af20de9c9309588d464dc01d8ea7db7646",
-      "durationMs": 134,
+      "command": "git worktree add --detach <checkout> 573c21329dc2fb80d96c2219309d9084c2276457",
+      "durationMs": 232,
       "exitCode": 0,
       "stderrBytes": 0,
       "stderrPreview": "",
       "stderrSha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "stdoutBytes": 73,
-      "stdoutPreview": "HEAD is now at 817396a Keep E3-T05 protocol pure under repository audits\n",
-      "stdoutSha256": "sha256:235885ef65ed89a2d44b587bde28a20ed6dfe5350cac2b192aa2c27fb6100570"
+      "stdoutBytes": 72,
+      "stdoutPreview": "HEAD is now at 573c213 Enforce aggregate budgets across E3-T05 siblings\n",
+      "stdoutSha256": "sha256:68b28b170326044e4b9a56e67cc6a5cc5d69a400694a96209bde1aaf7fb6090f"
     },
     {
       "command": "git submodule update --init --recursive",
-      "durationMs": 2001,
+      "durationMs": 2626,
       "exitCode": 0,
       "stderrBytes": 0,
       "stderrPreview": "",
@@ -32,7 +32,7 @@
     },
     {
       "command": "git status --porcelain --untracked-files=all",
-      "durationMs": 64,
+      "durationMs": 115,
       "exitCode": 0,
       "stderrBytes": 0,
       "stderrPreview": "",
@@ -43,36 +43,36 @@
     },
     {
       "command": "pnpm install --frozen-lockfile",
-      "durationMs": 1018,
+      "durationMs": 952,
       "exitCode": 0,
       "stderrBytes": 0,
       "stderrPreview": "",
       "stderrSha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "stdoutBytes": 832,
-      "stdoutPreview": "Scope: all 6 workspace projects\nLockfile is up to date, resolution step is skipped\nProgress: resolved 1, reused 0, downloaded 0, added 0\nPackages: +158\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\nProgress: resolved 158, reused 158, downloaded 0, added 158, done\n.../node_modules/protobufjs postinstall$ node scripts/postinstall\n.../node_modules/protobufjs postinstall: Done\n\ndependencies:\n+ @stream-slack/durable-streams 0.1.0 <- packages/durable-streams\n+ @stream-slack/http 0.1.0 <- packages/http\n+ @stream-slack/protocol 0.1.0 <- packages/protocol\n+ @stream-slack/reducers 0.1.0 <- packages/reducers\n+ @stream-slack/services 0.1.0 <- packages/services\n\ndevDependencies:\n+ @playwright/test 1.61.1\n+ @replayio/playwright 5.0.3\n+ eslint 10.8.0\n+ prettier 3.9.6\n\nDone in 964ms using pnpm v11.2.2\n",
-      "stdoutSha256": "sha256:812784590c507b8ff29b7d92bbbeec7297f957fc8a4eb06661f79fe3c4da0bf6"
+      "stdoutPreview": "Scope: all 6 workspace projects\nLockfile is up to date, resolution step is skipped\nProgress: resolved 1, reused 0, downloaded 0, added 0\nPackages: +158\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\nProgress: resolved 158, reused 158, downloaded 0, added 158, done\n.../node_modules/protobufjs postinstall$ node scripts/postinstall\n.../node_modules/protobufjs postinstall: Done\n\ndependencies:\n+ @stream-slack/durable-streams 0.1.0 <- packages/durable-streams\n+ @stream-slack/http 0.1.0 <- packages/http\n+ @stream-slack/protocol 0.1.0 <- packages/protocol\n+ @stream-slack/reducers 0.1.0 <- packages/reducers\n+ @stream-slack/services 0.1.0 <- packages/services\n\ndevDependencies:\n+ @playwright/test 1.61.1\n+ @replayio/playwright 5.0.3\n+ eslint 10.8.0\n+ prettier 3.9.6\n\nDone in 894ms using pnpm v11.2.2\n",
+      "stdoutSha256": "sha256:1070029023c1035d27bf8095e8ea154ae955ba1663ae17f2d6ad4c7a78583cdb"
     },
     {
       "command": "pnpm setup:emulate",
-      "durationMs": 32149,
+      "durationMs": 22932,
       "exitCode": 0,
       "stderrBytes": 0,
       "stderrPreview": "",
       "stderrSha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "stdoutBytes": 29223,
-      "stdoutPreview": "         35.64 KB\nESM dist/dist-I4XUSYHS.js                 114.32 KB\nESM dist/dist-LLBSQQWC.js                 414.94 KB\nESM dist/dist-BTN4DDIK.js                 144.17 KB\n[emulate-cli] ESM dist/api.js                           49.20 KB\nESM dist/dist-CG4HQISS.js                 27.52 KB\nESM dist/dist-OKZGYXA6.js                 198.92 KB\nESM dist/dist-JO6D2EV6.js                 62.85 KB\n[emulate-cli] ESM dist/dist-O2HI4ZBX.js                 36.81 KB\nESM dist/chunk-PZ5AY32C.js                233.00 B\nESM dist/dist-KUMIQPJP.js                 84.16 KB\nESM dist/chunk-WSJ6II32.js                52.54 KB\nESM dist/dist-JHLHCH44.js                 511.88 KB\nESM dist/dist-IZ5KDTSJ.js.map             130.51 KB\nESM dist/helpers-LXLP3DFE-PEPB2NAS.js.map 71.00 B\nESM dist/chunk-WVQMFHQM.js.map            3.60 KB\nESM dist/dist-NDJDEDCT.js.map             70.72 KB\nESM dist/dist-MNUVWLIT.js.map             103.24 KB\nESM dist/dist-I4XUSYHS.js.map             254.58 KB\nESM dist/api.js.map                       122.47 KB\nESM dist/dist-CG4HQISS.js.map             90.31 KB\n[emulate-cli] ESM dist/dist-GQXOI2Y2.js.map             120.56 KB\nESM dist/dist-BTN4DDIK.js.map             313.17 KB\nESM dist/chunk-PZ5AY32C.js.map            71.00 B\nESM dist/dist-JO6D2EV6.js.map             151.66 KB\nESM dist/dist-Z7ZRJIRP.js.map             125.94 KB\nESM dist/dist-O2HI4ZBX.js.map             106.72 KB\nESM dist/chunk-WSJ6II32.js.map            106.89 KB\nESM dist/dist-KUMIQPJP.js.map             192.44 KB\nESM dist/dist-VKQCYP4Z.js.map             178.74 KB\nESM dist/dist-OKZGYXA6.js.map             409.91 KB\nESM dist/dist-LLBSQQWC.js.map             817.06 KB\nESM dist/dist-JHLHCH44.js.map             1.47 MB\n[emulate-cli] ESM ⚡️ Build success in 663ms\n[emulate-cli] ESM dist/dist-JO6D2EV6.js                 62.85 KB\nESM dist/dist-NDJDEDCT.js                 35.64 KB\nESM dist/helpers-LXLP3DFE-PEPB2NAS.js     388.00 B\n[emulate-cli] ESM dist/dist-VKQCYP4Z.js                 75.85 KB\nESM dist/dist-JHLHCH44.js                 511.88 KB\nESM dist/chunk-WVQMFHQM.js                2.07 KB\nESM dist/index.js                         59.13 KB\nESM dist/dist-Z7ZRJIRP.js                 46.48 KB\nESM dist/dist-I4XUSYHS.js                 114.32 KB\nESM dist/dist-BTN4DDIK.js                 144.17 KB\nESM dist/dist-LLBSQQWC.js                 414.94 KB\nESM dist/dist-MNUVWLIT.js                 32.71 KB\nESM dist/dist-CG4HQISS.js                 27.52 KB\nESM dist/dist-O2HI4ZBX.js                 36.81 KB\nESM dist/dist-KUMIQPJP.js                 84.16 KB\nESM dist/dist-IZ5KDTSJ.js                 47.51 KB\nESM dist/dist-GQXOI2Y2.js                 42.31 KB\nESM dist/dist-OKZGYXA6.js                 198.92 KB\nESM dist/chunk-WSJ6II32.js                52.54 KB\nESM dist/chunk-PZ5AY32C.js                233.00 B\nESM dist/dist-JO6D2EV6.js.map             151.66 KB\nESM dist/dist-NDJDEDCT.js.map             70.72 KB\nESM dist/helpers-LXLP3DFE-PEPB2NAS.js.map 71.00 B\nESM dist/chunk-WVQMFHQM.js.map            3.60 KB\nESM dist/dist-I4XUSYHS.js.map             254.58 KB\nESM dist/index.js.map                     141.26 KB\nESM dist/dist-Z7ZRJIRP.js.map             125.94 KB\nESM dist/dist-MNUVWLIT.js.map             103.24 KB\nESM dist/dist-VKQCYP4Z.js.map             178.74 KB\nESM dist/dist-BTN4DDIK.js.map             313.17 KB\nESM dist/dist-O2HI4ZBX.js.map             106.72 KB\nESM dist/dist-IZ5KDTSJ.js.map             130.51 KB\nESM dist/dist-KUMIQPJP.js.map             192.44 KB\nESM dist/dist-GQXOI2Y2.js.map             120.56 KB\nESM dist/chunk-PZ5AY32C.js.map            71.00 B\nESM dist/dist-CG4HQISS.js.map             90.31 KB\nESM dist/dist-OKZGYXA6.js.map             409.91 KB\nESM dist/chunk-WSJ6II32.js.map            106.89 KB\nESM dist/dist-LLBSQQWC.js.map             817.06 KB\nESM dist/dist-JHLHCH44.js.map             1.47 MB\nESM ⚡️ Build success in 735ms\n[emulate-cli] DTS ⚡️ Build success in 844ms\n[emulate-cli] DTS dist/api.d.ts 787.00 B\nPASS emulator installed and built from its lockfile\n",
-      "stdoutSha256": "sha256:9a5bd63fe3265463173dc405732c7b22e282951d4f2f2beca954654caee09111"
+      "stdoutBytes": 29459,
+      "stdoutPreview": "lpers-LXLP3DFE-PEPB2NAS.js     388.00 B\nESM dist/dist-CG4HQISS.js                 27.52 KB\nESM dist/dist-MNUVWLIT.js                 32.71 KB\nESM dist/dist-O2HI4ZBX.js                 36.81 KB\n[emulate-cli] ESM dist/dist-OKZGYXA6.js                 198.92 KB\n[emulate-cli] ESM dist/dist-JHLHCH44.js                 511.88 KB\nESM dist/dist-LLBSQQWC.js                 414.94 KB\n[emulate-cli] ESM dist/dist-BTN4DDIK.js                 144.17 KB\nESM dist/dist-KUMIQPJP.js                 84.16 KB\nESM dist/chunk-PZ5AY32C.js                233.00 B\n[emulate-cli] ESM dist/chunk-WSJ6II32.js                52.54 KB\nESM dist/dist-IZ5KDTSJ.js                 47.51 KB\nESM dist/dist-GQXOI2Y2.js.map             120.56 KB\nESM dist/dist-JO6D2EV6.js.map             151.66 KB\nESM dist/chunk-WVQMFHQM.js.map            3.60 KB\nESM dist/dist-Z7ZRJIRP.js.map             125.94 KB\nESM dist/helpers-LXLP3DFE-PEPB2NAS.js.map 71.00 B\nESM dist/api.js.map                       122.47 KB\nESM dist/dist-I4XUSYHS.js.map             254.58 KB\nESM dist/dist-CG4HQISS.js.map             90.31 KB\nESM dist/dist-MNUVWLIT.js.map             103.24 KB\nESM dist/dist-OKZGYXA6.js.map             409.91 KB\nESM dist/dist-O2HI4ZBX.js.map             106.72 KB\nESM dist/dist-NDJDEDCT.js.map             70.72 KB\nESM dist/chunk-PZ5AY32C.js.map            71.00 B\nESM dist/chunk-WSJ6II32.js.map            106.89 KB\nESM dist/dist-KUMIQPJP.js.map             192.44 KB\nESM dist/dist-VKQCYP4Z.js.map             178.74 KB\nESM dist/dist-IZ5KDTSJ.js.map             130.51 KB\nESM dist/dist-BTN4DDIK.js.map             313.17 KB\nESM dist/dist-LLBSQQWC.js.map             817.06 KB\nESM dist/dist-JHLHCH44.js.map             1.47 MB\n[emulate-cli] ESM ⚡️ Build success in 381ms\n[emulate-cli] ESM dist/dist-JO6D2EV6.js                 62.85 KB\nESM dist/dist-MNUVWLIT.js                 32.71 KB\nESM dist/dist-GQXOI2Y2.js                 42.31 KB\nESM dist/dist-IZ5KDTSJ.js                 47.51 KB\nESM dist/dist-Z7ZRJIRP.js                 46.48 KB\nESM dist/helpers-LXLP3DFE-PEPB2NAS.js     388.00 B\nESM dist/chunk-WVQMFHQM.js                2.07 KB\nESM dist/index.js                         59.13 KB\nESM dist/dist-NDJDEDCT.js                 35.64 KB\nESM dist/dist-BTN4DDIK.js                 144.17 KB\nESM dist/dist-CG4HQISS.js                 27.52 KB\nESM dist/dist-JHLHCH44.js                 511.88 KB\nESM dist/dist-I4XUSYHS.js                 114.32 KB\nESM dist/dist-KUMIQPJP.js                 84.16 KB\nESM dist/dist-LLBSQQWC.js                 414.94 KB\nESM dist/dist-O2HI4ZBX.js                 36.81 KB\nESM dist/dist-VKQCYP4Z.js                 75.85 KB\nESM dist/dist-OKZGYXA6.js                 198.92 KB\nESM dist/chunk-PZ5AY32C.js                233.00 B\nESM dist/chunk-WSJ6II32.js                52.54 KB\nESM dist/helpers-LXLP3DFE-PEPB2NAS.js.map 71.00 B\nESM dist/dist-IZ5KDTSJ.js.map             130.51 KB\nESM dist/dist-JO6D2EV6.js.map             151.66 KB\nESM dist/chunk-WVQMFHQM.js.map            3.60 KB\nESM dist/dist-Z7ZRJIRP.js.map             125.94 KB\nESM dist/dist-NDJDEDCT.js.map             70.72 KB\nESM dist/dist-BTN4DDIK.js.map             313.17 KB\nESM dist/dist-GQXOI2Y2.js.map             120.56 KB\nESM dist/dist-CG4HQISS.js.map             90.31 KB\nESM dist/index.js.map                     141.26 KB\n[emulate-cli] ESM dist/dist-O2HI4ZBX.js.map             106.72 KB\nESM dist/chunk-PZ5AY32C.js.map            71.00 B\nESM dist/dist-VKQCYP4Z.js.map             178.74 KB\nESM dist/dist-MNUVWLIT.js.map             103.24 KB\nESM dist/dist-KUMIQPJP.js.map             192.44 KB\nESM dist/dist-OKZGYXA6.js.map             409.91 KB\nESM dist/dist-I4XUSYHS.js.map             254.58 KB\nESM dist/chunk-WSJ6II32.js.map            106.89 KB\nESM dist/dist-LLBSQQWC.js.map             817.06 KB\nESM dist/dist-JHLHCH44.js.map             1.47 MB\nESM ⚡️ Build success in 424ms\n[emulate-cli] DTS Build start\n[emulate-cli] DTS ⚡️ Build success in 515ms\nDTS dist/api.d.ts 787.00 B\nPASS emulator installed and built from its lockfile\n",
+      "stdoutSha256": "sha256:8b7ae4be7da69ed06701752a0d08ccdfdf95a42c3e5bb062851b40421f9c18f7"
     },
     {
       "command": "node scripts/verify-e3-t05.mjs",
-      "durationMs": 42684,
+      "durationMs": 32953,
       "exitCode": 0,
       "stderrBytes": 0,
       "stderrPreview": "",
       "stderrSha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "stdoutBytes": 655,
-      "stdoutPreview": "{\n  \"implementationCommit\": \"817396af20de9c9309588d464dc01d8ea7db7646\",\n  \"runId\": \"e3-t05-cold-final-20260807\",\n  \"gates\": [\n    {\n      \"name\": \"format\",\n      \"result\": \"PASS\"\n    },\n    {\n      \"name\": \"lint\",\n      \"result\": \"PASS\"\n    },\n    {\n      \"name\": \"typecheck\",\n      \"result\": \"PASS\"\n    },\n    {\n      \"name\": \"tests\",\n      \"result\": \"PASS\"\n    },\n    {\n      \"name\": \"build\",\n      \"result\": \"PASS\"\n    }\n  ],\n  \"batches\": 2,\n  \"refusals\": 7,\n  \"sensitivity\": \"PASS\",\n  \"replay\": \"Replay: N/A (server scheduling and recursion policy) + mitigation: burst schedules, durable causation graphs, cycle/fairness matrix, and replay digests\"\n}\n",
-      "stdoutSha256": "sha256:3bb9feaf029649ad64fb2218355d19ab1c71cfa87757a9be117179c76f4d4a11"
+      "stdoutBytes": 658,
+      "stdoutPreview": "{\n  \"implementationCommit\": \"573c21329dc2fb80d96c2219309d9084c2276457\",\n  \"runId\": \"e3-t05-cold-repaired-20260807\",\n  \"gates\": [\n    {\n      \"name\": \"format\",\n      \"result\": \"PASS\"\n    },\n    {\n      \"name\": \"lint\",\n      \"result\": \"PASS\"\n    },\n    {\n      \"name\": \"typecheck\",\n      \"result\": \"PASS\"\n    },\n    {\n      \"name\": \"tests\",\n      \"result\": \"PASS\"\n    },\n    {\n      \"name\": \"build\",\n      \"result\": \"PASS\"\n    }\n  ],\n  \"batches\": 2,\n  \"refusals\": 7,\n  \"sensitivity\": \"PASS\",\n  \"replay\": \"Replay: N/A (server scheduling and recursion policy) + mitigation: burst schedules, durable causation graphs, cycle/fairness matrix, and replay digests\"\n}\n",
+      "stdoutSha256": "sha256:ebbe6e1122798189fa6254e8d30302a43b2b4326327182c7bb01e4a699b07970"
     }
   ],
   "cleanCheckoutBeforeInstall": true,

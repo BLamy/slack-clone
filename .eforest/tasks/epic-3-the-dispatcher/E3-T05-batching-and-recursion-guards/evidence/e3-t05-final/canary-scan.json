@@ -1,6 +1,11 @@
 {
   "files": [
     {
+      "file": "aggregate-budget.json",
+      "leaked": false,
+      "matches": []
+    },
+    {
       "file": "batch-manifest.json",
       "leaked": false,
       "matches": []

@@ -1,6 +1,19 @@
 {
   "entries": [
     {
+      "aggregateBudget": {
+        "costUsdCents": 100,
+        "inputTokens": 100,
+        "outputTokens": 100,
+        "totalTokens": 200
+      },
+      "aggregateUsageAfter": null,
+      "aggregateUsageBefore": {
+        "costUsdCents": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "totalTokens": 0
+      },
       "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
       "ancestors": [],
       "depth": 0,
@@ -14,6 +27,19 @@
       }
     },
     {
+      "aggregateBudget": {
+        "costUsdCents": 100,
+        "inputTokens": 100,
+        "outputTokens": 100,
+        "totalTokens": 200
+      },
+      "aggregateUsageAfter": null,
+      "aggregateUsageBefore": {
+        "costUsdCents": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "totalTokens": 0
+      },
       "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
       "ancestors": [
         {
@@ -37,6 +63,19 @@
       }
     },
     {
+      "aggregateBudget": {
+        "costUsdCents": 100,
+        "inputTokens": 100,
+        "outputTokens": 100,
+        "totalTokens": 200
+      },
+      "aggregateUsageAfter": null,
+      "aggregateUsageBefore": {
+        "costUsdCents": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "totalTokens": 0
+      },
       "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
       "ancestors": [
         {
@@ -60,6 +99,19 @@
       }
     },
     {
+      "aggregateBudget": {
+        "costUsdCents": 100,
+        "inputTokens": 100,
+        "outputTokens": 100,
+        "totalTokens": 200
+      },
+      "aggregateUsageAfter": null,
+      "aggregateUsageBefore": {
+        "costUsdCents": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "totalTokens": 0
+      },
       "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
       "ancestors": [
         {
@@ -92,6 +144,19 @@
       }
     },
     {
+      "aggregateBudget": {
+        "costUsdCents": 100,
+        "inputTokens": 100,
+        "outputTokens": 100,
+        "totalTokens": 200
+      },
+      "aggregateUsageAfter": null,
+      "aggregateUsageBefore": {
+        "costUsdCents": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "totalTokens": 0
+      },
       "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
       "ancestors": [
         {
@@ -115,6 +180,19 @@
       }
     },
     {
+      "aggregateBudget": {
+        "costUsdCents": 100,
+        "inputTokens": 100,
+        "outputTokens": 100,
+        "totalTokens": 200
+      },
+      "aggregateUsageAfter": null,
+      "aggregateUsageBefore": {
+        "costUsdCents": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "totalTokens": 0
+      },
       "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
       "ancestors": [
         {
@@ -138,6 +216,19 @@
       }
     },
     {
+      "aggregateBudget": {
+        "costUsdCents": 0,
+        "inputTokens": 1,
+        "outputTokens": 1,
+        "totalTokens": 2
+      },
+      "aggregateUsageAfter": null,
+      "aggregateUsageBefore": {
+        "costUsdCents": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "totalTokens": 0
+      },
       "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
       "ancestors": [
         {
@@ -170,5 +261,5 @@
     "iv_zzzzzzzzzzzzzzzzzzzzzzzzzz": "CONVERSATION_SCHEDULER_DELEGATION_CONCURRENCY",
     "iv_kkkkkkkkkkkkkkkkkkkkkkkkkk": "CONVERSATION_SCHEDULER_BUDGET_EXCEEDED"
   },
-  "scheduleDigest": "sha256:7a379e6b280c27ca0b2d7597d6c454a0b0d72ccd34d86eef9df9591465d649f1"
+  "scheduleDigest": "sha256:b72f14b9fc57db8bb14e8b526f7a3e4def8ff2d564b4e89d845057e1ec35c45e"
 }

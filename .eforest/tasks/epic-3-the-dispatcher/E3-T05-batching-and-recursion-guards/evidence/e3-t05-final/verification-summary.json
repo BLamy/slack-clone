@@ -1,36 +1,36 @@
 {
   "schemaVersion": 1,
-  "implementationCommit": "817396af20de9c9309588d464dc01d8ea7db7646",
-  "runId": "e3-t05-cold-final-20260807",
+  "implementationCommit": "573c21329dc2fb80d96c2219309d9084c2276457",
+  "runId": "e3-t05-cold-repaired-20260807",
   "replay": "Replay: N/A (server scheduling and recursion policy) + mitigation: burst schedules, durable causation graphs, cycle/fairness matrix, and replay digests",
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 3317,
+      "durationMs": 2504,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 2611,
+      "durationMs": 2468,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 13484,
+      "durationMs": 6580,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 20259,
+      "durationMs": 19222,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 645,
+      "durationMs": 422,
       "name": "build",
       "result": "PASS"
     }
@@ -63,7 +63,7 @@
     ]
   },
   "canaryScan": {
-    "files": 10,
+    "files": 11,
     "leaked": false,
     "transcriptChecked": true
   }

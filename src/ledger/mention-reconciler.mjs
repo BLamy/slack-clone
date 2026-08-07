@@ -457,6 +457,10 @@ export function createMentionReconciler({
       await onBoundary("snapshot-resolved", {
         agentId,
         snapshotDigest: target.snapshot.snapshotDigest ?? null,
+        snapshot: target.snapshot,
+        snapshotRef: normalizeSnapshotRef(
+          target.snapshot.snapshotRef ?? target.snapshot.sourceManifest?.config,
+        ),
         source: sourceTrigger,
       });
       const invocation = createInvocationEnvelope({

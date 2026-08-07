@@ -139,6 +139,7 @@ try {
     "crash-schedules.json",
     "outcomes.json",
     "resolution-races.json",
+    "snapshot-attacks.json",
     "snapshot-manifest.json",
     "source-attacks.json",
     "replay-digests.json",

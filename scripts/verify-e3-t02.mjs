@@ -18,6 +18,7 @@ import {
   createProviderRegistry,
   deriveMentionInvocationId,
   INVOCATION_SNAPSHOT_ERROR_CODES,
+  invocationSnapshotDigest,
   membershipIdFor,
   validateMentionFacts,
 } from "@stream-slack/protocol";
@@ -110,6 +111,7 @@ const crashes = await verifyCrashSchedules();
 const outcomes = await verifyNonRunnableOutcomes();
 const resolutionRaces = await verifyResolutionRaces();
 const attacks = await verifySourceAndCheckpointAttacks();
+const snapshotAttacks = await verifySnapshotBindingAttacks();
 const replay = await verifyReplayDigests(race);
 const sensitivity =
   process.env.E3_T02_SKIP_SENSITIVITY === "1"
@@ -185,13 +187,14 @@ const invocationManifest = {
 const snapshotManifest = {
   records: [
     {
-      agentId: race.snapshot.agentId,
-      configSource: race.snapshot.sourceManifest.config,
-      context: race.snapshot.context,
-      membership: race.snapshot.membership,
-      snapshotDigest: race.snapshot.snapshotDigest,
-      sourceManifest: race.snapshot.sourceManifest,
-      workspaceId: race.snapshot.workspaceId,
+      agentId: race.validatedSnapshot.agentId,
+      configSource: race.validatedSnapshot.sourceManifest.config,
+      context: race.validatedSnapshot.context,
+      membership: race.validatedSnapshot.membership,
+      snapshotDigest: race.validatedSnapshot.snapshotDigest,
+      sourceManifest: race.validatedSnapshot.sourceManifest,
+      validatedAtBoundary: "snapshot-resolved",
+      workspaceId: race.validatedSnapshot.workspaceId,
     },
   ],
   result: "PASS",
@@ -206,6 +209,7 @@ const summary = {
   implementationTreeCleanAtStart: promoteEvidence,
   nonRunnableOutcomes: outcomes,
   resolutionRaces,
+  snapshotBindingAttacks: snapshotAttacks,
   replayEvidence: replay,
   replayUploadAttempted: false,
   result: "PASS",
@@ -240,6 +244,10 @@ await writeJson(path.join(evidenceDirectory, "outcomes.json"), outcomes);
 await writeJson(
   path.join(evidenceDirectory, "resolution-races.json"),
   resolutionRaces,
+);
+await writeJson(
+  path.join(evidenceDirectory, "snapshot-attacks.json"),
+  snapshotAttacks,
 );
 await writeJson(path.join(evidenceDirectory, "source-attacks.json"), attacks);
 await writeJson(path.join(evidenceDirectory, "replay-digests.json"), replay);
@@ -285,6 +293,12 @@ async function verifyDuplicateRace() {
   });
   const reconcilers = [];
   const doors = [];
+  let validatedSnapshot = null;
+  const captureValidatedSnapshot = async (boundary, payload) => {
+    if (boundary === "snapshot-resolved" && !validatedSnapshot) {
+      validatedSnapshot = payload.snapshot;
+    }
+  };
   for (let index = 0; index < fixture.race.duplicateDeliveries; index += 1) {
     const door = createDispatchDoor({
       producerId: `e3-t02-race-door-${index}`,
@@ -294,6 +308,7 @@ async function verifyDuplicateRace() {
     reconcilers.push(
       createReconciler({
         door,
+        onBoundary: captureValidatedSnapshot,
         resolveTarget: async () => ({ snapshot, status: "eligible" }),
         store,
       }),
@@ -326,6 +341,11 @@ async function verifyDuplicateRace() {
   assert.ok(receipts.length > 0);
   assert.equal(new Set(receipts.map((receipt) => receipt.nextOffset)).size, 1);
   assert.equal(new Set(receipts.map((receipt) => receipt.eventDigest)).size, 1);
+  assert.ok(
+    validatedSnapshot,
+    "reconciler did not expose a validated snapshot",
+  );
+  assert.equal(validatedSnapshot.snapshotDigest, invocation.snapshotDigest);
   for (const door of doors) door.close();
   return {
     checkpoints,
@@ -347,6 +367,7 @@ async function verifyDuplicateRace() {
     },
     source: await store.read(CHANNEL_STREAM),
     snapshot,
+    validatedSnapshot,
   };
 }
 
@@ -551,6 +572,11 @@ async function verifyResolutionRaces() {
       changedState: { membershipChanged: true },
       expectedCode: INVOCATION_SNAPSHOT_ERROR_CODES.STALE_MEMBERSHIP,
     },
+    {
+      expectedCode: INVOCATION_SNAPSHOT_ERROR_CODES.STALE_PROVIDER,
+      label: "thrown-stale-provider-during-resolution",
+      throwCode: INVOCATION_SNAPSHOT_ERROR_CODES.STALE_PROVIDER,
+    },
   ];
   const rows = [];
   for (const testCase of cases) {
@@ -569,6 +595,11 @@ async function verifyResolutionRaces() {
       resolveTarget: async ({ agentId, sourceTrigger }) => {
         attempts += 1;
         if (attempts === 1) {
+          if (testCase.throwCode) {
+            const error = new Error("simulated stale provider head");
+            error.code = testCase.throwCode;
+            throw error;
+          }
           const historical = createInvocationSnapshot(
             snapshotInputFor({ agentId, sourceTrigger }),
           );
@@ -612,6 +643,7 @@ async function verifyResolutionRaces() {
     rows.push({
       attempts,
       checkpointCountAfterRetry: checkpoints.records.length,
+      thrownResolutionError: Boolean(testCase.throwCode),
       firstAttempt: {
         code: first.retry.code,
         checkpointCount: beforeRetryCheckpoints.records.length,
@@ -765,6 +797,118 @@ async function verifySourceAndCheckpointAttacks() {
   return { attacks, result: "PASS" };
 }
 
+async function verifySnapshotBindingAttacks() {
+  const cases = [
+    {
+      label: "snapshot-foreign-workspace",
+      mutate(snapshot) {
+        snapshot.workspaceId = "ws_bbbbbbbbbbbbbbbbbbbbbbbbbb";
+        return recomputeSnapshotDigest(snapshot);
+      },
+      expected: MENTION_RECONCILER_ERROR_CODES.SNAPSHOT_REFUSED,
+    },
+    {
+      label: "snapshot-foreign-agent",
+      mutate(snapshot) {
+        snapshot.agentId = agentFor("q");
+        return recomputeSnapshotDigest(snapshot);
+      },
+      expected: MENTION_RECONCILER_ERROR_CODES.SNAPSHOT_REFUSED,
+    },
+    {
+      label: "snapshot-foreign-channel",
+      mutate(snapshot) {
+        snapshot.context.channelId =
+          "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff";
+        return recomputeSnapshotDigest(snapshot);
+      },
+      expected: MENTION_RECONCILER_ERROR_CODES.SNAPSHOT_REFUSED,
+    },
+    {
+      label: "snapshot-wrong-config-stream",
+      mutate(snapshot) {
+        snapshot.sourceManifest.config.stream = streamNames.agentConfig(
+          WORKSPACE_ID,
+          agentFor("q"),
+        );
+        return recomputeSnapshotDigest(snapshot);
+      },
+      expected: MENTION_RECONCILER_ERROR_CODES.SNAPSHOT_REFUSED,
+    },
+    {
+      label: "snapshot-config-source-digest-mismatch",
+      mutate(snapshot) {
+        snapshot.sourceManifest.config.stateDigest = digest("x");
+        return recomputeSnapshotDigest(snapshot);
+      },
+      expected: MENTION_RECONCILER_ERROR_CODES.SNAPSHOT_REFUSED,
+    },
+    {
+      label: "snapshot-missing-directory-source",
+      mutate(snapshot) {
+        delete snapshot.sourceManifest.directory;
+        return recomputeSnapshotDigest(snapshot);
+      },
+      expected: MENTION_RECONCILER_ERROR_CODES.SNAPSHOT_REFUSED,
+    },
+    {
+      label: "snapshot-forged-digest",
+      mutate(snapshot) {
+        snapshot.snapshotDigest = digest("a");
+        return snapshot;
+      },
+      expected: INVOCATION_SNAPSHOT_ERROR_CODES.SNAPSHOT_DIGEST_MISMATCH,
+    },
+  ];
+  const attacks = [];
+  for (const attack of cases) {
+    const store = createMemoryStore();
+    const source = seedSource(store, {
+      mentions: [agentMention(AGENT_PRINCIPAL_ID, "helper")],
+      text: "@helper",
+    });
+    const door = createDispatchDoor({
+      producerId: `e3-t02-snapshot-${attack.label}`,
+      streamStore: store,
+    });
+    const reconciler = createReconciler({
+      door,
+      resolveTarget: async () => ({
+        snapshot: attack.mutate(
+          structuredClone(
+            snapshotFor({
+              agentId: AGENT_ID,
+              sourceTrigger: source.reference,
+            }),
+          ),
+        ),
+        status: "eligible",
+      }),
+      store,
+    });
+    await reconciler.reconcile();
+    const invocations = await store.read(INVOCATION_STREAM);
+    const audits = await store.read(AUDIT_STREAM);
+    assert.equal(invocations.records.length, 0, attack.label);
+    assert.equal(audits.records.length, 1, attack.label);
+    const observedCode = audits.records[0].event.data.detail.code;
+    assert.equal(observedCode, attack.expected, attack.label);
+    attacks.push({
+      attack: attack.label,
+      invocationCount: invocations.records.length,
+      observedCode,
+      refused: true,
+    });
+    door.close();
+  }
+  return { attacks, result: "PASS" };
+}
+
+function recomputeSnapshotDigest(snapshot) {
+  snapshot.snapshotDigest = invocationSnapshotDigest(snapshot);
+  return snapshot;
+}
+
 async function verifyReplayDigests(race) {
   const invocationRecords = race.invocations.records.map((record, index) => ({
     event: record.event,
@@ -802,69 +946,111 @@ async function verifyReplayDigests(race) {
 
 async function verifySensitivity() {
   await mkdir(path.join(taskDirectory, "work"), { recursive: true });
-  const parent = await mkdtemp(
-    path.join(taskDirectory, "work", "sensitivity-"),
-  );
-  const checkout = path.join(parent, "checkout");
-  let worktreeAdded = false;
-  try {
-    execFileSync(
-      "git",
-      ["worktree", "add", "--detach", checkout, implementationCommit],
-      { cwd: root, stdio: "ignore" },
-    );
-    worktreeAdded = true;
-    const modulePath = path.join(checkout, "src/ledger/mention-reconciler.mjs");
-    const anchor = `const invocationId = deriveMentionInvocationId({
+  const mutations = [
+    {
+      command: ["node", "--test", "test/unit/mention-reconciler.test.mjs"],
+      description: "node --test test/unit/mention-reconciler.test.mjs",
+      mutate(source) {
+        const anchor = `const invocationId = deriveMentionInvocationId({
     agentId,
     sourceTrigger,
     workspaceId,
   });`;
-    let source = await readFile(modulePath, "utf8");
-    assert.equal(source.split(anchor).length - 1, 1);
-    source = source.replace(
-      anchor,
-      "const invocationId = `iv_${Math.random().toString(16).slice(2, 28)}`;",
+        assert.equal(source.split(anchor).length - 1, 1);
+        return source.replace(
+          anchor,
+          "const invocationId = `iv_${Math.random().toString(16).slice(2, 28)}`;",
+        );
+      },
+      name: "replace source-bound invocation ID with randomness",
+    },
+    {
+      command: ["node", "scripts/verify-e3-t02.mjs"],
+      description:
+        "E3_T02_SKIP_GATES=1 E3_T02_SKIP_SENSITIVITY=1 node scripts/verify-e3-t02.mjs",
+      env: {
+        E3_T02_SKIP_GATES: "1",
+        E3_T02_SKIP_SENSITIVITY: "1",
+      },
+      mutate(source) {
+        const start = source.indexOf("function validateResolvedSnapshot(");
+        const end = source.indexOf(
+          "\nfunction createInvocationEnvelope",
+          start,
+        );
+        assert.ok(start >= 0 && end > start);
+        return `${source.slice(0, start)}function validateResolvedSnapshot(snapshot) {
+  return snapshot;
+}${source.slice(end)}`;
+      },
+      name: "remove E2 snapshot binding validation",
+    },
+  ];
+  const results = [];
+  for (const mutation of mutations) {
+    const parent = await mkdtemp(
+      path.join(taskDirectory, "work", "sensitivity-"),
     );
-    await writeFile(modulePath, source);
-    execFileSync("pnpm", ["install", "--frozen-lockfile"], {
-      cwd: checkout,
-      stdio: "ignore",
-    });
-    let exitCode = 0;
+    const checkout = path.join(parent, "checkout");
+    let worktreeAdded = false;
     try {
       execFileSync(
-        "node",
-        ["--test", "test/unit/mention-reconciler.test.mjs"],
-        {
-          cwd: checkout,
-          stdio: "ignore",
-        },
+        "git",
+        ["worktree", "add", "--detach", checkout, implementationCommit],
+        { cwd: root, stdio: "ignore" },
       );
-    } catch (error) {
-      exitCode = typeof error.status === "number" ? error.status : 1;
-    }
-    assert.notEqual(
-      exitCode,
-      0,
-      "random invocation IDs must make the race verifier fail",
-    );
-    return {
-      mutation: "replace source-bound invocation ID with randomness",
-      verifierCommand: "node --test test/unit/mention-reconciler.test.mjs",
-      verifierExitCode: exitCode,
-      verifierRejected: true,
-      result: "PASS",
-    };
-  } finally {
-    if (worktreeAdded) {
-      execFileSync("git", ["worktree", "remove", "--force", checkout], {
-        cwd: root,
+      worktreeAdded = true;
+      const modulePath = path.join(
+        checkout,
+        "src/ledger/mention-reconciler.mjs",
+      );
+      const source = await readFile(modulePath, "utf8");
+      await writeFile(modulePath, mutation.mutate(source));
+      execFileSync("pnpm", ["install", "--frozen-lockfile"], {
+        cwd: checkout,
         stdio: "ignore",
       });
+      let exitCode = 0;
+      try {
+        execFileSync("node", mutation.command, {
+          cwd: checkout,
+          env: {
+            ...process.env,
+            ...mutation.env,
+            TEST_ARTIFACT_DIR: path.join(parent, "artifacts"),
+            TEST_RUN_ID: `${runId}-${mutation.name.replace(/[^a-z0-9]+/giu, "-")}`,
+          },
+          stdio: "ignore",
+        });
+      } catch (error) {
+        exitCode = typeof error.status === "number" ? error.status : 1;
+      }
+      assert.notEqual(exitCode, 0, `${mutation.name} must make verifier fail`);
+      results.push({
+        mutation: mutation.name,
+        verifierCommand: mutation.description,
+        verifierExitCode: exitCode,
+        verifierRejected: true,
+        result: "PASS",
+      });
+    } finally {
+      if (worktreeAdded) {
+        execFileSync("git", ["worktree", "remove", "--force", checkout], {
+          cwd: root,
+          stdio: "ignore",
+        });
+      }
+      await rm(parent, { force: true, recursive: true });
     }
-    await rm(parent, { force: true, recursive: true });
   }
+  return {
+    mutationCount: results.length,
+    mutations: results,
+    result: "PASS",
+    verifierDetectedMutant: results.every(
+      ({ verifierRejected }) => verifierRejected,
+    ),
+  };
 }
 
 function createReconciler({

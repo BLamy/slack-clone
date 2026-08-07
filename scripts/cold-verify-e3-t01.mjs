@@ -185,6 +185,8 @@ if (!canaryScan.postVerifierTranscriptChecked) {
 await writeFile(canaryScanPath, `${JSON.stringify(canaryScan, null, 2)}\n`);
 const summaryPath = path.join(reportDirectory, "verification-summary.json");
 const summary = JSON.parse(await readFile(summaryPath, "utf8"));
+summary.implementationTreeCleanAtStart =
+  transcript.cleanCheckoutBeforeInstall === true;
 summary.canaryScan = canaryScan;
 await writeFile(summaryPath, `${JSON.stringify(summary, null, 2)}\n`);
 const finalEvidenceScan = await scanReportFiles(reportDirectory);

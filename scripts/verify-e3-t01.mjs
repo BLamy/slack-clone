@@ -749,25 +749,38 @@ function verifyBindingAudit(complete) {
 }
 
 function verifyTerminalRaces(expectedTerminals) {
-  const winner = buildLifecycleRecords({ terminal: "completed" });
-  const sharedHead = winner.records.at(-1);
+  const fullLifecycle = buildLifecycleRecords({ terminal: "completed" });
+  const commonRecords = fullLifecycle.records.slice(0, 13);
+  const resultRecord = commonRecords.at(-1);
+  const failureData = {
+    ...commonRecord(13, resultRecord),
+    detailRef: null,
+    failureCode: "provider_failed",
+    retryable: false,
+  };
+  const failureEvent = eventEnvelope(
+    "r",
+    "run.failure.recorded",
+    failureData,
+    failureData.sourceRef,
+  );
+  const sharedHead = {
+    event: failureEvent,
+    offset: offset(14),
+  };
+  const sharedPrefix = [...commonRecords, sharedHead];
   const rows = expectedTerminals.map((terminal, index) => {
-    const candidateRecords = structuredClone(winner.records);
+    const sourceRef = sourceReference(
+      `run:${RUN_ID}`,
+      sharedHead.offset,
+      digestEventEnvelope(sharedHead.event),
+    );
     const candidateData = {
-      attemptId: "at_1",
+      ...commonRecord(14, sharedHead),
       attemptNumber: 1,
       binding: null,
-      from: "completed",
-      invocationId: INVOCATION_ID,
+      from: "running",
       leaseGeneration: 1,
-      runId: RUN_ID,
-      schemaVersion: 1,
-      sequence: 14,
-      sourceRef: sourceReference(
-        `run:${RUN_ID}`,
-        sharedHead.offset,
-        digestEventEnvelope(sharedHead.event),
-      ),
       terminal: {
         failureCode: terminal === "failed" ? "provider_failed" : null,
         kind: terminal,
@@ -777,48 +790,81 @@ function verifyTerminalRaces(expectedTerminals) {
             : terminal === "cancelled"
               ? "requested"
               : null,
-        resultRef:
-          terminal === "completed"
-            ? winner.resultRef
-            : null,
+        resultRef: terminal === "completed" ? fullLifecycle.resultRef : null,
       },
       to: terminal,
     };
-    const event = eventEnvelope(
-      index === 0 ? "z" : "y",
+    const contender = expectedTerminals[(index + 1) % expectedTerminals.length];
+    const contenderData = {
+      ...candidateData,
+      terminal: {
+        ...candidateData.terminal,
+        failureCode: contender === "failed" ? "provider_failed" : null,
+        kind: contender,
+        reasonCode:
+          contender === "timed-out"
+            ? "deadline"
+            : contender === "cancelled"
+              ? "requested"
+              : null,
+        resultRef: contender === "completed" ? fullLifecycle.resultRef : null,
+      },
+      to: contender,
+    };
+    const winningEvent = eventEnvelope(
+      index % 2 === 0 ? "y" : "z",
       "run.lifecycle.changed",
       candidateData,
-      candidateData.sourceRef,
+      sourceRef,
     );
-    candidateRecords.push({
-      event,
-      offset: offset(15),
-    });
+    const contenderEvent = eventEnvelope(
+      index % 2 === 0 ? "z" : "y",
+      "run.lifecycle.changed",
+      contenderData,
+      sourceRef,
+    );
+    const winnerRecords = [
+      ...structuredClone(sharedPrefix),
+      { event: winningEvent, offset: offset(15) },
+    ];
+    const winnerReplay = replayRecords(winnerRecords);
+    assert.equal(
+      winnerReplay.finalState.entities.runs[RUN_ID].status,
+      terminal,
+      `${terminal} terminal candidate must win its own race branch`,
+    );
+    const racedRecords = [
+      ...structuredClone(sharedPrefix),
+      { event: winningEvent, offset: offset(15) },
+      { event: contenderEvent, offset: offset(16) },
+    ];
     let error = null;
     try {
-      replayRecords(candidateRecords);
+      replayRecords(racedRecords);
     } catch (candidate) {
       error = candidate;
     }
-    assert.equal(error?.code, "INVOCATION_RUN_TERMINAL_IMMUTABLE", terminal);
-    assert.equal(error?.offset, offset(15), terminal);
+    assert.equal(
+      error?.code,
+      "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+      terminal,
+    );
+    assert.equal(error?.offset, offset(16), terminal);
     return {
-      attemptedTerminal: terminal,
+      contender,
       expectedCode: "INVOCATION_RUN_TERMINAL_IMMUTABLE",
       observedCode: error.code,
       offset: error.offset,
       refused: true,
       sharedHeadOffset: sharedHead.offset,
-      winner: "completed",
+      winner: terminal,
+      winnerStateDigest: winnerReplay.finalStateDigest,
     };
   });
   return {
     candidates: rows,
     sharedHeadOffset: sharedHead.offset,
-    terminalWinner: "completed",
-    oneWinnerPerExpectedHead:
-      winner.records.at(-1).event.data.to === "completed" &&
-      rows.every((row) => row.refused),
+    oneWinnerPerExpectedHead: rows.every((row) => row.refused),
     result: "PASS",
   };
 }

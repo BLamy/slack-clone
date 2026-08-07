@@ -3,7 +3,7 @@ id: E3-T04
 epic: 3
 title: "Bounded, ACL-safe context pack with durable citations"
 priority: 304
-status: pending
+status: in-progress
 depends_on: [E3-T02]
 estimate: L
 capstone: false

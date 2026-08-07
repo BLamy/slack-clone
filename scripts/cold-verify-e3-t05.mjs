@@ -35,6 +35,7 @@ const reportDirectory = promoteEvidence
     );
 const workDirectory = path.join(taskDirectory, "work");
 const evidenceFiles = [
+  "aggregate-budget.json",
   "batch-manifest.json",
   "canary-scan.json",
   "causation-graph.json",

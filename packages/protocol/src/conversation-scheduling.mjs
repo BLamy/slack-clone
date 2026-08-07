@@ -356,12 +356,17 @@ export function planConversationSchedule({
     (record) => record.parentInvocationId,
   );
   const delegatedConcurrency = countBy(normalizedActive, (run) => run.agentId);
+  const aggregateUsageByRoot = new Map();
+  const aggregateBudgetByRoot = new Map();
   const decisions = [];
   const refusals = [];
   const batches = [];
   const batchesByKey = new Map();
   const queuedOrder = normalizedQueued.map((item) => item.invocationId);
   const causationGraph = normalizedQueued.map((item) => ({
+    aggregateBudget: item.causation.aggregateBudget,
+    aggregateUsageAfter: null,
+    aggregateUsageBefore: item.causation.aggregateUsage,
     agentId: item.agentId,
     ancestors: item.causation.ancestors,
     depth: item.causation.ancestors.length,
@@ -370,16 +375,30 @@ export function planConversationSchedule({
     rootInvocationId: item.causation.rootInvocationId,
     sourceTrigger: item.sourceTrigger,
   }));
+  const causationGraphByInvocation = new Map(
+    causationGraph.map((entry) => [entry.invocationId, entry]),
+  );
 
   for (const item of normalizedQueued) {
     const sourceId = sourceIdentity(item.sourceTrigger);
     const duplicateInvocation = seenInvocations.has(item.invocationId);
     const duplicateSource = seenSources.has(sourceId);
+    const aggregate = aggregateUsageFor(item, {
+      aggregateBudgetByRoot,
+      aggregateUsageByRoot,
+    });
+    const graphEntry = causationGraphByInvocation.get(item.invocationId);
+    graphEntry.aggregateBudget = aggregate.budget;
+    graphEntry.aggregateUsageBefore = aggregate.before;
     const refusalCode = duplicateInvocation
       ? CONVERSATION_SCHEDULER_ERROR_CODES.REPLAYED_SOURCE
       : duplicateSource
         ? CONVERSATION_SCHEDULER_ERROR_CODES.DUPLICATE_SOURCE
-        : refusalFor(item, { childCounts, delegatedConcurrency });
+        : refusalFor(item, {
+            aggregate,
+            childCounts,
+            delegatedConcurrency,
+          });
     seenInvocations.add(item.invocationId);
     seenSources.add(sourceId);
 
@@ -403,6 +422,11 @@ export function planConversationSchedule({
       );
       existingBatch.memberInvocationIds.push(item.invocationId);
       incrementCausationCounts(item, childCounts, delegatedConcurrency);
+      graphEntry.aggregateUsageAfter = aggregate.after;
+      recordAggregateUsage(item, aggregate, {
+        aggregateBudgetByRoot,
+        aggregateUsageByRoot,
+      });
       decisions.push(
         decisionFor(item, {
           batchId: existingBatch.batchId,
@@ -452,6 +476,11 @@ export function planConversationSchedule({
       `${item.agentId}\u0000${item.conversation.channelId}`,
     );
     incrementCausationCounts(item, childCounts, delegatedConcurrency);
+    graphEntry.aggregateUsageAfter = aggregate.after;
+    recordAggregateUsage(item, aggregate, {
+      aggregateBudgetByRoot,
+      aggregateUsageByRoot,
+    });
     decisions.push(
       decisionFor(item, {
         batchId: batch.batchId,
@@ -693,7 +722,7 @@ export function validateSchedule(value) {
   return value;
 }
 
-function refusalFor(item, { childCounts, delegatedConcurrency }) {
+function refusalFor(item, { aggregate, childCounts, delegatedConcurrency }) {
   const source = item.source;
   if (source.isReplay)
     return CONVERSATION_SCHEDULER_ERROR_CODES.REPLAYED_SOURCE;
@@ -722,11 +751,7 @@ function refusalFor(item, { childCounts, delegatedConcurrency }) {
   if (ancestors.some((ancestor) => ancestor.agentId === item.agentId)) {
     return CONVERSATION_SCHEDULER_ERROR_CODES.CYCLE;
   }
-  const nextUsage = addUsage(
-    item.causation.aggregateUsage,
-    item.estimatedUsage,
-  );
-  if (!withinUsage(nextUsage, item.causation.aggregateBudget)) {
+  if (!withinUsage(aggregate.after, aggregate.budget)) {
     return CONVERSATION_SCHEDULER_ERROR_CODES.BUDGET_EXCEEDED;
   }
   if (source.authorKind !== "agent") return null;
@@ -825,6 +850,36 @@ function incrementCausationCounts(item, childCounts, delegatedConcurrency) {
   if (item.source.authorKind === "agent") {
     incrementCount(delegatedConcurrency, item.agentId);
   }
+}
+
+function aggregateUsageFor(
+  item,
+  { aggregateBudgetByRoot, aggregateUsageByRoot },
+) {
+  const rootInvocationId = item.causation.rootInvocationId;
+  const priorUsage = aggregateUsageByRoot.get(rootInvocationId);
+  const priorBudget = aggregateBudgetByRoot.get(rootInvocationId);
+  const before = priorUsage
+    ? maxUsage(priorUsage, item.causation.aggregateUsage)
+    : item.causation.aggregateUsage;
+  const budget = priorBudget
+    ? minBudget(priorBudget, item.causation.aggregateBudget)
+    : item.causation.aggregateBudget;
+  return {
+    after: addUsage(before, item.estimatedUsage),
+    before,
+    budget,
+  };
+}
+
+function recordAggregateUsage(
+  item,
+  aggregate,
+  { aggregateBudgetByRoot, aggregateUsageByRoot },
+) {
+  const rootInvocationId = item.causation.rootInvocationId;
+  aggregateUsageByRoot.set(rootInvocationId, aggregate.after);
+  aggregateBudgetByRoot.set(rootInvocationId, aggregate.budget);
 }
 
 function itemConversationKey(item) {
@@ -1368,6 +1423,32 @@ function addUsage(left, right) {
     outputTokens: left.outputTokens + right.outputTokens,
     totalTokens: left.totalTokens + right.totalTokens,
   };
+}
+
+function maxUsage(left, right) {
+  return {
+    costUsdCents: larger(left.costUsdCents, right.costUsdCents),
+    inputTokens: larger(left.inputTokens, right.inputTokens),
+    outputTokens: larger(left.outputTokens, right.outputTokens),
+    totalTokens: larger(left.totalTokens, right.totalTokens),
+  };
+}
+
+function minBudget(left, right) {
+  return {
+    costUsdCents: smaller(left.costUsdCents, right.costUsdCents),
+    inputTokens: smaller(left.inputTokens, right.inputTokens),
+    outputTokens: smaller(left.outputTokens, right.outputTokens),
+    totalTokens: smaller(left.totalTokens, right.totalTokens),
+  };
+}
+
+function larger(left, right) {
+  return left > right ? left : right;
+}
+
+function smaller(left, right) {
+  return left < right ? left : right;
 }
 
 function withinUsage(usage, budget) {

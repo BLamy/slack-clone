@@ -79,6 +79,7 @@ const sensitivity =
 
 await writeJson("batch-manifest.json", functional.batchManifest);
 await writeJson("causation-graph.json", functional.causationGraph);
+await writeJson("aggregate-budget.json", functional.aggregateBudget);
 await writeJson("concurrency-keys.json", functional.concurrencyKeys);
 await writeJson("fairness.json", functional.fairness);
 await writeJson("refusals.json", functional.refusals);
@@ -223,6 +224,44 @@ async function verifyFunctional() {
     assert.equal(guardMap[invocationId], expectedCode);
   }
 
+  const aggregateCases = aggregateBudgetMatrix();
+  const aggregateSchedule = planConversationSchedule({
+    queued: [...aggregateCases.items].reverse(),
+    workspaceId: WORKSPACE_ID,
+  });
+  const aggregateMap = Object.fromEntries(
+    aggregateSchedule.decisions.map((decision) => [
+      decision.invocationId,
+      decision,
+    ]),
+  );
+  assert.equal(
+    aggregateMap[aggregateCases.first.invocationId].status,
+    "admitted",
+  );
+  assert.equal(
+    aggregateMap[aggregateCases.second.invocationId].code,
+    CONVERSATION_SCHEDULER_ERROR_CODES.BUDGET_EXCEEDED,
+  );
+  assert.deepEqual(aggregateSchedule.batches[0].memberInvocationIds, [
+    aggregateCases.first.invocationId,
+  ]);
+  const aggregateFirstGraph = aggregateSchedule.causationGraph.find(
+    (entry) => entry.invocationId === aggregateCases.first.invocationId,
+  );
+  const aggregateSecondGraph = aggregateSchedule.causationGraph.find(
+    (entry) => entry.invocationId === aggregateCases.second.invocationId,
+  );
+  assert.deepEqual(
+    aggregateSecondGraph.aggregateUsageBefore,
+    aggregateCases.first.estimatedUsage,
+  );
+  assert.deepEqual(
+    aggregateFirstGraph.aggregateUsageAfter,
+    aggregateCases.first.estimatedUsage,
+  );
+  assert.equal(aggregateSecondGraph.aggregateUsageAfter, null);
+
   const completed = completeConversationBatch(
     ordered,
     ordered.batches[0].batchId,
@@ -246,6 +285,12 @@ async function verifyFunctional() {
       entries: guardSchedule.causationGraph,
       expected: Object.fromEntries(guards.expected),
       scheduleDigest: guardSchedule.scheduleDigest,
+    },
+    aggregateBudget: {
+      budget: aggregateCases.aggregateBudget,
+      decisions: aggregateSchedule.decisions,
+      entries: aggregateSchedule.causationGraph,
+      scheduleDigest: aggregateSchedule.scheduleDigest,
     },
     concurrencyKeys: {
       keys: ordered.concurrencyKeys,
@@ -422,6 +467,45 @@ function guardMatrix() {
     fanoutA,
     fanoutB,
     items: [missingGrant, revoked, cycle, depth, fanout, concurrency, budget],
+  };
+}
+
+function aggregateBudgetMatrix() {
+  const policy = makePolicy({
+    delegation: {
+      allowCrossChannel: false,
+      enabled: true,
+      maxChildren: 2,
+      maxDepth: 2,
+    },
+  });
+  const first = makeDelegatedChild({
+    agentId: AGENT_C,
+    index: 40,
+    invocationLetter: "g",
+    maxConcurrent: 2,
+    policy,
+  });
+  const second = makeDelegatedChild({
+    agentId: AGENT_C,
+    index: 41,
+    invocationLetter: "h",
+    maxConcurrent: 2,
+    policy,
+  });
+  const aggregateBudget = {
+    costUsdCents: 3,
+    inputTokens: 15,
+    outputTokens: 8,
+    totalTokens: 23,
+  };
+  first.causation.aggregateBudget = aggregateBudget;
+  second.causation.aggregateBudget = { ...aggregateBudget };
+  return {
+    aggregateBudget,
+    first,
+    items: [second, first],
+    second,
   };
 }
 

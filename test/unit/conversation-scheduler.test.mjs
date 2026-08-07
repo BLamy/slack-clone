@@ -301,6 +301,64 @@ test("delegation requires a current grant and rejects cycles, limits, and budget
   );
 });
 
+test("aggregate budgets accumulate across admitted siblings in source order", () => {
+  const policy = makePolicy({
+    delegation: {
+      allowCrossChannel: false,
+      enabled: true,
+      maxChildren: 2,
+      maxDepth: 2,
+    },
+  });
+  const first = makeDelegatedChild({
+    agentId: AGENT_C,
+    index: 1,
+    invocationLetter: "r",
+    maxConcurrent: 2,
+    policy,
+  });
+  const second = makeDelegatedChild({
+    agentId: AGENT_C,
+    index: 2,
+    invocationLetter: "s",
+    maxConcurrent: 2,
+    policy,
+  });
+  const aggregateBudget = {
+    costUsdCents: 3,
+    inputTokens: 15,
+    outputTokens: 8,
+    totalTokens: 23,
+  };
+  first.causation.aggregateBudget = aggregateBudget;
+  second.causation.aggregateBudget = { ...aggregateBudget };
+
+  const schedule = planConversationSchedule({
+    queued: [second, first],
+    workspaceId: WORKSPACE_ID,
+  });
+  const decisions = new Map(
+    schedule.decisions.map((decision) => [decision.invocationId, decision]),
+  );
+  assert.equal(decisions.get(first.invocationId).status, "admitted");
+  assert.equal(
+    decisions.get(second.invocationId).code,
+    CONVERSATION_SCHEDULER_ERROR_CODES.BUDGET_EXCEEDED,
+  );
+  assert.deepEqual(schedule.batches[0].memberInvocationIds, [
+    first.invocationId,
+  ]);
+  const firstGraph = schedule.causationGraph.find(
+    (entry) => entry.invocationId === first.invocationId,
+  );
+  const secondGraph = schedule.causationGraph.find(
+    (entry) => entry.invocationId === second.invocationId,
+  );
+  assert.deepEqual(secondGraph.aggregateUsageBefore, first.estimatedUsage);
+  assert.deepEqual(firstGraph.aggregateUsageAfter, first.estimatedUsage);
+  assert.equal(secondGraph.aggregateUsageAfter, null);
+});
+
 test("completed schedules remain replayable and mutation is detected", () => {
   const item = makeItem({ index: 1, invocationLetter: "a" });
   const schedule = planConversationSchedule({

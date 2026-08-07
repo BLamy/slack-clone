@@ -3,7 +3,7 @@ id: E3-T05
 epic: 3
 title: "Per-conversation batching, serialization, and recursion guards"
 priority: 305
-status: implemented
+status: verified
 depends_on: [E3-T02, E3-T03]
 estimate: L
 capstone: false
@@ -76,3 +76,61 @@ Cycles are detected from durable causation chains, not process-local sets.
 - Sensitivity: `sensitivity.json` shows all five detached mutations (self-trigger fence, cycle fence, conversation-key fence, aggregate-budget accumulator, and aggregate-budget narrowing) were detected by the verifier; `canary-scan.json` reports no leaked values across the promoted evidence.
 - Replay: `Replay: N/A (server scheduling and recursion policy) + mitigation: burst schedules, durable causation graphs, cycle/fairness matrix, and replay digests`.
 - Claim: E3-T05 deliverables are implemented, the earlier aggregate-budget gap is repaired, and the exact diff plus cold evidence are ready for a fresh critic; no browser recording is applicable to this server-only task.
+
+### Critic — 2026-08-07 — commit `3e9f66c4456bed51e14bee3ab2291e03f5d82c77`
+
+VERDICT: verified
+
+- Execution limitation, stated honestly: this critic session could not execute an
+  interpreter (`node -e`, `node scripts/verify-e3-t05.mjs`, and `make verify-E3-T05` were
+  all refused by the environment before running). No command output in this entry is
+  claimed as a fresh run. The audit is a static interrogation of the exact diff, the
+  immutable cold transcript, the promoted evidence, and the sensitivity harness, resting on
+  the builder's already-executed cold proof.
+- Provenance: `git diff 3e9f66c..HEAD` over `packages/`, `src/`, `scripts/`, `test/`,
+  `Makefile`, and `package.json` is empty, so the tree under review is product-identical to
+  the cited implementation commit; commit `28a92dd` touches only evidence and the readme.
+  `evidence/e3-t05-final/cold-clone-transcript.json` records a detached worktree at
+  `3e9f66c`, an empty `git status --porcelain --untracked-files=all` before install,
+  `pnpm install --frozen-lockfile`, `pnpm setup:emulate`, and `node scripts/verify-e3-t05.mjs`
+  all at exit 0, with run id `e3-t05-cold-final-20260807-v3` and all five gates PASS.
+- Source-order determinism: `planConversationSchedule` sorts on `sourceTrigger.offset` with
+  `invocationId` then `agentId` tie-breaks (`compareItems`), and the verifier plans the same
+  burst forward and reversed. `replay-digests.json` and `concurrency-keys.json` show
+  `scheduleDigest` == `reversedInputDigest`
+  (`sha256:24cc503c9df281db996b4b49f64f7a8b8990471f08406fc28ff248128a978a05`), so input
+  arrival order cannot change the schedule.
+- Refusal before provider: every refusal path returns a `non-running`/`terminal` decision and
+  never enters `batches`; the only provider callback (`executeBatch` in
+  `src/ledger/conversation-scheduler.mjs`) can only be reached through a planned batch.
+  `refusals.json` types self-trigger, quoted, code, edit, retry, agent-reply, and replayed
+  sources; `causation-graph.json` types DELEGATION_REQUIRED, DELEGATION_REVOKED, CYCLE,
+  DELEGATION_DEPTH, DELEGATION_FANOUT, DELEGATION_CONCURRENCY, and BUDGET_EXCEEDED.
+- Traceability: `batch-manifest.json` records two batches, one provider call serving three
+  members, three terminal dispositions, and a replayed terminal count of 3.
+  `replayConversationSchedule` re-derives both digests and rejects duplicate decisions,
+  duplicate terminal dispositions, and any batch member lacking its matching admitted
+  decision; the verifier's tamper case (`decisions[0].status = "queued"`) must throw.
+- Current grants/limits: `refusalFor` re-reads the item's own `delegationGrant` status,
+  source/target agents, channel scope, `maxDepth`, `maxChildren`, and `maxConcurrent` at
+  planning time, so a revoked or out-of-scope grant cannot admit a queued descendant.
+- Sibling accumulation and budget widening: `aggregate-budget.json` shows two siblings under
+  root `iv_aaaaaaaaaaaaaaaaaaaaaaaaaa`; the first is admitted with usage after
+  `{1,10,5,15}`, and the second — despite declaring `secondDeclaredBudget`
+  `{100,100,100,200}` — is held to the root budget `{3,15,8,23}` via `minBudget`, sees the
+  first sibling's usage via `maxUsage`, and is refused with
+  `CONVERSATION_SCHEDULER_BUDGET_EXCEEDED` with `aggregateUsageAfter: null`.
+- Detector sensitivity: `sensitivity.json` reports control exit 0 and five of five mutants
+  detected (self-trigger fence, cycle fence, conversation-key fence, aggregate-budget
+  accumulator, aggregate-budget narrowing), each verifier exit 1. Tracing each mutation by
+  hand against the fixtures confirms each one changes an asserted code or status rather than
+  merely reordering output: neutering the self-trigger fence yields DELEGATION_REQUIRED, the
+  cycle fence yields DELEGATION_CONCURRENCY, the key fence admits a decision asserted to be
+  `queued`, and both budget mutants admit the second sibling.
+- Residual observations, not refutations: the scheduler trusts the caller-supplied causation
+  chain (root/ancestors) as durable input, so accumulator scoping is only as sound as that
+  chain — consistent with the task contract that chains come from durable causation; and
+  fairness is proven for one planning round rather than a multi-round starvation soak.
+- Replay: `Replay: N/A (server scheduling and recursion policy) + mitigation: burst schedules,
+  durable causation graphs, cycle/fairness matrix, and replay digests`.
+- No substantive refutation remains against any acceptance criterion.

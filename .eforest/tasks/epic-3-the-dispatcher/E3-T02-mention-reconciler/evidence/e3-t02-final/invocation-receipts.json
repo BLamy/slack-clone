@@ -3,8 +3,8 @@
     {
       "eventId": "ev_a948214f9d10994ee47101a98f",
       "invocationId": "iv_17ba4a33075026486fbabc36b3",
-      "policyDigest": "sha256:c20cf1c51f54590b128bc764bf8497ab7a94ea9ce620802972b6e3e353f6c4a0",
-      "snapshotDigest": "sha256:1836af3f6877963b8b299df17298d30898c60ec944cc701fab53849d077a765c",
+      "policyDigest": "sha256:7d7621a9b5984daadc422e2286b9967727d695df89c4687e35dfdd444d079a42",
+      "snapshotDigest": "sha256:78efd59e4c891ffbfc5eb4a07aa069afe5f8a7fbd2878bfb774af6992723eba1",
       "snapshotRef": {
         "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
         "offset": "0000000000000002_0000000000000002",
@@ -18,5 +18,5 @@
     }
   ],
   "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations",
-  "streamDigest": "sha256:28bf712ef0b4c14df5ec1f120e5dd1dd2fd1a4ed70595d283e24744ce3960119"
+  "streamDigest": "sha256:e47364b12e7e61a37d3dead86d22c72058e4029a8fe2d2806ec4225a9f303555"
 }

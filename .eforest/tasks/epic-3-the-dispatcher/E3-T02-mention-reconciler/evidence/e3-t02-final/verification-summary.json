@@ -37,13 +37,18 @@
   "canaryScan": {
     "checked": true,
     "files": [
+      "canary-scan.json",
       "checkpoint-manifest.json",
+      "cold-clone-transcript.json",
       "crash-schedules.json",
       "duplicate-race.json",
       "invocation-receipts.json",
       "outcomes.json",
       "replay-digests.json",
+      "resolution-races.json",
       "sensitivity.json",
+      "snapshot-attacks.json",
+      "snapshot-manifest.json",
       "source-attacks.json",
       "source-manifest.json",
       "verification-summary.json"
@@ -60,7 +65,10 @@
       "invocation-receipts.json",
       "outcomes.json",
       "replay-digests.json",
+      "resolution-races.json",
       "sensitivity.json",
+      "snapshot-attacks.json",
+      "snapshot-manifest.json",
       "source-attacks.json",
       "source-manifest.json",
       "verification-summary.json"
@@ -108,7 +116,7 @@
     "effectiveInvocationRecords": 1,
     "invocationId": "iv_17ba4a33075026486fbabc36b3",
     "receiptEventDigests": [
-      "sha256:a4fe224da20c3b07fe22ab05bb88961e4e6fb0a5e7a0e07a42da9e0660f19613"
+      "sha256:fc08f30d2bc373dfad84029212bc2a655cbdb7694162f546837406653363f1f5"
     ],
     "receiptNextOffsets": [
       "0000000000000001_0000000000000001"
@@ -123,62 +131,161 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 3774,
+      "durationMs": 4899,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 4952,
+      "durationMs": 4733,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 10700,
+      "durationMs": 12220,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 25667,
+      "durationMs": 25405,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 722,
+      "durationMs": 1038,
       "name": "build",
       "result": "PASS"
     }
   ],
-  "implementationCommit": "53a2a6efe71ba31bf62129523e6542c1d0c35f85",
+  "implementationCommit": "c47281e01a75d5dd96a1b30eb0ddc0a64004482c",
   "implementationTreeCleanAtStart": true,
   "nonRunnableOutcomes": {
-    "auditCount": 10,
+    "auditCount": 8,
     "codes": [
       "INVOCATION_SNAPSHOT_AGENT_CONFIG_INACTIVE",
       "INVOCATION_SNAPSHOT_AGENT_CONFIG_INVALID",
       "INVOCATION_SNAPSHOT_MEMBERSHIP_INACTIVE",
       "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED",
-      "INVOCATION_SNAPSHOT_STALE_CONFIG",
-      "INVOCATION_SNAPSHOT_STALE_MEMBERSHIP",
-      "MENTION_RECONCILER_TARGET_KIND",
-      "MENTION_RECONCILER_TARGET_NOT_AGENT",
-      "MENTION_RECONCILER_TARGET_NOT_MEMBER",
-      "MENTION_RECONCILER_TARGET_REMOVED"
+      "MENTION_RECONCILER_TARGET_NOT_AGENT"
     ],
     "invocationCount": 0,
     "noHiddenConfigurationLeak": true,
+    "stateDriven": true,
+    "result": "PASS"
+  },
+  "resolutionRaces": {
+    "result": "PASS",
+    "rows": [
+      {
+        "attempts": 2,
+        "checkpointCountAfterRetry": 1,
+        "thrownResolutionError": false,
+        "firstAttempt": {
+          "code": "INVOCATION_SNAPSHOT_STALE_CONFIG",
+          "checkpointCount": 0,
+          "invocationCount": 0,
+          "status": "retry"
+        },
+        "label": "config-change-during-resolution",
+        "secondAttempt": {
+          "checkpointCount": 1,
+          "invocationCount": 1,
+          "status": "reconciled"
+        }
+      },
+      {
+        "attempts": 2,
+        "checkpointCountAfterRetry": 1,
+        "thrownResolutionError": false,
+        "firstAttempt": {
+          "code": "INVOCATION_SNAPSHOT_STALE_MEMBERSHIP",
+          "checkpointCount": 0,
+          "invocationCount": 0,
+          "status": "retry"
+        },
+        "label": "membership-change-during-resolution",
+        "secondAttempt": {
+          "checkpointCount": 1,
+          "invocationCount": 1,
+          "status": "reconciled"
+        }
+      },
+      {
+        "attempts": 2,
+        "checkpointCountAfterRetry": 1,
+        "thrownResolutionError": true,
+        "firstAttempt": {
+          "code": "INVOCATION_SNAPSHOT_STALE_PROVIDER",
+          "checkpointCount": 0,
+          "invocationCount": 0,
+          "status": "retry"
+        },
+        "label": "thrown-stale-provider-during-resolution",
+        "secondAttempt": {
+          "checkpointCount": 1,
+          "invocationCount": 1,
+          "status": "reconciled"
+        }
+      }
+    ]
+  },
+  "snapshotBindingAttacks": {
+    "attacks": [
+      {
+        "attack": "snapshot-foreign-workspace",
+        "invocationCount": 0,
+        "observedCode": "MENTION_RECONCILER_SNAPSHOT_REFUSED",
+        "refused": true
+      },
+      {
+        "attack": "snapshot-foreign-agent",
+        "invocationCount": 0,
+        "observedCode": "MENTION_RECONCILER_SNAPSHOT_REFUSED",
+        "refused": true
+      },
+      {
+        "attack": "snapshot-foreign-channel",
+        "invocationCount": 0,
+        "observedCode": "MENTION_RECONCILER_SNAPSHOT_REFUSED",
+        "refused": true
+      },
+      {
+        "attack": "snapshot-wrong-config-stream",
+        "invocationCount": 0,
+        "observedCode": "MENTION_RECONCILER_SNAPSHOT_REFUSED",
+        "refused": true
+      },
+      {
+        "attack": "snapshot-config-source-digest-mismatch",
+        "invocationCount": 0,
+        "observedCode": "MENTION_RECONCILER_SNAPSHOT_REFUSED",
+        "refused": true
+      },
+      {
+        "attack": "snapshot-missing-directory-source",
+        "invocationCount": 0,
+        "observedCode": "MENTION_RECONCILER_SNAPSHOT_REFUSED",
+        "refused": true
+      },
+      {
+        "attack": "snapshot-forged-digest",
+        "invocationCount": 0,
+        "observedCode": "INVOCATION_SNAPSHOT_DIGEST_MISMATCH",
+        "refused": true
+      }
+    ],
     "result": "PASS"
   },
   "replayEvidence": {
     "checkpoint": {
-      "finalStateDigest": "sha256:5c89f95aacf34c1a334a21f95b7bda2d376d9133f87e4a897bb66e619bf3a1aa",
+      "finalStateDigest": "sha256:66432bb2d7310acc61bd7f58bd0f8287d2048e16ff19a563009038ce6d62cd14",
       "replayedTwiceWithIdenticalDigest": true
     },
     "invocation": {
-      "finalStateDigest": "sha256:7df02c595a6131b1949a7a095ef79b7f744eef6d516e1871162858dff1323fce",
+      "finalStateDigest": "sha256:ea2c2a79011a015fc7fffd74514c18e8b8eb984bf220da9694e361112331dc49",
       "replayedTwiceWithIdenticalDigest": true
     },
     "sourceStreamDigest": "sha256:0a601331d9f6ecab0b833e11a118b7ba9458545456fe076404e2d204ac705ffe",
@@ -187,13 +294,27 @@
   "replayUploadAttempted": false,
   "result": "PASS",
   "replay": "Replay: N/A (headless stream reconciler) + mitigation: source and checkpoint manifests, hundred-way race, crash schedules, and replay digests",
-  "runId": "cold-8103-msiwjpx0",
+  "runId": "e3-t02-final-cold-20260807",
   "sensitivity": {
-    "mutation": "replace source-bound invocation ID with randomness",
-    "verifierCommand": "node --test test/unit/mention-reconciler.test.mjs",
-    "verifierExitCode": 1,
-    "verifierRejected": true,
-    "result": "PASS"
+    "mutationCount": 2,
+    "mutations": [
+      {
+        "mutation": "replace source-bound invocation ID with randomness",
+        "verifierCommand": "node --test test/unit/mention-reconciler.test.mjs",
+        "verifierExitCode": 1,
+        "verifierRejected": true,
+        "result": "PASS"
+      },
+      {
+        "mutation": "remove E2 snapshot binding validation",
+        "verifierCommand": "E3_T02_SKIP_GATES=1 E3_T02_SKIP_SENSITIVITY=1 node scripts/verify-e3-t02.mjs",
+        "verifierExitCode": 1,
+        "verifierRejected": true,
+        "result": "PASS"
+      }
+    ],
+    "result": "PASS",
+    "verifierDetectedMutant": true
   },
   "task": "E3-T02"
 }

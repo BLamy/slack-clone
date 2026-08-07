@@ -2,13 +2,13 @@
   "checkpointStream": "projection:px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
   "records": [
     {
-      "eventId": "ev_2244be240f68516d600ec9374b",
+      "eventId": "ev_0d8928af4ab65f9bf75b61663d",
       "projectionId": "px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
       "sequence": 1,
       "sourceOffset": "0000000000000001_0000000000000001",
       "sourceStream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
-      "stateDigest": "sha256:fad1c1f16e55ea2e3e8479fda8011f6aedffa1c19990ca8cec0904389bb158c2"
+      "stateDigest": "sha256:58b214f59241b16985ac7989460d620968c1d68ae080de9dc68ba2c1b95fb504"
     }
   ],
-  "streamDigest": "sha256:895c4bf0a94d0925ca543d6e5e4f10c4809e8f4c01b3aecc88fed12bfb1f6be3"
+  "streamDigest": "sha256:8fd06edf552ce3146ee05ec97b605f0a6c5f164b3fdd93fe7cba7ac003053333"
 }

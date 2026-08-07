@@ -1,10 +1,10 @@
 {
   "checkpoint": {
-    "finalStateDigest": "sha256:5c89f95aacf34c1a334a21f95b7bda2d376d9133f87e4a897bb66e619bf3a1aa",
+    "finalStateDigest": "sha256:66432bb2d7310acc61bd7f58bd0f8287d2048e16ff19a563009038ce6d62cd14",
     "replayedTwiceWithIdenticalDigest": true
   },
   "invocation": {
-    "finalStateDigest": "sha256:7df02c595a6131b1949a7a095ef79b7f744eef6d516e1871162858dff1323fce",
+    "finalStateDigest": "sha256:ea2c2a79011a015fc7fffd74514c18e8b8eb984bf220da9694e361112331dc49",
     "replayedTwiceWithIdenticalDigest": true
   },
   "sourceStreamDigest": "sha256:0a601331d9f6ecab0b833e11a118b7ba9458545456fe076404e2d204ac705ffe",

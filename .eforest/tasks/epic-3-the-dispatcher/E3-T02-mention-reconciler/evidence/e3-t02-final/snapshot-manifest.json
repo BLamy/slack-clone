@@ -1,0 +1,68 @@
+{
+  "records": [
+    {
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+      "configSource": {
+        "offset": "0000000000000002_0000000000000002",
+        "stateDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+      },
+      "context": {
+        "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "channelMembership": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "revision": 4,
+          "status": "active"
+        },
+        "scope": "current-channel",
+        "threadId": null
+      },
+      "membership": {
+        "membershipId": "mb_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "revision": 7,
+        "role": "agent",
+        "status": "active",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "snapshotDigest": "sha256:78efd59e4c891ffbfc5eb4a07aa069afe5f8a7fbd2878bfb774af6992723eba1",
+      "sourceManifest": {
+        "config": {
+          "offset": "0000000000000002_0000000000000002",
+          "stateDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+        },
+        "directory": {
+          "offset": "0000000000000004_0000000000000004",
+          "stateDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+        },
+        "providers": {
+          "manifestDigest": "sha256:751764325d1387da9404895128892e5a1e95005fb0bd45e27bd9dde42d6ec8b5",
+          "resolvedProviderDigest": "sha256:541df036a887331550882cddc8f8fb4b27366f24f1d7d632f66813476ea63116"
+        },
+        "workspaceInputs": {
+          "offset": "0000000000000004_0000000000000004",
+          "stateDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+        },
+        "connectionGrants": [
+          {
+            "offset": "0000000000000051_0000000000000033",
+            "stateDigest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+            "stream": "connection:conn_a/config"
+          },
+          {
+            "offset": "0000000000000050_0000000000000032",
+            "stateDigest": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+            "stream": "connection:conn_agrant_b/config"
+          }
+        ]
+      },
+      "validatedAtBoundary": "snapshot-resolved",
+      "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "result": "PASS"
+}

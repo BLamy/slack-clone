@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E3-T02 is implemented with promoted cold evidence and is awaiting a fresh critic.",
-  "updatedAt": "2026-08-07T12:11:51Z"
+  "statusReason": "E3-T02 is verified with promoted cold evidence; E3-T03 is the next eligible gate.",
+  "updatedAt": "2026-08-07T12:51:27Z"
 }

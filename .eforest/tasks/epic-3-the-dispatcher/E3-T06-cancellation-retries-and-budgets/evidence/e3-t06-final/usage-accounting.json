@@ -1,0 +1,60 @@
+{
+  "duplicateRefused": true,
+  "fractionalRefused": true,
+  "overflowRefused": true,
+  "concurrent": {
+    "accepted": 1,
+    "refused": 1
+  },
+  "aggregateBudget": {
+    "acceptedInputTokens": 9,
+    "attemptedInputTokens": 11,
+    "terminal": "budget-exhausted"
+  },
+  "dimensions": [
+    {
+      "actual": {
+        "costUsdCents": 2
+      },
+      "label": "cost",
+      "status": "budget-exhausted"
+    },
+    {
+      "actual": {
+        "wallTimeMs": 11
+      },
+      "label": "wall-time",
+      "status": "budget-exhausted"
+    },
+    {
+      "actual": {
+        "inputTokens": 1,
+        "outputTokens": 3,
+        "totalTokens": 4
+      },
+      "label": "output-tokens",
+      "status": "budget-exhausted"
+    },
+    {
+      "actual": {
+        "outputBytes": 3
+      },
+      "label": "output-bytes",
+      "status": "budget-exhausted"
+    }
+  ],
+  "attemptBudget": {
+    "attempts": 2,
+    "status": "failed",
+    "reason": "attempt-budget-exhausted"
+  },
+  "total": {
+    "costUsdCents": 2,
+    "inputTokens": 9,
+    "outputBytes": 10,
+    "outputTokens": 3,
+    "totalTokens": 12,
+    "wallTimeMs": 10
+  },
+  "result": "PASS"
+}

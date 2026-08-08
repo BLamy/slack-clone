@@ -1,0 +1,6 @@
+{
+  "result": "PASS",
+  "mutation": "run-queue capability deletion disabled before process kill",
+  "mutatedVerifierExitCode": 1,
+  "detectorWentRed": true
+}

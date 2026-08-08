@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E3-T06 is in progress after E3-T05 verified.",
+  "statusReason": "E3-T06 is implemented with promoted cold evidence; fresh critic verification is required.",
   "updatedAt": "2026-08-08T22:14:41Z"
 }

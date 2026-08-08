@@ -1,0 +1,27 @@
+[
+  {
+    "fencedBeforeNextAppend": true,
+    "reason": "operator-request",
+    "terminal": "cancelled"
+  },
+  {
+    "fencedBeforeNextAppend": true,
+    "reason": "attempt-deadline",
+    "terminal": "timed-out"
+  },
+  {
+    "fencedBeforeNextAppend": true,
+    "reason": "agent-revoked",
+    "terminal": "cancelled"
+  },
+  {
+    "fencedBeforeNextAppend": true,
+    "reason": "budget-exhausted",
+    "terminal": "budget-exhausted"
+  },
+  {
+    "fencedBeforeNextAppend": true,
+    "reason": "lease-lost",
+    "terminal": "cancelled"
+  }
+]

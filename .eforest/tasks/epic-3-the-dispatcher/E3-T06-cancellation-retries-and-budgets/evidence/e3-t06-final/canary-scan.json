@@ -1,0 +1,20 @@
+{
+  "checked": true,
+  "files": [
+    "attempt-timelines.json",
+    "canary-scan.json",
+    "capability-revocations.json",
+    "cold-clone-transcript.json",
+    "crash-recovery.json",
+    "fake-clock-schedules.json",
+    "process-resource-counts.json",
+    "replay-digests.json",
+    "sensitivity.json",
+    "terminal-races.json",
+    "usage-accounting.json",
+    "verification-summary.json"
+  ],
+  "findings": [],
+  "leaked": false,
+  "transcriptChecked": true
+}

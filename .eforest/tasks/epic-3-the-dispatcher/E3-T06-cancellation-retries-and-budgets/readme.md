@@ -3,7 +3,7 @@ id: E3-T06
 epic: 3
 title: "Cancellation, retries, deadlines, and resource budgets"
 priority: 306
-status: in-progress
+status: implemented
 depends_on: [E3-T03]
 estimate: L
 capstone: false
@@ -64,3 +64,12 @@ testable, not sleeps embedded in tests.
    mutation must make the verifier fail.
 
 ## Verification log
+
+### Builder — 2026-08-08 — commit `c266a78614a046ff94960f859dbd8e820cc1f5b5`
+
+- Cold proof: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e3-t06-final-c266a78 make verify-E3-T06` exited 0 from a clean detached worktree at the exact commit after local-reference submodule initialization, frozen install, and emulator setup. The transcript is recorded in `evidence/e3-t06-final/cold-clone-transcript.json`.
+- Gates: `pnpm format:check:e3-t06`, `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` all passed; the test gate included 180 unit/ledger tests and five two-session browser integration tests.
+- Run-control evidence: `attempt-timelines.json` records two attempts with deterministic backoff and distinct lease/capability digests; `fake-clock-schedules.json`, `capability-revocations.json`, `process-resource-counts.json`, `usage-accounting.json`, `terminal-races.json`, and `crash-recovery.json` cover the frozen schedules, fencing order, complete process-tree termination, all budget dimensions, terminal races, and idempotent restart recovery.
+- Replay/evidence integrity: `replay-digests.json` records reducer digest `sha256:b4cd46283d1b20bea8d63405093c3a975bfff8a779db0b09db14c53c90ce4f83`, lease digest `sha256:2e73c4c5082a385793e40e51887d048b20f72c5e8b6fbbcbe63b1a2f1d773dd4`, 23 reducer prefixes, and four lease prefixes. `canary-scan.json` reports no leaked credential-shaped values. `sensitivity.json` shows the capability-fence mutation made the verifier exit 1.
+- Replay: `Replay: N/A (headless run-control protocol) + mitigation: real process-tree probes, fake-clock schedules, usage manifests, terminal races, and replay`.
+- Claim: cancellation, deadlines, retries, bounded backoff, attempt/aggregate resource budgets, terminal immutability, process-group cleanup, and crash-safe idempotent logical actions are implemented and supported by the exact diff plus promoted cold evidence; ready for a fresh critic.

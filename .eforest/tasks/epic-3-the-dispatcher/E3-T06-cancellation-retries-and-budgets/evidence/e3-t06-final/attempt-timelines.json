@@ -1,0 +1,30 @@
+{
+  "attemptCount": 2,
+  "firstAttempt": {
+    "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+    "attemptId": "at_b4139a7758781413264d0ca673",
+    "attemptNumber": 1,
+    "capabilityDigest": "sha256:f355a0cc749a975072ec0c524870816f2d352890d1309962bbad1c90bbfa4cd2",
+    "endpoints": [
+      "run.events.write"
+    ],
+    "entryDigest": "sha256:7a6d602cfc2ec5c4df5adeb124ad24b9100c0d11a57ac20de9594299c2d8ee64",
+    "expiresAt": "2026-08-08T00:00:01.000Z",
+    "invocationId": "iv_eeeeeeeeeeeeeeeeeeeeeeeeee",
+    "leaseGeneration": 1,
+    "leaseId": "ls_1fbfdadd9a680ec50988863e7b",
+    "queueDigest": "sha256:120a86f8aab748465466516724bcf4e054e88eea18bc0cbd4a4a198d4cd6e765",
+    "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+    "workerId": "worker-e"
+  },
+  "secondAttempt": {
+    "attemptId": "at_22b604ba341ad3b9281e2ad363",
+    "attemptNumber": 2,
+    "leaseGeneration": 2,
+    "status": "leased"
+  },
+  "firstCapabilityDigest": "sha256:f355a0cc749a975072ec0c524870816f2d352890d1309962bbad1c90bbfa4cd2",
+  "secondCapabilityDigest": "sha256:0f5266229c571f4dd9cd204cdf7b8fb6cde98cbaba2e1eec3868b83435e4d4a8",
+  "freshIdentity": true,
+  "oldCapabilityRefused": true
+}

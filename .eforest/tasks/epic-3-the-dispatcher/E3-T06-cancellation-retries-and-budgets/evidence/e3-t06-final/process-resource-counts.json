@@ -57,7 +57,7 @@
     }
   ],
   "real": {
-    "processGroupId": -71015,
+    "processGroupId": -35459,
     "signals": [
       "SIGTERM",
       "SIGKILL"

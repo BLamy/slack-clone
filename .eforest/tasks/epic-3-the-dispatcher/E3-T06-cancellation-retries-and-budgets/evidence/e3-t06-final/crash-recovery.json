@@ -3,6 +3,9 @@
   "sideEffectCalls": 1,
   "restartStartedWithEmptyProcessMap": true,
   "recoveredWithoutRepeat": true,
+  "usageReplayRefused": true,
+  "aggregateUsagePreserved": true,
+  "leaseWatermarkPreserved": true,
   "recoveredControlRecorded": true,
   "terminal": "completed",
   "result": "PASS"

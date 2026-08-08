@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E3-T06 repair is in progress after the critic found restart dedupe, watermark, stale-capability, and deadline gaps.",
+  "statusReason": "E3-T06 repairs passed promoted cold verification; fresh critic verification is required.",
   "updatedAt": "2026-08-08T22:14:41Z"
 }

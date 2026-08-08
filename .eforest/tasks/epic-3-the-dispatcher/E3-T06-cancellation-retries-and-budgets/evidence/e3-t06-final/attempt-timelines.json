@@ -26,5 +26,6 @@
   "firstCapabilityDigest": "sha256:f355a0cc749a975072ec0c524870816f2d352890d1309962bbad1c90bbfa4cd2",
   "secondCapabilityDigest": "sha256:0f5266229c571f4dd9cd204cdf7b8fb6cde98cbaba2e1eec3868b83435e4d4a8",
   "freshIdentity": true,
-  "oldCapabilityRefused": true
+  "oldCapabilityRefused": true,
+  "staleCapabilityBudgetRefused": true
 }

@@ -1,6 +1,32 @@
 {
   "result": "PASS",
-  "mutation": "run-queue capability deletion disabled before process kill",
-  "mutatedVerifierExitCode": 1,
+  "mutations": [
+    {
+      "detectorWentRed": true,
+      "label": "capability-fence",
+      "mutatedVerifierExitCode": 1
+    },
+    {
+      "detectorWentRed": true,
+      "label": "usage-replay-dedupe",
+      "mutatedVerifierExitCode": 1
+    },
+    {
+      "detectorWentRed": true,
+      "label": "lease-watermark",
+      "mutatedVerifierExitCode": 1
+    },
+    {
+      "detectorWentRed": true,
+      "label": "stale-capability-preflight",
+      "mutatedVerifierExitCode": 1
+    },
+    {
+      "detectorWentRed": true,
+      "label": "deadline-fence",
+      "mutatedVerifierExitCode": 1
+    }
+  ],
+  "detectorCount": 5,
   "detectorWentRed": true
 }

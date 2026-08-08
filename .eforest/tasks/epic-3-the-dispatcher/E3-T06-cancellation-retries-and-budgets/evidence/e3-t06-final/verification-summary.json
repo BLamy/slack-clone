@@ -1,43 +1,43 @@
 {
   "schemaVersion": 1,
   "task": "E3-T06",
-  "runId": "e3-t06-final-c266a78",
-  "implementationCommit": "c266a78614a046ff94960f859dbd8e820cc1f5b5",
+  "runId": "e3-t06-repair-final-d8e34fe",
+  "implementationCommit": "d8e34fef90430ed5ac90a69c1f9a3be7c59e9506",
   "replay": "Replay: N/A (headless run-control protocol) + mitigation: real process-tree probes, fake-clock schedules, usage manifests, terminal races, and replay",
   "gates": [
     {
       "command": "pnpm format:check:e3-t06",
-      "durationMs": 2943,
+      "durationMs": 2653,
       "name": "format-e3-t06",
       "result": "PASS"
     },
     {
       "command": "pnpm format:check",
-      "durationMs": 6244,
+      "durationMs": 8123,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 7068,
+      "durationMs": 8100,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 18593,
+      "durationMs": 20001,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 29807,
+      "durationMs": 30516,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 1697,
+      "durationMs": 1149,
       "name": "build",
       "result": "PASS"
     }
@@ -70,7 +70,8 @@
     "firstCapabilityDigest": "sha256:f355a0cc749a975072ec0c524870816f2d352890d1309962bbad1c90bbfa4cd2",
     "secondCapabilityDigest": "sha256:0f5266229c571f4dd9cd204cdf7b8fb6cde98cbaba2e1eec3868b83435e4d4a8",
     "freshIdentity": true,
-    "oldCapabilityRefused": true
+    "oldCapabilityRefused": true,
+    "staleCapabilityBudgetRefused": true
   },
   "fakeClockSchedules": {
     "retry": {
@@ -180,6 +181,14 @@
       "terminal": "cancelled"
     }
   ],
+  "clockGuards": {
+    "rollbackObservedAtMs": 10,
+    "rollbackRefused": true,
+    "deadlineObservedAtMs": 101,
+    "deadlineFenced": true,
+    "terminal": "timed-out",
+    "result": "PASS"
+  },
   "processResources": {
     "scripted": [
       {
@@ -239,7 +248,7 @@
       }
     ],
     "real": {
-      "processGroupId": -71015,
+      "processGroupId": -35459,
       "signals": [
         "SIGTERM",
         "SIGKILL"
@@ -410,6 +419,9 @@
     "sideEffectCalls": 1,
     "restartStartedWithEmptyProcessMap": true,
     "recoveredWithoutRepeat": true,
+    "usageReplayRefused": true,
+    "aggregateUsagePreserved": true,
+    "leaseWatermarkPreserved": true,
     "recoveredControlRecorded": true,
     "terminal": "completed",
     "result": "PASS"
@@ -425,15 +437,44 @@
   },
   "sensitivity": {
     "result": "PASS",
-    "mutation": "run-queue capability deletion disabled before process kill",
-    "mutatedVerifierExitCode": 1,
+    "mutations": [
+      {
+        "detectorWentRed": true,
+        "label": "capability-fence",
+        "mutatedVerifierExitCode": 1
+      },
+      {
+        "detectorWentRed": true,
+        "label": "usage-replay-dedupe",
+        "mutatedVerifierExitCode": 1
+      },
+      {
+        "detectorWentRed": true,
+        "label": "lease-watermark",
+        "mutatedVerifierExitCode": 1
+      },
+      {
+        "detectorWentRed": true,
+        "label": "stale-capability-preflight",
+        "mutatedVerifierExitCode": 1
+      },
+      {
+        "detectorWentRed": true,
+        "label": "deadline-fence",
+        "mutatedVerifierExitCode": 1
+      }
+    ],
+    "detectorCount": 5,
     "detectorWentRed": true
   },
   "canaryScan": {
     "checked": true,
     "evidenceFiles": [
       "attempt-timelines.json",
+      "canary-scan.json",
       "capability-revocations.json",
+      "clock-guards.json",
+      "cold-clone-transcript.json",
       "crash-recovery.json",
       "fake-clock-schedules.json",
       "process-resource-counts.json",
@@ -450,7 +491,19 @@
       },
       {
         "leaked": false,
+        "name": "canary-scan.json"
+      },
+      {
+        "leaked": false,
         "name": "capability-revocations.json"
+      },
+      {
+        "leaked": false,
+        "name": "clock-guards.json"
+      },
+      {
+        "leaked": false,
+        "name": "cold-clone-transcript.json"
       },
       {
         "leaked": false,

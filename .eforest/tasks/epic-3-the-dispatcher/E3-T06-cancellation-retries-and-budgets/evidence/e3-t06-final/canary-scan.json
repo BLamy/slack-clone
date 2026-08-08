@@ -4,6 +4,7 @@
     "attempt-timelines.json",
     "canary-scan.json",
     "capability-revocations.json",
+    "clock-guards.json",
     "cold-clone-transcript.json",
     "crash-recovery.json",
     "fake-clock-schedules.json",

@@ -38,6 +38,7 @@ const evidenceFiles = [
   "attempt-timelines.json",
   "canary-scan.json",
   "capability-revocations.json",
+  "clock-guards.json",
   "crash-recovery.json",
   "fake-clock-schedules.json",
   "process-resource-counts.json",

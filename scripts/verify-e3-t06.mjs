@@ -80,6 +80,7 @@ await mkdir(path.join(taskDirectory, "work"), { recursive: true });
 const gates = await runGates();
 const retryEvidence = await verifyRetryAndRecovery();
 const controlEvidence = await verifyAuthorityAndProcessControl();
+const clockEvidence = await verifyClockAndDeadline();
 const budgetEvidence = await verifyBudgetAccounting();
 const raceEvidence = await verifyTerminalRaces();
 const crashEvidence = await verifyCrashRecovery();
@@ -105,6 +106,7 @@ const evidence = {
   },
   usageAccounting: budgetEvidence,
   capabilityRevocations: controlEvidence.revocations,
+  clockGuards: clockEvidence,
   processResources: {
     scripted: controlEvidence.processes,
     real: processEvidence,
@@ -119,6 +121,7 @@ await writeJson("attempt-timelines.json", retryEvidence.attempts);
 await writeJson("fake-clock-schedules.json", evidence.fakeClockSchedules);
 await writeJson("usage-accounting.json", budgetEvidence);
 await writeJson("capability-revocations.json", controlEvidence.revocations);
+await writeJson("clock-guards.json", clockEvidence);
 await writeJson("process-resource-counts.json", evidence.processResources);
 await writeJson("terminal-races.json", raceEvidence);
 await writeJson("crash-recovery.json", crashEvidence);
@@ -595,6 +598,23 @@ async function verifyRetryAndRecovery() {
     runCapabilityDigest(firstCapability),
     runCapabilityDigest(secondCapability),
   );
+  await assert.rejects(
+    harness.controller.reportUsage({
+      capability: firstCapability,
+      now: harness.dateAt(22),
+      usage: {
+        costUsdCents: 1,
+        inputTokens: 101,
+        outputBytes: 1,
+        outputTokens: 1,
+        totalTokens: 102,
+        wallTimeMs: 1,
+      },
+      usageKey: "stale-capability-overbudget",
+    }),
+    (error) => String(error.code).includes("CAPABILITY_INVALID"),
+  );
+  assert.equal(harness.controller.getState().status, "running");
   await harness.controller.reportUsage({
     now: harness.dateAt(25),
     usage: {
@@ -646,6 +666,7 @@ async function verifyRetryAndRecovery() {
       secondCapabilityDigest: runCapabilityDigest(secondCapability),
       freshIdentity: true,
       oldCapabilityRefused: true,
+      staleCapabilityBudgetRefused: true,
     },
     nonRetryableFailureNoNextAttempt: {
       attempts: nonRetryableHarness.controller.getState().attempts.length,
@@ -789,6 +810,59 @@ async function runControlOutcome(expectedStatus, operation) {
         firstAppendAfterFence >= 0,
     },
     state,
+  };
+}
+
+async function verifyClockAndDeadline() {
+  const harness = createHarness({ runLetter: "m" });
+  await harness.controller.beginAttempt({ now: harness.dateAt(0) });
+  await harness.controller.startAttempt({ now: harness.dateAt(1) });
+  await harness.controller.reportUsage({
+    now: harness.dateAt(10),
+    usage: {
+      costUsdCents: 1,
+      inputTokens: 1,
+      outputBytes: 1,
+      outputTokens: 1,
+      totalTokens: 2,
+      wallTimeMs: 1,
+    },
+    usageKey: "clock-forward-usage",
+  });
+  const beforeRollback = harness.controller.getState();
+  await assert.rejects(
+    harness.controller.complete({ now: harness.dateAt(9) }),
+    (error) => error.code === RUN_CONTROL_ERROR_CODES.CLOCK_REGRESSION,
+  );
+  const afterRollback = harness.controller.getState();
+  assert.equal(afterRollback.status, "running");
+  assert.equal(afterRollback.records, beforeRollback.records);
+  await assert.rejects(
+    harness.controller.complete({ now: harness.dateAt(101) }),
+    (error) => error.code === RUN_CONTROL_ERROR_CODES.DEADLINE_EXCEEDED,
+  );
+  const afterDeadline = harness.controller.getState();
+  assert.equal(afterDeadline.status, "timed-out");
+  assert.equal(afterDeadline.terminalCount, 1);
+  assert.equal(
+    harness.controller
+      .getRecords()
+      .some(({ event }) => event.eventType === "run.result.recorded"),
+    false,
+  );
+  assert.equal(
+    afterDeadline.processSnapshot.every(
+      ({ activeChildren }) => activeChildren === 0,
+    ),
+    true,
+  );
+  return {
+    rollbackObservedAtMs: afterRollback.lastObservedAtMs - BASE_TIME,
+    rollbackRefused: true,
+    deadlineObservedAtMs: afterDeadline.lastObservedAtMs - BASE_TIME,
+    deadlineFenced: true,
+    terminal: afterDeadline.status,
+    result: "PASS",
   };
 }
 
@@ -1166,15 +1240,29 @@ async function verifyTerminalRaces() {
 
 async function verifyCrashRecovery() {
   const idempotencyStore = new Map();
+  const aggregateUsageStore = { usage: zeroRunUsage() };
   let sideEffectCalls = 0;
-  const original = createHarness({ idempotencyStore });
+  const original = createHarness({ idempotencyStore, aggregateUsageStore });
   await original.controller.beginAttempt({ now: original.dateAt(0) });
   await original.controller.startAttempt({ now: original.dateAt(1) });
+  const durableUsage = {
+    costUsdCents: 2,
+    inputTokens: 4,
+    outputBytes: 8,
+    outputTokens: 2,
+    totalTokens: 6,
+    wallTimeMs: 3,
+  };
+  await original.controller.reportUsage({
+    now: original.dateAt(2),
+    usage: durableUsage,
+    usageKey: "durable-usage-1",
+  });
   await assert.rejects(
     original.controller.commitLogicalAction({
       actionKey: "durable-side-effect-1",
       crashAfterSideEffect: true,
-      now: original.dateAt(2),
+      now: original.dateAt(3),
       perform: async () => {
         sideEffectCalls += 1;
       },
@@ -1183,6 +1271,7 @@ async function verifyCrashRecovery() {
   const beforeRestart = original.controller.getState();
   assert.equal(sideEffectCalls, 1);
   assert.equal(idempotencyStore.has("durable-side-effect-1"), true);
+  const initialLeaseRecordCount = original.leaseRecords.length;
   const recoveryRunner = createScriptedProcessRunner({
     defaultChildren: 2,
     defaultIgnoresTerm: true,
@@ -1191,41 +1280,65 @@ async function verifyCrashRecovery() {
     leaseCoordinator: original.leaseCoordinator,
     idempotencyStore,
     initialCapability: original.controller.getCapabilityForWorker(),
-    initialLeaseRecordCount: original.leaseRecords.length,
+    initialLeaseRecordCount,
     initialRecords: original.controller.getRecords(),
     initialRun: {
       activeAttempt: beforeRestart.activeAttempt,
       attempts: beforeRestart.attempts,
-      runStartedAtMs: 1,
+      lastObservedAtMs: beforeRestart.lastObservedAtMs,
+      runStartedAtMs: beforeRestart.runStartedAtMs,
       sequence: beforeRestart.runSequence,
       status: beforeRestart.status,
       usage: beforeRestart.totalUsage,
     },
+    aggregateUsageStore,
     processRunner: recoveryRunner,
     leaseRecordsOverride: original.leaseRecords,
   });
+  await assert.rejects(
+    recovery.controller.reportUsage({
+      now: recovery.dateAt(4),
+      usage: durableUsage,
+      usageKey: "durable-usage-1",
+    }),
+    (error) => error.code === RUN_CONTROL_ERROR_CODES.DUPLICATE_USAGE,
+  );
+  assert.deepEqual(recovery.controller.getState().totalUsage, durableUsage);
+  assert.deepEqual(aggregateUsageStore.usage, durableUsage);
   const recovered = await recovery.controller.commitLogicalAction({
     actionKey: "durable-side-effect-1",
-    now: recovery.dateAt(3),
+    now: recovery.dateAt(5),
     perform: async () => {
       sideEffectCalls += 1;
     },
   });
   assert.equal(recovered.result, "replayed");
   assert.equal(sideEffectCalls, 1);
-  await recovery.controller.complete({ now: recovery.dateAt(4) });
-  await original.controller.cancel({
-    now: original.dateAt(5),
-    reasonCode: "crash-cleanup",
-  });
+  await recovery.controller.complete({ now: recovery.dateAt(6) });
   const state = recovery.controller.getState();
   assert.equal(state.status, "completed");
+  const recoveryOffsets = recovery.controller
+    .getRecords()
+    .map(({ offset }) => offset);
+  assert.equal(new Set(recoveryOffsets).size, recoveryOffsets.length);
+  const recoveryLeaseEventIds = recovery.controller
+    .getRecords()
+    .filter(({ event }) => event.eventType.startsWith("run.lease."))
+    .map(({ event }) => event.eventId);
+  assert.equal(
+    new Set(recoveryLeaseEventIds).size,
+    recoveryLeaseEventIds.length,
+  );
+  assert.equal(recovery.leaseRecords.length, initialLeaseRecordCount + 1);
   return {
     actionKey: "durable-side-effect-1",
     sideEffectCalls,
     restartStartedWithEmptyProcessMap:
       recoveryRunner.getProcessSnapshot().length === 0,
     recoveredWithoutRepeat: true,
+    usageReplayRefused: true,
+    aggregateUsagePreserved: true,
+    leaseWatermarkPreserved: true,
     recoveredControlRecorded: recovery.controller
       .getRecords()
       .some(({ event }) => event.data?.controlType === "side-effect.recovered"),
@@ -1377,40 +1490,87 @@ async function verifySensitivity() {
       cwd: checkout,
       stdio: "ignore",
     });
-    const target = path.join(checkout, "src/ledger/run-queue.mjs");
-    const source = await readFile(target, "utf8");
-    const needle = "      tokens.delete(digest);\n      await supersedeOne(";
-    assert.equal(source.includes(needle), true);
-    await writeFile(
-      target,
-      source.replace(
-        needle,
-        "      // fenced deletion disabled by sensitivity mutation\n      await supersedeOne(",
-      ),
-    );
-    let exitCode = 0;
-    try {
-      execFileSync("node", ["scripts/verify-e3-t06.mjs"], {
-        cwd: checkout,
-        env: {
-          ...process.env,
-          E3_T06_EXPECT_SENSITIVITY: "1",
-          E3_T06_IMPLEMENTATION_COMMIT: implementationCommit,
-          E3_T06_SKIP_GATES: "1",
-          E3_T06_SKIP_SENSITIVITY: "1",
-          TEST_RUN_ID: `${runId}-sensitivity`,
-        },
-        stdio: "ignore",
+    const mutations = [
+      {
+        file: "src/ledger/run-queue.mjs",
+        label: "capability-fence",
+        needle: "      tokens.delete(digest);\n      await supersedeOne(",
+        replacement:
+          "      // fenced deletion disabled by sensitivity mutation\n      await supersedeOne(",
+      },
+      {
+        file: "src/ledger/run-control.mjs",
+        label: "usage-replay-dedupe",
+        needle: "      usageKeys.add(event.idempotencyKey);",
+        replacement: '      usageKeys.add("sensitivity-mutated-usage-key");',
+      },
+      {
+        file: "src/ledger/run-control.mjs",
+        label: "lease-watermark",
+        needle: "  let flushedLeaseCount = initialLeaseRecordCount;",
+        replacement: "  let flushedLeaseCount = 0;",
+      },
+      {
+        file: "src/ledger/run-control.mjs",
+        label: "stale-capability-preflight",
+        needle:
+          "      await preflightMutationWithoutLock({ capability, now: nowDate });",
+        replacement:
+          "      await preflightMutationWithoutLock({ capability: currentCapability, now: nowDate });",
+      },
+      {
+        file: "src/ledger/run-control.mjs",
+        label: "deadline-fence",
+        needle:
+          "    if (deadlineAtMs !== null && now.getTime() >= deadlineAtMs) {",
+        replacement: "    if (false) {",
+      },
+    ];
+    const mutationResults = [];
+    for (const [index, mutation] of mutations.entries()) {
+      const target = path.join(checkout, mutation.file);
+      const source = await readFile(target, "utf8");
+      assert.equal(
+        source.includes(mutation.needle),
+        true,
+        `sensitivity needle missing for ${mutation.label}`,
+      );
+      await writeFile(
+        target,
+        source.replace(mutation.needle, mutation.replacement),
+      );
+      let exitCode = 0;
+      try {
+        execFileSync("node", ["scripts/verify-e3-t06.mjs"], {
+          cwd: checkout,
+          env: {
+            ...process.env,
+            E3_T06_EXPECT_SENSITIVITY: "1",
+            E3_T06_IMPLEMENTATION_COMMIT: implementationCommit,
+            E3_T06_SKIP_GATES: "1",
+            E3_T06_SKIP_SENSITIVITY: "1",
+            TEST_RUN_ID: `${runId}-sensitivity-${index}`,
+          },
+          stdio: "ignore",
+        });
+      } catch (error) {
+        exitCode = error.status ?? 1;
+      }
+      await writeFile(target, source);
+      assert.notEqual(exitCode, 0);
+      mutationResults.push({
+        detectorWentRed: true,
+        label: mutation.label,
+        mutatedVerifierExitCode: exitCode,
       });
-    } catch (error) {
-      exitCode = error.status ?? 1;
     }
-    assert.notEqual(exitCode, 0);
     return {
       result: "PASS",
-      mutation: "run-queue capability deletion disabled before process kill",
-      mutatedVerifierExitCode: exitCode,
-      detectorWentRed: true,
+      mutations: mutationResults,
+      detectorCount: mutationResults.length,
+      detectorWentRed: mutationResults.every(
+        ({ detectorWentRed }) => detectorWentRed,
+      ),
     };
   } finally {
     if (worktreeAdded) {

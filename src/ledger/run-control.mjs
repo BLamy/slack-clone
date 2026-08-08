@@ -57,6 +57,7 @@ export function createRunControlCoordinator({
   clock = () => new Date(),
   entry,
   initialCapability = null,
+  initialLeaseRecordCount = 0,
   initialRecords = [],
   initialRun = {},
   idempotencyStore = new Map(),
@@ -83,6 +84,23 @@ export function createRunControlCoordinator({
   validateRunControlPolicy(policy);
   validateUsage(aggregateUsage, "$.aggregateUsage");
   if (
+    !Number.isSafeInteger(initialLeaseRecordCount) ||
+    initialLeaseRecordCount < 0 ||
+    initialLeaseRecordCount > leaseRecords.length
+  ) {
+    throw new TypeError(
+      "initialLeaseRecordCount must be within the supplied lease record range",
+    );
+  }
+  if (
+    initialRun.lastObservedAtMs !== undefined &&
+    initialRun.lastObservedAtMs !== null &&
+    (!Number.isSafeInteger(initialRun.lastObservedAtMs) ||
+      initialRun.lastObservedAtMs < 0)
+  ) {
+    throw new TypeError("initialRun.lastObservedAtMs must be a timestamp");
+  }
+  if (
     !idempotencyStore ||
     typeof idempotencyStore.has !== "function" ||
     typeof idempotencyStore.set !== "function"
@@ -91,7 +109,7 @@ export function createRunControlCoordinator({
   }
 
   const records = structuredClone(initialRecords);
-  let flushedLeaseCount = 0;
+  let flushedLeaseCount = initialLeaseRecordCount;
   let runSequence = initialRun.sequence ?? inferRunSequence(records);
   let status = initialRun.status ?? "queued";
   let terminal = initialRun.terminal ?? null;
@@ -105,6 +123,7 @@ export function createRunControlCoordinator({
   let currentCapability = initialCapability;
   let processHandle = null;
   let runStartedAtMs = initialRun.runStartedAtMs ?? null;
+  let lastObservedAtMs = initialRun.lastObservedAtMs ?? null;
   let deadlineAtMs = initialRun.deadlineAtMs ?? null;
   let terminalCount = terminal ? 1 : 0;
   let serial = Promise.resolve();
@@ -130,7 +149,8 @@ export function createRunControlCoordinator({
           "terminal run cannot acquire another attempt",
         );
       }
-      const nowMs = normalizeDate(now).getTime();
+      const nowDate = observeNow(now);
+      const nowMs = nowDate.getTime();
       if (status === "retry") {
         if (!retrySchedule || nowMs < retrySchedule.nextAttemptAtMs) {
           throw controlError(
@@ -140,7 +160,7 @@ export function createRunControlCoordinator({
         }
         await appendLifecycleWithoutLock({
           from: "retry",
-          now: new Date(nowMs),
+          now: nowDate,
           to: "queued",
         });
         retrySchedule = null;
@@ -153,7 +173,7 @@ export function createRunControlCoordinator({
       }
       const projection = queueProjectionFor({
         attempts: attempts.length,
-        now: new Date(nowMs),
+        now: nowDate,
         status: "queued",
       });
       leaseCoordinator.rebuild(projection);
@@ -204,7 +224,7 @@ export function createRunControlCoordinator({
   async function startAttempt({ now = clock(), launch = {} } = {}) {
     return withLock(async () => {
       assertActiveAttempt("startAttempt", ["leased"]);
-      const nowDate = normalizeDate(now);
+      const nowDate = observeNow(now);
       const nowMs = nowDate.getTime();
       await leaseCoordinator.mutate({
         capability: currentCapability,
@@ -257,6 +277,8 @@ export function createRunControlCoordinator({
   } = {}) {
     return withLock(async () => {
       assertActiveAttempt("reportUsage", ["running", "awaiting-approval"]);
+      const nowDate = observeNow(now);
+      await preflightMutationWithoutLock({ capability, now: nowDate });
       validateUsage(usage);
       const normalizedKey =
         usageKey ??
@@ -264,7 +286,12 @@ export function createRunControlCoordinator({
           attemptId: activeAttempt.attemptId,
           usage,
         });
-      if (usageKeys.has(normalizedKey)) {
+      const usageIdempotencyKey = deriveRunControlId("ik", {
+        attemptId: activeAttempt.attemptId,
+        kind: "usage",
+        usageKey: normalizedKey,
+      });
+      if (usageKeys.has(usageIdempotencyKey)) {
         throw controlError(
           RUN_CONTROL_ERROR_CODES.DUPLICATE_USAGE,
           "usage key was already durably accounted",
@@ -280,7 +307,7 @@ export function createRunControlCoordinator({
         await finalizeWithoutLock({
           reasonCode: "budget-exhausted",
           terminalKind: "budget-exhausted",
-          now: normalizeDate(now),
+          now: nowDate,
         });
         throw controlError(
           RUN_CONTROL_ERROR_CODES.BUDGET_EXCEEDED,
@@ -290,6 +317,7 @@ export function createRunControlCoordinator({
       const result = await leaseCoordinator.mutate({
         capability,
         endpoint: "run.events.write",
+        now: nowDate,
         runId: entry.runId,
         workerId,
         mutate: async () => {
@@ -303,19 +331,15 @@ export function createRunControlCoordinator({
               wallTimeMs: usage.wallTimeMs,
             },
             eventType: "run.usage.recorded",
-            idempotencyKey: deriveRunControlId("ik", {
-              attemptId: activeAttempt.attemptId,
-              kind: "usage",
-              usageKey: normalizedKey,
-            }),
-            now: normalizeDate(now),
+            idempotencyKey: usageIdempotencyKey,
+            now: nowDate,
           });
           totalUsage = nextTotal;
           aggregateTotals = nextAggregate;
           if (aggregateUsageStore) {
             aggregateUsageStore.usage = structuredClone(aggregateTotals);
           }
-          usageKeys.add(normalizedKey);
+          usageKeys.add(usageIdempotencyKey);
           return { usage: structuredClone(usage), usageKey: normalizedKey };
         },
       });
@@ -331,7 +355,8 @@ export function createRunControlCoordinator({
   } = {}) {
     return withLock(async () => {
       assertActiveAttempt("reportFailure", ["running", "awaiting-approval"]);
-      const nowDate = normalizeDate(now);
+      const nowDate = observeNow(now);
+      await preflightMutationWithoutLock({ capability, now: nowDate });
       const plan = planRunRetry({
         attemptNumber: activeAttempt.attemptNumber,
         failureCode,
@@ -341,6 +366,7 @@ export function createRunControlCoordinator({
       });
       await leaseCoordinator.mutate({
         capability,
+        now: nowDate,
         runId: entry.runId,
         workerId,
         mutate: () =>
@@ -410,9 +436,11 @@ export function createRunControlCoordinator({
   } = {}) {
     return withLock(async () => {
       assertActiveAttempt("complete", ["running", "awaiting-approval"]);
-      const nowDate = normalizeDate(now);
+      const nowDate = observeNow(now);
+      await preflightMutationWithoutLock({ capability, now: nowDate });
       await leaseCoordinator.mutate({
         capability,
+        now: nowDate,
         runId: entry.runId,
         workerId,
         mutate: () =>
@@ -454,12 +482,12 @@ export function createRunControlCoordinator({
           "cancel actor is not authorized",
         );
       }
-      const nowDate = normalizeDate(now);
       if (terminal)
         return {
           result: "already-terminal",
           terminal: structuredClone(terminal),
         };
+      const nowDate = observeNow(now);
       if (
         !["queued", "retry", "running", "awaiting-approval", "leased"].includes(
           status,
@@ -494,7 +522,8 @@ export function createRunControlCoordinator({
 
   async function tick({ now = clock() } = {}) {
     return withLock(async () => {
-      const nowDate = normalizeDate(now);
+      if (terminal) return getState();
+      const nowDate = observeNow(now);
       const nowMs = nowDate.getTime();
       if (
         status === "retry" &&
@@ -523,12 +552,12 @@ export function createRunControlCoordinator({
     reasonCode = "authority-revoked",
   } = {}) {
     return withLock(async () => {
-      const nowDate = normalizeDate(now);
       if (terminal)
         return {
           result: "already-terminal",
           terminal: structuredClone(terminal),
         };
+      const nowDate = observeNow(now);
       if (status === "queued" || status === "retry") {
         await appendLifecycleWithoutLock({
           from: status,
@@ -564,12 +593,15 @@ export function createRunControlCoordinator({
         "running",
         "awaiting-approval",
       ]);
+      const nowDate = observeNow(now);
+      await preflightMutationWithoutLock({ capability, now: nowDate });
       if (typeof perform !== "function")
         throw new TypeError("logical action perform must be a function");
       if (idempotencyStore.has(actionKey)) {
         if (!controlIds.has(controlIdForAction(actionKey))) {
           await leaseCoordinator.mutate({
             capability,
+            now: nowDate,
             runId: entry.runId,
             workerId,
             mutate: () =>
@@ -578,7 +610,7 @@ export function createRunControlCoordinator({
                 controlType: "side-effect.recovered",
                 detail: "idempotent-recovery",
                 dueAtMs: null,
-                now: normalizeDate(now),
+                now: nowDate,
               }),
           });
         }
@@ -587,6 +619,7 @@ export function createRunControlCoordinator({
       return (
         await leaseCoordinator.mutate({
           capability,
+          now: nowDate,
           runId: entry.runId,
           workerId,
           mutate: async () => {
@@ -603,7 +636,7 @@ export function createRunControlCoordinator({
               controlType: "side-effect.committed",
               detail: "idempotent-commit",
               dueAtMs: null,
-              now: normalizeDate(now),
+              now: nowDate,
             });
             return { actionKey, performed: true, result: "committed" };
           },
@@ -856,6 +889,28 @@ export function createRunControlCoordinator({
     }
   }
 
+  async function preflightMutationWithoutLock({ capability, now }) {
+    await leaseCoordinator.mutate({
+      capability,
+      endpoint: "run.events.write",
+      now,
+      runId: entry.runId,
+      workerId,
+      mutate: () => null,
+    });
+    if (deadlineAtMs !== null && now.getTime() >= deadlineAtMs) {
+      await finalizeWithoutLock({
+        now,
+        reasonCode: "attempt-deadline",
+        terminalKind: "timed-out",
+      });
+      throw controlError(
+        RUN_CONTROL_ERROR_CODES.DEADLINE_EXCEEDED,
+        "run attempt deadline has elapsed",
+      );
+    }
+  }
+
   async function revokeAndTerminateWithoutLock({ now }) {
     if (currentCapability) {
       const capability = currentCapability;
@@ -872,7 +927,7 @@ export function createRunControlCoordinator({
       try {
         await leaseCoordinator.revoke({
           capability,
-          now: normalizeDate(now),
+          now,
           reason: "run-control",
           runId: entry.runId,
           workerId,
@@ -900,7 +955,7 @@ export function createRunControlCoordinator({
           ? "group-kill"
           : "graceful-group-exit",
         dueAtMs: null,
-        now: normalizeDate(now),
+        now,
       });
       processHandle = null;
     }
@@ -971,6 +1026,7 @@ export function createRunControlCoordinator({
       attempts,
       capabilityRevocations,
       deadlineAtMs,
+      lastObservedAtMs,
       processTerminations,
       processSnapshot: processRunner.getProcessSnapshot(),
       records: records.length,
@@ -1014,6 +1070,19 @@ export function createRunControlCoordinator({
     if (event.eventType === "run.usage.recorded") {
       usageKeys.add(event.idempotencyKey);
     }
+  }
+
+  function observeNow(value) {
+    const date = normalizeDate(value);
+    const nowMs = date.getTime();
+    if (lastObservedAtMs !== null && nowMs < lastObservedAtMs) {
+      throw controlError(
+        RUN_CONTROL_ERROR_CODES.CLOCK_REGRESSION,
+        "run-control timestamps must not move backwards",
+      );
+    }
+    lastObservedAtMs = nowMs;
+    return date;
   }
 }
 

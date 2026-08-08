@@ -82,10 +82,24 @@ try {
     },
   );
   worktreeAdded = true;
-  await runLogged("git", ["submodule", "update", "--init", "--recursive"], {
-    cwd: checkout,
-    displayCommand: "git submodule update --init --recursive",
-  });
+  await runLogged(
+    "git",
+    [
+      "-c",
+      "protocol.file.allow=always",
+      "submodule",
+      "update",
+      "--init",
+      "--recursive",
+      "--reference",
+      path.join(root, "emulate"),
+    ],
+    {
+      cwd: checkout,
+      displayCommand:
+        "git -c protocol.file.allow=always submodule update --init --recursive --reference <local emulate checkout>",
+    },
+  );
   const clean = await runLogged(
     "git",
     ["status", "--porcelain", "--untracked-files=all"],

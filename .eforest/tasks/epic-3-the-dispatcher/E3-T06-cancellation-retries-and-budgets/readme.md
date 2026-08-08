@@ -3,7 +3,7 @@ id: E3-T06
 epic: 3
 title: "Cancellation, retries, deadlines, and resource budgets"
 priority: 306
-status: implemented
+status: refuted
 depends_on: [E3-T03]
 estimate: L
 capstone: false
@@ -73,3 +73,10 @@ testable, not sleeps embedded in tests.
 - Replay/evidence integrity: `replay-digests.json` records reducer digest `sha256:b4cd46283d1b20bea8d63405093c3a975bfff8a779dc0b09db14c53c90ce4f83`, lease digest `sha256:2e73c4c5082a385793e40e51887d048b20f72c5e8b6fbbcbe63b1a2f1d773dd4`, 23 reducer prefixes, and four lease prefixes. `canary-scan.json` reports no leaked credential-shaped values. `sensitivity.json` shows the capability-fence mutation made the verifier exit 1.
 - Replay: `Replay: N/A (headless run-control protocol) + mitigation: real process-tree probes, fake-clock schedules, usage manifests, terminal races, and replay`.
 - Claim: cancellation, deadlines, retries, bounded backoff, attempt/aggregate resource budgets, terminal immutability, process-group cleanup, and crash-safe idempotent logical actions are implemented and supported by the exact diff plus promoted cold evidence; ready for a fresh critic.
+
+### Critic — 2026-08-08 — review of commit `07f1a99`
+
+VERDICT: refuted
+
+- The fresh critic could not execute commands in its sandbox, but its static findings are reproducible against the exact diff: usage deduplication was rehydrated with envelope `ik_` keys while `reportUsage` checked caller keys; the restart watermark `initialLeaseRecordCount` was accepted by the verifier harness but ignored by the coordinator; an over-budget `reportUsage` could finalize before validating the supplied capability; and mutating operations trusted caller timestamps without a monotonic deadline guard.
+- These gaps refute the restart/accounting, stale-capability fencing, and deadline portions of the acceptance criteria. The builder is returning the task to implementation to repair them and add independent verifier coverage before another critic.

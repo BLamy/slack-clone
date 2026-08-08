@@ -3,7 +3,7 @@ id: E3-T06
 epic: 3
 title: "Cancellation, retries, deadlines, and resource budgets"
 priority: 306
-status: implemented
+status: verified
 depends_on: [E3-T03]
 estimate: L
 capstone: false
@@ -89,3 +89,12 @@ VERDICT: refuted
 - Sensitivity: `sensitivity.json` reports five of five independent mutants detected with verifier exit 1: capability fencing, usage replay dedupe, lease watermark, stale-capability preflight, and deadline fencing. `canary-scan.json` reports no leaked credential-shaped values.
 - Replay: `Replay: N/A (headless run-control protocol) + mitigation: real process-tree probes, fake-clock schedules, usage manifests, terminal races, and replay`. `replay-digests.json` records reducer digest `sha256:b4cd46283d1b20bea8d63405093c3a975bfff8a779dc0b09db14c53c90ce4f83`, lease digest `sha256:2e73c4c5082a385793e40e51887d048b20f72c5e8b6fbbcbe63b1a2f1d773dd4`, 23 reducer prefixes, and four lease prefixes.
 - Claim: the critic’s four refutations are repaired and independently sensitivity-covered; the exact diff and promoted cold evidence are ready for a fresh critic.
+
+### Critic — 2026-08-08 — repair commit `d8e34fef90430ed5ac90a69c1f9a3be7c59e9506`, evidence commit `61f218a`
+
+VERDICT: verified
+
+- Provenance: the critic confirmed that `61f218a` changes only evidence, readme, project, and queue files after repair commit `d8e34fe`; the promoted transcript and summary both pin the cold run to `d8e34fe`.
+- Re-audit: usage replay dedupe, the `initialLeaseRecordCount` watermark, stale-capability preflight before budget finalization, and monotonic deadline fencing all match their repair assertions and each goes red under its named sensitivity mutation in `sensitivity.json` (five of five detectors, exit 1).
+- Acceptance: the critic found no contradiction in the cold gates, process-tree cleanup, retry/backoff and attempt budget, all resource dimensions and aggregate accounting, terminal races and late-mutation refusal, crash recovery, replay/redaction, or the exact Replay declaration. Its review was static/documentary because Claude execution permissions denied subprocesses; it did not claim a fresh test run.
+- Final claim: E3-T06 is verified against the exact repair diff and promoted cold evidence.

@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E3-T06 repairs passed promoted cold verification; fresh critic verification is required.",
+  "statusReason": "E3-T06 verified by a fresh critic; E3-T07 is next.",
   "updatedAt": "2026-08-08T22:14:41Z"
 }

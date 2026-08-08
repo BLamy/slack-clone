@@ -318,6 +318,7 @@ export const REDUCER_REGISTRY_V1 = Object.freeze({
   "run.lifecycle.changed": reduceRunLifecycleChanged,
   "run.activity.recorded": reduceRunActivityRecorded,
   "run.usage.recorded": reduceRunUsageRecorded,
+  "run.control.recorded": reduceRunControlRecorded,
   "run.approval.requested": reduceRunApprovalRequested,
   "run.approval.decided": reduceRunApprovalDecided,
   "run.artifact.recorded": reduceRunArtifactRecorded,
@@ -1610,10 +1611,12 @@ function reduceRunLifecycleChanged(state, data, context) {
       agentId: binding.agentId,
       approvals: {},
       artifacts: {},
+      controls: [],
       attempts: {},
       correlationId: binding.correlationId,
       eventCount: 1,
       failure: null,
+      failures: [],
       history: [runHistoryEntry(normalized, context)],
       invocationId: normalized.invocationId,
       invocationRef: binding.invocationRef,
@@ -1792,6 +1795,29 @@ function reduceRunUsageRecorded(state, data, context) {
   });
 }
 
+function reduceRunControlRecorded(state, data, context) {
+  reduceRunRecord(state, "run.control.recorded", data, context, (run) => {
+    if (
+      (run.controls ?? []).some(({ controlId }) => controlId === data.controlId)
+    ) {
+      failRun(
+        "INVOCATION_RUN_DUPLICATE_RECORD",
+        "controlId was already recorded",
+        "controlId",
+        context,
+      );
+    }
+    run.controls = [
+      ...(run.controls ?? []),
+      {
+        ...copyJson(data),
+        eventId: context.envelope.eventId,
+        offset: context.offset,
+      },
+    ];
+  });
+}
+
 function reduceRunApprovalRequested(state, data, context) {
   reduceRunRecord(state, "run.approval.requested", data, context, (run) => {
     if (run.status !== "awaiting-approval") {
@@ -1893,19 +1919,23 @@ function reduceRunResultRecorded(state, data, context) {
 
 function reduceRunFailureRecorded(state, data, context) {
   reduceRunRecord(state, "run.failure.recorded", data, context, (run) => {
-    if (run.failure !== null) {
+    if (
+      (run.failures ?? []).some(({ attemptId }) => attemptId === data.attemptId)
+    ) {
       failRun(
         "INVOCATION_RUN_DUPLICATE_RECORD",
-        "a run may record only one immutable failure",
+        "an attempt may record only one immutable failure",
         "failureCode",
         context,
       );
     }
-    run.failure = {
+    const failure = {
       ...copyJson(data),
       eventId: context.envelope.eventId,
       offset: context.offset,
     };
+    run.failures = [...(run.failures ?? []), failure];
+    run.failure = failure;
   });
 }
 

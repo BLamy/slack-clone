@@ -48,6 +48,14 @@
     "costUsdCents": { "type": "integer", "minimum": 0, "maximum": 1000000000 },
     "wallTimeMs": { "type": "integer", "minimum": 0, "maximum": 1000000000 },
     "outputBytes": { "type": "integer", "minimum": 0, "maximum": 1000000000 },
+    "controlId": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,200}$" },
+    "controlType": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,200}$" },
+    "detail": { "type": ["string", "null"], "maxLength": 512 },
+    "dueAtMs": { "type": ["integer", "null"], "minimum": 0 },
+    "actionKey": {
+      "type": ["string", "null"],
+      "pattern": "^[A-Za-z0-9._:-]{1,200}$"
+    },
     "approvalId": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,200}$" },
     "action": { "type": "string", "maxLength": 512 },
     "requestRef": { "$ref": "source-reference.v1.schema.json" },

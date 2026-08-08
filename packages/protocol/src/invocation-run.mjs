@@ -1,4 +1,8 @@
 import { sha256Digest } from "./sha256.mjs";
+import {
+  RUN_CONTROL_POLICY_OPTIONAL_KEYS,
+  validateRunControlPolicyFields,
+} from "./run-control.mjs";
 
 export const INVOCATION_RUN_SCHEMA_VERSION = 1;
 
@@ -7,6 +11,7 @@ export const INVOCATION_RUN_EVENT_TYPES_V1 = Object.freeze([
   "run.lifecycle.changed",
   "run.activity.recorded",
   "run.usage.recorded",
+  "run.control.recorded",
   "run.approval.requested",
   "run.approval.decided",
   "run.artifact.recorded",
@@ -27,6 +32,7 @@ export const RUN_STATES_V1 = Object.freeze([
   "failed",
   "timed-out",
   "cancelled",
+  "budget-exhausted",
 ]);
 
 export const TERMINAL_RUN_STATES_V1 = Object.freeze([
@@ -34,11 +40,13 @@ export const TERMINAL_RUN_STATES_V1 = Object.freeze([
   "failed",
   "timed-out",
   "cancelled",
+  "budget-exhausted",
 ]);
 
 export const RUN_RECORD_EVENT_TYPES_V1 = Object.freeze([
   "run.activity.recorded",
   "run.usage.recorded",
+  "run.control.recorded",
   "run.approval.requested",
   "run.approval.decided",
   "run.artifact.recorded",
@@ -303,6 +311,26 @@ export function validateRunRecordData(
         );
       }
       break;
+    case "run.control.recorded":
+      assertKeys(
+        value,
+        [
+          ...commonKeys,
+          "controlId",
+          "controlType",
+          "detail",
+          "dueAtMs",
+          "actionKey",
+        ],
+        [],
+        "$.event.data",
+      );
+      assertToken(value.controlId, "$.event.data.controlId");
+      assertToken(value.controlType, "$.event.data.controlType");
+      assertSafeTextOrNull(value.detail, "$.event.data.detail");
+      assertNonNegativeSafeIntegerOrNull(value.dueAtMs, "$.event.data.dueAtMs");
+      assertTokenOrNull(value.actionKey, "$.event.data.actionKey");
+      break;
     case "run.approval.requested":
       assertKeys(
         value,
@@ -420,10 +448,14 @@ export function allowedRunTransition(from, to) {
         "failed",
         "timed-out",
         "cancelled",
+        "budget-exhausted",
       ],
     ],
-    ["awaiting-approval", ["running", "failed", "timed-out", "cancelled"]],
-    ["retry", ["queued"]],
+    [
+      "awaiting-approval",
+      ["running", "failed", "timed-out", "cancelled", "budget-exhausted"],
+    ],
+    ["retry", ["queued", "cancelled"]],
   ]);
   return transitions.get(from)?.includes(to) ?? false;
 }
@@ -585,7 +617,7 @@ function validatePolicy(value, path) {
       "maxWallTimeMs",
       "allowApprovals",
     ],
-    [],
+    RUN_CONTROL_POLICY_OPTIONAL_KEYS,
     path,
   );
   assertVersion(value.version, `${path}.version`);
@@ -604,6 +636,7 @@ function validatePolicy(value, path) {
       "allowApprovals must be a boolean",
     );
   }
+  validateRunControlPolicyFields(value, path);
 }
 
 function assertRunBindingOrNull(
@@ -722,6 +755,13 @@ function assertTerminalOrNull(value, to, expectedWorkspaceId) {
       "cancelled runs require a reason code",
     );
   }
+  if (to === "budget-exhausted" && value.reasonCode === null) {
+    fail(
+      INVOCATION_RUN_ERROR_CODES.INVALID_DATA,
+      "$.event.data.terminal.reasonCode",
+      "budget-exhausted runs require a reason code",
+    );
+  }
 }
 
 function assertAttemptFields(value, path) {
@@ -759,6 +799,16 @@ function assertSourceReferenceOrNull(value, path, expectedWorkspaceId) {
 
 function assertTokenOrNull(value, path) {
   if (value !== null) assertToken(value, path);
+}
+
+function assertNonNegativeSafeIntegerOrNull(value, path) {
+  if (value !== null && (!Number.isSafeInteger(value) || value < 0)) {
+    fail(
+      INVOCATION_RUN_ERROR_CODES.INVALID_DATA,
+      path,
+      "value must be null or a non-negative safe integer",
+    );
+  }
 }
 
 function assertRunStateOrNull(value, path) {

@@ -526,6 +526,7 @@ export function createRunLeaseCoordinator({
     for (const lease of Object.values(replayed.finalState.leases)) {
       if (Date.parse(lease.expiresAt) > nowMs) continue;
       const entry = entryForLease(lease);
+      tokens.delete(lease.capabilityDigest);
       await appendEvent({
         data: leaseEventData(lease, entry, lease.expiresAt),
         entry,
@@ -533,7 +534,6 @@ export function createRunLeaseCoordinator({
         now,
         reason: "lease-expired",
       });
-      tokens.delete(lease.capabilityDigest);
       expired.push(redactLease(lease));
     }
     return expired;
@@ -786,8 +786,8 @@ export function createRunLeaseCoordinator({
       try {
         await authorityFor(entry, "mutate");
       } catch (error) {
-        await supersedeOne(lease, entry, normalizedNow, "authority-revoked");
         tokens.delete(digest);
+        await supersedeOne(lease, entry, normalizedNow, "authority-revoked");
         throw new RunQueueError(
           error.code ?? RUN_QUEUE_ERROR_CODES.AUTHORITY_REVOKED,
           error.detail ?? "run authority was revoked before mutation",
@@ -816,19 +816,45 @@ export function createRunLeaseCoordinator({
       const lease = replayed.finalState.leases[runId];
       if (!lease) return { result: "no-active-lease", runId };
       const entry = entryForLease(lease);
+      tokens.delete(lease.capabilityDigest);
       await supersedeOne(
         lease,
         entry,
         normalizeDate(now),
         boundedToken(reason, "reason"),
       );
-      tokens.delete(lease.capabilityDigest);
       return { lease: redactLease(lease), result: "superseded" };
+    });
+  }
+
+  async function revoke({
+    capability,
+    now = clock(),
+    reason = "revoked",
+    runId,
+    workerId,
+  }) {
+    return withLock(async () => {
+      const normalizedNow = normalizeDate(now);
+      const { digest, lease } = assertCapability(capability, {
+        runId,
+        workerId,
+      });
+      const entry = entryForLease(lease);
+      tokens.delete(digest);
+      await supersedeOne(
+        lease,
+        entry,
+        normalizedNow,
+        boundedToken(reason, "reason"),
+      );
+      return { lease: redactLease(lease), result: "revoked" };
     });
   }
 
   async function expireOne(lease, now) {
     const entry = entryForLease(lease);
+    tokens.delete(lease.capabilityDigest);
     await appendEvent({
       data: leaseEventData(lease, entry, lease.expiresAt),
       entry,
@@ -836,7 +862,6 @@ export function createRunLeaseCoordinator({
       now,
       reason: "lease-expired",
     });
-    tokens.delete(lease.capabilityDigest);
   }
 
   async function supersedeOne(lease, entry, now, reason) {
@@ -865,6 +890,7 @@ export function createRunLeaseCoordinator({
       }),
     heartbeat,
     mutate,
+    revoke,
     rebuild: (nextProjection) => {
       assertProjection(nextProjection, workspaceId);
       projection = nextProjection;

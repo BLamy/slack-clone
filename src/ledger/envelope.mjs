@@ -30,6 +30,7 @@ export const EVENT_TYPES_V1 = Object.freeze([
   "run.lifecycle.changed",
   "run.activity.recorded",
   "run.usage.recorded",
+  "run.control.recorded",
   "run.approval.requested",
   "run.approval.decided",
   "run.artifact.recorded",

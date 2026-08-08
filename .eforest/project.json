@@ -7,6 +7,6 @@
   "loop": "loop.md",
   "tasks": "tasks",
   "mainStream": null,
-  "statusReason": "E3-T06 was refuted by the fresh critic; repair is in progress.",
+  "statusReason": "E3-T06 repair is in progress after the critic found restart dedupe, watermark, stale-capability, and deadline gaps.",
   "updatedAt": "2026-08-08T22:14:41Z"
 }

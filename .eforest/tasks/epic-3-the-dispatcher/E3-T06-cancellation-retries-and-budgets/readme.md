@@ -3,7 +3,7 @@ id: E3-T06
 epic: 3
 title: "Cancellation, retries, deadlines, and resource budgets"
 priority: 306
-status: refuted
+status: in-progress
 depends_on: [E3-T03]
 estimate: L
 capstone: false

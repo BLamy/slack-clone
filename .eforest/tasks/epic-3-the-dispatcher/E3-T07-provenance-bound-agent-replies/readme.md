@@ -3,7 +3,7 @@ id: E3-T07
 epic: 3
 title: "Agent replies bound to run provenance and current membership"
 priority: 307
-status: pending
+status: in-progress
 depends_on: [E3-T03, E3-T04]
 estimate: L
 capstone: false

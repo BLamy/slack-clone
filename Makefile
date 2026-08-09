@@ -89,6 +89,9 @@ verify-E3-T05:
 verify-E3-T06:
 	@E3_T06_ENTRYPOINT='make verify-E3-T06' node scripts/cold-verify-e3-t06.mjs
 
+verify-E3-T07:
+	@E3_T07_ENTRYPOINT='make verify-E3-T07' node scripts/cold-verify-e3-t07.mjs
+
 verify-E2:
 	@node scripts/composed-verify-e2.mjs
 

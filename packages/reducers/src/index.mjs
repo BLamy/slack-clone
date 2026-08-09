@@ -2,6 +2,7 @@ import {
   directChannelIdFor,
   AGENT_CONFIG_REVISION_EVENT_TYPES_V1,
   validateAgentConfigRevisionEventData,
+  validateAgentReplyProvenance,
   MENTION_PRINCIPAL_KINDS,
   parseMentionCandidates,
   validatePrincipalId,
@@ -137,6 +138,7 @@ export const REDUCER_ERROR_CODES = Object.freeze({
   MESSAGE_REPLY_ROOT: "REDUCER_MESSAGE_REPLY_ROOT",
   MESSAGE_REVISION_CONFLICT: "REDUCER_MESSAGE_REVISION_CONFLICT",
   MESSAGE_TEXT: "REDUCER_MESSAGE_TEXT",
+  AGENT_REPLY_PROVENANCE: "REDUCER_AGENT_REPLY_PROVENANCE",
   MENTION_AMBIGUOUS_TARGET: "REDUCER_MENTION_AMBIGUOUS_TARGET",
   MENTION_HANDLE_MISMATCH: "REDUCER_MENTION_HANDLE_MISMATCH",
   MENTION_INVALID: "REDUCER_MENTION_INVALID",
@@ -527,13 +529,16 @@ function reduceMessageReplied(state, data, context) {
       "rootMessageId",
       "text",
     ],
-    ["mentions"],
+    ["agentReplyProvenance", "mentions"],
     context,
   );
   assertConversationMessageIdentity(state, data, context);
   assertConversationText(data.text, context);
   assertConversationContentType(data.contentType, context);
   assertConversationMentions(state, data, context);
+  if (Object.hasOwn(data, "agentReplyProvenance")) {
+    assertAgentReplyProvenance(state, data, context);
+  }
   assertToken(data.rootMessageId, "rootMessageId", context);
   if (data.rootMessageId === data.messageId) {
     failMessage(
@@ -930,6 +935,36 @@ function assertConversationMentions(state, data, context) {
   return mentions;
 }
 
+function assertAgentReplyProvenance(state, data, context) {
+  try {
+    validateAgentReplyProvenance(data.agentReplyProvenance, {
+      expectedAgentPrincipalId: data.authorId,
+      expectedChannelId: data.channelId,
+      expectedWorkspaceId: context.envelope.workspaceId,
+    });
+  } catch (error) {
+    failMessage(
+      REDUCER_ERROR_CODES.AGENT_REPLY_PROVENANCE,
+      error instanceof Error ? (error.detail ?? error.message) : String(error),
+      "agentReplyProvenance",
+      context,
+    );
+  }
+  const principal = getPrincipal(state, data.authorId);
+  if (
+    !principal ||
+    principal.kind !== "agent" ||
+    principal.status !== "active"
+  ) {
+    failMessage(
+      REDUCER_ERROR_CODES.AGENT_REPLY_PROVENANCE,
+      "agent reply author must be an active agent principal",
+      "authorId",
+      context,
+    );
+  }
+}
+
 function assertReaction(value, context) {
   try {
     normalizeReactionName(value);
@@ -964,6 +999,9 @@ function createConversationMessageRecord(data, context, kind) {
     text: data.text,
     workspaceId: context.envelope.workspaceId,
   };
+  if (Object.hasOwn(data, "agentReplyProvenance")) {
+    record.agentReplyProvenance = copyJson(data.agentReplyProvenance);
+  }
   if (Object.hasOwn(data, "mentions")) {
     record.mentions = data.mentions.map((mention) => ({
       ...mention,

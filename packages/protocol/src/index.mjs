@@ -16,6 +16,7 @@ export * from "./invocation-run.mjs";
 export * from "./run-queue.mjs";
 export * from "./conversation-scheduling.mjs";
 export * from "./run-control.mjs";
+export * from "./agent-replies.mjs";
 
 export function normalizeRoomId(roomId) {
   const normalized = String(roomId)

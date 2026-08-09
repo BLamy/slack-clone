@@ -44,6 +44,7 @@ export class ConversationAuthorizationError extends Error {
 
 export function authorizeConversationCommand({
   actorId,
+  allowAgentReplyProvenance = false,
   operation,
   payload,
   state,
@@ -56,6 +57,7 @@ export function authorizeConversationCommand({
       { operation, payload },
       actorId,
       workspaceId,
+      { allowAgentReplyProvenance },
     );
     const channel = get(state?.entities?.channels, payload.channelId);
     if (!channel || channel.workspaceId !== workspaceId) {
@@ -252,6 +254,7 @@ export function createConversationAuthorization({
 }
 
 export function prepareConversationEvent({
+  allowAgentReplyProvenance = false,
   actorId,
   operation,
   payload,
@@ -261,6 +264,7 @@ export function prepareConversationEvent({
 }) {
   const prepared = authorizeConversationCommand({
     actorId,
+    allowAgentReplyProvenance,
     operation,
     payload,
     state,
@@ -297,6 +301,7 @@ export function prepareConversationEvent({
  * accepted receipt binds the returned mention facts to the durable source.
  */
 export function createMentionAwareConversationDispatcher({
+  allowAgentReplyProvenance = false,
   dispatch,
   lookupState,
   withChannelFence,
@@ -331,6 +336,7 @@ export function createMentionAwareConversationDispatcher({
         const state = await lookupState(request.workspaceId, channelId);
         const prepared = prepareConversationEvent({
           actorId: request.actorId,
+          allowAgentReplyProvenance,
           operation: request.operation,
           payload: request.payload,
           state,

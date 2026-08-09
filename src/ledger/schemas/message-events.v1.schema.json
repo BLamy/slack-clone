@@ -43,6 +43,7 @@
         "contentType": { "const": "text/plain" },
         "messageId": { "$ref": "#/$defs/messageId" },
         "rootMessageId": { "$ref": "#/$defs/messageId" },
+        "agentReplyProvenance": { "$ref": "#/$defs/agentReplyProvenance" },
         "mentions": { "$ref": "#/$defs/mentions" },
         "text": { "type": "string", "minLength": 1, "maxLength": 4000 }
       }
@@ -106,6 +107,75 @@
       "type": "array",
       "maxItems": 100,
       "items": { "$ref": "#/$defs/mention" }
+    },
+    "agentReplyProvenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agentId",
+        "agentPrincipalId",
+        "attemptId",
+        "channelId",
+        "contextDigest",
+        "contextRef",
+        "invocationId",
+        "invocationRef",
+        "leaseGeneration",
+        "runId",
+        "schemaVersion",
+        "snapshotDigest",
+        "snapshotRef",
+        "sourceMention",
+        "threadRootMessageId"
+      ],
+      "properties": {
+        "agentId": {
+          "type": "string",
+          "pattern": "^ag_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+        },
+        "agentPrincipalId": { "$ref": "#/$defs/principalId" },
+        "attemptId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,200}$"
+        },
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "contextDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "contextRef": { "$ref": "#/$defs/sourceReference" },
+        "invocationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,200}$"
+        },
+        "invocationRef": { "$ref": "#/$defs/sourceReference" },
+        "leaseGeneration": { "type": "integer", "minimum": 1 },
+        "runId": {
+          "type": "string",
+          "pattern": "^rn_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+        },
+        "schemaVersion": { "const": 1 },
+        "snapshotDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "snapshotRef": { "$ref": "#/$defs/sourceReference" },
+        "sourceMention": { "$ref": "#/$defs/sourceReference" },
+        "threadRootMessageId": { "$ref": "#/$defs/messageId" }
+      }
+    },
+    "sourceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["digest", "offset", "stream"],
+      "properties": {
+        "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "offset": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{16}_[0-9a-f]{16}$"
+        },
+        "stream": { "type": "string", "minLength": 1, "maxLength": 400 }
+      }
     },
     "mention": {
       "type": "object",

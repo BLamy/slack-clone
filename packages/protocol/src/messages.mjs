@@ -1,4 +1,5 @@
 import { validateChannelId } from "./channels.mjs";
+import { validateAgentReplyProvenance } from "./agent-replies.mjs";
 import { validatePrincipalId } from "./principals.mjs";
 
 export const MESSAGE_SCHEMA_VERSION = 1;
@@ -189,7 +190,8 @@ export function validateConversationCommand(operation, payload, options = {}) {
     );
   }
   const required = requiredKeysForOperation(operation);
-  const allowed = new Set(required);
+  const optional = optionalKeysForOperation(operation, options);
+  const allowed = new Set([...required, ...optional]);
   for (const key of required) {
     if (!Object.hasOwn(payload, key)) {
       throw messageError(
@@ -256,6 +258,13 @@ export function validateConversationCommand(operation, payload, options = {}) {
     assertPositiveRevision(payload.expectedRevision);
   }
   if (operation.includes("reaction.")) normalizeReactionName(payload.emoji);
+  if (Object.hasOwn(payload, "agentReplyProvenance")) {
+    validateAgentReplyProvenance(payload.agentReplyProvenance, {
+      expectedAgentPrincipalId: options.expectedAgentPrincipalId,
+      expectedChannelId: payload.channelId,
+      expectedWorkspaceId: options.workspaceId,
+    });
+  }
   return Object.freeze({
     data: {
       ...payload,
@@ -269,12 +278,21 @@ export function validateConversationCommand(operation, payload, options = {}) {
   });
 }
 
-export function stampConversationActor(command, actorId, workspaceId) {
+export function stampConversationActor(
+  command,
+  actorId,
+  workspaceId,
+  options = {},
+) {
   validatePrincipalId(actorId, { expectedWorkspaceId: workspaceId });
   const validated = validateConversationCommand(
     command.operation,
     command.payload,
-    { workspaceId },
+    {
+      ...options,
+      expectedAgentPrincipalId: actorId,
+      workspaceId,
+    },
   );
   if (
     command.operation === "channel.message.create" ||
@@ -351,6 +369,17 @@ function requiredKeysForOperation(operation) {
     default:
       return [];
   }
+}
+
+function optionalKeysForOperation(operation, options) {
+  const optional = operation.includes("message.") ? ["mentions"] : [];
+  if (
+    operation === "channel.message.reply" &&
+    options.allowAgentReplyProvenance
+  ) {
+    optional.push("agentReplyProvenance");
+  }
+  return optional;
 }
 
 function assertPositiveRevision(value) {

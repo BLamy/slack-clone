@@ -83,6 +83,15 @@ try {
   worktreeAdded = true;
   await runLogged(
     "git",
+    ["config", "submodule.emulate.url", path.join(root, "emulate")],
+    {
+      cwd: checkout,
+      displayCommand:
+        "git config submodule.emulate.url <local emulate checkout>",
+    },
+  );
+  await runLogged(
+    "git",
     [
       "-c",
       "protocol.file.allow=always",

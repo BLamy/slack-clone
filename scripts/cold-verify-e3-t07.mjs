@@ -129,6 +129,7 @@ try {
       E3_T07_SKIP_GATES: "0",
       E3_T07_SKIP_SENSITIVITY: "0",
       PROMOTE_EVIDENCE: promoteEvidence ? "1" : "0",
+      TEST_HOST: process.env.TEST_HOST ?? "localhost",
       TEST_ARTIFACT_DIR: artifactDirectory,
       TEST_RUN_ID: runId,
     },

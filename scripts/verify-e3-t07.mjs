@@ -267,6 +267,25 @@ async function verifyFunctionalMatrix() {
   );
   assert.equal(lostAck.channelMessages.length, 2);
 
+  const contextConflict = await createHarness();
+  await contextConflict.dispatcher.dispatchReply({
+    capability: contextConflict.capability,
+    output: "first context-bound reply",
+    runId: RUN_ID,
+    workerId: WORKER_ID,
+  });
+  contextConflict.recordContext("changed-after-first-reply");
+  await assertReplyRefusal(
+    contextConflict.dispatcher.dispatchReply({
+      capability: contextConflict.capability,
+      output: "second context-bound reply",
+      runId: RUN_ID,
+      workerId: WORKER_ID,
+    }),
+    AGENT_REPLY_ERROR_CODES.DISPATCH_REFUSED,
+  );
+  assert.equal(contextConflict.channelMessages.length, 2);
+
   const redacted = await createHarness();
   const secret = `sk-${"z".repeat(24)}`;
   const unsafe = `<script>send(${secret})</script>`;
@@ -338,6 +357,7 @@ async function verifyFunctionalMatrix() {
   const staleAuthority = await verifyStaleAuthorityMatrix();
   const persistedRefusals = [
     ...lostAck.refusalArtifacts,
+    ...contextConflict.refusalArtifacts,
     ...wrongRun.refusalArtifacts,
     ...oversized.refusalArtifacts,
     ...externalFailure.refusalArtifacts,
@@ -647,15 +667,6 @@ async function createHarness({
         receipt: { ...existing.result.receipt, replayed: true },
       };
     }
-    if (
-      channelMessages.some(
-        ({ messageId }) => messageId === preparedData.messageId,
-      )
-    ) {
-      const duplicate = new Error("message id was already accepted");
-      duplicate.code = "DISPATCH_IDEMPOTENCY_CONFLICT";
-      throw duplicate;
-    }
     const event = issueEventEnvelope(
       {
         actorId: request.actorId,
@@ -754,6 +765,26 @@ async function createHarness({
     messageDispatches,
     nowMs,
     refusalArtifacts,
+    recordContext(label) {
+      const ref = {
+        digest: canonicalSha256({ context: label }),
+        offset: offset(10),
+        stream: CHANNEL_STREAM,
+      };
+      const record = appendRunActivity(runRecords, {
+        attemptId: lease.attemptId,
+        contentRef: ref,
+        previousRef: lastReference(runRecords),
+        sequence: 6,
+      });
+      sourceRecords.set(referenceKey(ref), {
+        digest: ref.digest,
+        event: record.event,
+        offset: ref.offset,
+        stream: ref.stream,
+      });
+      return ref;
+    },
     runRecords,
     sourceMention,
     contextRef,
@@ -1207,6 +1238,19 @@ async function verifySensitivity() {
       needle: 'Object.hasOwn(payload, "agentReplyProvenance");',
       replacement: "false; // sensitivity mutant: reject trusted replay",
       target: "src/ledger/conversation-auth.mjs",
+    },
+    {
+      label: "reply-idempotency-provenance-drift",
+      needle: `const idempotencyKey = deriveRunControlId("ik", {
+      kind: "agent-reply",
+      messageId,
+    });`,
+      replacement: `const idempotencyKey = deriveRunControlId("ik", {
+      kind: "agent-reply",
+      messageId,
+      provenance,
+    });`,
+      target: "src/ledger/agent-replies.mjs",
     },
     {
       label: "accepted-event-contract",

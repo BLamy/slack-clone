@@ -283,7 +283,6 @@ export function createAgentReplyDispatcher({
     const idempotencyKey = deriveRunControlId("ik", {
       kind: "agent-reply",
       messageId,
-      provenance,
     });
     const result = await dispatch({
       actorId: agentPrincipalId,
@@ -330,10 +329,10 @@ export function createAgentReplyDispatcher({
       validateInvocationRequestedData(event.data, {
         expectedWorkspaceId: workspaceId,
       });
-    } catch (error) {
+    } catch {
       throw refusal(
         AGENT_REPLY_ERROR_CODES.INVOCATION_MISMATCH,
-        safeDetail(error, "invocation data is invalid"),
+        "invocation data is invalid",
       );
     }
     if (
@@ -359,10 +358,10 @@ export function createAgentReplyDispatcher({
   async function resolveSource(reference) {
     try {
       assertSourceReference(reference, "$.sourceMention", workspaceId);
-    } catch (error) {
+    } catch {
       throw refusal(
         AGENT_REPLY_ERROR_CODES.SOURCE_INVALID,
-        safeDetail(error, "source mention reference is invalid"),
+        "source mention reference is invalid",
       );
     }
     const record = normalizeRecord(
@@ -516,10 +515,10 @@ export function createAgentReplyDispatcher({
           "$.run.contextRef",
           workspaceId,
         );
-      } catch (error) {
+      } catch {
         throw refusal(
           AGENT_REPLY_ERROR_CODES.CONTEXT_MISSING,
-          safeDetail(error, "run context citation is invalid"),
+          "run context citation is invalid",
         );
       }
       return { ref: run.state.contextRef };
@@ -545,10 +544,10 @@ export function createAgentReplyDispatcher({
         "$.run.contextRef",
         workspaceId,
       );
-    } catch (error) {
+    } catch {
       throw refusal(
         AGENT_REPLY_ERROR_CODES.CONTEXT_MISSING,
-        safeDetail(error, "run context citation is invalid"),
+        "run context citation is invalid",
       );
     }
     return { ref: contexts.event.data.contentRef };
@@ -813,10 +812,10 @@ function sanitizeOutput(value) {
     .replaceAll(">", "&gt;");
   try {
     validateConversationText(text);
-  } catch (error) {
+  } catch {
     throw new AgentReplyError(
       AGENT_REPLY_ERROR_CODES.OUTPUT_INVALID,
-      safeDetail(error, "reply output is not valid conversation text"),
+      "reply output is not valid conversation text",
     );
   }
   return {
@@ -878,10 +877,10 @@ function normalizeRecord(value, label, expectedWorkspaceId) {
   const record = value?.event ? value : { event: value };
   try {
     validateEventEnvelope(record.event);
-  } catch (error) {
+  } catch {
     throw refusal(
       AGENT_REPLY_ERROR_CODES.SOURCE_INVALID,
-      safeDetail(error, `${label} event is invalid`),
+      `${label} event is invalid`,
     );
   }
   if (record.event.workspaceId !== expectedWorkspaceId) {
@@ -994,15 +993,4 @@ function normalizeRefusal(error, context) {
 
 function refusal(code, detail) {
   return new AgentReplyError(code, detail, { recordRefusal: true });
-}
-
-function safeDetail(error, fallback) {
-  const detail = error?.detail ?? error?.message ?? fallback;
-  return String(detail)
-    .replace(
-      /-----BEGIN [^-]*PRIVATE KEY-----[\s\S]*?-----END [^-]*PRIVATE KEY-----/giu,
-      "[redacted]",
-    )
-    .replace(/\b(?:Bearer|Basic)\s+[A-Za-z0-9._~+/=-]{12,}/giu, "[redacted]")
-    .slice(0, 240);
 }

@@ -1,5 +1,5 @@
 {
-  "channel": "sha256:cdc497c94e2100ab19896218372c868c0fb19d42d4595607f59dbb8ed030b56b",
-  "refusalHeads": "sha256:82afee2f881a26547a0ce7cbc373e24941c7faecc86a4fade0195fc48688f9ad",
+  "acceptedEventSet": "sha256:f5de3eff1a99323e34fb642656ab00e2f2df1770ff653f67e39f4550d8bde1b5",
+  "refusalHeads": "sha256:d12f22a583fe63722e314a547f362db4af4a2ca5e604168f8fec61b38f493c5d",
   "provenance": "sha256:c70331bbcd8f05dfc5bfa0b9615336478945e734396be911a079012b70604a70"
 }

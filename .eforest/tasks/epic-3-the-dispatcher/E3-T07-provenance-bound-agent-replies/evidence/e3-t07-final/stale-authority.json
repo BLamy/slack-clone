@@ -108,6 +108,84 @@
       "artifact": {
         "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
         "agentPrincipalId": null,
+        "artifactId": "art_5890d20574d0c7d9963bc40ea4",
+        "attemptId": "at_1bbe05045d79d17710e1b57b16",
+        "byteLength": 29,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": 1,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:30c60f0691a9c855604ccd46b91603cba25583f539eab2757abe5c9add4e04d0",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_AUTHORITY_REVOKED",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_beb5a2690ac540f197f0321c80"
+      },
+      "channelAppends": 0,
+      "code": "AGENT_REPLY_AUTHORITY_REVOKED",
+      "name": "workspace-status-omitted"
+    },
+    {
+      "artifact": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "agentPrincipalId": null,
+        "artifactId": "art_669c199183fe7f4e5b3b7c3d30",
+        "attemptId": "at_1bbe05045d79d17710e1b57b16",
+        "byteLength": 25,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": 1,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:10ee3a3ccc9b49e95d884024595bfc8d2e2a33d38a687d1f54947bcc4a1eb3b7",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_AGENT_INACTIVE",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_1358f44157751caf877ac4d8c5"
+      },
+      "channelAppends": 0,
+      "code": "AGENT_REPLY_AGENT_INACTIVE",
+      "name": "agent-status-omitted"
+    },
+    {
+      "artifact": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "agentPrincipalId": null,
+        "artifactId": "art_745397bce0f766d00c3cec5cef",
+        "attemptId": "at_1bbe05045d79d17710e1b57b16",
+        "byteLength": 35,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": 1,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:b5e6c0add793040393ffdfb7d484dd99f34024c515ee13156bb19eac28e18c40",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_SOURCE_INVALID",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_0f83e75e130c4e44bc3406b723"
+      },
+      "channelAppends": 0,
+      "code": "AGENT_REPLY_SOURCE_INVALID",
+      "name": "source-stream-channel-mismatch"
+    },
+    {
+      "artifact": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "agentPrincipalId": null,
         "artifactId": "art_f1ad678d22a1d95570e08e513d",
         "attemptId": "at_1bbe05045d79d17710e1b57b16",
         "byteLength": 28,
@@ -235,5 +313,5 @@
       "channelAppends": 0
     }
   ],
-  "refusalCount": 9
+  "refusalCount": 12
 }

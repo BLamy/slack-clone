@@ -3,5 +3,26 @@
   "escapedMarkup": true,
   "rawSizeBounded": true,
   "redacted": true,
-  "refusalOutputBytesOnly": true
+  "errorCanaryAbsent": true,
+  "refusalArtifactKeys": [
+    "agentId",
+    "agentPrincipalId",
+    "artifactId",
+    "attemptId",
+    "byteLength",
+    "channelId",
+    "contextRef",
+    "idempotencyKey",
+    "invocationId",
+    "kind",
+    "leaseGeneration",
+    "mediaType",
+    "outputDigest",
+    "outputRedacted",
+    "provenance",
+    "refusalCode",
+    "runId",
+    "schemaVersion",
+    "workspaceId"
+  ]
 }

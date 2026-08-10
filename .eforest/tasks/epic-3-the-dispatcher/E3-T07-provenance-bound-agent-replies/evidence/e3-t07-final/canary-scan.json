@@ -1,6 +1,7 @@
 {
   "checked": true,
   "files": [
+    "accepted-events.json",
     "canary-scan.json",
     "cold-clone-transcript.json",
     "message-digests.json",

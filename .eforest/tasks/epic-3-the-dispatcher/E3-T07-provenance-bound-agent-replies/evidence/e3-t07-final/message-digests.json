@@ -1,9 +1,24 @@
 {
-  "acceptedMessageCount": 3,
-  "channelStreamDigest": "sha256:cdc497c94e2100ab19896218372c868c0fb19d42d4595607f59dbb8ed030b56b",
-  "provenanceDigests": [
-    "sha256:9672b58f9e3eb8b47d3e540f0d1fd8ee030de84957ded4edeab8b0f3a462f5af",
-    "sha256:9672b58f9e3eb8b47d3e540f0d1fd8ee030de84957ded4edeab8b0f3a462f5af",
-    "sha256:9672b58f9e3eb8b47d3e540f0d1fd8ee030de84957ded4edeab8b0f3a462f5af"
+  "acceptedEventSetDigest": "sha256:f5de3eff1a99323e34fb642656ab00e2f2df1770ff653f67e39f4550d8bde1b5",
+  "acceptedScenarioCount": 3,
+  "scenarios": [
+    {
+      "eventDigest": "sha256:626c40344349952b88ca3af9855da9c9993c1eb003ed5c2d9cb45475ff193634",
+      "messageStateDigest": "sha256:9158e3c1392efc7c4d117ae9b544517f5b9d62ce34d066a0ea913c0dc25362a1",
+      "name": "happy",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+    },
+    {
+      "eventDigest": "sha256:02290521decdd61d884823e872aad98787b0a1b01a25d481434c632df6f2a712",
+      "messageStateDigest": "sha256:399582b3189ad3308ab0374ae469acfd944da0f0c3e42dd48dd18b27cc75adff",
+      "name": "lost-ack-replay",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+    },
+    {
+      "eventDigest": "sha256:e95b00cb5be234d771b21880e7d30d6d47b3992e5f7a79fd065a4385546cfb7a",
+      "messageStateDigest": "sha256:cd656832b85386581df1b5a3519cbdba613b896298bfdfee3800dcb42af6b43f",
+      "name": "redacted",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+    }
   ]
 }

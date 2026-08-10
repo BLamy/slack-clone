@@ -35,6 +35,7 @@ const reportDirectory = promoteEvidence
     );
 const workDirectory = path.join(taskDirectory, "work");
 const evidenceFiles = [
+  "accepted-events.json",
   "canary-scan.json",
   "message-digests.json",
   "provenance.json",

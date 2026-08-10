@@ -3,7 +3,6 @@ import { execFileSync } from "node:child_process";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-import { createInitialState, reduceEnvelope } from "@stream-slack/reducers";
 import {
   deriveInvocationCorrelationId,
   deriveRunControlId,
@@ -26,6 +25,10 @@ import {
   createRunLeaseCoordinator,
   projectEligibleQueue,
 } from "../src/ledger/run-queue.mjs";
+import {
+  createInitialState,
+  reduceEnvelope,
+} from "../packages/reducers/src/index.mjs";
 
 const WORKSPACE_ID = "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa";
 const HUMAN_ID = "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb";
@@ -98,6 +101,7 @@ const summary = {
 };
 
 await writeJson("reply-receipts.json", functional.replyReceipts);
+await writeJson("accepted-events.json", functional.acceptedEvents);
 await writeJson("provenance.json", functional.provenance);
 await writeJson("refusal-heads.json", functional.refusalHeads);
 await writeJson("message-digests.json", functional.messageDigests);
@@ -176,6 +180,13 @@ async function verifyFunctionalMatrix() {
   assert.equal(
     happy.messageDispatches[0].provenance.threadRootMessageId,
     "root-message",
+  );
+  assert.throws(
+    () =>
+      reduceReplyThroughMessageReducer(happy.messageDispatches[0].event, {
+        principalKind: "human",
+      }),
+    (error) => error?.code === "REDUCER_AGENT_REPLY_PROVENANCE",
   );
 
   const reducerCheck = reduceReplyThroughMessageReducer(
@@ -291,11 +302,46 @@ async function verifyFunctionalMatrix() {
     false,
   );
 
+  const errorCanary = `opaque-${canonicalSha256({ error: "append" })}`;
+  const externalFailure = await createHarness({ appendError: errorCanary });
+  const externalError = await assertReplyRefusal(
+    externalFailure.dispatcher.dispatchReply({
+      capability: externalFailure.capability,
+      output: "safe output",
+      runId: RUN_ID,
+      workerId: WORKER_ID,
+    }),
+    AGENT_REPLY_ERROR_CODES.DISPATCH_REFUSED,
+  );
+  assert.equal(
+    JSON.stringify(externalError.toJSON()).includes(errorCanary),
+    false,
+  );
+  assert.equal(
+    JSON.stringify(externalFailure.refusalArtifacts).includes(errorCanary),
+    false,
+  );
+
+  const missingEvent = await createHarness({ returnAcceptedEvent: false });
+  await assertReplyRefusal(
+    missingEvent.dispatcher.dispatchReply({
+      capability: missingEvent.capability,
+      output: "accepted without an event",
+      runId: RUN_ID,
+      workerId: WORKER_ID,
+    }),
+    AGENT_REPLY_ERROR_CODES.DISPATCH_REFUSED,
+  );
+  assert.equal(missingEvent.channelMessages.length, 2);
+  assert.equal(missingEvent.refusalArtifacts.length, 1);
+
   const staleAuthority = await verifyStaleAuthorityMatrix();
   const persistedRefusals = [
     ...lostAck.refusalArtifacts,
     ...wrongRun.refusalArtifacts,
     ...oversized.refusalArtifacts,
+    ...externalFailure.refusalArtifacts,
+    ...missingEvent.refusalArtifacts,
     ...staleAuthority.cases.map((entry) => entry.artifact),
   ];
   const refusalHeads = {
@@ -307,20 +353,25 @@ async function verifyFunctionalMatrix() {
     ),
   };
   assert.equal(refusalHeads.allBoundToRuns, true);
-  const messageEvents = [
-    happy.messageDispatches[0].event,
-    lostAck.messageDispatches[0].event,
-    redacted.messageDispatches[0].event,
+  const acceptedEvents = [
+    { event: happy.messageDispatches[0].event, name: "happy" },
+    { event: lostAck.messageDispatches[0].event, name: "lost-ack-replay" },
+    { event: redacted.messageDispatches[0].event, name: "redacted" },
   ];
   const messageDigests = {
-    acceptedMessageCount: messageEvents.length,
-    channelStreamDigest: canonicalSha256(messageEvents),
-    provenanceDigests: messageEvents.map((event) =>
-      canonicalSha256(event.data.agentReplyProvenance),
-    ),
+    acceptedEventSetDigest: canonicalSha256(acceptedEvents),
+    acceptedScenarioCount: acceptedEvents.length,
+    scenarios: acceptedEvents.map(({ event, name }) => ({
+      eventDigest: digestEventEnvelope(event),
+      messageStateDigest: canonicalSha256(
+        reduceReplyThroughMessageReducer(event),
+      ),
+      name,
+      stream: CHANNEL_STREAM,
+    })),
   };
   const replayDigests = {
-    channel: messageDigests.channelStreamDigest,
+    acceptedEventSet: messageDigests.acceptedEventSetDigest,
     refusalHeads: canonicalSha256(
       persistedRefusals.map((artifact) => ({
         artifactId: artifact.artifactId,
@@ -333,6 +384,7 @@ async function verifyFunctionalMatrix() {
     ),
   };
   return {
+    acceptedEvents,
     messageDigests,
     provenance: {
       actorKind: "agent",
@@ -354,9 +406,13 @@ async function verifyFunctionalMatrix() {
       escapedMarkup: redactedText.includes("&lt;script&gt;"),
       rawSizeBounded: oversized.refusalArtifacts.length === 1,
       redacted: redactedResult.output.redacted,
-      refusalOutputBytesOnly: persistedRefusals.every(
-        (artifact) => !Object.hasOwn(artifact, "output"),
-      ),
+      errorCanaryAbsent:
+        !JSON.stringify(persistedRefusals).includes(errorCanary),
+      refusalArtifactKeys: [
+        ...new Set(
+          persistedRefusals.flatMap((artifact) => Object.keys(artifact)),
+        ),
+      ].sort(),
     },
     refusalHeads,
     replayDigests,
@@ -374,10 +430,15 @@ async function verifyFunctionalMatrix() {
 }
 
 async function createHarness({
+  appendError = null,
   beforeMessageAuthorize = null,
   loseAck = false,
+  omitAgentStatus = false,
+  omitWorkspaceStatus = false,
   policy = buildPolicy(),
+  returnAcceptedEvent = true,
   sourceMentionPrincipalId = AGENT_PRINCIPAL_ID,
+  sourceStream = CHANNEL_STREAM,
 } = {}) {
   let nowMs = BASE_TIME;
   let eventNumber = 0;
@@ -421,7 +482,10 @@ async function createHarness({
     workspaceStatus: "active",
   };
 
-  const sourceMention = createSourceMessage(sourceMentionPrincipalId);
+  const sourceMention = createSourceMessage(
+    sourceMentionPrincipalId,
+    sourceStream,
+  );
   const sourceRecords = new Map([
     [referenceKey(sourceMention.ref), sourceMention],
   ]);
@@ -554,10 +618,16 @@ async function createHarness({
     channel: structuredClone(authority.channel),
     messages: structuredClone(channelMessages),
   });
-  const readAuthority = async () => structuredClone(authority);
+  const readAuthority = async () => {
+    const current = structuredClone(authority);
+    if (omitAgentStatus) delete current.agentStatus;
+    if (omitWorkspaceStatus) delete current.workspaceStatus;
+    return current;
+  };
   const readInvocation = async () => structuredClone(invocationRecord);
   const readRun = async () => ({ records: structuredClone(runRecords) });
   const appendMessage = async (request) => {
+    if (appendError !== null) throw new Error(appendError);
     const preparedData = request.payload;
     const requestDigest = canonicalSha256({
       actorId: request.actorId,
@@ -642,7 +712,7 @@ async function createHarness({
       lost.ambiguousAck = true;
       throw lost;
     }
-    return result;
+    return returnAcceptedEvent ? result : { ...result, event: undefined };
   };
   const dispatch = createMentionAwareConversationDispatcher({
     allowAgentReplyProvenance: true,
@@ -707,7 +777,7 @@ function buildPolicy(overrides = {}) {
   };
 }
 
-function createSourceMessage(targetPrincipalId) {
+function createSourceMessage(targetPrincipalId, sourceStream = CHANNEL_STREAM) {
   const mentions = [
     {
       handle: targetPrincipalId === AGENT_PRINCIPAL_ID ? "helper" : "other",
@@ -748,9 +818,9 @@ function createSourceMessage(targetPrincipalId) {
     ref: {
       digest: digestEventEnvelope(event),
       offset: offset(1),
-      stream: CHANNEL_STREAM,
+      stream: sourceStream,
     },
-    stream: CHANNEL_STREAM,
+    stream: sourceStream,
   };
 }
 
@@ -954,7 +1024,10 @@ function appendTerminalLifecycle(harness) {
   });
 }
 
-function reduceReplyThroughMessageReducer(replyEvent) {
+function reduceReplyThroughMessageReducer(
+  replyEvent,
+  { principalKind = "agent" } = {},
+) {
   const source = createSourceMessage(AGENT_PRINCIPAL_ID);
   const state = createInitialState();
   state.entities.channels = {
@@ -994,7 +1067,7 @@ function reduceReplyThroughMessageReducer(replyEvent) {
   };
   state.entities.principals = {
     [AGENT_PRINCIPAL_ID]: {
-      kind: "agent",
+      kind: principalKind,
       principalId: AGENT_PRINCIPAL_ID,
       status: "active",
     },
@@ -1093,6 +1166,13 @@ function offset(value) {
 async function verifySensitivity() {
   const mutations = [
     {
+      label: "request-override-allowlist",
+      needle: 'const keys = ["capability", "output", "runId", "workerId"];',
+      replacement:
+        'const keys = ["capability", "channelId", "output", "runId", "workerId"];',
+      target: "src/ledger/agent-replies.mjs",
+    },
+    {
       label: "current-membership-fence",
       needle: "assertAuthority(authority, { agentPrincipalId, channelId });",
       replacement: "// sensitivity mutant: omit current membership fence",
@@ -1114,6 +1194,30 @@ async function verifySensitivity() {
       label: "raw-output-budget",
       needle: "Math.max(output.rawByteLength, output.byteLength),",
       replacement: "output.byteLength, // sensitivity mutant: ignore raw bytes",
+      target: "src/ledger/agent-replies.mjs",
+    },
+    {
+      label: "reducer-agent-kind",
+      needle: 'principal.kind !== "agent" ||',
+      replacement: "false || // sensitivity mutant: accept non-agent actor",
+      target: "packages/reducers/src/index.mjs",
+    },
+    {
+      label: "lost-ack-trusted-replay",
+      needle: 'Object.hasOwn(payload, "agentReplyProvenance");',
+      replacement: "false; // sensitivity mutant: reject trusted replay",
+      target: "src/ledger/conversation-auth.mjs",
+    },
+    {
+      label: "accepted-event-contract",
+      needle: `if (!event) {
+    throw refusal(
+      AGENT_REPLY_ERROR_CODES.DISPATCH_REFUSED,
+      "message dispatch returned no accepted event",
+    );
+  }`,
+      replacement:
+        "if (!event) return; // sensitivity mutant: trust receipt only",
       target: "src/ledger/agent-replies.mjs",
     },
     {
@@ -1297,6 +1401,42 @@ async function verifyStaleAuthorityMatrix() {
       code: error.code,
       name,
       channelAppends: harness.channelMessages.length - 1,
+    });
+  }
+
+  for (const [name, options, expectedCode] of [
+    [
+      "workspace-status-omitted",
+      { omitWorkspaceStatus: true },
+      AGENT_REPLY_ERROR_CODES.AUTHORITY_REVOKED,
+    ],
+    [
+      "agent-status-omitted",
+      { omitAgentStatus: true },
+      AGENT_REPLY_ERROR_CODES.AGENT_INACTIVE,
+    ],
+    [
+      "source-stream-channel-mismatch",
+      { sourceStream: `channel:${OTHER_CHANNEL_ID}` },
+      AGENT_REPLY_ERROR_CODES.SOURCE_INVALID,
+    ],
+  ]) {
+    const harness = await createHarness(options);
+    const error = await assertReplyRefusal(
+      harness.dispatcher.dispatchReply({
+        capability: harness.capability,
+        output: `late ${name}`,
+        runId: RUN_ID,
+        workerId: WORKER_ID,
+      }),
+      expectedCode,
+    );
+    assert.equal(harness.channelMessages.length, 1, name);
+    cases.push({
+      artifact: harness.refusalArtifacts[0],
+      channelAppends: 0,
+      code: error.code,
+      name,
     });
   }
 

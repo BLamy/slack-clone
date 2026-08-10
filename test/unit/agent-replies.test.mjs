@@ -59,6 +59,22 @@ test("agent reply provenance is strict and cannot be accepted by a human path", 
       ),
     /agentReplyProvenance is not allowed/u,
   );
+  assert.throws(
+    () =>
+      validateConversationCommand(
+        "channel.message.reply",
+        {
+          channelId: CHANNEL_ID,
+          contentType: "text/plain",
+          mentions: [AGENT_PRINCIPAL_ID],
+          messageId: "human-reply",
+          rootMessageId: "root",
+          text: "answer",
+        },
+        { workspaceId: WORKSPACE_ID },
+      ),
+    /mentions is not allowed/u,
+  );
   const prepared = stampConversationActor(
     {
       operation: "channel.message.reply",

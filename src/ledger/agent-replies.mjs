@@ -235,7 +235,7 @@ export function createAgentReplyDispatcher({
       workerId,
     });
     assertAuthority(authority, { agentPrincipalId, channelId });
-    const channel = await resolveChannel(channelId, source.event.data);
+    const channel = await resolveChannel(channelId);
     const run = await resolveRun(scope);
     assertRunIsCurrent(run, scope);
     assertOutputBudget(
@@ -393,21 +393,30 @@ export function createAgentReplyDispatcher({
         "source mention has no canonical structured mention facts",
       );
     }
+    if (
+      reference.stream !==
+      streamNames.channel(workspaceId, record.event.data.channelId)
+    ) {
+      throw refusal(
+        AGENT_REPLY_ERROR_CODES.SOURCE_INVALID,
+        "source mention stream does not match its message channel",
+      );
+    }
     return record;
   }
 
   async function resolveAuthority(input) {
     try {
       return await readAuthority({ ...input, workspaceId });
-    } catch (error) {
+    } catch {
       throw refusal(
         AGENT_REPLY_ERROR_CODES.AUTHORITY_REVOKED,
-        safeDetail(error, "current authority could not be resolved"),
+        "current authority could not be resolved",
       );
     }
   }
 
-  async function resolveChannel(channelId, sourceData) {
+  async function resolveChannel(channelId) {
     const raw = await readChannel({ channelId, workspaceId });
     const state = raw?.state ?? raw;
     const channel = raw?.channel ?? state?.entities?.channels?.[channelId];
@@ -421,12 +430,6 @@ export function createAgentReplyDispatcher({
       throw refusal(
         AGENT_REPLY_ERROR_CODES.CHANNEL_INACTIVE,
         "reply channel is not currently active",
-      );
-    }
-    if (sourceData.channelId !== channelId) {
-      throw refusal(
-        AGENT_REPLY_ERROR_CODES.SOURCE_INVALID,
-        "source mention channel does not match the current channel",
       );
     }
     return { channel, messages };
@@ -600,16 +603,13 @@ export function createAgentReplyDispatcher({
     const workspaceMembership = value?.workspaceMembership;
     const channel = value?.channel;
     const channelMembership = value?.channelMembership;
-    if (
-      value?.workspaceStatus !== undefined &&
-      value.workspaceStatus !== "active"
-    ) {
+    if (value?.workspaceStatus !== "active") {
       throw refusal(
         AGENT_REPLY_ERROR_CODES.AUTHORITY_REVOKED,
         "workspace authority is not active",
       );
     }
-    if (value?.agentStatus !== undefined && value.agentStatus !== "active") {
+    if (value?.agentStatus !== "active") {
       throw refusal(
         AGENT_REPLY_ERROR_CODES.AGENT_INACTIVE,
         "agent lifecycle is not active",
@@ -895,7 +895,12 @@ function normalizeRecord(value, label, expectedWorkspaceId) {
 
 function assertAcceptedReply(result, provenance, actorId) {
   const event = result?.event;
-  if (!event) return;
+  if (!event) {
+    throw refusal(
+      AGENT_REPLY_ERROR_CODES.DISPATCH_REFUSED,
+      "message dispatch returned no accepted event",
+    );
+  }
   if (event.actorId !== actorId) {
     throw refusal(
       AGENT_REPLY_ERROR_CODES.ACTOR_MISMATCH,
@@ -953,7 +958,7 @@ function withRefusalContext(error, context) {
   }
   return new AgentReplyError(
     AGENT_REPLY_ERROR_CODES.DISPATCH_REFUSED,
-    safeDetail(error, "normal message dispatch refused the reply"),
+    "normal message dispatch refused the reply",
     { refusalContext: context, recordRefusal: true },
   );
 }
@@ -978,7 +983,7 @@ function normalizeRefusal(error, context) {
       : AGENT_REPLY_ERROR_CODES.DISPATCH_REFUSED,
     leaseFailure
       ? "the run capability is no longer valid for this reply"
-      : safeDetail(error, "reply dispatch was refused"),
+      : "reply dispatch was refused",
     {
       refusalContext: context,
       recordRefusal: true,

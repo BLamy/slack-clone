@@ -372,7 +372,7 @@ function requiredKeysForOperation(operation) {
 }
 
 function optionalKeysForOperation(operation, options) {
-  const optional = operation.includes("message.") ? ["mentions"] : [];
+  const optional = [];
   if (
     operation === "channel.message.reply" &&
     options.allowAgentReplyProvenance

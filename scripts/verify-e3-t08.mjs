@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import {
+  mkdir,
+  mkdtemp,
+  readFile,
+  readdir,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import path from "node:path";
 
 import {
@@ -15,6 +22,7 @@ import { createAgentReplyDispatcher } from "../src/ledger/agent-replies.mjs";
 import {
   assembleContextPack,
   contextPackDigest,
+  replayContextPack,
 } from "../src/ledger/context-pack.mjs";
 import { createMentionAwareConversationDispatcher } from "../src/ledger/conversation-auth.mjs";
 import { createConversationScheduler } from "../src/ledger/conversation-scheduler.mjs";
@@ -27,6 +35,7 @@ import { createMentionReconciler } from "../src/ledger/mention-reconciler.mjs";
 import {
   createRunLeaseCoordinator,
   projectEligibleQueue,
+  replayRunLeaseEvents,
 } from "../src/ledger/run-queue.mjs";
 import {
   createRunControlCoordinator,
@@ -34,6 +43,7 @@ import {
 } from "../src/ledger/run-control.mjs";
 import { streamNames } from "../src/ledger/topology.mjs";
 import {
+  makeDelegatedChild,
   makeItem,
   makePolicy,
 } from "../test/support/conversation-scheduler-fixture.mjs";
@@ -82,37 +92,56 @@ await mkdir(path.join(taskDirectory, "work"), { recursive: true });
 
 const gates = runGates();
 const composed = await verifyComposedIngressAndLease();
+const adversarial = verifyBatchingAndRecursion();
+const faultEvidence = await verifyCancellationAndRetry(composed);
 const streamDumps = composed.store.dump();
 const sourceRefManifest = sourceManifest(streamDumps);
+const projectionRebuild = rebuildProjection({ composed, streamDumps });
+const sensitivity = await verifySensitivity();
 const composite = canonicalSha256({
+  adversarial,
+  faultEvidence,
   context: composed.context,
   invocation: composed.invocation,
+  projectionRebuild,
   queue: composed.queue,
   run: composed.run,
   scheduler: composed.scheduler,
   sourceRefManifest,
 });
 const evidence = {
+  adversarial,
   batchingRecursionOutcomes: composed.scheduler,
+  cancellationRevocation: faultEvidence.cancellation,
   compositeReplayDigests: {
     compositeDigest: composite,
     rebuiltDigest: canonicalSha256({
+      adversarial,
+      faultEvidence,
       context: composed.context,
       invocation: composed.invocation,
+      projectionRebuild,
       queue: composed.queue,
       run: composed.run,
       scheduler: composed.scheduler,
       sourceRefManifest: sourceManifest(structuredClone(streamDumps)),
     }),
   },
-  faultSchedules: composed.store.faultSchedule(),
+  faultSchedules: {
+    runControl: faultEvidence.schedule,
+    streamBoundaries: composed.store.faultSchedule(),
+  },
+  processResourceCounts: faultEvidence.processes,
+  retryUsageAccounting: faultEvidence.retry,
   gates,
   implementationCommit,
   mentionInvocationSnapshot: composed.invocation,
   queueLeaseManifest: composed.lease,
+  replyReceipt: composed.reply,
   replay,
   result: "PASS",
   runId,
+  sensitivity,
   sourceRefManifest,
   streamDumps,
   task: "E3-T08",
@@ -131,8 +160,13 @@ for (const [filename, value] of [
   ["batching-recursion-outcomes.json", composed.scheduler],
   ["attempt-timelines.json", composed.run.state.attemptTimelines],
   ["process-resource-counts.json", composed.run.state.processSnapshot],
+  ["cancellation-revocation.json", evidence.cancellationRevocation],
+  ["retry-usage-accounting.json", evidence.retryUsageAccounting],
   ["context-pack.json", composed.context],
+  ["reply-receipt.json", composed.reply],
+  ["projection-rebuild.json", projectionRebuild],
   ["composite-replay-digests.json", evidence.compositeReplayDigests],
+  ["sensitivity.json", sensitivity],
 ]) {
   await writeJson(filename, value);
 }
@@ -165,6 +199,7 @@ function runGates() {
   const results = [];
   for (const [name, script] of [
     ["format", "format:check"],
+    ["format-task", "format:check:e3-t08"],
     ["lint", "lint"],
     ["typecheck", "typecheck"],
     ["tests", "test"],
@@ -243,7 +278,7 @@ async function verifyComposedIngressAndLease() {
   const invocationRecord = {
     digest: digestEventEnvelope(invocationEvent),
     event: invocationEvent,
-    offset: deterministicOffset(1),
+    offset: invocationSnapshot.records[0].offset ?? deterministicOffset(1),
   };
   const invocationRef = {
     digest: invocationRecord.digest,
@@ -274,8 +309,15 @@ async function verifyComposedIngressAndLease() {
     workspaceId,
   };
   const scheduleJournal = [];
+  const auditStream = streamNames.workspaceAudit(workspaceId);
   const scheduler = createConversationScheduler({
-    record: async (entry) => scheduleJournal.push(entry),
+    record: async (entry) => {
+      scheduleJournal.push(entry);
+      store.seed(auditStream, {
+        ...structuredClone(entry),
+        stream: auditStream,
+      });
+    },
   });
   const schedule = await scheduler.plan({ queued: [actualItem], workspaceId });
   assert.equal(schedule.batches.length, 1);
@@ -305,6 +347,10 @@ async function verifyComposedIngressAndLease() {
   const processRunner = createScriptedProcessRunner({
     clock: () => new Date(CAPSTONE_TIME),
   });
+  const runStream = streamNames.run(workspaceId, runId);
+  for (const record of runRecords) {
+    store.seed(runStream, { ...structuredClone(record), stream: runStream });
+  }
   const durableRunRecords = structuredClone(runRecords);
   const runPolicy = buildRunPolicy();
   const queueProjectionFor = ({ attempts = 0, now, status = "queued" }) =>
@@ -332,8 +378,13 @@ async function verifyComposedIngressAndLease() {
   const controller = createRunControlCoordinator({
     actorId: humanId,
     appendRecord: async ({ record }) => {
-      durableRunRecords.push(structuredClone(record));
-      return { record };
+      const persisted = {
+        ...structuredClone(record),
+        stream: runStream,
+      };
+      durableRunRecords.push(persisted);
+      store.seed(runStream, persisted);
+      return { record: persisted };
     },
     clock: () => new Date(CAPSTONE_TIME),
     entry: queue.entries[0],
@@ -425,10 +476,19 @@ async function verifyComposedIngressAndLease() {
     workspaceInputs: [],
   });
   assert.equal(contextPack.packDigest, contextPackDigest(contextPack));
-  const contextRef = {
+  const contextArtifactSequence = store.count(auditStream) + 1;
+  const contextArtifactRecord = {
+    content: contextPack,
     digest: contextPack.packDigest,
-    offset: deterministicOffset(2),
-    stream: streamNames.channel(workspaceId, channelId),
+    kind: "context-pack",
+    offset: deterministicOffset(contextArtifactSequence),
+    stream: auditStream,
+  };
+  store.seed(auditStream, contextArtifactRecord);
+  const contextRef = {
+    digest: contextArtifactRecord.digest,
+    offset: contextArtifactRecord.offset,
+    stream: auditStream,
   };
   await controller.recordActivity({
     contentRef: contextRef,
@@ -503,9 +563,35 @@ async function verifyComposedIngressAndLease() {
     ),
     true,
   );
+  const completedRunRecords = controller.getRecords();
+  const leaseReplay = replayRunLeaseEvents(
+    completedRunRecords.filter((record) =>
+      record.event?.eventType?.startsWith("run.lease."),
+    ),
+    { workspaceId },
+  );
+  const auditRecords = store.records(auditStream);
+  const conversation = structuredClone(state.entities.messages);
+  const projectionBefore = {
+    auditDigest: canonicalSha256(stripStreamFields(auditRecords)),
+    contextDigest: contextPack.packDigest,
+    conversationDigest: canonicalSha256(conversation),
+    leaseStateDigest: leaseReplay.finalStateDigest,
+    queueDigest: queue.queueDigest,
+    runDigest: completedRunState.replayDigest,
+    projectionDigest: canonicalSha256({
+      auditDigest: canonicalSha256(stripStreamFields(auditRecords)),
+      contextDigest: contextPack.packDigest,
+      conversationDigest: canonicalSha256(conversation),
+      leaseStateDigest: leaseReplay.finalStateDigest,
+      queueDigest: queue.queueDigest,
+      runDigest: completedRunState.replayDigest,
+    }),
+  };
   return {
     context: contextPack,
     invocation: {
+      ...invocation,
       invocationId: invocation.invocationId,
       invocationRef,
       snapshotDigest: invocation.snapshotDigest,
@@ -525,13 +611,16 @@ async function verifyComposedIngressAndLease() {
       queueDigest: queue.queueDigest,
     },
     scheduler: {
+      input: [actualItem],
       journal: scheduleJournal,
       scheduleDigest: schedule.scheduleDigest,
       batches: schedule.batches,
       refusals: schedule.refusals,
     },
+    conversation,
+    projectionBefore,
     run: {
-      records: controller.getRecords(),
+      records: completedRunRecords,
       state: completedRunState,
     },
     reply,
@@ -563,6 +652,634 @@ function buildRunPolicy(overrides = {}) {
   };
   validateRunControlPolicy(policy);
   return policy;
+}
+
+async function verifyCancellationAndRetry(composed) {
+  const baseMs = Date.parse(CAPSTONE_TIME);
+  const policy = buildRunPolicy();
+  const actionKey = "scripted-side-effect-capstone";
+  const retryFixture = createFaultController("f", composed, policy, baseMs);
+  const retryController = retryFixture.controller;
+
+  await retryController.beginAttempt({ now: new Date(baseMs) });
+  await retryController.startAttempt({
+    launch: { children: 3, ignoresTerm: true, outputBytes: 32 },
+    now: new Date(baseMs + 1),
+  });
+  const firstCapability = retryController.getCapabilityForWorker();
+  let crash = null;
+  let sideEffects = 0;
+  try {
+    await retryController.commitLogicalAction({
+      actionKey,
+      capability: firstCapability,
+      crashAfterSideEffect: true,
+      now: new Date(baseMs + 2),
+      perform: async () => {
+        sideEffects += 1;
+      },
+    });
+  } catch (error) {
+    crash = summarizeError(error);
+  }
+  assert.ok(crash);
+  assert.equal(sideEffects, 1);
+  const retryResult = await retryController.reportFailure({
+    capability: firstCapability,
+    failureCode: "scripted-process-crash",
+    now: new Date(baseMs + 3),
+    retryable: true,
+  });
+  assert.equal(retryResult.retry, true);
+  const afterFailure = retryController.getState();
+  assert.equal(afterFailure.status, "retry");
+  assert.equal(
+    afterFailure.processSnapshot.every(
+      ({ activeChildren }) => activeChildren === 0,
+    ),
+    true,
+  );
+
+  const retryAt = retryResult.schedule.nextAttemptAtMs;
+  const leasedRetry = await retryController.tick({
+    now: new Date(retryAt),
+  });
+  assert.equal(leasedRetry.result, "leased");
+  assert.equal(retryController.getState().status, "leased");
+  await retryController.startAttempt({
+    launch: { children: 2, ignoresTerm: false, outputBytes: 16 },
+    now: new Date(retryAt + 1),
+  });
+  const secondCapability = retryController.getCapabilityForWorker();
+  const replayResult = await retryController.commitLogicalAction({
+    actionKey,
+    capability: secondCapability,
+    now: new Date(retryAt + 2),
+    perform: async () => {
+      sideEffects += 1;
+    },
+  });
+  assert.equal(replayResult.result, "replayed");
+  assert.equal(sideEffects, 1);
+  await retryController.reportUsage({
+    capability: secondCapability,
+    now: new Date(retryAt + 3),
+    usage: {
+      costUsdCents: 1,
+      inputTokens: 4,
+      outputBytes: 16,
+      outputTokens: 2,
+      totalTokens: 6,
+      wallTimeMs: 5,
+    },
+    usageKey: "retry-success-usage",
+  });
+  const beforeCancel = retryController.getState();
+  assert.equal(beforeCancel.attempts.length, 2);
+  assert.equal(beforeCancel.totalUsage.totalTokens, 6);
+  assert.equal(
+    beforeCancel.totalUsage.totalTokens <=
+      policy.maxInputTokens + policy.maxOutputTokens,
+    true,
+  );
+  const cancelResult = await retryController.cancel({
+    now: new Date(retryAt + 4),
+    reasonCode: "operator-cancelled",
+  });
+  const afterCancel = retryController.getState();
+  assert.equal(cancelResult.result, "cancelled");
+  assert.equal(afterCancel.status, "cancelled");
+  assert.equal(afterCancel.terminalCount, 1);
+  assert.equal(
+    afterCancel.processSnapshot.every(
+      ({ activeChildren }) => activeChildren === 0,
+    ),
+    true,
+  );
+  const lateCancelWrite = await captureError(() =>
+    retryController.reportUsage({
+      capability: secondCapability,
+      now: new Date(retryAt + 5),
+      usage: {
+        costUsdCents: 1,
+        inputTokens: 1,
+        outputBytes: 1,
+        outputTokens: 1,
+        totalTokens: 2,
+        wallTimeMs: 1,
+      },
+      usageKey: "late-cancel-usage",
+    }),
+  );
+  assert.match(lateCancelWrite.code, /TERMINAL_IMMUTABLE/u);
+
+  const revocationFixture = createFaultController(
+    "v",
+    composed,
+    policy,
+    baseMs,
+  );
+  const revocationController = revocationFixture.controller;
+  await revocationController.beginAttempt({ now: new Date(baseMs) });
+  await revocationController.startAttempt({
+    launch: { children: 2, ignoresTerm: true, outputBytes: 8 },
+    now: new Date(baseMs + 1),
+  });
+  const revocationCapability = revocationController.getCapabilityForWorker();
+  revocationFixture.authority.agentStatus = "disabled";
+  const revocationResult = await revocationController.revokeForAuthority({
+    now: new Date(baseMs + 2),
+    reasonCode: "agent-disabled",
+  });
+  const afterRevocation = revocationController.getState();
+  assert.equal(revocationResult.result, "cancelled");
+  assert.equal(afterRevocation.status, "cancelled");
+  assert.equal(
+    afterRevocation.processSnapshot.every(
+      ({ activeChildren }) => activeChildren === 0,
+    ),
+    true,
+  );
+  const lateRevocationWrite = await captureError(() =>
+    revocationController.commitLogicalAction({
+      actionKey: "late-revocation-action",
+      capability: revocationCapability,
+      now: new Date(baseMs + 3),
+      perform: async () => {
+        throw new Error("late mutation should not run");
+      },
+    }),
+  );
+  assert.match(lateRevocationWrite.code, /TERMINAL_IMMUTABLE/u);
+
+  return {
+    cancellation: {
+      lateWrite: lateCancelWrite,
+      result: cancelResult,
+      state: afterCancel,
+    },
+    processes: {
+      cancellation: afterCancel.processSnapshot,
+      revocation: afterRevocation.processSnapshot,
+      survivorsAfterCancellation: afterCancel.processSnapshot.reduce(
+        (sum, { activeChildren }) => sum + activeChildren,
+        0,
+      ),
+      survivorsAfterRevocation: afterRevocation.processSnapshot.reduce(
+        (sum, { activeChildren }) => sum + activeChildren,
+        0,
+      ),
+    },
+    retry: {
+      actionKey,
+      attempts: beforeCancel.attempts,
+      budget: {
+        aggregateMaxTotalTokens:
+          policy.maxAggregateInputTokens + policy.maxAggregateOutputTokens,
+        maxAttempts: policy.maxAttempts,
+        maxTotalTokens: policy.maxInputTokens + policy.maxOutputTokens,
+      },
+      crash,
+      replayResult,
+      retrySchedule: retryResult.schedule,
+      sideEffects,
+      totalUsage: beforeCancel.totalUsage,
+    },
+    revocation: {
+      lateWrite: lateRevocationWrite,
+      result: revocationResult,
+      state: afterRevocation,
+    },
+    schedule: [...retryFixture.schedule, ...revocationFixture.schedule],
+  };
+}
+
+function createFaultController(suffix, composed, policy, baseMs) {
+  const { agentId, humanId, workspaceId } = CAPSTONE_IDS;
+  const runId = `rn_${workspaceId.slice(3)}_${suffix.repeat(26)}`;
+  const invocationRef = composed.invocation.invocationRef;
+  const invocation = { ...composed.invocation };
+  delete invocation.invocationRef;
+  const runRecords = createRequestedAndQueuedRun({
+    invocation,
+    invocationRef,
+    runId,
+  });
+  const runStream = streamNames.run(workspaceId, runId);
+  for (const record of runRecords) {
+    composed.store.seed(runStream, {
+      ...structuredClone(record),
+      stream: runStream,
+    });
+  }
+  const queuedRunRef = {
+    digest: runRecords.at(-1).digest,
+    offset: runRecords.at(-1).offset,
+    stream: runStream,
+  };
+  const invocationValue = { ...invocation, sourceRef: invocationRef };
+  const queueProjectionFor = ({ attempts = 0, now, status = "queued" }) =>
+    projectEligibleQueue({
+      invocations: [
+        {
+          ...invocationValue,
+          status: "requested",
+        },
+      ],
+      now,
+      runs: [
+        {
+          agentId,
+          attempts,
+          invocationId: invocation.invocationId,
+          runId,
+          runRef: queuedRunRef,
+          status,
+        },
+      ],
+      workspaceId,
+    });
+  const queue = queueProjectionFor({
+    now: new Date(baseMs),
+  });
+  const authority = {
+    agentStatus: "active",
+    invocationStatus: "requested",
+    workspaceStatus: "active",
+  };
+  const leaseRecords = [];
+  const durableRunRecords = structuredClone(runRecords);
+  const processRunner = createScriptedProcessRunner({
+    clock: () => baseMs,
+  });
+  let nowMs = baseMs;
+  const leaseCoordinator = createRunLeaseCoordinator({
+    actorId: humanId,
+    appendLeaseEvent: async ({ record }) => {
+      leaseRecords.push(structuredClone(record));
+      return { record };
+    },
+    clock: () => new Date(nowMs),
+    leaseTtlMs: 1_000,
+    queueProjection: queue,
+    resolveAuthority: () => authority,
+    tokenFactory: (scope) =>
+      `rcap_${canonicalSha256(scope).slice("sha256:".length)}`,
+    workspaceId,
+  });
+  const controller = createRunControlCoordinator({
+    actorId: humanId,
+    appendRecord: async ({ record }) => {
+      const persisted = {
+        ...structuredClone(record),
+        stream: runStream,
+      };
+      durableRunRecords.push(persisted);
+      composed.store.seed(runStream, persisted);
+      return { record: persisted };
+    },
+    clock: () => new Date(nowMs),
+    entry: queue.entries[0],
+    initialRecords: runRecords,
+    initialRun: {
+      sequence: 2,
+      status: "queued",
+      usage: zeroRunUsage(),
+    },
+    leaseCoordinator,
+    leaseEndpoints: ["run.events.write", "run.reply.write"],
+    leaseRecords,
+    policy,
+    processRunner,
+    queueProjectionFor,
+    workerId: `e3-t08-fault-${suffix}`,
+  });
+  const schedule = [
+    {
+      boundary: "crash-after-side-effect-before-ack",
+      runId,
+    },
+    {
+      boundary: "retry-backoff-elapsed",
+      runId,
+    },
+    {
+      boundary: "cancellation-before-late-write",
+      runId,
+    },
+  ];
+  return { authority, controller, durableRunRecords, nowMs, schedule };
+}
+
+async function captureError(operation) {
+  try {
+    await operation();
+  } catch (error) {
+    return summarizeError(error);
+  }
+  throw new Error("expected operation to fail");
+}
+
+function summarizeError(error) {
+  return {
+    code: error?.code ?? error?.name ?? "ERROR",
+    detail: error?.detail ?? error?.message ?? String(error),
+  };
+}
+
+function verifyBatchingAndRecursion() {
+  const policy = makePolicy({
+    delegation: {
+      allowCrossChannel: false,
+      enabled: false,
+      maxChildren: 0,
+      maxDepth: 0,
+    },
+    maxConcurrentPerChannel: 1,
+  });
+  const base = makeItem({ policy });
+  const burst = [
+    makeItem({ index: 3, invocationLetter: "c", policy }),
+    makeItem({ index: 1, invocationLetter: "a", policy }),
+    makeItem({ index: 2, invocationLetter: "b", policy }),
+    makeItem({
+      authorAgentId: base.agentId,
+      authorKind: "agent",
+      index: 4,
+      invocationLetter: "d",
+      isAgentReply: true,
+      policy,
+    }),
+    makeDelegatedChild({ policy }),
+  ];
+  const planned = planConversationSchedule({
+    queued: burst,
+    workspaceId: CAPSTONE_IDS.workspaceId,
+  });
+  assert.equal(planned.batches.length, 1);
+  assert.equal(planned.batches[0].members.length, 3);
+  assert.equal(planned.refusals.length, 2);
+  assert.equal(
+    planned.refusals.every(({ code }) =>
+      [
+        "CONVERSATION_SCHEDULER_AGENT_REPLY",
+        "CONVERSATION_SCHEDULER_DELEGATION_REQUIRED",
+      ].includes(code),
+    ),
+    true,
+  );
+  const admittedIds = new Set(planned.batches[0].memberInvocationIds);
+  assert.equal(admittedIds.size, 3);
+  return {
+    admittedInvocationIds: [...admittedIds],
+    batchCount: planned.batches.length,
+    providerCalls: admittedIds.size,
+    refusalCodes: planned.refusals.map(({ code }) => code),
+    refusalCount: planned.refusals.length,
+    scheduleDigest: planned.scheduleDigest,
+  };
+}
+
+function rebuildProjection({ composed, streamDumps }) {
+  const { channelId, workspaceId, runId } = {
+    channelId: CAPSTONE_IDS.channelId,
+    runId: composed.lease.runId,
+    workspaceId: CAPSTONE_IDS.workspaceId,
+  };
+  const channelStream = streamNames.channel(workspaceId, channelId);
+  const invocationStream = streamNames.workspaceInvocations(workspaceId);
+  const auditStream = streamNames.workspaceAudit(workspaceId);
+  const runStream = streamNames.run(workspaceId, runId);
+  const channelRecords = streamDumps[channelStream]?.records ?? [];
+  const invocationRecords = streamDumps[invocationStream]?.records ?? [];
+  const normalizedInvocationRecords = invocationRecords.map(
+    (record, index) => ({
+      ...record,
+      offset: record.offset ?? deterministicOffset(index + 1),
+    }),
+  );
+  const auditRecords = streamDumps[auditStream]?.records ?? [];
+  const runRecords = streamDumps[runStream]?.records ?? [];
+  assert.ok(channelRecords.length > 0);
+  assert.ok(invocationRecords.length > 0);
+  assert.ok(runRecords.length > 0);
+
+  const initialRunRecords = runRecords
+    .filter((record) => {
+      const event = record.event ?? record;
+      return (
+        event.eventType === "run.lifecycle.changed" &&
+        ["requested", "queued"].includes(event.data?.to)
+      );
+    })
+    .slice(0, 2);
+  const rebuiltQueue = projectEligibleQueue({
+    invocationRecords: normalizedInvocationRecords,
+    now: new Date(CAPSTONE_TIME),
+    runRecords: initialRunRecords,
+    workspaceId,
+  });
+  assert.equal(rebuiltQueue.queueDigest, composed.queue.queueDigest);
+
+  const contextArtifact = auditRecords.find(
+    (record) => record.kind === "context-pack" && record.content,
+  );
+  assert.ok(contextArtifact);
+  const rebuiltContext = replayContextPack(contextArtifact.content);
+  assert.equal(rebuiltContext.packDigest, composed.context.packDigest);
+
+  const rebuiltConversation = replayConversationRecords(channelRecords);
+  assert.equal(
+    canonicalSha256(rebuiltConversation),
+    composed.projectionBefore.conversationDigest,
+  );
+
+  const normalizedRunRecords = stripStreamFields(runRecords);
+  const rebuiltLease = replayRunLeaseEvents(
+    normalizedRunRecords.filter((record) =>
+      record.event?.eventType?.startsWith("run.lease."),
+    ),
+    { workspaceId },
+  );
+  const rebuiltSchedule = planConversationSchedule({
+    queued: composed.scheduler.input,
+    workspaceId,
+  });
+  assert.equal(
+    rebuiltSchedule.scheduleDigest,
+    composed.scheduler.scheduleDigest,
+  );
+  const after = {
+    auditDigest: canonicalSha256(stripStreamFields(auditRecords)),
+    contextDigest: rebuiltContext.packDigest,
+    conversationDigest: canonicalSha256(rebuiltConversation),
+    leaseStateDigest: rebuiltLease.finalStateDigest,
+    queueDigest: rebuiltQueue.queueDigest,
+    runDigest: canonicalSha256(normalizedRunRecords),
+    projectionDigest: canonicalSha256({
+      auditDigest: canonicalSha256(stripStreamFields(auditRecords)),
+      contextDigest: rebuiltContext.packDigest,
+      conversationDigest: canonicalSha256(rebuiltConversation),
+      leaseStateDigest: rebuiltLease.finalStateDigest,
+      queueDigest: rebuiltQueue.queueDigest,
+      runDigest: canonicalSha256(normalizedRunRecords),
+    }),
+  };
+  assert.deepEqual(after, composed.projectionBefore);
+  return {
+    after,
+    before: composed.projectionBefore,
+    replayed: {
+      conversationMessageCount: Object.keys(rebuiltConversation).length,
+      contextDigest: rebuiltContext.packDigest,
+      leaseStateDigest: rebuiltLease.finalStateDigest,
+      queueDigest: rebuiltQueue.queueDigest,
+      runRecordCount: normalizedRunRecords.length,
+      scheduleDigest: rebuiltSchedule.scheduleDigest,
+    },
+  };
+}
+
+function replayConversationRecords(records) {
+  const messages = {};
+  for (const record of records) {
+    const event = record.event ?? record;
+    if (
+      !["channel.message.created", "channel.message.replied"].includes(
+        event.eventType,
+      )
+    ) {
+      continue;
+    }
+    messages[event.data.messageId] = {
+      ...structuredClone(event.data),
+      revision: 1,
+      status: "active",
+      workspaceId: event.workspaceId,
+    };
+  }
+  return messages;
+}
+
+function stripStreamFields(records) {
+  return records.map((record) => {
+    const copy = structuredClone(record);
+    delete copy.stream;
+    return copy;
+  });
+}
+
+async function verifySensitivity() {
+  if (process.env.E3_T08_SKIP_SENSITIVITY === "1") {
+    return {
+      mutationCount: 0,
+      result: "SKIPPED",
+    };
+  }
+  const mutations = [
+    {
+      file: "scripts/verify-e3-t08.mjs",
+      name: "reply-endpoint-scope",
+      from: 'leaseEndpoints: ["run.events.write", "run.reply.write"],',
+      to: 'leaseEndpoints: ["run.events.write"],',
+    },
+    {
+      file: "src/ledger/run-control.mjs",
+      name: "activity-event-type",
+      from: 'eventType: "run.activity.recorded",',
+      to: 'eventType: "run.result.recorded",',
+    },
+    {
+      file: "src/ledger/mention-reconciler.mjs",
+      name: "dispatch-door-adapter",
+      from: 'const dispatchFunction =\n    typeof dispatch === "function" ? dispatch : dispatch?.dispatch;',
+      to: "const dispatchFunction = dispatch;",
+    },
+  ];
+  const results = [];
+  for (const [index, mutation] of mutations.entries()) {
+    const parent = await mkdtemp(
+      path.join(taskDirectory, "work", "sensitivity-"),
+    );
+    const checkout = path.join(parent, "checkout");
+    let worktreeAdded = false;
+    try {
+      execFileSync(
+        "git",
+        ["worktree", "add", "--detach", checkout, implementationCommit],
+        { cwd: root, stdio: "ignore" },
+      );
+      worktreeAdded = true;
+      const target = path.join(checkout, mutation.file);
+      const original = await readFile(target, "utf8");
+      assert.equal(
+        original.includes(mutation.from),
+        true,
+        `sensitivity mutation needle missing: ${mutation.file}`,
+      );
+      await writeFile(target, original.replace(mutation.from, mutation.to));
+      const artifactDirectory = path.join(
+        checkout,
+        ".artifacts",
+        "e3-t08-sensitivity",
+        mutation.name,
+      );
+      let exitCode = 0;
+      let stdout = "";
+      let stderr = "";
+      try {
+        stdout = execFileSync("node", ["scripts/verify-e3-t08.mjs"], {
+          cwd: checkout,
+          encoding: "utf8",
+          env: {
+            ...process.env,
+            E3_T08_IMPLEMENTATION_COMMIT: implementationCommit,
+            E3_T08_SKIP_GATES: "1",
+            E3_T08_SKIP_SENSITIVITY: "1",
+            PROMOTE_EVIDENCE: "0",
+            TEST_ARTIFACT_DIR: artifactDirectory,
+            TEST_RUN_ID: `sens-${index}-${mutation.name}`,
+          },
+          maxBuffer: 10 * 1024 * 1024,
+          stdio: ["ignore", "pipe", "pipe"],
+        });
+      } catch (error) {
+        exitCode = error.status ?? 1;
+        stdout = error.stdout ?? "";
+        stderr = error.stderr ?? "";
+      }
+      assert.notEqual(
+        exitCode,
+        0,
+        `sensitivity mutation unexpectedly passed: ${mutation.name}`,
+      );
+      results.push({
+        exitCode,
+        file: mutation.file,
+        mutation: mutation.name,
+        stderrSha256: canonicalSha256(stderr),
+        stdoutSha256: canonicalSha256(stdout),
+        result: "VERIFIER_FAILED_AS_EXPECTED",
+      });
+    } finally {
+      if (worktreeAdded) {
+        try {
+          execFileSync("git", ["worktree", "remove", "--force", checkout], {
+            cwd: root,
+            stdio: "ignore",
+          });
+        } catch {
+          // Preserve the mutation result and remove the temporary parent below.
+        }
+      }
+      await rm(parent, { force: true, recursive: true });
+    }
+  }
+  return {
+    mutationCount: results.length,
+    mutations: results,
+    result: "PASS",
+  };
 }
 
 function createRequestedAndQueuedRun({ invocation, invocationRef, runId }) {
@@ -637,6 +1354,7 @@ function sourceManifest(dumps) {
         head: dump.head,
         recordDigests: dump.records.map((record) => {
           if (record?.event && record?.digest) return record.digest;
+          if (record?.digest) return record.digest;
           if (record?.eventType) return digestEventEnvelope(record);
           return canonicalSha256(record);
         }),

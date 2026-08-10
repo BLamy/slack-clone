@@ -1,5 +1,5 @@
 {
-  "refusalCount": 17,
+  "refusalCount": 18,
   "artifacts": [
     {
       "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
@@ -21,6 +21,27 @@
       "schemaVersion": 1,
       "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
       "idempotencyKey": "ik_8664aef9473b2fef7cd4082e89"
+    },
+    {
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+      "agentPrincipalId": null,
+      "artifactId": "art_86045b08de841982fc7ed36a2a",
+      "attemptId": "at_1bbe05045d79d17710e1b57b16",
+      "byteLength": 26,
+      "channelId": null,
+      "contextRef": null,
+      "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "kind": "agent-reply.refusal",
+      "leaseGeneration": 1,
+      "mediaType": "application/json",
+      "outputDigest": "sha256:858c8a1e58196c71025a5447f33766f952c7559327637aee0a81fae041b81860",
+      "outputRedacted": false,
+      "provenance": null,
+      "refusalCode": "AGENT_REPLY_DISPATCH_REFUSED",
+      "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "schemaVersion": 1,
+      "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "idempotencyKey": "ik_d16a4a291a3908562769ce1aee"
     },
     {
       "agentId": null,

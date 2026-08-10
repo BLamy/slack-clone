@@ -21,39 +21,39 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 13484,
+      "durationMs": 11654,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 5727,
+      "durationMs": 9796,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 15738,
+      "durationMs": 26467,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 25156,
+      "durationMs": 35198,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 925,
+      "durationMs": 1731,
       "name": "build",
       "result": "PASS"
     }
   ],
-  "implementationCommit": "5b67ca17be19d133e2271297c6e1c9f7d27bcf0e",
+  "implementationCommit": "8bd740a611a6d671265cdfc90556e2c227b1bd2f",
   "replay": "Replay: N/A (server reply dispatch contract) + mitigation: provenance manifests, lost-ack replay, stale-authority matrix, canary scan, and digests",
   "result": "PASS",
-  "runId": "e3-t07-repair-final-5b67ca1",
+  "runId": "e3-t07-final-8bd740a",
   "acceptedEvents": [
     {
       "event": {
@@ -63,7 +63,7 @@
           "offset": "0000000000000001_0000000000000000",
           "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
         },
-        "correlationId": "cr_1da65aebe11bb7e5f2aadf6668",
+        "correlationId": "cr_bbd101a330a62fe52d45e3ff63",
         "data": {
           "agentReplyProvenance": {
             "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
@@ -106,10 +106,10 @@
           "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
         },
         "eventType": "channel.message.replied",
-        "idempotencyKey": "ik_1c4547229d74ddbe07042bf664",
+        "idempotencyKey": "ik_de186944218a74df3fd2092c8f",
         "schemaVersion": 1,
         "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "eventId": "ev_1da65aebe11bb7e5f2aadf6668",
+        "eventId": "ev_bbd101a330a62fe52d45e3ff63",
         "serverTimestamp": "2026-08-08T00:00:00.001Z"
       },
       "name": "happy"
@@ -122,7 +122,7 @@
           "offset": "0000000000000001_0000000000000000",
           "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
         },
-        "correlationId": "cr_1da65aebe11bb7e5f2aadf6668",
+        "correlationId": "cr_bbd101a330a62fe52d45e3ff63",
         "data": {
           "agentReplyProvenance": {
             "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
@@ -165,10 +165,10 @@
           "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
         },
         "eventType": "channel.message.replied",
-        "idempotencyKey": "ik_1c4547229d74ddbe07042bf664",
+        "idempotencyKey": "ik_de186944218a74df3fd2092c8f",
         "schemaVersion": 1,
         "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "eventId": "ev_1da65aebe11bb7e5f2aadf6668",
+        "eventId": "ev_bbd101a330a62fe52d45e3ff63",
         "serverTimestamp": "2026-08-08T00:00:00.001Z"
       },
       "name": "lost-ack-replay"
@@ -181,7 +181,7 @@
           "offset": "0000000000000001_0000000000000000",
           "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
         },
-        "correlationId": "cr_1da65aebe11bb7e5f2aadf6668",
+        "correlationId": "cr_bbd101a330a62fe52d45e3ff63",
         "data": {
           "agentReplyProvenance": {
             "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
@@ -224,34 +224,34 @@
           "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
         },
         "eventType": "channel.message.replied",
-        "idempotencyKey": "ik_1c4547229d74ddbe07042bf664",
+        "idempotencyKey": "ik_de186944218a74df3fd2092c8f",
         "schemaVersion": 1,
         "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "eventId": "ev_1da65aebe11bb7e5f2aadf6668",
+        "eventId": "ev_bbd101a330a62fe52d45e3ff63",
         "serverTimestamp": "2026-08-08T00:00:00.001Z"
       },
       "name": "redacted"
     }
   ],
   "messageDigests": {
-    "acceptedEventSetDigest": "sha256:f5de3eff1a99323e34fb642656ab00e2f2df1770ff653f67e39f4550d8bde1b5",
+    "acceptedEventSetDigest": "sha256:47628fa727835247780c06d233a281bad9414d826883707941b33754b9ba553f",
     "acceptedScenarioCount": 3,
     "scenarios": [
       {
-        "eventDigest": "sha256:626c40344349952b88ca3af9855da9c9993c1eb003ed5c2d9cb45475ff193634",
-        "messageStateDigest": "sha256:9158e3c1392efc7c4d117ae9b544517f5b9d62ce34d066a0ea913c0dc25362a1",
+        "eventDigest": "sha256:97514704f9bd6240d67d9dd547940aca9ea2ebdc6914264cacc19dc6e18bf29d",
+        "messageStateDigest": "sha256:2e8e542d0f04fd74f19622fbc3ce2a81f4d5298a4eb960d042f10e496716954d",
         "name": "happy",
         "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
       },
       {
-        "eventDigest": "sha256:02290521decdd61d884823e872aad98787b0a1b01a25d481434c632df6f2a712",
-        "messageStateDigest": "sha256:399582b3189ad3308ab0374ae469acfd944da0f0c3e42dd48dd18b27cc75adff",
+        "eventDigest": "sha256:c939eb0003aa7ce0c1be3c37b45f6572983219e71810c93400e2089625b17c40",
+        "messageStateDigest": "sha256:0f8973d15587fbc6556e48ee60510ae60bbba3d1b159217a77e552fad4a297b2",
         "name": "lost-ack-replay",
         "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
       },
       {
-        "eventDigest": "sha256:e95b00cb5be234d771b21880e7d30d6d47b3992e5f7a79fd065a4385546cfb7a",
-        "messageStateDigest": "sha256:cd656832b85386581df1b5a3519cbdba613b896298bfdfee3800dcb42af6b43f",
+        "eventDigest": "sha256:6d0265e5fecde969802118e9724aa1ad2f06fd4e1764f7532b95e6dd2707168d",
+        "messageStateDigest": "sha256:62b8a1190f7d7142d7fa061958472d275679915f8b38533322cf859fad4e0ec6",
         "name": "redacted",
         "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
       }
@@ -344,7 +344,7 @@
     ]
   },
   "refusalHeads": {
-    "refusalCount": 17,
+    "refusalCount": 18,
     "artifacts": [
       {
         "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
@@ -366,6 +366,27 @@
         "schemaVersion": 1,
         "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
         "idempotencyKey": "ik_8664aef9473b2fef7cd4082e89"
+      },
+      {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "agentPrincipalId": null,
+        "artifactId": "art_86045b08de841982fc7ed36a2a",
+        "attemptId": "at_1bbe05045d79d17710e1b57b16",
+        "byteLength": 26,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": 1,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:858c8a1e58196c71025a5447f33766f952c7559327637aee0a81fae041b81860",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_DISPATCH_REFUSED",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_d16a4a291a3908562769ce1aee"
       },
       {
         "agentId": null,
@@ -707,8 +728,8 @@
     "allBoundToRuns": true
   },
   "replayDigests": {
-    "acceptedEventSet": "sha256:f5de3eff1a99323e34fb642656ab00e2f2df1770ff653f67e39f4550d8bde1b5",
-    "refusalHeads": "sha256:d12f22a583fe63722e314a547f362db4af4a2ca5e604168f8fec61b38f493c5d",
+    "acceptedEventSet": "sha256:47628fa727835247780c06d233a281bad9414d826883707941b33754b9ba553f",
+    "refusalHeads": "sha256:37854b766bb7ef4d15e25a73e67ee81d8ec48064d0561a81897806f8dcff0310",
     "provenance": "sha256:c70331bbcd8f05dfc5bfa0b9615336478945e734396be911a079012b70604a70"
   },
   "replyReceipts": {
@@ -720,22 +741,22 @@
     },
     "receipts": [
       {
-        "eventDigest": "sha256:626c40344349952b88ca3af9855da9c9993c1eb003ed5c2d9cb45475ff193634",
-        "idempotencyKey": "ik_1c4547229d74ddbe07042bf664",
+        "eventDigest": "sha256:97514704f9bd6240d67d9dd547940aca9ea2ebdc6914264cacc19dc6e18bf29d",
+        "idempotencyKey": "ik_de186944218a74df3fd2092c8f",
         "nextOffset": "0000000000000002_0000000000000000",
         "replayed": false,
         "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
       },
       {
-        "eventDigest": "sha256:02290521decdd61d884823e872aad98787b0a1b01a25d481434c632df6f2a712",
-        "idempotencyKey": "ik_1c4547229d74ddbe07042bf664",
+        "eventDigest": "sha256:c939eb0003aa7ce0c1be3c37b45f6572983219e71810c93400e2089625b17c40",
+        "idempotencyKey": "ik_de186944218a74df3fd2092c8f",
         "nextOffset": "0000000000000002_0000000000000000",
         "replayed": true,
         "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
       },
       {
-        "eventDigest": "sha256:e95b00cb5be234d771b21880e7d30d6d47b3992e5f7a79fd065a4385546cfb7a",
-        "idempotencyKey": "ik_1c4547229d74ddbe07042bf664",
+        "eventDigest": "sha256:6d0265e5fecde969802118e9724aa1ad2f06fd4e1764f7532b95e6dd2707168d",
+        "idempotencyKey": "ik_de186944218a74df3fd2092c8f",
         "nextOffset": "0000000000000002_0000000000000000",
         "replayed": false,
         "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
@@ -1062,7 +1083,7 @@
   "sensitivity": {
     "controlExitCode": 0,
     "controlPassed": true,
-    "mutationCount": 9,
+    "mutationCount": 10,
     "result": "PASS",
     "results": [
       {
@@ -1098,6 +1119,11 @@
       {
         "detected": true,
         "label": "lost-ack-trusted-replay",
+        "verifierExitCode": 1
+      },
+      {
+        "detected": true,
+        "label": "reply-idempotency-provenance-drift",
         "verifierExitCode": 1
       },
       {

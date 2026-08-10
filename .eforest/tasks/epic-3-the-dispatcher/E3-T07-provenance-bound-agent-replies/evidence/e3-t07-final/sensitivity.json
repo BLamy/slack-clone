@@ -1,7 +1,7 @@
 {
   "controlExitCode": 0,
   "controlPassed": true,
-  "mutationCount": 9,
+  "mutationCount": 10,
   "result": "PASS",
   "results": [
     {
@@ -37,6 +37,11 @@
     {
       "detected": true,
       "label": "lost-ack-trusted-replay",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "reply-idempotency-provenance-drift",
       "verifierExitCode": 1
     },
     {

@@ -239,7 +239,7 @@ export function createAgentReplyDispatcher({
     const run = await resolveRun(scope);
     assertRunIsCurrent(run, scope);
     assertOutputBudget(
-      output.byteLength,
+      Math.max(output.rawByteLength, output.byteLength),
       outputDigest,
       invocation.data.policy,
       run,

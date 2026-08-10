@@ -104,7 +104,10 @@ export function authorizeConversationCommand({
           "reply root must be a visible root in the same workspace and channel",
         );
       }
-      if (get(messages, payload.messageId)) {
+      const trustedAgentReplay =
+        allowAgentReplyProvenance &&
+        Object.hasOwn(payload, "agentReplyProvenance");
+      if (get(messages, payload.messageId) && !trustedAgentReplay) {
         throw new ConversationAuthorizationError(
           CONVERSATION_AUTH_ERROR_CODES.MESSAGE_DUPLICATE,
           "message id is already present in this channel",

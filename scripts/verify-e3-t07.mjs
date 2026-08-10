@@ -8,7 +8,6 @@ import {
   deriveInvocationCorrelationId,
   deriveRunControlId,
   policyDigest,
-  stampConversationActor,
   validateAgentReplyProvenance,
 } from "@stream-slack/protocol";
 
@@ -18,6 +17,7 @@ import {
   createAgentReplyDispatcher,
 } from "../src/ledger/agent-replies.mjs";
 import { canonicalSha256 } from "../src/ledger/canonical-json.mjs";
+import { createMentionAwareConversationDispatcher } from "../src/ledger/conversation-auth.mjs";
 import {
   digestEventEnvelope,
   issueEventEnvelope,
@@ -39,6 +39,7 @@ const OTHER_CHANNEL_ID =
   "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee";
 const INVOCATION_ID = "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa";
 const RUN_ID = "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb";
+const OTHER_RUN_ID = "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee";
 const WORKER_ID = "reply-worker";
 const CHANNEL_STREAM = `channel:${CHANNEL_ID}`;
 const INVOCATION_STREAM = `workspace:${WORKSPACE_ID}/invocations`;
@@ -187,18 +188,49 @@ async function verifyFunctionalMatrix() {
   );
 
   const spoof = await createHarness();
-  await assertReplyRefusal(
-    spoof.dispatcher.dispatchReply({
-      capability: spoof.capability,
-      channelId: OTHER_CHANNEL_ID,
-      output: "spoof",
-      runId: RUN_ID,
-      workerId: WORKER_ID,
-    }),
-    AGENT_REPLY_ERROR_CODES.INVALID_REQUEST,
-  );
+  const rejectedOverrideFields = [];
+  for (const [field, value] of Object.entries({
+    actorId: AGENT_PRINCIPAL_ID,
+    attemptId: "at_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+    channelId: OTHER_CHANNEL_ID,
+    contextDigest: canonicalSha256({ spoof: "context" }),
+    contextRef: { spoof: true },
+    invocationId: INVOCATION_ID,
+    leaseGeneration: 99,
+    ownerId: HUMAN_ID,
+    snapshotDigest: canonicalSha256({ spoof: "snapshot" }),
+    snapshotRef: { spoof: true },
+    sourceMention: { spoof: true },
+    stream: `channel:${OTHER_CHANNEL_ID}`,
+    threadRootMessageId: "other-root",
+  })) {
+    await assertReplyRefusal(
+      spoof.dispatcher.dispatchReply({
+        capability: spoof.capability,
+        [field]: value,
+        output: "spoof",
+        runId: RUN_ID,
+        workerId: WORKER_ID,
+      }),
+      AGENT_REPLY_ERROR_CODES.INVALID_REQUEST,
+    );
+    rejectedOverrideFields.push(field);
+  }
   assert.equal(spoof.channelMessages.length, 1);
   assert.equal(spoof.refusalArtifacts.length, 0);
+
+  const wrongRun = await createHarness();
+  await assertReplyRefusal(
+    wrongRun.dispatcher.dispatchReply({
+      capability: wrongRun.capability,
+      output: "wrong run",
+      runId: OTHER_RUN_ID,
+      workerId: WORKER_ID,
+    }),
+    AGENT_REPLY_ERROR_CODES.LEASE_INVALID,
+  );
+  assert.equal(wrongRun.channelMessages.length, 1);
+  assert.equal(wrongRun.refusalArtifacts.length, 1);
 
   const lostAck = await createHarness({ loseAck: true });
   const retryRequest = {
@@ -239,12 +271,39 @@ async function verifyFunctionalMatrix() {
   assert.equal(redactedText.includes("<script>"), false);
   assert.equal(redactedText.includes("&lt;script&gt;"), true);
 
+  const oversized = await createHarness({
+    policy: buildPolicy({ maxOutputBytes: 64 }),
+  });
+  const oversizedSecret = `sk-${"q".repeat(512)}`;
+  await assertReplyRefusal(
+    oversized.dispatcher.dispatchReply({
+      capability: oversized.capability,
+      output: oversizedSecret,
+      runId: RUN_ID,
+      workerId: WORKER_ID,
+    }),
+    AGENT_REPLY_ERROR_CODES.BUDGET_EXCEEDED,
+  );
+  assert.equal(oversized.channelMessages.length, 1);
+  assert.equal(oversized.refusalArtifacts.length, 1);
+  assert.equal(
+    JSON.stringify(oversized.refusalArtifacts).includes(oversizedSecret),
+    false,
+  );
+
   const staleAuthority = await verifyStaleAuthorityMatrix();
+  const persistedRefusals = [
+    ...lostAck.refusalArtifacts,
+    ...wrongRun.refusalArtifacts,
+    ...oversized.refusalArtifacts,
+    ...staleAuthority.cases.map((entry) => entry.artifact),
+  ];
   const refusalHeads = {
-    refusalCount: staleAuthority.cases.length + 2,
-    artifacts: staleAuthority.cases.map((entry) => entry.artifact),
-    allBoundToRuns: staleAuthority.cases.every(
-      (entry) => entry.artifact.runId === RUN_ID,
+    refusalCount: persistedRefusals.length,
+    artifacts: persistedRefusals,
+    allBoundToRuns: persistedRefusals.every(
+      (artifact) =>
+        artifact.runId === RUN_ID || artifact.runId === OTHER_RUN_ID,
     ),
   };
   assert.equal(refusalHeads.allBoundToRuns, true);
@@ -263,7 +322,7 @@ async function verifyFunctionalMatrix() {
   const replayDigests = {
     channel: messageDigests.channelStreamDigest,
     refusalHeads: canonicalSha256(
-      staleAuthority.cases.map(({ artifact }) => ({
+      persistedRefusals.map((artifact) => ({
         artifactId: artifact.artifactId,
         refusalCode: artifact.refusalCode,
         runId: artifact.runId,
@@ -278,6 +337,7 @@ async function verifyFunctionalMatrix() {
     provenance: {
       actorKind: "agent",
       derivedFields: Object.keys(happy.messageDispatches[0].provenance).sort(),
+      rejectedOverrideFields,
       invocationRef: happy.messageDispatches[0].provenance.invocationRef,
       sourceMention: happy.messageDispatches[0].provenance.sourceMention,
       snapshotRef: happy.messageDispatches[0].provenance.snapshotRef,
@@ -292,9 +352,10 @@ async function verifyFunctionalMatrix() {
         .join("\n")
         .includes(secret),
       escapedMarkup: redactedText.includes("&lt;script&gt;"),
+      rawSizeBounded: oversized.refusalArtifacts.length === 1,
       redacted: redactedResult.output.redacted,
-      refusalOutputBytesOnly: staleAuthority.cases.every(
-        ({ artifact }) => !Object.hasOwn(artifact, "output"),
+      refusalOutputBytesOnly: persistedRefusals.every(
+        (artifact) => !Object.hasOwn(artifact, "output"),
       ),
     },
     refusalHeads,
@@ -313,6 +374,7 @@ async function verifyFunctionalMatrix() {
 }
 
 async function createHarness({
+  beforeMessageAuthorize = null,
   loseAck = false,
   policy = buildPolicy(),
   sourceMentionPrincipalId = AGENT_PRINCIPAL_ID,
@@ -495,17 +557,12 @@ async function createHarness({
   const readAuthority = async () => structuredClone(authority);
   const readInvocation = async () => structuredClone(invocationRecord);
   const readRun = async () => ({ records: structuredClone(runRecords) });
-  const dispatch = async (request) => {
-    const prepared = stampConversationActor(
-      { operation: request.operation, payload: request.payload },
-      request.actorId,
-      WORKSPACE_ID,
-      { allowAgentReplyProvenance: true },
-    );
+  const appendMessage = async (request) => {
+    const preparedData = request.payload;
     const requestDigest = canonicalSha256({
       actorId: request.actorId,
       operation: request.operation,
-      payload: prepared.data,
+      payload: preparedData,
       workspaceId: request.workspaceId,
     });
     const existing = acceptedByKey.get(request.idempotencyKey);
@@ -522,7 +579,7 @@ async function createHarness({
     }
     if (
       channelMessages.some(
-        ({ messageId }) => messageId === prepared.data.messageId,
+        ({ messageId }) => messageId === preparedData.messageId,
       )
     ) {
       const duplicate = new Error("message id was already accepted");
@@ -532,11 +589,11 @@ async function createHarness({
     const event = issueEventEnvelope(
       {
         actorId: request.actorId,
-        causation: prepared.data.agentReplyProvenance.sourceMention,
+        causation: preparedData.agentReplyProvenance.sourceMention,
         correlationId: deriveRunControlId("cr", {
           idempotencyKey: request.idempotencyKey,
         }),
-        data: prepared.data,
+        data: preparedData,
         eventType: "channel.message.replied",
         idempotencyKey: request.idempotencyKey,
         schemaVersion: 1,
@@ -587,6 +644,16 @@ async function createHarness({
     }
     return result;
   };
+  const dispatch = createMentionAwareConversationDispatcher({
+    allowAgentReplyProvenance: true,
+    dispatch: appendMessage,
+    lookupState: async () =>
+      conversationAuthorizationState(authority, channelMessages),
+    withChannelFence: async (_scope, authorizeAndAppend) => {
+      await beforeMessageAuthorize?.(authority);
+      return authorizeAndAppend();
+    },
+  });
   const dispatcher = createAgentReplyDispatcher({
     appendRefusal: async (artifact) => {
       const existing = refusalArtifacts.find(
@@ -611,6 +678,7 @@ async function createHarness({
     channelMessages,
     dispatcher,
     invocation,
+    lease,
     leaseCoordinator,
     capability: acquired.capability,
     messageDispatches,
@@ -938,6 +1006,45 @@ function reduceReplyThroughMessageReducer(replyEvent) {
   return next;
 }
 
+function conversationAuthorizationState(authority, channelMessages) {
+  const state = createInitialState();
+  const channelId = authority.channel.channelId;
+  const principalId = authority.principal.principalId;
+  state.entities.channels = {
+    [channelId]: structuredClone(authority.channel),
+  };
+  state.entities.channelMemberships = {
+    [`${channelId}\u0000${principalId}`]: structuredClone(
+      authority.channelMembership,
+    ),
+  };
+  state.entities.memberships = {
+    [membershipKey(principalId)]: structuredClone(
+      authority.workspaceMembership,
+    ),
+  };
+  state.entities.principals = {
+    [principalId]: structuredClone(authority.principal),
+  };
+  state.entities.messages = Object.fromEntries(
+    channelMessages.map((message) => [
+      message.messageId,
+      {
+        authorId: message.authorId ?? HUMAN_ID,
+        channelId: message.channelId,
+        contentType: message.contentType ?? "text/plain",
+        messageId: message.messageId,
+        revision: message.revision ?? 1,
+        rootMessageId: message.rootMessageId,
+        status: message.status,
+        text: message.text ?? "trigger",
+        workspaceId: WORKSPACE_ID,
+      },
+    ]),
+  );
+  return state;
+}
+
 function membershipKey(principalId) {
   return `mb_${WORKSPACE_ID.slice(3)}_${principalId.slice(30)}`;
 }
@@ -1002,6 +1109,20 @@ async function verifySensitivity() {
       needle: "assertSourceTargetsAgent(source, agentPrincipalId);",
       replacement: "// sensitivity mutant: omit source mention fence",
       target: "src/ledger/agent-replies.mjs",
+    },
+    {
+      label: "raw-output-budget",
+      needle: "Math.max(output.rawByteLength, output.byteLength),",
+      replacement: "output.byteLength, // sensitivity mutant: ignore raw bytes",
+      target: "src/ledger/agent-replies.mjs",
+    },
+    {
+      label: "message-door-membership-fence",
+      needle:
+        "requireActiveMembership(state, workspaceId, channel.channelId, actorId);",
+      replacement:
+        "// sensitivity mutant: omit final message-door membership fence",
+      target: "src/ledger/conversation-auth.mjs",
     },
   ];
   const control = await runSensitivityChild(root, "control");
@@ -1178,6 +1299,45 @@ async function verifyStaleAuthorityMatrix() {
       channelAppends: harness.channelMessages.length - 1,
     });
   }
+
+  const appendBoundary = await createHarness({
+    beforeMessageAuthorize: (authority) => {
+      authority.channelMembership.status = "removed";
+    },
+  });
+  const appendBoundaryError = await assertReplyRefusal(
+    appendBoundary.dispatcher.dispatchReply({
+      capability: appendBoundary.capability,
+      output: "membership changed at append",
+      runId: RUN_ID,
+      workerId: WORKER_ID,
+    }),
+    AGENT_REPLY_ERROR_CODES.DISPATCH_REFUSED,
+  );
+  cases.push({
+    artifact: appendBoundary.refusalArtifacts[0],
+    code: appendBoundaryError.code,
+    name: "membership-removed-at-message-door",
+    channelAppends: appendBoundary.channelMessages.length - 1,
+  });
+
+  const expired = await createHarness();
+  expired.setNow(Date.parse(expired.lease.expiresAt) + 1);
+  const expiredError = await assertReplyRefusal(
+    expired.dispatcher.dispatchReply({
+      capability: expired.capability,
+      output: "late expired output",
+      runId: RUN_ID,
+      workerId: WORKER_ID,
+    }),
+    AGENT_REPLY_ERROR_CODES.LEASE_INVALID,
+  );
+  cases.push({
+    artifact: expired.refusalArtifacts[0],
+    code: expiredError.code,
+    name: "capability-expired",
+    channelAppends: expired.channelMessages.length - 1,
+  });
 
   const terminal = await createHarness();
   appendTerminalLifecycle(terminal);

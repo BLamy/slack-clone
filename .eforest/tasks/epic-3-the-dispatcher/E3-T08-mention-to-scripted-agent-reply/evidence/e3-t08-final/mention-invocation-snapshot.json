@@ -18,9 +18,9 @@
     "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
   },
   "schemaVersion": 1,
-  "snapshotDigest": "sha256:c216f487678c289d2ae485e05f7804afb22651ad4c92ab50c7dd13fef309a8cb",
+  "snapshotDigest": "sha256:e3067451ae94bc09743dab1f07badf981f4e987dc7205ba066bfdc8a5b5e8848",
   "snapshotRef": {
-    "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "digest": "sha256:c8c1616c2bb0d96b440c0594ee50bf85b6ad051afdca2f8ab1bd7c9e4b167cb2",
     "offset": "0000000000000002_0000000000000002",
     "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
   },
@@ -31,7 +31,7 @@
   },
   "triggerType": "channel.mention",
   "invocationRef": {
-    "digest": "sha256:e68cc1e3d8b4a5aa52aec32d0bbb1e696e261d805c002238959ab3719c12d643",
+    "digest": "sha256:8e6b066713fe58178222372a9cd447301d19b16d2cd4e77d8bd83d2d6ce322cd",
     "offset": "0000000000000001_0000000000000001",
     "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
   }

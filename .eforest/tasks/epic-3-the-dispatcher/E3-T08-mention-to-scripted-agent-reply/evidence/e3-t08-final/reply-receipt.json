@@ -18,16 +18,16 @@
     },
     "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
     "invocationRef": {
-      "digest": "sha256:e68cc1e3d8b4a5aa52aec32d0bbb1e696e261d805c002238959ab3719c12d643",
+      "digest": "sha256:8e6b066713fe58178222372a9cd447301d19b16d2cd4e77d8bd83d2d6ce322cd",
       "offset": "0000000000000001_0000000000000001",
       "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
     },
     "leaseGeneration": 1,
     "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr",
     "schemaVersion": 1,
-    "snapshotDigest": "sha256:c216f487678c289d2ae485e05f7804afb22651ad4c92ab50c7dd13fef309a8cb",
+    "snapshotDigest": "sha256:e3067451ae94bc09743dab1f07badf981f4e987dc7205ba066bfdc8a5b5e8848",
     "snapshotRef": {
-      "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "digest": "sha256:c8c1616c2bb0d96b440c0594ee50bf85b6ad051afdca2f8ab1bd7c9e4b167cb2",
       "offset": "0000000000000002_0000000000000002",
       "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
     },
@@ -39,7 +39,7 @@
     "threadRootMessageId": "capstone-trigger"
   },
   "receipt": {
-    "eventDigest": "sha256:146bc18fe223dfe4e26c8e8fb868ea22305cfe17f7944b97216d5b3dc36e3e49",
+    "eventDigest": "sha256:a5654dbd6744c16db9b5b47be9f3ab866f12e629d9f8219af900a3409ee3f0c1",
     "nextOffset": "0000000000000002_0000000000000002",
     "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
     "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"

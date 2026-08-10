@@ -83,3 +83,13 @@ run, and audit streams after projections and process state are deleted.
 - Composite replay digest: `sha256:3cadfdb13667d6d5c4aeb167e7c1dbf3e7172258bdf7469a1822b34f71fe4124`; rebuilt digest matched.
 - Replay: N/A (server/CLI scripted-agent capstone; real providers and UI land later) + mitigation: multi-process fault schedules, source/ref manifest, canary scans, projection rebuild, and independent composite replay.
 - Claim: the canonical human mention reconciles once, leases once, assembles authorized bounded context, produces one provenance-bound threaded reply, and handles duplicate delivery, batching/recursion refusals, crash retry, cancellation, authority revocation, process cleanup, and stale-write fencing without secret-shaped evidence.
+
+### Builder — f1d3b486513e72af10ce4fdb70b88c86cda72ec7
+
+- Addressed the independent critic's `needs-evidence` finding by persisting the active agent configuration as a two-record Durable Stream and binding the snapshot reference to its replayed state digest and stream head.
+- `make verify-E3-T08` passed from a clean detached cold clone with `E3_T08_SKIP_GATES=0` and `E3_T08_SKIP_SENSITIVITY=0`.
+- Gates: `pnpm format:check`, `pnpm format:check:e3-t08`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` all passed.
+- Evidence: `evidence/e3-t08-final/` — the source/ref manifest now includes the resolved config state reference; projection rebuild independently replays the config stream and matches the pre-delete projection.
+- Composite replay digest: `sha256:0c6b02ddbe3724ccbd22428122e65b6e33fcf4c9a6215edf86c3bf9b2a203880`; rebuilt digest matched.
+- Replay: N/A (server/CLI scripted-agent capstone; real providers and UI land later) + mitigation: multi-process fault schedules, source/ref manifest, canary scans, projection rebuild, and independent composite replay.
+- Claim: the prior config provenance gap is closed; the canonical mention, immutable snapshot, lease, bounded context, scripted run, threaded reply, fault handling, source replay, and evidence canary protections remain reproducible from the exact implementation commit.

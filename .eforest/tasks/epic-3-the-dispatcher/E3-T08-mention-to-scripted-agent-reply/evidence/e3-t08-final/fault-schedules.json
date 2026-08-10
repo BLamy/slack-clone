@@ -29,6 +29,16 @@
     {
       "boundary": "after-append",
       "index": 0,
+      "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+    },
+    {
+      "boundary": "after-append",
+      "index": 1,
+      "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+    },
+    {
+      "boundary": "after-append",
+      "index": 0,
       "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
     },
     {

@@ -62,6 +62,7 @@ export function createRunControlCoordinator({
   initialRun = {},
   idempotencyStore = new Map(),
   leaseCoordinator,
+  leaseEndpoints = ["run.events.write"],
   leaseRecords = [],
   onCapabilityFenced = () => {},
   policy,
@@ -82,6 +83,20 @@ export function createRunControlCoordinator({
     workerId,
   });
   validateRunControlPolicy(policy);
+  if (
+    !Array.isArray(leaseEndpoints) ||
+    leaseEndpoints.length === 0 ||
+    leaseEndpoints.some(
+      (endpoint) => typeof endpoint !== "string" || endpoint.length === 0,
+    )
+  ) {
+    throw new TypeError(
+      "run controller leaseEndpoints must be non-empty strings",
+    );
+  }
+  const frozenLeaseEndpoints = Object.freeze(
+    [...new Set(leaseEndpoints)].sort(),
+  );
   validateUsage(aggregateUsage, "$.aggregateUsage");
   if (
     !Number.isSafeInteger(initialLeaseRecordCount) ||
@@ -187,6 +202,7 @@ export function createRunControlCoordinator({
         );
       }
       const acquired = await leaseCoordinator.acquire({
+        endpoints: frozenLeaseEndpoints,
         entry: currentEntry,
         now: new Date(nowMs),
         queueProof: projection.proof,
@@ -344,6 +360,46 @@ export function createRunControlCoordinator({
         },
       });
       return { ...result.result, result: "accounted" };
+    });
+  }
+
+  async function recordActivity({
+    capability = currentCapability,
+    contentRef,
+    kind = "context-pack",
+    now = clock(),
+    summary = null,
+  } = {}) {
+    return withLock(async () => {
+      assertActiveAttempt("recordActivity", ["running", "awaiting-approval"]);
+      const nowDate = observeNow(now);
+      await preflightMutationWithoutLock({ capability, now: nowDate });
+      return leaseCoordinator.mutate({
+        capability,
+        endpoint: "run.events.write",
+        now: nowDate,
+        runId: entry.runId,
+        workerId,
+        mutate: () =>
+          appendRunRecordWithoutLock({
+            data: {
+              attemptId: activeAttempt.attemptId,
+              contentRef,
+              invocationId: entry.invocationId,
+              kind,
+              runId: entry.runId,
+              schemaVersion: 1,
+              summary,
+            },
+            eventType: "run.activity.recorded",
+            idempotencyKey: deriveRunControlId("ik", {
+              attemptId: activeAttempt.attemptId,
+              contentRef,
+              kind,
+            }),
+            now: nowDate,
+          }),
+      });
     });
   }
 
@@ -671,6 +727,7 @@ export function createRunControlCoordinator({
         "run is not eligible in the rebuilt queue",
       );
     const acquired = await leaseCoordinator.acquire({
+      endpoints: frozenLeaseEndpoints,
       entry: currentEntry,
       now: new Date(nowMs),
       queueProof: projection.proof,
@@ -1050,6 +1107,7 @@ export function createRunControlCoordinator({
     getState,
     reportFailure,
     reportUsage,
+    recordActivity,
     revokeForAuthority,
     startAttempt,
     tick,

@@ -194,9 +194,15 @@ export function createChannelAppend({ state, store }) {
       workspaceId,
     };
     return {
-      event: structuredClone(event.data),
+      event:
+        request.operation === "channel.message.reply"
+          ? structuredClone(event)
+          : structuredClone(event.data),
       receipt: {
-        eventDigest: canonicalSha256(event.data),
+        eventDigest:
+          request.operation === "channel.message.reply"
+            ? digest
+            : canonicalSha256(event.data),
         nextOffset: offset,
         stream,
         workspaceId,

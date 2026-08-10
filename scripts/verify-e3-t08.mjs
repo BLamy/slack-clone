@@ -6,9 +6,16 @@ import path from "node:path";
 import {
   deriveRunQueueId,
   planConversationSchedule,
+  validateRunControlPolicy,
+  zeroRunUsage,
 } from "@stream-slack/protocol";
 
 import { canonicalSha256 } from "../src/ledger/canonical-json.mjs";
+import { createAgentReplyDispatcher } from "../src/ledger/agent-replies.mjs";
+import {
+  assembleContextPack,
+  contextPackDigest,
+} from "../src/ledger/context-pack.mjs";
 import { createMentionAwareConversationDispatcher } from "../src/ledger/conversation-auth.mjs";
 import { createConversationScheduler } from "../src/ledger/conversation-scheduler.mjs";
 import { createDispatchDoor } from "../src/ledger/dispatch.mjs";
@@ -21,6 +28,10 @@ import {
   createRunLeaseCoordinator,
   projectEligibleQueue,
 } from "../src/ledger/run-queue.mjs";
+import {
+  createRunControlCoordinator,
+  createScriptedProcessRunner,
+} from "../src/ledger/run-control.mjs";
 import { streamNames } from "../src/ledger/topology.mjs";
 import {
   makeItem,
@@ -74,8 +85,10 @@ const composed = await verifyComposedIngressAndLease();
 const streamDumps = composed.store.dump();
 const sourceRefManifest = sourceManifest(streamDumps);
 const composite = canonicalSha256({
+  context: composed.context,
   invocation: composed.invocation,
   queue: composed.queue,
+  run: composed.run,
   scheduler: composed.scheduler,
   sourceRefManifest,
 });
@@ -84,8 +97,10 @@ const evidence = {
   compositeReplayDigests: {
     compositeDigest: composite,
     rebuiltDigest: canonicalSha256({
+      context: composed.context,
       invocation: composed.invocation,
       queue: composed.queue,
+      run: composed.run,
       scheduler: composed.scheduler,
       sourceRefManifest: sourceManifest(structuredClone(streamDumps)),
     }),
@@ -114,6 +129,9 @@ for (const [filename, value] of [
   ["mention-invocation-snapshot.json", composed.invocation],
   ["queue-lease-manifest.json", composed.lease],
   ["batching-recursion-outcomes.json", composed.scheduler],
+  ["attempt-timelines.json", composed.run.state.attemptTimelines],
+  ["process-resource-counts.json", composed.run.state.processSnapshot],
+  ["context-pack.json", composed.context],
   ["composite-replay-digests.json", evidence.compositeReplayDigests],
 ]) {
   await writeJson(filename, value);
@@ -267,8 +285,13 @@ async function verifyComposedIngressAndLease() {
     schedule.scheduleDigest,
   );
 
+  const leaseRecords = [];
   const leaseCoordinator = createRunLeaseCoordinator({
     actorId: humanId,
+    appendLeaseEvent: async ({ record }) => {
+      leaseRecords.push(structuredClone(record));
+      return { record };
+    },
     clock: () => new Date(CAPSTONE_TIME),
     queueProjection: queue,
     resolveAuthority: () => ({
@@ -279,13 +302,209 @@ async function verifyComposedIngressAndLease() {
     tokenFactory: () => `rcap_${"x".repeat(64)}`,
     workspaceId,
   });
-  const acquired = await leaseCoordinator.acquire({
+  const processRunner = createScriptedProcessRunner({
+    clock: () => new Date(CAPSTONE_TIME),
+  });
+  const durableRunRecords = structuredClone(runRecords);
+  const runPolicy = buildRunPolicy();
+  const queueProjectionFor = ({ attempts = 0, now, status = "queued" }) =>
+    projectEligibleQueue({
+      invocations: [
+        {
+          ...invocation,
+          sourceRef: invocationRef,
+          status: "requested",
+        },
+      ],
+      now,
+      runs: [
+        {
+          agentId,
+          attempts,
+          invocationId: invocation.invocationId,
+          runId,
+          runRef: queue.entries[0].runRef,
+          status,
+        },
+      ],
+      workspaceId,
+    });
+  const controller = createRunControlCoordinator({
+    actorId: humanId,
+    appendRecord: async ({ record }) => {
+      durableRunRecords.push(structuredClone(record));
+      return { record };
+    },
+    clock: () => new Date(CAPSTONE_TIME),
     entry: queue.entries[0],
-    queueProof: queue.proof,
+    initialRecords: runRecords,
+    initialRun: {
+      sequence: 2,
+      status: "queued",
+      usage: zeroRunUsage(),
+    },
+    leaseCoordinator,
+    leaseEndpoints: ["run.events.write", "run.reply.write"],
+    leaseRecords,
+    policy: runPolicy,
+    processRunner,
+    queueProjectionFor,
     workerId: "scripted-capstone-worker",
   });
-  assert.equal(acquired.lease.leaseGeneration, 1);
+  await controller.beginAttempt();
+  await controller.startAttempt({
+    launch: { children: 2, outputBytes: 64 },
+  });
+  await controller.reportUsage({
+    usage: {
+      costUsdCents: 1,
+      inputTokens: 10,
+      outputBytes: 64,
+      outputTokens: 8,
+      totalTokens: 18,
+      wallTimeMs: 10,
+    },
+  });
+  const runState = controller.getState();
+  assert.equal(runState.status, "running");
+  assert.equal(runState.attempts.length, 1);
+  assert.equal(runState.processSnapshot.length, 1);
+  const contextPack = assembleContextPack({
+    agentId,
+    authorization: {
+      channel: {
+        channelId,
+        kind: "public",
+        revision: 1,
+        status: "active",
+        workspaceId,
+      },
+      channelMembership: {
+        channelId,
+        principalId: CAPSTONE_IDS.agentPrincipalId,
+        revision: 1,
+        status: "active",
+        workspaceId,
+      },
+      workspaceMembership: {
+        principalId: CAPSTONE_IDS.agentPrincipalId,
+        revision: 1,
+        role: "agent",
+        status: "active",
+        workspaceId,
+      },
+    },
+    context: { channelId, scope: "current-channel", threadId: null },
+    instructions: [],
+    policy: {
+      includePrivate: false,
+      includeThreadHistory: true,
+      maxAttachmentBytes: 64_000,
+      maxBytes: 20_000,
+      maxEstimatedTokens: 4_000,
+      maxHistoryDepth: 100,
+      maxItems: 8,
+      maxMessages: 4,
+      workspaceInputPaths: [],
+    },
+    sourceHeads: [sourceTrigger],
+    sourceRecords: [
+      {
+        event: sourceRecord.event,
+        offset: sourceRecord.offset,
+        stream: sourceRecord.stream,
+      },
+    ],
+    trigger: {
+      channelId,
+      messageId: "capstone-trigger",
+      source: sourceTrigger,
+      threadId: null,
+    },
+    workspaceId,
+    workspaceInputs: [],
+  });
+  assert.equal(contextPack.packDigest, contextPackDigest(contextPack));
+  const contextRef = {
+    digest: contextPack.packDigest,
+    offset: deterministicOffset(2),
+    stream: streamNames.channel(workspaceId, channelId),
+  };
+  await controller.recordActivity({
+    contentRef: contextRef,
+    kind: "context-pack",
+    summary: "bounded capstone context pack",
+  });
+  const replyDispatch = createMentionAwareConversationDispatcher({
+    allowAgentReplyProvenance: true,
+    dispatch: appendChannel,
+    lookupState: async () => state,
+    withChannelFence: async (_scope, operation) => operation(),
+  });
+  const refusalArtifacts = [];
+  const replyDispatcher = createAgentReplyDispatcher({
+    appendRefusal: async (artifact) => {
+      refusalArtifacts.push(structuredClone(artifact));
+      return artifact;
+    },
+    clock: () => new Date(CAPSTONE_TIME),
+    dispatch: replyDispatch,
+    leaseCoordinator,
+    readAuthority: async () => ({
+      agentStatus: "active",
+      channel: state.entities.channels[channelId],
+      channelMembership:
+        state.entities.channelMemberships[
+          `${channelId}\u0000${CAPSTONE_IDS.agentPrincipalId}`
+        ],
+      principal: state.entities.principals[CAPSTONE_IDS.agentPrincipalId],
+      workspaceMembership:
+        state.entities.memberships[
+          `mb_${workspaceId.slice(3)}_${CAPSTONE_IDS.agentPrincipalId.slice(30)}`
+        ],
+      workspaceStatus: "active",
+    }),
+    readChannel: async () => ({
+      channel: state.entities.channels[channelId],
+      messages: Object.values(state.entities.messages),
+    }),
+    readInvocation: async () => ({
+      digest: invocationRecord.digest,
+      event: invocationEvent,
+      offset: invocationRecord.offset,
+      stream: invocationStream,
+    }),
+    readRun: async () => ({ records: controller.getRecords() }),
+    readSource: async () => structuredClone(sourceRecord),
+    workspaceId,
+  });
+  const reply = await replyDispatcher.dispatchReply({
+    capability: controller.getCapabilityForWorker(),
+    output: "The authorized thread asks for a concise summary.",
+    runId,
+    workerId: controller.workerId,
+  });
+  assert.equal(reply.result, "accepted");
+  assert.equal(reply.provenance.contextDigest, contextPack.packDigest);
+  assert.equal(refusalArtifacts.length, 0);
+  await controller.complete({
+    resultRef: {
+      digest: reply.receipt.eventDigest,
+      offset: reply.receipt.nextOffset,
+      stream: reply.receipt.stream,
+    },
+    summary: "scripted reply accepted",
+  });
+  const completedRunState = controller.getState();
+  assert.equal(completedRunState.status, "completed");
+  assert.equal(
+    completedRunState.processSnapshot.every(
+      ({ activeChildren }) => activeChildren === 0,
+    ),
+    true,
+  );
   return {
+    context: contextPack,
     invocation: {
       invocationId: invocation.invocationId,
       invocationRef,
@@ -294,11 +513,11 @@ async function verifyComposedIngressAndLease() {
       sourceTrigger,
     },
     lease: {
-      attemptId: acquired.lease.attemptId,
-      leaseGeneration: acquired.lease.leaseGeneration,
+      attemptId: runState.activeAttempt.attemptId,
+      leaseGeneration: runState.activeAttempt.leaseGeneration,
       queueDigest: queue.queueDigest,
       runId,
-      workerId: acquired.lease.workerId,
+      workerId: controller.workerId,
     },
     queue: {
       entry: queue.entries[0],
@@ -311,8 +530,39 @@ async function verifyComposedIngressAndLease() {
       batches: schedule.batches,
       refusals: schedule.refusals,
     },
+    run: {
+      records: controller.getRecords(),
+      state: completedRunState,
+    },
+    reply,
     store,
   };
+}
+
+function buildRunPolicy(overrides = {}) {
+  const policy = {
+    allowApprovals: false,
+    attemptDeadlineMs: 100,
+    maxAggregateCostUsdCents: 100,
+    maxAggregateInputTokens: 100,
+    maxAggregateOutputBytes: 500,
+    maxAggregateOutputTokens: 100,
+    maxAggregateWallTimeMs: 1_000,
+    maxAttempts: 3,
+    maxCostUsdCents: 100,
+    maxInputTokens: 100,
+    maxOutputBytes: 500,
+    maxOutputTokens: 100,
+    maxWallTimeMs: 1_000,
+    retryBackoffBaseMs: 10,
+    retryBackoffMaxMs: 40,
+    retryBackoffMultiplier: 2,
+    terminationGraceMs: 10,
+    version: 1,
+    ...overrides,
+  };
+  validateRunControlPolicy(policy);
+  return policy;
 }
 
 function createRequestedAndQueuedRun({ invocation, invocationRef, runId }) {

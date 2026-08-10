@@ -3,7 +3,7 @@ id: E3-T07
 epic: 3
 title: "Agent replies bound to run provenance and current membership"
 priority: 307
-status: implemented
+status: verified
 depends_on: [E3-T03, E3-T04]
 estimate: L
 capstone: false
@@ -33,21 +33,21 @@ enter a channel under stale permission.
 
 ## Acceptance criteria
 
-- [ ] `make verify-E3-T07` exits 0 from a cold clone and records reply receipts, channel/run
+- [x] `make verify-E3-T07` exits 0 from a cold clone and records reply receipts, channel/run
       source
       references, refusal heads, message-state digests, and canary scan.
-- [ ] The server derives the agent actor, channel, thread root, invocation, attempt, lease
+- [x] The server derives the agent actor, channel, thread root, invocation, attempt, lease
       generation, snapshot digest, context digest, and source mention reference; the caller
       cannot override any provenance field.
-- [ ] A valid reply appears through the same message reducer/API as a human message with an
+- [x] A valid reply appears through the same message reducer/API as a human message with an
       explicit agent principal kind and traceable run provenance.
-- [ ] Retry after lost acknowledgement yields the original reply receipt and one logical
+- [x] Retry after lost acknowledgement yields the original reply receipt and one logical
       channel message; duplicate and conflicting payloads follow dispatch idempotency rules.
-- [ ] Lease loss, terminal run, agent disable/suspend, membership removal, channel archive,
+- [x] Lease loss, terminal run, agent disable/suspend, membership removal, channel archive,
       capability expiry, and cross-channel target all refuse before channel append.
-- [ ] Output size/content limits and redaction run before append; planted credentials in the
+- [x] Output size/content limits and redaction run before append; planted credentials in the
       scripted runner never appear in channel events, run dumps, logs, or evidence.
-- [ ] Replay is declared `Replay: N/A (server reply dispatch contract) + mitigation:
+- [x] Replay is declared `Replay: N/A (server reply dispatch contract) + mitigation:
       provenance manifests, lost-ack replay, stale-authority matrix, canary scan, and digests`.
 
 ## Adversarial verification
@@ -93,3 +93,14 @@ enter a channel under stale permission.
 - Cold proof: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e3-t07-final-8bd740a E3_T07_IMPLEMENTATION_COMMIT=8bd740a611a6d671265cdfc90556e2c227b1bd2f make verify-E3-T07` exited 0 from a clean detached worktree with all five repository gates passing. Evidence records three accepted scenarios, 18 actual refusal artifacts, 12 stale-authority cases, and zero canary findings.
 - Digests: accepted event set `sha256:47628fa727835247780c06d233a281bad9414d826883707941b33754b9ba553f`; refusal heads `sha256:37854b766bb7ef4d15e25a73e67ee81d8ec48064d0561a81897806f8dcff0310`; provenance `sha256:c70331bbcd8f05dfc5bfa0b9615336478945e734396be911a079012b70604a70`.
 - Sensitivity: all ten mutants fail, including a new `reply-idempotency-provenance-drift` mutant that restores provenance to the idempotency key. E3-T07 remains `implemented` pending a fresh executable critic verdict.
+
+### Critic — 2026-08-09 — session `019fe931-2062-7e82-bc0c-14d6033d0f46`
+
+VERDICT: verified
+
+- Independently reviewed implementation commit `8bd740a611a6d671265cdfc90556e2c227b1bd2f`, evidence commit `bc21570ab64cda04d4a023656c613be046ffa68c`, the full task, and verified E3-T03/E3-T04 dependency contracts.
+- `TEST_RUN_ID=e3-t07-critic-independent-20260809 E3_T07_IMPLEMENTATION_COMMIT=8bd740a611a6d671265cdfc90556e2c227b1bd2f make verify-E3-T07` passed independently, including format, lint, typecheck, 183 unit/ledger tests, five browser integration tests, build, functional attacks, canary scan, stale-authority races, and sensitivity.
+- New-input attacks covered caller provenance overrides, omitted authority, source stream/channel mismatch, missing accepted event, external and validator error canaries, lost-ack replay, changed context/output under the same logical reply identity, and membership removal at the normal message door. No attack produced an unauthorized or duplicate channel append.
+- Recomputed accepted-set digest `sha256:47628fa727835247780c06d233a281bad9414d826883707941b33754b9ba553f`, all three event-envelope digests, refusal-head digest `sha256:37854b766bb7ef4d15e25a73e67ee81d8ec48064d0561a81897806f8dcff0310`, and provenance digest `sha256:c70331bbcd8f05dfc5bfa0b9615336478945e734396be911a079012b70604a70`; all matched promoted evidence.
+- In a disposable worktree, weakened omitted-workspace authority handling made the verifier exit 1 with `reply unexpectedly accepted; expected AGENT_REPLY_AUTHORITY_REVOKED`. The worktree was removed and the main checkout remained clean.
+- Residual risk: deterministic in-process adapters do not model concurrent production replicas or a real external Durable Streams service; that broader integration proof belongs to later capstones and does not refute E3-T07.

@@ -1,0 +1,7 @@
+{
+  "canaryAbsentFromAcceptedChannel": true,
+  "escapedMarkup": true,
+  "rawSizeBounded": true,
+  "redacted": true,
+  "refusalOutputBytesOnly": true
+}

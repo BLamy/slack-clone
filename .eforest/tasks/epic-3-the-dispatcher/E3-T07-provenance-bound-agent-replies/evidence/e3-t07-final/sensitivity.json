@@ -1,0 +1,34 @@
+{
+  "controlExitCode": 0,
+  "controlPassed": true,
+  "mutationCount": 5,
+  "result": "PASS",
+  "results": [
+    {
+      "detected": true,
+      "label": "current-membership-fence",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "terminal-run-fence",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "source-mention-fence",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "raw-output-budget",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "message-door-membership-fence",
+      "verifierExitCode": 1
+    }
+  ],
+  "verifierDetectedMutant": true
+}

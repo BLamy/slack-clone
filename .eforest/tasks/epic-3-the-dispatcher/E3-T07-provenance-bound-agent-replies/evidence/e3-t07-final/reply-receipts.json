@@ -1,0 +1,31 @@
+{
+  "acceptedCount": 3,
+  "lostAck": {
+    "first": "AGENT_REPLY_ACK_UNKNOWN",
+    "retry": "replayed",
+    "logicalChannelMessages": 1
+  },
+  "receipts": [
+    {
+      "eventDigest": "sha256:626c40344349952b88ca3af9855da9c9993c1eb003ed5c2d9cb45475ff193634",
+      "idempotencyKey": "ik_1c4547229d74ddbe07042bf664",
+      "nextOffset": "0000000000000002_0000000000000000",
+      "replayed": false,
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+    },
+    {
+      "eventDigest": "sha256:02290521decdd61d884823e872aad98787b0a1b01a25d481434c632df6f2a712",
+      "idempotencyKey": "ik_1c4547229d74ddbe07042bf664",
+      "nextOffset": "0000000000000002_0000000000000000",
+      "replayed": true,
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+    },
+    {
+      "eventDigest": "sha256:e95b00cb5be234d771b21880e7d30d6d47b3992e5f7a79fd065a4385546cfb7a",
+      "idempotencyKey": "ik_1c4547229d74ddbe07042bf664",
+      "nextOffset": "0000000000000002_0000000000000000",
+      "replayed": false,
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "actorKind": "agent",
+  "derivedFields": [
+    "agentId",
+    "agentPrincipalId",
+    "attemptId",
+    "channelId",
+    "contextDigest",
+    "contextRef",
+    "invocationId",
+    "invocationRef",
+    "leaseGeneration",
+    "runId",
+    "schemaVersion",
+    "snapshotDigest",
+    "snapshotRef",
+    "sourceMention",
+    "threadRootMessageId"
+  ],
+  "rejectedOverrideFields": [
+    "actorId",
+    "attemptId",
+    "channelId",
+    "contextDigest",
+    "contextRef",
+    "invocationId",
+    "leaseGeneration",
+    "ownerId",
+    "snapshotDigest",
+    "snapshotRef",
+    "sourceMention",
+    "stream",
+    "threadRootMessageId"
+  ],
+  "invocationRef": {
+    "digest": "sha256:3304655f0fa1e6b2520a74a9fc3399ea72b84ae3d033856116ac3b3c1570676a",
+    "offset": "0000000000000001_0000000000000000",
+    "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+  },
+  "sourceMention": {
+    "digest": "sha256:e291de58f4097100f8a87b6d6230de8253441c2441f9f7c378b07394d453cb39",
+    "offset": "0000000000000001_0000000000000000",
+    "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+  },
+  "snapshotRef": {
+    "digest": "sha256:3323a023aae1777006d5262dfaa26594f6f1123e0599cdc19760ad92f3ca937a",
+    "offset": "0000000000000001_0000000000000000",
+    "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+  },
+  "contextRef": {
+    "digest": "sha256:b13089b970e71db4c6aa3709cb56d1fbaa7714be9b6b2792874429a80440b9c3",
+    "offset": "0000000000000009_0000000000000000",
+    "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+  },
+  "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "attemptId": "at_1bbe05045d79d17710e1b57b16",
+  "leaseGeneration": 1
+}

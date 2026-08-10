@@ -8,7 +8,7 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-1. **E3-T07** — Agent replies bound to run provenance and current membership *(builder working)*
+1. **E3-T07** — Agent replies bound to run provenance and current membership *(awaiting independent critic)*
 
 ## Next up (dependencies satisfied)
 
@@ -58,7 +58,7 @@ No new task may start until **E3-T07** clears the gate.
 - [x] ` 304` [E3-T04](epic-3-the-dispatcher/E3-T04-bounded-context-pack/readme.md) — Bounded, ACL-safe context pack with durable citations *(deps: E3-T02)*
 - [x] ` 305` [E3-T05](epic-3-the-dispatcher/E3-T05-batching-and-recursion-guards/readme.md) — Per-conversation batching, serialization, and recursion guards *(deps: E3-T02, E3-T03)*
 - [x] ` 306` [E3-T06](epic-3-the-dispatcher/E3-T06-cancellation-retries-and-budgets/readme.md) — Cancellation, retries, deadlines, and resource budgets *(deps: E3-T03)*
-- [~] ` 307` [E3-T07](epic-3-the-dispatcher/E3-T07-provenance-bound-agent-replies/readme.md) — Agent replies bound to run provenance and current membership *(deps: E3-T03, E3-T04)*
+- [?] ` 307` [E3-T07](epic-3-the-dispatcher/E3-T07-provenance-bound-agent-replies/readme.md) — Agent replies bound to run provenance and current membership *(deps: E3-T03, E3-T04)*
 - [ ] ` 308` [E3-T08](epic-3-the-dispatcher/E3-T08-mention-to-scripted-agent-reply/readme.md) — Capstone: mention to scripted agent reply **[CAPSTONE]** *(deps: E3-T05, E3-T06, E3-T07)*
 
 ## Epic 4 — `epic-4-the-sprite`

@@ -111,8 +111,14 @@ const composite = canonicalSha256({
 });
 const evidence = {
   adversarial,
-  batchingRecursionOutcomes: composed.scheduler,
-  cancellationRevocation: faultEvidence.cancellation,
+  batchingRecursionOutcomes: {
+    adversarial,
+    composed: composed.scheduler,
+  },
+  cancellationRevocation: {
+    cancellation: faultEvidence.cancellation,
+    revocation: faultEvidence.revocation,
+  },
   compositeReplayDigests: {
     compositeDigest: composite,
     rebuiltDigest: canonicalSha256({
@@ -157,9 +163,17 @@ for (const [filename, value] of [
   ["stream-dumps.json", streamDumps],
   ["mention-invocation-snapshot.json", composed.invocation],
   ["queue-lease-manifest.json", composed.lease],
-  ["batching-recursion-outcomes.json", composed.scheduler],
-  ["attempt-timelines.json", composed.run.state.attemptTimelines],
-  ["process-resource-counts.json", composed.run.state.processSnapshot],
+  ["batching-recursion-outcomes.json", evidence.batchingRecursionOutcomes],
+  [
+    "attempt-timelines.json",
+    {
+      cancellation: faultEvidence.cancellation.state.attemptTimelines,
+      composed: composed.run.state.attemptTimelines,
+      revocation: faultEvidence.revocation.state.attemptTimelines,
+      retry: faultEvidence.retry.attempts,
+    },
+  ],
+  ["process-resource-counts.json", evidence.processResourceCounts],
   ["cancellation-revocation.json", evidence.cancellationRevocation],
   ["retry-usage-accounting.json", evidence.retryUsageAccounting],
   ["context-pack.json", composed.context],

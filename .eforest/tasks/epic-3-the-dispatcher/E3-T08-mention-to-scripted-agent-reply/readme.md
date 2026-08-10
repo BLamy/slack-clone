@@ -3,7 +3,7 @@ id: E3-T08
 epic: 3
 title: "Capstone: mention to scripted agent reply"
 priority: 308
-status: in-progress
+status: implemented
 depends_on: [E3-T05, E3-T06, E3-T07]
 estimate: L
 capstone: true
@@ -74,3 +74,12 @@ run, and audit streams after projections and process state are deleted.
    guards and the composed capstone must fail.
 
 ## Verification log
+
+### Builder — c7faa9229352cfeedcd723db46741ff631f39898
+
+- `make verify-E3-T08` passed from a clean detached cold clone with `E3_T08_SKIP_GATES=0` and `E3_T08_SKIP_SENSITIVITY=0`.
+- Gates: `pnpm format:check`, `pnpm format:check:e3-t08`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` all passed.
+- Evidence: `evidence/e3-t08-final/` — source/ref manifest, stream dumps, queue/lease manifest, context pack, reply receipt, fault schedules, attempt/process/cancellation/retry artifacts, projection rebuild, composite replay digest, canary scan, sensitivity, and cold-clone transcript.
+- Composite replay digest: `sha256:3cadfdb13667d6d5c4aeb167e7c1dbf3e7172258bdf7469a1822b34f71fe4124`; rebuilt digest matched.
+- Replay: N/A (server/CLI scripted-agent capstone; real providers and UI land later) + mitigation: multi-process fault schedules, source/ref manifest, canary scans, projection rebuild, and independent composite replay.
+- Claim: the canonical human mention reconciles once, leases once, assembles authorized bounded context, produces one provenance-bound threaded reply, and handles duplicate delivery, batching/recursion refusals, crash retry, cancellation, authority revocation, process cleanup, and stale-write fencing without secret-shaped evidence.

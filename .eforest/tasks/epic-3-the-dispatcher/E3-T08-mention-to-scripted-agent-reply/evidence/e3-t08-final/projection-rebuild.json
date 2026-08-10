@@ -1,0 +1,28 @@
+{
+  "after": {
+    "auditDigest": "sha256:8d81fc51fdc7d216c09533765e168a39014ef2643613498a1004777ae7c5839d",
+    "contextDigest": "sha256:dbf16d9663a8253750b375776ac8491ba378cae1e09426bb47b3f771e389318a",
+    "conversationDigest": "sha256:bbbb68d27d42da23ea64fde82042eb5309bae61f4ca8fb189699ccdacc6e6eef",
+    "leaseStateDigest": "sha256:9178487f0fac5100027ff64f10b39ff0064394dca7281463df69494c6d4413be",
+    "queueDigest": "sha256:5f620ba34ce37a2742e35d69e7fa31af5dbe925b3a6883a11a03dae746b36a78",
+    "runDigest": "sha256:4ad5c8ffa9af16a1615b52c801d38dadee557caa861f9a2b1eb65e4cc836a3cb",
+    "projectionDigest": "sha256:b71c80f099806ddfc26aafdabe442c9ab1e39fda92c82bb4017f63e81ed057ba"
+  },
+  "before": {
+    "auditDigest": "sha256:8d81fc51fdc7d216c09533765e168a39014ef2643613498a1004777ae7c5839d",
+    "contextDigest": "sha256:dbf16d9663a8253750b375776ac8491ba378cae1e09426bb47b3f771e389318a",
+    "conversationDigest": "sha256:bbbb68d27d42da23ea64fde82042eb5309bae61f4ca8fb189699ccdacc6e6eef",
+    "leaseStateDigest": "sha256:9178487f0fac5100027ff64f10b39ff0064394dca7281463df69494c6d4413be",
+    "queueDigest": "sha256:5f620ba34ce37a2742e35d69e7fa31af5dbe925b3a6883a11a03dae746b36a78",
+    "runDigest": "sha256:4ad5c8ffa9af16a1615b52c801d38dadee557caa861f9a2b1eb65e4cc836a3cb",
+    "projectionDigest": "sha256:b71c80f099806ddfc26aafdabe442c9ab1e39fda92c82bb4017f63e81ed057ba"
+  },
+  "replayed": {
+    "conversationMessageCount": 2,
+    "contextDigest": "sha256:dbf16d9663a8253750b375776ac8491ba378cae1e09426bb47b3f771e389318a",
+    "leaseStateDigest": "sha256:9178487f0fac5100027ff64f10b39ff0064394dca7281463df69494c6d4413be",
+    "queueDigest": "sha256:5f620ba34ce37a2742e35d69e7fa31af5dbe925b3a6883a11a03dae746b36a78",
+    "runRecordCount": 12,
+    "scheduleDigest": "sha256:07539cfb599227c224536820879f210babf9526986ce64a7a5333f993d51325b"
+  }
+}

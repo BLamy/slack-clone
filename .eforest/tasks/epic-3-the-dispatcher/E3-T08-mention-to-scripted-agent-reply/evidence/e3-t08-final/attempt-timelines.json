@@ -1,0 +1,82 @@
+{
+  "cancellation": [
+    {
+      "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+      "attemptNumber": 1,
+      "atMs": 1786320000000,
+      "event": "leased",
+      "leaseGeneration": 1
+    },
+    {
+      "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+      "attemptNumber": 1,
+      "atMs": 1786320000001,
+      "deadlineAtMs": 1786320000101,
+      "event": "running",
+      "leaseGeneration": 1
+    },
+    {
+      "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+      "attemptNumber": 2,
+      "atMs": 1786320000013,
+      "event": "leased",
+      "leaseGeneration": 2
+    },
+    {
+      "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+      "attemptNumber": 2,
+      "atMs": 1786320000014,
+      "deadlineAtMs": 1786320000114,
+      "event": "running",
+      "leaseGeneration": 2
+    }
+  ],
+  "composed": [
+    {
+      "attemptId": "at_f83986cb3d08b6dd5702f465f3",
+      "attemptNumber": 1,
+      "atMs": 1786320000000,
+      "event": "leased",
+      "leaseGeneration": 1
+    },
+    {
+      "attemptId": "at_f83986cb3d08b6dd5702f465f3",
+      "attemptNumber": 1,
+      "atMs": 1786320000000,
+      "deadlineAtMs": 1786320000100,
+      "event": "running",
+      "leaseGeneration": 1
+    }
+  ],
+  "revocation": [
+    {
+      "attemptId": "at_06e5717de9dbf1910cbec919b7",
+      "attemptNumber": 1,
+      "atMs": 1786320000000,
+      "event": "leased",
+      "leaseGeneration": 1
+    },
+    {
+      "attemptId": "at_06e5717de9dbf1910cbec919b7",
+      "attemptNumber": 1,
+      "atMs": 1786320000001,
+      "deadlineAtMs": 1786320000101,
+      "event": "running",
+      "leaseGeneration": 1
+    }
+  ],
+  "retry": [
+    {
+      "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+      "attemptNumber": 1,
+      "leaseGeneration": 1,
+      "status": "leased"
+    },
+    {
+      "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+      "attemptNumber": 2,
+      "leaseGeneration": 2,
+      "status": "leased"
+    }
+  ]
+}

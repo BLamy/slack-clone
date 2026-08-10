@@ -1,0 +1,260 @@
+{
+  "cancellation": {
+    "lateWrite": {
+      "code": "RUN_CONTROL_TERMINAL_IMMUTABLE",
+      "detail": "reportUsage requires an active, capability-bound attempt"
+    },
+    "result": {
+      "result": "cancelled",
+      "terminal": {
+        "failureCode": null,
+        "kind": "cancelled",
+        "reasonCode": "operator-cancelled",
+        "resultRef": null
+      }
+    },
+    "state": {
+      "activeAttempt": null,
+      "aggregateUsage": {
+        "costUsdCents": 1,
+        "inputTokens": 4,
+        "outputBytes": 16,
+        "outputTokens": 2,
+        "totalTokens": 6,
+        "wallTimeMs": 5
+      },
+      "attemptTimelines": [
+        {
+          "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+          "attemptNumber": 1,
+          "atMs": 1786320000000,
+          "event": "leased",
+          "leaseGeneration": 1
+        },
+        {
+          "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+          "attemptNumber": 1,
+          "atMs": 1786320000001,
+          "deadlineAtMs": 1786320000101,
+          "event": "running",
+          "leaseGeneration": 1
+        },
+        {
+          "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+          "attemptNumber": 2,
+          "atMs": 1786320000013,
+          "event": "leased",
+          "leaseGeneration": 2
+        },
+        {
+          "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+          "attemptNumber": 2,
+          "atMs": 1786320000014,
+          "deadlineAtMs": 1786320000114,
+          "event": "running",
+          "leaseGeneration": 2
+        }
+      ],
+      "attempts": [
+        {
+          "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+          "attemptNumber": 1,
+          "leaseGeneration": 1,
+          "status": "leased"
+        },
+        {
+          "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+          "attemptNumber": 2,
+          "leaseGeneration": 2,
+          "status": "leased"
+        }
+      ],
+      "capabilityRevocations": [
+        {
+          "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+          "atMs": 1786320000003,
+          "reason": "run-control"
+        },
+        {
+          "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+          "atMs": 1786320000017,
+          "reason": "run-control"
+        }
+      ],
+      "deadlineAtMs": 1786320000114,
+      "lastObservedAtMs": 1786320000017,
+      "processTerminations": [
+        {
+          "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+          "durationMs": 11,
+          "finishedAtMs": 1786320000014,
+          "groupId": -70000,
+          "signals": [
+            "SIGTERM",
+            "SIGKILL"
+          ],
+          "survivors": 0,
+          "usedKillEscalation": true
+        },
+        {
+          "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+          "durationMs": 10,
+          "finishedAtMs": 1786320000027,
+          "groupId": -70004,
+          "signals": [
+            "SIGTERM"
+          ],
+          "survivors": 0,
+          "usedKillEscalation": false
+        }
+      ],
+      "processSnapshot": [
+        {
+          "activeChildren": 0,
+          "groupId": -70000,
+          "outputBytes": 32,
+          "pid": 70000,
+          "signals": [
+            "SIGTERM",
+            "SIGKILL"
+          ]
+        },
+        {
+          "activeChildren": 0,
+          "groupId": -70004,
+          "outputBytes": 16,
+          "pid": 70004,
+          "signals": [
+            "SIGTERM"
+          ]
+        }
+      ],
+      "records": 21,
+      "replayDigest": "sha256:5eb6a9339d9e63d82b4733bcd51474d28715d868c031b0a63ca27d092436d258",
+      "retrySchedule": null,
+      "runSequence": 17,
+      "status": "cancelled",
+      "terminal": {
+        "failureCode": null,
+        "kind": "cancelled",
+        "reasonCode": "operator-cancelled",
+        "resultRef": null
+      },
+      "terminalCount": 1,
+      "totalUsage": {
+        "costUsdCents": 1,
+        "inputTokens": 4,
+        "outputBytes": 16,
+        "outputTokens": 2,
+        "totalTokens": 6,
+        "wallTimeMs": 5
+      }
+    }
+  },
+  "revocation": {
+    "lateWrite": {
+      "code": "RUN_CONTROL_TERMINAL_IMMUTABLE",
+      "detail": "commitLogicalAction requires an active, capability-bound attempt"
+    },
+    "result": {
+      "result": "cancelled",
+      "terminal": {
+        "failureCode": null,
+        "kind": "cancelled",
+        "reasonCode": "agent-disabled",
+        "resultRef": null
+      }
+    },
+    "state": {
+      "activeAttempt": null,
+      "aggregateUsage": {
+        "costUsdCents": 0,
+        "inputTokens": 0,
+        "outputBytes": 0,
+        "outputTokens": 0,
+        "totalTokens": 0,
+        "wallTimeMs": 0
+      },
+      "attemptTimelines": [
+        {
+          "attemptId": "at_06e5717de9dbf1910cbec919b7",
+          "attemptNumber": 1,
+          "atMs": 1786320000000,
+          "event": "leased",
+          "leaseGeneration": 1
+        },
+        {
+          "attemptId": "at_06e5717de9dbf1910cbec919b7",
+          "attemptNumber": 1,
+          "atMs": 1786320000001,
+          "deadlineAtMs": 1786320000101,
+          "event": "running",
+          "leaseGeneration": 1
+        }
+      ],
+      "attempts": [
+        {
+          "attemptId": "at_06e5717de9dbf1910cbec919b7",
+          "attemptNumber": 1,
+          "leaseGeneration": 1,
+          "status": "leased"
+        }
+      ],
+      "capabilityRevocations": [
+        {
+          "attemptId": "at_06e5717de9dbf1910cbec919b7",
+          "atMs": 1786320000002,
+          "reason": "run-control"
+        }
+      ],
+      "deadlineAtMs": 1786320000101,
+      "lastObservedAtMs": 1786320000002,
+      "processTerminations": [
+        {
+          "attemptId": "at_06e5717de9dbf1910cbec919b7",
+          "durationMs": 11,
+          "finishedAtMs": 1786320000013,
+          "groupId": -70000,
+          "signals": [
+            "SIGTERM",
+            "SIGKILL"
+          ],
+          "survivors": 0,
+          "usedKillEscalation": true
+        }
+      ],
+      "processSnapshot": [
+        {
+          "activeChildren": 0,
+          "groupId": -70000,
+          "outputBytes": 8,
+          "pid": 70000,
+          "signals": [
+            "SIGTERM",
+            "SIGKILL"
+          ]
+        }
+      ],
+      "records": 9,
+      "replayDigest": "sha256:aa33673429fc876c722e4ed53ef7ee73be45ef8c07953d0eb12eb816a5e775a1",
+      "retrySchedule": null,
+      "runSequence": 7,
+      "status": "cancelled",
+      "terminal": {
+        "failureCode": null,
+        "kind": "cancelled",
+        "reasonCode": "agent-disabled",
+        "resultRef": null
+      },
+      "terminalCount": 1,
+      "totalUsage": {
+        "costUsdCents": 0,
+        "inputTokens": 0,
+        "outputBytes": 0,
+        "outputTokens": 0,
+        "totalTokens": 0,
+        "wallTimeMs": 0
+      }
+    }
+  }
+}

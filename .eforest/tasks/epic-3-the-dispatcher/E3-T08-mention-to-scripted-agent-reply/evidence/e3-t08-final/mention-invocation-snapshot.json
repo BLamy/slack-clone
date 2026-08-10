@@ -1,0 +1,38 @@
+{
+  "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+  "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+  "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+  "policy": {
+    "allowApprovals": false,
+    "maxAttempts": 3,
+    "maxCostUsdCents": 250,
+    "maxInputTokens": 8000,
+    "maxOutputTokens": 4000,
+    "maxWallTimeMs": 900000,
+    "version": 1
+  },
+  "policyDigest": "sha256:7d7621a9b5984daadc422e2286b9967727d695df89c4687e35dfdd444d079a42",
+  "promptRef": {
+    "digest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+    "offset": "0000000000000001_0000000000000001",
+    "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "schemaVersion": 1,
+  "snapshotDigest": "sha256:c216f487678c289d2ae485e05f7804afb22651ad4c92ab50c7dd13fef309a8cb",
+  "snapshotRef": {
+    "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "offset": "0000000000000002_0000000000000002",
+    "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+  },
+  "sourceTrigger": {
+    "digest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+    "offset": "0000000000000001_0000000000000001",
+    "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "triggerType": "channel.mention",
+  "invocationRef": {
+    "digest": "sha256:e68cc1e3d8b4a5aa52aec32d0bbb1e696e261d805c002238959ab3719c12d643",
+    "offset": "0000000000000001_0000000000000001",
+    "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+  }
+}

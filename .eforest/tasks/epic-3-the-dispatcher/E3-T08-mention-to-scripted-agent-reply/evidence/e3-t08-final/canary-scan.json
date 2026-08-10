@@ -1,0 +1,26 @@
+{
+  "checked": true,
+  "files": [
+    "attempt-timelines.json",
+    "batching-recursion-outcomes.json",
+    "canary-scan.json",
+    "cancellation-revocation.json",
+    "cold-clone-transcript.json",
+    "composite-replay-digests.json",
+    "context-pack.json",
+    "fault-schedules.json",
+    "mention-invocation-snapshot.json",
+    "process-resource-counts.json",
+    "projection-rebuild.json",
+    "queue-lease-manifest.json",
+    "reply-receipt.json",
+    "retry-usage-accounting.json",
+    "sensitivity.json",
+    "source-ref-manifest.json",
+    "stream-dumps.json",
+    "verification-summary.json"
+  ],
+  "findings": [],
+  "leaked": false,
+  "transcriptChecked": true
+}

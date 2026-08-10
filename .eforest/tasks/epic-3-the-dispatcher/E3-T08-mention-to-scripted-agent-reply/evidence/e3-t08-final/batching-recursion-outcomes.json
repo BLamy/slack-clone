@@ -1,0 +1,140 @@
+{
+  "adversarial": {
+    "admittedInvocationIds": [
+      "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "iv_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "iv_cccccccccccccccccccccccccc"
+    ],
+    "batchCount": 1,
+    "providerCalls": 3,
+    "refusalCodes": [
+      "CONVERSATION_SCHEDULER_AGENT_REPLY",
+      "CONVERSATION_SCHEDULER_DELEGATION_REQUIRED"
+    ],
+    "refusalCount": 2,
+    "scheduleDigest": "sha256:1ebd39a086f0f39703ef97c03b9d34d79cd13b7d2c6825be7817cd399b373414"
+  },
+  "composed": {
+    "input": [
+      {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "causation": {
+          "aggregateBudget": {
+            "costUsdCents": 100,
+            "inputTokens": 100,
+            "outputTokens": 100,
+            "totalTokens": 200
+          },
+          "aggregateUsage": {
+            "costUsdCents": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "totalTokens": 0
+          },
+          "ancestors": [],
+          "delegationGrant": null,
+          "parentInvocationId": null,
+          "rootInvocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "conversation": {
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "threadId": null
+        },
+        "estimatedUsage": {
+          "costUsdCents": 1,
+          "inputTokens": 10,
+          "outputTokens": 5,
+          "totalTokens": 15
+        },
+        "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+        "invocationRef": {
+          "digest": "sha256:e68cc1e3d8b4a5aa52aec32d0bbb1e696e261d805c002238959ab3719c12d643",
+          "offset": "0000000000000001_0000000000000001",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+        },
+        "policy": {
+          "budgets": {
+            "maxCostUsdCents": 100,
+            "maxInputTokens": 100,
+            "maxOutputTokens": 100,
+            "maxTotalTokens": 200
+          },
+          "concurrency": {
+            "maxConcurrentPerChannel": 1,
+            "maxConcurrentRuns": 2,
+            "queueStrategy": "serialize"
+          },
+          "delegation": {
+            "allowCrossChannel": false,
+            "enabled": false,
+            "maxChildren": 0,
+            "maxDepth": 0
+          }
+        },
+        "policyDigest": "sha256:b7443f8f279a492d6d36ea362852da49c1d7ed1df527d8375e362cff9f71c9f5",
+        "snapshotDigest": "sha256:c216f487678c289d2ae485e05f7804afb22651ad4c92ab50c7dd13fef309a8cb",
+        "source": {
+          "authorAgentId": null,
+          "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "authorKind": "human",
+          "eventType": "channel.message.created",
+          "isAgentReply": false,
+          "isEdit": false,
+          "isReplay": false,
+          "isRetry": false,
+          "mentionKind": "canonical"
+        },
+        "sourceTrigger": {
+          "digest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+          "offset": "0000000000000001_0000000000000001",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "journal": [
+      {
+        "batchCount": 1,
+        "finalScheduleDigest": "sha256:e275b28666e40f3c9016c0810dabca4738ac32f51d4b2975d43bc27218a3db27",
+        "kind": "conversation.schedule.planned",
+        "refusalCount": 0,
+        "scheduleDigest": "sha256:07539cfb599227c224536820879f210babf9526986ce64a7a5333f993d51325b",
+        "sourceCount": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "scheduleDigest": "sha256:07539cfb599227c224536820879f210babf9526986ce64a7a5333f993d51325b",
+    "batches": [
+      {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "batchId": "bt_9308ccf383cff51a6cda41b255",
+        "conversationKey": "ck_6c49ad5a3bb1537786f7931e88",
+        "memberInvocationIds": [
+          "iv_e3315cbb2d8e996b9fddee8baa"
+        ],
+        "members": [
+          {
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "invocationRef": {
+              "digest": "sha256:e68cc1e3d8b4a5aa52aec32d0bbb1e696e261d805c002238959ab3719c12d643",
+              "offset": "0000000000000001_0000000000000001",
+              "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+            },
+            "order": 0,
+            "sourceTrigger": {
+              "digest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+              "offset": "0000000000000001_0000000000000001",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+            }
+          }
+        ],
+        "policyDigest": "sha256:b7443f8f279a492d6d36ea362852da49c1d7ed1df527d8375e362cff9f71c9f5",
+        "snapshotDigest": "sha256:c216f487678c289d2ae485e05f7804afb22651ad4c92ab50c7dd13fef309a8cb",
+        "sourceInvocationCount": 1,
+        "status": "admitted",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "refusals": []
+  }
+}

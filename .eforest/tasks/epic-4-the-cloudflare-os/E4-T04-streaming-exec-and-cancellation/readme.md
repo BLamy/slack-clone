@@ -11,10 +11,10 @@ capstone: false
 
 ## Goal
 
-Remote commands execute through a bounded Fly Sprite session whose stdout, stderr,
-status, heartbeat, and terminal result append to a replayable run stream with monotonic
-sequence numbers. Clients may reconnect from an offset, and cancellation terminates the
-process tree before any later tool or message effect is accepted.
+Remote commands execute through a bounded Cloudflare OS workspace session whose stdout,
+stderr, status, heartbeat, and terminal result append to a replayable run stream with
+monotonic sequence numbers. Clients may reconnect from an offset, and cancellation
+terminates the process tree before any later tool or message effect is accepted.
 
 ## Context
 
@@ -25,7 +25,8 @@ signal delivery.
 
 ## Deliverables
 
-- `packages/sandbox/src/exec-events.ts` and Fly streaming transport with replay/resume.
+- `packages/sandbox/src/exec-events.ts` and Cloudflare OS streaming transport with
+  replay/resume.
 - Bounded output chunking, terminal-result idempotency, process-tree cancellation, and
   timeout enforcement.
 - `make verify-E4-T04` with disconnect, duplicate, reorder, overflow, and kill fixtures.

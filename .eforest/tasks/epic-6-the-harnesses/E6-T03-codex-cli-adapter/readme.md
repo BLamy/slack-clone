@@ -12,7 +12,7 @@ capstone: false
 ## Goal
 
 `packages/harness-codex` launches the pinned Codex CLI noninteractively inside the claimed
-Sprite, supplies only the immutable context pack and shared tool gateway, translates its
+Cloudflare OS workspace, supplies only the immutable context pack and shared tool gateway, translates its
 structured output into canonical harness events, and terminates the full process tree on
 cancel or budget exhaustion.
 

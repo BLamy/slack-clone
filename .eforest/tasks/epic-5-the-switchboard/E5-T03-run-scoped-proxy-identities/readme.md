@@ -25,20 +25,22 @@ with an auditable lifecycle, not an environment variable copied from the server.
 ## Deliverables
 
 - Proxy-identity events/reducer, issuer, revoker, and scope validator.
-- Proof-of-possession or equivalent single-run binding between Sprite and broker endpoint.
+- Proof-of-possession or equivalent single-run binding between the Cloudflare OS
+  workspace/Gadget and broker endpoint.
 - `make verify-E5-T03` with expiry, replay, rotation, cancellation, and tenant-race cases.
 
 ## Acceptance criteria
 
 - [ ] `make verify-E5-T03` passes cold and replays identity lifecycle fixtures twice to
       byte-identical active-scope, expiry, and revocation digests.
-- [ ] An issued identity binds tenant, workspace, agent revision, run/lease, Sprite,
+- [ ] An issued identity binds tenant, workspace, agent revision, run/lease, Cloudflare OS
+      workspace/Gadget,
       connection revision set, tool-purpose set, audience, issued-at, expiry, and unique id.
 - [ ] The orchestrator persists only identity metadata and hashes; bearer material is
       delivered through the sandbox bootstrap boundary and absent from streams, logs,
       evidence, command lines, and inherited process environments.
 - [ ] Rotation overlaps only for the documented grace interval and invalidates the old
-      identity afterward; replay from another Sprite or run is refused.
+      identity afterward; replay from another Cloudflare OS workspace or run is refused.
 - [ ] Cancel, run terminal, lost lease, agent disable, and connection disable each revoke
       before the next request and produce exactly one terminal identity event.
 - [ ] Browser evidence is recorded exactly as `Replay: N/A (headless proxy identity
@@ -47,13 +49,13 @@ with an auditable lifecycle, not an environment variable copied from the server.
 
 ## Adversarial verification
 
-1. Steal an identity and replay it from sibling run/Sprite, after rotation, and after every
+1. Steal an identity and replay it from sibling run/Cloudflare OS workspace, after rotation, and after every
    revocation trigger. Any accepted request is a critical finding.
 2. Race renewal with cancel and lease loss across hostile clock skew. No post-terminal
    identity may become active.
 3. Scan process tables, `/proc`-style fixtures, argv, env, dumps, traces, and errors for
    canary bearer bytes. One occurrence refutes delivery isolation.
-4. Disable audience or Sprite binding in a scratch worktree. The cross-run replay fixture
+4. Disable audience or Cloudflare OS workspace binding in a scratch worktree. The cross-run replay fixture
    must make the verifier fail.
 
 ## Verification log

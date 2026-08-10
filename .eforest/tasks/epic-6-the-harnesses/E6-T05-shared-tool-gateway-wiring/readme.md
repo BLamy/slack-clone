@@ -39,7 +39,7 @@ terminate at a thin translation layer and share all substantive gateway code.
       outbound target.
 - [ ] Approval pause/resume correlates one native call to one canonical request, and
       reconnect/duplicate native records cause at most one service execution.
-- [ ] Gateway auth is bound to run, harness process, Sprite, lease, and expiry; a stolen
+- [ ] Gateway auth is bound to run, harness process, Cloudflare OS workspace, lease, and expiry; a stolen
       endpoint/token from the other harness or run is refused.
 - [ ] Browser evidence is recorded exactly as `Replay: N/A (headless shared tool wiring)
       + mitigation: cold-clone cross-harness differential replay, exact request digests,

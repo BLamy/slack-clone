@@ -13,19 +13,21 @@ capstone: false
 
 The server enforces tenant, workspace, agent, and run limits before provider allocation,
 records provider-observed resource usage as replayable cost events, and reconciles labeled
-Fly resources so expired or unowned Sprites are destroyed without touching live work.
+Cloudflare OS workspaces/Gadgets so expired or unowned resources are destroyed without
+touching live work.
 
 ## Context
 
-Remote sandboxes can outlive a crashed scheduler and become both a bill and a security
-liability. Queue counters alone are not authoritative, so garbage collection compares
-durable leases with a scoped provider inventory and requires repeated absence proof before
-destructive action.
+Cloudflare OS workspaces can outlive a crashed scheduler and become both a bill and a
+security liability. Queue counters alone are not authoritative, so garbage collection
+compares durable leases with a scoped provider inventory and requires repeated absence
+proof before destructive action.
 
 ## Deliverables
 
 - Quota/reservation and usage/cost event reducers in `packages/sandbox`.
-- Fly inventory reconciler, orphan quarantine, grace period, and idempotent GC worker.
+- Cloudflare OS workspace/Gadget inventory reconciler, orphan quarantine, grace period, and
+  idempotent GC worker.
 - `make verify-E4-T07` with crash, clock, quota-race, and false-orphan fixtures.
 
 ## Acceptance criteria

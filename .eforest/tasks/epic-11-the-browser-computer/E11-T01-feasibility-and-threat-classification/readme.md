@@ -17,8 +17,8 @@ using current `@agent-wasm/sdk` workspace/`AgentAdapter` and `@agent-wasm/codex`
 
 ## Context
 
-Epic 11 is an explicit final reach epic. It is not on the Fly production path and cannot
-change Fly defaults, reliability gates, or security posture. Claude Code browser support
+Epic 11 is an explicit final reach epic. It is not on the Cloudflare OS production path and
+cannot change Cloudflare OS defaults, reliability gates, or security posture. Claude Code browser support
 is unknown until this task's executable probes prove its prerequisites.
 
 ## Deliverables
@@ -39,7 +39,7 @@ is unknown until this task's executable probes prove its prerequisites.
 - [ ] The threat model classifies secret exposure, origin/storage escape, broker abuse,
       egress, persistence, supply-chain, denial-of-service, and cross-workspace attacks with
       a fail-closed mitigation or explicit blocker for every high-risk path.
-- [ ] No probe changes the registered Fly production provider, defaults, policies, or run
+- [ ] No probe changes the registered Cloudflare OS production provider, defaults, policies, or run
       routing; a repository/config diff proves reach isolation.
 - [ ] The final probe journey has a cited Replay and same-session MP4 with zero console
       errors; expected negative-probe failures are asserted as typed results, not exceptions.
@@ -53,6 +53,6 @@ is unknown until this task's executable probes prove its prerequisites.
 3. Attempt origin, storage, worker, broker, and egress escapes described in the threat model;
    an unclassified high-risk path refutes completeness.
 4. Compare Replay/MP4, console/network logs, and repository diff; hidden host execution,
-   unexplained errors, or a Fly-path change refutes the reach-only claim.
+   unexplained errors, or a Cloudflare OS-path change refutes the reach-only claim.
 
 ## Verification log

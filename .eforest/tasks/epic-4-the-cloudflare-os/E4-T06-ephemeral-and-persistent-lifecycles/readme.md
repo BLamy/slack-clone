@@ -25,8 +25,8 @@ modes need a common event model and destructive reset contract.
 
 ## Deliverables
 
-- Lifecycle policy and lineage schemas in `packages/sandbox` and Fly implementations for
-  create/resume/suspend/reset/destroy.
+- Lifecycle policy and lineage schemas in `packages/sandbox` and Cloudflare OS
+  implementations for create/resume/suspend/reset/destroy.
 - Persistent-tree manifest, ephemeral scratch separation, and retention-expiry worker.
 - `make verify-E4-T06` with multi-run, crash, revoke, and expiry fixtures.
 
@@ -34,7 +34,7 @@ modes need a common event model and destructive reset contract.
 
 - [ ] `make verify-E4-T06` passes cold and replays two independent lifecycle sequences in
       each mode to identical lineage, tree, and terminal digests.
-- [ ] Ephemeral mode destroys the Sprite and all writable storage after terminal run
+- [ ] Ephemeral mode destroys the Cloudflare OS Gadget/workspace and all writable storage after terminal run
       state; a provider inventory query finds no matching retained resource.
 - [ ] Persistent mode resumes only the configured agent lineage, verifies its last tree
       digest before use, and records the base and new digests for every run.

@@ -19,7 +19,7 @@ and recursion attempts are handled honestly.
 ## Context
 
 This is the final provider-neutral server gate. It uses the same registry, queue, lease,
-capability, context, process, and reply contracts that Fly, Infisical, Codex, and Claude Code
+capability, context, process, and reply contracts that Cloudflare OS, Infisical, Codex, and Claude Code
 will implement later, but the scripted harness makes the scenario deterministic and
 credential-free. A green result must be reconstructable from channel, config, invocation,
 run, and audit streams after projections and process state are deleted.

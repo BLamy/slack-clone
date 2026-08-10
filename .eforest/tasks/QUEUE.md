@@ -62,38 +62,38 @@ No new task may start until **E3-T08** clears the gate.
 - [x] ` 307` [E3-T07](epic-3-the-dispatcher/E3-T07-provenance-bound-agent-replies/readme.md) — Agent replies bound to run provenance and current membership *(deps: E3-T03, E3-T04)*
 - [?] ` 308` [E3-T08](epic-3-the-dispatcher/E3-T08-mention-to-scripted-agent-reply/readme.md) — Capstone: mention to scripted agent reply **[CAPSTONE]** *(deps: E3-T05, E3-T06, E3-T07)*
 
-## Epic 4 — `epic-4-the-sprite`
+## Epic 4 — `epic-4-the-cloudflare-os`
 
-- [ ] ` 401` [E4-T01](epic-4-the-sprite/E4-T01-sandbox-provider-contract/readme.md) — Sandbox provider contract: capability discovery, fenced lifecycle operations, and provider-neutral run identities *(deps: E3)*
-- [ ] ` 402` [E4-T02](epic-4-the-sprite/E4-T02-fly-sprites-control-plane/readme.md) — Fly Sprites control plane: authenticated create, inspect, suspend, resume, and destroy behind SandboxProvider *(deps: E4-T01)*
-- [ ] ` 403` [E4-T03](epic-4-the-sprite/E4-T03-pinned-workspace-materialization/readme.md) — Pinned workspace materialization: one invocation digest becomes one byte-exact sandbox tree *(deps: E4-T02)*
-- [ ] ` 404` [E4-T04](epic-4-the-sprite/E4-T04-streaming-exec-and-cancellation/readme.md) — Streaming execution and cancellation: ordered output, reconnectable offsets, and fenced process termination *(deps: E4-T02)*
-- [ ] ` 405` [E4-T05](epic-4-the-sprite/E4-T05-default-deny-network-policy/readme.md) — Default-deny sandbox networking: destination allowlists, metadata blocking, and auditable egress decisions *(deps: E4-T02)*
-- [ ] ` 406` [E4-T06](epic-4-the-sprite/E4-T06-ephemeral-and-persistent-lifecycles/readme.md) — Ephemeral and persistent sandbox lifecycles: explicit retention, resume, reset, and destruction semantics *(deps: E4-T03, E4-T04)*
-- [ ] ` 407` [E4-T07](epic-4-the-sprite/E4-T07-quotas-costs-and-orphan-gc/readme.md) — Sandbox quotas, cost accounting, and orphan garbage collection from provider-observed reality *(deps: E4-T04, E4-T06)*
-- [ ] ` 408` [E4-T08](epic-4-the-sprite/E4-T08-real-fly-sandbox-conformance/readme.md) — Capstone: a real Fly Sprite executes a pinned run under deny-by-default policy, survives reconnect, and leaves no orphan **[CAPSTONE]** *(deps: E4-T05, E4-T07)*
+- [ ] ` 401` [E4-T01](epic-4-the-cloudflare-os/E4-T01-sandbox-provider-contract/readme.md) — Sandbox provider contract: capability discovery, fenced lifecycle operations, and provider-neutral run identities *(deps: E3)*
+- [ ] ` 402` [E4-T02](epic-4-the-cloudflare-os/E4-T02-cloudflare-os-control-plane/readme.md) — Cloudflare OS control plane: authenticated workspace and Gadget lifecycle behind SandboxProvider *(deps: E4-T01)*
+- [ ] ` 403` [E4-T03](epic-4-the-cloudflare-os/E4-T03-pinned-workspace-materialization/readme.md) — Pinned workspace materialization: one invocation digest becomes one byte-exact sandbox tree *(deps: E4-T02)*
+- [ ] ` 404` [E4-T04](epic-4-the-cloudflare-os/E4-T04-streaming-exec-and-cancellation/readme.md) — Streaming execution and cancellation: ordered output, reconnectable offsets, and fenced process termination *(deps: E4-T02)*
+- [ ] ` 405` [E4-T05](epic-4-the-cloudflare-os/E4-T05-default-deny-network-policy/readme.md) — Default-deny sandbox networking: destination allowlists, metadata blocking, and auditable egress decisions *(deps: E4-T02)*
+- [ ] ` 406` [E4-T06](epic-4-the-cloudflare-os/E4-T06-ephemeral-and-persistent-lifecycles/readme.md) — Ephemeral and persistent sandbox lifecycles: explicit retention, resume, reset, and destruction semantics *(deps: E4-T03, E4-T04)*
+- [ ] ` 407` [E4-T07](epic-4-the-cloudflare-os/E4-T07-quotas-costs-and-orphan-gc/readme.md) — Sandbox quotas, cost accounting, and orphan garbage collection from provider-observed reality *(deps: E4-T04, E4-T06)*
+- [ ] ` 408` [E4-T08](epic-4-the-cloudflare-os/E4-T08-cloudflare-os-conformance/readme.md) — Capstone: a real Cloudflare OS workspace executes a pinned run under deny-by-default policy, survives reconnect, and leaves no orphan **[CAPSTONE]** *(deps: E4-T05, E4-T07)*
 
 ## Epic 5 — `epic-5-the-switchboard`
 
 - [ ] ` 501` [E5-T01](epic-5-the-switchboard/E5-T01-credential-broker-contract/readme.md) — Credential broker contract: Infisical Agent Proxy in production, Agent Vault locally, and no raw-secret orchestration path *(deps: E3)*
 - [ ] ` 502` [E5-T02](epic-5-the-switchboard/E5-T02-service-connection-secretref-model/readme.md) — Service connections and SecretRefs: replayable metadata without credential values *(deps: E5-T01)*
 - [ ] ` 503` [E5-T03](epic-5-the-switchboard/E5-T03-run-scoped-proxy-identities/readme.md) — Run-scoped proxy identities: least-privilege issuance, rotation, revocation, and replay resistance *(deps: E5-T02)*
-- [ ] ` 504` [E5-T04](epic-5-the-switchboard/E5-T04-sprite-proxy-bootstrap/readme.md) — Sprite credential-proxy bootstrap: attested local endpoint, no secret environment, and default-deny egress *(deps: E4-T05, E5-T03)*
+- [ ] ` 504` [E5-T04](epic-5-the-switchboard/E5-T04-cloudflare-os-proxy-bootstrap/readme.md) — Cloudflare OS credential-proxy bootstrap: attested Gatekeeper endpoint, no secret environment, and default-deny egress *(deps: E4-T05, E5-T03)*
 - [ ] ` 505` [E5-T05](epic-5-the-switchboard/E5-T05-integration-import-and-tool-catalog/readme.md) — Service onboarding: import integrations into a versioned searchable tool catalog *(deps: E5-T02)*
 - [ ] ` 506` [E5-T06](epic-5-the-switchboard/E5-T06-search-describe-execute-gateway/readme.md) — Tool gateway: search, describe, and schema-validated execute over pinned catalog operations *(deps: E5-T05)*
 - [ ] ` 507` [E5-T07](epic-5-the-switchboard/E5-T07-exact-request-policy-approvals/readme.md) — Exact-request policy and approvals: risk decisions bind one canonical tool call *(deps: E5-T06)*
 - [ ] ` 508` [E5-T08](epic-5-the-switchboard/E5-T08-connection-grants/readme.md) — Connection grants: administrators assign least-privilege service purposes to agent revisions *(deps: E5-T03, E5-T07)*
-- [ ] ` 509` [E5-T09](epic-5-the-switchboard/E5-T09-brokered-tool-security-capstone/readme.md) — Capstone: a real Fly agent uses a real Infisical Agent Proxy connection through one approved tool call without seeing credentials **[CAPSTONE]** *(deps: E5-T04, E5-T08)*
+- [ ] ` 509` [E5-T09](epic-5-the-switchboard/E5-T09-brokered-tool-security-capstone/readme.md) — Capstone: a real Cloudflare OS agent uses a real Infisical Agent Proxy connection through one approved tool call without seeing credentials **[CAPSTONE]** *(deps: E5-T04, E5-T08)*
 
 ## Epic 6 — `epic-6-the-harnesses`
 
 - [ ] ` 601` [E6-T01](epic-6-the-harnesses/E6-T01-harness-provider-contract/readme.md) — Harness provider contract: Codex and Claude Code behind one fenced invocation interface *(deps: E4, E5)*
-- [ ] ` 602` [E6-T02](epic-6-the-harnesses/E6-T02-pinned-harness-installation/readme.md) — Pinned harness installation: allowlisted artifacts, verified digests, and repeatable Sprite images *(deps: E6-T01)*
+- [ ] ` 602` [E6-T02](epic-6-the-harnesses/E6-T02-pinned-harness-installation/readme.md) — Pinned harness installation: allowlisted artifacts, verified digests, and repeatable Cloudflare OS workspace layers *(deps: E6-T01)*
 - [ ] ` 603` [E6-T03](epic-6-the-harnesses/E6-T03-codex-cli-adapter/readme.md) — Codex CLI adapter: pinned noninteractive launch, structured activity, tool mediation, and cancellation *(deps: E6-T02)*
 - [ ] ` 604` [E6-T04](epic-6-the-harnesses/E6-T04-claude-code-adapter/readme.md) — Claude Code adapter: pinned noninteractive launch, structured activity, tool mediation, and cancellation *(deps: E6-T02)*
 - [ ] ` 605` [E6-T05](epic-6-the-harnesses/E6-T05-shared-tool-gateway-wiring/readme.md) — Shared tool gateway wiring: identical brokered tools and policy semantics for both harnesses *(deps: E5, E6-T03, E6-T04)*
 - [ ] ` 606` [E6-T06](epic-6-the-harnesses/E6-T06-fresh-session-and-normalization/readme.md) — Fresh sessions and normalized results: no hidden harness history, one portable provenance envelope *(deps: E6-T03, E6-T04)*
-- [ ] ` 607` [E6-T07](epic-6-the-harnesses/E6-T07-two-harnesses-on-fly/readme.md) — Capstone: Codex and Claude Code each complete the same brokered task on real Fly Sprites **[CAPSTONE]** *(deps: E6-T05, E6-T06)*
+- [ ] ` 607` [E6-T07](epic-6-the-harnesses/E6-T07-two-harnesses-on-cloudflare-os/readme.md) — Capstone: Codex and Claude Code each complete the same brokered task on real Cloudflare OS workspaces **[CAPSTONE]** *(deps: E6-T05, E6-T06)*
 
 ## Epic 7 — `epic-7-the-watchtower`
 

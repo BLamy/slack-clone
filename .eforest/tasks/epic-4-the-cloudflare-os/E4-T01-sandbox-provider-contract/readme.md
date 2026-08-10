@@ -18,7 +18,7 @@ snapshot, while provider capabilities are explicit data rather than adapter gues
 
 ## Context
 
-Fly Sprites is the first server runtime and almostnode is a later reach, so the queue must
+Cloudflare OS is the first server runtime and AlmostNode is a later reach, so the queue must
 freeze semantics before either adapter leaks provider-specific behavior into run state.
 The contract is a security boundary: an agent chooses only a configured provider id and
 profile; it never supplies raw provider credentials, host paths, network policy, or an

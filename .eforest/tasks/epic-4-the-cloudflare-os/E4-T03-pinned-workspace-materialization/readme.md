@@ -11,10 +11,10 @@ capstone: false
 
 ## Goal
 
-The Fly adapter materializes an invocation's immutable workspace manifest into its Sprite
-at `/workspace`, verifies a canonical tree digest before execution, and refuses archive,
-path, symlink, or late-head changes that could make the sandbox run different source than
-the dispatcher claimed.
+The Cloudflare OS adapter materializes an invocation's immutable workspace manifest into
+its isolated Gadget workspace, verifies a canonical tree digest before execution, and
+refuses archive, path, symlink, or late-head changes that could make the sandbox run
+different source than the dispatcher claimed.
 
 ## Context
 
@@ -26,7 +26,7 @@ workspace already bound to a run.
 ## Deliverables
 
 - Content-addressed workspace manifest and transfer implementation in
-  `packages/sandbox-fly/src/workspace/`.
+  `packages/sandbox-cloudflare-os/src/workspace/`.
 - Canonical tree-digest parity utilities shared with the dispatcher and an archive/path
   hardening corpus.
 - `make verify-E4-T03` with clean, corrupt, truncated, and hostile-tree fixtures.

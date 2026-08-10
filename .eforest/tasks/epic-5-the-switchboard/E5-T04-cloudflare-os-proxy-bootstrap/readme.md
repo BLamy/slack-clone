@@ -1,7 +1,7 @@
 ---
 id: E5-T04
 epic: 5
-title: "Sprite credential-proxy bootstrap: attested local endpoint, no secret environment, and default-deny egress"
+title: "Cloudflare OS credential-proxy bootstrap: attested Gatekeeper endpoint, no secret environment, and default-deny egress"
 priority: 504
 status: pending
 depends_on: [E4-T05, E5-T03]
@@ -11,10 +11,11 @@ capstone: false
 
 ## Goal
 
-A Fly Sprite boots with a run-scoped credential proxy endpoint that is reachable only by
-the run's processes, authenticates with its bound proxy identity, and routes approved
-secret-backed service requests without placing real credentials in the workspace,
-environment, command line, filesystem, or general network path.
+A Cloudflare OS workspace/Gadget boots with a run-scoped credential proxy through an
+attested Gatekeeper endpoint that is reachable only by the run's processes, authenticates
+with its bound proxy identity, and routes approved secret-backed service requests without
+placing real credentials in the workspace, environment, command line, filesystem, or
+general network path.
 
 ## Context
 
@@ -24,16 +25,18 @@ and E4's network policy must allow only the broker/tool endpoints required by th
 
 ## Deliverables
 
-- Attested bootstrap manifest and Fly startup wiring in `packages/sandbox-fly`.
+- Attested bootstrap manifest and Cloudflare OS/Gatekeeper startup wiring in
+  `packages/sandbox-cloudflare-os`.
 - Loopback or mutually authenticated local broker endpoint, health/readiness gate, and
   teardown/revocation hook.
-- `make verify-E5-T04` plus opt-in real Fly/Infisical integration gate.
+- `make verify-E5-T04` plus opt-in real Cloudflare OS/Infisical integration gate.
 
 ## Acceptance criteria
 
-- [ ] `make verify-E5-T04` passes cold with two isolated Sprite fixtures and proves each
+- [ ] `make verify-E5-T04` passes cold with two isolated Cloudflare OS workspace/Gadget
+      fixtures and proves each
       can use only its own broker identity and connection revision.
-- [ ] No secret value or reusable broker token appears in Sprite env, argv, workspace,
+- [ ] No secret value or reusable broker token appears in Cloudflare OS env, argv, workspace,
       retained volume, process listing, run stream, or bootstrap manifest; canary scans
       cover success and every error path.
 - [ ] Agent execution waits for a successful provider/mode attestation identifying
@@ -42,7 +45,7 @@ and E4's network policy must allow only the broker/tool endpoints required by th
       service, metadata/private networks, arbitrary internet, and sibling proxy endpoints.
 - [ ] Cancel, suspend, destroy, or lease loss closes the endpoint and revokes identity
       before process continuation; persistent resume requires a newly issued identity.
-- [ ] Browser evidence is recorded exactly as `Replay: N/A (headless Sprite proxy
+- [ ] Browser evidence is recorded exactly as `Replay: N/A (headless Cloudflare OS proxy
       bootstrap) + mitigation: cold-clone isolation matrix, canary scans, network-deny
       transcript, lifecycle replay, and gated real-provider smoke`.
 

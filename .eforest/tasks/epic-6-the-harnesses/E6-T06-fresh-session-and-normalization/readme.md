@@ -34,7 +34,7 @@ resume is a future-capable input with a digest, never an ambient home-directory 
 - [ ] `make verify-E6-T06` passes cold and normalizes paired Codex/Claude fixture runs to
       stable versioned envelopes and exact provenance digests.
 - [ ] A fresh run cannot read prior harness conversation ids, homes, caches, auth state,
-      transcripts, tool results, or environment canaries, including on persistent Sprites.
+      transcripts, tool results, or environment canaries, including on persistent Cloudflare OS workspaces.
 - [ ] Only an explicit resume artifact named and hashed in the invocation snapshot may
       restore history; missing, foreign, mutable, or digest-mismatched artifacts fail
       before harness launch.

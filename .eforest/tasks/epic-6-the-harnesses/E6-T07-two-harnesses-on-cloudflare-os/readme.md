@@ -1,7 +1,7 @@
 ---
 id: E6-T07
 epic: 6
-title: "Capstone: Codex and Claude Code each complete the same brokered task on real Fly Sprites"
+title: "Capstone: Codex and Claude Code each complete the same brokered task on real Cloudflare OS workspaces"
 priority: 607
 status: pending
 depends_on: [E6-T05, E6-T06]
@@ -12,7 +12,7 @@ capstone: true
 ## Goal
 
 From a cold clone, two agent configurations differing only by harness run the same pinned
-task on separate real Fly Sprites: one with Codex CLI, one with Claude Code. Each starts
+task on separate real Cloudflare OS workspaces: one with Codex CLI, one with Claude Code. Each starts
 fresh, uses the same granted brokered tool through Infisical Agent Proxy, publishes a
 provenance-bound Slack reply, and cleans up without secret or session leakage.
 
@@ -31,11 +31,11 @@ caching Proxy cannot satisfy the capstone. Provider unavailability is a visible 
 
 ## Acceptance criteria
 
-- [ ] `tools/verify/cold_clone.sh verify-E6-T07-real` attests real Fly, real Codex CLI,
+- [ ] `tools/verify/cold_clone.sh verify-E6-T07-real` attests real Cloudflare OS, real Codex CLI,
       real Claude Code, and real Infisical Agent Proxy; missing any provider exits nonzero
       with `SKIPPED:` and no fake/local fallback can pass.
 - [ ] Both invocations cite the same context/workspace/catalog/grant/task digests and
-      distinct harness artifact, run, Sprite, proxy identity, and fresh-home identities.
+      distinct harness artifact, run, Cloudflare OS workspace, proxy identity, and fresh-home identities.
 - [ ] Each harness independently search/describes and executes the same granted operation;
       canonical policy/request digests match, and the service observes exactly one request
       per run with no extra destination.
@@ -44,10 +44,10 @@ caching Proxy cannot satisfy the capstone. Provider unavailability is a visible 
       not change authorization or provenance fields.
 - [ ] Cancellation/revocation of a follow-up probe stops both harness process trees and
       broker access; canary scans find no service/model credentials or prior-session data,
-      and final Fly inventory is empty.
+      and final Cloudflare OS inventory is empty.
 - [ ] Browser evidence is recorded exactly as `Replay: N/A (real headless dual-harness
       capstone) + mitigation: cold-clone real-provider attestations, canonical request and
-      reply digests, target-service counts, canary scans, and Fly inventories`.
+      reply digests, target-service counts, canary scans, and Cloudflare OS inventories`.
 
 ## Adversarial verification
 

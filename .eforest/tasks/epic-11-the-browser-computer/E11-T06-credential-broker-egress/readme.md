@@ -19,7 +19,7 @@ values never enter JavaScript, Wasm memory, worker messages, storage, DOM, or re
 
 This is the only permitted real-credential path for the browser reach provider. The
 browser sends a typed service operation under a run-bound capability; it never receives
-a raw credential or arbitrary authenticated fetch primitive. Fly production is unchanged.
+a raw credential or arbitrary authenticated fetch primitive. Cloudflare OS production is unchanged.
 
 ## Deliverables
 

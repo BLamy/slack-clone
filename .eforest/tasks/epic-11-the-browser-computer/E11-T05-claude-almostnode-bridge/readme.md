@@ -19,7 +19,7 @@ different harness.
 ## Context
 
 Claude Code browser support is not assumed. This reach task cannot weaken the common
-harness contract, alter the Fly production adapter, or claim parity from protocol-shaped
+harness contract, alter the Cloudflare OS production adapter, or claim parity from protocol-shaped
 fixtures. Verification requires the actual Claude Code harness in the browser boundary.
 
 ## Deliverables

@@ -17,6 +17,7 @@ import {
   zeroRunUsage,
 } from "@stream-slack/protocol";
 
+import { replayAgentConfigStream } from "../src/ledger/agent-config-stream.mjs";
 import { canonicalSha256 } from "../src/ledger/canonical-json.mjs";
 import { createAgentReplyDispatcher } from "../src/ledger/agent-replies.mjs";
 import {
@@ -57,6 +58,7 @@ import {
   createCapstoneAuthorityState,
   createCapstoneSnapshot,
   createChannelAppend,
+  seedCapstoneConfigStream,
 } from "../test/support/e3-capstone-fixture.mjs";
 
 const root = path.resolve(import.meta.dirname, "..");
@@ -95,7 +97,9 @@ const composed = await verifyComposedIngressAndLease();
 const adversarial = verifyBatchingAndRecursion();
 const faultEvidence = await verifyCancellationAndRetry(composed);
 const streamDumps = composed.store.dump();
-const sourceRefManifest = sourceManifest(streamDumps);
+const sourceRefManifest = sourceManifest(streamDumps, {
+  stateReferences: [composed.config.source],
+});
 const projectionRebuild = rebuildProjection({ composed, streamDumps });
 const sensitivity = await verifySensitivity();
 const composite = canonicalSha256({
@@ -130,7 +134,9 @@ const evidence = {
       queue: composed.queue,
       run: composed.run,
       scheduler: composed.scheduler,
-      sourceRefManifest: sourceManifest(structuredClone(streamDumps)),
+      sourceRefManifest: sourceManifest(structuredClone(streamDumps), {
+        stateReferences: [composed.config.source],
+      }),
     }),
   },
   faultSchedules: {
@@ -257,7 +263,10 @@ async function verifyComposedIngressAndLease() {
     offset: sourceRecord.offset,
     stream: sourceRecord.stream,
   };
-  const snapshot = createCapstoneSnapshot(sourceTrigger);
+  const config = await seedCapstoneConfigStream({ store });
+  const snapshot = createCapstoneSnapshot(sourceTrigger, {
+    configSource: config.source,
+  });
   const door = createDispatchDoor({
     producerId: "e3-t08-reconciler",
     streamStore: store,
@@ -588,6 +597,7 @@ async function verifyComposedIngressAndLease() {
   const conversation = structuredClone(state.entities.messages);
   const projectionBefore = {
     auditDigest: canonicalSha256(stripStreamFields(auditRecords)),
+    configStateDigest: config.source.stateDigest,
     contextDigest: contextPack.packDigest,
     conversationDigest: canonicalSha256(conversation),
     leaseStateDigest: leaseReplay.finalStateDigest,
@@ -595,6 +605,7 @@ async function verifyComposedIngressAndLease() {
     runDigest: completedRunState.replayDigest,
     projectionDigest: canonicalSha256({
       auditDigest: canonicalSha256(stripStreamFields(auditRecords)),
+      configStateDigest: config.source.stateDigest,
       contextDigest: contextPack.packDigest,
       conversationDigest: canonicalSha256(conversation),
       leaseStateDigest: leaseReplay.finalStateDigest,
@@ -603,6 +614,7 @@ async function verifyComposedIngressAndLease() {
     }),
   };
   return {
+    config,
     context: contextPack,
     invocation: {
       ...invocation,
@@ -1061,10 +1073,15 @@ function rebuildProjection({ composed, streamDumps }) {
     workspaceId: CAPSTONE_IDS.workspaceId,
   };
   const channelStream = streamNames.channel(workspaceId, channelId);
+  const configStream = streamNames.agentConfig(
+    workspaceId,
+    composed.invocation.agentId,
+  );
   const invocationStream = streamNames.workspaceInvocations(workspaceId);
   const auditStream = streamNames.workspaceAudit(workspaceId);
   const runStream = streamNames.run(workspaceId, runId);
   const channelRecords = streamDumps[channelStream]?.records ?? [];
+  const configRecords = streamDumps[configStream]?.records ?? [];
   const invocationRecords = streamDumps[invocationStream]?.records ?? [];
   const normalizedInvocationRecords = invocationRecords.map(
     (record, index) => ({
@@ -1075,8 +1092,22 @@ function rebuildProjection({ composed, streamDumps }) {
   const auditRecords = streamDumps[auditStream]?.records ?? [];
   const runRecords = streamDumps[runStream]?.records ?? [];
   assert.ok(channelRecords.length > 0);
+  assert.ok(configRecords.length > 0);
   assert.ok(invocationRecords.length > 0);
   assert.ok(runRecords.length > 0);
+
+  const rebuiltConfig = replayAgentConfigStream(configRecords);
+  const configHead = configRecords.at(-1);
+  assert.equal(
+    rebuiltConfig.finalStateDigest,
+    composed.config.source.stateDigest,
+  );
+  assert.equal(configHead.offset, composed.config.source.offset);
+  assert.equal(
+    composed.invocation.snapshotRef.digest,
+    rebuiltConfig.finalStateDigest,
+  );
+  assert.equal(composed.invocation.snapshotRef.offset, configHead.offset);
 
   const initialRunRecords = runRecords
     .filter((record) => {
@@ -1125,6 +1156,7 @@ function rebuildProjection({ composed, streamDumps }) {
   );
   const after = {
     auditDigest: canonicalSha256(stripStreamFields(auditRecords)),
+    configStateDigest: rebuiltConfig.finalStateDigest,
     contextDigest: rebuiltContext.packDigest,
     conversationDigest: canonicalSha256(rebuiltConversation),
     leaseStateDigest: rebuiltLease.finalStateDigest,
@@ -1132,6 +1164,7 @@ function rebuildProjection({ composed, streamDumps }) {
     runDigest: canonicalSha256(normalizedRunRecords),
     projectionDigest: canonicalSha256({
       auditDigest: canonicalSha256(stripStreamFields(auditRecords)),
+      configStateDigest: rebuiltConfig.finalStateDigest,
       contextDigest: rebuiltContext.packDigest,
       conversationDigest: canonicalSha256(rebuiltConversation),
       leaseStateDigest: rebuiltLease.finalStateDigest,
@@ -1145,6 +1178,7 @@ function rebuildProjection({ composed, streamDumps }) {
     before: composed.projectionBefore,
     replayed: {
       conversationMessageCount: Object.keys(rebuiltConversation).length,
+      configStateDigest: rebuiltConfig.finalStateDigest,
       contextDigest: rebuiltContext.packDigest,
       leaseStateDigest: rebuiltLease.finalStateDigest,
       queueDigest: rebuiltQueue.queueDigest,
@@ -1360,8 +1394,8 @@ function createRequestedAndQueuedRun({ invocation, invocationRef, runId }) {
   return events;
 }
 
-function sourceManifest(dumps) {
-  return Object.fromEntries(
+function sourceManifest(dumps, { stateReferences = [] } = {}) {
+  const manifest = Object.fromEntries(
     Object.entries(dumps).map(([stream, dump]) => [
       stream,
       {
@@ -1376,6 +1410,23 @@ function sourceManifest(dumps) {
       },
     ]),
   );
+  if (stateReferences.length > 0) {
+    manifest.stateReferences = stateReferences.map((reference) => {
+      const dump = dumps[reference.stream];
+      assert.ok(dump, `state reference stream is absent: ${reference.stream}`);
+      assert.equal(
+        dump.records.at(-1)?.offset,
+        reference.offset,
+        `state reference does not resolve to stream head: ${reference.stream}`,
+      );
+      return {
+        ...reference,
+        head: dump.head,
+        streamDigest: dump.streamDigest,
+      };
+    });
+  }
+  return manifest;
 }
 
 async function writeJson(filename, value) {

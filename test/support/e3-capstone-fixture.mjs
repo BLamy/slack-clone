@@ -9,6 +9,7 @@ import {
 } from "@stream-slack/protocol";
 import { createInitialState } from "@stream-slack/reducers";
 
+import { createAgentConfigStream } from "../../src/ledger/agent-config-stream.mjs";
 import { canonicalSha256 } from "../../src/ledger/canonical-json.mjs";
 import {
   digestEventEnvelope,
@@ -74,15 +75,13 @@ export function createCapstoneAuthorityState() {
   return state;
 }
 
-export function createCapstoneSnapshot(sourceTrigger) {
+export function createCapstoneSnapshot(
+  sourceTrigger,
+  { configSource = defaultConfigSource() } = {},
+) {
   const { agentId, agentPrincipalId, channelId, workspaceId } = CAPSTONE_IDS;
   const activeConfig = structuredClone(config);
   const configDigest = agentConfigDigest(activeConfig);
-  const configSource = {
-    offset: deterministicOffset(2),
-    stateDigest: fixedDigest("b"),
-    stream: streamNames.agentConfig(workspaceId, agentId),
-  };
   const directorySource = {
     offset: deterministicOffset(4),
     stateDigest: fixedDigest("d"),
@@ -160,6 +159,53 @@ export function createCapstoneSnapshot(sourceTrigger) {
   });
 }
 
+export async function seedCapstoneConfigStream({ store }) {
+  const { agentId, humanId, workspaceId } = CAPSTONE_IDS;
+  const configStream = createAgentConfigStream({
+    agentId,
+    streamStore: store,
+    workspaceId,
+  });
+  const clock = () => new Date(CAPSTONE_TIME);
+  const created = await configStream.create({
+    actorId: humanId,
+    clock,
+    config: structuredClone(config),
+    correlationId: `cr_${"c".repeat(26)}`,
+    eventId: `ev_${"c".repeat(26)}`,
+    idempotencyKey: `ik_${"c".repeat(26)}`,
+  });
+  await configStream.activate({
+    actorId: humanId,
+    clock,
+    correlationId: `cr_${"c".repeat(26)}`,
+    eventId: `ev_${"d".repeat(26)}`,
+    expectedRevision: created.revision,
+    expectedRevisionId: created.revisionId,
+    idempotencyKey: `ik_${"d".repeat(26)}`,
+    revisionId: created.revisionId,
+  });
+  const replay = await configStream.read();
+  const records = replay.records.map((record, index) => ({
+    ...record,
+    offset: deterministicOffset(index + 1),
+  }));
+  store.replace(replay.stream, records);
+  const finalReplay = await configStream.read();
+  const activeRecord = records.at(-1);
+  const source = {
+    offset: activeRecord.offset,
+    stateDigest: finalReplay.stateDigest,
+    stream: finalReplay.stream,
+  };
+  return {
+    records,
+    source,
+    stateDigest: finalReplay.stateDigest,
+    stream: finalReplay.stream,
+  };
+}
+
 export function createChannelAppend({ state, store }) {
   const { channelId, workspaceId } = CAPSTONE_IDS;
   const stream = streamNames.channel(workspaceId, channelId);
@@ -213,6 +259,15 @@ export function createChannelAppend({ state, store }) {
 
 export function fixedDigest(letter) {
   return `sha256:${letter.repeat(64)}`;
+}
+
+function defaultConfigSource() {
+  const { agentId, workspaceId } = CAPSTONE_IDS;
+  return {
+    offset: deterministicOffset(2),
+    stateDigest: fixedDigest("b"),
+    stream: streamNames.agentConfig(workspaceId, agentId),
+  };
 }
 
 function principal(principalId, handle, kind, ownedBy = null) {

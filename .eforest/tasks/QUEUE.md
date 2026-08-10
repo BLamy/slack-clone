@@ -8,11 +8,16 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-No task is currently in progress, awaiting verification, or refuted.
+1. **E3-T08** — Capstone: mention to scripted agent reply *(builder working)*
 
 ## Next up (dependencies satisfied)
 
-1. **E3-T08** — Capstone: mention to scripted agent reply
+No new task may start until **E3-T08** clears the gate.
+
+## Unlocks when E3-T08 verifies
+
+1. **E4-T01** — Sandbox provider contract: capability discovery, fenced lifecycle operations, and provider-neutral run identities
+1. **E5-T01** — Credential broker contract: Infisical Agent Proxy in production, Agent Vault locally, and no raw-secret orchestration path
 
 ## Epic 0 — `epic-0-the-ledger`
 
@@ -55,7 +60,7 @@ No task is currently in progress, awaiting verification, or refuted.
 - [x] ` 305` [E3-T05](epic-3-the-dispatcher/E3-T05-batching-and-recursion-guards/readme.md) — Per-conversation batching, serialization, and recursion guards *(deps: E3-T02, E3-T03)*
 - [x] ` 306` [E3-T06](epic-3-the-dispatcher/E3-T06-cancellation-retries-and-budgets/readme.md) — Cancellation, retries, deadlines, and resource budgets *(deps: E3-T03)*
 - [x] ` 307` [E3-T07](epic-3-the-dispatcher/E3-T07-provenance-bound-agent-replies/readme.md) — Agent replies bound to run provenance and current membership *(deps: E3-T03, E3-T04)*
-- [ ] ` 308` [E3-T08](epic-3-the-dispatcher/E3-T08-mention-to-scripted-agent-reply/readme.md) — Capstone: mention to scripted agent reply **[CAPSTONE]** *(deps: E3-T05, E3-T06, E3-T07)*
+- [~] ` 308` [E3-T08](epic-3-the-dispatcher/E3-T08-mention-to-scripted-agent-reply/readme.md) — Capstone: mention to scripted agent reply **[CAPSTONE]** *(deps: E3-T05, E3-T06, E3-T07)*
 
 ## Epic 4 — `epic-4-the-sprite`
 

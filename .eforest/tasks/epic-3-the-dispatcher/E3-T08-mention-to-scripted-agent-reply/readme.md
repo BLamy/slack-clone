@@ -3,7 +3,7 @@ id: E3-T08
 epic: 3
 title: "Capstone: mention to scripted agent reply"
 priority: 308
-status: pending
+status: in-progress
 depends_on: [E3-T05, E3-T06, E3-T07]
 estimate: L
 capstone: true

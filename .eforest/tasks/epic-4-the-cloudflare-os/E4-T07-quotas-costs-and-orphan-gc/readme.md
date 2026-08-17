@@ -3,7 +3,7 @@ id: E4-T07
 epic: 4
 title: "Sandbox quotas, cost accounting, and orphan garbage collection from provider-observed reality"
 priority: 407
-status: implemented
+status: refuted
 depends_on: [E4-T04, E4-T06]
 estimate: L
 capstone: false
@@ -72,3 +72,12 @@ proof before destructive action.
 - Gates: format:check, task format gate, lint, typecheck, test:unit (189 passed, 0 skipped), and build passed.
 - Replay: N/A (server quota and GC worker) + mitigation: cold-clone race/replay fixtures, provider inventory transcripts, exact cost digests, and deletion sensitivity.
 - Claim: scoped atomic reservations, provider-observed deduplicated cost events, paginated ownership-safe quarantine/GC, monotonic/fenced lease rechecks, and deletion sensitivity satisfy the E4-T07 acceptance criteria.
+
+### Critic — 2026-08-17
+
+- Verdict: VERDICT: refuted
+- Exact implementation commit: a536b9edda876e7d6879d5fffc3f72c5c3f48a03
+- Independent cold run: make verify-E4-T07, TEST_RUN_ID=e4-t07-critic-20260817; formatting, lint, typecheck, 189 unit tests with 0 skipped, build, and the verifier all passed with matching builder digests.
+- Findings: the reservation fixture incremented providerCalls after reserve without invoking a provider; cleanup sensitivity failed only after entering the destroy stub; delayed-heartbeat sequence advance was not exercised; timeout removed the resource before 504 so no idempotent destroy retry was proven; stale-fence rejection was not tested.
+- Replay: N/A (server quota and GC worker) + mitigation: independent cold clone, quota race replay, paginated ownership inventory, canary scan, and mutation review.
+- Status: refuted pending verifier repair.

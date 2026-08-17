@@ -96,6 +96,10 @@ export class CloudflareOsSandboxProvider {
     return this.#lifecycle("resume", request);
   }
 
+  async reset(request) {
+    return this.#lifecycle("reset", request);
+  }
+
   async destroy(request) {
     return this.#lifecycle("destroy", request);
   }

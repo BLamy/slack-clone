@@ -93,8 +93,16 @@ export class CloudflareOsClient {
     return this.#mutate("resume", reference, labels, idempotencyKey);
   }
 
+  reset(reference, labels, idempotencyKey) {
+    return this.#mutate("reset", reference, labels, idempotencyKey);
+  }
+
   destroy(reference, labels, idempotencyKey) {
     return this.#mutate("destroy", reference, labels, idempotencyKey);
+  }
+
+  inventory(labels) {
+    return this.listByLabels(labels);
   }
 
   cancel(reference, labels, idempotencyKey) {

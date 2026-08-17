@@ -116,6 +116,9 @@ verify-E4-T04:
 verify-E4-T05:
 	@node scripts/cold-verify-e4-t05.mjs
 
+verify-E4-T06:
+	@E4_T06_ENTRYPOINT='make verify-E4-T06' node scripts/cold-verify-e4-t06.mjs
+
 verify-E2:
 	@node scripts/composed-verify-e2.mjs
 

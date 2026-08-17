@@ -196,6 +196,17 @@ export class InMemorySandboxProvider {
     });
   }
 
+  async reset(request) {
+    return this.#lifecycle("reset", request, (sandbox) => {
+      if (sandbox.lifecycle === "destroyed") invalidLifecycle("reset");
+      for (const execution of this.#executions.values()) {
+        if (execution.sandboxId === sandbox.sandboxId)
+          execution.status = "cancelled";
+      }
+      sandbox.lifecycle = "ready";
+    });
+  }
+
   async destroy(request) {
     return this.#lifecycle("destroy", request, (sandbox) => {
       if (sandbox.lifecycle === "destroyed") {

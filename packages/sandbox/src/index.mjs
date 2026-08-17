@@ -29,4 +29,11 @@ export {
   normalizeAddress,
   normalizeHost,
 } from "./network-policy.mjs";
+export {
+  LIFECYCLE_ERROR_CODES,
+  SandboxLifecycleManager,
+  compileLifecyclePolicy,
+  retainEntries,
+  retainedTreeDigest,
+} from "./lifecycle.mjs";
 export { InMemorySandboxProvider, redact } from "./provider.mjs";

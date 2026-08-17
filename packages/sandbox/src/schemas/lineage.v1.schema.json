@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:stream-slack:sandbox-lineage:v1",
+  "title": "Stream Slack sandbox lineage v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "lineageId",
+    "agentId",
+    "mode",
+    "lineageGeneration",
+    "status",
+    "fence",
+    "treeDigest"
+  ],
+  "properties": {
+    "lineageId": {
+      "type": "string",
+      "pattern": "^ln_[A-Za-z0-9._:-]{1,160}$"
+    },
+    "agentId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,160}$"
+    },
+    "lineageKey": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,160}$"
+    },
+    "mode": { "enum": ["ephemeral", "persistent"] },
+    "lineageGeneration": { "type": "integer", "minimum": 1 },
+    "policyDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "encryption": { "const": "provider-managed" },
+    "status": { "enum": ["active", "suspended"] },
+    "runId": {
+      "type": "string",
+      "pattern": "^rn_[A-Za-z0-9._:-]{1,120}$"
+    },
+    "fence": { "type": "integer", "minimum": 1 },
+    "treeDigest": {
+      "anyOf": [
+        { "type": "null" },
+        { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+      ]
+    },
+    "retentionExpiresAt": { "type": ["integer", "null"] }
+  }
+}

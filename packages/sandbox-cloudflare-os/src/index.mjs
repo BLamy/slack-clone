@@ -17,6 +17,10 @@ export {
   createCloudflareOsProvider,
 } from "./provider.mjs";
 export {
+  CloudflareOrphanGarbageCollector,
+  OWNERSHIP_LABEL_KEYS,
+} from "./gc.mjs";
+export {
   canonical as canonicalWorkspaceValue,
   normalizeManifest,
   normalizePath,

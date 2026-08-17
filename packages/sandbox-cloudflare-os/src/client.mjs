@@ -69,10 +69,11 @@ export class CloudflareOsClient {
     });
   }
 
-  listByLabels(labels) {
+  listByLabels(labels, { cursor } = {}) {
     const query = new URLSearchParams();
     for (const key of Object.keys(labels).sort())
       query.set(`label.${key}`, labels[key]);
+    if (cursor !== undefined && cursor !== null) query.set("cursor", cursor);
     return this.#request("GET", `/v1/workspaces?${query}`, {
       operation: "reconcile",
     });
@@ -125,8 +126,8 @@ export class CloudflareOsClient {
     );
   }
 
-  inventory(labels) {
-    return this.listByLabels(labels);
+  inventory(labels, options = {}) {
+    return this.listByLabels(labels, options);
   }
 
   cancel(reference, labels, idempotencyKey, expectedFence) {

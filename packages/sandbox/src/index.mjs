@@ -36,4 +36,13 @@ export {
   retainEntries,
   retainedTreeDigest,
 } from "./lifecycle.mjs";
+export {
+  QUOTA_COST_DIMENSIONS,
+  QUOTA_ERROR_CODES,
+  QUOTA_RESERVATION_DIMENSIONS,
+  SandboxQuotaManager,
+  compileQuotaPolicy,
+  quotaUsageDigest,
+  replayQuotaEvents,
+} from "./quota.mjs";
 export { InMemorySandboxProvider, redact } from "./provider.mjs";

@@ -34,6 +34,7 @@ const REQUIRED = [
   "CF_OS_GATEKEEPER_HOST",
   "CF_OS_GATEKEEPER_PORT",
   "CF_OS_GATEKEEPER_PURPOSE",
+  "CF_OS_TEST_PROFILE",
 ];
 const REPLAY =
   "Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger, and before/after Cloudflare OS inventory";
@@ -87,6 +88,11 @@ async function runRealConformance() {
     agentId: config.agentId,
     invocationId,
     idempotencyKey: createKey,
+  };
+  const scopeLabels = {
+    "stream-slack/tenant": config.tenantId,
+    "stream-slack/workspace": config.workspaceId,
+    "stream-slack/agent": config.agentId,
   };
   const networkPolicy = buildNetworkPolicy(config);
   const manifest = buildManifest(invocationDigest);
@@ -153,6 +159,7 @@ async function runRealConformance() {
         "streaming-exec",
       ],
       networkPolicy,
+      testProfile: config.testProfile,
       testScope: prefix,
     },
   };
@@ -166,6 +173,8 @@ async function runRealConformance() {
     networkPolicyDigest: networkPolicy.digest,
     providerResourceId: null,
     providerAttestation: null,
+    resourceBindings: [],
+    scopeLabels,
     beforeInventory: null,
     afterCreateInventory: null,
     afterPublishInventory: null,
@@ -183,12 +192,12 @@ async function runRealConformance() {
   let cleanupError = null;
   try {
     tempRoot = await mkdtemp(path.join(os.tmpdir(), "stream-slack-e4-t08-"));
-    const before = await inventoryAll(client, identity);
+    const before = await inventoryAll(client, scopeLabels);
     state.beforeInventory = summarizeInventory(before.resources);
     assert.equal(
-      exactResources(before.resources, identity).length,
+      prefixedResources(before.resources, prefix).length,
       0,
-      "unique E4-T08 ownership labels were already present before create",
+      "uniquely prefixed E4-T08 resources were already present before create",
     );
 
     sandbox = await provider.create({
@@ -196,11 +205,16 @@ async function runRealConformance() {
       idempotencyKey: createKey,
     });
     assert.equal(sandbox.lifecycle, "ready");
-    const afterCreate = await inventoryAll(client, identity);
+    const afterCreate = await inventoryAll(client, scopeLabels);
     const createdResource = requireOneResource(afterCreate.resources, identity);
     state.afterCreateInventory = summarizeInventory(afterCreate.resources);
     state.providerResourceId = resourceId(createdResource);
-    state.providerAttestation = requireCloudflareAttestation(createdResource);
+    state.providerAttestation = requireCloudflareAttestation(
+      createdResource,
+      state.providerResourceId,
+      config.testProfile,
+    );
+    recordResourceBinding(state, "create", createdResource);
     assert.equal(sandbox.sandboxId, publicSandboxId(createdResource));
     assert.equal(createdResource.fence, sandbox.fence);
 
@@ -231,12 +245,13 @@ async function runRealConformance() {
       { materializer },
     );
     assert.equal(materialized.digest, expectedWorkspaceDigest);
-    const afterPublish = await inventoryAll(client, identity);
+    const afterPublish = await inventoryAll(client, scopeLabels);
     const publishedResource = requireOneResource(
       afterPublish.resources,
       identity,
     );
     state.afterPublishInventory = summarizeInventory(afterPublish.resources);
+    recordResourceBinding(state, "workspace-materialize", publishedResource);
     assert.equal(
       extractWorkspaceDigest(publishedResource.raw),
       expectedWorkspaceDigest,
@@ -344,6 +359,11 @@ async function runRealConformance() {
       cancellation.stdout.includes("post-cancel-side-effect"),
       false,
     );
+    assert.equal(
+      cancellation.networkDecisions.length,
+      0,
+      "cancellation execution emitted an unassigned network decision",
+    );
     state.executions.push(executionEvidence(cancellation));
     sandbox = await refreshSandbox(
       provider,
@@ -354,19 +374,22 @@ async function runRealConformance() {
       prefix + "_refresh_cancel",
     );
 
-    const beforeDestroy = await inventoryAll(client, identity);
+    const beforeDestroy = await inventoryAll(client, scopeLabels);
     const usageResource = requireOneResource(beforeDestroy.resources, identity);
     state.beforeDestroyInventory = summarizeInventory(beforeDestroy.resources);
-    const usage = extractProviderUsage(usageResource.raw);
+    recordResourceBinding(state, "usage", usageResource);
+    const usage = extractProviderUsage(
+      usageResource.raw,
+      state.providerResourceId,
+    );
     const costObservation = {
       reservationId: reservation.reservationId,
-      providerResourceId: state.providerResourceId,
+      providerResourceId: usage.providerResourceId,
       meteringWindow: usage.meteringWindow,
       measured: usage.measured,
       pricingVersion: usage.pricingVersion,
-      sourceObservationId:
-        usage.sourceObservationId ?? prefix + "_usage_observation",
-      sourceOffset: usage.sourceOffset ?? prefix + "_usage_offset",
+      sourceObservationId: usage.sourceObservationId,
+      sourceOffset: usage.sourceOffset,
     };
     const cost = quota.recordUsage(costObservation);
     assert.equal(cost.providerResourceId, state.providerResourceId);
@@ -378,13 +401,14 @@ async function runRealConformance() {
       base,
       sandbox,
       identity,
+      scopeLabels,
       prefix,
     });
     state.acceptedTimeoutRetry = destroyed.evidence;
     assert.equal(destroyed.remaining.length, 0);
-    const afterCleanup = await inventoryAll(client, identity);
+    const afterCleanup = await inventoryAll(client, scopeLabels);
     state.afterCleanupInventory = summarizeInventory(afterCleanup.resources);
-    assert.equal(exactResources(afterCleanup.resources, identity).length, 0);
+    assert.equal(prefixedResources(afterCleanup.resources, prefix).length, 0);
     quota.release({
       reservationId: reservation.reservationId,
       expectedFence: reservation.fence,
@@ -400,12 +424,12 @@ async function runRealConformance() {
     primaryError = error;
   } finally {
     try {
-      state.cleanup = await cleanupExactResources(client, identity, prefix);
+      state.cleanup = await cleanupPrefixResources(client, scopeLabels, prefix);
     } catch (error) {
       cleanupError = error;
     }
     try {
-      const after = await inventoryAll(client, identity);
+      const after = await inventoryAll(client, scopeLabels);
       state.afterCleanupInventory = summarizeInventory(after.resources);
     } catch (error) {
       state.afterCleanupInventory = { inventoryError: safeError(error) };
@@ -437,7 +461,7 @@ async function runRealConformance() {
       beforeDestroy: state.beforeDestroyInventory,
       afterCleanup: state.afterCleanupInventory,
       cleanup: state.cleanup,
-      auditOperations: client.audit().map(({ operation }) => operation),
+      audit: client.audit(),
     });
     await writeJson("execution-transcripts.json", {
       schemaVersion: 1,
@@ -495,7 +519,10 @@ async function runRealConformance() {
     networkDecisionDigest: digestValue(state.networkProbes),
     quotaEventDigest: state.quota.eventDigest,
     acceptedTimeoutRetry: state.acceptedTimeoutRetry,
-    finalInventoryCount: state.afterCleanupInventory?.length ?? 0,
+    finalInventoryCount: prefixedSummaryCount(
+      state.afterCleanupInventory,
+      prefix,
+    ),
     replay: REPLAY,
   };
   await writeJson("verification-summary.json", summary);
@@ -767,11 +794,23 @@ async function runNetworkProbes({
       "probe " + probe.id + " produced no network decision event",
     );
     assert.equal(
+      decisions.length,
+      1,
+      "probe " + probe.id + " produced extra network decision events",
+    );
+    assert.equal(
       new Set(decisions.map((decision) => decision.outcome)).size,
       1,
       "probe " + probe.id + " had conflicting network decisions",
     );
     assert.equal(decisions[0].outcome, probe.expected);
+    assert.deepEqual(
+      decisions[0].destination,
+      summarizeDestination(probe.url),
+      "probe " +
+        probe.id +
+        " decision was not bound to its requested destination",
+    );
     results.push({ ...result, probe, decisions });
     currentSandbox = await refreshSandbox(
       provider,
@@ -782,7 +821,25 @@ async function runNetworkProbes({
       prefix + "_refresh_probe_" + probe.id,
     );
   }
+  assertNetworkProbeMatrix(results, probes);
   return results;
+}
+
+function assertNetworkProbeMatrix(results, probes) {
+  const expected = new Set(probes.map((probe) => probe.id));
+  const observed = results.flatMap((result) => result.decisions);
+  assert.equal(results.length, probes.length);
+  assert.equal(observed.length, probes.length);
+  for (const decision of observed)
+    assert.ok(
+      expected.has(decision.probeId),
+      "network decision was not assigned to a declared probe",
+    );
+  assert.deepEqual(
+    [...new Set(observed.map((decision) => decision.probeId))].sort(),
+    [...expected].sort(),
+    "network decision events did not cover the exact probe matrix",
+  );
 }
 
 async function destroyWithAcceptedTimeoutRetry({
@@ -791,6 +848,7 @@ async function destroyWithAcceptedTimeoutRetry({
   base,
   sandbox,
   identity,
+  scopeLabels,
   prefix,
 }) {
   const destroyKey = prefix + "_destroy";
@@ -827,11 +885,11 @@ async function destroyWithAcceptedTimeoutRetry({
     });
   }
   assert.ok(destroyed);
-  const remaining = await inventoryAll(client, identity);
+  const remaining = await inventoryAll(client, scopeLabels);
   assert.equal(
-    exactResources(remaining.resources, identity).length,
+    prefixedResources(remaining.resources, prefix).length,
     0,
-    "destroy returned before the unique provider resource was gone",
+    "destroy returned before all uniquely prefixed provider resources were gone",
   );
   assert.equal(
     firstError !== null && retryAttempted,
@@ -840,7 +898,7 @@ async function destroyWithAcceptedTimeoutRetry({
   );
   return {
     destroyed,
-    remaining: exactResources(remaining.resources, identity),
+    remaining: prefixedResources(remaining.resources, prefix),
     evidence: {
       timeoutObserved: firstError !== null,
       retryAttempted,
@@ -850,19 +908,19 @@ async function destroyWithAcceptedTimeoutRetry({
   };
 }
 
-async function cleanupExactResources(client, identity, prefix) {
+async function cleanupPrefixResources(client, scopeLabels, prefix) {
   const attempts = [];
   for (let round = 0; round < 12; round += 1) {
-    const inventory = await inventoryAll(client, identity);
-    const resources = exactResources(inventory.resources, identity);
+    const inventory = await inventoryAll(client, scopeLabels);
+    const resources = prefixedResources(inventory.resources, prefix);
     if (resources.length === 0)
       return { rounds: round + 1, attempts, remaining: 0 };
     for (const resource of resources) {
       try {
         await client.destroy(
           resourceReference(resource),
-          identity,
-          prefix + "_cleanup",
+          resource.labels,
+          prefix + "_cleanup_" + hash(resourceId(resource)).slice(0, 16),
           resource.fence,
         );
         attempts.push({
@@ -887,10 +945,10 @@ async function cleanupExactResources(client, identity, prefix) {
     }
     await delay(250);
   }
-  const remaining = await inventoryAll(client, identity);
+  const remaining = await inventoryAll(client, scopeLabels);
   throw new Error(
     "cleanup left " +
-      exactResources(remaining.resources, identity).length +
+      prefixedResources(remaining.resources, prefix).length +
       " uniquely prefixed provider resources",
   );
 }
@@ -933,6 +991,11 @@ async function inventoryAll(client, labels) {
     const values = response?.resources ?? response?.items ?? response;
     if (!Array.isArray(values))
       throw new Error("real provider inventory response was not an array");
+    for (const raw of values)
+      if (!resourceDetails(raw))
+        throw new Error(
+          "real provider inventory contained an unparseable workspace/Gadget",
+        );
     resources.push(...values);
     pages.push(values.length);
     const next =
@@ -953,6 +1016,35 @@ function exactResources(resources, labels) {
   return resources
     .map((raw) => resourceDetails(raw))
     .filter((resource) => resource && labelsEqual(resource.labels, labels));
+}
+
+function prefixedResources(resources, prefix) {
+  return resources
+    .map((raw) => resourceDetails(raw))
+    .filter((resource) => resource && hasRunPrefix(resource.labels, prefix));
+}
+
+function hasRunPrefix(labels, prefix) {
+  return ["stream-slack/invocation", "stream-slack/idempotency"].some(
+    (key) =>
+      typeof labels?.[key] === "string" && labels[key].startsWith(prefix + "_"),
+  );
+}
+
+function prefixedSummaryCount(summary, prefix) {
+  if (!Array.isArray(summary)) return 0;
+  return summary.filter((resource) => hasRunPrefix(resource.labels, prefix))
+    .length;
+}
+
+function recordResourceBinding(state, phase, resource) {
+  const id = resourceId(resource);
+  assert.equal(
+    id,
+    state.providerResourceId,
+    "provider resource identity changed during " + phase,
+  );
+  state.resourceBindings.push({ phase, providerResourceId: id });
 }
 
 function requireOneResource(resources, labels) {
@@ -1017,26 +1109,58 @@ function publicSandboxId(resource) {
   );
 }
 
-function requireCloudflareAttestation(resource) {
+function requireCloudflareAttestation(
+  resource,
+  expectedResourceId,
+  expectedTestProfile,
+) {
   const record =
     resource.raw?.resource ??
     resource.raw?.workspace ??
     resource.raw?.gadget ??
     resource.raw;
-  const candidates = [
-    record?.provider,
-    record?.providerName,
-    record?.providerType,
-    record?.platform,
-    record?.metadata?.provider,
-    record?.metadata?.providerName,
-  ].filter((value) => typeof value === "string");
-  const attestation = candidates.find((value) => /cloudflare/iu.test(value));
-  if (!attestation)
+  const providerType =
+    record?.providerType ??
+    record?.provider?.type ??
+    record?.provider?.kind ??
+    record?.attestation?.providerType ??
+    record?.providerAttestation?.providerType;
+  const normalizedProviderType =
+    typeof providerType === "string"
+      ? providerType.toLowerCase().replace(/[_\s]+/gu, "-")
+      : null;
+  if (normalizedProviderType !== "cloudflare-os")
     throw new Error(
-      "real provider response lacked a Cloudflare OS attestation",
+      "real provider response lacked the typed cloudflare-os provider attestation",
     );
-  return attestation;
+  const attestedResourceId =
+    record?.providerResourceId ??
+    record?.provider?.resourceId ??
+    record?.provider?.resource_id ??
+    record?.attestation?.resourceId ??
+    record?.attestation?.resource_id ??
+    record?.providerAttestation?.resourceId ??
+    record?.providerAttestation?.resource_id;
+  assert.equal(
+    attestedResourceId,
+    expectedResourceId,
+    "provider attestation resource id did not match the inventory resource",
+  );
+  const testProfile =
+    record?.testProfile ??
+    record?.provider?.testProfile ??
+    record?.metadata?.testProfile ??
+    record?.attestation?.testProfile;
+  assert.equal(
+    testProfile,
+    expectedTestProfile,
+    "real provider did not attest the accepted-timeout conformance profile",
+  );
+  return {
+    providerType: normalizedProviderType,
+    providerResourceId: attestedResourceId,
+    testProfile,
+  };
 }
 
 function extractWorkspaceDigest(raw) {
@@ -1051,7 +1175,7 @@ function extractWorkspaceDigest(raw) {
   );
 }
 
-function extractProviderUsage(raw) {
+function extractProviderUsage(raw, expectedResourceId) {
   const record = raw?.resource ?? raw?.workspace ?? raw?.gadget ?? raw;
   const source =
     record?.usage ??
@@ -1068,20 +1192,43 @@ function extractProviderUsage(raw) {
     endMs: source.endMs,
   };
   const measured = source.measured ?? source.units ?? source;
+  const providerResourceId =
+    source.providerResourceId ??
+    source.providerResource?.resourceId ??
+    record?.providerResourceId ??
+    record?.provider?.resourceId;
+  assert.equal(
+    providerResourceId,
+    expectedResourceId,
+    "provider usage was not bound to the attested resource",
+  );
   assert.ok(Number.isSafeInteger(meteringWindow.startMs));
   assert.ok(Number.isSafeInteger(meteringWindow.endMs));
   assert.ok(meteringWindow.endMs > meteringWindow.startMs);
   assert.ok(measured && typeof measured === "object");
+  assertProviderObservationId(
+    source.sourceObservationId,
+    "sourceObservationId",
+  );
+  assertProviderObservationId(source.sourceOffset, "sourceOffset");
+  assertProviderObservationId(source.pricingVersion, "pricingVersion");
   return {
+    providerResourceId,
     meteringWindow,
     measured,
-    pricingVersion:
-      source.pricingVersion ??
-      process.env.CF_OS_PRICING_VERSION ??
-      "cloudflare-os-provider-v1",
+    pricingVersion: source.pricingVersion,
     sourceObservationId: source.sourceObservationId,
     sourceOffset: source.sourceOffset,
   };
+}
+
+function assertProviderObservationId(value, name) {
+  assert.equal(typeof value, "string", "provider usage omitted " + name);
+  assert.match(
+    value,
+    /^[A-Za-z0-9._:-]{1,160}$/u,
+    "provider usage " + name + " is not a bounded identifier",
+  );
 }
 
 function buildNetworkPolicy(config) {
@@ -1237,18 +1384,38 @@ function normalizeNetworkDecision(value, fallbackProbeId) {
   const outcome = String(outcomeValue ?? "").toLowerCase();
   if (!["allow", "allowed", "deny", "denied"].includes(outcome))
     throw new Error("real provider network decision has no allow/deny outcome");
+  const probeId =
+    value.probeId ?? value.probe_id ?? value.requestId ?? value.request_id;
+  if (typeof probeId !== "string" || !/^[A-Za-z0-9._:-]{1,160}$/u.test(probeId))
+    throw new Error(
+      "real provider network decision lacks an explicit bounded probe id",
+    );
+  if (fallbackProbeId !== null && probeId !== fallbackProbeId)
+    throw new Error(
+      "real provider network decision was attributed to the wrong probe",
+    );
   return {
-    probeId:
-      value.probeId ??
-      value.probe_id ??
-      value.requestId ??
-      value.request_id ??
-      fallbackProbeId,
+    probeId,
     outcome: outcome.startsWith("allow") ? "allow" : "deny",
-    reasonCode: value.reasonCode ?? value.reason_code ?? null,
-    ruleId: value.ruleId ?? value.rule_id ?? null,
+    reasonCode: boundedDecisionField(
+      value.reasonCode ?? value.reason_code ?? null,
+      "reasonCode",
+    ),
+    ruleId: boundedDecisionField(
+      value.ruleId ?? value.rule_id ?? null,
+      "ruleId",
+    ),
     destination: summarizeDestination(value.destination ?? value.url ?? null),
   };
+}
+
+function boundedDecisionField(value, name) {
+  if (value === null || value === undefined) return null;
+  if (typeof value !== "string" || !/^[A-Za-z0-9._:-]{1,160}$/u.test(value))
+    throw new Error(
+      "network decision " + name + " is not a bounded identifier",
+    );
+  return value;
 }
 
 function summarizeDestination(value) {
@@ -1351,6 +1518,9 @@ function readConfig() {
   const gatekeeperPurpose = process.env.CF_OS_GATEKEEPER_PURPOSE;
   if (!/^[A-Za-z0-9._:-]{1,96}$/u.test(gatekeeperPurpose))
     throw new Error("CF_OS_GATEKEEPER_PURPOSE is invalid");
+  const testProfile = process.env.CF_OS_TEST_PROFILE;
+  if (testProfile !== "e4-t08-accepted-timeout-once")
+    throw new Error("CF_OS_TEST_PROFILE must be e4-t08-accepted-timeout-once");
   const lifecycleMode = process.env.CF_OS_LIFECYCLE_MODE ?? "ephemeral";
   if (!["ephemeral", "persistent"].includes(lifecycleMode))
     throw new Error("CF_OS_LIFECYCLE_MODE must be ephemeral or persistent");
@@ -1373,6 +1543,7 @@ function readConfig() {
     gatekeeperHost,
     gatekeeperPort,
     gatekeeperPurpose,
+    testProfile,
     gatekeeperUrl: buildProbePolicyUrl({
       gatekeeperScheme,
       gatekeeperHost,

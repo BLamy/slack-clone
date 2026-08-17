@@ -109,6 +109,14 @@ export class CloudflareOsClient {
     });
   }
 
+  configureNetworkPolicy(reference, labels, policy, idempotencyKey) {
+    return this.#request("POST", `${resourcePath(reference)}/network-policy`, {
+      body: { labels, policy },
+      idempotencyKey,
+      operation: "network-policy",
+    });
+  }
+
   cancelExecution(reference, labels, executionId, idempotencyKey) {
     assertExecutionId(executionId);
     return this.#request(

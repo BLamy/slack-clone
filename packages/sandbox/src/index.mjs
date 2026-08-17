@@ -19,4 +19,14 @@ export {
   decodeExecutionOutput,
   replayExecutionEvents,
 } from "./exec-events.mjs";
+export {
+  DEFAULT_NETWORK_POLICY,
+  NETWORK_POLICY_ERROR_CODES,
+  NetworkDecisionLog,
+  NetworkPolicyEvaluator,
+  classifyAddress,
+  compileNetworkPolicy,
+  normalizeAddress,
+  normalizeHost,
+} from "./network-policy.mjs";
 export { InMemorySandboxProvider, redact } from "./provider.mjs";

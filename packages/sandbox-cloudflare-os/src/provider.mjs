@@ -1,4 +1,6 @@
 import {
+  DEFAULT_NETWORK_POLICY,
+  compileNetworkPolicy,
   discoverCapabilities,
   SANDBOX_ERROR_CODES,
 } from "@stream-slack/sandbox";
@@ -135,6 +137,41 @@ export class CloudflareOsSandboxProvider {
 
   async cancel(request) {
     return this.#lifecycle("cancel", request);
+  }
+
+  async configureNetworkPolicy(request, policy = DEFAULT_NETWORK_POLICY) {
+    const normalized = validateMutation(request, "network-policy");
+    if (
+      typeof normalized.sandboxId !== "string" ||
+      !ID.test(normalized.sandboxId)
+    )
+      invalid("sandboxId is invalid");
+    const compiled = compileNetworkPolicy(policy);
+    const labels = resourceLabels(normalized);
+    return this.#mutate(
+      "network-policy",
+      { ...normalized, policyDigest: compiled.digest },
+      async () => {
+        const resolved = await this.#resolve({ ...normalized, labels });
+        this.#assertFence(resolved.sandbox, normalized);
+        const remote = await this.#client.configureNetworkPolicy(
+          resolved.reference,
+          labels,
+          publicPolicy(compiled),
+          normalized.idempotencyKey,
+        );
+        const mapped = this.#remember(remote, { labels, ...normalized });
+        this.#append(
+          "network-policy",
+          mapped.sandbox,
+          normalized.idempotencyKey,
+        );
+        return {
+          sandbox: mapped.sandbox,
+          policyDigest: compiled.digest,
+        };
+      },
+    );
   }
 
   async exec(request) {
@@ -480,6 +517,7 @@ function validateSpec(spec, capabilities) {
     if (!capabilities.capabilities.includes(capability))
       unsupported(capability);
   }
+  compileNetworkPolicy(spec.networkPolicy ?? DEFAULT_NETWORK_POLICY);
 }
 
 function validateExec(exec, capabilities) {
@@ -491,7 +529,23 @@ function validateExec(exec, capabilities) {
 }
 
 function publicSpec(spec) {
-  return structuredClone(spec);
+  return {
+    ...structuredClone(spec),
+    networkPolicy: publicPolicy(
+      compileNetworkPolicy(spec.networkPolicy ?? DEFAULT_NETWORK_POLICY),
+    ),
+  };
+}
+
+function publicPolicy(policy) {
+  return {
+    schemaVersion: policy.schemaVersion,
+    defaultEgress: policy.defaultEgress,
+    defaultInbound: policy.defaultInbound,
+    allow: structuredClone(policy.allow),
+    inbound: structuredClone(policy.inbound),
+    digest: policy.digest,
+  };
 }
 
 function resourceList(response) {

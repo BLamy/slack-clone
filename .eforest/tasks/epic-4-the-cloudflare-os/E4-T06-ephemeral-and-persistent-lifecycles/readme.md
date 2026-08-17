@@ -3,7 +3,7 @@ id: E4-T06
 epic: 4
 title: "Ephemeral and persistent sandbox lifecycles: explicit retention, resume, reset, and destruction semantics"
 priority: 406
-status: implemented
+status: refuted
 depends_on: [E4-T03, E4-T04]
 estimate: L
 capstone: false
@@ -80,6 +80,16 @@ modes need a common event model and destructive reset contract.
 - Gates: `format:check`, `lint`, `typecheck`, `test:unit` (189 passed, 0 skipped), and `build` passed from a detached cold worktree.
 - Replay: N/A (headless sandbox lifecycle) + mitigation: cold-clone multi-run replay, byte-tamper readiness gate, provider CAS race, inventory checks, canary scans, and cleanup sensitivity.
 - Claim: the critic’s provider-disk and concurrent-resume gaps are closed at the Cloudflare boundary; the task verifier now turns red when either byte-integrity or ephemeral cleanup is weakened.
+
+### Repair Critic — 2026-08-17
+
+- Verdict: `VERDICT: refuted`
+- Exact repaired implementation commit: `7ab54bbb926c716b7aefddce513a26cb9cff605b`
+- Independent cold run: `make verify-E4-T06`, `TEST_RUN_ID=e4-t06-critic-repair-20260817`; all repository gates and the lifecycle verifier passed, with builder/critic evidence digests matching.
+- Finding: `CloudflareOsSandboxProvider.exec()` still authorized from its cached `#workspaceDigests` value and did not invoke the materializer readiness check. A tampered published byte made `snapshot()` and `assertExecutionReady()` fail while provider `exec()` still made one remote execution call.
+- Other attacks passed: deterministic replay, excluded mounts, secret refusal, expiry, stale reset/revoke fences, one-winner in-memory and Cloudflare resume races, expected-fence CAS, accepted-timeout destroy cleanup, and zero inventory.
+- Sensitivity: making ephemeral cleanup a no-op in a disposable worktree made the inventory assertion exit 1.
+- Replay: N/A (headless sandbox lifecycle) + mitigation: independent cold clone, provider-level execution tamper detector, CAS race, inventory cleanup, and cleanup sensitivity.
 
 ### Critic — 2026-08-17
 

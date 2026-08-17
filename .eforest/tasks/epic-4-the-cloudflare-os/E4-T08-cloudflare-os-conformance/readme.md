@@ -3,7 +3,7 @@ id: E4-T08
 epic: 4
 title: "Capstone: a real Cloudflare OS workspace executes a pinned run under deny-by-default policy, survives reconnect, and leaves no orphan"
 priority: 408
-status: implemented
+status: refuted
 depends_on: [E4-T05, E4-T07]
 estimate: L
 capstone: true
@@ -124,3 +124,33 @@ before/after Cloudflare OS inventory.
 - Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger, and before/after Cloudflare OS inventory.
 - Claim: the verifier now fails closed on the critic's evidence-integrity findings and cannot report the capstone as passed without an authenticated Cloudflare OS resource, the provider-attested accepted-timeout test profile, exact network/cost evidence, and prefix-wide zero inventory. The real-provider acceptance is still unproven until the dedicated identity and endpoint are supplied.
 - Status: implemented; fresh independent critic required.
+
+### Critic 2 — 2026-08-17
+
+VERDICT: needs-evidence
+
+Lifecycle status set to `refuted`, the repository status that routes this ticket back
+to the builder; `needs-evidence` remains a verdict rather than a lifecycle value. The
+fresh critic reviewed exact commit `fb6ab3c6866b1ab796edbb3e48fab3b40537b90b`, ran a
+new detached cold clone with all `CF_OS_*` variables unset, and confirmed exit 2 with
+`SKIPPED:` for all eleven settings. HTTPS, loopback, localhost, query-bearing URL, and
+wrong-profile attacks failed before transport. Independent format, lint, typecheck,
+189 unit tests with zero skips, and build all passed.
+
+The repaired typed Cloudflare attestation, test-profile binding, provider usage IDs,
+explicit probe IDs/destinations, and exact six-probe matrix checks were confirmed.
+Real acceptance remains unproven because the environment has no Cloudflare identity,
+remote inventory, execution/network/cost transcript, or accepted-timeout cleanup run.
+The remaining verifier findings are: DNS-rebinding, public-listener, fork-escape, and
+stale-handle adversarial checks are not explicit; `CF_OS_INBOUND_PROBE_URL` accepts an
+arbitrary unvalidated replacement for the inbound probe; phase resource bindings are
+not persisted in `provider-inventory.json`; and cleanup has no independent storage
+inventory/entity coverage.
+
+Reviewed with fresh detached evidence:
+
+```text
+tools/verify/cold_clone.sh verify-E4-T08-real
+```
+
+Critic evidence: `/private/tmp/slack-clone-e4-t08-critic-critic-e4-t08-cold-20260817-1786996434-93683/skipped.json` and `/private/tmp/slack-clone-e4-t08-gates-95800/gates.log`. Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger, and before/after Cloudflare OS inventory.

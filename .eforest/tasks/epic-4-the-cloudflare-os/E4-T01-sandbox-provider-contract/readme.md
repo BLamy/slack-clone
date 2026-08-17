@@ -3,7 +3,7 @@ id: E4-T01
 epic: 4
 title: "Sandbox provider contract: capability discovery, fenced lifecycle operations, and provider-neutral run identities"
 priority: 401
-status: in-progress
+status: verified
 depends_on: [E3]
 estimate: M
 capstone: false
@@ -64,3 +64,21 @@ unbounded command channel.
    refutes the measuring apparatus.
 
 ## Verification log
+
+### Builder — 2026-08-17
+
+- Commit: `b5a1c2b4d53437248fea7fc782808309b40e60e2`
+- Cold run: `make verify-E4-T01`, `TEST_RUN_ID=e4-t01-cold-20260817`
+- Evidence: `.artifacts/e4-t01/e4-t01-cold-20260817/{capabilities,lifecycle-events,sensitivity,verification-summary,cold-verification-transcript}.json`
+- Lifecycle digest: `sha256:a0f4199e321fae5e8aeae2bd5be03bac6e9c4d9c0b5cc09715befa6049c7e1f0`
+- Gates: `format:check`, `lint`, `typecheck`, `test:unit` (189 passed, 0 skipped), and `build` passed from a detached cold worktree.
+- Replay: N/A (headless sandbox contract; no browser surface) + mitigation: cold-clone conformance, lifecycle event replay, digest equality, and mutation sensitivity.
+- Claim: provider-neutral sandbox lifecycle operations are capability-discovered, idempotency-keyed, invocation-fenced, typed, and redacted at the public/evidence boundary.
+
+### Critic — 2026-08-17
+
+- Verdict: `VERDICT: verified`
+- Independent run: `make verify-E4-T01`, `TEST_RUN_ID=e4-t01-critic-20260817`, exact commit `b5a1c2b4d53437248fea7fc782808309b40e60e2`.
+- Result: detached cold clone passed formatting, lint, typecheck, all 189 unit/ledger tests with zero skips, and build; lifecycle digest matched the builder run.
+- Attacks: duplicate create and exec requests produced one side effect each; conflicting payloads returned `SANDBOX_IDEMPOTENCY_CONFLICT`; stale fences and unsupported capabilities were refused before mutation; serialized events contained no provider handles or credential-shaped canaries.
+- Replay: N/A (headless sandbox contract; no browser surface) + mitigation: independent cold-clone conformance and sensitivity checks.

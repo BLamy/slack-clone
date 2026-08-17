@@ -25,6 +25,7 @@ export class CloudflareOsSandboxProvider {
   #records = new Map();
   #idempotency = new Map();
   #events = [];
+  #workspaceDigests = new Map();
 
   constructor({ client, capabilities } = {}) {
     if (!(client instanceof CloudflareOsClient))
@@ -95,6 +96,41 @@ export class CloudflareOsSandboxProvider {
     return this.#lifecycle("destroy", request);
   }
 
+  async materializeWorkspace(request, manifest, { materializer } = {}) {
+    const normalized = validateMutation(request, "materialize");
+    if (
+      typeof normalized.sandboxId !== "string" ||
+      !ID.test(normalized.sandboxId)
+    )
+      invalid("sandboxId is invalid");
+    if (!DIGEST.test(normalized.workspaceDigest))
+      invalid("workspaceDigest is invalid");
+    if (!materializer || typeof materializer.materialize !== "function")
+      invalid("workspace materializer is required");
+    const labels = resourceLabels(normalized);
+    return this.#mutate("materialize", normalized, async () => {
+      const resolved = await this.#resolve({ ...normalized, labels });
+      this.#assertFence(resolved.sandbox, normalized);
+      const result = await materializer.materialize(manifest, {
+        expectedDigest: normalized.workspaceDigest,
+      });
+      if (result?.digest !== normalized.workspaceDigest)
+        throw cloudflareOsError(
+          CLOUDFLARE_OS_ERROR_CODES.WORKSPACE_DIGEST_MISMATCH,
+          "materializer returned a digest different from the invocation expectation",
+          { operation: "materialize" },
+        );
+      this.#workspaceDigests.set(resolved.sandbox.sandboxId, result.digest);
+      this.#events.push({
+        idempotencyKey: normalized.idempotencyKey,
+        operation: "materialize",
+        sandboxId: resolved.sandbox.sandboxId,
+        workspaceDigest: result.digest,
+      });
+      return structuredClone(result);
+    });
+  }
+
   async cancel(request) {
     return this.#lifecycle("cancel", request);
   }
@@ -106,6 +142,18 @@ export class CloudflareOsSandboxProvider {
     return this.#mutate("exec", normalized, async () => {
       const resolved = await this.#resolve({ ...normalized, labels });
       this.#assertFence(resolved.sandbox, normalized);
+      const materializedDigest = this.#workspaceDigests.get(
+        resolved.sandbox.sandboxId,
+      );
+      if (
+        !DIGEST.test(normalized.workspaceDigest) ||
+        materializedDigest !== normalized.workspaceDigest
+      )
+        throw cloudflareOsError(
+          CLOUDFLARE_OS_ERROR_CODES.WORKSPACE_DIGEST_MISMATCH,
+          "execution is blocked until the published workspace matches the invocation digest",
+          { operation: "exec" },
+        );
       const remote = await this.#client.exec(
         resolved.reference,
         labels,

@@ -16,3 +16,15 @@ export {
   CloudflareOsSandboxProvider,
   createCloudflareOsProvider,
 } from "./provider.mjs";
+export {
+  canonical as canonicalWorkspaceValue,
+  normalizeManifest,
+  normalizePath,
+  validateArchiveEntries,
+  workspaceDigest,
+} from "./workspace/manifest.mjs";
+export {
+  WorkspaceMaterializer,
+  comparePublishedTrees,
+  snapshotManifest,
+} from "./workspace/materializer.mjs";

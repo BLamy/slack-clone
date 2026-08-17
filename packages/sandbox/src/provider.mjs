@@ -4,6 +4,7 @@ import {
   discoverCapabilities,
   normalizeCapabilities,
 } from "./capabilities.mjs";
+import { ExecutionController } from "./exec-events.mjs";
 import { SANDBOX_ERROR_CODES, sandboxError } from "./errors.mjs";
 
 const ID = /^[A-Za-z0-9._:-]{1,160}$/u;
@@ -20,10 +21,14 @@ export class InMemorySandboxProvider {
   #executions = new Map();
   #idempotency = new Map();
   #events = [];
+  #executionControllers = new Map();
+  #executionLimits;
+  #processRunner;
+  #clock;
   #nextSandbox = 1;
   #nextExecution = 1;
 
-  constructor({ capabilities } = {}) {
+  constructor({ capabilities, executionLimits, processRunner, clock } = {}) {
     this.#capabilities = discoverCapabilities(
       capabilities ?? [
         "cancellation",
@@ -33,6 +38,9 @@ export class InMemorySandboxProvider {
         "streaming-exec",
       ],
     );
+    this.#executionLimits = executionLimits;
+    this.#processRunner = processRunner ?? null;
+    this.#clock = clock ?? (() => Date.now());
   }
 
   discover() {
@@ -98,11 +106,22 @@ export class InMemorySandboxProvider {
         runId: sandbox.runId,
         command: normalized.exec.command,
         status: "running",
+        fence: sandbox.fence,
         handle: `opaque-execution-handle-${this.#nextExecution++}`,
       };
       sandbox.lifecycle = "running";
       sandbox.fence += 1;
       this.#executions.set(executionId, execution);
+      this.#executionControllers.set(
+        executionId,
+        new ExecutionController({
+          executionId,
+          executionLimits: this.#executionLimits,
+          limits: this.#executionLimits,
+          processRunner: this.#processRunner,
+          clock: this.#clock,
+        }),
+      );
       this.#append("exec.started", execution, true);
       return { executionId, status: execution.status, fence: sandbox.fence };
     });
@@ -121,6 +140,46 @@ export class InMemorySandboxProvider {
       }
       sandbox.lifecycle = "ready";
     });
+  }
+
+  executionEvents(request, { afterSequence = 0 } = {}) {
+    const controller = this.#executionController(request);
+    return controller.replay(afterSequence);
+  }
+
+  appendExecutionOutput(request, channel, bytes) {
+    const controller = this.#executionController(request);
+    return controller.appendOutput(channel, bytes);
+  }
+
+  appendExecutionHeartbeat(request, details = {}) {
+    const controller = this.#executionController(request);
+    return controller.appendHeartbeat(details);
+  }
+
+  completeExecution(request, result) {
+    const controller = this.#executionController(request);
+    const terminal = controller.complete(result);
+    const execution = this.#executions.get(request.executionId);
+    execution.status = terminal.kind;
+    return terminal;
+  }
+
+  async cancelExecution(request, options = {}) {
+    const controller = this.#executionController(request);
+    const terminal = await controller.cancel(options);
+    const execution = this.#executions.get(request.executionId);
+    execution.status = terminal.kind;
+    return terminal;
+  }
+
+  async startExecution(request, options = {}) {
+    const controller = this.#executionController(request);
+    return controller.start(options);
+  }
+
+  waitForExecution(request) {
+    return this.#executionController(request).waitForTerminal();
   }
 
   async suspend(request) {
@@ -175,6 +234,31 @@ export class InMemorySandboxProvider {
       );
     }
     return sandbox;
+  }
+
+  #executionController(request) {
+    const executionId = request?.executionId;
+    if (typeof executionId !== "string" || !ID.test(executionId))
+      throw sandboxError(
+        SANDBOX_ERROR_CODES.EXECUTION_NOT_FOUND,
+        "executionId is invalid",
+      );
+    const execution = this.#executions.get(executionId);
+    if (!execution)
+      throw sandboxError(
+        SANDBOX_ERROR_CODES.EXECUTION_NOT_FOUND,
+        "execution was not found",
+      );
+    const sandbox = this.#sandbox(request);
+    if (
+      sandbox.sandboxId !== execution.sandboxId ||
+      request.expectedFence !== execution.fence
+    )
+      throw sandboxError(
+        SANDBOX_ERROR_CODES.FENCE_MISMATCH,
+        "execution request is outside its run fence",
+      );
+    return this.#executionControllers.get(executionId);
   }
 
   async #lifecycle(operation, request, apply) {

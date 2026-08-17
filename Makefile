@@ -1,4 +1,4 @@
-.PHONY: verify-E0 verify-E0-T01 verify-E0-T02 verify-E0-T03 verify-E0-T04 verify-E0-T05 verify-E0-T06 verify-E0-T07 verify-E1 verify-E1-T01 verify-E1-T02 verify-E1-T03 verify-E1-T04 verify-E1-T05 verify-E1-T06 verify-E1-T07 verify-E1-T08 verify-E2 verify-E2-T01 verify-E2-T02 verify-E2-T03 verify-E2-T04 verify-E2-T05 verify-E2-T06 verify-E2-T07 verify-E2-T08 verify-E3 verify-E3-T01 verify-E3-T02 verify-E3-T03 verify-E3-T04 verify-E3-T05 verify-E3-T06 verify-E3-T07 verify-E3-T08 verify-E4-T01 verify-E4-T02 verify-E4-T02-real verify-E4-T03 projection-E1-T07-rebuild projection-E1-T07-catch-up projection-E1-T07-corruption projection-E1-T07-shadow
+.PHONY: verify-E0 verify-E0-T01 verify-E0-T02 verify-E0-T03 verify-E0-T04 verify-E0-T05 verify-E0-T06 verify-E0-T07 verify-E1 verify-E1-T01 verify-E1-T02 verify-E1-T03 verify-E1-T04 verify-E1-T05 verify-E1-T06 verify-E1-T07 verify-E1-T08 verify-E2 verify-E2-T01 verify-E2-T02 verify-E2-T03 verify-E2-T04 verify-E2-T05 verify-E2-T06 verify-E2-T07 verify-E2-T08 verify-E3 verify-E3-T01 verify-E3-T02 verify-E3-T03 verify-E3-T04 verify-E3-T05 verify-E3-T06 verify-E3-T07 verify-E3-T08 verify-E4-T01 verify-E4-T02 verify-E4-T02-real verify-E4-T03 verify-E4-T04 projection-E1-T07-rebuild projection-E1-T07-catch-up projection-E1-T07-corruption projection-E1-T07-shadow
 
 verify-E0: verify-E0-T01 verify-E0-T02 verify-E0-T03 verify-E0-T04 verify-E0-T05 verify-E0-T06 verify-E0-T07
 
@@ -109,6 +109,9 @@ verify-E4-T02-real:
 
 verify-E4-T03:
 	@node scripts/cold-verify-e4-t03.mjs
+
+verify-E4-T04:
+	@node scripts/cold-verify-e4-t04.mjs
 
 verify-E2:
 	@node scripts/composed-verify-e2.mjs

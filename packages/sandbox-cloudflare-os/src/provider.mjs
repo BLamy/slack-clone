@@ -26,6 +26,7 @@ export class CloudflareOsSandboxProvider {
   #idempotency = new Map();
   #events = [];
   #workspaceDigests = new Map();
+  #executionRecords = new Map();
 
   constructor({ client, capabilities } = {}) {
     if (!(client instanceof CloudflareOsClient))
@@ -39,6 +40,7 @@ export class CloudflareOsSandboxProvider {
         "network-policy",
         "persistence",
         "resource-limit",
+        "streaming-exec",
       ],
     );
   }
@@ -161,12 +163,80 @@ export class CloudflareOsSandboxProvider {
         normalized.idempotencyKey,
       );
       const mapped = this.#remember(remote, { labels, ...normalized });
+      const executionId = remote.executionId ?? remote.execution?.id;
+      if (typeof executionId === "string" && ID.test(executionId))
+        this.#executionRecords.set(executionId, {
+          executionId,
+          sandboxId: mapped.sandbox.sandboxId,
+          runId: normalized.runId,
+          invocationDigest: normalized.invocationDigest,
+          expectedFence: mapped.sandbox.fence,
+          reference: mapped.reference,
+          labels: structuredClone(labels),
+        });
       this.#append("exec", mapped.sandbox, normalized.idempotencyKey);
       return {
         executionId: remote.executionId ?? remote.execution?.id,
         status: remote.status ?? remote.execution?.status ?? "running",
         fence: mapped.sandbox.fence,
       };
+    });
+  }
+
+  async *streamExecution(request, { afterSequence = 0, signal } = {}) {
+    const normalized = validateExecutionLookup(request, "exec-stream");
+    const labels = resourceLabels(normalized);
+    const record = this.#executionRecords.get(normalized.executionId);
+    if (!record) notFound("execution");
+    if (
+      record.runId !== normalized.runId ||
+      record.invocationDigest !== normalized.invocationDigest ||
+      record.sandboxId !== normalized.sandboxId
+    )
+      throw cloudflareOsError(
+        SANDBOX_ERROR_CODES.FENCE_MISMATCH,
+        "execution stream is outside its invocation fence",
+        { operation: "exec-stream" },
+      );
+    const resolved = await this.#resolve({ ...normalized, labels });
+    this.#assertFence(resolved.sandbox, normalized);
+    for await (const event of this.#client.streamExec(
+      record.reference,
+      record.labels,
+      normalized.executionId,
+      { afterSequence, signal },
+    ))
+      yield event;
+  }
+
+  async cancelExecution(request) {
+    const normalized = validateExecutionMutation(request, "exec-cancel");
+    const labels = resourceLabels(normalized);
+    const record = this.#executionRecords.get(normalized.executionId);
+    if (!record) notFound("execution");
+    if (
+      record.runId !== normalized.runId ||
+      record.invocationDigest !== normalized.invocationDigest ||
+      record.sandboxId !== normalized.sandboxId
+    )
+      throw cloudflareOsError(
+        SANDBOX_ERROR_CODES.FENCE_MISMATCH,
+        "execution cancellation is outside its invocation fence",
+        { operation: "exec-cancel" },
+      );
+    return this.#mutate("exec-cancel", normalized, async () => {
+      const resolved = await this.#resolve({ ...normalized, labels });
+      this.#assertFence(resolved.sandbox, normalized);
+      const remote = await this.#client.cancelExecution(
+        record.reference,
+        labels,
+        normalized.executionId,
+        normalized.idempotencyKey,
+      );
+      const mapped = this.#remember(remote, { labels, ...normalized });
+      record.expectedFence = mapped.sandbox.fence;
+      this.#append("exec-cancel", mapped.sandbox, normalized.idempotencyKey);
+      return mapped.sandbox;
     });
   }
 
@@ -376,6 +446,31 @@ function validateLookup(request, operation) {
   return normalized;
 }
 
+function validateExecutionLookup(request, operation) {
+  const normalized = validateLookup(request, operation);
+  if (
+    typeof normalized.executionId !== "string" ||
+    !/^ex_[A-Za-z0-9._:-]{1,160}$/u.test(normalized.executionId)
+  )
+    invalid("executionId is invalid");
+  return normalized;
+}
+
+function validateExecutionMutation(request, operation) {
+  const normalized = validateMutation(request, operation);
+  if (
+    typeof normalized.sandboxId !== "string" ||
+    !ID.test(normalized.sandboxId)
+  )
+    invalid("sandboxId is invalid");
+  if (
+    typeof normalized.executionId !== "string" ||
+    !/^ex_[A-Za-z0-9._:-]{1,160}$/u.test(normalized.executionId)
+  )
+    invalid("executionId is invalid");
+  return normalized;
+}
+
 function validateSpec(spec, capabilities) {
   if (!spec || typeof spec !== "object" || Array.isArray(spec))
     invalid("spec is required");
@@ -431,6 +526,14 @@ function conflict(detail, operation) {
   throw cloudflareOsError(CLOUDFLARE_OS_ERROR_CODES.CONFLICT, detail, {
     operation,
   });
+}
+
+function notFound(subject) {
+  throw cloudflareOsError(
+    CLOUDFLARE_OS_ERROR_CODES.NOT_FOUND,
+    `${subject} was not found`,
+    { operation: "resolve" },
+  );
 }
 
 function hash(value) {

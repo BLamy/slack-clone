@@ -9,4 +9,14 @@ export {
   SandboxProviderError,
   sandboxError,
 } from "./errors.mjs";
+export {
+  EXECUTION_CHANNELS,
+  EXECUTION_EVENT_TYPES,
+  EXECUTION_LIMITS,
+  ExecutionController,
+  ExecutionEventJournal,
+  createProcessTreeRunner,
+  decodeExecutionOutput,
+  replayExecutionEvents,
+} from "./exec-events.mjs";
 export { InMemorySandboxProvider, redact } from "./provider.mjs";

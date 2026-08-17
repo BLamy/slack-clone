@@ -9,6 +9,8 @@ import {
 } from "./errors.mjs";
 
 const MAX_BODY_BYTES = 32 * 1024;
+const MAX_STREAM_EVENT_BYTES = 128 * 1024;
+const EXECUTION_ID = /^ex_[A-Za-z0-9._:-]{1,160}$/u;
 export class CloudflareOsClient {
   #baseUrl;
   #token;
@@ -105,6 +107,91 @@ export class CloudflareOsClient {
       idempotencyKey,
       operation: "exec",
     });
+  }
+
+  cancelExecution(reference, labels, executionId, idempotencyKey) {
+    assertExecutionId(executionId);
+    return this.#request(
+      "POST",
+      `${resourcePath(reference)}/exec/${encodeURIComponent(executionId)}/cancel`,
+      {
+        body: { executionId, labels },
+        idempotencyKey,
+        operation: "exec-cancel",
+      },
+    );
+  }
+
+  /**
+   * Follow a provider execution as newline-delimited events. The after
+   * sequence is sent to the provider on every reconnect; the caller owns the
+   * durable journal and therefore decides which offset is safe to resume.
+   */
+  async *streamExec(
+    reference,
+    labels,
+    executionId,
+    { afterSequence = 0, signal } = {},
+  ) {
+    assertExecutionId(executionId);
+    if (!Number.isSafeInteger(afterSequence) || afterSequence < 0)
+      throw cloudflareOsError(
+        CLOUDFLARE_OS_ERROR_CODES.INVALID_REQUEST,
+        "execution stream offset is invalid",
+        { operation: "exec-stream" },
+      );
+    const query = new URLSearchParams({ after: String(afterSequence) });
+    for (const key of Object.keys(labels ?? {}).sort())
+      query.set(`label.${key}`, labels[key]);
+    const path = `${resourcePath(reference)}/exec/${encodeURIComponent(executionId)}/events?${query}`;
+    const url = `${this.#baseUrl}${path}`;
+    let response;
+    try {
+      response = await this.#fetch(url, {
+        method: "GET",
+        headers: {
+          accept: "application/x-ndjson",
+          authorization: `Bearer ${this.#token}`,
+        },
+        ...(signal === undefined ? {} : { signal }),
+      });
+    } catch {
+      throw cloudflareOsError(
+        CLOUDFLARE_OS_ERROR_CODES.TIMEOUT,
+        "Cloudflare OS execution stream was interrupted",
+        { operation: "exec-stream", retryable: true },
+      );
+    }
+    this.#audit.push({
+      method: "GET",
+      operation: "exec-stream",
+      path,
+      status: response.status,
+      afterSequence,
+      ...(labels === undefined ? {} : { labels: structuredClone(labels) }),
+    });
+    if (!response.ok) throw normalizeHttpError(response.status, "exec-stream");
+    const contentType = response.headers.get("content-type") ?? "";
+    if (
+      contentType &&
+      !/application\/(?:x-ndjson|json-seq)(?:;|$)/iu.test(contentType)
+    )
+      throw cloudflareOsError(
+        CLOUDFLARE_OS_ERROR_CODES.PROTOCOL,
+        "Cloudflare OS execution stream has an invalid content type",
+        { operation: "exec-stream" },
+      );
+    if (!response.body)
+      throw cloudflareOsError(
+        CLOUDFLARE_OS_ERROR_CODES.PROTOCOL,
+        "Cloudflare OS execution stream has no body",
+        { operation: "exec-stream" },
+      );
+    yield* parseNdjson(response.body);
+  }
+
+  streamExecution(reference, labels, executionId, options = {}) {
+    return this.streamExec(reference, labels, executionId, options);
   }
 
   #mutate(operation, reference, labels, idempotencyKey) {
@@ -204,4 +291,69 @@ async function readJson(response) {
 
 function resourcePath(reference) {
   return `/v1/workspaces/${encodeURIComponent(reference.workspaceId)}/gadgets/${encodeURIComponent(reference.gadgetId)}`;
+}
+
+function assertExecutionId(executionId) {
+  if (typeof executionId !== "string" || !EXECUTION_ID.test(executionId))
+    throw cloudflareOsError(
+      CLOUDFLARE_OS_ERROR_CODES.INVALID_REQUEST,
+      "executionId is invalid",
+      { operation: "exec-stream" },
+    );
+}
+
+async function* parseNdjson(body) {
+  const decoder = new TextDecoder();
+  let pending = "";
+  for await (const chunk of bodyChunks(body)) {
+    pending += decoder.decode(chunk, { stream: true });
+    if (new TextEncoder().encode(pending).byteLength > MAX_STREAM_EVENT_BYTES)
+      throw cloudflareOsError(
+        CLOUDFLARE_OS_ERROR_CODES.PROTOCOL,
+        "Cloudflare OS execution event exceeded the bounded transport limit",
+        { operation: "exec-stream" },
+      );
+    let newline;
+    while ((newline = pending.indexOf("\n")) !== -1) {
+      const line = pending.slice(0, newline).replace(/\r$/u, "");
+      pending = pending.slice(newline + 1);
+      if (line.length === 0) continue;
+      yield parseStreamLine(line);
+    }
+  }
+  pending += decoder.decode();
+  if (pending.length > 0) yield parseStreamLine(pending);
+}
+
+async function* bodyChunks(body) {
+  if (typeof body[Symbol.asyncIterator] === "function") {
+    for await (const chunk of body) yield chunk;
+    return;
+  }
+  const reader = body.getReader?.();
+  if (!reader) throw new TypeError("execution stream body is not readable");
+  try {
+    while (true) {
+      const result = await reader.read();
+      if (result.done) return;
+      yield result.value;
+    }
+  } finally {
+    reader.releaseLock?.();
+  }
+}
+
+function parseStreamLine(line) {
+  try {
+    const event = JSON.parse(line);
+    if (!event || typeof event !== "object" || Array.isArray(event))
+      throw new Error("not an object");
+    return event;
+  } catch {
+    throw cloudflareOsError(
+      CLOUDFLARE_OS_ERROR_CODES.PROTOCOL,
+      "Cloudflare OS execution stream contained malformed JSON",
+      { operation: "exec-stream" },
+    );
+  }
 }

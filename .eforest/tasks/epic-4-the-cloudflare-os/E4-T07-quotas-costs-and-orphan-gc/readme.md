@@ -3,7 +3,7 @@ id: E4-T07
 epic: 4
 title: "Sandbox quotas, cost accounting, and orphan garbage collection from provider-observed reality"
 priority: 407
-status: in-progress
+status: implemented
 depends_on: [E4-T04, E4-T06]
 estimate: L
 capstone: false
@@ -59,3 +59,16 @@ proof before destructive action.
    fail before a destroy call.
 
 ## Verification log
+
+### Builder — 2026-08-17
+
+- Commit: a536b9edda876e7d6879d5fffc3f72c5c3f48a03
+- Cold run: make verify-E4-T07, TEST_RUN_ID=e4-t07-cold-final-20260817; detached tracked checkout with exact implementation commit.
+- Evidence: .artifacts/e4-t07/e4-t07-cold-final-20260817/{quota-reservation,usage-cost,gc-inventory,deletion-sensitivity,verification-summary,cold-verification-transcript}.json.
+- Digests: quota/event and shuffled replay sha256:ba6fe0ed245300d859aab8974af63553b60f0efd4ad8812be6faf3cd00b1be4e; GC sha256:62f62e9c8037b5a9af0bd6f1dd8cfbea88d1f6db2f7fc0ea43930727338ed093; reservation races sha256:3e50f5cc4092060ec2d24758e3c9e96f0503fceac232177440a1f3b9729e65ca; deletion sensitivity sha256:dc81cc5104b23ebd87e885f5b0ae320d2ec92d9bb95ae43182ceb094da34f0fa.
+- Reservation evidence: all six dimensions admitted one and rejected one under concurrent attempts; provider calls were 6, with no call for rejected reservations. Duplicate usage observations produced two cost records and one canonical spend total.
+- GC evidence: 19 paginated provider pages; exact deployment/tenant/workspace/agent ownership filtering preserved live, foreign, partial, and unlabeled resources; owned orphans were destroyed with expected fences; accepted-timeout cleanup reconciled; delayed heartbeat, monotonic clock rollback, and crash checkpoint were exercised.
+- Sensitivity: the disposable mutation that removed the second lease check exited 1, proving the false-orphan detector turns red.
+- Gates: format:check, task format gate, lint, typecheck, test:unit (189 passed, 0 skipped), and build passed.
+- Replay: N/A (server quota and GC worker) + mitigation: cold-clone race/replay fixtures, provider inventory transcripts, exact cost digests, and deletion sensitivity.
+- Claim: scoped atomic reservations, provider-observed deduplicated cost events, paginated ownership-safe quarantine/GC, monotonic/fenced lease rechecks, and deletion sensitivity satisfy the E4-T07 acceptance criteria.

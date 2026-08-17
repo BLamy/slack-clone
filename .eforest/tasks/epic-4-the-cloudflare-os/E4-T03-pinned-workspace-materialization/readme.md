@@ -3,7 +3,7 @@ id: E4-T03
 epic: 4
 title: "Pinned workspace materialization: one invocation digest becomes one byte-exact sandbox tree"
 priority: 403
-status: pending
+status: in-progress
 depends_on: [E4-T02]
 estimate: L
 capstone: false

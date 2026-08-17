@@ -3,7 +3,7 @@ id: E4-T07
 epic: 4
 title: "Sandbox quotas, cost accounting, and orphan garbage collection from provider-observed reality"
 priority: 407
-status: in-progress
+status: implemented
 depends_on: [E4-T04, E4-T06]
 estimate: L
 capstone: false
@@ -81,3 +81,17 @@ proof before destructive action.
 - Findings: the reservation fixture incremented providerCalls after reserve without invoking a provider; cleanup sensitivity failed only after entering the destroy stub; delayed-heartbeat sequence advance was not exercised; timeout removed the resource before 504 so no idempotent destroy retry was proven; stale-fence rejection was not tested.
 - Replay: N/A (server quota and GC worker) + mitigation: independent cold clone, quota race replay, paginated ownership inventory, canary scan, and mutation review.
 - Status: refuted pending verifier repair.
+
+### Repair Builder — 2026-08-17
+
+- Commit: d1990f029bf395ccb26211185e2b13dfba9b321a
+- Cold run: make verify-E4-T07, TEST_RUN_ID=e4-t07-cold-repair-20260817; detached tracked checkout with exact repair commit and frozen install.
+- Evidence: .artifacts/e4-t07/e4-t07-cold-repair-20260817/{quota-reservation,usage-cost,gc-inventory,deletion-sensitivity,verification-summary,cold-verification-transcript}.json.
+- Digests: quota/event and shuffled replay sha256:ba6fe0ed245300d859aab8974af63553b60f0efd4ad8812be6faf3cd00b1be4e; GC sha256:20a365e283c3e8ffca01f1420f938621c94c93e156963fd966fb670c6d4c38a9; reservation races sha256:3e50f5cc4092060ec2d24758e3c9e96f0503fceac232177440a1f3b9729e65ca; deletion sensitivity sha256:d326fbc8812bb369acd095c9e734a1e7b5b2ad420b09ace254c4f53486d913fd.
+- Repair coverage: accepted reservations invoke an actual provider stub while rejected races make no provider call; delayed heartbeat sequence advancement resets grace; a retained 504 resource is retried with the same deterministic idempotency key; stale provider fences are rejected without deletion.
+- GC evidence: 23 paginated provider pages; live, foreign, partial, and unlabeled resources remain; timeout retry has two destroy attempts with one idempotency key; delayed heartbeat and monotonic rollback paths are exercised.
+- Sensitivity: the disposable mutation that removes the second lease check exits 73 from the simulated destroy guard, proving the detector turns red before a destructive provider action can proceed.
+- Gates: format:check, task format gate, lint, typecheck, test:unit (189 passed, 0 skipped), and build passed from the detached checkout.
+- Replay: N/A (server quota and GC worker) + mitigation: cold-clone race/replay fixtures, provider inventory transcripts, exact cost digests, and deletion sensitivity.
+- Claim: the repaired evidence closes the prior critic findings and the E4-T07 implementation is ready for a fresh independent critic.
+- Status: implemented; fresh critic required.

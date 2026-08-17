@@ -3,7 +3,7 @@ id: E4-T08
 epic: 4
 title: "Capstone: a real Cloudflare OS workspace executes a pinned run under deny-by-default policy, survives reconnect, and leaves no orphan"
 priority: 408
-status: in-progress
+status: implemented
 depends_on: [E4-T05, E4-T07]
 estimate: L
 capstone: true
@@ -64,3 +64,14 @@ failure, not permission to mark the epic complete.
    target must still detect the induced violation; a green run refutes sensitivity.
 
 ## Verification log
+
+### Builder — 2026-08-17
+
+- Commit: ced928e57ab04e14060444f3025a25483efaf2a8
+- Cold run: E4_T08_IMPLEMENTATION_COMMIT=ced928e57ab04e14060444f3025a25483efaf2a8 TEST_RUN_ID=e4-t08-cold-missing-20260817 make verify-E4-T08-real; detached tracked checkout and frozen install completed, then the real-only runner exited 2 with `SKIPPED:` for missing explicit Cloudflare OS configuration.
+- Evidence: .artifacts/e4-t08-real/e4-t08-cold-missing-20260817/skipped.json.
+- Local gates: format:check, task format gate, lint, typecheck, test:unit (189 passed, 0 skipped), and build passed at the exact implementation commit.
+- Deliverables: remote workspace publication with digest attestation, exact-label provider inventory, reconnectable execution journal, cancellation/process-survivor checks, network probe decision capture, provider-observed quota/cost ledger, accepted-timeout destroy retry, and tools/verify/cold_clone.sh verify-E4-T08-real.
+- Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger, and before/after Cloudflare OS inventory.
+- Claim: the capstone gate is real-only and fails closed against missing or local configuration; real provider acceptance remains unproven until the dedicated Cloudflare test identity and endpoint are supplied.
+- Status: implemented; fresh critic required, with real-provider evidence still outstanding.

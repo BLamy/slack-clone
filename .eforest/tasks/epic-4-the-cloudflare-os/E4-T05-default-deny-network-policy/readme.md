@@ -3,7 +3,7 @@ id: E4-T05
 epic: 4
 title: "Default-deny sandbox networking: destination allowlists, metadata blocking, and auditable egress decisions"
 priority: 405
-status: pending
+status: in-progress
 depends_on: [E4-T02]
 estimate: L
 capstone: false

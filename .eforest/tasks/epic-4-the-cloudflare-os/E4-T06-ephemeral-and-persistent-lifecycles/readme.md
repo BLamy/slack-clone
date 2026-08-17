@@ -3,7 +3,7 @@ id: E4-T06
 epic: 4
 title: "Ephemeral and persistent sandbox lifecycles: explicit retention, resume, reset, and destruction semantics"
 priority: 406
-status: implemented
+status: verified
 depends_on: [E4-T03, E4-T04]
 estimate: L
 capstone: false
@@ -100,6 +100,17 @@ modes need a common event model and destructive reset contract.
 - Gates: `format:check`, `lint`, `typecheck`, `test:unit` (189 passed, 0 skipped), and `build` passed from a detached cold worktree.
 - Replay: N/A (headless sandbox lifecycle) + mitigation: cold-clone multi-run replay, provider-level byte-tamper execution gate, CAS race, inventory checks, canary scans, and cleanup sensitivity.
 - Claim: provider execution now requires a bound byte-verifying materializer; cached workspace digests cannot authorize execution after post-publication mutation, and reset/destroy clear the verifier binding.
+
+### Final Critic — 2026-08-17
+
+- Verdict: `VERDICT: verified`
+- Exact implementation commit: `d0fa519c7bf008d8976c6d27394ffbb04682302d`
+- Independent cold run: `make verify-E4-T06`, `TEST_RUN_ID=e4-t06-critic-final-20260817`; lifecycle verifier, `format:check`, lint, typecheck, 189 unit tests with 0 skipped, and build all passed from a detached checkout.
+- Evidence: `/tmp/stream-slack-e4-t06-cold.77CFhT/.artifacts/e4-t06/e4-t06-critic-final-20260817/{verification-summary,provider-workspace-integrity,provider-enforcement}.json`; generated digests matched the builder evidence.
+- Independent attacks: provider-byte tamper blocked before remote execution with `remoteExecCalls: 0`; Cloudflare resume CAS produced one winner and one `CLOUDFLARE_OS_CONFLICT` loser; reset/destroy cleared materializer authorization; stale reset/revoke/destroy handles were fenced; excluded canaries and raw secrets were rejected.
+- Cleanup attacks: accepted-then-timeout destroy reconciled to zero provider inventory, and removing ephemeral cleanup in a disposable worktree made `node scripts/verify-e4-t06.mjs` fail at the inventory assertion (`scripts/verify-e4-t06.mjs:203`).
+- Replay: N/A (headless sandbox lifecycle) + mitigation: cold-clone multi-run replay, provider inventory checks, canary-secret scans, and stale-lineage races.
+- Claim: the exact repaired diff satisfies the lifecycle, provider-integrity, fencing, retention, cleanup, and sensitivity criteria; no finding refuted the implementation or verifier.
 
 ### Critic — 2026-08-17
 

@@ -3,7 +3,7 @@ id: E4-T04
 epic: 4
 title: "Streaming execution and cancellation: ordered output, reconnectable offsets, and fenced process termination"
 priority: 404
-status: implemented
+status: verified
 depends_on: [E4-T02]
 estimate: L
 capstone: false
@@ -69,3 +69,13 @@ signal delivery.
 - Gates: `format:check`, `lint`, `typecheck`, `test:unit` (189 passed, 0 skipped), and `build` passed from a detached cold worktree.
 - Replay: N/A (headless remote execution transport) + mitigation: cold-clone transcript replay, disconnect matrix, cancellation sensitivity, and exact sequence assertions.
 - Claim: the bounded event journal preserves byte-exact stdout/stderr order across reconnects, accepts one terminal event, emits typed output limits, and fences cancellation/timeout effects before process-tree termination.
+
+### Critic — 2026-08-17
+
+- Verdict: `VERDICT: verified`
+- Exact implementation commit: `13dca35ec0e376a446228ef71ada7dda0d938e2b`
+- Independent cold run: `make verify-E4-T04`, `TEST_RUN_ID=e4-t04-critic-20260817`; the detached clone passed with transcript digest `sha256:c5704831d44532b2d5461260ab79258067983034f2b5469bf5e27ae82f9b332d` and six reconnect boundaries.
+- Independent attacks passed: every disconnect offset replayed the exact ordered transcript; future offsets, late output, stale heartbeats, and duplicate terminals were refused without sequence advancement; invalid UTF-8 bytes remained byte-exact; chunk floods emitted a typed limit event; cancellation and timeout fenced effects and left zero simulated descendants.
+- Sensitivity: in a disposable worktree, removing the late-event guard made the direct terminal detector exit 1 with `Missing expected exception`; the worktree was removed after the check.
+- Gates: `format:check`, `lint`, `typecheck`, `test:unit` (189 passed, 0 skipped), and `build` passed from the detached cold worktree.
+- Replay: N/A (headless remote execution transport) + mitigation: independent cold clone, reconnect matrix, terminal-integrity attacks, cancellation sensitivity, and exact sequence/digest comparison.

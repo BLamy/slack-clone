@@ -3,7 +3,7 @@ id: E4-T08
 epic: 4
 title: "Capstone: a real Cloudflare OS workspace executes a pinned run under deny-by-default policy, survives reconnect, and leaves no orphan"
 priority: 408
-status: pending
+status: in-progress
 depends_on: [E4-T05, E4-T07]
 estimate: L
 capstone: true

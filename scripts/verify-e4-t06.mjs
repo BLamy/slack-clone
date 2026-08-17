@@ -77,6 +77,8 @@ assert.deepEqual(
 
 const expiry = runRetentionExpiry();
 const workspaceIntegrity = await runWorkspaceIntegritySequence();
+const providerWorkspaceIntegrity =
+  await runProviderWorkspaceIntegritySequence();
 const provider = await runCloudflareProviderSequence();
 await runInMemoryResetSequence();
 
@@ -105,6 +107,10 @@ await writeJson("persistent-sequence.json", {
 });
 await writeJson("retention-race.json", expiry);
 await writeJson("workspace-integrity.json", workspaceIntegrity);
+await writeJson(
+  "provider-workspace-integrity.json",
+  providerWorkspaceIntegrity,
+);
 await writeJson("provider-enforcement.json", provider);
 await writeJson("verification-summary.json", {
   schemaVersion: 1,
@@ -120,6 +126,7 @@ await writeJson("verification-summary.json", {
   persistentEventDigest: persistentFirst.eventDigest,
   retentionExpiryDigest: expiry.eventDigest,
   workspaceIntegrityDigest: digestValue(workspaceIntegrity),
+  providerWorkspaceIntegrityDigest: digestValue(providerWorkspaceIntegrity),
   providerLifecycleDigest: provider.eventDigest,
   zeroSkips: true,
   replay:
@@ -579,6 +586,114 @@ async function runWorkspaceIntegritySequence() {
       pointerDigest,
       recomputedDigest,
       executionBlockedAfterByteTamper: true,
+    };
+  } finally {
+    await rm(tempRoot, { recursive: true, force: true });
+  }
+}
+
+async function runProviderWorkspaceIntegritySequence() {
+  const tempRoot = await mkdtemp(
+    path.join(os.tmpdir(), "stream-slack-e4-t06-provider-integrity-"),
+  );
+  let remote = null;
+  let execCalls = 0;
+  const client = new CloudflareOsClient({
+    baseUrl: "http://fixture.invalid",
+    token: "e4-t06-integrity-provider",
+    fetchImpl: async (url, options) => {
+      const parsed = new URL(url);
+      if (parsed.pathname === "/v1/workspaces" && options.method === "POST") {
+        const body = JSON.parse(options.body);
+        remote = {
+          workspaceId: "ws_e4_t06_integrity",
+          gadgetId: "gd_e4_t06_integrity",
+          labels: body.labels,
+          spec: body.spec,
+          state: "ready",
+          fence: 1,
+        };
+        return jsonResponse(remote);
+      }
+      if (options.method === "GET") return jsonResponse(remote);
+      if (parsed.pathname.endsWith("/exec")) {
+        execCalls += 1;
+        remote = {
+          ...remote,
+          state: "running",
+          fence: remote.fence + 1,
+        };
+        return jsonResponse({ ...remote, executionId: "ex_e4_t06_integrity" });
+      }
+      return jsonResponse(remote);
+    },
+  });
+  try {
+    const provider = new CloudflareOsSandboxProvider({ client });
+    const base = {
+      runId: "rn_e4_t06_provider_integrity",
+      invocationDigest: INVOCATION_A,
+      expectedFence: 0,
+      resourceIdentity: {
+        tenantId: "tenant_e4_t06_integrity",
+        workspaceId: "workspace_e4_t06_integrity",
+        agentId: "agent_e4_t06_integrity",
+        invocationId: "invocation_e4_t06_integrity",
+        idempotencyKey: "ik_e4_t06_provider_integrity_create",
+      },
+      spec: { persistence: "persistent", requiredCapabilities: [] },
+    };
+    const created = await provider.create({
+      ...base,
+      idempotencyKey: "ik_e4_t06_provider_integrity_create",
+    });
+    const manifest = normalizeManifest({
+      schemaVersion: 1,
+      entries: [
+        {
+          path: "workspace.txt",
+          type: "file",
+          content: "provider integration bytes\n",
+        },
+      ],
+    });
+    const expectedDigest = workspaceDigest(manifest);
+    const publicationPath = path.join(tempRoot, "workspace");
+    const materializer = new WorkspaceMaterializer({ publicationPath });
+    await provider.materializeWorkspace(
+      {
+        ...base,
+        sandboxId: created.sandboxId,
+        expectedFence: created.fence,
+        workspaceDigest: expectedDigest,
+        idempotencyKey: "ik_e4_t06_provider_integrity_materialize",
+      },
+      manifest,
+      { materializer },
+    );
+    const target = await readlink(publicationPath);
+    await writeFile(
+      path.join(path.dirname(publicationPath), target, "workspace.txt"),
+      "tampered provider integration bytes\n",
+    );
+    await assert.rejects(
+      () =>
+        provider.exec({
+          ...base,
+          sandboxId: created.sandboxId,
+          expectedFence: created.fence,
+          workspaceDigest: expectedDigest,
+          exec: { command: "printf must-not-run" },
+          idempotencyKey: "ik_e4_t06_provider_integrity_exec",
+        }),
+      (error) =>
+        error.code === CLOUDFLARE_OS_ERROR_CODES.WORKSPACE_DIGEST_MISMATCH,
+    );
+    assert.equal(execCalls, 0);
+    return {
+      expectedDigest,
+      remoteExecCalls: execCalls,
+      executionBlocked: true,
     };
   } finally {
     await rm(tempRoot, { recursive: true, force: true });

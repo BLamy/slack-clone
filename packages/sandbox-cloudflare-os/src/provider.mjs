@@ -27,7 +27,7 @@ export class CloudflareOsSandboxProvider {
   #records = new Map();
   #idempotency = new Map();
   #events = [];
-  #workspaceDigests = new Map();
+  #workspaceMaterializers = new Map();
   #executionRecords = new Map();
 
   constructor({ client, capabilities } = {}) {
@@ -113,7 +113,11 @@ export class CloudflareOsSandboxProvider {
       invalid("sandboxId is invalid");
     if (!DIGEST.test(normalized.workspaceDigest))
       invalid("workspaceDigest is invalid");
-    if (!materializer || typeof materializer.materialize !== "function")
+    if (
+      !materializer ||
+      typeof materializer.materialize !== "function" ||
+      typeof materializer.assertExecutionReady !== "function"
+    )
       invalid("workspace materializer is required");
     const labels = resourceLabels(normalized);
     return this.#mutate("materialize", normalized, async () => {
@@ -128,7 +132,10 @@ export class CloudflareOsSandboxProvider {
           "materializer returned a digest different from the invocation expectation",
           { operation: "materialize" },
         );
-      this.#workspaceDigests.set(resolved.sandbox.sandboxId, result.digest);
+      this.#workspaceMaterializers.set(
+        resolved.sandbox.sandboxId,
+        materializer,
+      );
       this.#events.push({
         idempotencyKey: normalized.idempotencyKey,
         operation: "materialize",
@@ -185,18 +192,22 @@ export class CloudflareOsSandboxProvider {
     return this.#mutate("exec", normalized, async () => {
       const resolved = await this.#resolve({ ...normalized, labels });
       this.#assertFence(resolved.sandbox, normalized);
-      const materializedDigest = this.#workspaceDigests.get(
-        resolved.sandbox.sandboxId,
-      );
-      if (
-        !DIGEST.test(normalized.workspaceDigest) ||
-        materializedDigest !== normalized.workspaceDigest
-      )
+      if (!DIGEST.test(normalized.workspaceDigest))
         throw cloudflareOsError(
           CLOUDFLARE_OS_ERROR_CODES.WORKSPACE_DIGEST_MISMATCH,
-          "execution is blocked until the published workspace matches the invocation digest",
+          "execution is blocked until the invocation workspace digest is valid",
           { operation: "exec" },
         );
+      const materializer = this.#workspaceMaterializers.get(
+        resolved.sandbox.sandboxId,
+      );
+      if (!materializer)
+        throw cloudflareOsError(
+          CLOUDFLARE_OS_ERROR_CODES.WORKSPACE_DIGEST_MISMATCH,
+          "execution is blocked until a byte-verifying workspace materializer is bound",
+          { operation: "exec" },
+        );
+      await materializer.assertExecutionReady(normalized.workspaceDigest);
       const remote = await this.#client.exec(
         resolved.reference,
         labels,
@@ -318,6 +329,9 @@ export class CloudflareOsSandboxProvider {
               normalized.expectedFence,
             );
       const mapped = this.#remember(remote, { labels, ...normalized });
+      if (operation === "reset" || operation === "destroy") {
+        this.#workspaceMaterializers.delete(mapped.sandbox.sandboxId);
+      }
       this.#append(operation, mapped.sandbox, normalized.idempotencyKey);
       return mapped.sandbox;
     });

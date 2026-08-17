@@ -3,7 +3,7 @@ id: E3-T08
 epic: 3
 title: "Capstone: mention to scripted agent reply"
 priority: 308
-status: implemented
+status: verified
 depends_on: [E3-T05, E3-T06, E3-T07]
 estimate: L
 capstone: true
@@ -93,3 +93,13 @@ run, and audit streams after projections and process state are deleted.
 - Composite replay digest: `sha256:0c6b02ddbe3724ccbd22428122e65b6e33fcf4c9a6215edf86c3bf9b2a203880`; rebuilt digest matched.
 - Replay: N/A (server/CLI scripted-agent capstone; real providers and UI land later) + mitigation: multi-process fault schedules, source/ref manifest, canary scans, projection rebuild, and independent composite replay.
 - Claim: the prior config provenance gap is closed; the canonical mention, immutable snapshot, lease, bounded context, scripted run, threaded reply, fault handling, source replay, and evidence canary protections remain reproducible from the exact implementation commit.
+
+### Critic — b53cc35f1259cfd63e484845549df3dbc41c951e
+
+VERDICT: verified
+
+- `make verify-E3-T08` passed from a cold detached checkout (`runId=cold-3978-msxesya`, `result=PASS`, zero task-local skips).
+- Repaired the E3-T01 pinned lifecycle digests after the shared reducer gained its durable `controls` and `failures` fields; the refreshed fixture and promoted E3-T01 evidence now agree on `sha256:93ac7688b87515e347c90b0a4b0349e8db6812e11d275b8b409c9ea3b85db769`.
+- `make verify-E3-T08` passed cold as `runId=cold-68145-msxfvg6a`; the composed `make verify-E3` passed all E3-T01 through E3-T08 gates as `runId=composed-72635-msxfxbcw` with zero skips.
+- The composed transcript is `.artifacts/e3-composed/composed-72635-msxfxbcw/composed-verify-transcript.json`; all five gates, independent attacks, sensitivity checks, and browser proofs passed for each dependency.
+- Replay: N/A (server/CLI scripted-agent capstone; real providers and UI land later) + mitigation: multi-process fault schedules, source/ref manifest, canary scans, projection rebuild, and independent composite replay.

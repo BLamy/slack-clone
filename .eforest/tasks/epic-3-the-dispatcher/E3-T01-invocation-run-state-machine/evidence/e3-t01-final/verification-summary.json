@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E3-T01",
-  "runId": "e3-t01-cold-secret-fixed-20260807",
-  "implementationCommit": "cef7c4b0184832433ca1fcb00e406b23542888ff",
+  "runId": "e3-t01-digest-refresh-20260817",
+  "implementationCommit": "b53cc35f1259cfd63e484845549df3dbc41c951e",
   "implementationTreeCleanAtStart": true,
   "result": "PASS",
   "replay": "Replay: N/A (server run protocol) + mitigation: lifecycle corpus, source-reference audit, secret canary scan, and per-prefix replay digests",
@@ -10,31 +10,31 @@
   "gates": [
     {
       "command": "pnpm format:check",
-      "durationMs": 2610,
+      "durationMs": 2184,
       "name": "format",
       "result": "PASS"
     },
     {
       "command": "pnpm lint",
-      "durationMs": 2714,
+      "durationMs": 2059,
       "name": "lint",
       "result": "PASS"
     },
     {
       "command": "pnpm typecheck",
-      "durationMs": 6549,
+      "durationMs": 5926,
       "name": "typecheck",
       "result": "PASS"
     },
     {
       "command": "pnpm test",
-      "durationMs": 19392,
+      "durationMs": 19318,
       "name": "tests",
       "result": "PASS"
     },
     {
       "command": "pnpm build",
-      "durationMs": 480,
+      "durationMs": 715,
       "name": "build",
       "result": "PASS"
     }
@@ -213,7 +213,7 @@
     }
   ],
   "replayEvidence": {
-    "finalStateDigest": "sha256:4088e18c0f69fa8565f81b57efbbe3f270034db0cd95caf2352cea4a52cbe4eb",
+    "finalStateDigest": "sha256:93ac7688b87515e347c90b0a4b0349e8db6812e11d275b8b409c9ea3b85db769",
     "networkUsed": false,
     "perPrefixDigests": [
       {
@@ -224,67 +224,67 @@
       {
         "index": 2,
         "offset": "0000000000000002_aaaaaaaaaaaaaaaa",
-        "stateDigest": "sha256:3a30374d5ba7fa9f002f470573f5c630ea48efa4abca746e14be83b163db384a"
+        "stateDigest": "sha256:ea3d9a220f7d5885481043176cc9ba03060f401b698c35636b1c618e1ec41fd3"
       },
       {
         "index": 3,
         "offset": "0000000000000003_aaaaaaaaaaaaaaaa",
-        "stateDigest": "sha256:558f51d38b7718e12927201d52e2cf461e464cc20121a4abcd9155b483da8eb6"
+        "stateDigest": "sha256:acef253ee89c73b931aee9552af060630a59268be38fda7545e27577eadcfb91"
       },
       {
         "index": 4,
         "offset": "0000000000000004_aaaaaaaaaaaaaaaa",
-        "stateDigest": "sha256:8e4bd9f486ff6f39c5d9d770696296fc9f2e32eb870a63f1fa9c5f7207c6e32e"
+        "stateDigest": "sha256:9148f0a0488b4a27e6dbcca5939d477f65e1deb5029abcf40fa7881d6cba3b1d"
       },
       {
         "index": 5,
         "offset": "0000000000000005_aaaaaaaaaaaaaaaa",
-        "stateDigest": "sha256:9b89ae8e0de19708db4ac352c073c7f15bd5e776c7ebb7398b25e4859b5aa5b7"
+        "stateDigest": "sha256:ee70a9fc03fc4298d3f0ebfa67c13d303a261f6fdf2666671ae2bd0ca5e99710"
       },
       {
         "index": 6,
         "offset": "0000000000000006_aaaaaaaaaaaaaaaa",
-        "stateDigest": "sha256:35ff4c6b4ea1a91864a98e86160c3aca3b0e09e0e3b29b3e75067fd06134811f"
+        "stateDigest": "sha256:d791711413d242b4789f6be158edca70ad2194d84f7323e5f85ace41704317ee"
       },
       {
         "index": 7,
         "offset": "0000000000000007_aaaaaaaaaaaaaaaa",
-        "stateDigest": "sha256:ef438709ba79b7604c987b317d83c383f9ad2395c3f8fe504255a3f28344821b"
+        "stateDigest": "sha256:c3f092a83d1823b548a52c82676cd8597baf1dfe086528bc7cf47846089df957"
       },
       {
         "index": 8,
         "offset": "0000000000000008_aaaaaaaaaaaaaaaa",
-        "stateDigest": "sha256:1152f2385a825fb3b14d15109700460e8efdd1d97c82b2334174a7e87090c282"
+        "stateDigest": "sha256:a62a878edbc810be52a77727ac6bb1d2de325a1481670b682d32c2055cfaadda"
       },
       {
         "index": 9,
         "offset": "0000000000000009_aaaaaaaaaaaaaaaa",
-        "stateDigest": "sha256:4f7b32514ce7c1b1a2ea63ca83e4d8cd1b50595e5ef3b0695db1142e14342378"
+        "stateDigest": "sha256:4b3583b348fa334110e459aa0ca1462011ee4e87d290d1552eb8c15d0f9e62c4"
       },
       {
         "index": 10,
         "offset": "0000000000000010_aaaaaaaaaaaaaaaa",
-        "stateDigest": "sha256:45fa827ba87db4dea3b7447650a41910921b510cf6c52f84cf660d6de41c1eb9"
+        "stateDigest": "sha256:4d4a3d675c0c7417b680753014a41efb912ae405c8fd1cc404f1973a8ed7fd6b"
       },
       {
         "index": 11,
         "offset": "0000000000000011_aaaaaaaaaaaaaaaa",
-        "stateDigest": "sha256:6e681aa1113764b03fefc1fbad4480fdc30cd76da761261dcdcd08d93385e043"
+        "stateDigest": "sha256:4d250924c501a6da415431e0562ec61eef0b6854d952894cdd219fa26744d831"
       },
       {
         "index": 12,
         "offset": "0000000000000012_aaaaaaaaaaaaaaaa",
-        "stateDigest": "sha256:7d9f2a451eb501bf9129ff2f13488f907c08ab0f4b55536cc57a423285797d7b"
+        "stateDigest": "sha256:71352e17412460b45e8fb91ec744528307fb7dd429860a3edb2c71963e7d538c"
       },
       {
         "index": 13,
         "offset": "0000000000000013_aaaaaaaaaaaaaaaa",
-        "stateDigest": "sha256:4633c0517c28af36d05500fae3f0d979587c5d1b19ec1a53fc0062be822de1db"
+        "stateDigest": "sha256:a93b5af22e2036626c808faaa26fb2d389538c108ee108e4e5cfbd4a55da10d4"
       },
       {
         "index": 14,
         "offset": "0000000000000014_aaaaaaaaaaaaaaaa",
-        "stateDigest": "sha256:4088e18c0f69fa8565f81b57efbbe3f270034db0cd95caf2352cea4a52cbe4eb"
+        "stateDigest": "sha256:93ac7688b87515e347c90b0a4b0349e8db6812e11d275b8b409c9ea3b85db769"
       }
     ],
     "replayedTwiceWithIdenticalDigest": true,
@@ -329,7 +329,7 @@
         "refused": true,
         "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
         "winner": "completed",
-        "winnerStateDigest": "sha256:792f566642e95fa297dff2efbf9af6f679c6a8f320227bef69a49ce126626c4c"
+        "winnerStateDigest": "sha256:bff1c61f80012183f79385d8f8bec9db587671729d85a91763be3eae86b6c4c4"
       },
       {
         "contender": "timed-out",
@@ -339,7 +339,7 @@
         "refused": true,
         "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
         "winner": "failed",
-        "winnerStateDigest": "sha256:2118a29a60dad33c28183d4f6c53e6e42de1791b7761f01b5667b0256a586391"
+        "winnerStateDigest": "sha256:3ef4fea4dcb245319fac16812d8430dcfb7633e0c5fae6b222bdefe0e4ba3d4c"
       },
       {
         "contender": "cancelled",
@@ -349,7 +349,7 @@
         "refused": true,
         "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
         "winner": "timed-out",
-        "winnerStateDigest": "sha256:22b65140fbc69813d08b5a15aa09649e5d43758e50d57891a6124e232f35d5f6"
+        "winnerStateDigest": "sha256:6fbb5b941b980195de365cf47077a26a0e1b2da852f648851fbb54db1b054f15"
       },
       {
         "contender": "completed",
@@ -359,7 +359,7 @@
         "refused": true,
         "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
         "winner": "cancelled",
-        "winnerStateDigest": "sha256:1329042084694e764cf50dba10ab9223690e2c8ddcc3dd160e23df0dc9a61a75"
+        "winnerStateDigest": "sha256:5954b60668ec803fe55071ca7c650e214fe5bfecbc2b36707c978b6f43a5faca"
       }
     ],
     "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",

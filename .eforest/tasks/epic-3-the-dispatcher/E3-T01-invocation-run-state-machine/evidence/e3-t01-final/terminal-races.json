@@ -8,7 +8,7 @@
       "refused": true,
       "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
       "winner": "completed",
-      "winnerStateDigest": "sha256:792f566642e95fa297dff2efbf9af6f679c6a8f320227bef69a49ce126626c4c"
+      "winnerStateDigest": "sha256:bff1c61f80012183f79385d8f8bec9db587671729d85a91763be3eae86b6c4c4"
     },
     {
       "contender": "timed-out",
@@ -18,7 +18,7 @@
       "refused": true,
       "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
       "winner": "failed",
-      "winnerStateDigest": "sha256:2118a29a60dad33c28183d4f6c53e6e42de1791b7761f01b5667b0256a586391"
+      "winnerStateDigest": "sha256:3ef4fea4dcb245319fac16812d8430dcfb7633e0c5fae6b222bdefe0e4ba3d4c"
     },
     {
       "contender": "cancelled",
@@ -28,7 +28,7 @@
       "refused": true,
       "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
       "winner": "timed-out",
-      "winnerStateDigest": "sha256:22b65140fbc69813d08b5a15aa09649e5d43758e50d57891a6124e232f35d5f6"
+      "winnerStateDigest": "sha256:6fbb5b941b980195de365cf47077a26a0e1b2da852f648851fbb54db1b054f15"
     },
     {
       "contender": "completed",
@@ -38,7 +38,7 @@
       "refused": true,
       "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
       "winner": "cancelled",
-      "winnerStateDigest": "sha256:1329042084694e764cf50dba10ab9223690e2c8ddcc3dd160e23df0dc9a61a75"
+      "winnerStateDigest": "sha256:5954b60668ec803fe55071ca7c650e214fe5bfecbc2b36707c978b6f43a5faca"
     }
   ],
   "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",

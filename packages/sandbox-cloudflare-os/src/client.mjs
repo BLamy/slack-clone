@@ -11,6 +11,7 @@ import {
 const MAX_BODY_BYTES = 32 * 1024;
 const MAX_STREAM_EVENT_BYTES = 128 * 1024;
 const EXECUTION_ID = /^ex_[A-Za-z0-9._:-]{1,160}$/u;
+const DIGEST = /^sha256:[0-9a-f]{64}$/u;
 export class CloudflareOsClient {
   #baseUrl;
   #token;
@@ -153,6 +154,30 @@ export class CloudflareOsClient {
       body: { labels, policy },
       idempotencyKey,
       operation: "network-policy",
+    });
+  }
+
+  publishWorkspace(
+    reference,
+    labels,
+    manifest,
+    workspaceDigest,
+    idempotencyKey,
+  ) {
+    if (!DIGEST.test(workspaceDigest))
+      throw cloudflareOsError(
+        CLOUDFLARE_OS_ERROR_CODES.INVALID_REQUEST,
+        "workspaceDigest is invalid",
+        { operation: "workspace-materialize" },
+      );
+    return this.#request("POST", `${resourcePath(reference)}/workspace`, {
+      body: {
+        labels,
+        workspaceDigest,
+        manifest: transportManifest(manifest),
+      },
+      idempotencyKey,
+      operation: "workspace-materialize",
     });
   }
 
@@ -354,6 +379,33 @@ function assertExecutionId(executionId) {
       "executionId is invalid",
       { operation: "exec-stream" },
     );
+}
+
+function transportManifest(manifest) {
+  if (
+    !manifest ||
+    typeof manifest !== "object" ||
+    !Array.isArray(manifest.entries)
+  )
+    throw cloudflareOsError(
+      CLOUDFLARE_OS_ERROR_CODES.INVALID_REQUEST,
+      "workspace manifest is invalid",
+      { operation: "workspace-materialize" },
+    );
+  return {
+    schemaVersion: 1,
+    ...(manifest.invocationDigest === undefined
+      ? {}
+      : { invocationDigest: manifest.invocationDigest }),
+    entries: manifest.entries.map((entry) => ({
+      path: entry.path,
+      type: entry.type,
+      mode: entry.mode,
+      ...(entry.bytes === undefined
+        ? {}
+        : { contentBase64: Buffer.from(entry.bytes).toString("base64") }),
+    })),
+  };
 }
 
 async function* parseNdjson(body) {

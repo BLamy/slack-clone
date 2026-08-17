@@ -132,6 +132,20 @@ export class CloudflareOsSandboxProvider {
           "materializer returned a digest different from the invocation expectation",
           { operation: "materialize" },
         );
+      const remote = await this.#client.publishWorkspace(
+        resolved.reference,
+        labels,
+        manifest,
+        normalized.workspaceDigest,
+        normalized.idempotencyKey,
+      );
+      const remoteDigest = extractWorkspaceDigest(remote);
+      if (remoteDigest !== null && remoteDigest !== normalized.workspaceDigest)
+        throw cloudflareOsError(
+          CLOUDFLARE_OS_ERROR_CODES.WORKSPACE_DIGEST_MISMATCH,
+          "Cloudflare OS returned a workspace digest different from the invocation expectation",
+          { operation: "materialize" },
+        );
       this.#workspaceMaterializers.set(
         resolved.sandbox.sandboxId,
         materializer,
@@ -566,6 +580,19 @@ function publicPolicy(policy) {
     inbound: structuredClone(policy.inbound),
     digest: policy.digest,
   };
+}
+
+function extractWorkspaceDigest(remote) {
+  if (!remote || typeof remote !== "object" || Array.isArray(remote))
+    return null;
+  return (
+    remote.workspaceDigest ??
+    remote.workspace?.workspaceDigest ??
+    remote.workspace?.digest ??
+    remote.gadget?.workspaceDigest ??
+    remote.gadget?.digest ??
+    null
+  );
 }
 
 function resourceList(response) {

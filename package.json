@@ -60,6 +60,7 @@
     "replay:ledger": "node scripts/replay-ledger.mjs",
     "audit:durable-streams": "node tools/audit-durable-streams-access.mjs",
     "format:check:e4-t07": "prettier --check packages/sandbox/src/quota.mjs packages/sandbox/src/schemas/quota-policy.v1.schema.json packages/sandbox-cloudflare-os/src/gc.mjs packages/sandbox-cloudflare-os/src/client.mjs packages/sandbox-cloudflare-os/src/errors.mjs packages/sandbox-cloudflare-os/src/index.mjs scripts/verify-e4-t07.mjs scripts/cold-verify-e4-t07.mjs",
+    "format:check:e4-t08-real": "prettier --check packages/sandbox-cloudflare-os/src/client.mjs packages/sandbox-cloudflare-os/src/provider.mjs scripts/verify-e4-t08-real.mjs",
     "record:replay": "node scripts/record-two-replays.mjs"
   },
   "dependencies": {

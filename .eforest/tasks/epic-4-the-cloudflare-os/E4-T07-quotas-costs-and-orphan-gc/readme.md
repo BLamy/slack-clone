@@ -3,7 +3,7 @@ id: E4-T07
 epic: 4
 title: "Sandbox quotas, cost accounting, and orphan garbage collection from provider-observed reality"
 priority: 407
-status: implemented
+status: verified
 depends_on: [E4-T04, E4-T06]
 estimate: L
 capstone: false
@@ -95,3 +95,14 @@ proof before destructive action.
 - Replay: N/A (server quota and GC worker) + mitigation: cold-clone race/replay fixtures, provider inventory transcripts, exact cost digests, and deletion sensitivity.
 - Claim: the repaired evidence closes the prior critic findings and the E4-T07 implementation is ready for a fresh independent critic.
 - Status: implemented; fresh critic required.
+
+### Final Critic — 2026-08-17
+
+- Verdict: VERDICT: verified
+- Exact implementation commit: d1990f029bf395ccb26211185e2b13dfba9b321a
+- Independent cold run: TEST_RUN_ID=e4-t07-critic-repair-20260817-independent E4_T07_IMPLEMENTATION_COMMIT=d1990f029bf395ccb26211185e2b13dfba9b321a TEST_ARTIFACT_DIR=/private/tmp/e4-t07-critic-artifacts.RcjBlU make verify-E4-T07; detached checkout passed format, lint, typecheck, build, and 189 unit tests with 0 skips.
+- Independent evidence: /private/tmp/e4-t07-critic-artifacts.RcjBlU/{quota-reservation,usage-cost,gc-inventory,deletion-sensitivity,verification-summary,cold-verification-transcript}.json; fresh artifacts matched the expected digests and contained no canary values.
+- Findings: none. The critic confirmed six actual provider-stub calls with no rejected-provider calls, heartbeat sequence 1 to 2 protection, retained-504 retry with the same deterministic idempotency key, stale-fence rejection without deletion, and sensitivity exit 73 at DESTRUCTIVE_DESTROY_REACHED.
+- Independent attack: advancing the provider fence after inventory and before GC destroy produced a typed conflict, zero accepted deletions, and preserved the resource.
+- Replay: N/A (server quota and GC worker) + mitigation: independent cold clone, provider inventory transcripts, exact cost digests, deletion sensitivity, and a provider-fence race.
+- Status: verified.

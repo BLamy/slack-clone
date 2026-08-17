@@ -250,7 +250,7 @@ function runQuotaSequence(reverse) {
   return {
     eventDigest: manager.digest(),
     replayDigest: replayed.digest,
-    reservation,
+    reservation: manager.reservation(reservation.reservationId),
     usage: manager.usage(),
     cost,
     duplicateObservationCount: 2,

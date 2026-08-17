@@ -191,7 +191,7 @@ acceptance criteria remain unverified. The capstone must not advance to E5 on th
 code-only evidence.
 
 Fresh critic evidence: `/private/tmp/slack-clone-e4-t08-critic-NbpKpY/skipped.json`
-and `/private/tmp/slack-clone-e4-t08-gates-*/gates.log`. Replay: N/A (real headless
+and `/private/tmp/slack-clone-e4-t08-gates-95800/gates.log`. Replay: N/A (real headless
 Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript,
 exact stream/tree digests, network probe evidence, cost ledger, and before/after
 Cloudflare OS inventory.

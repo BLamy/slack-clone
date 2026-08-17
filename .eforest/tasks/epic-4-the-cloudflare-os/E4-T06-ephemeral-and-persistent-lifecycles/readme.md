@@ -3,7 +3,7 @@ id: E4-T06
 epic: 4
 title: "Ephemeral and persistent sandbox lifecycles: explicit retention, resume, reset, and destruction semantics"
 priority: 406
-status: in-progress
+status: implemented
 depends_on: [E4-T03, E4-T04]
 estimate: L
 capstone: false
@@ -69,6 +69,17 @@ modes need a common event model and destructive reset contract.
 - Gates: `format:check`, `lint`, `typecheck`, `test:unit` (189 passed, 0 skipped), and `build` passed from a detached cold worktree.
 - Replay: N/A (headless sandbox lifecycle) + mitigation: cold-clone multi-run replay, provider inventory checks, canary-secret scans, and stale-lineage races.
 - Claim: lifecycle policy and lineage schemas bind explicit ephemeral or provider-encrypted persistent retention; only declared workspace bytes survive persistent suspend/resume, excluded mounts and credential-shaped material are refused, expiry/reset/revoke rotate fences, concurrent resumes have one winner, and Cloudflare OS reset/destroy leave no inventory match.
+
+### Repair Builder — 2026-08-17
+
+- Commit: `7ab54bbb926c716b7aefddce513a26cb9cff605b`
+- Cold run: `make verify-E4-T06`, `TEST_RUN_ID=e4-t06-cold-repair-20260817`
+- Evidence: `.artifacts/e4-t06/e4-t06-cold-repair-20260817/{ephemeral-sequence,persistent-sequence,retention-race,workspace-integrity,provider-enforcement,verification-summary,cold-verification-transcript}.json`
+- Repair evidence: workspace pointer `sha256:d5ce5dd50652ce9a9ce6b930983a0beacd0ce94e42fe62eed36613e6a0545a66` versus tampered-byte digest `sha256:66e2fbafdd4d37051e3031606a48a433fa7374b8e53ff9ab5124363a10238542`; readiness was blocked. Cloudflare concurrent resume had one winner and one `CLOUDFLARE_OS_CONFLICT` loser after expected-fence CAS enforcement.
+- Provider lifecycle digest: `sha256:9a0caef3cd002fb4543dd93146d949193fc3924f32ba1534541cbe8ddeac187e`; workspace-integrity evidence digest: `sha256:3b73b0894dea409ac3a503422a66bdb6f11669f5fc4673fb3e21cb13f3090b2b`.
+- Gates: `format:check`, `lint`, `typecheck`, `test:unit` (189 passed, 0 skipped), and `build` passed from a detached cold worktree.
+- Replay: N/A (headless sandbox lifecycle) + mitigation: cold-clone multi-run replay, byte-tamper readiness gate, provider CAS race, inventory checks, canary scans, and cleanup sensitivity.
+- Claim: the critic’s provider-disk and concurrent-resume gaps are closed at the Cloudflare boundary; the task verifier now turns red when either byte-integrity or ephemeral cleanup is weakened.
 
 ### Critic — 2026-08-17
 

@@ -3,7 +3,7 @@ id: E4-T06
 epic: 4
 title: "Ephemeral and persistent sandbox lifecycles: explicit retention, resume, reset, and destruction semantics"
 priority: 406
-status: pending
+status: in-progress
 depends_on: [E4-T03, E4-T04]
 estimate: L
 capstone: false

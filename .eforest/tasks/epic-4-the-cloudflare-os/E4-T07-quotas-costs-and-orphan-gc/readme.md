@@ -3,7 +3,7 @@ id: E4-T07
 epic: 4
 title: "Sandbox quotas, cost accounting, and orphan garbage collection from provider-observed reality"
 priority: 407
-status: pending
+status: in-progress
 depends_on: [E4-T04, E4-T06]
 estimate: L
 capstone: false

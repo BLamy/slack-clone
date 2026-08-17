@@ -21,6 +21,7 @@ import {
   replayQuotaEvents,
 } from "@stream-slack/sandbox";
 import {
+  CLOUDFLARE_OS_ERROR_CODES,
   CloudflareOrphanGarbageCollector,
   CloudflareOsClient,
 } from "@stream-slack/sandbox-cloudflare-os";
@@ -268,6 +269,13 @@ async function runQuotaReservationRaces() {
   ];
   const races = [];
   let providerCalls = 0;
+  const provider = {
+    async create(reservation) {
+      assert.equal(reservation.status, "active");
+      providerCalls += 1;
+      return { providerResourceId: "provider_" + reservation.reservationId };
+    },
+  };
   for (const dimension of dimensions) {
     const limits = {
       sandboxes: dimension === "sandboxes" ? 1 : 10,
@@ -295,8 +303,7 @@ async function runQuotaReservationRaces() {
           const result = manager.reserve(
             quotaRequest(dimension + "_race_" + suffix, requested),
           );
-          providerCalls += 1;
-          return result;
+          return provider.create(result);
         }),
       ),
     );
@@ -368,6 +375,7 @@ async function runGcSequence() {
   const orphan = resource("orphan", ownershipLabels, 2);
   const protectedResource = resource("protected", ownershipLabels, 3);
   const timeoutResource = resource("timeout", ownershipLabels, 4);
+  const heartbeatResource = resource("heartbeat", ownershipLabels, 5);
   const foreign = resource("foreign", {
     ...ownershipLabels,
     "stream-slack/deployment": "deployment_other",
@@ -383,12 +391,14 @@ async function runGcSequence() {
     orphan,
     protectedResource,
     timeoutResource,
+    heartbeatResource,
     foreign,
     partial,
     unlabeled,
   ])
     resources.set(resourceKey(value), value);
   let protectedLeaseArmed = false;
+  let timeoutAttempts = 0;
   const destroyCalls = [];
   const inventoryPages = [];
   const client = new CloudflareOsClient({
@@ -419,18 +429,20 @@ async function runGcSequence() {
       const gadgetId = segments.at(-2);
       const key = workspaceId + ":" + gadgetId;
       const current = resources.get(key);
-      assert.ok(
-        current,
-        "destroy target " + key + " should be in provider inventory",
-      );
-      assert.equal(
-        options.headers["if-match"],
-        "fence-" + current.fence,
-        "GC destroy must carry the provider fence",
-      );
-      destroyCalls.push({ key, expectedFence: current.fence });
+      if (!current) return jsonResponse({}, 404);
+      if (options.headers["if-match"] !== "fence-" + current.fence)
+        return jsonResponse({ message: "stale provider fence" }, 409);
+      destroyCalls.push({
+        key,
+        expectedFence: current.fence,
+        idempotencyKey: options.headers["idempotency-key"],
+      });
+      if (key === resourceKey(timeoutResource) && timeoutAttempts === 0) {
+        timeoutAttempts += 1;
+        return jsonResponse({}, 504);
+      }
+      if (key === resourceKey(timeoutResource)) timeoutAttempts += 1;
       resources.delete(key);
-      if (key === resourceKey(timeoutResource)) return jsonResponse({}, 504);
       return jsonResponse({
         ...current,
         state: "destroyed",
@@ -448,6 +460,11 @@ async function runGcSequence() {
       }
       if (protectedLeaseArmed) return { active: true, heartbeatSequence: 8 };
     }
+    if (candidate.resourceKey === resourceKey(heartbeatResource))
+      return {
+        active: false,
+        heartbeatSequence: phase === "pre-destroy" ? 2 : 1,
+      };
     return { active: false, heartbeatSequence: 0 };
   };
   const gcOptions = {
@@ -466,6 +483,7 @@ async function runGcSequence() {
       resourceKey(orphan),
       resourceKey(protectedResource),
       resourceKey(timeoutResource),
+      resourceKey(heartbeatResource),
     ]),
   );
   assert.equal(first.ignored, 3);
@@ -481,6 +499,10 @@ async function runGcSequence() {
   now = 20;
   const afterGrace = await recovered.scan();
   assert.deepEqual(afterGrace.destroyed, [resourceKey(orphan)]);
+  assert.equal(
+    afterGrace.destroyed.includes(resourceKey(heartbeatResource)),
+    false,
+  );
   assert.equal(afterGrace.destroyFailures.length, 1);
   assert.equal(
     afterGrace.destroyFailures[0].resourceKey,
@@ -493,12 +515,21 @@ async function runGcSequence() {
     afterTimeoutReconcile.destroyed.includes(resourceKey(protectedResource)),
     false,
   );
-  assert.equal(resources.has(resourceKey(timeoutResource)), false);
   assert.equal(
-    destroyCalls.filter(({ key }) => key === resourceKey(timeoutResource))
-      .length,
+    afterTimeoutReconcile.destroyed.includes(resourceKey(timeoutResource)),
+    true,
+  );
+  assert.equal(resources.has(resourceKey(timeoutResource)), false);
+  const timeoutDestroyCalls = destroyCalls.filter(
+    ({ key }) => key === resourceKey(timeoutResource),
+  );
+  assert.equal(timeoutDestroyCalls.length, 2);
+  assert.equal(
+    new Set(timeoutDestroyCalls.map(({ idempotencyKey }) => idempotencyKey))
+      .size,
     1,
   );
+  assert.equal(timeoutAttempts, 2);
 
   const rollback = resource("rollback", ownershipLabels, 5);
   resources.set(resourceKey(rollback), rollback);
@@ -513,6 +544,10 @@ async function runGcSequence() {
   );
   now = 30;
   const rollbackBeforeGrace = await recovered.scan();
+  assert.equal(
+    rollbackBeforeGrace.destroyed.includes(resourceKey(heartbeatResource)),
+    true,
+  );
   assert.equal(
     rollbackBeforeGrace.destroyed.includes(resourceKey(rollback)),
     false,
@@ -549,6 +584,20 @@ async function runGcSequence() {
     client.audit().some(({ path: auditPath }) => auditPath.includes("cursor=")),
     true,
   );
+  await assert.rejects(
+    () =>
+      client.destroy(
+        {
+          workspaceId: live.workspaceId,
+          gadgetId: live.gadgetId,
+        },
+        ownershipLabels,
+        "gc_stale_fence",
+        999,
+      ),
+    (error) => error.code === CLOUDFLARE_OS_ERROR_CODES.CONFLICT,
+  );
+  assert.equal(resources.has(resourceKey(live)), true);
   assert.equal(
     JSON.stringify(client.audit()).includes(DEPLOYMENT_TOKEN),
     false,
@@ -562,7 +611,9 @@ async function runGcSequence() {
     destroyedOwnedOrphans: destroyCalls.map(({ key }) => key).sort(),
     foreignAndLivePreserved: true,
     delayedHeartbeatProtected: true,
+    delayedHeartbeatSequenceAdvanced: true,
     timeoutRetryReconciled: true,
+    staleFenceRejected: true,
     wallClockRollbackSafe: true,
     finalInventory: remainingKeys,
   };
@@ -602,10 +653,9 @@ async function runGcSensitivity() {
       "const labels = " + JSON.stringify(makeOwnershipLabels()) + ";",
       'const resource = { workspaceId: "ws_e4_t07_sensitive", gadgetId: "gd_e4_t07_sensitive", labels, state: "ready", fence: 1 };',
       "let now = 0;",
-      "let destroyCalls = 0;",
       'let phase = "";',
       "const gc = new CloudflareOrphanGarbageCollector({",
-      "  client: { async inventory() { return { resources: [resource] }; }, async destroy() { destroyCalls += 1; } },",
+      '  client: { async inventory() { return { resources: [resource] }; }, async destroy() { process.stderr.write("DESTRUCTIVE_DESTROY_REACHED\\n"); process.exit(73); } },',
       "  ownershipLabels: labels,",
       "  graceMs: 10,",
       "  clock: () => now,",
@@ -613,22 +663,24 @@ async function runGcSensitivity() {
       "});",
       "await gc.scan();",
       "now = 20;",
-      "await gc.scan();",
-      'assert.equal(destroyCalls, 0, "false-orphan recheck must prevent destroy");',
+      "const secondScan = await gc.scan();",
+      'assert.equal(secondScan.destroyed.length, 0, "false-orphan recheck must prevent destroy");',
     ].join("\n");
     await writeFile(fixturePath, fixture);
     const result = spawnSync(process.execPath, [fixturePath], {
       cwd: path.resolve("."),
       encoding: "utf8",
     });
-    assert.notEqual(
+    assert.equal(
       result.status,
-      0,
+      73,
       "removing the second orphan check must make the verifier fail",
     );
+    assert.match(result.stderr, /DESTRUCTIVE_DESTROY_REACHED/u);
     return {
       mutatedVerifierExitCode: result.status,
       secondOrphanCheckSensitive: true,
+      mutationStoppedAtDestroyGuard: true,
     };
   } finally {
     await rm(tempRoot, { recursive: true, force: true });

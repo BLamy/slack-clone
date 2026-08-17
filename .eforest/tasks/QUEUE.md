@@ -8,7 +8,7 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-1. **E4-T04** — Streaming execution and cancellation: ordered output, reconnectable offsets, and fenced process termination *(builder working)*
+1. **E4-T04** — Streaming execution and cancellation: ordered output, reconnectable offsets, and fenced process termination *(awaiting independent critic)*
 
 ## Next up (dependencies satisfied)
 
@@ -67,7 +67,7 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 - [x] ` 401` [E4-T01](epic-4-the-cloudflare-os/E4-T01-sandbox-provider-contract/readme.md) — Sandbox provider contract: capability discovery, fenced lifecycle operations, and provider-neutral run identities *(deps: E3)*
 - [x] ` 402` [E4-T02](epic-4-the-cloudflare-os/E4-T02-cloudflare-os-control-plane/readme.md) — Cloudflare OS control plane: authenticated workspace and Gadget lifecycle behind SandboxProvider *(deps: E4-T01)*
 - [x] ` 403` [E4-T03](epic-4-the-cloudflare-os/E4-T03-pinned-workspace-materialization/readme.md) — Pinned workspace materialization: one invocation digest becomes one byte-exact sandbox tree *(deps: E4-T02)*
-- [~] ` 404` [E4-T04](epic-4-the-cloudflare-os/E4-T04-streaming-exec-and-cancellation/readme.md) — Streaming execution and cancellation: ordered output, reconnectable offsets, and fenced process termination *(deps: E4-T02)*
+- [?] ` 404` [E4-T04](epic-4-the-cloudflare-os/E4-T04-streaming-exec-and-cancellation/readme.md) — Streaming execution and cancellation: ordered output, reconnectable offsets, and fenced process termination *(deps: E4-T02)*
 - [ ] ` 405` [E4-T05](epic-4-the-cloudflare-os/E4-T05-default-deny-network-policy/readme.md) — Default-deny sandbox networking: destination allowlists, metadata blocking, and auditable egress decisions *(deps: E4-T02)*
 - [ ] ` 406` [E4-T06](epic-4-the-cloudflare-os/E4-T06-ephemeral-and-persistent-lifecycles/readme.md) — Ephemeral and persistent sandbox lifecycles: explicit retention, resume, reset, and destruction semantics *(deps: E4-T03, E4-T04)*
 - [ ] ` 407` [E4-T07](epic-4-the-cloudflare-os/E4-T07-quotas-costs-and-orphan-gc/readme.md) — Sandbox quotas, cost accounting, and orphan garbage collection from provider-observed reality *(deps: E4-T04, E4-T06)*

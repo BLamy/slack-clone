@@ -3,7 +3,7 @@ id: E4-T04
 epic: 4
 title: "Streaming execution and cancellation: ordered output, reconnectable offsets, and fenced process termination"
 priority: 404
-status: in-progress
+status: implemented
 depends_on: [E4-T02]
 estimate: L
 capstone: false
@@ -59,3 +59,13 @@ signal delivery.
    post-terminal chunk.
 
 ## Verification log
+
+### Builder — 2026-08-17
+
+- Commit: `13dca35ec0e376a446228ef71ada7dda0d938e2b`
+- Cold run: `make verify-E4-T04`, `TEST_RUN_ID=e4-t04-cold-20260817`
+- Evidence: `.artifacts/e4-t04/e4-t04-cold-20260817/{transcript,reconnect-matrix,cancellation,limits,transport-audit,verification-summary,cold-verification-transcript}.json`
+- Transcript digest: `sha256:c5704831d44532b2d5461260ab79258067983034f2b5469bf5e27ae82f9b332d`
+- Gates: `format:check`, `lint`, `typecheck`, `test:unit` (189 passed, 0 skipped), and `build` passed from a detached cold worktree.
+- Replay: N/A (headless remote execution transport) + mitigation: cold-clone transcript replay, disconnect matrix, cancellation sensitivity, and exact sequence assertions.
+- Claim: the bounded event journal preserves byte-exact stdout/stderr order across reconnects, accepts one terminal event, emits typed output limits, and fences cancellation/timeout effects before process-tree termination.

@@ -17,7 +17,9 @@ const task = path.join(
   root,
   ".eforest/tasks/epic-4-the-cloudflare-os/E4-T01-sandbox-provider-contract",
 );
-const parent = await mkdtemp(path.join(task, "work", "cold-clone-"));
+const work = path.join(task, "work");
+await mkdir(work, { recursive: true });
+const parent = await mkdtemp(path.join(work, "cold-clone-"));
 const checkout = path.join(parent, "checkout");
 let added = false;
 try {

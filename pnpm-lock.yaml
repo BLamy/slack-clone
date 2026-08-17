@@ -19,6 +19,9 @@ importers:
       "@stream-slack/reducers":
         specifier: workspace:*
         version: link:packages/reducers
+      "@stream-slack/sandbox":
+        specifier: workspace:*
+        version: link:packages/sandbox
       "@stream-slack/services":
         specifier: workspace:*
         version: link:packages/services
@@ -61,6 +64,8 @@ importers:
       "@stream-slack/protocol":
         specifier: workspace:*
         version: link:../protocol
+
+  packages/sandbox: {}
 
   packages/services:
     dependencies:

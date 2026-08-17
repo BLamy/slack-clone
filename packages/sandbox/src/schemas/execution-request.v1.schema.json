@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stream-slack.dev/schemas/sandbox-execution-request.v1.json",
+  "title": "Sandbox execution request",
+  "type": "object",
+  "required": [
+    "sandboxId",
+    "runId",
+    "invocationDigest",
+    "idempotencyKey",
+    "expectedFence",
+    "exec"
+  ],
+  "properties": {
+    "sandboxId": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,160}$" },
+    "runId": { "type": "string", "pattern": "^rn_[A-Za-z0-9._:-]{1,120}$" },
+    "invocationDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,160}$"
+    },
+    "expectedFence": { "type": "integer", "minimum": 0 },
+    "exec": {
+      "type": "object",
+      "required": ["command"],
+      "properties": {
+        "command": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "stream": { "type": "boolean" },
+        "env": {
+          "type": "object",
+          "maxProperties": 32,
+          "additionalProperties": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

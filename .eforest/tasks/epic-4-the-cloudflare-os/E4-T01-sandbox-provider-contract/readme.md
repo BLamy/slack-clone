@@ -3,7 +3,7 @@ id: E4-T01
 epic: 4
 title: "Sandbox provider contract: capability discovery, fenced lifecycle operations, and provider-neutral run identities"
 priority: 401
-status: pending
+status: in-progress
 depends_on: [E3]
 estimate: M
 capstone: false
@@ -49,8 +49,8 @@ unbounded command channel.
       config and redacted from run events, proven with canary scans over serialized
       requests, errors, fixtures, and evidence.
 - [ ] Browser evidence is recorded exactly as `Replay: N/A (headless sandbox contract;
-      no browser surface) + mitigation: cold-clone conformance, lifecycle event replay,
-      digest equality, and mutation sensitivity`.
+    no browser surface) + mitigation: cold-clone conformance, lifecycle event replay,
+    digest equality, and mutation sensitivity`.
 
 ## Adversarial verification
 

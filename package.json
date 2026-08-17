@@ -66,6 +66,7 @@
     "@stream-slack/http": "workspace:*",
     "@stream-slack/protocol": "workspace:*",
     "@stream-slack/reducers": "workspace:*",
+    "@stream-slack/sandbox": "workspace:*",
     "@stream-slack/services": "workspace:*"
   },
   "devDependencies": {

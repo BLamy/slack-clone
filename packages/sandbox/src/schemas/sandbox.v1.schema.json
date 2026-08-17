@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:stream-slack:sandbox:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["requiredCapabilities"],
+  "properties": {
+    "requiredCapabilities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "networkPolicy": { "type": "object", "additionalProperties": true },
+    "resourceLimit": { "type": "object", "additionalProperties": true },
+    "persistence": { "type": "string", "enum": ["ephemeral", "persistent"] }
+  }
+}

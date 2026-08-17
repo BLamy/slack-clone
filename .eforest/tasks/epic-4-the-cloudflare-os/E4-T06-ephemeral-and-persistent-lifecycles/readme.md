@@ -3,7 +3,7 @@ id: E4-T06
 epic: 4
 title: "Ephemeral and persistent sandbox lifecycles: explicit retention, resume, reset, and destruction semantics"
 priority: 406
-status: in-progress
+status: implemented
 depends_on: [E4-T03, E4-T04]
 estimate: L
 capstone: false
@@ -90,6 +90,16 @@ modes need a common event model and destructive reset contract.
 - Other attacks passed: deterministic replay, excluded mounts, secret refusal, expiry, stale reset/revoke fences, one-winner in-memory and Cloudflare resume races, expected-fence CAS, accepted-timeout destroy cleanup, and zero inventory.
 - Sensitivity: making ephemeral cleanup a no-op in a disposable worktree made the inventory assertion exit 1.
 - Replay: N/A (headless sandbox lifecycle) + mitigation: independent cold clone, provider-level execution tamper detector, CAS race, inventory cleanup, and cleanup sensitivity.
+
+### Final Repair Builder — 2026-08-17
+
+- Commit: `d0fa519c7bf008d8976c6d27394ffbb04682302d`
+- Cold run: `make verify-E4-T06`, `TEST_RUN_ID=e4-t06-cold-provider-integrity-20260817`
+- Evidence: `.artifacts/e4-t06/e4-t06-cold-provider-integrity-20260817/{ephemeral-sequence,persistent-sequence,retention-race,workspace-integrity,provider-workspace-integrity,provider-enforcement,verification-summary,cold-verification-transcript}.json`
+- Provider execution integrity: after byte tamper, the provider-level `exec()` returned `CLOUDFLARE_OS_WORKSPACE_DIGEST_MISMATCH` and made `remoteExecCalls: 0`; provider workspace-integrity digest `sha256:5c6d1816bb7cebfbddc40e910a27220c50657f2107afd695457f52fe258da506`.
+- Gates: `format:check`, `lint`, `typecheck`, `test:unit` (189 passed, 0 skipped), and `build` passed from a detached cold worktree.
+- Replay: N/A (headless sandbox lifecycle) + mitigation: cold-clone multi-run replay, provider-level byte-tamper execution gate, CAS race, inventory checks, canary scans, and cleanup sensitivity.
+- Claim: provider execution now requires a bound byte-verifying materializer; cached workspace digests cannot authorize execution after post-publication mutation, and reset/destroy clear the verifier binding.
 
 ### Critic — 2026-08-17
 

@@ -3,7 +3,7 @@ id: E4-T08
 epic: 4
 title: "Capstone: a real Cloudflare OS workspace executes a pinned run under deny-by-default policy, survives reconnect, and leaves no orphan"
 priority: 408
-status: implemented
+status: refuted
 depends_on: [E4-T05, E4-T07]
 estimate: L
 capstone: true
@@ -75,3 +75,37 @@ failure, not permission to mark the epic complete.
 - Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger, and before/after Cloudflare OS inventory.
 - Claim: the capstone gate is real-only and fails closed against missing or local configuration; real provider acceptance remains unproven until the dedicated Cloudflare test identity and endpoint are supplied.
 - Status: implemented; fresh critic required, with real-provider evidence still outstanding.
+
+### Critic — 2026-08-17
+
+VERDICT: needs-evidence
+
+Lifecycle status set to `refuted`, the only repository status that routes this ticket
+back to the builder; `needs-evidence` is a verdict, not a status value. The fresh critic
+reviewed exact implementation commit `ced928e57ab04e14060444f3025a25483efaf2a8`, ran
+the detached cold clone with all Cloudflare configuration unset, and independently
+confirmed the required `SKIPPED:` exit 2 behavior. HTTPS and loopback-base negative
+attacks also failed closed before any transport was reached. Exact independent gates
+passed: format, lint, typecheck, 189 unit tests with 0 skips, and build.
+
+The real-provider acceptance remains unproven because no Cloudflare identity, endpoint,
+remote inventory, execution transcript, network decision evidence, provider usage, or
+accepted-timeout cleanup transcript was available. The critic also identified verifier
+hardening required before a real run can be trusted: provider attestation currently
+accepts an arbitrary string containing `cloudflare`; network evidence does not reject
+unknown or unassigned decisions; usage may fall back to locally synthesized source and
+pricing fields without binding the provider observation to the resource; accepted-timeout
+retry is only observed if the provider happens to time out; and cleanup proves only exact
+label equality rather than the full task-scope prefix inventory.
+
+Reviewed with fresh detached run:
+
+```text
+tools/verify/cold_clone.sh verify-E4-T08-real
+```
+
+Critic artifacts were retained outside the checkout at
+`/private/tmp/slack-clone-e4-t08-critic.NLEMIX/artifacts/skipped.json`. Replay: N/A
+(real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider
+transcript, exact stream/tree digests, network probe evidence, cost ledger, and
+before/after Cloudflare OS inventory.

@@ -3,7 +3,7 @@ id: E4-T04
 epic: 4
 title: "Streaming execution and cancellation: ordered output, reconnectable offsets, and fenced process termination"
 priority: 404
-status: pending
+status: in-progress
 depends_on: [E4-T02]
 estimate: L
 capstone: false

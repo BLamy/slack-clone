@@ -3,7 +3,7 @@ id: E4-T08
 epic: 4
 title: "Capstone: a real Cloudflare OS workspace executes a pinned run under deny-by-default policy, survives reconnect, and leaves no orphan"
 priority: 408
-status: in-progress
+status: implemented
 depends_on: [E4-T05, E4-T07]
 estimate: L
 capstone: true
@@ -109,3 +109,18 @@ Critic artifacts were retained outside the checkout at
 (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider
 transcript, exact stream/tree digests, network probe evidence, cost ledger, and
 before/after Cloudflare OS inventory.
+
+### Builder — 2026-08-17 (repair)
+
+- Commit: `fb6ab3c6866b1ab796edbb3e48fab3b40537b90b`
+- Repair: the real verifier now requires a typed `cloudflare-os` attestation bound to
+  the exact provider resource and the dedicated `e4-t08-accepted-timeout-once` provider
+  test profile; rejects unassigned, extra, mismatched, or secret-shaped network
+  decisions; requires provider-sourced resource-bound usage, pricing, observation, and
+  offset identifiers; validates the full tenant/workspace/agent inventory scope; and
+  cleans every resource carrying the unique run prefix rather than only exact labels.
+- Cold run: `E4_T08_IMPLEMENTATION_COMMIT=fb6ab3c6866b1ab796edbb3e48fab3b40537b90b TEST_RUN_ID=e4-t08-cold-missing-repair-20260817 make verify-E4-T08-real`; detached tracked checkout and frozen install completed, then the real-only runner exited 2 with `SKIPPED:` for all eleven required provider/profile settings, including `CF_OS_TEST_PROFILE`.
+- Gates: `pnpm format:check:e4-t08-real`, `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test:unit` (189 passed, 0 skipped), and `pnpm build` passed at the implementation commit.
+- Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger, and before/after Cloudflare OS inventory.
+- Claim: the verifier now fails closed on the critic's evidence-integrity findings and cannot report the capstone as passed without an authenticated Cloudflare OS resource, the provider-attested accepted-timeout test profile, exact network/cost evidence, and prefix-wide zero inventory. The real-provider acceptance is still unproven until the dedicated identity and endpoint are supplied.
+- Status: implemented; fresh independent critic required.

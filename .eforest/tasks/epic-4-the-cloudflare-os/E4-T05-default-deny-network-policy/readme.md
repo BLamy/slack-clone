@@ -3,7 +3,7 @@ id: E4-T05
 epic: 4
 title: "Default-deny sandbox networking: destination allowlists, metadata blocking, and auditable egress decisions"
 priority: 405
-status: in-progress
+status: implemented
 depends_on: [E4-T02]
 estimate: L
 capstone: false
@@ -60,3 +60,13 @@ against the real provider in E4-T08.
    must turn `verify-E4-T05` red.
 
 ## Verification log
+
+### Builder — 2026-08-17
+
+- Commit: `fe2bfc9edfd807ac267ad8c4eb0ff27a24f5744b`
+- Cold run: `make verify-E4-T05`, `TEST_RUN_ID=e4-t05-cold-20260817`
+- Evidence: `.artifacts/e4-t05/e4-t05-cold-20260817/{compiled-policy,decision-log,adversarial-matrix,provider-enforcement,verification-summary,cold-verification-transcript}.json`
+- Policy digest: `sha256:49e15f184594ebd8a1b4cb53168ed19b3093d6796270507b54b9d55bd3839357`; decision digest: `sha256:4d7c778b5b36c654247e822e255e7dbbf61e19bd36a9955dcc3821faeac228d9`.
+- Gates: `format:check`, `lint`, `typecheck`, `test:unit` (189 passed, 0 skipped), and `build` passed from a detached cold worktree.
+- Replay: N/A (sandbox network security boundary) + mitigation: cold-clone adversarial DNS matrix, deny-log replay, canary scans, and real-provider enforcement in E4-T08.
+- Claim: default-deny policy compilation binds scheme, host, port, public address class, and purpose; resolver refreshes, CNAMEs, redirects, encoded/private/metadata addresses, proxy bypass, and inbound exposure are denied and redacted decisions are replay-stable.

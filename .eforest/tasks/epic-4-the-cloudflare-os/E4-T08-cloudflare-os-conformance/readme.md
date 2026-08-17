@@ -3,7 +3,7 @@ id: E4-T08
 epic: 4
 title: "Capstone: a real Cloudflare OS workspace executes a pinned run under deny-by-default policy, survives reconnect, and leaves no orphan"
 priority: 408
-status: in-progress
+status: implemented
 depends_on: [E4-T05, E4-T07]
 estimate: L
 capstone: true
@@ -154,3 +154,17 @@ tools/verify/cold_clone.sh verify-E4-T08-real
 ```
 
 Critic evidence: `/private/tmp/slack-clone-e4-t08-critic-critic-e4-t08-cold-20260817-1786996434-93683/skipped.json` and `/private/tmp/slack-clone-e4-t08-gates-95800/gates.log`. Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger, and before/after Cloudflare OS inventory.
+
+### Builder — 2026-08-17 (adversarial repair)
+
+- Commit: `a252f5dfb4c6209fd7a771b5d320713dafc9b73a`
+- Repair: the real runner now requires and exercises configured DNS-rebinding and
+  public-listener probes, uses a fixed loopback inbound probe instead of accepting an
+  arbitrary inbound URL, explicitly proves stale-fence rejection before a provider exec
+  request, records the forked-child cancellation attack, persists phase resource
+  bindings, and inventories nested/explicit storage entities during cleanup.
+- Cold run: `E4_T08_IMPLEMENTATION_COMMIT=a252f5dfb4c6209fd7a771b5d320713dafc9b73a TEST_RUN_ID=e4-t08-cold-missing-adversarial-20260817 make verify-E4-T08-real`; detached tracked checkout and frozen install completed, then the real-only runner exited 2 with `SKIPPED:` for all thirteen required provider, profile, DNS-rebinding, and public-listener settings.
+- Gates: `pnpm format:check:e4-t08-real`, `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test:unit` (189 passed, 0 skipped), and `pnpm build` passed at the implementation commit.
+- Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger, and before/after Cloudflare OS inventory.
+- Claim: the verifier now covers the critic's code-level adversarial and evidence gaps and still fails closed without an authenticated Cloudflare OS profile. The real-provider acceptance remains unproven until the dedicated identity and endpoint produce the live transcript, exact network decisions, provider usage, accepted-timeout retry, and zero resource/storage inventory.
+- Status: implemented; fresh independent critic required.

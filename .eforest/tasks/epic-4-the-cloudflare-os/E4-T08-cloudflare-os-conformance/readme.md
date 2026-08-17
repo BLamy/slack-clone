@@ -3,7 +3,7 @@ id: E4-T08
 epic: 4
 title: "Capstone: a real Cloudflare OS workspace executes a pinned run under deny-by-default policy, survives reconnect, and leaves no orphan"
 priority: 408
-status: implemented
+status: refuted
 depends_on: [E4-T05, E4-T07]
 estimate: L
 capstone: true
@@ -168,3 +168,30 @@ Critic evidence: `/private/tmp/slack-clone-e4-t08-critic-critic-e4-t08-cold-2026
 - Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger, and before/after Cloudflare OS inventory.
 - Claim: the verifier now covers the critic's code-level adversarial and evidence gaps and still fails closed without an authenticated Cloudflare OS profile. The real-provider acceptance remains unproven until the dedicated identity and endpoint produce the live transcript, exact network decisions, provider usage, accepted-timeout retry, and zero resource/storage inventory.
 - Status: implemented; fresh independent critic required.
+
+### Critic 3 — 2026-08-17
+
+VERDICT: needs-evidence
+
+Lifecycle status set to `refuted`, the repository status that routes this ticket back
+to the builder; `needs-evidence` is not a lifecycle value. The fresh critic reviewed
+exact commit `a252f5dfb4c6209fd7a771b5d320713dafc9b73a`, ran a detached cold clone with
+all `CF_OS_*` variables unset, and confirmed exit 2 with `SKIPPED:` for all thirteen
+settings. Invalid, loopback, localhost, query-bearing, wrong-profile, local-probe, and
+query-probe attacks all failed before transport. Exact detached task/repository format,
+lint, typecheck, 189 unit tests with zero skips, build, syntax, and whitespace checks
+passed.
+
+The critic confirmed the explicit DNS/public-listener/fixed-inbound probes,
+stale-fence rejection before provider `exec`, forked-child cancellation assertions,
+durable `resourceBindings`, and nested/explicit storage inventory and cleanup checks.
+No live Cloudflare identity, remote transcript, network evidence, provider usage,
+accepted-timeout retry, or final zero-inventory proof exists, so the real-provider
+acceptance criteria remain unverified. The capstone must not advance to E5 on the
+code-only evidence.
+
+Fresh critic evidence: `/private/tmp/slack-clone-e4-t08-critic-NbpKpY/skipped.json`
+and `/private/tmp/slack-clone-e4-t08-gates-*/gates.log`. Replay: N/A (real headless
+Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript,
+exact stream/tree digests, network probe evidence, cost ledger, and before/after
+Cloudflare OS inventory.

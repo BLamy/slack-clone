@@ -309,11 +309,13 @@ export class CloudflareOsSandboxProvider {
               resolved.reference,
               labels,
               normalized.idempotencyKey,
+              normalized.expectedFence,
             )
           : await this.#client[operation](
               resolved.reference,
               labels,
               normalized.idempotencyKey,
+              normalized.expectedFence,
             );
       const mapped = this.#remember(remote, { labels, ...normalized });
       this.#append(operation, mapped.sandbox, normalized.idempotencyKey);

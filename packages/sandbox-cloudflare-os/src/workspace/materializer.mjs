@@ -13,7 +13,11 @@ import {
 } from "node:fs/promises";
 import path from "node:path";
 
-import { CLOUDFLARE_OS_ERROR_CODES, cloudflareOsError } from "../errors.mjs";
+import {
+  CLOUDFLARE_OS_ERROR_CODES,
+  CloudflareOsProviderError,
+  cloudflareOsError,
+} from "../errors.mjs";
 import {
   canonical,
   normalizeManifest,
@@ -128,13 +132,23 @@ export class WorkspaceMaterializer {
   }
 
   async snapshot() {
-    const digest = await this.currentDigest();
-    if (digest === null) return null;
-    return snapshotManifest(this.#publicationPath, this.#limits);
+    const pointerDigest = await this.currentDigest();
+    if (pointerDigest === null) return null;
+    let snapshot;
+    try {
+      snapshot = await snapshotManifest(this.#publicationPath, this.#limits);
+    } catch (error) {
+      if (error instanceof CloudflareOsProviderError) throw error;
+      throw workspaceIntegrityError();
+    }
+    if (workspaceDigest(snapshot) !== pointerDigest)
+      throw workspaceIntegrityError();
+    return snapshot;
   }
 
   async assertExecutionReady(expectedDigest) {
-    const actualDigest = await this.currentDigest();
+    const snapshot = await this.snapshot();
+    const actualDigest = snapshot === null ? null : workspaceDigest(snapshot);
     if (actualDigest !== expectedDigest)
       throw cloudflareOsError(
         CLOUDFLARE_OS_ERROR_CODES.WORKSPACE_DIGEST_MISMATCH,
@@ -203,4 +217,12 @@ function publishError(detail) {
   return cloudflareOsError(CLOUDFLARE_OS_ERROR_CODES.PUBLISH_FAILED, detail, {
     operation: "publish",
   });
+}
+
+function workspaceIntegrityError() {
+  return cloudflareOsError(
+    CLOUDFLARE_OS_ERROR_CODES.WORKSPACE_DIGEST_MISMATCH,
+    "published workspace bytes do not match the content-addressed pointer",
+    { operation: "publish" },
+  );
 }

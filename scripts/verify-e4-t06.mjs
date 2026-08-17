@@ -1,11 +1,25 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
+import {
+  mkdir,
+  mkdtemp,
+  readdir,
+  readFile,
+  readlink,
+  rm,
+  writeFile,
+} from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 
 import {
   CloudflareOsClient,
   CloudflareOsSandboxProvider,
+  CLOUDFLARE_OS_ERROR_CODES,
+  WorkspaceMaterializer,
+  normalizeManifest,
+  snapshotManifest,
+  workspaceDigest,
 } from "@stream-slack/sandbox-cloudflare-os";
 import {
   InMemorySandboxProvider,
@@ -62,6 +76,7 @@ assert.deepEqual(
 );
 
 const expiry = runRetentionExpiry();
+const workspaceIntegrity = await runWorkspaceIntegritySequence();
 const provider = await runCloudflareProviderSequence();
 await runInMemoryResetSequence();
 
@@ -89,6 +104,7 @@ await writeJson("persistent-sequence.json", {
   excludedEntries: EXCLUDED_ENTRIES.length,
 });
 await writeJson("retention-race.json", expiry);
+await writeJson("workspace-integrity.json", workspaceIntegrity);
 await writeJson("provider-enforcement.json", provider);
 await writeJson("verification-summary.json", {
   schemaVersion: 1,
@@ -103,6 +119,7 @@ await writeJson("verification-summary.json", {
   persistentTerminalDigest: persistentFirst.terminalDigest,
   persistentEventDigest: persistentFirst.eventDigest,
   retentionExpiryDigest: expiry.eventDigest,
+  workspaceIntegrityDigest: digestValue(workspaceIntegrity),
   providerLifecycleDigest: provider.eventDigest,
   zeroSkips: true,
   replay:
@@ -518,10 +535,64 @@ function runRetentionExpiry() {
   };
 }
 
+async function runWorkspaceIntegritySequence() {
+  const tempRoot = await mkdtemp(
+    path.join(os.tmpdir(), "stream-slack-e4-t06-integrity-"),
+  );
+  try {
+    const manifest = normalizeManifest({
+      schemaVersion: 1,
+      entries: [
+        {
+          path: "workspace.txt",
+          type: "file",
+          content: "provider workspace bytes\n",
+        },
+      ],
+    });
+    const expectedDigest = workspaceDigest(manifest);
+    const publicationPath = path.join(tempRoot, "workspace");
+    const materializer = new WorkspaceMaterializer({ publicationPath });
+    await materializer.materialize(manifest, { expectedDigest });
+    const pointerDigest = await materializer.currentDigest();
+    const target = await readlink(publicationPath);
+    await writeFile(
+      path.join(path.dirname(publicationPath), target, "workspace.txt"),
+      "tampered provider workspace bytes\n",
+    );
+    const recomputedDigest = workspaceDigest(
+      await snapshotManifest(publicationPath),
+    );
+    assert.notEqual(recomputedDigest, expectedDigest);
+    await assert.rejects(
+      () => materializer.snapshot(),
+      (error) =>
+        error.code === CLOUDFLARE_OS_ERROR_CODES.WORKSPACE_DIGEST_MISMATCH,
+    );
+    await assert.rejects(
+      () => materializer.assertExecutionReady(expectedDigest),
+      (error) =>
+        error.code === CLOUDFLARE_OS_ERROR_CODES.WORKSPACE_DIGEST_MISMATCH,
+    );
+    return {
+      expectedDigest,
+      pointerDigest,
+      recomputedDigest,
+      executionBlockedAfterByteTamper: true,
+    };
+  } finally {
+    await rm(tempRoot, { recursive: true, force: true });
+  }
+}
+
 async function runCloudflareProviderSequence() {
   const requests = [];
   let remote = null;
   let destroyedStorage = false;
+  let holdResumeInspects = false;
+  let resumeInspectCount = 0;
+  let resumeInspectBarrier;
+  let releaseResumeInspects;
   const client = new CloudflareOsClient({
     baseUrl: "http://fixture.invalid",
     token: DEPLOYMENT_TOKEN,
@@ -544,8 +615,20 @@ async function runCloudflareProviderSequence() {
         return jsonResponse({
           resources: remote && !destroyedStorage ? [remote] : [],
         });
+      if (
+        options.method === "GET" &&
+        parsed.pathname !== "/v1/workspaces" &&
+        holdResumeInspects
+      ) {
+        resumeInspectCount += 1;
+        if (resumeInspectCount === 2) releaseResumeInspects();
+        await resumeInspectBarrier;
+        return jsonResponse(structuredClone(remote));
+      }
       if (options.method === "GET") return jsonResponse(remote);
       const operation = parsed.pathname.split("/").at(-1);
+      if (body?.expectedFence !== remote.fence)
+        return jsonResponse({ message: "stale lifecycle fence" }, 409);
       if (operation === "destroy") destroyedStorage = true;
       remote = {
         ...remote,
@@ -584,12 +667,37 @@ async function runCloudflareProviderSequence() {
     expectedFence: created.fence,
     idempotencyKey: "ik_e4_t06_cloudflare_suspend",
   });
-  const resumed = await provider.resume({
-    ...base,
-    sandboxId: created.sandboxId,
-    expectedFence: suspended.fence,
-    idempotencyKey: "ik_e4_t06_cloudflare_resume",
+  resumeInspectCount = 0;
+  resumeInspectBarrier = new Promise((resolve) => {
+    releaseResumeInspects = resolve;
   });
+  holdResumeInspects = true;
+  const resumeRace = await Promise.allSettled([
+    provider.resume({
+      ...base,
+      sandboxId: created.sandboxId,
+      expectedFence: suspended.fence,
+      idempotencyKey: "ik_e4_t06_cloudflare_resume_a",
+    }),
+    provider.resume({
+      ...base,
+      sandboxId: created.sandboxId,
+      expectedFence: suspended.fence,
+      idempotencyKey: "ik_e4_t06_cloudflare_resume_b",
+    }),
+  ]);
+  holdResumeInspects = false;
+  assert.equal(
+    resumeRace.filter(({ status }) => status === "fulfilled").length,
+    1,
+  );
+  assert.equal(
+    resumeRace.filter(({ status }) => status === "rejected").length,
+    1,
+  );
+  const resumeLoser = resumeRace.find(({ status }) => status === "rejected");
+  assert.equal(resumeLoser.reason.code, CLOUDFLARE_OS_ERROR_CODES.CONFLICT);
+  const resumed = resumeRace.find(({ status }) => status === "fulfilled").value;
   const reset = await provider.reset({
     ...base,
     sandboxId: created.sandboxId,
@@ -619,7 +727,16 @@ async function runCloudflareProviderSequence() {
     requests
       .filter(({ method }) => method === "POST")
       .map(({ path: requestPath }) => requestPath.split("/").at(-1)),
-    ["workspaces", "suspend", "resume", "reset", "destroy"],
+    ["workspaces", "suspend", "resume", "resume", "reset", "destroy"],
+  );
+  assert.equal(
+    requests
+      .filter(
+        ({ method, path: requestPath }) =>
+          method === "POST" && requestPath !== "/v1/workspaces",
+      )
+      .every(({ body }) => Number.isSafeInteger(body.expectedFence)),
+    true,
   );
   assert.equal(JSON.stringify(requests).includes(DEPLOYMENT_TOKEN), false);
   assert.equal(JSON.stringify(requests).includes(RAW_SECRET_CANARY), false);
@@ -633,6 +750,11 @@ async function runCloudflareProviderSequence() {
     remoteDestroyed: destroyedStorage,
     inventoryAfterDestroy: 0,
     lifecycleOperations: ["create", "suspend", "resume", "reset", "destroy"],
+    concurrentResume: {
+      winners: 1,
+      losers: 1,
+      loserCode: resumeLoser.reason.code,
+    },
     auditOperations: client.audit().map(({ operation }) => operation),
   };
 }
@@ -698,9 +820,9 @@ function digestValue(value) {
   return `sha256:${createHash("sha256").update(JSON.stringify(value)).digest("hex")}`;
 }
 
-function jsonResponse(value) {
+function jsonResponse(value, status = 200) {
   return new Response(JSON.stringify(value), {
-    status: 200,
+    status,
     headers: { "content-type": "application/json" },
   });
 }

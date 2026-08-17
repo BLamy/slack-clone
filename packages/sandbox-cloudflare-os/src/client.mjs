@@ -85,28 +85,58 @@ export class CloudflareOsClient {
     });
   }
 
-  suspend(reference, labels, idempotencyKey) {
-    return this.#mutate("suspend", reference, labels, idempotencyKey);
+  suspend(reference, labels, idempotencyKey, expectedFence) {
+    return this.#mutate(
+      "suspend",
+      reference,
+      labels,
+      idempotencyKey,
+      expectedFence,
+    );
   }
 
-  resume(reference, labels, idempotencyKey) {
-    return this.#mutate("resume", reference, labels, idempotencyKey);
+  resume(reference, labels, idempotencyKey, expectedFence) {
+    return this.#mutate(
+      "resume",
+      reference,
+      labels,
+      idempotencyKey,
+      expectedFence,
+    );
   }
 
-  reset(reference, labels, idempotencyKey) {
-    return this.#mutate("reset", reference, labels, idempotencyKey);
+  reset(reference, labels, idempotencyKey, expectedFence) {
+    return this.#mutate(
+      "reset",
+      reference,
+      labels,
+      idempotencyKey,
+      expectedFence,
+    );
   }
 
-  destroy(reference, labels, idempotencyKey) {
-    return this.#mutate("destroy", reference, labels, idempotencyKey);
+  destroy(reference, labels, idempotencyKey, expectedFence) {
+    return this.#mutate(
+      "destroy",
+      reference,
+      labels,
+      idempotencyKey,
+      expectedFence,
+    );
   }
 
   inventory(labels) {
     return this.listByLabels(labels);
   }
 
-  cancel(reference, labels, idempotencyKey) {
-    return this.#mutate("cancel", reference, labels, idempotencyKey);
+  cancel(reference, labels, idempotencyKey, expectedFence) {
+    return this.#mutate(
+      "cancel",
+      reference,
+      labels,
+      idempotencyKey,
+      expectedFence,
+    );
   }
 
   exec(reference, labels, exec, idempotencyKey) {
@@ -210,11 +240,15 @@ export class CloudflareOsClient {
     return this.streamExec(reference, labels, executionId, options);
   }
 
-  #mutate(operation, reference, labels, idempotencyKey) {
+  #mutate(operation, reference, labels, idempotencyKey, expectedFence) {
     return this.#request("POST", `${resourcePath(reference)}/${operation}`, {
-      body: { labels },
+      body: {
+        labels,
+        ...(expectedFence === undefined ? {} : { expectedFence }),
+      },
       idempotencyKey,
       operation,
+      expectedFence,
     });
   }
 
@@ -226,6 +260,7 @@ export class CloudflareOsClient {
       idempotencyKey,
       operation,
       labels,
+      expectedFence,
       retryOnTimeout = method === "GET",
     } = {},
   ) {
@@ -242,6 +277,8 @@ export class CloudflareOsClient {
         if (body !== undefined) headers["content-type"] = "application/json";
         if (idempotencyKey !== undefined)
           headers["idempotency-key"] = idempotencyKey;
+        if (expectedFence !== undefined)
+          headers["if-match"] = `fence-${expectedFence}`;
         const response = await this.#fetch(url, {
           method,
           headers,

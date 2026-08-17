@@ -67,6 +67,7 @@
     "@stream-slack/protocol": "workspace:*",
     "@stream-slack/reducers": "workspace:*",
     "@stream-slack/sandbox": "workspace:*",
+    "@stream-slack/sandbox-cloudflare-os": "workspace:*",
     "@stream-slack/services": "workspace:*"
   },
   "devDependencies": {

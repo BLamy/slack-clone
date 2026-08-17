@@ -22,6 +22,9 @@ importers:
       "@stream-slack/sandbox":
         specifier: workspace:*
         version: link:packages/sandbox
+      "@stream-slack/sandbox-cloudflare-os":
+        specifier: workspace:*
+        version: link:packages/sandbox-cloudflare-os
       "@stream-slack/services":
         specifier: workspace:*
         version: link:packages/services
@@ -66,6 +69,12 @@ importers:
         version: link:../protocol
 
   packages/sandbox: {}
+
+  packages/sandbox-cloudflare-os:
+    dependencies:
+      "@stream-slack/sandbox":
+        specifier: workspace:*
+        version: link:../sandbox
 
   packages/services:
     dependencies:

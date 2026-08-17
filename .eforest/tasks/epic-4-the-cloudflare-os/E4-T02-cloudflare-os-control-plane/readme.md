@@ -3,7 +3,7 @@ id: E4-T02
 epic: 4
 title: "Cloudflare OS control plane: authenticated workspace and Gadget lifecycle behind SandboxProvider"
 priority: 402
-status: pending
+status: in-progress
 depends_on: [E4-T01]
 estimate: L
 capstone: false

@@ -8,12 +8,17 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-No task is currently in progress, awaiting verification, or refuted.
+1. **E4-T02** — Cloudflare OS control plane: authenticated workspace and Gadget lifecycle behind SandboxProvider *(builder working)*
 
 ## Next up (dependencies satisfied)
 
-1. **E4-T02** — Cloudflare OS control plane: authenticated workspace and Gadget lifecycle behind SandboxProvider
 1. **E5-T01** — Credential broker contract: Infisical Agent Proxy in production, Agent Vault locally, and no raw-secret orchestration path
+
+## Unlocks when E4-T02 verifies
+
+1. **E4-T03** — Pinned workspace materialization: one invocation digest becomes one byte-exact sandbox tree
+1. **E4-T04** — Streaming execution and cancellation: ordered output, reconnectable offsets, and fenced process termination
+1. **E4-T05** — Default-deny sandbox networking: destination allowlists, metadata blocking, and auditable egress decisions
 
 ## Epic 0 — `epic-0-the-ledger`
 
@@ -61,7 +66,7 @@ No task is currently in progress, awaiting verification, or refuted.
 ## Epic 4 — `epic-4-the-cloudflare-os`
 
 - [x] ` 401` [E4-T01](epic-4-the-cloudflare-os/E4-T01-sandbox-provider-contract/readme.md) — Sandbox provider contract: capability discovery, fenced lifecycle operations, and provider-neutral run identities *(deps: E3)*
-- [ ] ` 402` [E4-T02](epic-4-the-cloudflare-os/E4-T02-cloudflare-os-control-plane/readme.md) — Cloudflare OS control plane: authenticated workspace and Gadget lifecycle behind SandboxProvider *(deps: E4-T01)*
+- [~] ` 402` [E4-T02](epic-4-the-cloudflare-os/E4-T02-cloudflare-os-control-plane/readme.md) — Cloudflare OS control plane: authenticated workspace and Gadget lifecycle behind SandboxProvider *(deps: E4-T01)*
 - [ ] ` 403` [E4-T03](epic-4-the-cloudflare-os/E4-T03-pinned-workspace-materialization/readme.md) — Pinned workspace materialization: one invocation digest becomes one byte-exact sandbox tree *(deps: E4-T02)*
 - [ ] ` 404` [E4-T04](epic-4-the-cloudflare-os/E4-T04-streaming-exec-and-cancellation/readme.md) — Streaming execution and cancellation: ordered output, reconnectable offsets, and fenced process termination *(deps: E4-T02)*
 - [ ] ` 405` [E4-T05](epic-4-the-cloudflare-os/E4-T05-default-deny-network-policy/readme.md) — Default-deny sandbox networking: destination allowlists, metadata blocking, and auditable egress decisions *(deps: E4-T02)*

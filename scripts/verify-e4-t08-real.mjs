@@ -17,6 +17,7 @@ import {
 import {
   EXECUTION_EVENT_TYPES,
   ExecutionEventJournal,
+  SANDBOX_ERROR_CODES,
   SandboxQuotaManager,
   compileNetworkPolicy,
   decodeExecutionOutput,
@@ -35,6 +36,8 @@ const REQUIRED = [
   "CF_OS_GATEKEEPER_PORT",
   "CF_OS_GATEKEEPER_PURPOSE",
   "CF_OS_TEST_PROFILE",
+  "CF_OS_DNS_REBIND_PROBE_URL",
+  "CF_OS_PUBLIC_LISTENER_PROBE_URL",
 ];
 const REPLAY =
   "Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger, and before/after Cloudflare OS inventory";
@@ -176,12 +179,18 @@ async function runRealConformance() {
     resourceBindings: [],
     scopeLabels,
     beforeInventory: null,
+    beforeStorageInventory: null,
     afterCreateInventory: null,
+    afterCreateStorageInventory: null,
     afterPublishInventory: null,
+    afterPublishStorageInventory: null,
     beforeDestroyInventory: null,
+    beforeDestroyStorageInventory: null,
     afterCleanupInventory: null,
+    afterCleanupStorageInventory: null,
     executions: [],
     networkProbes: [],
+    adversarial: {},
     acceptedTimeoutRetry: null,
     quota: null,
     cleanup: null,
@@ -194,10 +203,16 @@ async function runRealConformance() {
     tempRoot = await mkdtemp(path.join(os.tmpdir(), "stream-slack-e4-t08-"));
     const before = await inventoryAll(client, scopeLabels);
     state.beforeInventory = summarizeInventory(before.resources);
+    state.beforeStorageInventory = summarizeStorageInventory(before.storage);
     assert.equal(
       prefixedResources(before.resources, prefix).length,
       0,
       "uniquely prefixed E4-T08 resources were already present before create",
+    );
+    assert.equal(
+      prefixedStorageResources(before.storage, prefix).length,
+      0,
+      "uniquely prefixed E4-T08 storage was already present before create",
     );
 
     sandbox = await provider.create({
@@ -208,6 +223,9 @@ async function runRealConformance() {
     const afterCreate = await inventoryAll(client, scopeLabels);
     const createdResource = requireOneResource(afterCreate.resources, identity);
     state.afterCreateInventory = summarizeInventory(afterCreate.resources);
+    state.afterCreateStorageInventory = summarizeStorageInventory(
+      afterCreate.storage,
+    );
     state.providerResourceId = resourceId(createdResource);
     state.providerAttestation = requireCloudflareAttestation(
       createdResource,
@@ -251,6 +269,9 @@ async function runRealConformance() {
       identity,
     );
     state.afterPublishInventory = summarizeInventory(afterPublish.resources);
+    state.afterPublishStorageInventory = summarizeStorageInventory(
+      afterPublish.storage,
+    );
     recordResourceBinding(state, "workspace-materialize", publishedResource);
     assert.equal(
       extractWorkspaceDigest(publishedResource.raw),
@@ -345,6 +366,19 @@ async function runRealConformance() {
       prefix + "_refresh_network",
     );
 
+    const staleHandle = await runStaleHandleAttack({
+      provider,
+      client,
+      base,
+      sandbox,
+      workspaceDigest: expectedWorkspaceDigest,
+      networkPolicy,
+      idempotencyKey: prefix + "_stale_handle_policy",
+      execIdempotencyKey: prefix + "_stale_handle_exec",
+    });
+    state.adversarial.staleHandle = staleHandle.evidence;
+    sandbox = staleHandle.sandbox;
+
     const cancellation = await runCancellation({
       provider,
       base,
@@ -364,6 +398,14 @@ async function runRealConformance() {
       0,
       "cancellation execution emitted an unassigned network decision",
     );
+    state.adversarial.forkEscape = {
+      executionId: cancellation.executionId,
+      backgroundChildSpawned: cancellation.backgroundChildSpawned,
+      survivors: cancellation.terminal.termination?.survivors ?? null,
+      postCancelSideEffect: cancellation.stdout.includes(
+        "post-cancel-side-effect",
+      ),
+    };
     state.executions.push(executionEvidence(cancellation));
     sandbox = await refreshSandbox(
       provider,
@@ -377,6 +419,9 @@ async function runRealConformance() {
     const beforeDestroy = await inventoryAll(client, scopeLabels);
     const usageResource = requireOneResource(beforeDestroy.resources, identity);
     state.beforeDestroyInventory = summarizeInventory(beforeDestroy.resources);
+    state.beforeDestroyStorageInventory = summarizeStorageInventory(
+      beforeDestroy.storage,
+    );
     recordResourceBinding(state, "usage", usageResource);
     const usage = extractProviderUsage(
       usageResource.raw,
@@ -408,7 +453,14 @@ async function runRealConformance() {
     assert.equal(destroyed.remaining.length, 0);
     const afterCleanup = await inventoryAll(client, scopeLabels);
     state.afterCleanupInventory = summarizeInventory(afterCleanup.resources);
+    state.afterCleanupStorageInventory = summarizeStorageInventory(
+      afterCleanup.storage,
+    );
     assert.equal(prefixedResources(afterCleanup.resources, prefix).length, 0);
+    assert.equal(
+      prefixedStorageResources(afterCleanup.storage, prefix).length,
+      0,
+    );
     quota.release({
       reservationId: reservation.reservationId,
       expectedFence: reservation.fence,
@@ -431,6 +483,9 @@ async function runRealConformance() {
     try {
       const after = await inventoryAll(client, scopeLabels);
       state.afterCleanupInventory = summarizeInventory(after.resources);
+      state.afterCleanupStorageInventory = summarizeStorageInventory(
+        after.storage,
+      );
     } catch (error) {
       state.afterCleanupInventory = { inventoryError: safeError(error) };
       cleanupError ??= error;
@@ -455,11 +510,17 @@ async function runRealConformance() {
       prefix,
       providerResourceId: state.providerResourceId,
       providerAttestation: state.providerAttestation,
+      resourceBindings: state.resourceBindings,
       beforeCreate: state.beforeInventory,
+      beforeCreateStorage: state.beforeStorageInventory,
       afterCreate: state.afterCreateInventory,
+      afterCreateStorage: state.afterCreateStorageInventory,
       afterPublish: state.afterPublishInventory,
+      afterPublishStorage: state.afterPublishStorageInventory,
       beforeDestroy: state.beforeDestroyInventory,
+      beforeDestroyStorage: state.beforeDestroyStorageInventory,
       afterCleanup: state.afterCleanupInventory,
+      afterCleanupStorage: state.afterCleanupStorageInventory,
       cleanup: state.cleanup,
       audit: client.audit(),
     });
@@ -468,6 +529,7 @@ async function runRealConformance() {
       task: "E4-T08",
       runId,
       executions: state.executions,
+      adversarial: state.adversarial,
       acceptedTimeoutRetry: state.acceptedTimeoutRetry,
     });
     await writeJson("network-probes.json", {
@@ -519,10 +581,9 @@ async function runRealConformance() {
     networkDecisionDigest: digestValue(state.networkProbes),
     quotaEventDigest: state.quota.eventDigest,
     acceptedTimeoutRetry: state.acceptedTimeoutRetry,
-    finalInventoryCount: prefixedSummaryCount(
-      state.afterCleanupInventory,
-      prefix,
-    ),
+    finalInventoryCount:
+      prefixedSummaryCount(state.afterCleanupInventory, prefix) +
+      prefixedSummaryCount(state.afterCleanupStorageInventory, prefix),
     replay: REPLAY,
   };
   await writeJson("verification-summary.json", summary);
@@ -696,6 +757,67 @@ async function runCancellation({
     networkDecisions,
     rawEvents,
     disconnected: false,
+    backgroundChildSpawned: true,
+  };
+}
+
+async function runStaleHandleAttack({
+  provider,
+  client,
+  base,
+  sandbox,
+  workspaceDigest: expectedDigest,
+  networkPolicy,
+  idempotencyKey,
+  execIdempotencyKey,
+}) {
+  const stale = structuredClone(sandbox);
+  const advanced = await provider.configureNetworkPolicy(
+    {
+      ...base,
+      sandboxId: sandbox.sandboxId,
+      expectedFence: sandbox.fence,
+      idempotencyKey,
+    },
+    networkPolicy,
+  );
+  const execRequestsBefore = client
+    .audit()
+    .filter(({ operation }) => operation === "exec").length;
+  await assert.rejects(
+    provider.exec({
+      ...base,
+      sandboxId: stale.sandboxId,
+      expectedFence: stale.fence,
+      workspaceDigest: expectedDigest,
+      exec: {
+        command: shellCommand("printf 'stale-handle-should-not-run\\n'"),
+        stream: true,
+      },
+      idempotencyKey: execIdempotencyKey,
+    }),
+    (error) => error?.code === SANDBOX_ERROR_CODES.FENCE_MISMATCH,
+  );
+  const execRequestsAfter = client
+    .audit()
+    .filter(({ operation }) => operation === "exec").length;
+  assert.equal(
+    execRequestsAfter,
+    execRequestsBefore,
+    "stale-handle rejection reached the provider exec endpoint",
+  );
+  assert.ok(
+    advanced.sandbox.fence > stale.fence,
+    "stale-handle attack did not advance the provider fence",
+  );
+  return {
+    sandbox: advanced.sandbox,
+    evidence: {
+      staleFence: stale.fence,
+      freshFence: advanced.sandbox.fence,
+      rejectedCode: SANDBOX_ERROR_CODES.FENCE_MISMATCH,
+      providerExecRequests: execRequestsAfter - execRequestsBefore,
+    },
   };
 }
 
@@ -757,9 +879,17 @@ async function runNetworkProbes({
     { id: "metadata", url: "http://169.254.169.254/", expected: "deny" },
     {
       id: "inbound",
-      url:
-        config.inboundProbeUrl ??
-        "http://127.0.0.1:" + String(config.gatekeeperPort) + "/",
+      url: "http://127.0.0.1:" + String(config.gatekeeperPort) + "/",
+      expected: "deny",
+    },
+    {
+      id: "dns-rebinding",
+      url: config.dnsRebindingProbeUrl,
+      expected: "deny",
+    },
+    {
+      id: "public-listener",
+      url: config.publicListenerProbeUrl,
       expected: "deny",
     },
   ];
@@ -892,18 +1022,27 @@ async function destroyWithAcceptedTimeoutRetry({
     "destroy returned before all uniquely prefixed provider resources were gone",
   );
   assert.equal(
+    prefixedStorageResources(remaining.storage, prefix).length,
+    0,
+    "destroy returned before all uniquely prefixed provider storage was gone",
+  );
+  assert.equal(
     firstError !== null && retryAttempted,
     true,
     "real provider did not exercise the accepted-then-timeout retry",
   );
   return {
     destroyed,
-    remaining: prefixedResources(remaining.resources, prefix),
+    remaining: [
+      ...prefixedResources(remaining.resources, prefix),
+      ...prefixedStorageResources(remaining.storage, prefix),
+    ],
     evidence: {
       timeoutObserved: firstError !== null,
       retryAttempted,
       sameIdempotencyKey: true,
       resourceGone: true,
+      storageGone: true,
     },
   };
 }
@@ -912,7 +1051,10 @@ async function cleanupPrefixResources(client, scopeLabels, prefix) {
   const attempts = [];
   for (let round = 0; round < 12; round += 1) {
     const inventory = await inventoryAll(client, scopeLabels);
-    const resources = prefixedResources(inventory.resources, prefix);
+    const resources = [
+      ...prefixedResources(inventory.resources, prefix),
+      ...prefixedStorageResources(inventory.storage, prefix),
+    ];
     if (resources.length === 0)
       return { rounds: round + 1, attempts, remaining: 0 };
     for (const resource of resources) {
@@ -920,16 +1062,16 @@ async function cleanupPrefixResources(client, scopeLabels, prefix) {
         await client.destroy(
           resourceReference(resource),
           resource.labels,
-          prefix + "_cleanup_" + hash(resourceId(resource)).slice(0, 16),
+          prefix + "_cleanup_" + hash(resourceTargetId(resource)).slice(0, 16),
           resource.fence,
         );
         attempts.push({
-          resourceId: resourceId(resource),
+          resourceId: resourceTargetId(resource),
           result: "destroyed",
         });
       } catch (error) {
         attempts.push({
-          resourceId: resourceId(resource),
+          resourceId: resourceTargetId(resource),
           result: "error",
           error: safeError(error),
         });
@@ -948,8 +1090,9 @@ async function cleanupPrefixResources(client, scopeLabels, prefix) {
   const remaining = await inventoryAll(client, scopeLabels);
   throw new Error(
     "cleanup left " +
-      prefixedResources(remaining.resources, prefix).length +
-      " uniquely prefixed provider resources",
+      (prefixedResources(remaining.resources, prefix).length +
+        prefixedStorageResources(remaining.storage, prefix).length) +
+      " uniquely prefixed provider resources or storage",
   );
 }
 
@@ -984,6 +1127,7 @@ async function refreshSandbox(
 
 async function inventoryAll(client, labels) {
   const resources = [];
+  const storage = [];
   const pages = [];
   let cursor = null;
   for (let page = 0; page < 1024; page += 1) {
@@ -996,6 +1140,19 @@ async function inventoryAll(client, labels) {
         throw new Error(
           "real provider inventory contained an unparseable workspace/Gadget",
         );
+    for (const raw of values) storage.push(...storageDetailsForResource(raw));
+    const explicitStorage =
+      response?.storage ?? response?.storages ?? response?.volumes ?? [];
+    if (!Array.isArray(explicitStorage))
+      throw new Error("real provider storage inventory was not an array");
+    for (const raw of explicitStorage) {
+      const detail = storageDetails(raw);
+      if (!detail)
+        throw new Error(
+          "real provider inventory contained an unparseable storage resource",
+        );
+      storage.push(detail);
+    }
     resources.push(...values);
     pages.push(values.length);
     const next =
@@ -1004,7 +1161,7 @@ async function inventoryAll(client, labels) {
       response?.pagination?.nextCursor ??
       null;
     if (next === null || next === undefined || next === "")
-      return { resources, pages };
+      return { resources, storage, pages };
     if (typeof next !== "string")
       throw new Error("real provider inventory cursor was invalid");
     cursor = next;
@@ -1024,6 +1181,10 @@ function prefixedResources(resources, prefix) {
     .filter((resource) => resource && hasRunPrefix(resource.labels, prefix));
 }
 
+function prefixedStorageResources(storage, prefix) {
+  return storage.filter((resource) => hasRunPrefix(resource.labels, prefix));
+}
+
 function hasRunPrefix(labels, prefix) {
   return ["stream-slack/invocation", "stream-slack/idempotency"].some(
     (key) =>
@@ -1035,6 +1196,17 @@ function prefixedSummaryCount(summary, prefix) {
   if (!Array.isArray(summary)) return 0;
   return summary.filter((resource) => hasRunPrefix(resource.labels, prefix))
     .length;
+}
+
+function summarizeStorageInventory(storage) {
+  return storage.map((resource) => ({
+    storageId: resource.storageId,
+    workspaceId: resource.workspaceId,
+    gadgetId: resource.gadgetId,
+    labels: resource.labels,
+    fence: resource.fence,
+    state: resource.state,
+  }));
 }
 
 function recordResourceBinding(state, phase, resource) {
@@ -1085,6 +1257,55 @@ function resourceDetails(raw) {
   };
 }
 
+function storageDetailsForResource(raw) {
+  const parent = resourceDetails(raw);
+  const record = raw?.resource ?? raw?.workspace ?? raw?.gadget ?? raw;
+  const candidates = [];
+  for (const key of ["storage", "storages", "storageResources", "volumes"]) {
+    const value = record?.[key];
+    if (value === undefined || value === null) continue;
+    candidates.push(...(Array.isArray(value) ? value : [value]));
+  }
+  return candidates.map((candidate) => {
+    const detail = storageDetails(candidate, parent);
+    if (!detail)
+      throw new Error(
+        "real provider inventory contained an unparseable nested storage resource",
+      );
+    return detail;
+  });
+}
+
+function storageDetails(raw, parent = null) {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
+  const record = raw.storage ?? raw.volume ?? raw;
+  const labels = record.labels ?? parent?.labels;
+  const workspaceId =
+    record.workspaceId ?? parent?.workspaceId ?? record.workspace?.id;
+  const gadgetId = record.gadgetId ?? parent?.gadgetId ?? record.gadget?.id;
+  const fence = record.fence ?? record.revision ?? parent?.fence;
+  const storageId =
+    record.storageId ?? record.storage_id ?? record.volumeId ?? record.id;
+  if (
+    !labels ||
+    typeof storageId !== "string" ||
+    !/^[A-Za-z0-9._:-]{1,160}$/u.test(storageId) ||
+    typeof workspaceId !== "string" ||
+    typeof gadgetId !== "string" ||
+    !Number.isSafeInteger(fence)
+  )
+    return null;
+  return {
+    raw,
+    storageId,
+    labels,
+    workspaceId,
+    gadgetId,
+    fence,
+    state: record.state ?? record.status ?? record.lifecycle ?? null,
+  };
+}
+
 function resourceReference(resource) {
   return {
     workspaceId: resource.workspaceId,
@@ -1094,6 +1315,12 @@ function resourceReference(resource) {
 
 function resourceId(resource) {
   return resource.workspaceId + ":" + resource.gadgetId;
+}
+
+function resourceTargetId(resource) {
+  return resource.storageId
+    ? resourceId(resource) + ":storage:" + resource.storageId
+    : resourceId(resource);
 }
 
 function publicSandboxId(resource) {
@@ -1481,6 +1708,7 @@ function summarizeInventory(resources) {
         record?.providerName ??
         record?.providerType ??
         null,
+      storage: summarizeStorageInventory(storageDetailsForResource(raw)),
     };
   });
 }
@@ -1521,6 +1749,31 @@ function readConfig() {
   const testProfile = process.env.CF_OS_TEST_PROFILE;
   if (testProfile !== "e4-t08-accepted-timeout-once")
     throw new Error("CF_OS_TEST_PROFILE must be e4-t08-accepted-timeout-once");
+  const dnsRebindingProbeUrl = conformanceProbeUrl(
+    process.env.CF_OS_DNS_REBIND_PROBE_URL,
+    "CF_OS_DNS_REBIND_PROBE_URL",
+  );
+  const publicListenerProbeUrl = conformanceProbeUrl(
+    process.env.CF_OS_PUBLIC_LISTENER_PROBE_URL,
+    "CF_OS_PUBLIC_LISTENER_PROBE_URL",
+  );
+  if (
+    sameOrigin(
+      dnsRebindingProbeUrl,
+      gatekeeperScheme,
+      gatekeeperHost,
+      gatekeeperPort,
+    ) ||
+    sameOrigin(
+      publicListenerProbeUrl,
+      gatekeeperScheme,
+      gatekeeperHost,
+      gatekeeperPort,
+    )
+  )
+    throw new Error(
+      "adversarial probe URLs must not be the allowlisted Gatekeeper origin",
+    );
   const lifecycleMode = process.env.CF_OS_LIFECYCLE_MODE ?? "ephemeral";
   if (!["ephemeral", "persistent"].includes(lifecycleMode))
     throw new Error("CF_OS_LIFECYCLE_MODE must be ephemeral or persistent");
@@ -1544,13 +1797,52 @@ function readConfig() {
     gatekeeperPort,
     gatekeeperPurpose,
     testProfile,
+    dnsRebindingProbeUrl,
+    publicListenerProbeUrl,
     gatekeeperUrl: buildProbePolicyUrl({
       gatekeeperScheme,
       gatekeeperHost,
       gatekeeperPort,
     }),
-    inboundProbeUrl: process.env.CF_OS_INBOUND_PROBE_URL,
   };
+}
+
+function conformanceProbeUrl(value, name) {
+  let parsed;
+  try {
+    parsed = new URL(value);
+  } catch {
+    throw new Error(name + " must be an absolute HTTP(S) DNS probe URL");
+  }
+  if (
+    !["http:", "https:"].includes(parsed.protocol) ||
+    parsed.username ||
+    parsed.password ||
+    parsed.search ||
+    parsed.hash ||
+    !parsed.hostname ||
+    isLocalHost(parsed.hostname) ||
+    isIpLiteral(parsed.hostname)
+  )
+    throw new Error(
+      name +
+        " must be a credential-free public DNS name without query material",
+    );
+  return parsed.toString();
+}
+
+function sameOrigin(url, scheme, host, port) {
+  const parsed = new URL(url);
+  const actualPort = parsed.port
+    ? Number(parsed.port)
+    : parsed.protocol === "https:"
+      ? 443
+      : 80;
+  return (
+    parsed.protocol === scheme + ":" &&
+    parsed.hostname === host &&
+    actualPort === port
+  );
 }
 
 function boundedId(value, name) {
@@ -1584,6 +1876,10 @@ function isLocalHost(hostname) {
     value === "::1" ||
     value === "[::1]"
   );
+}
+
+function isIpLiteral(hostname) {
+  return /^[0-9.]+$/u.test(hostname) || hostname.includes(":");
 }
 
 function uniqueSuffix() {

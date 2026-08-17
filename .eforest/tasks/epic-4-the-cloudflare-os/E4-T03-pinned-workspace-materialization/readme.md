@@ -3,7 +3,7 @@ id: E4-T03
 epic: 4
 title: "Pinned workspace materialization: one invocation digest becomes one byte-exact sandbox tree"
 priority: 403
-status: in-progress
+status: verified
 depends_on: [E4-T02]
 estimate: L
 capstone: false
@@ -61,3 +61,22 @@ workspace already bound to a run.
    turn red on mixed-tree detection.
 
 ## Verification log
+
+### Builder — 2026-08-17
+
+- Commit: `503675de2f65e3a977f787f49e5c0631af1fcb68`
+- Cold run: `make verify-E4-T03`, `TEST_RUN_ID=e4-t03-cold-20260817`
+- Evidence: `.artifacts/e4-t03/e4-t03-cold-20260817/{tree-digests,hostile-corpus,crash-matrix,verification-summary,cold-verification-transcript}.json`
+- Expected workspace digest: `sha256:04b3124949eb9b50a02072f0b361f91dbb62590bfd84aee7e111faf98d232299`
+- Gates: `format:check`, `lint`, `typecheck`, `test:unit` (189 passed, 0 skipped), and `build` passed from a detached cold worktree.
+- Replay: N/A (headless workspace materialization) + mitigation: cold-clone tree parity, hostile archive corpus, crash matrix, and exact digest comparison.
+- Claim: content-addressed manifests reject unsafe trees, transfer into a staged version, atomically publish a complete symlink target, and block execution until the expected digest is materialized.
+
+### Critic — 2026-08-17
+
+- Verdict: `VERDICT: verified`
+- Exact implementation commit: `503675de2f65e3a977f787f49e5c0631af1fcb68`
+- Independent cold run: `make verify-E4-T03`, `TEST_RUN_ID=e4-t03-critic-20260817`; the detached clone passed with the committed workspace digest `sha256:04b3124949eb9b50a02072f0b361f91dbb62590bfd84aee7e111faf98d232299`.
+- Independent attacks passed: byte mutation was refused before publish; hostile path, Unicode, link, device, duplicate, oversized-entry, and decompression cases were rejected; every transfer crash boundary retained either the prior or new complete tree; provider execution was refused before materialization; a changed manifest produced a different digest.
+- Gates: `format:check`, `lint`, `typecheck`, `test:unit` (189 passed, 0 skipped), and `build` passed from the detached cold worktree.
+- Replay: N/A (headless workspace materialization) + mitigation: independent cold clone, hostile corpus, crash matrix, provider execution fence, and exact digest comparison.

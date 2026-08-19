@@ -1,0 +1,19 @@
+{
+  "proofType": "exact implementation commit cloned with local object hardlinks disabled",
+  "implementationCommit": "2d40835e62f0e5663f7a9720a63637c2f8ffa3b7",
+  "commands": [
+    "git clone --no-hardlinks . <ticket-work>/repo",
+    "git checkout --detach 2d40835e62f0e5663f7a9720a63637c2f8ffa3b7",
+    "make verify-E0-T01",
+    "pnpm test:ledger"
+  ],
+  "result": "PASS",
+  "checks": 9,
+  "skipped": 0,
+  "ledgerTests": {
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0
+  },
+  "note": "The clone was created inside the ticket-owned ignored work directory and checked out detached at the published implementation commit before either command ran."
+}

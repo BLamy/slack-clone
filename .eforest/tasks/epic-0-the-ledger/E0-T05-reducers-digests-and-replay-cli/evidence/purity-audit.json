@@ -1,0 +1,15 @@
+[
+  {
+    "ambientCapabilities": [],
+    "imports": [
+      "./canonical-state.mjs",
+      "./canonical-state.mjs"
+    ],
+    "path": "packages/reducers/src/index.mjs"
+  },
+  {
+    "ambientCapabilities": [],
+    "imports": [],
+    "path": "packages/reducers/src/canonical-state.mjs"
+  }
+]

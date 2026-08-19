@@ -1,0 +1,301 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T03",
+  "runId": "e0-t03-repair9-resources",
+  "implementationCommit": "1df738ffcf827cd07113fcf94aec14205d786125",
+  "implementationTreeCleanAtStart": true,
+  "result": "PASS",
+  "artifactRoot": "/Users/brettlamy/Dev/slack-clone/.artifacts/e0-t03/e0-t03-repair9-resources",
+  "gates": [
+    {
+      "name": "format",
+      "command": "pnpm format:check",
+      "result": "PASS",
+      "durationMs": 3803
+    },
+    {
+      "name": "lint",
+      "command": "pnpm lint",
+      "result": "PASS",
+      "durationMs": 4251
+    },
+    {
+      "name": "static-analysis",
+      "command": "pnpm typecheck",
+      "result": "PASS",
+      "durationMs": 9963
+    },
+    {
+      "name": "unit",
+      "command": "pnpm test:unit",
+      "result": "PASS",
+      "durationMs": 8438
+    },
+    {
+      "name": "conformance",
+      "command": "pnpm test:conformance",
+      "result": "PASS",
+      "durationMs": 10404
+    },
+    {
+      "name": "integration",
+      "command": "pnpm test:integration",
+      "result": "PASS",
+      "durationMs": 14472
+    },
+    {
+      "name": "concurrency",
+      "command": "pnpm test:concurrency",
+      "result": "PASS",
+      "durationMs": 11925
+    },
+    {
+      "name": "build",
+      "command": "pnpm build",
+      "result": "PASS",
+      "durationMs": 1027
+    }
+  ],
+  "replay": "N/A (server transport adapter) + mitigation: real-emulator protocol transcript, request-budget proof, canary scan, and reconnect matrix",
+  "replayUploadAttempted": false,
+  "externalTunnelAttempted": false,
+  "recordingsUnchanged": true,
+  "conformance": {
+    "capturedOffsets": [
+      "0000000000000000_0000000000000096",
+      "0000000000000000_0000000000000193",
+      "0000000000000000_0000000000000289",
+      "0000000000000000_0000000000000409",
+      "0000000000000000_0000000000000535"
+    ],
+    "resumeMatrix": [
+      {
+        "checkpoint": "-1",
+        "expectedIds": [
+          "record-1",
+          "record-2",
+          "record-3",
+          "record-live",
+          "record-live-2"
+        ],
+        "observedIds": [
+          "record-1",
+          "record-2",
+          "record-3",
+          "record-live",
+          "record-live-2"
+        ],
+        "nextOffset": "0000000000000000_0000000000000535",
+        "streamDigest": "sha256:b806fa177276e46105e866fc41b756e4a3f81d12edd1cc0d1fc3ae4bdbbbd178"
+      },
+      {
+        "checkpoint": "0000000000000000_0000000000000096",
+        "expectedIds": [
+          "record-2",
+          "record-3",
+          "record-live",
+          "record-live-2"
+        ],
+        "observedIds": [
+          "record-2",
+          "record-3",
+          "record-live",
+          "record-live-2"
+        ],
+        "nextOffset": "0000000000000000_0000000000000535",
+        "streamDigest": "sha256:83cac8b0577b3f6fe20209f6d65774d395713900c021f8adcbefb9d08962e4de"
+      },
+      {
+        "checkpoint": "0000000000000000_0000000000000193",
+        "expectedIds": [
+          "record-3",
+          "record-live",
+          "record-live-2"
+        ],
+        "observedIds": [
+          "record-3",
+          "record-live",
+          "record-live-2"
+        ],
+        "nextOffset": "0000000000000000_0000000000000535",
+        "streamDigest": "sha256:c0f14151f3e7e13aed2db567e6997809a912f01d37898f74c19cdd5a99d68dd6"
+      },
+      {
+        "checkpoint": "0000000000000000_0000000000000289",
+        "expectedIds": [
+          "record-live",
+          "record-live-2"
+        ],
+        "observedIds": [
+          "record-live",
+          "record-live-2"
+        ],
+        "nextOffset": "0000000000000000_0000000000000535",
+        "streamDigest": "sha256:0e3c55f6e35610532cf138b0ddaf566415cd08f5dcea4b02527b315850602d4e"
+      },
+      {
+        "checkpoint": "0000000000000000_0000000000000409",
+        "expectedIds": [
+          "record-live-2"
+        ],
+        "observedIds": [
+          "record-live-2"
+        ],
+        "nextOffset": "0000000000000000_0000000000000535",
+        "streamDigest": "sha256:e8969b669234d2882be251a94f03b1da05d97087872c8ab80263b8ec5d93c2c7"
+      },
+      {
+        "checkpoint": "0000000000000000_0000000000000535",
+        "expectedIds": [],
+        "observedIds": [],
+        "nextOffset": "0000000000000000_0000000000000535",
+        "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "requestBudget": {
+      "schemaVersion": 1,
+      "task": "E0-T03",
+      "runId": "e0-t03-repair9-resources",
+      "implementationCommit": "1df738ffcf827cd07113fcf94aec14205d786125",
+      "result": "PASS",
+      "requestCounter": "HTTP delivery to Durable Streams adapter",
+      "logicalIdleDurationMs": 900000,
+      "requestsBeforeLogicalAdvance": 2,
+      "requestsAfterLogicalAdvance": 2,
+      "requestDeltaWhileIdle": 0,
+      "frozenTotalRequestCap": 24,
+      "totalRequests": 19,
+      "createRequests": 1,
+      "sseRequests": 5,
+      "requestsAtCancel": 13,
+      "requestsAfterCancellationSettled": 13,
+      "realEmulatorIdleObservation": {
+        "requestsWhenOfficialFollowParked": 7,
+        "requestsAfterMicrotaskSettle": 7
+      },
+      "idleWindow": {
+        "schemaVersion": 1,
+        "boundary": "HTTP delivery to Durable Streams adapter",
+        "logicalIdleDurationMs": 900000,
+        "timerFinishedAtMs": 900000,
+        "callsBeforeLogicalAdvance": 2,
+        "callsAfterLogicalAdvance": 2,
+        "callDeltaWhileIdle": 0,
+        "readCallsBeforeLogicalAdvance": 1,
+        "readCallsAfterLogicalAdvance": 1,
+        "followCallsBeforeLogicalAdvance": 1,
+        "followCallsAfterLogicalAdvance": 1,
+        "keepAliveTimerExecutions": 90,
+        "pollingTimerExecutions": 0,
+        "pollingMutationMs": null
+      },
+      "pollingPositiveControl": {
+        "detectorRejected": true,
+        "logicalIdleDurationMs": 900000,
+        "pollingMutationMs": 350,
+        "pollingTimerExecutions": 2571,
+        "requestDeltaWhileIdle": 2571
+      },
+      "diagnosticsAtIdle": {
+        "appendCalls": 3,
+        "boundedReads": 0,
+        "createRequests": 1,
+        "ensureCalls": 7,
+        "followCalls": 1,
+        "requests": 8,
+        "requestsByMethod": {
+          "HEAD": 1,
+          "PUT": 1,
+          "POST": 3,
+          "GET": 3
+        },
+        "responsesByStatus": {
+          "200": 2,
+          "201": 1,
+          "204": 3,
+          "404": 1
+        },
+        "sseRequests": 2,
+        "longPollRequests": 0,
+        "activeFollowers": 1,
+        "pendingIdleWaiters": 1,
+        "cachedStreams": 1
+      },
+      "diagnosticsAfterCancel": {
+        "appendCalls": 5,
+        "boundedReads": 0,
+        "createRequests": 1,
+        "ensureCalls": 9,
+        "followCalls": 1,
+        "requests": 14,
+        "requestsByMethod": {
+          "HEAD": 1,
+          "PUT": 1,
+          "POST": 5,
+          "GET": 7
+        },
+        "responsesByStatus": {
+          "200": 6,
+          "201": 1,
+          "204": 5,
+          "404": 1
+        },
+        "sseRequests": 6,
+        "longPollRequests": 0,
+        "activeFollowers": 0,
+        "pendingIdleWaiters": 0,
+        "cachedStreams": 1
+      }
+    },
+    "canaryScan": {
+      "schemaVersion": 1,
+      "task": "E0-T03",
+      "runId": "e0-t03-repair9-resources",
+      "implementationCommit": "1df738ffcf827cd07113fcf94aec14205d786125",
+      "result": "PASS",
+      "canarySha256": "c30ec86e16e06604a6af5cb662f04ed142b0af7ce8bd5a72bee225bf64f3aa1c",
+      "encodingsScanned": [
+        "raw",
+        "url-encoded",
+        "base64"
+      ],
+      "positiveControlDetections": [
+        1,
+        1,
+        1
+      ],
+      "totalMatches": 0,
+      "categories": {
+        "browserAssetsAndApi": {
+          "entries": 7,
+          "bytesScanned": 32856,
+          "matches": 0
+        },
+        "logs": {
+          "entries": 1,
+          "bytesScanned": 288,
+          "matches": 0
+        },
+        "environmentManifests": {
+          "entries": 1,
+          "bytesScanned": 375,
+          "matches": 0
+        },
+        "runArtifacts": {
+          "entries": 4,
+          "bytesScanned": 27370,
+          "matches": 0
+        }
+      }
+    }
+  },
+  "browserRegression": {
+    "schemaVersion": 1,
+    "room": "e0-t03-repair9-resources-edit-1785690602887",
+    "stream": "/rooms/e0-t03-repair9-resources-edit-1785690602887/messages",
+    "nextOffset": "0000000000000000_0000000000000551",
+    "streamDigest": "sha256:03fff90be7e0dd5bca0212ba6cbbb39478412c2b2d5c2422d0ebd885431e32cc",
+    "messageCount": 1,
+    "domMatchedApi": true
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "changedFile": "src/projections.mjs",
+  "mutation": "row source-digest and reducer-version checks omitted",
+  "installExitCode": 0,
+  "verifierExitCode": 1,
+  "verifierRejected": true,
+  "result": "PASS"
+}

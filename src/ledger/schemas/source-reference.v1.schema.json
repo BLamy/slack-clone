@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stream-slack.local/schemas/source-reference.v1.schema.json",
+  "title": "Stream Slack source reference v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["digest", "offset", "stream"],
+  "properties": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "offset": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{16}_[0-9a-f]{16}$"
+    },
+    "stream": {
+      "type": "string",
+      "pattern": "^(workspace:ws_[0-9a-hjkmnp-tv-z]{26}/(directory|invocations|audit)|channel:ch_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}|agent:ag_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}/config|run:rn_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}|connection:cn_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}/config|projection:px_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26})$"
+    }
+  }
+}

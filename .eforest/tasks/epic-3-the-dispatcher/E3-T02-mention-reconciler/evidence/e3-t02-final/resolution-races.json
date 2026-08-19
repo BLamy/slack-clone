@@ -1,0 +1,56 @@
+{
+  "result": "PASS",
+  "rows": [
+    {
+      "attempts": 2,
+      "checkpointCountAfterRetry": 1,
+      "thrownResolutionError": false,
+      "firstAttempt": {
+        "code": "INVOCATION_SNAPSHOT_STALE_CONFIG",
+        "checkpointCount": 0,
+        "invocationCount": 0,
+        "status": "retry"
+      },
+      "label": "config-change-during-resolution",
+      "secondAttempt": {
+        "checkpointCount": 1,
+        "invocationCount": 1,
+        "status": "reconciled"
+      }
+    },
+    {
+      "attempts": 2,
+      "checkpointCountAfterRetry": 1,
+      "thrownResolutionError": false,
+      "firstAttempt": {
+        "code": "INVOCATION_SNAPSHOT_STALE_MEMBERSHIP",
+        "checkpointCount": 0,
+        "invocationCount": 0,
+        "status": "retry"
+      },
+      "label": "membership-change-during-resolution",
+      "secondAttempt": {
+        "checkpointCount": 1,
+        "invocationCount": 1,
+        "status": "reconciled"
+      }
+    },
+    {
+      "attempts": 2,
+      "checkpointCountAfterRetry": 1,
+      "thrownResolutionError": true,
+      "firstAttempt": {
+        "code": "INVOCATION_SNAPSHOT_STALE_PROVIDER",
+        "checkpointCount": 0,
+        "invocationCount": 0,
+        "status": "retry"
+      },
+      "label": "thrown-stale-provider-during-resolution",
+      "secondAttempt": {
+        "checkpointCount": 1,
+        "invocationCount": 1,
+        "status": "reconciled"
+      }
+    }
+  ]
+}

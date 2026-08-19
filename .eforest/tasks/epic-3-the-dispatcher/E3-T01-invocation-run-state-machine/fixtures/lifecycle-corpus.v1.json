@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "replay": {
+    "finalStateDigest": "sha256:93ac7688b87515e347c90b0a4b0349e8db6812e11d275b8b409c9ea3b85db769",
+    "perPrefixDigests": [
+      {
+        "index": 1,
+        "offset": "0000000000000001_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:5ed42b8b1c177bb2694285f2a0829f292a82d7f87fae347735763774a3774d97"
+      },
+      {
+        "index": 2,
+        "offset": "0000000000000002_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:ea3d9a220f7d5885481043176cc9ba03060f401b698c35636b1c618e1ec41fd3"
+      },
+      {
+        "index": 3,
+        "offset": "0000000000000003_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:acef253ee89c73b931aee9552af060630a59268be38fda7545e27577eadcfb91"
+      },
+      {
+        "index": 4,
+        "offset": "0000000000000004_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:9148f0a0488b4a27e6dbcca5939d477f65e1deb5029abcf40fa7881d6cba3b1d"
+      },
+      {
+        "index": 5,
+        "offset": "0000000000000005_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:ee70a9fc03fc4298d3f0ebfa67c13d303a261f6fdf2666671ae2bd0ca5e99710"
+      },
+      {
+        "index": 6,
+        "offset": "0000000000000006_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:d791711413d242b4789f6be158edca70ad2194d84f7323e5f85ace41704317ee"
+      },
+      {
+        "index": 7,
+        "offset": "0000000000000007_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:c3f092a83d1823b548a52c82676cd8597baf1dfe086528bc7cf47846089df957"
+      },
+      {
+        "index": 8,
+        "offset": "0000000000000008_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:a62a878edbc810be52a77727ac6bb1d2de325a1481670b682d32c2055cfaadda"
+      },
+      {
+        "index": 9,
+        "offset": "0000000000000009_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:4b3583b348fa334110e459aa0ca1462011ee4e87d290d1552eb8c15d0f9e62c4"
+      },
+      {
+        "index": 10,
+        "offset": "0000000000000010_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:4d4a3d675c0c7417b680753014a41efb912ae405c8fd1cc404f1973a8ed7fd6b"
+      },
+      {
+        "index": 11,
+        "offset": "0000000000000011_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:4d250924c501a6da415431e0562ec61eef0b6854d952894cdd219fa26744d831"
+      },
+      {
+        "index": 12,
+        "offset": "0000000000000012_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:71352e17412460b45e8fb91ec744528307fb7dd429860a3edb2c71963e7d538c"
+      },
+      {
+        "index": 13,
+        "offset": "0000000000000013_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:a93b5af22e2036626c808faaa26fb2d389538c108ee108e4e5cfbd4a55da10d4"
+      },
+      {
+        "index": 14,
+        "offset": "0000000000000014_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:93ac7688b87515e347c90b0a4b0349e8db6812e11d275b8b409c9ea3b85db769"
+      }
+    ]
+  },
+  "task": "E3-T01",
+  "validLifecycle": [
+    "workspace.invocation.requested",
+    "run.lifecycle.changed:null->requested",
+    "run.lifecycle.changed:requested->queued",
+    "run.lifecycle.changed:queued->leased",
+    "run.lifecycle.changed:leased->running",
+    "run.activity.recorded",
+    "run.usage.recorded",
+    "run.lifecycle.changed:running->awaiting-approval",
+    "run.approval.requested",
+    "run.approval.decided",
+    "run.lifecycle.changed:awaiting-approval->running",
+    "run.artifact.recorded",
+    "run.result.recorded",
+    "run.lifecycle.changed:running->completed"
+  ],
+  "terminalStates": ["completed", "failed", "timed-out", "cancelled"],
+  "invalidMutationFields": [
+    "state",
+    "sequence",
+    "runId",
+    "attemptId",
+    "sourceRef",
+    "usage",
+    "terminal"
+  ],
+  "boundedRecordTypes": [
+    "activity",
+    "usage",
+    "approval",
+    "artifact",
+    "result",
+    "failure"
+  ]
+}

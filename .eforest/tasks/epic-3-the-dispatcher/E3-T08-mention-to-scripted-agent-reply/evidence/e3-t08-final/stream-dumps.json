@@ -1,0 +1,2247 @@
+{
+  "__stream_slack_dispatch_idempotency__": {
+    "head": "0000000000000002_0000000000000002",
+    "records": [
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "eventDigest": "sha256:d7e59ff306caeb938798102d8215131611e2fa3f306b0d97470fd91544f9bcdf",
+          "idempotencyKey": "ik_ca39199b128c4dffcefe7824e3",
+          "nextOffset": "0000000000000001_0000000000000001",
+          "operation": "workspace.invocation.requested",
+          "requestDigest": "sha256:47607d8eb421b8e6bf669f7ccbe93a22d7ced7666206b2c837366e3f6471499c",
+          "status": "accepted",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "eventDigest": "sha256:d74a1e2eb53f10e51e9c539b64648e4a56be6a4a04190e6b20e38e1705df522a",
+          "idempotencyKey": "ik_8b076112671e5186b6229cf54b",
+          "nextOffset": "0000000000000001_0000000000000001",
+          "operation": "projection.checkpointed",
+          "requestDigest": "sha256:d8a52f0f3c1e256ef3cceba5e810a24fabc7e394bb0316f05adfdbcd90cb88ea",
+          "status": "accepted",
+          "stream": "projection:px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    ],
+    "streamDigest": "sha256:8f61a85ff936c7b074b0cc4971efaf2f16c1bf1b57233d41ac525ff68813c46e"
+  },
+  "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config": {
+    "head": "0000000000000002_0000000000000002",
+    "records": [
+      {
+        "digest": "sha256:aacfb3391b1a9370e2fa8972da6c3acc88bb06e7b0551a4bb06bc3ac606d98f0",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": null,
+          "correlationId": "cr_cccccccccccccccccccccccccc",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+            "config": {
+              "schemaVersion": 1,
+              "instructions": {
+                "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+                "task": "Answer the current request using only the authorized context.",
+                "guardrails": [
+                  "Never disclose credentials or secret-shaped values.",
+                  "Keep replies bounded and auditable."
+                ]
+              },
+              "context": {
+                "scope": "current-channel",
+                "includePrivate": false,
+                "includeThreadHistory": true,
+                "maxMessages": 50,
+                "maxBytes": 65536
+              },
+              "trigger": {
+                "events": [
+                  "manual",
+                  "mention"
+                ],
+                "requireMention": false,
+                "allowMessageEdits": false
+              },
+              "delegation": {
+                "enabled": false,
+                "maxDepth": 0,
+                "maxChildren": 0,
+                "allowCrossChannel": false
+              },
+              "concurrency": {
+                "maxConcurrentRuns": 4,
+                "maxConcurrentPerChannel": 1,
+                "queueStrategy": "serialize"
+              },
+              "budgets": {
+                "timeoutSeconds": 900,
+                "maxInputTokens": 8000,
+                "maxOutputTokens": 4000,
+                "maxTotalTokens": 12000,
+                "maxCostUsdCents": 250
+              },
+              "harness": {
+                "providerId": "scripted",
+                "providerVersion": "1.0.0",
+                "requiredCapabilities": [
+                  "structured-output"
+                ]
+              },
+              "sandbox": {
+                "providerId": "scripted",
+                "providerVersion": "1.0.0",
+                "requiredCapabilities": [
+                  "ephemeral"
+                ],
+                "lifecycle": "ephemeral",
+                "networkPolicy": "deny-all"
+              },
+              "workspaceInputs": {
+                "source": "workspace",
+                "paths": [
+                  "README.md",
+                  "docs"
+                ],
+                "maxBytes": 1048576
+              },
+              "connectionGrants": {
+                "maxCallsPerRun": 2,
+                "refs": [
+                  {
+                    "connectionId": "conn_a",
+                    "grantId": "grant_bgrant_c",
+                    "purpose": "p",
+                    "revision": 1
+                  },
+                  {
+                    "connectionId": "conn_agrant_b",
+                    "grantId": "grant_c",
+                    "purpose": "p",
+                    "revision": 1
+                  }
+                ]
+              }
+            },
+            "configDigest": "sha256:985cb3cc8e3ddfb848768e8f058afad174135e97253eed9376953c0a820973c7",
+            "expectedRevision": 0,
+            "expectedRevisionId": null,
+            "predecessorRevisionId": null,
+            "revision": 1,
+            "revisionId": "acr_830d4b027060063bf272fc4968fea6ddab60587fa790c19bc9e8beb8702edd36"
+          },
+          "eventType": "agent.config.created",
+          "idempotencyKey": "ik_cccccccccccccccccccccccccc",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_cccccccccccccccccccccccccc",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000001_0000000000000001"
+      },
+      {
+        "digest": "sha256:342cfdadca47c9ecef04e09638f98fbf875e5538343ef23168a43ce244ab1bf1",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": null,
+          "correlationId": "cr_cccccccccccccccccccccccccc",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+            "expectedRevision": 1,
+            "expectedRevisionId": "acr_830d4b027060063bf272fc4968fea6ddab60587fa790c19bc9e8beb8702edd36",
+            "revisionId": "acr_830d4b027060063bf272fc4968fea6ddab60587fa790c19bc9e8beb8702edd36"
+          },
+          "eventType": "agent.config.activated",
+          "idempotencyKey": "ik_dddddddddddddddddddddddddd",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_dddddddddddddddddddddddddd",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000002_0000000000000002"
+      }
+    ],
+    "streamDigest": "sha256:314c592b8a9e1373e860dc54978206b8a7cd2b2908dc1eff8208eac3bcd83ecf"
+  },
+  "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb": {
+    "head": "0000000000000002_0000000000000002",
+    "records": [
+      {
+        "digest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": null,
+          "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "data": {
+            "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "contentType": "text/plain",
+            "messageId": "capstone-trigger",
+            "rootMessageId": null,
+            "text": "@helper summarize the authorized thread",
+            "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+            "mentions": [
+              {
+                "handle": "helper",
+                "kind": "agent",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+                "span": {
+                  "startByte": 0,
+                  "endByte": 7
+                },
+                "text": "@helper"
+              }
+            ]
+          },
+          "eventType": "channel.message.created",
+          "idempotencyKey": "ik_mmmmmmmmmmmmmmmmmmmmmmmmmm",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000001_0000000000000001",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      {
+        "digest": "sha256:a5654dbd6744c16db9b5b47be9f3ab866f12e629d9f8219af900a3409ee3f0c1",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "causation": null,
+          "correlationId": "cr_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "data": {
+            "agentReplyProvenance": {
+              "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "agentPrincipalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "attemptId": "at_f83986cb3d08b6dd5702f465f3",
+              "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "contextDigest": "sha256:dbf16d9663a8253750b375776ac8491ba378cae1e09426bb47b3f771e389318a",
+              "contextRef": {
+                "digest": "sha256:dbf16d9663a8253750b375776ac8491ba378cae1e09426bb47b3f771e389318a",
+                "offset": "0000000000000002_0000000000000002",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/audit"
+              },
+              "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+              "invocationRef": {
+                "digest": "sha256:8e6b066713fe58178222372a9cd447301d19b16d2cd4e77d8bd83d2d6ce322cd",
+                "offset": "0000000000000001_0000000000000001",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+              },
+              "leaseGeneration": 1,
+              "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+              "schemaVersion": 1,
+              "snapshotDigest": "sha256:e3067451ae94bc09743dab1f07badf981f4e987dc7205ba066bfdc8a5b5e8848",
+              "snapshotRef": {
+                "digest": "sha256:c8c1616c2bb0d96b440c0594ee50bf85b6ad051afdca2f8ab1bd7c9e4b167cb2",
+                "offset": "0000000000000002_0000000000000002",
+                "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+              },
+              "sourceMention": {
+                "digest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+                "offset": "0000000000000001_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "threadRootMessageId": "capstone-trigger"
+            },
+            "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "contentType": "text/plain",
+            "messageId": "msg_0f4d395b7c837bf92a264c9590",
+            "rootMessageId": "capstone-trigger",
+            "text": "The authorized thread asks for a concise summary.",
+            "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
+          },
+          "eventType": "channel.message.replied",
+          "idempotencyKey": "ik_5532ed52047f3fdeaabb6e3d77",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000002_0000000000000002",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    ],
+    "streamDigest": "sha256:5336be0d0177ce2fae97b2dbe66ae9a2616af88530a6c25e9113b2cf874f955f"
+  },
+  "projection:px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb": {
+    "head": "0000000000000001_0000000000000001",
+    "records": [
+      {
+        "digest": "sha256:fbaabad7dc6e208f1a1ef6a802fd5082387f8a59a55499ddd819b773841011aa",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+            "offset": "0000000000000001_0000000000000001",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "correlationId": "cr_711488fc280dfd50b677506676",
+          "data": {
+            "projectionId": "px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "sequence": 1,
+            "sourceOffset": "0000000000000001_0000000000000001",
+            "sourceStream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "stateDigest": "sha256:a1ea12421b19f3596274c213d1edfb5d794fe3fb11fd80cc8748278038bc80d8"
+          },
+          "eventType": "projection.checkpointed",
+          "idempotencyKey": "ik_8b076112671e5186b6229cf54b",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_8b076112671e5186b6229cf54b",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "dispatch": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "expectedHead": "0000000000000000_0000000000000000",
+          "idempotencyKey": "ik_8b076112671e5186b6229cf54b",
+          "operation": "projection.checkpointed",
+          "requestDigest": "sha256:d8a52f0f3c1e256ef3cceba5e810a24fabc7e394bb0316f05adfdbcd90cb88ea",
+          "schemaVersion": 1,
+          "stream": "projection:px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    ],
+    "streamDigest": "sha256:8906c78376bc3fe20e30e4c054f12f41458c273ab0f7380b4fa656a51e1f6064"
+  },
+  "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff": {
+    "head": "0000000000000021_0000000000000015",
+    "records": [
+      {
+        "digest": "sha256:9bc852e744f81b90687db0a3624f4043f4675c7f8613d4fb9f59c7fd260df638",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:8e6b066713fe58178222372a9cd447301d19b16d2cd4e77d8bd83d2d6ce322cd",
+            "offset": "0000000000000001_0000000000000001",
+            "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": null,
+            "attemptNumber": null,
+            "binding": {
+              "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+              "invocationRef": {
+                "digest": "sha256:8e6b066713fe58178222372a9cd447301d19b16d2cd4e77d8bd83d2d6ce322cd",
+                "offset": "0000000000000001_0000000000000001",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+              },
+              "policy": {
+                "allowApprovals": false,
+                "maxAttempts": 3,
+                "maxCostUsdCents": 250,
+                "maxInputTokens": 8000,
+                "maxOutputTokens": 4000,
+                "maxWallTimeMs": 900000,
+                "version": 1
+              },
+              "policyDigest": "sha256:7d7621a9b5984daadc422e2286b9967727d695df89c4687e35dfdd444d079a42",
+              "snapshotDigest": "sha256:e3067451ae94bc09743dab1f07badf981f4e987dc7205ba066bfdc8a5b5e8848",
+              "snapshotRef": {
+                "digest": "sha256:c8c1616c2bb0d96b440c0594ee50bf85b6ad051afdca2f8ab1bd7c9e4b167cb2",
+                "offset": "0000000000000002_0000000000000002",
+                "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+              },
+              "sourceTrigger": {
+                "digest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+                "offset": "0000000000000001_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+              }
+            },
+            "from": null,
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": null,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sequence": 1,
+            "sourceRef": {
+              "digest": "sha256:8e6b066713fe58178222372a9cd447301d19b16d2cd4e77d8bd83d2d6ce322cd",
+              "offset": "0000000000000001_0000000000000001",
+              "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+            },
+            "terminal": null,
+            "to": "requested"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_668c0f8c8880a3ca5a0fd82a76",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_668c0f8c8880a3ca5a0fd82a76",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000001_0000000000000001",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:9bc852e744f81b90687db0a3624f4043f4675c7f8613d4fb9f59c7fd260df638",
+            "offset": "0000000000000001_0000000000000001",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": null,
+            "attemptNumber": null,
+            "binding": null,
+            "from": "requested",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": null,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sequence": 2,
+            "sourceRef": {
+              "digest": "sha256:9bc852e744f81b90687db0a3624f4043f4675c7f8613d4fb9f59c7fd260df638",
+              "offset": "0000000000000001_0000000000000001",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "terminal": null,
+            "to": "queued"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_e74de94df7e56f9bc1390e9c06",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_e74de94df7e56f9bc1390e9c06",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000002_0000000000000002",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:52d99cc4cd460c5ff842f388fe9f6c46e268a1910ebf05f8952e87c7fd762dc7",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+            "attemptNumber": 1,
+            "binding": null,
+            "from": "queued",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": 1,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sequence": 3,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "terminal": null,
+            "to": "leased"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_912d6d571ddfcbba0ef353d100",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_7888ef6315e0732dcd711b6e34",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000003_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:258b51acb4dd1ab89e4dd2e23b1498693e4af5cb1d8ae28d10c1e453cbd29b07",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+            "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+            "attemptNumber": 1,
+            "capabilityDigest": "sha256:3507abf9f8aab1357bfb1b7fae6da57d39427cefbbccc2b819032e17340849c9",
+            "endpoints": [
+              "run.events.write",
+              "run.reply.write"
+            ],
+            "entryDigest": "sha256:4bdf88a4d99c476466a34624b05bdd49ca381e880526799efa20bdfb4a91ac19",
+            "expiresAt": "2026-08-10T00:00:01.000Z",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "issuedAt": "2026-08-10T00:00:00.000Z",
+            "leaseGeneration": 1,
+            "leaseId": "ls_e3ee07322445529b4987b17636",
+            "queueDigest": "sha256:51ece3fc254c9188f1c09b7aefd5a8bd783a030eb739ffb62e2988c9f7d31a2b",
+            "reason": null,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "workerId": "e3-t08-fault-f"
+          },
+          "eventType": "run.lease.acquired",
+          "idempotencyKey": "ik_23530770557fa71e8fb26d9a4a",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_23530770557fa71e8fb26d9a4a",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000004_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:be6021781303d0d099c88da7a174e46546f7aadd4620d332660b02496de68f03",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+            "attemptNumber": 1,
+            "binding": null,
+            "from": "leased",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": 1,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sequence": 4,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "terminal": null,
+            "to": "running"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_107ccb720f2399a135a0c82e06",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_5d619e83e7f890d8dd33c01105",
+          "serverTimestamp": "2026-08-10T00:00:00.001Z"
+        },
+        "offset": "0000000000000005_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:14ff1bba99f44e72e7987ae234fb98eb3e86a074a5539a2ba6307cb5e1e1bafe",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sequence": 5,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "actionKey": null,
+            "controlId": "ctl_3c40cb1fb062a88976e1de2360",
+            "controlType": "attempt.deadline.set",
+            "detail": "deadline-frozen",
+            "dueAtMs": 1786320000101
+          },
+          "eventType": "run.control.recorded",
+          "idempotencyKey": "ik_a45cabc75c92bddbbb9c58fa80",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_34a027f2c7d1bd05c522eca356",
+          "serverTimestamp": "2026-08-10T00:00:00.001Z"
+        },
+        "offset": "0000000000000006_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:2471407dd988069bcbb4e28d8a80831d850515c866f87c10b7a33bd5eb91149b",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sequence": 6,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "detailRef": null,
+            "failureCode": "scripted-process-crash",
+            "retryable": true
+          },
+          "eventType": "run.failure.recorded",
+          "idempotencyKey": "ik_8e3389d07e737feadc218260ef",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_b7dba9f0d205fd84fa3a8c5aa5",
+          "serverTimestamp": "2026-08-10T00:00:00.003Z"
+        },
+        "offset": "0000000000000007_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:5668805b3ff884b7e8816f9ad1165bc378bf2f0cf458b3d6869e7eb7443b2fe8",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sequence": 7,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "actionKey": null,
+            "controlId": "ctl_dd8074a689319ca6191457120e",
+            "controlType": "retry.scheduled",
+            "detail": "retryable",
+            "dueAtMs": 1786320000013
+          },
+          "eventType": "run.control.recorded",
+          "idempotencyKey": "ik_7194deb00b373b0c263bb07947",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_e523d28e23810c6142321237a9",
+          "serverTimestamp": "2026-08-10T00:00:00.003Z"
+        },
+        "offset": "0000000000000008_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:b6e889df27d2c2d3f336a86e1b93d1eecc04468ce338c396dba41d01c02e6eaf",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+            "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+            "attemptNumber": 1,
+            "capabilityDigest": "sha256:3507abf9f8aab1357bfb1b7fae6da57d39427cefbbccc2b819032e17340849c9",
+            "endpoints": [
+              "run.events.write",
+              "run.reply.write"
+            ],
+            "entryDigest": "sha256:4bdf88a4d99c476466a34624b05bdd49ca381e880526799efa20bdfb4a91ac19",
+            "expiresAt": "2026-08-10T00:00:01.000Z",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "issuedAt": "2026-08-10T00:00:00.003Z",
+            "leaseGeneration": 1,
+            "leaseId": "ls_e3ee07322445529b4987b17636",
+            "queueDigest": "sha256:51ece3fc254c9188f1c09b7aefd5a8bd783a030eb739ffb62e2988c9f7d31a2b",
+            "reason": "run-control",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "workerId": "e3-t08-fault-f"
+          },
+          "eventType": "run.lease.superseded",
+          "idempotencyKey": "ik_3e99241f5d43cbd8468b4315e7",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_3e99241f5d43cbd8468b4315e7",
+          "serverTimestamp": "2026-08-10T00:00:00.003Z"
+        },
+        "offset": "0000000000000009_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:6c65790cc495000ac10c55933163848371b878fb94ac77cb417c4cd86454f15e",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sequence": 8,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "actionKey": null,
+            "controlId": "ctl_7b9cb9f19114963c0608939838",
+            "controlType": "process.terminated",
+            "detail": "group-kill",
+            "dueAtMs": null
+          },
+          "eventType": "run.control.recorded",
+          "idempotencyKey": "ik_271117e1f76465c986ee9e0cf1",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_f72c8115c3c7db0b068e62eaef",
+          "serverTimestamp": "2026-08-10T00:00:00.003Z"
+        },
+        "offset": "0000000000000010_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:78d4f97b67100696e49418baee38614b38092c55913a0b937fc5432f1f6f654c",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+            "attemptNumber": 1,
+            "binding": null,
+            "from": "running",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": 1,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sequence": 9,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "terminal": null,
+            "to": "retry"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_ee320cac9d0772216d14947800",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_cc29abe8722b47e3c7d07f2c96",
+          "serverTimestamp": "2026-08-10T00:00:00.003Z"
+        },
+        "offset": "0000000000000011_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:6258271d438d7cdae9f61131b9e4f4be587947411b7c4f9b4de681ae9f722266",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": null,
+            "attemptNumber": null,
+            "binding": null,
+            "from": "retry",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": null,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sequence": 10,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "terminal": null,
+            "to": "queued"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_892a755d0575f2095e3850bc6d",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_3607c086e4cf2ef78572df460f",
+          "serverTimestamp": "2026-08-10T00:00:00.013Z"
+        },
+        "offset": "0000000000000012_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:d3e0d17b6a7eb8329445afe76fa40d05900597e183df6631bded2055bf5c6099",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+            "attemptNumber": 2,
+            "binding": null,
+            "from": "queued",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": 2,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sequence": 11,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "terminal": null,
+            "to": "leased"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_fccdd802d10adad52f76599ff8",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_dc8ac38f11078427bf454b0cd7",
+          "serverTimestamp": "2026-08-10T00:00:00.013Z"
+        },
+        "offset": "0000000000000013_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:6728d3dac3f04a792f260f29722375d12a5a2312be0fc44a1dbfe6dfc1ed85ed",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+            "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+            "attemptNumber": 2,
+            "capabilityDigest": "sha256:d7ee68157aa9d3484c3bc590e5007a9df495acc8c7cfeda2798ecf7c402d140f",
+            "endpoints": [
+              "run.events.write",
+              "run.reply.write"
+            ],
+            "entryDigest": "sha256:f64c203c4e1b91ed7c76b69ad5564860361aed7ba64beb0218373b5184d326fe",
+            "expiresAt": "2026-08-10T00:00:01.013Z",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "issuedAt": "2026-08-10T00:00:00.013Z",
+            "leaseGeneration": 2,
+            "leaseId": "ls_f2cd117a81568d43a46e32689a",
+            "queueDigest": "sha256:03c11403cd2ef2210f5bd4729a9e5b73149c0488d662e08cb24ada7a37cac412",
+            "reason": null,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "workerId": "e3-t08-fault-f"
+          },
+          "eventType": "run.lease.acquired",
+          "idempotencyKey": "ik_e9e1e2e8b30fdfccca5c932a9f",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_e9e1e2e8b30fdfccca5c932a9f",
+          "serverTimestamp": "2026-08-10T00:00:00.013Z"
+        },
+        "offset": "0000000000000014_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:bf1771f3c8860241708dd1c8557313b03507d69a95de4a0802f8001b05c95c46",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+            "attemptNumber": 2,
+            "binding": null,
+            "from": "leased",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": 2,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sequence": 12,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "terminal": null,
+            "to": "running"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_fe10dd65e44ed0f9e7bfaf3356",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_fa3c0ddd35430501e3634354fa",
+          "serverTimestamp": "2026-08-10T00:00:00.014Z"
+        },
+        "offset": "0000000000000015_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:268dab6093054ed0118cd73463360bb03e431bff78845c18604f8e2e3745f404",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sequence": 13,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "actionKey": null,
+            "controlId": "ctl_da0146b50a91646cb33b1bcc60",
+            "controlType": "attempt.deadline.set",
+            "detail": "deadline-frozen",
+            "dueAtMs": 1786320000114
+          },
+          "eventType": "run.control.recorded",
+          "idempotencyKey": "ik_e42b92d6248900e33b9f59766a",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_b022d40ad5e5542027cc7b4864",
+          "serverTimestamp": "2026-08-10T00:00:00.014Z"
+        },
+        "offset": "0000000000000016_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:faec83f811312ccb1d811203d04bef293d029b29727d6a3bcf72b0ffed8e33cd",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sequence": 14,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "actionKey": "scripted-side-effect-capstone",
+            "controlId": "ctl_3779cfe50e4521344922c43d41",
+            "controlType": "side-effect.recovered",
+            "detail": "idempotent-recovery",
+            "dueAtMs": null
+          },
+          "eventType": "run.control.recorded",
+          "idempotencyKey": "ik_cd746f4a3f0e622a019d8e2b3e",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_3286cee02cf48e5f70346cbd8e",
+          "serverTimestamp": "2026-08-10T00:00:00.015Z"
+        },
+        "offset": "0000000000000017_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:ce0ad051b17d80fa89526f484ba81cf84664e8b8cac66da248240052de329ee6",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sequence": 15,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "costUsdCents": 1,
+            "inputTokens": 4,
+            "outputBytes": 16,
+            "outputTokens": 2,
+            "totalTokens": 6,
+            "wallTimeMs": 5
+          },
+          "eventType": "run.usage.recorded",
+          "idempotencyKey": "ik_ea05ef27560a2b93bbf557fd0d",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_5c216c97da1bcf80e9b2bd95d9",
+          "serverTimestamp": "2026-08-10T00:00:00.016Z"
+        },
+        "offset": "0000000000000018_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:7e9e87c9fe663d1a8fbf36f32e54af3831210cb77975b1da2ae14512f90b787e",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+            "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+            "attemptNumber": 2,
+            "capabilityDigest": "sha256:d7ee68157aa9d3484c3bc590e5007a9df495acc8c7cfeda2798ecf7c402d140f",
+            "endpoints": [
+              "run.events.write",
+              "run.reply.write"
+            ],
+            "entryDigest": "sha256:f64c203c4e1b91ed7c76b69ad5564860361aed7ba64beb0218373b5184d326fe",
+            "expiresAt": "2026-08-10T00:00:01.013Z",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "issuedAt": "2026-08-10T00:00:00.017Z",
+            "leaseGeneration": 2,
+            "leaseId": "ls_f2cd117a81568d43a46e32689a",
+            "queueDigest": "sha256:03c11403cd2ef2210f5bd4729a9e5b73149c0488d662e08cb24ada7a37cac412",
+            "reason": "run-control",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "workerId": "e3-t08-fault-f"
+          },
+          "eventType": "run.lease.superseded",
+          "idempotencyKey": "ik_65c107817fbe4a3b3bc47e155f",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_65c107817fbe4a3b3bc47e155f",
+          "serverTimestamp": "2026-08-10T00:00:00.017Z"
+        },
+        "offset": "0000000000000019_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:993e967545910923eee5a58d8e7f2738b3fd842ae9f20e9764f990ed02a753f3",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sequence": 16,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "actionKey": null,
+            "controlId": "ctl_ad3c7778e724b8b07d7bdcf4eb",
+            "controlType": "process.terminated",
+            "detail": "graceful-group-exit",
+            "dueAtMs": null
+          },
+          "eventType": "run.control.recorded",
+          "idempotencyKey": "ik_b2715a9212e33d33fa71fbdb7c",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_2d3062c724b4b8b7ad7cb46dc9",
+          "serverTimestamp": "2026-08-10T00:00:00.017Z"
+        },
+        "offset": "0000000000000020_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      },
+      {
+        "digest": "sha256:c6d9b83980b39e7d6ac4e55771247436b70f893f4891f6c245fcce0916e783cb",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+            "attemptNumber": 2,
+            "binding": null,
+            "from": "running",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": 2,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sequence": 17,
+            "sourceRef": {
+              "digest": "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "terminal": {
+              "failureCode": null,
+              "kind": "cancelled",
+              "reasonCode": "operator-cancelled",
+              "resultRef": null
+            },
+            "to": "cancelled"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_ed150c0031475a400d475efbaa",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_74bd213ef23f76adef34f5a515",
+          "serverTimestamp": "2026-08-10T00:00:00.017Z"
+        },
+        "offset": "0000000000000021_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+      }
+    ],
+    "streamDigest": "sha256:a5db9de214489ac0bbf3dff3494bf802357091ccafcb637a3e1971f62d25c701"
+  },
+  "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr": {
+    "head": "0000000000000012_000000000000000c",
+    "records": [
+      {
+        "digest": "sha256:b50e76d161f43c90e7192703ff101464d10876e234bd4937d2dea396f52c1782",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:8e6b066713fe58178222372a9cd447301d19b16d2cd4e77d8bd83d2d6ce322cd",
+            "offset": "0000000000000001_0000000000000001",
+            "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": null,
+            "attemptNumber": null,
+            "binding": {
+              "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+              "invocationRef": {
+                "digest": "sha256:8e6b066713fe58178222372a9cd447301d19b16d2cd4e77d8bd83d2d6ce322cd",
+                "offset": "0000000000000001_0000000000000001",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+              },
+              "policy": {
+                "allowApprovals": false,
+                "maxAttempts": 3,
+                "maxCostUsdCents": 250,
+                "maxInputTokens": 8000,
+                "maxOutputTokens": 4000,
+                "maxWallTimeMs": 900000,
+                "version": 1
+              },
+              "policyDigest": "sha256:7d7621a9b5984daadc422e2286b9967727d695df89c4687e35dfdd444d079a42",
+              "snapshotDigest": "sha256:e3067451ae94bc09743dab1f07badf981f4e987dc7205ba066bfdc8a5b5e8848",
+              "snapshotRef": {
+                "digest": "sha256:c8c1616c2bb0d96b440c0594ee50bf85b6ad051afdca2f8ab1bd7c9e4b167cb2",
+                "offset": "0000000000000002_0000000000000002",
+                "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+              },
+              "sourceTrigger": {
+                "digest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+                "offset": "0000000000000001_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+              }
+            },
+            "from": null,
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": null,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+            "schemaVersion": 1,
+            "sequence": 1,
+            "sourceRef": {
+              "digest": "sha256:8e6b066713fe58178222372a9cd447301d19b16d2cd4e77d8bd83d2d6ce322cd",
+              "offset": "0000000000000001_0000000000000001",
+              "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+            },
+            "terminal": null,
+            "to": "requested"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_027573cdaeb2a32ed8e85309f8",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_027573cdaeb2a32ed8e85309f8",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000001_0000000000000001",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+      },
+      {
+        "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:b50e76d161f43c90e7192703ff101464d10876e234bd4937d2dea396f52c1782",
+            "offset": "0000000000000001_0000000000000001",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": null,
+            "attemptNumber": null,
+            "binding": null,
+            "from": "requested",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": null,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+            "schemaVersion": 1,
+            "sequence": 2,
+            "sourceRef": {
+              "digest": "sha256:b50e76d161f43c90e7192703ff101464d10876e234bd4937d2dea396f52c1782",
+              "offset": "0000000000000001_0000000000000001",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+            },
+            "terminal": null,
+            "to": "queued"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_1171651707e0b5d3f67bd53ad0",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_1171651707e0b5d3f67bd53ad0",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000002_0000000000000002",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+      },
+      {
+        "digest": "sha256:a1ac2f8cbfd7ba839e49e17fe3e3e57c448bd2ebd1334210171d3b11533e7857",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_f83986cb3d08b6dd5702f465f3",
+            "attemptNumber": 1,
+            "binding": null,
+            "from": "queued",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": 1,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+            "schemaVersion": 1,
+            "sequence": 3,
+            "sourceRef": {
+              "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+            },
+            "terminal": null,
+            "to": "leased"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_e6b1c0133c9b1816d3c4c8b85f",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_45ddada4ff42215ac9163712f3",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000003_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+      },
+      {
+        "digest": "sha256:1c05b65aa015ad22dea348abbaae4be7db1c5be0692e9c0fa8c74627c600fb90",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+            "attemptId": "at_f83986cb3d08b6dd5702f465f3",
+            "attemptNumber": 1,
+            "capabilityDigest": "sha256:729fa9ef7e9497041e95715bab5a3a47794cec30291ff38929cc78ef2554e25b",
+            "endpoints": [
+              "run.events.write",
+              "run.reply.write"
+            ],
+            "entryDigest": "sha256:26d7304ef693c0c9e9e4756fc4adb1073fb1fd31c2ccfbb2587629a80221e2a5",
+            "expiresAt": "2026-08-10T00:00:30.000Z",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "issuedAt": "2026-08-10T00:00:00.000Z",
+            "leaseGeneration": 1,
+            "leaseId": "ls_419a19affe15c97f8e44e0b991",
+            "queueDigest": "sha256:b1bf2f23ef63264e1351e5d922d416ddcfb2b27f60b48fbfc580fd4f29bdfdf4",
+            "reason": null,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+            "schemaVersion": 1,
+            "sourceRef": {
+              "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+            },
+            "workerId": "scripted-capstone-worker"
+          },
+          "eventType": "run.lease.acquired",
+          "idempotencyKey": "ik_9d43ba53908d4c76dff79e75e9",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_9d43ba53908d4c76dff79e75e9",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000004_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+      },
+      {
+        "digest": "sha256:437e6cfa34fe98340af96b945778f7271c54127f7a678c44b781ea4ef4f5820d",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_f83986cb3d08b6dd5702f465f3",
+            "attemptNumber": 1,
+            "binding": null,
+            "from": "leased",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": 1,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+            "schemaVersion": 1,
+            "sequence": 4,
+            "sourceRef": {
+              "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+            },
+            "terminal": null,
+            "to": "running"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_5b35386f41da910a908170266c",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_6f5e9c8cef71772b30c3c4b84f",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000005_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+      },
+      {
+        "digest": "sha256:93bfe5d8f8f6472a4030ad135359eafc994d5e423a29ea2e6bf53cb7df8bc12a",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_f83986cb3d08b6dd5702f465f3",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+            "schemaVersion": 1,
+            "sequence": 5,
+            "sourceRef": {
+              "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+            },
+            "actionKey": null,
+            "controlId": "ctl_05021579f126ae5ee629d48e12",
+            "controlType": "attempt.deadline.set",
+            "detail": "deadline-frozen",
+            "dueAtMs": 1786320000100
+          },
+          "eventType": "run.control.recorded",
+          "idempotencyKey": "ik_a74c36b3a824f9638dc6ff51b0",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_817642fef8fc3258608e18f1ca",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000006_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+      },
+      {
+        "digest": "sha256:64d6d341d20d0c8a5af7421ea2e2d1b74908e539182628e7e02cfdf1faa98d2e",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_f83986cb3d08b6dd5702f465f3",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+            "schemaVersion": 1,
+            "sequence": 6,
+            "sourceRef": {
+              "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+            },
+            "costUsdCents": 1,
+            "inputTokens": 10,
+            "outputBytes": 64,
+            "outputTokens": 8,
+            "totalTokens": 18,
+            "wallTimeMs": 10
+          },
+          "eventType": "run.usage.recorded",
+          "idempotencyKey": "ik_ce0914041211eed0172246351b",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_97974a1028f80cea3e26aea144",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000007_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+      },
+      {
+        "digest": "sha256:d7346e613a151ca2984450205665d501d6e14cad96c72e626ed6f6cbb8e9684a",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_f83986cb3d08b6dd5702f465f3",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+            "schemaVersion": 1,
+            "sequence": 7,
+            "sourceRef": {
+              "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+            },
+            "contentRef": {
+              "digest": "sha256:dbf16d9663a8253750b375776ac8491ba378cae1e09426bb47b3f771e389318a",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/audit"
+            },
+            "kind": "context-pack",
+            "summary": "bounded capstone context pack"
+          },
+          "eventType": "run.activity.recorded",
+          "idempotencyKey": "ik_77dde080b3126d916cd3bad7fa",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_09123428a9bdcae36a852dae5f",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000008_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+      },
+      {
+        "digest": "sha256:cf9cf71a603c1f6590292fbaec12d549de942785ebe395b51e240dbe33d578f3",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_f83986cb3d08b6dd5702f465f3",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+            "schemaVersion": 1,
+            "sequence": 8,
+            "sourceRef": {
+              "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+            },
+            "resultRef": {
+              "digest": "sha256:a5654dbd6744c16db9b5b47be9f3ab866f12e629d9f8219af900a3409ee3f0c1",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "summary": "scripted reply accepted"
+          },
+          "eventType": "run.result.recorded",
+          "idempotencyKey": "ik_27512893a5e4fcfa2d6d49f98d",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_06aca28c798a90088f592a6530",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000009_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+      },
+      {
+        "digest": "sha256:a1bc12afd584018027ae14077166d7ae266581b3905082df25025d3cd5465190",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+            "attemptId": "at_f83986cb3d08b6dd5702f465f3",
+            "attemptNumber": 1,
+            "capabilityDigest": "sha256:729fa9ef7e9497041e95715bab5a3a47794cec30291ff38929cc78ef2554e25b",
+            "endpoints": [
+              "run.events.write",
+              "run.reply.write"
+            ],
+            "entryDigest": "sha256:26d7304ef693c0c9e9e4756fc4adb1073fb1fd31c2ccfbb2587629a80221e2a5",
+            "expiresAt": "2026-08-10T00:00:30.000Z",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "issuedAt": "2026-08-10T00:00:00.000Z",
+            "leaseGeneration": 1,
+            "leaseId": "ls_419a19affe15c97f8e44e0b991",
+            "queueDigest": "sha256:b1bf2f23ef63264e1351e5d922d416ddcfb2b27f60b48fbfc580fd4f29bdfdf4",
+            "reason": "run-control",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+            "schemaVersion": 1,
+            "sourceRef": {
+              "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+            },
+            "workerId": "scripted-capstone-worker"
+          },
+          "eventType": "run.lease.superseded",
+          "idempotencyKey": "ik_640706aa2008b03e0b8cc2c2b3",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_640706aa2008b03e0b8cc2c2b3",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000010_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+      },
+      {
+        "digest": "sha256:1760b8b3d9d60de84dd0b9620d07f06739a6f0e6bc5cf82e4db46fa6b4fc778e",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_f83986cb3d08b6dd5702f465f3",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+            "schemaVersion": 1,
+            "sequence": 9,
+            "sourceRef": {
+              "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+            },
+            "actionKey": null,
+            "controlId": "ctl_75559aa4859ab00953255519f7",
+            "controlType": "process.terminated",
+            "detail": "group-kill",
+            "dueAtMs": null
+          },
+          "eventType": "run.control.recorded",
+          "idempotencyKey": "ik_b173fccad01a6162c440a25abc",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_7a7033778965957d87b3519d23",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000011_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+      },
+      {
+        "digest": "sha256:3bf2b8697b20a4434aa14cbc99af1637cd6d85a02c6287da390d41e1f65a93db",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_f83986cb3d08b6dd5702f465f3",
+            "attemptNumber": 1,
+            "binding": null,
+            "from": "running",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": 1,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+            "schemaVersion": 1,
+            "sequence": 10,
+            "sourceRef": {
+              "digest": "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+            },
+            "terminal": {
+              "failureCode": null,
+              "kind": "completed",
+              "reasonCode": null,
+              "resultRef": {
+                "digest": "sha256:a5654dbd6744c16db9b5b47be9f3ab866f12e629d9f8219af900a3409ee3f0c1",
+                "offset": "0000000000000002_0000000000000002",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+              }
+            },
+            "to": "completed"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_27d0c4084035182e78a52fb124",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_64004babf4a3bec4916457ab9b",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000012_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr"
+      }
+    ],
+    "streamDigest": "sha256:681939ba2e3cccba208ceafc268db57e982e2402beb38700819013cd019529be"
+  },
+  "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv": {
+    "head": "0000000000000009_0000000000000009",
+    "records": [
+      {
+        "digest": "sha256:1abb51a5f8148a27d95f346e27e8cf66b78c39efb96a06cce6531c90b4f75977",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:8e6b066713fe58178222372a9cd447301d19b16d2cd4e77d8bd83d2d6ce322cd",
+            "offset": "0000000000000001_0000000000000001",
+            "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": null,
+            "attemptNumber": null,
+            "binding": {
+              "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+              "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+              "invocationRef": {
+                "digest": "sha256:8e6b066713fe58178222372a9cd447301d19b16d2cd4e77d8bd83d2d6ce322cd",
+                "offset": "0000000000000001_0000000000000001",
+                "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+              },
+              "policy": {
+                "allowApprovals": false,
+                "maxAttempts": 3,
+                "maxCostUsdCents": 250,
+                "maxInputTokens": 8000,
+                "maxOutputTokens": 4000,
+                "maxWallTimeMs": 900000,
+                "version": 1
+              },
+              "policyDigest": "sha256:7d7621a9b5984daadc422e2286b9967727d695df89c4687e35dfdd444d079a42",
+              "snapshotDigest": "sha256:e3067451ae94bc09743dab1f07badf981f4e987dc7205ba066bfdc8a5b5e8848",
+              "snapshotRef": {
+                "digest": "sha256:c8c1616c2bb0d96b440c0594ee50bf85b6ad051afdca2f8ab1bd7c9e4b167cb2",
+                "offset": "0000000000000002_0000000000000002",
+                "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+              },
+              "sourceTrigger": {
+                "digest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+                "offset": "0000000000000001_0000000000000001",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+              }
+            },
+            "from": null,
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": null,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv",
+            "schemaVersion": 1,
+            "sequence": 1,
+            "sourceRef": {
+              "digest": "sha256:8e6b066713fe58178222372a9cd447301d19b16d2cd4e77d8bd83d2d6ce322cd",
+              "offset": "0000000000000001_0000000000000001",
+              "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+            },
+            "terminal": null,
+            "to": "requested"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_56d775260e0d9f93f687081fc2",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_56d775260e0d9f93f687081fc2",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000001_0000000000000001",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+      },
+      {
+        "digest": "sha256:2fcb6b2d83f6896f6d28934ae851baa26bc8bc39a2ea15d3f2cb95d7c19f205d",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:1abb51a5f8148a27d95f346e27e8cf66b78c39efb96a06cce6531c90b4f75977",
+            "offset": "0000000000000001_0000000000000001",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": null,
+            "attemptNumber": null,
+            "binding": null,
+            "from": "requested",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": null,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv",
+            "schemaVersion": 1,
+            "sequence": 2,
+            "sourceRef": {
+              "digest": "sha256:1abb51a5f8148a27d95f346e27e8cf66b78c39efb96a06cce6531c90b4f75977",
+              "offset": "0000000000000001_0000000000000001",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+            },
+            "terminal": null,
+            "to": "queued"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_a8430a10d08ec63cb0f111ea47",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_a8430a10d08ec63cb0f111ea47",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000002_0000000000000002",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+      },
+      {
+        "digest": "sha256:46f43653f171c6e0eafe20f04910c5d873f3977c9647a98113f0d37a813f48b6",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:2fcb6b2d83f6896f6d28934ae851baa26bc8bc39a2ea15d3f2cb95d7c19f205d",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_06e5717de9dbf1910cbec919b7",
+            "attemptNumber": 1,
+            "binding": null,
+            "from": "queued",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": 1,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv",
+            "schemaVersion": 1,
+            "sequence": 3,
+            "sourceRef": {
+              "digest": "sha256:2fcb6b2d83f6896f6d28934ae851baa26bc8bc39a2ea15d3f2cb95d7c19f205d",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+            },
+            "terminal": null,
+            "to": "leased"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_2c44ac6c1576446b3035cb7783",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_09ddc94dd75611999972eec94c",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000003_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+      },
+      {
+        "digest": "sha256:b25511c2e51ffe526fb2a0ce42a312dc13a9521ee4bf52ce0db0341bc9bd82e3",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:2fcb6b2d83f6896f6d28934ae851baa26bc8bc39a2ea15d3f2cb95d7c19f205d",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+            "attemptId": "at_06e5717de9dbf1910cbec919b7",
+            "attemptNumber": 1,
+            "capabilityDigest": "sha256:b89d5b70b911005b9d48c13c6d843047fc5a086857ba2ad4d2791f0ea38abd1b",
+            "endpoints": [
+              "run.events.write",
+              "run.reply.write"
+            ],
+            "entryDigest": "sha256:e223ab9583e1478af877e8115462b4ed07365e990cb9bc1c92eb386fa072c22a",
+            "expiresAt": "2026-08-10T00:00:01.000Z",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "issuedAt": "2026-08-10T00:00:00.000Z",
+            "leaseGeneration": 1,
+            "leaseId": "ls_1466bfb47f8ca9622bb7d66e60",
+            "queueDigest": "sha256:178552e2f6f06d09224f4a7effae9b09533495ee0f96849aca34d23b005832ab",
+            "reason": null,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv",
+            "schemaVersion": 1,
+            "sourceRef": {
+              "digest": "sha256:2fcb6b2d83f6896f6d28934ae851baa26bc8bc39a2ea15d3f2cb95d7c19f205d",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+            },
+            "workerId": "e3-t08-fault-v"
+          },
+          "eventType": "run.lease.acquired",
+          "idempotencyKey": "ik_9812d3910dea6cf14dbe8c6d86",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_9812d3910dea6cf14dbe8c6d86",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "offset": "0000000000000004_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+      },
+      {
+        "digest": "sha256:fa8334057c4840272f4cc310243686264288901db47a53aa30c1c626d77bae95",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:2fcb6b2d83f6896f6d28934ae851baa26bc8bc39a2ea15d3f2cb95d7c19f205d",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_06e5717de9dbf1910cbec919b7",
+            "attemptNumber": 1,
+            "binding": null,
+            "from": "leased",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": 1,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv",
+            "schemaVersion": 1,
+            "sequence": 4,
+            "sourceRef": {
+              "digest": "sha256:2fcb6b2d83f6896f6d28934ae851baa26bc8bc39a2ea15d3f2cb95d7c19f205d",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+            },
+            "terminal": null,
+            "to": "running"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_d8cc4017cb25a0f932ebadf73f",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_24c9d890f1ac8ef4710963f00a",
+          "serverTimestamp": "2026-08-10T00:00:00.001Z"
+        },
+        "offset": "0000000000000005_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+      },
+      {
+        "digest": "sha256:4f75dbf30980c6506a3c6cd747b2837ed8d4312c6eb39e328deb9e3eb79feee3",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:2fcb6b2d83f6896f6d28934ae851baa26bc8bc39a2ea15d3f2cb95d7c19f205d",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_06e5717de9dbf1910cbec919b7",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv",
+            "schemaVersion": 1,
+            "sequence": 5,
+            "sourceRef": {
+              "digest": "sha256:2fcb6b2d83f6896f6d28934ae851baa26bc8bc39a2ea15d3f2cb95d7c19f205d",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+            },
+            "actionKey": null,
+            "controlId": "ctl_7124381296104243e68259f6e3",
+            "controlType": "attempt.deadline.set",
+            "detail": "deadline-frozen",
+            "dueAtMs": 1786320000101
+          },
+          "eventType": "run.control.recorded",
+          "idempotencyKey": "ik_829427b12be1cf8f4bdc64fd7d",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_dc08033cd34063f418647c7272",
+          "serverTimestamp": "2026-08-10T00:00:00.001Z"
+        },
+        "offset": "0000000000000006_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+      },
+      {
+        "digest": "sha256:4e189af8ee238805e9fd3f9acc568e2444c6348089b611dd427925f144eef538",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:2fcb6b2d83f6896f6d28934ae851baa26bc8bc39a2ea15d3f2cb95d7c19f205d",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+            "attemptId": "at_06e5717de9dbf1910cbec919b7",
+            "attemptNumber": 1,
+            "capabilityDigest": "sha256:b89d5b70b911005b9d48c13c6d843047fc5a086857ba2ad4d2791f0ea38abd1b",
+            "endpoints": [
+              "run.events.write",
+              "run.reply.write"
+            ],
+            "entryDigest": "sha256:e223ab9583e1478af877e8115462b4ed07365e990cb9bc1c92eb386fa072c22a",
+            "expiresAt": "2026-08-10T00:00:01.000Z",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "issuedAt": "2026-08-10T00:00:00.002Z",
+            "leaseGeneration": 1,
+            "leaseId": "ls_1466bfb47f8ca9622bb7d66e60",
+            "queueDigest": "sha256:178552e2f6f06d09224f4a7effae9b09533495ee0f96849aca34d23b005832ab",
+            "reason": "run-control",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv",
+            "schemaVersion": 1,
+            "sourceRef": {
+              "digest": "sha256:2fcb6b2d83f6896f6d28934ae851baa26bc8bc39a2ea15d3f2cb95d7c19f205d",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+            },
+            "workerId": "e3-t08-fault-v"
+          },
+          "eventType": "run.lease.superseded",
+          "idempotencyKey": "ik_0a45b97c99561b7905c4f07705",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_0a45b97c99561b7905c4f07705",
+          "serverTimestamp": "2026-08-10T00:00:00.002Z"
+        },
+        "offset": "0000000000000007_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+      },
+      {
+        "digest": "sha256:7889ab26abd6ec109cd87f87bce03ca6d95ebb9bbb59e396ec0c1909bc9f0195",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:2fcb6b2d83f6896f6d28934ae851baa26bc8bc39a2ea15d3f2cb95d7c19f205d",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_06e5717de9dbf1910cbec919b7",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv",
+            "schemaVersion": 1,
+            "sequence": 6,
+            "sourceRef": {
+              "digest": "sha256:2fcb6b2d83f6896f6d28934ae851baa26bc8bc39a2ea15d3f2cb95d7c19f205d",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+            },
+            "actionKey": null,
+            "controlId": "ctl_4364a86b01eca8622486bdfe1f",
+            "controlType": "process.terminated",
+            "detail": "group-kill",
+            "dueAtMs": null
+          },
+          "eventType": "run.control.recorded",
+          "idempotencyKey": "ik_5101bcada102a9003d7514899b",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_9a6dd83d71d0435b8400246e7a",
+          "serverTimestamp": "2026-08-10T00:00:00.002Z"
+        },
+        "offset": "0000000000000008_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+      },
+      {
+        "digest": "sha256:866e944da2da5d8c3d6f0320caaaee1f461d586db6c7dad2f8abf63691621f60",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:2fcb6b2d83f6896f6d28934ae851baa26bc8bc39a2ea15d3f2cb95d7c19f205d",
+            "offset": "0000000000000002_0000000000000002",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "attemptId": "at_06e5717de9dbf1910cbec919b7",
+            "attemptNumber": 1,
+            "binding": null,
+            "from": "running",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "leaseGeneration": 1,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv",
+            "schemaVersion": 1,
+            "sequence": 7,
+            "sourceRef": {
+              "digest": "sha256:2fcb6b2d83f6896f6d28934ae851baa26bc8bc39a2ea15d3f2cb95d7c19f205d",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+            },
+            "terminal": {
+              "failureCode": null,
+              "kind": "cancelled",
+              "reasonCode": "agent-disabled",
+              "resultRef": null
+            },
+            "to": "cancelled"
+          },
+          "eventType": "run.lifecycle.changed",
+          "idempotencyKey": "ik_0a5251f4da082fbebea710202f",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_873e7658d582268e388b85924f",
+          "serverTimestamp": "2026-08-10T00:00:00.002Z"
+        },
+        "offset": "0000000000000009_0000000000000000",
+        "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+      }
+    ],
+    "streamDigest": "sha256:0d3c2ef0add411da68f71245215eaaefd96c057d170b16fdb84b3b480b2c4de3"
+  },
+  "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/audit": {
+    "head": "0000000000000002_0000000000000002",
+    "records": [
+      {
+        "batchCount": 1,
+        "finalScheduleDigest": "sha256:49e242e69cfdb7261d066ab4e49c4774ff2de4ea4069799baa82c7dfb1ebaa46",
+        "kind": "conversation.schedule.planned",
+        "refusalCount": 0,
+        "scheduleDigest": "sha256:b0d766b8986d746a631d4bc5e078d7733c71c109d3af90d40dd2f6c9ccb708f5",
+        "sourceCount": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/audit"
+      },
+      {
+        "content": {
+          "accounting": {
+            "attachmentBytes": 0,
+            "bytes": 213,
+            "estimatedTokens": 10,
+            "historyItems": 1,
+            "items": 1
+          },
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "context": {
+            "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "scope": "current-channel",
+            "threadId": null
+          },
+          "instructions": [],
+          "items": [
+            {
+              "citation": {
+                "contentKind": "conversation-message",
+                "eventDigest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+                "offset": "0000000000000001_0000000000000001",
+                "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+                "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "content": {
+                "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "contentType": "text/plain",
+                "messageId": "capstone-trigger",
+                "revision": 1,
+                "rootMessageId": null,
+                "text": "@helper summarize the authorized thread"
+              },
+              "contentKind": "conversation-message",
+              "id": "message:capstone-trigger",
+              "ordinal": 1,
+              "trust": "untrusted-content"
+            }
+          ],
+          "kind": "context-pack",
+          "omitted": [],
+          "policy": {
+            "includePrivate": false,
+            "includeThreadHistory": true,
+            "maxAttachmentBytes": 64000,
+            "maxBytes": 20000,
+            "maxEstimatedTokens": 4000,
+            "maxHistoryDepth": 100,
+            "maxItems": 8,
+            "maxMessages": 4,
+            "workspaceInputPaths": []
+          },
+          "schemaVersion": 1,
+          "sourceHeads": [
+            {
+              "digest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+              "offset": "0000000000000001_0000000000000001",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+            }
+          ],
+          "trigger": {
+            "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "messageId": "capstone-trigger",
+            "threadId": null,
+            "citation": {
+              "contentKind": "conversation-trigger",
+              "eventDigest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+              "offset": "0000000000000001_0000000000000001",
+              "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+            }
+          },
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "packDigest": "sha256:dbf16d9663a8253750b375776ac8491ba378cae1e09426bb47b3f771e389318a"
+        },
+        "digest": "sha256:dbf16d9663a8253750b375776ac8491ba378cae1e09426bb47b3f771e389318a",
+        "kind": "context-pack",
+        "offset": "0000000000000002_0000000000000002",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/audit"
+      }
+    ],
+    "streamDigest": "sha256:727e8599acf4fc2ca72d59934569db571d840854c20382a05356dd89f1312147"
+  },
+  "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations": {
+    "head": "0000000000000001_0000000000000001",
+    "records": [
+      {
+        "digest": "sha256:8e6b066713fe58178222372a9cd447301d19b16d2cd4e77d8bd83d2d6ce322cd",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "causation": {
+            "digest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+            "offset": "0000000000000001_0000000000000001",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+            "correlationId": "cr_ca39199b128c4dffcefe7824e3",
+            "invocationId": "iv_e3315cbb2d8e996b9fddee8baa",
+            "policy": {
+              "allowApprovals": false,
+              "maxAttempts": 3,
+              "maxCostUsdCents": 250,
+              "maxInputTokens": 8000,
+              "maxOutputTokens": 4000,
+              "maxWallTimeMs": 900000,
+              "version": 1
+            },
+            "policyDigest": "sha256:7d7621a9b5984daadc422e2286b9967727d695df89c4687e35dfdd444d079a42",
+            "promptRef": {
+              "digest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+              "offset": "0000000000000001_0000000000000001",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "schemaVersion": 1,
+            "snapshotDigest": "sha256:e3067451ae94bc09743dab1f07badf981f4e987dc7205ba066bfdc8a5b5e8848",
+            "snapshotRef": {
+              "digest": "sha256:c8c1616c2bb0d96b440c0594ee50bf85b6ad051afdca2f8ab1bd7c9e4b167cb2",
+              "offset": "0000000000000002_0000000000000002",
+              "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+            },
+            "sourceTrigger": {
+              "digest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+              "offset": "0000000000000001_0000000000000001",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "triggerType": "channel.mention"
+          },
+          "eventType": "workspace.invocation.requested",
+          "idempotencyKey": "ik_ca39199b128c4dffcefe7824e3",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_ca39199b128c4dffcefe7824e3",
+          "serverTimestamp": "2026-08-10T00:00:00.000Z"
+        },
+        "dispatch": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "expectedHead": "0000000000000000_0000000000000000",
+          "idempotencyKey": "ik_ca39199b128c4dffcefe7824e3",
+          "operation": "workspace.invocation.requested",
+          "requestDigest": "sha256:47607d8eb421b8e6bf669f7ccbe93a22d7ced7666206b2c837366e3f6471499c",
+          "schemaVersion": 1,
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    ],
+    "streamDigest": "sha256:eb8e0003cf53b89cff5e962107cde9152bb526adc08a52274f91af38f37a9ef0"
+  }
+}

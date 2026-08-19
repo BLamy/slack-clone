@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T02",
+  "implementationCommit": "db8077fd92e9578913886c543090d5cce0b5b239",
+  "runId": "cold-9987-msawhncx",
+  "result": "PASS",
+  "stackA": {
+    "appPort": 44885,
+    "auth0Port": 44884,
+    "durableStreamsPort": 44883,
+    "artifactRoot": ".artifacts/e0-t02/cold-9987-msawhncx/a"
+  },
+  "stackB": {
+    "appPort": 22193,
+    "auth0Port": 22192,
+    "durableStreamsPort": 22191,
+    "artifactRoot": ".artifacts/e0-t02/cold-9987-msawhncx/b"
+  },
+  "artifactRootsDistinct": true,
+  "foreignSessionRefused": true,
+  "sameRoomNameStreamsIsolated": true,
+  "childrenStopped": true,
+  "unrelatedProcessesUntouched": true,
+  "recordingsUnchanged": true
+}

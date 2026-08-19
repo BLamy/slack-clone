@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stream-slack.local/schemas/channel-events.v1.schema.json",
+  "title": "Stream Slack channel events v1",
+  "oneOf": [
+    {
+      "title": "Channel created",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channelId", "creatorId", "displayName", "kind"],
+      "properties": {
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "creatorId": { "$ref": "#/$defs/principalId" },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "kind": { "enum": ["public", "private"] }
+      }
+    },
+    {
+      "title": "Channel renamed",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channelId", "displayName", "expectedChannelRevision"],
+      "properties": {
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "expectedChannelRevision": { "type": "integer", "minimum": 1 }
+      }
+    },
+    {
+      "title": "Channel archived or unarchived",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channelId", "expectedChannelRevision"],
+      "properties": {
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "expectedChannelRevision": { "type": "integer", "minimum": 1 },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 240 }
+      }
+    },
+    {
+      "title": "Channel membership invited",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "channelId",
+        "expectedChannelRevision",
+        "inviteId",
+        "principalId"
+      ],
+      "properties": {
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "expectedChannelRevision": { "type": "integer", "minimum": 1 },
+        "inviteId": { "$ref": "#/$defs/inviteId" },
+        "principalId": { "$ref": "#/$defs/principalId" }
+      }
+    },
+    {
+      "title": "Channel membership joined",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channelId", "expectedChannelRevision", "principalId"],
+      "properties": {
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "expectedChannelRevision": { "type": "integer", "minimum": 1 },
+        "inviteId": { "$ref": "#/$defs/inviteId" },
+        "principalId": { "$ref": "#/$defs/principalId" }
+      }
+    },
+    {
+      "title": "Channel membership left or removed",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channelId", "expectedChannelRevision", "principalId"],
+      "properties": {
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "expectedChannelRevision": { "type": "integer", "minimum": 1 },
+        "principalId": { "$ref": "#/$defs/principalId" },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 240 }
+      }
+    },
+    {
+      "title": "Direct channel created",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channelId", "creatorId", "participantIds"],
+      "properties": {
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "creatorId": { "$ref": "#/$defs/principalId" },
+        "participantIds": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "$ref": "#/$defs/principalId" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "channelId": {
+      "type": "string",
+      "pattern": "^ch_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "principalId": {
+      "type": "string",
+      "pattern": "^pr_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "inviteId": {
+      "type": "string",
+      "pattern": "^iv_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+    }
+  }
+}

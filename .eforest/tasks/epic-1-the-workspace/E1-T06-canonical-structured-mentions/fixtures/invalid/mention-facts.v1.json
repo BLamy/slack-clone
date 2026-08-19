@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "invalidFactCases": [
+    {
+      "name": "forged-principal-scope",
+      "fact": {
+        "handle": "ada",
+        "kind": "human",
+        "principalId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_dddddddddddddddddddddddddd",
+        "span": { "startByte": 0, "endByte": 4 },
+        "text": "@ada"
+      },
+      "code": "PRINCIPAL_SCOPE_MISMATCH"
+    },
+    {
+      "name": "wrong-byte-span",
+      "fact": {
+        "handle": "ada",
+        "kind": "human",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "span": { "startByte": 0, "endByte": 4 },
+        "text": "@ada"
+      },
+      "code": "MENTION_TEXT_MISMATCH"
+    },
+    {
+      "name": "forged-principal-substitution",
+      "fact": {
+        "handle": "ada",
+        "kind": "human",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "span": { "startByte": 6, "endByte": 10 },
+        "text": "@ada"
+      },
+      "reducer": true,
+      "code": "REDUCER_MENTION_HANDLE_MISMATCH"
+    },
+    {
+      "name": "forged-kind",
+      "fact": {
+        "handle": "ada",
+        "kind": "agent",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "span": { "startByte": 6, "endByte": 10 },
+        "text": "@ada"
+      },
+      "reducer": true,
+      "code": "REDUCER_MENTION_KIND_MISMATCH"
+    },
+    {
+      "name": "ambiguous-principal-target",
+      "fact": {
+        "handle": "ambiguous",
+        "kind": "human",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "span": { "startByte": 6, "endByte": 16 },
+        "text": "@ambiguous"
+      },
+      "reducer": true,
+      "text": "hello @ambiguous",
+      "code": "REDUCER_MENTION_AMBIGUOUS_TARGET"
+    },
+    {
+      "name": "disabled-principal-target",
+      "fact": {
+        "handle": "disabled",
+        "kind": "human",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "span": { "startByte": 6, "endByte": 15 },
+        "text": "@disabled"
+      },
+      "reducer": true,
+      "text": "hello @disabled",
+      "code": "REDUCER_MENTION_TARGET_DISABLED"
+    },
+    {
+      "name": "non-member-principal-target",
+      "fact": {
+        "handle": "outsider",
+        "kind": "human",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_kkkkkkkkkkkkkkkkkkkkkkkkkk",
+        "span": { "startByte": 6, "endByte": 15 },
+        "text": "@outsider"
+      },
+      "reducer": true,
+      "text": "hello @outsider",
+      "code": "REDUCER_MENTION_TARGET_NOT_MEMBER"
+    },
+    {
+      "name": "overlapping-spans",
+      "text": "@@ada",
+      "facts": [
+        {
+          "handle": "ada",
+          "kind": "human",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "span": { "startByte": 1, "endByte": 5 },
+          "text": "@ada"
+        },
+        {
+          "handle": "ada",
+          "kind": "human",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "span": { "startByte": 1, "endByte": 5 },
+          "text": "@ada"
+        }
+      ],
+      "code": "MENTION_INVALID_SPAN"
+    }
+  ]
+}

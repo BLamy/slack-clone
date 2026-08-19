@@ -1,0 +1,234 @@
+{
+  "proofType": "Critic 4 independent exact-head verification and Replay interrogation",
+  "criticRole": "fresh critic; did not implement E0-T01 product code or builder evidence",
+  "reviewedBase": "9ec2eca253e9c1c2c18008472f4cf77079a1b932",
+  "reviewedHead": "d2531992613349f02e7ae27dd21f113895f1e11a",
+  "applicationCommit": "d6abddc8908275931b73fcdd9c8b084353aad3b4",
+  "predictionsWrittenBeforeExecution": "work/critic4-predictions.md",
+  "coldClone": {
+    "commands": [
+      "git clone --no-hardlinks /Users/brettlamy/Dev/slack-clone <ticket-work>/critic4-cold/repo",
+      "git checkout --detach d2531992613349f02e7ae27dd21f113895f1e11a",
+      "make verify-E0-T01",
+      "diff -u evidence/verify-output.txt <(make verify-E0-T01)",
+      "pnpm test:ledger"
+    ],
+    "headMatched": true,
+    "makeVerify": {
+      "exitCode": 0,
+      "checks": 9,
+      "skipped": 0,
+      "outputByteIdenticalToCommittedEvidence": true
+    },
+    "ledgerTests": {
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    "goldenDigests": {
+      "eventEnvelope": "sha256:4947425de8918cc240bee9704f7d9b6eaa57253f6bca047cc318f97b0d4c276a",
+      "sourceReference": "sha256:930748f19cbf2a9d8f4986a6d411c81279d0c080a53f701d01f845011abb97bd",
+      "matchManifest": true
+    }
+  },
+  "availableGates": {
+    "pnpm test": {
+      "exitCode": 0,
+      "ledgerPassed": 6,
+      "browserPassed": 5,
+      "failed": 0
+    },
+    "make verify-E0-T01": {
+      "exitCode": 0,
+      "checks": 9,
+      "skipped": 0
+    },
+    "unavailable": {
+      "pnpm run format:check": "ERR_PNPM_NO_SCRIPT",
+      "pnpm run lint": "ERR_PNPM_NO_SCRIPT",
+      "pnpm run typecheck": "ERR_PNPM_NO_SCRIPT",
+      "pnpm run build": "ERR_PNPM_NO_SCRIPT"
+    },
+    "backlogAudit": {
+      "preVerdict": "ok: 95 tasks, 12 epics, 12 capstones, dependency graph acyclic",
+      "postVerdictExitCode": 1,
+      "postVerdictErrors": [
+        "fewer than three binary acceptance criteria",
+        "acceptance boxes must remain unchecked"
+      ],
+      "scopeNote": "tools/audit_backlog.py lines 101-104 require at least three unchecked boxes and forbid checked boxes. That initial-backlog authoring rule conflicts with the explicit critic instruction to check all criteria after verification; it is not an E0-T01 acceptance gate. The verified status and checked criteria were preserved, and tools/build_queue.py completed successfully."
+    }
+  },
+  "independentAttacks": {
+    "harness": "work/critic4-attacks.mjs",
+    "seed": "0x4c417",
+    "freshCanary": "CRITIC4-CANARY-4c417-20260801-DO-NOT-LEAK",
+    "freshIdentifiers": {
+      "workspaceA": "ws_4c417qkbmz8hd5v0rtn29fjw6y",
+      "workspaceB": "ws_8pmwr4t0zx6cbk1hs82dnvgj73",
+      "channelA": "ch_4c417qkbmz8hd5v0rtn29fjw6y_8pmwr4t0zx6cbk1hs82dnvgj73",
+      "channelB": "ch_8pmwr4t0zx6cbk1hs82dnvgj73_4c417qkbmz8hd5v0rtn29fjw6y"
+    },
+    "checks": 171,
+    "passed": 171,
+    "failed": 0,
+    "canonicalByteFlips": 1968,
+    "digestSurvivors": 0,
+    "appendCallsAcrossRejectedInputsAndFixtures": 0,
+    "beforeAfterStreamBytesIdentical": true,
+    "beforeAfterStreamDigestIdentical": true,
+    "hostileIdentifierCollisions": 0,
+    "canaryReflectedInTypedErrors": 0,
+    "coverage": [
+      "traversal, percent encoding, separators, controls, case, malformed lengths, Crockford exclusions, Unicode confusables, bidi and zero-width forms all refused without normalization",
+      "cross-workspace scoped IDs and stream names refused",
+      "all eight topology builders parsed and round-tripped in their owning workspace",
+      "non-finite and unsafe numbers, invalid Unicode, unsupported values, non-plain objects, sparse arrays, cycles and prototype-sensitive keys refused",
+      "unknown versions and event types, malformed IDs, client-issued identity/time, extra keys, malformed source references and unsafe data refused before append",
+      "all five invalid fixtures reproduced their exact committed error code and path",
+      "issuance extra-key, timestamp, malformed event-ID and invalid-clock attacks refused",
+      "canonical bytes and digests repeated across cloned and reordered logical values"
+    ]
+  },
+  "detectorSensitivity": {
+    "clone": "ticket work/critic4-sensitivity disposable clone detached at reviewedHead",
+    "defect": "removed canonical source-offset pattern validation while retaining string type validation",
+    "directVerifier": {
+      "command": "node tools/verify-e0-t01.mjs",
+      "exitCode": 1
+    },
+    "makeVerifier": {
+      "command": "make verify-E0-T01",
+      "exitCode": 2,
+      "trailer": "make: *** [verify-E0-T01] Error 1"
+    },
+    "failure": "expected a typed ledger refusal at tools/verify-e0-t01.mjs:65 from the source-reference attack at line 255",
+    "detectorSensitive": true
+  },
+  "critic3Findings": {
+    "C3-F2": {
+      "status": "cleared",
+      "installedPackageVersion": "@replayio/playwright@5.0.3",
+      "lockfileResolutionExact": true,
+      "initializerSource": "node_modules/@replayio/playwright/dist/_bundled/@replayio/test-utils/metadata.js",
+      "behavioralObservation": "initMetadataFile created literal {} at an absent explicit RECORD_REPLAY_METADATA_FILE path and returned that path",
+      "descriptiveMetadataScope": "PLAYWRIGHT_REPLAY_METADATA is parsed separately by the Replay fixture"
+    },
+    "C3-F3": {
+      "status": "cleared",
+      "playwrightPageScope": "response listener observed 200, 201 and the expected intermediate 302; no page response was >=400",
+      "replayTableScope": "21 terminal page-network entries, all 2xx; the intermediate redirect was not enumerated",
+      "apiRequestContextScope": "legacy display-name spoof PATCH was separately asserted at 403 and is excluded from both page and Replay network counts",
+      "scopesDisclosedConsistently": true
+    }
+  },
+  "replayInterrogation": {
+    "recordingId": "368a3b30-c22d-4dcd-b010-fb8803bd9406",
+    "tools": [
+      "RecordingOverview",
+      "ConsoleMessages summary",
+      "ConsoleMessages messages",
+      "NetworkRequest summary",
+      "NetworkRequest complete request list",
+      "NetworkRequest detail for request index 20",
+      "UncaughtException",
+      "UserInteractions summary",
+      "SearchSources",
+      "Evaluate"
+    ],
+    "queryable": true,
+    "finalUrl": "http://127.0.0.1:5175/app?room=demo",
+    "durationMs": 49356,
+    "errors": 0,
+    "warnings": 0,
+    "console": {
+      "total": 1,
+      "info": 1,
+      "errors": 0,
+      "warnings": 0,
+      "marker": "E0-T01 interrogable Replay proof",
+      "point": "Point:1"
+    },
+    "network": {
+      "total": 21,
+      "failed": 0,
+      "noResponse": 0,
+      "slow": 0,
+      "statusDistribution": {
+        "2xx": 21
+      },
+      "status200": 20,
+      "status201": 1,
+      "methods": {
+        "GET": 18,
+        "POST": 1,
+        "PATCH": 2
+      }
+    },
+    "uncaughtExceptions": 0,
+    "interactions": {
+      "total": 11,
+      "clicks": 11,
+      "keypresses": 0,
+      "startMs": 16838,
+      "endMs": 28342
+    },
+    "sourceExecution": {
+      "source": "http://127.0.0.1:5175/app.js",
+      "streamDigestAssignmentHits": 86,
+      "saveMessageDispatchHits": 2,
+      "saveMessageBodyHits": 2,
+      "editedMessageRenderHits": 13
+    },
+    "finalStreamCorrelation": {
+      "networkRequestIndex": 20,
+      "networkRequestPoint": "Point:2",
+      "networkStatus": 200,
+      "apiOffset": "0000000000000000_0000000000000659",
+      "domOffset": "0000000000000000_0000000000000659",
+      "apiDigest": "sha256:3298644cf0a115db55630fec88dca13ed18a6eeb33fb567c299e894e58885ba8",
+      "domDigest": "sha256:3298644cf0a115db55630fec88dca13ed18a6eeb33fb567c299e894e58885ba8",
+      "connectionState": "live",
+      "equal": true
+    },
+    "replayioList": {
+      "status": "Uploaded",
+      "duration": "49s"
+    }
+  },
+  "sameSessionMp4": {
+    "path": "recordings/e0-t01-2d40835-final.mp4",
+    "sha256": "33fb975ea66928e5179a787ccb147af2d2506a29180266f8ba6d54fc373b4c9f",
+    "bytes": 284018,
+    "codec": "h264",
+    "profile": "High",
+    "resolution": "1280x720",
+    "frames": 588,
+    "durationSeconds": 19.6,
+    "probeScore": 100,
+    "allClaimsMatch": true
+  },
+  "coverageAudit": {
+    "executed": [
+      "src/ledger/*, schemas, all valid/invalid fixtures, docs/stream-topology.md, tools/verify-e0-t01.mjs and test/ledger/*",
+      "src/server.mjs routing, public landing/login/chat, durable editing and legacy identity refusal plus public/app.js, app.html, index.html and styles.css through pnpm test 5/5",
+      "Makefile and package.json gate wiring through cold and primary commands",
+      "tools/audit_backlog.py and tools/build_queue.py",
+      "Replay browser behavior and app.js source execution through direct MCP interrogation"
+    ],
+    "explicitlyWaived": [
+      "AGENTS.md, ROADMAP.md, CLAUDE.md, README.md, .eforest planning/task metadata and pull-request template: documentation or queue metadata",
+      ".gitignore and .replay/config.json: configuration without independent product behavior",
+      "scripts/e0-t01-replay-flow.js and metadata sentinel: evidence harness audited against the recording and installed Replay contract, not product runtime",
+      "tests/replay-concurrent.spec.mjs: test-only helper excluded by playwright.config.mjs; no acceptance criterion depends on it"
+    ],
+    "dead": [],
+    "requiringEvidence": []
+  },
+  "redactionAudit": {
+    "rawSecretsFound": false,
+    "customerContentFound": false,
+    "note": "The deliberately incorrect password string and local emulator fixture token are non-production test fixtures; no provider credential, session cookie or unredacted HTTP capture is stored here."
+  },
+  "verdict": "verified"
+}

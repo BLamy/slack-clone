@@ -1,0 +1,12 @@
+{
+  "proofType": "targeted defect in a disposable clone",
+  "baseImplementationCommit": "2d40835e62f0e5663f7a9720a63637c2f8ffa3b7",
+  "mutation": "disabled validateEventEnvelope schemaVersion equality check",
+  "command": "make verify-E0-T01",
+  "expected": "non-zero exit on the forward-version refusal fixture",
+  "observedNodeExitCode": 1,
+  "observedMakeExitCode": 2,
+  "observedFailure": "forward-version fixture no longer produced LedgerValidationError at tools/verify-e0-t01.mjs:148",
+  "exitCodeExplanation": "The Node process exits 1. GNU make reports a failed recipe with exit 2 while preserving `make: *** [verify-E0-T01] Error 1` in its output.",
+  "detectorSensitive": true
+}

@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 0,
+  "instructions": {
+    "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+    "task": "Answer the current request using only the authorized context.",
+    "guardrails": [
+      "Never disclose credentials or secret-shaped values.",
+      "Keep replies bounded and auditable."
+    ]
+  },
+  "contextPolicy": {
+    "scope": "current-channel",
+    "includePrivate": false,
+    "includeThreadHistory": true,
+    "maxMessages": 50,
+    "maxBytes": 65536
+  },
+  "triggerPolicy": {
+    "events": ["mention", "manual"],
+    "requireMention": false,
+    "allowMessageEdits": false
+  },
+  "delegationPolicy": {
+    "enabled": false,
+    "maxDepth": 0,
+    "maxChildren": 0,
+    "allowCrossChannel": false
+  },
+  "concurrencyPolicy": {
+    "maxConcurrentRuns": 4,
+    "maxConcurrentPerChannel": 1,
+    "queueStrategy": "serialize"
+  },
+  "budget": {
+    "timeoutSeconds": 900,
+    "maxInputTokens": 8000,
+    "maxOutputTokens": 4000,
+    "maxTotalTokens": 12000,
+    "maxCostUsdCents": 250
+  },
+  "harness": {
+    "providerId": "scripted",
+    "providerVersion": "1.0.0",
+    "requiredCapabilities": ["structured-output"]
+  },
+  "sandbox": {
+    "providerId": "scripted",
+    "providerVersion": "1.0.0",
+    "requiredCapabilities": ["ephemeral"],
+    "lifecycle": "ephemeral",
+    "networkPolicy": "deny-all"
+  },
+  "workspaceInputPolicy": {
+    "source": "workspace",
+    "paths": ["README.md", "docs"],
+    "maxBytes": 1048576
+  },
+  "connectionGrantRefs": {
+    "refs": [
+      {
+        "connectionId": "conn_agrant_b",
+        "grantId": "grant_c",
+        "purpose": "p",
+        "revision": 1
+      },
+      {
+        "connectionId": "conn_a",
+        "grantId": "grant_bgrant_c",
+        "purpose": "p",
+        "revision": 1
+      }
+    ],
+    "maxCallsPerRun": 2
+  }
+}

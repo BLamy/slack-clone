@@ -1,0 +1,9 @@
+{
+  "finalReducerDigest": "sha256:b4cd46283d1b20bea8d63405093c3a975bfff8a779dc0b09db14c53c90ce4f83",
+  "finalLeaseDigest": "sha256:2e73c4c5082a385793e40e51887d048b20f72c5e8b6fbbcbe63b1a2f1d773dd4",
+  "prefixCount": 23,
+  "leasePrefixCount": 4,
+  "terminalImmutable": true,
+  "bearerNotPersisted": true,
+  "result": "PASS"
+}

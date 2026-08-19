@@ -1,0 +1,19 @@
+{
+  "mode": "decode",
+  "expectedError": {
+    "code": "LEDGER_INVALID_EVENT_TYPE",
+    "path": "$.eventType"
+  },
+  "value": {
+    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "causation": null,
+    "correlationId": "cr_dddddddddddddddddddddddddd",
+    "data": {},
+    "eventId": "ev_cccccccccccccccccccccccccc",
+    "eventType": "channel.message.future",
+    "idempotencyKey": "ik_eeeeeeeeeeeeeeeeeeeeeeeeee",
+    "schemaVersion": 1,
+    "serverTimestamp": "2026-01-01T00:00:00.000Z",
+    "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+}

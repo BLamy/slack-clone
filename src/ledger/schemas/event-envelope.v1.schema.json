@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stream-slack.local/schemas/event-envelope.v1.schema.json",
+  "title": "Stream Slack event envelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "actorId",
+    "causation",
+    "correlationId",
+    "data",
+    "eventId",
+    "eventType",
+    "idempotencyKey",
+    "schemaVersion",
+    "serverTimestamp",
+    "workspaceId"
+  ],
+  "properties": {
+    "actorId": {
+      "type": "string",
+      "pattern": "^pr_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "causation": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "source-reference.v1.schema.json" }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "pattern": "^cr_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "data": {
+      "type": "object"
+    },
+    "eventId": {
+      "type": "string",
+      "pattern": "^ev_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "eventType": {
+      "enum": [
+        "ledger.fixture-recorded",
+        "workspace.directory.updated",
+        "channel.message.created",
+        "channel.message.replied",
+        "channel.message.edited",
+        "channel.message.deleted",
+        "channel.message.reaction.added",
+        "channel.message.reaction.removed",
+        "agent.config.created",
+        "agent.config.revised",
+        "agent.config.activated",
+        "agent.config.disabled",
+        "agent.config.retired",
+        "workspace.invocation.requested",
+        "run.lifecycle.changed",
+        "run.activity.recorded",
+        "run.usage.recorded",
+        "run.control.recorded",
+        "run.approval.requested",
+        "run.approval.decided",
+        "run.artifact.recorded",
+        "run.result.recorded",
+        "run.failure.recorded",
+        "run.lease.acquired",
+        "run.lease.heartbeat",
+        "run.lease.released",
+        "run.lease.expired",
+        "run.lease.superseded",
+        "connection.config.revised",
+        "workspace.audit.recorded",
+        "projection.checkpointed",
+        "principal.created",
+        "principal.profile.updated",
+        "principal.suspended",
+        "principal.deactivated",
+        "channel.created",
+        "channel.renamed",
+        "channel.archived",
+        "channel.unarchived",
+        "channel.membership.invited",
+        "channel.membership.joined",
+        "channel.membership.left",
+        "channel.membership.removed",
+        "channel.direct.created",
+        "workspace.created",
+        "workspace.membership.invited",
+        "workspace.membership.accepted",
+        "workspace.membership.role.changed",
+        "workspace.membership.suspended",
+        "workspace.membership.removed"
+      ]
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "pattern": "^ik_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "serverTimestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+    },
+    "workspaceId": {
+      "type": "string",
+      "pattern": "^ws_[0-9a-hjkmnp-tv-z]{26}$"
+    }
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "room": "e1-t05-promoted-e1-t05-cold-checkout-resume",
+  "clients": 2,
+  "firstCheckpoint": "0000000000000000_0000000000000722",
+  "secondCheckpoint": "0000000000000000_0000000000001454",
+  "acceptedMessageIds": [
+    "c47eb61e-9259-4f0b-873b-f87ba223e311",
+    "f6cdf7b2-3e7a-4fa6-8b68-6702a62b5ac3"
+  ],
+  "resumedMessageIds": [
+    "f6cdf7b2-3e7a-4fa6-8b68-6702a62b5ac3"
+  ],
+  "finalDigest": "sha256:a3bc45285c0fd5d5fed7f057c765cacd917af2d06e896f78265bc6a223ddb4e6",
+  "finalOffsets": {
+    "ada": "0000000000000000_0000000000001454",
+    "linus": "0000000000000000_0000000000001454"
+  },
+  "noDuplicateLogicalEffects": true,
+  "crossRoomIsolation": {
+    "isolatedRoom": "e1-t05-promoted-e1-t05-cold-checkout-isolation",
+    "idleRoom": "e1-t05-promoted-e1-t05-cold-checkout-idle",
+    "acceptedMessageId": "900c0667-345c-4526-8767-8f2ffa44b995",
+    "otherClientReceivedMessage": false
+  },
+  "archive": {
+    "responseStatus": 200,
+    "terminalCode": "LIVE_CHANNEL_ARCHIVED",
+    "checkpoint": "0000000000000000_0000000000000731",
+    "reconnectAfterArchive": {
+      "status": 409,
+      "code": "LIVE_CHANNEL_ARCHIVED",
+      "checkpoint": "0000000000000000_0000000000001244"
+    },
+    "writeAfterArchive": {
+      "status": 409,
+      "code": "CHAT_ROOM_ARCHIVED"
+    }
+  },
+  "logout": {
+    "responseStatus": 302,
+    "terminalCode": "LIVE_SESSION_REVOKED"
+  },
+  "reconnectMatrix": [
+    "after acknowledged status before next append",
+    "append while one client disconnected",
+    "resume from opaque Last-Event-ID-equivalent query checkpoint",
+    "independent room remains idle while a sibling room receives an event",
+    "archive event terminates the hot room at its acknowledged checkpoint",
+    "reconnect from a post-archive checkpoint is refused before SSE headers",
+    "message mutation after archive is refused by the durable room authority",
+    "logout before the next queued event"
+  ],
+  "typedRefusal": {
+    "status": 400,
+    "code": "LIVE_CHECKPOINT_INVALID"
+  },
+  "transcript": [
+    {
+      "bodyCode": null,
+      "label": "ada-session",
+      "method": "GET",
+      "path": "/api/session",
+      "status": 200
+    },
+    {
+      "bodyCode": null,
+      "label": "linus-session",
+      "method": "GET",
+      "path": "/api/session",
+      "status": 200
+    },
+    {
+      "checkpoint": null,
+      "label": "ada-initial",
+      "method": "GET",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-cold-checkout-resume/events",
+      "status": 200
+    },
+    {
+      "checkpoint": null,
+      "label": "linus-initial",
+      "method": "GET",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-cold-checkout-resume/events",
+      "status": 200
+    },
+    {
+      "bodyCode": null,
+      "label": "post-ik_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "method": "POST",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-cold-checkout-resume/messages",
+      "status": 201
+    },
+    {
+      "bodyCode": null,
+      "label": "post-ik_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "method": "POST",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-cold-checkout-resume/messages",
+      "status": 201
+    },
+    {
+      "checkpoint": "0000000000000000_0000000000000722",
+      "label": "ada-resumed",
+      "method": "GET",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-cold-checkout-resume/events?offset=0000000000000000_0000000000000722",
+      "status": 200
+    },
+    {
+      "bodyCode": null,
+      "label": "ada-final",
+      "method": "GET",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-cold-checkout-resume/messages",
+      "status": 200
+    },
+    {
+      "bodyCode": null,
+      "label": "linus-final",
+      "method": "GET",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-cold-checkout-resume/messages",
+      "status": 200
+    },
+    {
+      "bodyCode": "LIVE_CHECKPOINT_INVALID",
+      "label": "malformed-checkpoint",
+      "method": "GET",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-cold-checkout-resume/events?offset=%00",
+      "status": 400
+    },
+    {
+      "checkpoint": null,
+      "label": "ada-isolation",
+      "method": "GET",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-cold-checkout-isolation/events",
+      "status": 200
+    },
+    {
+      "checkpoint": null,
+      "label": "linus-isolation",
+      "method": "GET",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-cold-checkout-idle/events",
+      "status": 200
+    },
+    {
+      "bodyCode": null,
+      "label": "post-ik_cccccccccccccccccccccccccc",
+      "method": "POST",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-cold-checkout-isolation/messages",
+      "status": 201
+    },
+    {
+      "bodyCode": null,
+      "label": "archive-room",
+      "method": "POST",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-cold-checkout-isolation/archive",
+      "status": 200
+    },
+    {
+      "bodyCode": "LIVE_CHANNEL_ARCHIVED",
+      "label": "archive-reconnect-after-status",
+      "method": "GET",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-cold-checkout-isolation/events?offset=0000000000000000_0000000000001244",
+      "status": 409
+    },
+    {
+      "bodyCode": "CHAT_ROOM_ARCHIVED",
+      "label": "archive-write-after-status",
+      "method": "POST",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-cold-checkout-isolation/messages",
+      "status": 409
+    },
+    {
+      "checkpoint": null,
+      "label": "ada-logout",
+      "method": "GET",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-cold-checkout-logout/events",
+      "status": 200
+    },
+    {
+      "label": "ada-logout",
+      "method": "GET",
+      "path": "/logout",
+      "status": 302
+    },
+    {
+      "bodyCode": null,
+      "label": "post-ik_dddddddddddddddddddddddddd",
+      "method": "POST",
+      "path": "/api/rooms/e1-t05-promoted-e1-t05-cold-checkout-logout/messages",
+      "status": 201
+    }
+  ]
+}

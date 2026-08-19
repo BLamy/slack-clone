@@ -1,0 +1,74 @@
+{
+  "refusalCount": 10,
+  "refusals": [
+    {
+      "name": "cross-tenant-channel-id",
+      "code": "REDUCER_CHANNEL_SCOPE_MISMATCH",
+      "offset": "0000000000000000_0000000000000014",
+      "refusedBeforeAppend": true,
+      "sourceDumpUnchangedAfterReducerFailure": true
+    },
+    {
+      "name": "service-channel-creator",
+      "code": "REDUCER_CHANNEL_PARTICIPANT_SERVICE",
+      "offset": "0000000000000000_0000000000000014",
+      "refusedBeforeAppend": true,
+      "sourceDumpUnchangedAfterReducerFailure": true
+    },
+    {
+      "name": "stale-channel-revision",
+      "code": "REDUCER_CHANNEL_REVISION_CONFLICT",
+      "offset": "0000000000000000_0000000000000019",
+      "refusedBeforeAppend": true,
+      "sourceDumpUnchangedAfterReducerFailure": true
+    },
+    {
+      "name": "stale-membership-join-revision",
+      "code": "REDUCER_CHANNEL_REVISION_CONFLICT",
+      "offset": "0000000000000000_0000000000000023",
+      "refusedBeforeAppend": true,
+      "sourceDumpUnchangedAfterReducerFailure": true
+    },
+    {
+      "name": "duplicate-direct-participant",
+      "code": "REDUCER_CHANNEL_DIRECT_PARTICIPANTS",
+      "offset": "0000000000000000_0000000000000024",
+      "refusedBeforeAppend": true,
+      "sourceDumpUnchangedAfterReducerFailure": true
+    },
+    {
+      "name": "direct-id-mismatch",
+      "code": "REDUCER_CHANNEL_DIRECT_ID_MISMATCH",
+      "offset": "0000000000000000_0000000000000035",
+      "refusedBeforeAppend": true
+    },
+    {
+      "name": "equivalent-direct-set",
+      "code": "REDUCER_CHANNEL_DIRECT_DUPLICATE",
+      "offset": "0000000000000000_0000000000000031",
+      "refusedBeforeAppend": true
+    },
+    {
+      "name": "service-direct-participant",
+      "code": "REDUCER_CHANNEL_PARTICIPANT_SERVICE",
+      "offset": "0000000000000000_0000000000000032",
+      "refusedBeforeAppend": true
+    },
+    {
+      "name": "direct-participant-replacement",
+      "code": "REDUCER_CHANNEL_INVALID_KIND",
+      "offset": "0000000000000000_0000000000000033",
+      "refusedBeforeAppend": true
+    },
+    {
+      "name": "archived-rename",
+      "code": "REDUCER_CHANNEL_ARCHIVED",
+      "offset": "0000000000000000_0000000000000034",
+      "refusedBeforeAppend": true
+    }
+  ],
+  "raceProtection": true,
+  "directParticipantSetImmutable": true,
+  "directIdentityBinding": true,
+  "result": "PASS"
+}

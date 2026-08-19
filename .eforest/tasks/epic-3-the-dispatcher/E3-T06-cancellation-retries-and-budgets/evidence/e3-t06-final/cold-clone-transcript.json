@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "runId": "e3-t06-repair-final-d8e34fe",
+  "implementationCommit": "d8e34fef90430ed5ac90a69c1f9a3be7c59e9506",
+  "entrypoint": {
+    "command": "make verify-E3-T06",
+    "delegatedTo": "node scripts/verify-e3-t06.mjs"
+  },
+  "checkout": "disposable git worktree at the implementation commit",
+  "commands": [
+    {
+      "command": "git worktree add --detach <checkout> d8e34fef90430ed5ac90a69c1f9a3be7c59e9506",
+      "durationMs": 624,
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "stderrPreview": "",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutBytes": 67,
+      "stdoutPreview": "HEAD is now at d8e34fe Repair E3-T06 restart fencing and deadlines\n",
+      "stdoutSha256": "5aa7cf6d0ce29e8e4eb33f51325d0afc0ddab1df9dbb9a5c7aa49081f6d40e56"
+    },
+    {
+      "command": "git -c protocol.file.allow=always submodule update --init --recursive --reference <local emulate checkout>",
+      "durationMs": 1634,
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "stderrPreview": "",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutBytes": 81,
+      "stdoutPreview": "Submodule path 'emulate': checked out '8b88027535e4ea6a18c3ce92a13af706382a451f'\n",
+      "stdoutSha256": "62f3e1ba0a18303668d74e03ab1238816e53cfff6a4e41ff4d85937c9475b907"
+    },
+    {
+      "command": "git status --porcelain --untracked-files=all",
+      "durationMs": 251,
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "stderrPreview": "",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutBytes": 0,
+      "stdoutPreview": "",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "durationMs": 2307,
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "stderrPreview": "",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutBytes": 831,
+      "stdoutPreview": "Scope: all 6 workspace projects\nLockfile is up to date, resolution step is skipped\nProgress: resolved 1, reused 0, downloaded 0, added 0\nPackages: +158\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\nProgress: resolved 158, reused 158, downloaded 0, added 158, done\n.../node_modules/protobufjs postinstall$ node scripts/postinstall\n.../node_modules/protobufjs postinstall: Done\n\ndependencies:\n+ @stream-slack/durable-streams 0.1.0 <- packages/durable-streams\n+ @stream-slack/http 0.1.0 <- packages/http\n+ @stream-slack/protocol 0.1.0 <- packages/protocol\n+ @stream-slack/reducers 0.1.0 <- packages/reducers\n+ @stream-slack/services 0.1.0 <- packages/services\n\ndevDependencies:\n+ @playwright/test 1.61.1\n+ @replayio/playwright 5.0.3\n+ eslint 10.8.0\n+ prettier 3.9.6\n\nDone in 2.1s using pnpm v11.2.2\n",
+      "stdoutSha256": "9e5abeb76d2bc175ef6fa1da5083f89d015b0b59123919fd02fe38d4911e5424"
+    },
+    {
+      "command": "pnpm setup:emulate",
+      "durationMs": 71925,
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "stderrPreview": "",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutBytes": 30107,
+      "stdoutPreview": "dist/index.js                         59.13 KB\nESM dist/dist-I4XUSYHS.js                 114.32 KB\nESM dist/chunk-WVQMFHQM.js                2.07 KB\nESM dist/dist-LLBSQQWC.js                 414.94 KB\nESM dist/dist-BTN4DDIK.js                 144.17 KB\n[emulate-cli] ESM dist/dist-OKZGYXA6.js                 198.92 KB\n[emulate-cli] ESM dist/chunk-PZ5AY32C.js                233.00 B\n[emulate-cli] ESM dist/dist-O2HI4ZBX.js                 36.81 KB\nESM dist/dist-KUMIQPJP.js                 84.16 KB\nESM dist/chunk-WSJ6II32.js                52.54 KB\nESM dist/dist-CG4HQISS.js                 27.52 KB\nESM dist/dist-GQXOI2Y2.js.map             120.56 KB\nESM dist/dist-MNUVWLIT.js.map             103.24 KB\nESM dist/dist-Z7ZRJIRP.js.map             125.94 KB\nESM dist/dist-IZ5KDTSJ.js.map             130.51 KB\nESM dist/dist-JO6D2EV6.js.map             151.66 KB\n[emulate-cli] ESM dist/helpers-LXLP3DFE-PEPB2NAS.js.map 71.00 B\nESM dist/dist-VKQCYP4Z.js.map             178.74 KB\nESM dist/dist-NDJDEDCT.js.map             70.72 KB\nESM dist/index.js.map                     141.26 KB\nESM dist/dist-I4XUSYHS.js.map             254.58 KB\nESM dist/dist-BTN4DDIK.js.map             313.17 KB\nESM dist/chunk-WVQMFHQM.js.map            3.60 KB\nESM dist/dist-O2HI4ZBX.js.map             106.72 KB\nESM dist/chunk-PZ5AY32C.js.map            71.00 B\nESM dist/chunk-WSJ6II32.js.map            106.89 KB\nESM dist/dist-CG4HQISS.js.map             90.31 KB\nESM dist/dist-OKZGYXA6.js.map             409.91 KB\nESM dist/dist-KUMIQPJP.js.map             192.44 KB\nESM dist/dist-LLBSQQWC.js.map             817.06 KB\nESM dist/dist-JHLHCH44.js.map             1.47 MB\nESM ⚡️ Build success in 1961ms\n[emulate-cli] ESM dist/dist-IZ5KDTSJ.js                 47.51 KB\n[emulate-cli] ESM dist/dist-GQXOI2Y2.js                 42.31 KB\nESM dist/dist-Z7ZRJIRP.js                 46.48 KB\nESM dist/dist-NDJDEDCT.js                 35.64 KB\nESM dist/dist-VKQCYP4Z.js                 75.85 KB\nESM dist/dist-JHLHCH44.js                 511.88 KB\nESM dist/dist-I4XUSYHS.js                 114.32 KB\nESM dist/api.js                           49.20 KB\nESM dist/dist-JO6D2EV6.js                 62.85 KB\nESM dist/chunk-WVQMFHQM.js                2.07 KB\nESM dist/helpers-LXLP3DFE-PEPB2NAS.js     388.00 B\nESM dist/dist-OKZGYXA6.js                 198.92 KB\nESM dist/dist-KUMIQPJP.js                 84.16 KB\nESM dist/dist-CG4HQISS.js                 27.52 KB\nESM dist/chunk-PZ5AY32C.js                233.00 B\nESM dist/dist-MNUVWLIT.js                 32.71 KB\nESM dist/dist-BTN4DDIK.js                 144.17 KB\nESM dist/dist-O2HI4ZBX.js                 36.81 KB\nESM dist/dist-LLBSQQWC.js                 414.94 KB\n[emulate-cli] ESM dist/chunk-WSJ6II32.js                52.54 KB\nESM dist/dist-IZ5KDTSJ.js.map             130.51 KB\nESM dist/dist-NDJDEDCT.js.map             70.72 KB\nESM dist/dist-GQXOI2Y2.js.map             120.56 KB\nESM dist/dist-VKQCYP4Z.js.map             178.74 KB\nESM dist/dist-JO6D2EV6.js.map             151.66 KB\nESM dist/chunk-WVQMFHQM.js.map            3.60 KB\nESM dist/dist-Z7ZRJIRP.js.map             125.94 KB\nESM dist/helpers-LXLP3DFE-PEPB2NAS.js.map 71.00 B\nESM dist/dist-OKZGYXA6.js.map             409.91 KB\n[emulate-cli] ESM dist/dist-I4XUSYHS.js.map             254.58 KB\nESM dist/dist-CG4HQISS.js.map             90.31 KB\nESM dist/dist-KUMIQPJP.js.map             192.44 KB\nESM dist/chunk-PZ5AY32C.js.map            71.00 B\nESM dist/api.js.map                       122.47 KB\nESM dist/dist-BTN4DDIK.js.map             313.17 KB\nESM dist/dist-O2HI4ZBX.js.map             106.72 KB\n[emulate-cli] ESM dist/dist-MNUVWLIT.js.map             103.24 KB\nESM dist/chunk-WSJ6II32.js.map            106.89 KB\nESM dist/dist-LLBSQQWC.js.map             817.06 KB\nESM dist/dist-JHLHCH44.js.map             1.47 MB\n[emulate-cli] ESM ⚡️ Build success in 2112ms\n[emulate-cli] DTS Build start\n[emulate-cli] DTS ⚡️ Build success in 1803ms\nDTS dist/api.d.ts 787.00 B\nPASS emulator installed and built from its lockfile\n",
+      "stdoutSha256": "7b0bfbfec146cf61f9ba02e0c3b075146b71edb25eaa1ebb10621c1e7217f68b"
+    },
+    {
+      "command": "node scripts/verify-e3-t06.mjs",
+      "durationMs": 82750,
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "stderrPreview": "",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutBytes": 19187,
+      "stdoutPreview": ", and reacquisition fence stale workers (72.843792ms)\n✔ authority revocation supersedes a lease before the next mutation (83.63025ms)\n✔ workspace directory retries transient provider startup and replays authority (1666.212833ms)\n✔ live HTTP handlers recheck membership before every chat capability (9.736875ms)\n✔ live HTTP binding refuses sibling IDs, headers, streams, and body fields (2.174625ms)\n✔ live event checkpoints cannot cross the trusted workspace binding (0.529792ms)\n✔ a current member reaches the read and mutation handlers after the fence (1.635667ms)\n✔ a non-draining SSE client cannot hold the workspace authorization fence (2.710041ms)\n✔ workspace context is optional-hint tolerant but immutable and tenant-bound (7.155042ms)\n✔ workspace request binding rejects nested tenant overrides and binds trusted scope (2.356667ms)\n✔ role capabilities are explicit and deny unlisted actions (2.491125ms)\n✔ authorization rechecks membership for reads, mutations, and subscriptions (11.720875ms)\n✔ workspace fence serializes different principals during revocation (0.827666ms)\nℹ tests 180\nℹ suites 0\nℹ pass 180\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 10138.486916\n[app:e3-t06-repair-final-d8e34fe] slack-clone listening on http://127.0.0.1:36119\nusing durable streams at http://127.0.0.1:36117\n[emulate:e3-t06-repair-final-d8e34fe] \n  emulate v0.7.0\n\n  durable-streams  http://localhost:36117\n  auth0            http://localhost:36118\n\n  Tokens\n  test_token_admin -> admin\n\n  Config: emulate.config.yaml\n\n[playwright:e3-t06-repair-final-d8e34fe] \nRunning 5 tests using 1 worker\n[playwright:e3-t06-repair-final-d8e34fe] \n[playwright:e3-t06-repair-final-d8e34fe]   ✓  1 tests/two-sessions.spec.mjs:41:1 › homepage sends a user through the emulator login into the chat (1.6s)[playwright:e3-t06-repair-final-d8e34fe] \n[playwright:e3-t06-repair-final-d8e34fe]   ✓  2 tests/two-sessions.spec.mjs:85:1 › login errors do not move the form (372ms)[playwright:e3-t06-repair-final-d8e34fe] \n[playwright:e3-t06-repair-final-d8e34fe]   ✓  3 tests/two-sessions.spec.mjs:99:1 › two authenticated sessions in the same room see messages from each other (1.3s)\n[playwright:e3-t06-repair-final-d8e34fe] STREAM_PROOF {\"schemaVersion\":1,\"room\":\"e3-t06-repair-final-d8e34fe-edit-1786230885568\",\"stream\":\"/rooms/e3-t06-repair-final-d8e34fe-edit-1786230885568/messages\",\"nextOffset\":\"0000000000000000_0000000000001505\",\"streamDigest\":\"sha256:1aef891770edae9d4e20c9b866a756b73082cc37e043486bcf325c42a54f4f1f\",\"messageCount\":1,\"domMatchedApi\":true}\n[playwright:e3-t06-repair-final-d8e34fe]   ✓  4 tests/two-sessions.spec.mjs:155:1 › a user can edit their message and the update persists across sessions (1.6s)\n[playwright:e3-t06-repair-final-d8e34fe]   ✓  5 tests/two-sessions.spec.mjs:293:1 › legacy display-name-only messages stay readable but cannot be edited (584ms)[playwright:e3-t06-repair-final-d8e34fe] \n[playwright:e3-t06-repair-final-d8e34fe] \n  5 passed (9.3s)\n[emulate:e3-t06-repair-final-d8e34fe] \nShutting down...\nPASS build output=/Users/brettlamy/Dev/slack-clone/.eforest/tasks/epic-3-the-dispatcher/E3-T06-cancellation-retries-and-budgets/work/cold-clone-k7hRcx/checkout/.artifacts/e0-t02/e3-t06-repair-final-d8e34fe/build files=79\n{\n  \"implementationCommit\": \"d8e34fef90430ed5ac90a69c1f9a3be7c59e9506\",\n  \"result\": \"PASS\",\n  \"runId\": \"e3-t06-repair-final-d8e34fe\",\n  \"gates\": [\n    {\n      \"name\": \"format-e3-t06\",\n      \"result\": \"PASS\"\n    },\n    {\n      \"name\": \"format\",\n      \"result\": \"PASS\"\n    },\n    {\n      \"name\": \"lint\",\n      \"result\": \"PASS\"\n    },\n    {\n      \"name\": \"typecheck\",\n      \"result\": \"PASS\"\n    },\n    {\n      \"name\": \"tests\",\n      \"result\": \"PASS\"\n    },\n    {\n      \"name\": \"build\",\n      \"result\": \"PASS\"\n    }\n  ],\n  \"attempts\": 2,\n  \"terminal\": \"completed\",\n  \"sensitivity\": \"PASS\",\n  \"replay\": \"Replay: N/A (headless run-control protocol) + mitigation: real process-tree probes, fake-clock schedules, usage manifests, terminal races, and replay\"\n}\n",
+      "stdoutSha256": "4ebd866f54677f23595a23462e1806222aa7328d5677da8dd8591a342ede5e44"
+    }
+  ],
+  "cleanCheckoutBeforeInstall": true,
+  "result": "PASS"
+}

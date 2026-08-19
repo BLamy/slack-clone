@@ -1,0 +1,132 @@
+{
+  "proofType": "independent critic reproduction, attacks, and detector-sensitivity probes",
+  "critic": "critic 2 (fresh session, did not implement E0-T01)",
+  "reviewedBase": "9ec2eca253e9c1c2c18008472f4cf77079a1b932",
+  "reviewedHead": "7262a9b69c066a00855ec8f010c0c122c93ce8de",
+  "productCommit": "d6abddc8908275931b73fcdd9c8b084353aad3b4",
+  "productCommitToHeadDelta": "evidence metadata only (QUEUE.md, readme.md, 4 evidence files, .replay/browser-session.json); no src/, public/, tests/, tools/ change",
+  "coldClone": {
+    "command": "git clone --no-hardlinks <repo> <work>/critic2/coldclone; git checkout --detach d6abddc",
+    "makeVerify": {
+      "result": "PASS",
+      "checks": 9,
+      "skipped": 0,
+      "outputMatchesCommittedEvidence": "byte-identical to evidence/verify-output.txt"
+    },
+    "pnpmTestLedger": { "passed": 6, "failed": 0, "skipped": 0 }
+  },
+  "primaryCheckoutGates": {
+    "pnpm test": { "ledgerTests": 6, "browserTests": 5, "failed": 0, "skipped": 0 }
+  },
+  "independentAttacks": {
+    "harness": "work/critic2/coldclone/critic2-attacks.mjs (critic-authored, critic seed 0xc21c2)",
+    "totalChecks": 141,
+    "failures": 0,
+    "freshIdentifiers": {
+      "workspaceA": "ws_t3xgsdn3fkv6dab98q91r7kr0r",
+      "workspaceB": "ws_jchvm1ec715qyvx5d1xjr5t58c",
+      "channelA": "ch_t3xgsdn3fkv6dab98q91r7kr0r_2nsdkz2sskgv14ndd8qrf2s7eg",
+      "channelB": "ch_jchvm1ec715qyvx5d1xjr5t58c_bh1xec8h9tc9eqwzxwvx5chc01"
+    },
+    "coverage": [
+      "fresh well-formed IDs accepted; 25/27-char and Crockford-excluded i/l/o/u rejected",
+      "cross-workspace channel and principal IDs rejected (confused deputy)",
+      "24 hostile ID forms rejected: traversal, %2e%2e, separators, NUL/newline/CRLF/tab, Cyrillic a, Greek omicron, fullwidth a, Kelvin sign, Turkish dotless i, ZWJ, RTL override, unpaired surrogate, sibling concat, wrong prefix",
+      "no hostile input collides onto a real stream name; none normalized",
+      "9 hostile parseStreamName forms rejected including trailing-newline and cross-workspace channel",
+      "canonical encoder rejects NaN, Infinity, 2^53, 1e400, unpaired surrogates, undefined, functions, symbols, BigInt, Date, Map, sparse arrays, cycles, __proto__/constructor keys, symbol keys, getters, non-plain prototypes; global prototype not polluted; -0 normalizes to 0",
+      "digest is key-order independent and byte-stable across repeat encodes",
+      "both golden fixtures reproduce the committed manifest digests",
+      "one-byte flips: 3 bit positions across every canonical byte all change the digest or fail closed, 0 survivors",
+      "21 envelope mutations rejected (future/zero/string/float version, unknown and __proto__ event type, extra key, missing key, cross-workspace actor and causation, short offset, uppercase digest, missing/extra causation keys, non-canonical and impossible timestamps, array/null/unsafe-int/surrogate data)",
+      "all 5 invalid golden fixtures and all 21 mutations rejected with 0 calls to the append callback",
+      "client-supplied serverTimestamp and eventId at issuance rejected with LEDGER_EXTRA_KEY"
+    ]
+  },
+  "detectorSensitivity": [
+    {
+      "defect": "critic-authored, distinct from the builder's: assertIdentifier normalizes via NFKC+toLowerCase instead of rejecting",
+      "clone": "work/critic2/sabotage-idcase (disposable, detached at d6abddc)",
+      "command": "make verify-E0-T01",
+      "result": "RED",
+      "failure": "AssertionError 'expected a typed ledger refusal' at tools/verify-e0-t01.mjs:65 via :241"
+    },
+    {
+      "defect": "reproduction of the builder's claimed defect: schemaVersion equality fence disabled",
+      "clone": "work/critic2/sabotage-version (disposable, detached at d6abddc)",
+      "command": "make verify-E0-T01",
+      "result": "RED",
+      "failure": "assert.ok(caught instanceof LedgerValidationError) at tools/verify-e0-t01.mjs:148, as the builder claimed",
+      "exitCodeDiscrepancy": "node exited 1, not the 2 recorded in evidence/verifier-sensitivity.json; tools/verify-e0-t01.mjs contains no process.exit and the Makefile runs plain node, so exit 2 is not reachable"
+    },
+    {
+      "defect": "critic-authored browser defect: reinstate the display-name ownership fallback removed in the rework",
+      "clone": "work/critic2/sabotage-owner (disposable, detached at d6abddc)",
+      "command": "playwright test tests/two-sessions.spec.mjs against the sabotaged server",
+      "result": "RED",
+      "failure": "'legacy display-name-only messages stay readable but cannot be edited' failed: PATCH returned 200, expected 403 (tests/two-sessions.spec.mjs:210); other 4 tests still passed"
+    }
+  ],
+  "browserEvidenceInterrogation": {
+    "mp4": {
+      "path": "recordings/e0-t01-d6abddc-final.mp4",
+      "shasum": "013d6127a29bb1623315a344b784e04051356e281c489f0aa00e713fa2944e68",
+      "shasumMatchesClaim": true,
+      "bytes": 284624,
+      "bytesMatchClaim": true,
+      "ffprobe": {
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "resolution": "1280x720",
+        "durationSeconds": 20.2,
+        "frames": 606,
+        "probeScore": 100
+      },
+      "verdict": "genuine, plays, matches every claimed property"
+    },
+    "replayRecording": {
+      "id": "d8fdc763-b621-453f-a00c-9010c6cb5a5f",
+      "command": "replayio list",
+      "observedStatus": "Uploaded",
+      "observedDuration": "48.7s",
+      "claimedDurationMs": 48751,
+      "durationCorroborates": true,
+      "verdict": "exists, finished, uploaded; corroborates browser-proof.json and .replay/browser-session.json"
+    },
+    "notInterrogated": "The recording's console, network, exception, and source-execution timelines could not be opened from this CLI session; critic protocol step 7 was therefore not completed."
+  },
+  "criticBrowserRun": {
+    "harness": "work/critic2/critic-console.spec.mjs against the pristine product commit",
+    "domApiStreamCorrelation": [
+      {
+        "phase": "after append",
+        "domOffset": "0000000000000000_0000000000000236",
+        "apiOffset": "0000000000000000_0000000000000236",
+        "digest": "sha256:d5ea476c2c667423e98f28931c41cecc6eb928b9602d67dc2ad1e0492fa14fb5",
+        "equal": true
+      },
+      {
+        "phase": "after durable edit",
+        "domOffset": "0000000000000000_0000000000000510",
+        "apiOffset": "0000000000000000_0000000000000510",
+        "digest": "sha256:8ba369af3aacf7f6e5fed133204d59c605dd89d1ca4ff766cceb36e4c343aa00",
+        "equal": true
+      }
+    ],
+    "unauthenticatedApiAccess": "GET /api/rooms/<room>/messages without a session returned 401",
+    "protectedRouteWithoutSession": "/app?room=<room> redirected to /login?returnTo=",
+    "independentSpoofCanary": "legacy record with display name only and attacker-supplied user/email/actorId in the PATCH body returned 403; message remained readable and had zero edit controls",
+    "requestFailed": 0,
+    "consoleWarnings": 0,
+    "consoleErrors": 2,
+    "consoleErrorDetail": [
+      "401 from the critic's own deliberate unauthenticated API probe (not part of the builder's session)",
+      "500 from the forced edit-failure step, which IS part of the builder's session"
+    ],
+    "note": "public/app.js emits no console output of its own, so every console error observed is a browser resource-load message caused by a deliberately simulated non-2xx response."
+  },
+  "openQuestions": [
+    "browser-proof.json records consoleErrors: 0 for a session that included a forced 500 edit failure; an independent reproduction of that same step produces one browser resource-load console error. Either the builder's count excludes browser resource-load messages (a counting definition that is not disclosed) or the figure is inaccurate. The Replay recording console would settle it and was not interrogable here.",
+    "evidence/verifier-sensitivity.json records observedExitCode 2; the reproduced failure exits 1."
+  ]
+}

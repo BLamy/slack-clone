@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:stream-slack:sandbox-lifecycle-policy:v1",
+  "title": "Stream Slack sandbox lifecycle policy v1",
+  "description": "Run-scoped lifecycle selection. Persistent bytes are encrypted by the provider boundary.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "mode",
+    "agentId",
+    "lineageKey",
+    "retentionMs",
+    "encryption"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "mode": { "enum": ["ephemeral", "persistent"] },
+    "persistence": { "enum": ["ephemeral", "persistent"] },
+    "agentId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,160}$"
+    },
+    "lineageKey": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,160}$"
+    },
+    "retentionMs": { "type": "integer", "minimum": 0 },
+    "encryption": { "const": "provider-managed" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "mode": { "const": "ephemeral" } } },
+      "then": { "properties": { "retentionMs": { "const": 0 } } }
+    },
+    {
+      "if": { "properties": { "mode": { "const": "persistent" } } },
+      "then": { "properties": { "retentionMs": { "minimum": 1 } } }
+    }
+  ]
+}

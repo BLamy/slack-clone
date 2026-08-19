@@ -1,0 +1,21 @@
+{
+  "checked": true,
+  "evidenceFiles": [
+    "authority-fences.json",
+    "canary-scan.json",
+    "capability-scopes.json",
+    "cold-clone-transcript.json",
+    "lease-schedules.json",
+    "queue-proof.json",
+    "reducer-integration.json",
+    "replay-digests.json",
+    "sensitivity.json",
+    "verification-summary.json",
+    "worker-race.json"
+  ],
+  "leaked": false,
+  "postVerifierScanCompleted": true,
+  "postVerifierTranscriptChecked": true,
+  "publishedEvidenceLeaked": false,
+  "canaryPresentInPublishedEvidence": false
+}

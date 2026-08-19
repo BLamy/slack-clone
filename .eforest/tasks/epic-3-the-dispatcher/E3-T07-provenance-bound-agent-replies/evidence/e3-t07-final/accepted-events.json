@@ -1,0 +1,179 @@
+[
+  {
+    "event": {
+      "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+      "causation": {
+        "digest": "sha256:e291de58f4097100f8a87b6d6230de8253441c2441f9f7c378b07394d453cb39",
+        "offset": "0000000000000001_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+      },
+      "correlationId": "cr_bbd101a330a62fe52d45e3ff63",
+      "data": {
+        "agentReplyProvenance": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "agentPrincipalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "attemptId": "at_1bbe05045d79d17710e1b57b16",
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "contextDigest": "sha256:b13089b970e71db4c6aa3709cb56d1fbaa7714be9b6b2792874429a80440b9c3",
+          "contextRef": {
+            "digest": "sha256:b13089b970e71db4c6aa3709cb56d1fbaa7714be9b6b2792874429a80440b9c3",
+            "offset": "0000000000000009_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+          },
+          "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "invocationRef": {
+            "digest": "sha256:3304655f0fa1e6b2520a74a9fc3399ea72b84ae3d033856116ac3b3c1570676a",
+            "offset": "0000000000000001_0000000000000000",
+            "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+          },
+          "leaseGeneration": 1,
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "schemaVersion": 1,
+          "snapshotDigest": "sha256:05c4af1476719ef83f9e04c1017c0df35640f5aa070715d3c6c61e4abf2fab2d",
+          "snapshotRef": {
+            "digest": "sha256:3323a023aae1777006d5262dfaa26594f6f1123e0599cdc19760ad92f3ca937a",
+            "offset": "0000000000000001_0000000000000000",
+            "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+          },
+          "sourceMention": {
+            "digest": "sha256:e291de58f4097100f8a87b6d6230de8253441c2441f9f7c378b07394d453cb39",
+            "offset": "0000000000000001_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+          },
+          "threadRootMessageId": "root-message"
+        },
+        "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "contentType": "text/plain",
+        "messageId": "msg_71b25efa669642ad71c7d7bd93",
+        "rootMessageId": "root-message",
+        "text": "A bounded answer from the agent.",
+        "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
+      },
+      "eventType": "channel.message.replied",
+      "idempotencyKey": "ik_de186944218a74df3fd2092c8f",
+      "schemaVersion": 1,
+      "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "eventId": "ev_bbd101a330a62fe52d45e3ff63",
+      "serverTimestamp": "2026-08-08T00:00:00.001Z"
+    },
+    "name": "happy"
+  },
+  {
+    "event": {
+      "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+      "causation": {
+        "digest": "sha256:e291de58f4097100f8a87b6d6230de8253441c2441f9f7c378b07394d453cb39",
+        "offset": "0000000000000001_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+      },
+      "correlationId": "cr_bbd101a330a62fe52d45e3ff63",
+      "data": {
+        "agentReplyProvenance": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "agentPrincipalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "attemptId": "at_1bbe05045d79d17710e1b57b16",
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "contextDigest": "sha256:b13089b970e71db4c6aa3709cb56d1fbaa7714be9b6b2792874429a80440b9c3",
+          "contextRef": {
+            "digest": "sha256:b13089b970e71db4c6aa3709cb56d1fbaa7714be9b6b2792874429a80440b9c3",
+            "offset": "0000000000000009_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+          },
+          "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "invocationRef": {
+            "digest": "sha256:3304655f0fa1e6b2520a74a9fc3399ea72b84ae3d033856116ac3b3c1570676a",
+            "offset": "0000000000000001_0000000000000000",
+            "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+          },
+          "leaseGeneration": 1,
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "schemaVersion": 1,
+          "snapshotDigest": "sha256:05c4af1476719ef83f9e04c1017c0df35640f5aa070715d3c6c61e4abf2fab2d",
+          "snapshotRef": {
+            "digest": "sha256:3323a023aae1777006d5262dfaa26594f6f1123e0599cdc19760ad92f3ca937a",
+            "offset": "0000000000000001_0000000000000000",
+            "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+          },
+          "sourceMention": {
+            "digest": "sha256:e291de58f4097100f8a87b6d6230de8253441c2441f9f7c378b07394d453cb39",
+            "offset": "0000000000000001_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+          },
+          "threadRootMessageId": "root-message"
+        },
+        "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "contentType": "text/plain",
+        "messageId": "msg_71b25efa669642ad71c7d7bd93",
+        "rootMessageId": "root-message",
+        "text": "one durable reply",
+        "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
+      },
+      "eventType": "channel.message.replied",
+      "idempotencyKey": "ik_de186944218a74df3fd2092c8f",
+      "schemaVersion": 1,
+      "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "eventId": "ev_bbd101a330a62fe52d45e3ff63",
+      "serverTimestamp": "2026-08-08T00:00:00.001Z"
+    },
+    "name": "lost-ack-replay"
+  },
+  {
+    "event": {
+      "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+      "causation": {
+        "digest": "sha256:e291de58f4097100f8a87b6d6230de8253441c2441f9f7c378b07394d453cb39",
+        "offset": "0000000000000001_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+      },
+      "correlationId": "cr_bbd101a330a62fe52d45e3ff63",
+      "data": {
+        "agentReplyProvenance": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "agentPrincipalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "attemptId": "at_1bbe05045d79d17710e1b57b16",
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "contextDigest": "sha256:b13089b970e71db4c6aa3709cb56d1fbaa7714be9b6b2792874429a80440b9c3",
+          "contextRef": {
+            "digest": "sha256:b13089b970e71db4c6aa3709cb56d1fbaa7714be9b6b2792874429a80440b9c3",
+            "offset": "0000000000000009_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+          },
+          "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "invocationRef": {
+            "digest": "sha256:3304655f0fa1e6b2520a74a9fc3399ea72b84ae3d033856116ac3b3c1570676a",
+            "offset": "0000000000000001_0000000000000000",
+            "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+          },
+          "leaseGeneration": 1,
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "schemaVersion": 1,
+          "snapshotDigest": "sha256:05c4af1476719ef83f9e04c1017c0df35640f5aa070715d3c6c61e4abf2fab2d",
+          "snapshotRef": {
+            "digest": "sha256:3323a023aae1777006d5262dfaa26594f6f1123e0599cdc19760ad92f3ca937a",
+            "offset": "0000000000000001_0000000000000000",
+            "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+          },
+          "sourceMention": {
+            "digest": "sha256:e291de58f4097100f8a87b6d6230de8253441c2441f9f7c378b07394d453cb39",
+            "offset": "0000000000000001_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+          },
+          "threadRootMessageId": "root-message"
+        },
+        "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "contentType": "text/plain",
+        "messageId": "msg_71b25efa669642ad71c7d7bd93",
+        "rootMessageId": "root-message",
+        "text": "&lt;script&gt;send([REDACTED_API_KEY])&lt;/script&gt;",
+        "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
+      },
+      "eventType": "channel.message.replied",
+      "idempotencyKey": "ik_de186944218a74df3fd2092c8f",
+      "schemaVersion": 1,
+      "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "eventId": "ev_bbd101a330a62fe52d45e3ff63",
+      "serverTimestamp": "2026-08-08T00:00:00.001Z"
+    },
+    "name": "redacted"
+  }
+]

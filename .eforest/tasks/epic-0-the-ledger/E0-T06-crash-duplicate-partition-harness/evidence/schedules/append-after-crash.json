@@ -1,0 +1,795 @@
+{
+  "schemaVersion": 1,
+  "schedule": {
+    "seed": "e0-t06-append-after",
+    "schedule": [
+      {
+        "action": "crash",
+        "hook": "append",
+        "occurrence": 0,
+        "phase": "after",
+        "role": "target"
+      }
+    ],
+    "hits": [
+      {
+        "hook": "validate",
+        "occurrence": 0,
+        "phase": "before",
+        "role": "dispatch",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "append",
+        "occurrence": 0,
+        "phase": "before",
+        "role": "target",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "append",
+        "occurrence": 0,
+        "phase": "after",
+        "role": "target",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "crash"
+      },
+      {
+        "hook": "validate",
+        "occurrence": 1,
+        "phase": "before",
+        "role": "dispatch",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "receipt",
+        "occurrence": 0,
+        "phase": "before",
+        "role": "receipt",
+        "stream": "__stream_slack_dispatch_idempotency__",
+        "action": "continue"
+      },
+      {
+        "hook": "receipt",
+        "occurrence": 0,
+        "phase": "after",
+        "role": "receipt",
+        "stream": "__stream_slack_dispatch_idempotency__",
+        "action": "continue"
+      },
+      {
+        "hook": "acknowledge",
+        "occurrence": 0,
+        "phase": "before",
+        "role": "dispatch",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "validate",
+        "occurrence": 2,
+        "phase": "before",
+        "role": "dispatch",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "append",
+        "occurrence": 1,
+        "phase": "before",
+        "role": "target",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "append",
+        "occurrence": 1,
+        "phase": "after",
+        "role": "target",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "receipt",
+        "occurrence": 1,
+        "phase": "before",
+        "role": "receipt",
+        "stream": "__stream_slack_dispatch_idempotency__",
+        "action": "continue"
+      },
+      {
+        "hook": "receipt",
+        "occurrence": 1,
+        "phase": "after",
+        "role": "receipt",
+        "stream": "__stream_slack_dispatch_idempotency__",
+        "action": "continue"
+      },
+      {
+        "hook": "acknowledge",
+        "occurrence": 1,
+        "phase": "before",
+        "role": "dispatch",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "validate",
+        "occurrence": 3,
+        "phase": "before",
+        "role": "dispatch",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "append",
+        "occurrence": 2,
+        "phase": "before",
+        "role": "target",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "append",
+        "occurrence": 2,
+        "phase": "after",
+        "role": "target",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "receipt",
+        "occurrence": 2,
+        "phase": "before",
+        "role": "receipt",
+        "stream": "__stream_slack_dispatch_idempotency__",
+        "action": "continue"
+      },
+      {
+        "hook": "receipt",
+        "occurrence": 2,
+        "phase": "after",
+        "role": "receipt",
+        "stream": "__stream_slack_dispatch_idempotency__",
+        "action": "continue"
+      },
+      {
+        "hook": "acknowledge",
+        "occurrence": 2,
+        "phase": "before",
+        "role": "dispatch",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "publish",
+        "occurrence": 0,
+        "phase": "before",
+        "role": "reader",
+        "stream": null,
+        "action": "continue"
+      },
+      {
+        "hook": "publish",
+        "occurrence": 0,
+        "phase": "after",
+        "role": "reader",
+        "stream": null,
+        "action": "continue"
+      },
+      {
+        "hook": "checkpoint",
+        "occurrence": 0,
+        "phase": "load",
+        "role": "reader",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "consume",
+        "occurrence": 0,
+        "phase": "before",
+        "role": "reader",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "checkpoint",
+        "occurrence": 0,
+        "phase": "before",
+        "role": "reader",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "checkpoint",
+        "occurrence": 1,
+        "phase": "before",
+        "role": "reader",
+        "stream": "__harness_checkpoints__",
+        "action": "continue"
+      },
+      {
+        "hook": "checkpoint",
+        "occurrence": 0,
+        "phase": "after",
+        "role": "reader",
+        "stream": "__harness_checkpoints__",
+        "action": "continue"
+      },
+      {
+        "hook": "checkpoint",
+        "occurrence": 1,
+        "phase": "after",
+        "role": "reader",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "consume",
+        "occurrence": 1,
+        "phase": "before",
+        "role": "reader",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "checkpoint",
+        "occurrence": 2,
+        "phase": "before",
+        "role": "reader",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "checkpoint",
+        "occurrence": 3,
+        "phase": "before",
+        "role": "reader",
+        "stream": "__harness_checkpoints__",
+        "action": "continue"
+      },
+      {
+        "hook": "checkpoint",
+        "occurrence": 2,
+        "phase": "after",
+        "role": "reader",
+        "stream": "__harness_checkpoints__",
+        "action": "continue"
+      },
+      {
+        "hook": "checkpoint",
+        "occurrence": 3,
+        "phase": "after",
+        "role": "reader",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "consume",
+        "occurrence": 2,
+        "phase": "before",
+        "role": "reader",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "checkpoint",
+        "occurrence": 4,
+        "phase": "before",
+        "role": "reader",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "checkpoint",
+        "occurrence": 5,
+        "phase": "before",
+        "role": "reader",
+        "stream": "__harness_checkpoints__",
+        "action": "continue"
+      },
+      {
+        "hook": "checkpoint",
+        "occurrence": 4,
+        "phase": "after",
+        "role": "reader",
+        "stream": "__harness_checkpoints__",
+        "action": "continue"
+      },
+      {
+        "hook": "checkpoint",
+        "occurrence": 5,
+        "phase": "after",
+        "role": "reader",
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "action": "continue"
+      },
+      {
+        "hook": "publish",
+        "occurrence": 0,
+        "phase": "slow-consumer",
+        "role": "unrelated",
+        "stream": null,
+        "action": "continue"
+      },
+      {
+        "hook": "append",
+        "occurrence": 0,
+        "phase": "before",
+        "role": "unrelated",
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "action": "continue"
+      },
+      {
+        "hook": "append",
+        "occurrence": 0,
+        "phase": "after",
+        "role": "unrelated",
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "action": "continue"
+      },
+      {
+        "hook": "append",
+        "occurrence": 1,
+        "phase": "before",
+        "role": "unrelated",
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "action": "continue"
+      },
+      {
+        "hook": "append",
+        "occurrence": 1,
+        "phase": "after",
+        "role": "unrelated",
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "action": "continue"
+      },
+      {
+        "hook": "append",
+        "occurrence": 2,
+        "phase": "before",
+        "role": "unrelated",
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "action": "continue"
+      },
+      {
+        "hook": "append",
+        "occurrence": 2,
+        "phase": "after",
+        "role": "unrelated",
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "action": "continue"
+      },
+      {
+        "hook": "append",
+        "occurrence": 3,
+        "phase": "before",
+        "role": "unrelated",
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "action": "continue"
+      },
+      {
+        "hook": "append",
+        "occurrence": 3,
+        "phase": "after",
+        "role": "unrelated",
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "action": "continue"
+      },
+      {
+        "hook": "append",
+        "occurrence": 4,
+        "phase": "before",
+        "role": "unrelated",
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "action": "continue"
+      },
+      {
+        "hook": "append",
+        "occurrence": 4,
+        "phase": "after",
+        "role": "unrelated",
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "action": "continue"
+      }
+    ],
+    "matchedScheduleEntries": [
+      0
+    ],
+    "coveredHooks": [
+      "validate",
+      "append",
+      "receipt",
+      "publish",
+      "consume",
+      "checkpoint",
+      "acknowledge"
+    ]
+  },
+  "result": "PASS",
+  "sourceStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "acceptedEvents": [
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "data": {
+          "fixtureId": "fault-c",
+          "value": "seeded-c"
+        },
+        "eventId": "ev_cccccccccccccccccccccccccc",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_cccccccccccccccccccccccccc",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:00.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "dispatch": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "expectedHead": "0000000000000000_0000000000000000",
+        "idempotencyKey": "ik_cccccccccccccccccccccccccc",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:45d4815304f9c1bd6e04eb79bc88d2e7b24ad988c2b7edf0e5b656e7a80aeb36",
+        "schemaVersion": 1,
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "data": {
+          "fixtureId": "fault-d",
+          "value": "seeded-d"
+        },
+        "eventId": "ev_dddddddddddddddddddddddddd",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_dddddddddddddddddddddddddd",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:01.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "dispatch": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "expectedHead": "0000000000000000_0000000000000001",
+        "idempotencyKey": "ik_dddddddddddddddddddddddddd",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:24a27a0f9635a44f2c559cd612316f6d8a993cbe69c797a778861f89377e69af",
+        "schemaVersion": 1,
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "data": {
+          "fixtureId": "fault-e",
+          "value": "seeded-e"
+        },
+        "eventId": "ev_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:02.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "dispatch": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "expectedHead": "0000000000000000_0000000000000002",
+        "idempotencyKey": "ik_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:8facda258adf171ae9fbd83315d4b71a55e18b119f636dd34179022320c813e8",
+        "schemaVersion": 1,
+        "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    }
+  ],
+  "operations": [
+    {
+      "attempt": 1,
+      "code": "HARNESS_CRASH",
+      "operation": "dispatch",
+      "processId": "dispatch-process-0-0",
+      "requestIndex": 0,
+      "result": "refused",
+      "receiptCount": 0,
+      "targetCount": 1
+    },
+    {
+      "attempt": 2,
+      "operation": "dispatch",
+      "processId": "dispatch-process-0-1",
+      "requestIndex": 0,
+      "result": "accepted",
+      "acknowledgement": {
+        "delayed": false,
+        "released": true,
+        "stateTrace": [
+          "pending",
+          "acknowledged"
+        ],
+        "ticks": 0
+      }
+    },
+    {
+      "attempt": 1,
+      "operation": "dispatch",
+      "processId": "dispatch-process-1-0",
+      "requestIndex": 1,
+      "result": "accepted",
+      "acknowledgement": {
+        "delayed": false,
+        "released": true,
+        "stateTrace": [
+          "pending",
+          "acknowledged"
+        ],
+        "ticks": 0
+      }
+    },
+    {
+      "attempt": 1,
+      "operation": "dispatch",
+      "processId": "dispatch-process-2-0",
+      "requestIndex": 2,
+      "result": "accepted",
+      "acknowledgement": {
+        "delayed": false,
+        "released": true,
+        "stateTrace": [
+          "pending",
+          "acknowledged"
+        ],
+        "ticks": 0
+      }
+    }
+  ],
+  "processRestarts": [
+    {
+      "component": "dispatch",
+      "from": "dispatch-process-0-0",
+      "reason": "HARNESS_CRASH",
+      "stateDeleted": true,
+      "to": "dispatch-process-0-1"
+    }
+  ],
+  "checkpoints": [
+    {
+      "offset": "0000000000000000_0000000000000001",
+      "checkpointDigest": "sha256:5719295eb888b0600783428523c98937f11dbe34e82734bd0b6f0abca852dea0",
+      "durableOffset": "0000000000000000_0000000000000001"
+    },
+    {
+      "offset": "0000000000000000_0000000000000002",
+      "checkpointDigest": "sha256:91ca2edef70fc9c141c1eae7a9f7b05fd22b424f3661d4fe4f0c6011c4e8d025",
+      "durableOffset": "0000000000000000_0000000000000002"
+    },
+    {
+      "offset": "0000000000000000_0000000000000003",
+      "checkpointDigest": "sha256:49e0ad2be248540ef6c2208a9447699830d96a257d5505f7547874cabb1793af",
+      "durableOffset": "0000000000000000_0000000000000003"
+    }
+  ],
+  "targetDump": [
+    {
+      "offset": "0000000000000000_0000000000000001",
+      "record": {
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "causation": null,
+          "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "data": {
+            "fixtureId": "fault-c",
+            "value": "seeded-c"
+          },
+          "eventId": "ev_cccccccccccccccccccccccccc",
+          "eventType": "ledger.fixture-recorded",
+          "idempotencyKey": "ik_cccccccccccccccccccccccccc",
+          "schemaVersion": 1,
+          "serverTimestamp": "2026-08-02T00:00:00.000Z",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "dispatch": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "expectedHead": "0000000000000000_0000000000000000",
+          "idempotencyKey": "ik_cccccccccccccccccccccccccc",
+          "operation": "ledger.event.append",
+          "requestDigest": "sha256:45d4815304f9c1bd6e04eb79bc88d2e7b24ad988c2b7edf0e5b656e7a80aeb36",
+          "schemaVersion": 1,
+          "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000002",
+      "record": {
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "causation": null,
+          "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "data": {
+            "fixtureId": "fault-d",
+            "value": "seeded-d"
+          },
+          "eventId": "ev_dddddddddddddddddddddddddd",
+          "eventType": "ledger.fixture-recorded",
+          "idempotencyKey": "ik_dddddddddddddddddddddddddd",
+          "schemaVersion": 1,
+          "serverTimestamp": "2026-08-02T00:00:01.000Z",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "dispatch": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "expectedHead": "0000000000000000_0000000000000001",
+          "idempotencyKey": "ik_dddddddddddddddddddddddddd",
+          "operation": "ledger.event.append",
+          "requestDigest": "sha256:24a27a0f9635a44f2c559cd612316f6d8a993cbe69c797a778861f89377e69af",
+          "schemaVersion": 1,
+          "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000003",
+      "record": {
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "causation": null,
+          "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "data": {
+            "fixtureId": "fault-e",
+            "value": "seeded-e"
+          },
+          "eventId": "ev_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "eventType": "ledger.fixture-recorded",
+          "idempotencyKey": "ik_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "schemaVersion": 1,
+          "serverTimestamp": "2026-08-02T00:00:02.000Z",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "dispatch": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "expectedHead": "0000000000000000_0000000000000002",
+          "idempotencyKey": "ik_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "operation": "ledger.event.append",
+          "requestDigest": "sha256:8facda258adf171ae9fbd83315d4b71a55e18b119f636dd34179022320c813e8",
+          "schemaVersion": 1,
+          "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    }
+  ],
+  "receiptDump": [
+    {
+      "offset": "0000000000000000_0000000000000001",
+      "record": {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "eventDigest": "sha256:b1d7bac85d4bfa77f14f64e28fcddbd555f78923cc8c753eb070e3cefbeeb085",
+          "idempotencyKey": "ik_cccccccccccccccccccccccccc",
+          "nextOffset": "0000000000000000_0000000000000001",
+          "operation": "ledger.event.append",
+          "requestDigest": "sha256:45d4815304f9c1bd6e04eb79bc88d2e7b24ad988c2b7edf0e5b656e7a80aeb36",
+          "status": "accepted",
+          "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000002",
+      "record": {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "eventDigest": "sha256:ed29fa297620f60a5b39cc345b8faac5ffa6f3c58dac4f167414288d4cce18b3",
+          "idempotencyKey": "ik_dddddddddddddddddddddddddd",
+          "nextOffset": "0000000000000000_0000000000000002",
+          "operation": "ledger.event.append",
+          "requestDigest": "sha256:24a27a0f9635a44f2c559cd612316f6d8a993cbe69c797a778861f89377e69af",
+          "status": "accepted",
+          "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000003",
+      "record": {
+        "kind": "dispatch.accepted",
+        "receipt": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "eventDigest": "sha256:1d556e6fd0a93dd1c7578083dfc0d6148e7c44886b59f5692f6e39384f32ab5e",
+          "idempotencyKey": "ik_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "nextOffset": "0000000000000000_0000000000000003",
+          "operation": "ledger.event.append",
+          "requestDigest": "sha256:8facda258adf171ae9fbd83315d4b71a55e18b119f636dd34179022320c813e8",
+          "status": "accepted",
+          "stream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    }
+  ],
+  "authoritativeReplay": {
+    "finalStateDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "recordCount": 3
+  },
+  "reader": {
+    "processId": "reader-process-0",
+    "finalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "appliedOffsets": [
+      "0000000000000000_0000000000000001",
+      "0000000000000000_0000000000000002",
+      "0000000000000000_0000000000000003"
+    ],
+    "checkpoint": {
+      "kind": "reader.checkpoint",
+      "offset": "0000000000000000_0000000000000003",
+      "sourceStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "stateDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0"
+    },
+    "checkpointRecovery": null,
+    "resumeFrom": "0000000000000000_0000000000000000",
+    "sourceReplayCount": 3,
+    "durableAuthorityRestarts": [],
+    "partitionProbe": null
+  },
+  "invalidCausalOrder": {
+    "rejected": {
+      "code": "REDUCER_ILLEGAL_TRANSITION",
+      "offset": "0000000000000000_0000000000000001"
+    },
+    "citedOffset": "0000000000000000_0000000000000001"
+  },
+  "slowConsumer": {
+    "bounds": {
+      "maxBytes": 1024,
+      "maxRecords": 2,
+      "inputBytes": 1434,
+      "inputRecords": 3,
+      "cancelPeakBytes": 956,
+      "cancelPeakRecords": 2,
+      "catchUpPeakBytes": 956,
+      "catchUpPeakRecords": 2
+    },
+    "cancel": {
+      "code": "HARNESS_SLOW_CONSUMER",
+      "offset": "0000000000000000_0000000000000003",
+      "policy": "cancel",
+      "result": "cancelled"
+    },
+    "catchUp": {
+      "overflowAt": "0000000000000000_0000000000000003",
+      "policy": "catch-up",
+      "result": "caught-up",
+      "resumedFrom": "0000000000000000_0000000000000000",
+      "replayedRecords": 3
+    },
+    "unrelatedStreamProgress": {
+      "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+      "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "independent": true,
+      "headOfLineBlocked": false,
+      "partitionedDuringProbe": false,
+      "progressRecords": 5
+    }
+  },
+  "delayedAcknowledgements": [],
+  "finalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0"
+}

@@ -1,0 +1,62 @@
+{
+  "files": [
+    {
+      "file": "aggregate-budget.json",
+      "leaked": false,
+      "matches": []
+    },
+    {
+      "file": "batch-manifest.json",
+      "leaked": false,
+      "matches": []
+    },
+    {
+      "file": "canary-scan.json",
+      "leaked": false,
+      "matches": []
+    },
+    {
+      "file": "causation-graph.json",
+      "leaked": false,
+      "matches": []
+    },
+    {
+      "file": "cold-clone-transcript.json",
+      "leaked": false,
+      "matches": []
+    },
+    {
+      "file": "concurrency-keys.json",
+      "leaked": false,
+      "matches": []
+    },
+    {
+      "file": "fairness.json",
+      "leaked": false,
+      "matches": []
+    },
+    {
+      "file": "refusals.json",
+      "leaked": false,
+      "matches": []
+    },
+    {
+      "file": "replay-digests.json",
+      "leaked": false,
+      "matches": []
+    },
+    {
+      "file": "sensitivity.json",
+      "leaked": false,
+      "matches": []
+    },
+    {
+      "file": "verification-summary.json",
+      "leaked": false,
+      "matches": []
+    }
+  ],
+  "finalEvidenceChecked": true,
+  "leaked": false,
+  "transcriptChecked": true
+}

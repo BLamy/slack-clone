@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stream-slack.local/schemas/agent-config-events.v1.schema.json",
+  "title": "Stream Slack agent configuration events v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["eventType", "data"],
+  "properties": {
+    "eventType": { "type": "string" },
+    "data": { "type": "object" }
+  },
+  "oneOf": [
+    {
+      "title": "Agent configuration created",
+      "properties": {
+        "eventType": { "const": "agent.config.created" },
+        "data": { "$ref": "#/$defs/revisionData" }
+      }
+    },
+    {
+      "title": "Agent configuration revised",
+      "properties": {
+        "eventType": { "const": "agent.config.revised" },
+        "data": { "$ref": "#/$defs/revisionData" }
+      }
+    },
+    {
+      "title": "Agent configuration activated",
+      "properties": {
+        "eventType": { "const": "agent.config.activated" },
+        "data": { "$ref": "#/$defs/activationData" }
+      }
+    },
+    {
+      "title": "Agent configuration disabled",
+      "properties": {
+        "eventType": { "const": "agent.config.disabled" },
+        "data": { "$ref": "#/$defs/lifecycleData" }
+      }
+    },
+    {
+      "title": "Agent configuration retired",
+      "properties": {
+        "eventType": { "const": "agent.config.retired" },
+        "data": { "$ref": "#/$defs/lifecycleData" }
+      }
+    }
+  ],
+  "$defs": {
+    "agentId": {
+      "type": "string",
+      "pattern": "^ag_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "revisionId": {
+      "type": "string",
+      "pattern": "^acr_[0-9a-f]{64}$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "nullableRevisionId": {
+      "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/revisionId" }]
+    },
+    "config": {
+      "$ref": "agent-config.v1.schema.json"
+    },
+    "revisionData": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agentId",
+        "config",
+        "configDigest",
+        "expectedRevision",
+        "expectedRevisionId",
+        "predecessorRevisionId",
+        "revision",
+        "revisionId"
+      ],
+      "properties": {
+        "agentId": { "$ref": "#/$defs/agentId" },
+        "config": { "$ref": "#/$defs/config" },
+        "configDigest": { "$ref": "#/$defs/digest" },
+        "expectedRevision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "expectedRevisionId": { "$ref": "#/$defs/nullableRevisionId" },
+        "predecessorRevisionId": { "$ref": "#/$defs/nullableRevisionId" },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "revisionId": { "$ref": "#/$defs/revisionId" }
+      }
+    },
+    "activationData": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agentId",
+        "expectedRevision",
+        "expectedRevisionId",
+        "revisionId"
+      ],
+      "properties": {
+        "agentId": { "$ref": "#/$defs/agentId" },
+        "expectedRevision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "expectedRevisionId": { "$ref": "#/$defs/nullableRevisionId" },
+        "revisionId": { "$ref": "#/$defs/revisionId" }
+      }
+    },
+    "lifecycleData": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agentId", "expectedRevision", "expectedRevisionId"],
+      "properties": {
+        "agentId": { "$ref": "#/$defs/agentId" },
+        "expectedRevision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "expectedRevisionId": { "$ref": "#/$defs/nullableRevisionId" }
+      }
+    }
+  }
+}

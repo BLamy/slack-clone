@@ -1,0 +1,20 @@
+{
+  "interfaceVersion": 1,
+  "rows": [
+    {
+      "adapterInterfaceVersion": 1,
+      "descriptorDigest": "sha256:847eadb14caa74f2ca5fb1522eb95e3b71c9c82aec4e6e0b58bd076a81fbe512",
+      "kind": "harness",
+      "providerKey": "harness:scripted@1.0.0",
+      "result": "PASS"
+    },
+    {
+      "adapterInterfaceVersion": 1,
+      "descriptorDigest": "sha256:693a5264c3850844f3d7f337df063f7e561edea236762d208a15a13b84a82c1e",
+      "kind": "sandbox",
+      "providerKey": "sandbox:scripted@1.0.0",
+      "result": "PASS"
+    }
+  ],
+  "result": "PASS"
+}

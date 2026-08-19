@@ -1,0 +1,59 @@
+{
+  "controlExitCode": 0,
+  "controlPassed": true,
+  "mutationCount": 10,
+  "result": "PASS",
+  "results": [
+    {
+      "detected": true,
+      "label": "request-override-allowlist",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "current-membership-fence",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "terminal-run-fence",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "source-mention-fence",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "raw-output-budget",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "reducer-agent-kind",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "lost-ack-trusted-replay",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "reply-idempotency-provenance-drift",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "accepted-event-contract",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "message-door-membership-fence",
+      "verifierExitCode": 1
+    }
+  ],
+  "verifierDetectedMutant": true
+}

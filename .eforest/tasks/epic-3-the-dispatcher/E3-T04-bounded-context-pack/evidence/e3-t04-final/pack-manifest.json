@@ -1,0 +1,121 @@
+{
+  "result": "PASS",
+  "packDigest": "sha256:2e15baf66fe66555415c49fef7fb7c150dbb6d15a40e287fc517f72a3f326c7f",
+  "canonicalBytes": 4611,
+  "accounting": {
+    "attachmentBytes": 11,
+    "bytes": 925,
+    "estimatedTokens": 18,
+    "historyItems": 2,
+    "items": 4
+  },
+  "sourceHeads": [
+    {
+      "digest": "sha256:1d137b6339b853b9a1fea9673a77020faf0f0631dce82c4b9ab9d450be92a6f3",
+      "offset": "0000000000000004_0000000000000000",
+      "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+    },
+    {
+      "digest": "sha256:a550503fa2909b8f6cc5fdbf808973c1c66bd998f054c5d9f03ecebd5b4329cf",
+      "offset": "0000000000000003_0000000000000000",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    {
+      "digest": "sha256:5b8912c967e8730d0bd6855dd2005176f7845489198d4730c1ef43d5842430e4",
+      "offset": "0000000000000005_0000000000000000",
+      "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+    }
+  ],
+  "included": [
+    {
+      "citation": {
+        "contentKind": "conversation-message",
+        "eventDigest": "sha256:163b5771446ce6dc777ba882ed046be08f30d90c92b2531c5c1c0b0ff695c14c",
+        "offset": "0000000000000001_0000000000000000",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "contentKind": "conversation-message",
+      "id": "message:root",
+      "ordinal": 1,
+      "trust": "untrusted-content",
+      "sourceRange": {
+        "endOffset": "0000000000000001_0000000000000000",
+        "startOffset": "0000000000000001_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "citation": {
+        "contentKind": "conversation-message",
+        "eventDigest": "sha256:311d997efbe70e2dba988ac422cc49368d979ba56dc7356820c75f9fb99096af",
+        "offset": "0000000000000002_0000000000000000",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "contentKind": "conversation-message",
+      "id": "message:reply",
+      "ordinal": 2,
+      "trust": "untrusted-content",
+      "sourceRange": {
+        "endOffset": "0000000000000002_0000000000000000",
+        "startOffset": "0000000000000002_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "citation": {
+        "contentKind": "workspace-file",
+        "eventDigest": "sha256:5b8912c967e8730d0bd6855dd2005176f7845489198d4730c1ef43d5842430e4",
+        "offset": "0000000000000005_0000000000000000",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+      },
+      "contentKind": "workspace-file",
+      "id": "workspace-file:docs/readme.md",
+      "ordinal": 3,
+      "trust": "untrusted-content",
+      "sourceRange": {
+        "endOffset": "0000000000000005_0000000000000000",
+        "startOffset": "0000000000000005_0000000000000000",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+      }
+    }
+  ],
+  "instructions": [
+    {
+      "citation": {
+        "contentKind": "agent-instruction",
+        "eventDigest": "sha256:1d137b6339b853b9a1fea9673a77020faf0f0631dce82c4b9ab9d450be92a6f3",
+        "offset": "0000000000000004_0000000000000000",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+      },
+      "id": "task",
+      "revision": 2,
+      "trust": "trusted-instructions"
+    }
+  ],
+  "omitted": [
+    {
+      "bytes": 13,
+      "citation": {
+        "contentKind": "conversation-message",
+        "eventDigest": "sha256:a550503fa2909b8f6cc5fdbf808973c1c66bd998f054c5d9f03ecebd5b4329cf",
+        "offset": "0000000000000003_0000000000000000",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "contentKind": "conversation-message",
+      "estimatedTokens": 4,
+      "id": "message:old",
+      "reason": "message-limit",
+      "sourceRange": {
+        "endOffset": "0000000000000003_0000000000000000",
+        "startOffset": "0000000000000003_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "trust": "untrusted-content"
+    }
+  ]
+}

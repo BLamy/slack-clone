@@ -1,0 +1,12 @@
+{
+  "mutation": "disable channel membership check for channel.read",
+  "unsafeBypassObserved": true,
+  "baselineVerifierMatrixMustRefuseTheSamePrivateRead": true,
+  "implementationTreeBinding": {
+    "mutatedPath": "src/ledger/channel-auth.mjs",
+    "verifierRejectedPostImplementationChange": true,
+    "result": "PASS"
+  },
+  "scratchPath": ".artifacts/e1-t03/promoted-sha-vector-e1-t03/unsafe-channel-auth/channel-auth.mjs",
+  "result": "PASS"
+}

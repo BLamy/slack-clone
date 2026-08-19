@@ -1,0 +1,41 @@
+{
+  "checked": true,
+  "files": [
+    "canary-scan.json",
+    "checkpoint-manifest.json",
+    "cold-clone-transcript.json",
+    "crash-schedules.json",
+    "duplicate-race.json",
+    "invocation-receipts.json",
+    "outcomes.json",
+    "replay-digests.json",
+    "resolution-races.json",
+    "sensitivity.json",
+    "snapshot-attacks.json",
+    "snapshot-manifest.json",
+    "source-attacks.json",
+    "source-manifest.json",
+    "verification-summary.json"
+  ],
+  "leaked": false,
+  "canaryPresentInPublishedEvidence": false,
+  "publishedEvidenceLeaked": false,
+  "evidenceFiles": [
+    "canary-scan.json",
+    "checkpoint-manifest.json",
+    "cold-clone-transcript.json",
+    "crash-schedules.json",
+    "duplicate-race.json",
+    "invocation-receipts.json",
+    "outcomes.json",
+    "replay-digests.json",
+    "resolution-races.json",
+    "sensitivity.json",
+    "snapshot-attacks.json",
+    "snapshot-manifest.json",
+    "source-attacks.json",
+    "source-manifest.json",
+    "verification-summary.json"
+  ],
+  "postVerifierTranscriptChecked": true
+}

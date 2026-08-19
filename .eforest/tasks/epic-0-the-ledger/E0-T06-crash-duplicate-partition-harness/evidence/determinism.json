@@ -1,0 +1,313 @@
+[
+  {
+    "name": "baseline",
+    "acceptedRefusedSequence": [
+      {
+        "code": null,
+        "requestIndex": 0,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 1,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 2,
+        "result": "accepted"
+      }
+    ],
+    "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "identical": true
+  },
+  {
+    "name": "validate-crash",
+    "acceptedRefusedSequence": [
+      {
+        "code": "HARNESS_CRASH",
+        "requestIndex": 0,
+        "result": "refused"
+      },
+      {
+        "code": null,
+        "requestIndex": 0,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 1,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 2,
+        "result": "accepted"
+      }
+    ],
+    "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "identical": true
+  },
+  {
+    "name": "append-before-crash",
+    "acceptedRefusedSequence": [
+      {
+        "code": "HARNESS_CRASH",
+        "requestIndex": 0,
+        "result": "refused"
+      },
+      {
+        "code": null,
+        "requestIndex": 0,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 1,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 2,
+        "result": "accepted"
+      }
+    ],
+    "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "identical": true
+  },
+  {
+    "name": "append-after-crash",
+    "acceptedRefusedSequence": [
+      {
+        "code": "HARNESS_CRASH",
+        "requestIndex": 0,
+        "result": "refused"
+      },
+      {
+        "code": null,
+        "requestIndex": 0,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 1,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 2,
+        "result": "accepted"
+      }
+    ],
+    "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "identical": true
+  },
+  {
+    "name": "receipt-before-crash",
+    "acceptedRefusedSequence": [
+      {
+        "code": "HARNESS_CRASH",
+        "requestIndex": 0,
+        "result": "refused"
+      },
+      {
+        "code": null,
+        "requestIndex": 0,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 1,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 2,
+        "result": "accepted"
+      }
+    ],
+    "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "identical": true
+  },
+  {
+    "name": "receipt-after-crash",
+    "acceptedRefusedSequence": [
+      {
+        "code": "HARNESS_CRASH",
+        "requestIndex": 0,
+        "result": "refused"
+      },
+      {
+        "code": null,
+        "requestIndex": 0,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 1,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 2,
+        "result": "accepted"
+      }
+    ],
+    "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "identical": true
+  },
+  {
+    "name": "append-duplicate",
+    "acceptedRefusedSequence": [
+      {
+        "code": null,
+        "requestIndex": 0,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 1,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 2,
+        "result": "accepted"
+      }
+    ],
+    "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "identical": true
+  },
+  {
+    "name": "receipt-duplicate",
+    "acceptedRefusedSequence": [
+      {
+        "code": null,
+        "requestIndex": 0,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 1,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 2,
+        "result": "accepted"
+      }
+    ],
+    "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "identical": true
+  },
+  {
+    "name": "publish-duplicate-reorder",
+    "acceptedRefusedSequence": [
+      {
+        "code": null,
+        "requestIndex": 0,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 1,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 2,
+        "result": "accepted"
+      }
+    ],
+    "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "identical": true
+  },
+  {
+    "name": "consume-partition",
+    "acceptedRefusedSequence": [
+      {
+        "code": null,
+        "requestIndex": 0,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 1,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 2,
+        "result": "accepted"
+      }
+    ],
+    "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "identical": true
+  },
+  {
+    "name": "checkpoint-corrupt",
+    "acceptedRefusedSequence": [
+      {
+        "code": null,
+        "requestIndex": 0,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 1,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 2,
+        "result": "accepted"
+      }
+    ],
+    "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "identical": true
+  },
+  {
+    "name": "acknowledge-delay",
+    "acceptedRefusedSequence": [
+      {
+        "code": null,
+        "requestIndex": 0,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 1,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 2,
+        "result": "accepted"
+      }
+    ],
+    "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "identical": true
+  },
+  {
+    "name": "seeded-combination",
+    "acceptedRefusedSequence": [
+      {
+        "code": null,
+        "requestIndex": 0,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 1,
+        "result": "accepted"
+      },
+      {
+        "code": null,
+        "requestIndex": 2,
+        "result": "accepted"
+      }
+    ],
+    "digest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "identical": true
+  }
+]

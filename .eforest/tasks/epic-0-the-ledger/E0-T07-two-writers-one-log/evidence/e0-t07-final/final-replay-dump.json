@@ -1,0 +1,130 @@
+{
+  "records": [
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-final-duplicate-logical-operation-0",
+          "value": "value-0"
+        },
+        "eventId": "ev_00000000000000000000000000",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_00000000000000000000000000",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:00.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "offset": "0000000000000000_0000000000000888"
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-final-pre-partition-0-a-1",
+          "value": "value-1"
+        },
+        "eventId": "ev_00000000000000000000000001",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_00000000000000000000000001",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:01.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "offset": "0000000000000000_0000000000001766"
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-final-pre-partition-1-b-4",
+          "value": "value-4"
+        },
+        "eventId": "ev_00000000000000000000000004",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_00000000000000000000000004",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:04.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "offset": "0000000000000000_0000000000002644"
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-final-non-conflicting-main-5",
+          "value": "value-5"
+        },
+        "eventId": "ev_00000000000000000000000005",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_00000000000000000000000005",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:05.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "offset": "0000000000000000_0000000000003525"
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-final-partition-0-b-8",
+          "value": "value-8"
+        },
+        "eventId": "ev_00000000000000000000000008",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_00000000000000000000000008",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:08.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "offset": "0000000000000000_0000000000004399"
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-final-partition-1-b-10",
+          "value": "value-10"
+        },
+        "eventId": "ev_0000000000000000000000000a",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_0000000000000000000000000a",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:10.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "offset": "0000000000000000_0000000000005275"
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-final-post-restart-b-12",
+          "value": "value-12"
+        },
+        "eventId": "ev_0000000000000000000000000c",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_0000000000000000000000000c",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:12.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "offset": "0000000000000000_0000000000006152"
+    }
+  ]
+}

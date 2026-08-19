@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "canonicalJson": "{\"actorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"causation\":{\"digest\":\"sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\",\"offset\":\"0000000000000001_0000000000000002\",\"stream\":\"channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc\"},\"correlationId\":\"cr_dddddddddddddddddddddddddd\",\"data\":{\"messageId\":\"fixture-message-1\",\"metadata\":{\"priority\":1,\"tags\":[\"demo\",\"ledger\"]},\"text\":\"hello from the canonical ledger\"},\"eventId\":\"ev_cccccccccccccccccccccccccc\",\"eventType\":\"channel.message.created\",\"idempotencyKey\":\"ik_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"schemaVersion\":1,\"serverTimestamp\":\"2026-01-01T00:00:00.000Z\",\"workspaceId\":\"ws_aaaaaaaaaaaaaaaaaaaaaaaaaa\"}",
+  "byteLength": 707,
+  "canonicalSha256": "sha256:4947425de8918cc240bee9704f7d9b6eaa57253f6bca047cc318f97b0d4c276a",
+  "sourceReferenceSha256": "sha256:930748f19cbf2a9d8f4986a6d411c81279d0c080a53f701d01f845011abb97bd"
+}

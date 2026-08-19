@@ -1,0 +1,8 @@
+{
+  "changedFile": "src/ledger/multi-user-chat-api.mjs",
+  "mutation": "omit private channel membership recheck in assertReadable",
+  "installExitCode": 0,
+  "verifierExitCode": 1,
+  "verifierRejected": true,
+  "result": "PASS"
+}

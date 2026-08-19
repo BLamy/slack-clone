@@ -1,0 +1,27 @@
+{
+  "duplicate-logical-id.json": {
+    "code": "REDUCER_DUPLICATE_LOGICAL_ID",
+    "offset": "0000000000000002_0000000000000006",
+    "path": "$.event.data.messageId"
+  },
+  "invalid-offset.json": {
+    "code": "REDUCER_INVALID_OFFSET",
+    "offset": "not-an-offset",
+    "path": "$.records[0].offset"
+  },
+  "illegal-transition.json": {
+    "code": "REDUCER_ILLEGAL_TRANSITION",
+    "offset": "0000000000000002_0000000000000004",
+    "path": "$.event.data.to"
+  },
+  "malformed-envelope.json": {
+    "code": "REPLAY_INVALID_ENVELOPE",
+    "offset": "0000000000000002_0000000000000002",
+    "path": "$.records[0].event"
+  },
+  "unknown-event-type.json": {
+    "code": "REPLAY_INVALID_ENVELOPE",
+    "offset": "0000000000000002_0000000000000001",
+    "path": "$.records[0].event"
+  }
+}

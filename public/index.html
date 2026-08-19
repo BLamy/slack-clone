@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stream Slack Durable Streams Demo</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="home-page">
+    <header class="home-header">
+      <a class="home-brand" href="/" aria-label="Stream Slack home">
+        <span class="workspace__mark">S</span>
+        <span>Stream Slack</span>
+      </a>
+      <nav class="home-nav" aria-label="Primary navigation">
+        <a href="#features">Features</a>
+        <a href="#stack">Emulate stack</a>
+        <a href="#try">Try it</a>
+      </nav>
+      <a class="home-login" href="/login?returnTo=%2Fapp%3Froom%3Ddemo"
+        >Sign in</a
+      >
+    </header>
+
+    <main>
+      <section class="home-hero" aria-labelledby="home-title">
+        <div class="home-copy">
+          <p class="home-eyebrow">Durable Streams chat demo</p>
+          <h1 id="home-title">A Slack-style room backed by BLamy/emulate.</h1>
+          <p class="home-lede">
+            Sign in through the local Auth0 emulator, join a room, and watch
+            messages append to a Durable Streams service that every connected
+            session can replay.
+          </p>
+          <div class="home-actions">
+            <a
+              class="home-primary"
+              data-testid="home-open-chat"
+              href="/app?room=demo"
+              >Open demo room</a
+            >
+            <a class="home-secondary" href="#stack">View stack</a>
+          </div>
+        </div>
+
+        <section class="home-preview" aria-label="Chat preview">
+          <aside class="home-preview__sidebar">
+            <div class="home-preview__team">Durable workspace</div>
+            <div class="home-preview__label">Channels</div>
+            <div class="home-preview__channel is-active"># demo</div>
+            <div class="home-preview__channel"># replay-tests</div>
+            <div class="home-preview__channel"># emulator-status</div>
+            <div class="home-preview__label">Signed-in users</div>
+            <div class="home-preview__person">
+              <span class="home-avatar home-avatar--green"></span>Ada
+            </div>
+            <div class="home-preview__person">
+              <span class="home-avatar home-avatar--blue"></span>Linus
+            </div>
+          </aside>
+          <div class="home-preview__chat">
+            <div class="home-preview__bar">
+              <strong># demo</strong>
+              <span>Auth0 emulator active</span>
+            </div>
+            <article class="home-preview__message">
+              <span class="home-avatar home-avatar--green"></span>
+              <div>
+                <strong>Ada Lovelace</strong>
+                <p>Posting this through the app writes to Durable Streams.</p>
+              </div>
+            </article>
+            <article class="home-preview__message">
+              <span class="home-avatar home-avatar--blue"></span>
+              <div>
+                <strong>Linus Torvalds</strong>
+                <p>
+                  The second session receives the same stream event and renders
+                  it live.
+                </p>
+              </div>
+            </article>
+            <div class="home-preview__composer">Message #demo</div>
+          </div>
+        </section>
+      </section>
+
+      <section
+        class="home-section"
+        id="features"
+        aria-labelledby="features-title"
+      >
+        <p class="home-eyebrow">What the demo proves</p>
+        <h2 id="features-title">
+          Auth, streams, and replayable chat in one local stack.
+        </h2>
+        <div class="home-grid">
+          <article>
+            <h3>Emulated Auth0</h3>
+            <p>
+              Seeded users sign in against the local Auth0 emulator before
+              entering the chat.
+            </p>
+          </article>
+          <article>
+            <h3>Durable messages</h3>
+            <p>
+              Every post is appended to a Durable Streams room and replayed to
+              connected clients.
+            </p>
+          </article>
+          <article>
+            <h3>Replay-ready</h3>
+            <p>
+              The app is set up for Playwright and Replay Chromium verification
+              runs.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="home-stack" id="stack" aria-labelledby="stack-title">
+        <div>
+          <p class="home-eyebrow">Local services</p>
+          <h2 id="stack-title">
+            The app runs against the BLamy/emulate submodule.
+          </h2>
+        </div>
+        <dl>
+          <div>
+            <dt>Chat app</dt>
+            <dd>http://127.0.0.1:5175</dd>
+          </div>
+          <div>
+            <dt>Durable Streams</dt>
+            <dd>http://127.0.0.1:4100</dd>
+          </div>
+          <div>
+            <dt>Auth0 emulator</dt>
+            <dd>http://127.0.0.1:4101</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="home-try" id="try" aria-labelledby="try-title">
+        <div>
+          <p class="home-eyebrow">Seeded credentials</p>
+          <h2 id="try-title">
+            Open the demo room and sign in as Ada or Linus.
+          </h2>
+          <p>
+            Use <code>DemoPass123</code> with <code>ada@example.test</code> or
+            <code>linus@example.test</code>.
+          </p>
+        </div>
+        <a class="home-primary" href="/app?room=demo">Launch chat</a>
+      </section>
+    </main>
+  </body>
+</html>

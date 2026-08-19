@@ -1,0 +1,90 @@
+{
+  "ledger-log.v1.json": [
+    {
+      "finalStateDigest": "sha256:ce664ad1f779ccad43e48f49e502745128f4ca34c912d11bd8b7c1d178bb199a",
+      "name": "serverTimestamp",
+      "outcome": "digest-changed"
+    },
+    {
+      "finalStateDigest": "sha256:38c3e14d40952180edd95d0dadd6b620a6ff6068c26b0a5211a677bc50175d89",
+      "name": "correlationId",
+      "outcome": "digest-changed"
+    },
+    {
+      "finalStateDigest": "sha256:a7c21cbd2bd78555107a1c6ff45234be5ebef91b79444ee7b0a98a676369ddef",
+      "name": "idempotencyKey",
+      "outcome": "digest-changed"
+    },
+    {
+      "finalStateDigest": "sha256:a004a6c92372e067762ebe6fa9ebc8fb39eb9b9b699b575526e31176a78dd6f9",
+      "name": "actorId",
+      "outcome": "digest-changed"
+    },
+    {
+      "finalStateDigest": "sha256:a7ded304486d95a6f40d700f512c012d17e00889ab362c7bb930be8f966bc5ea",
+      "name": "eventId",
+      "outcome": "digest-changed"
+    },
+    {
+      "code": "REPLAY_INVALID_ENVELOPE",
+      "name": "schemaVersion",
+      "offset": "0000000000000000_0000000000000001",
+      "outcome": "validation-failed"
+    },
+    {
+      "finalStateDigest": "sha256:f813d088e9372e0ef57f939e34cd8551d13546b557b5342c556537f3e8dc0bd0",
+      "name": "offset",
+      "outcome": "digest-changed"
+    },
+    {
+      "baselineFinalStateDigest": "sha256:fd07653077a9042c51aed5c2a931eba07d6299736f06313dd36788b663093a65",
+      "finalStateDigest": "sha256:397f52805d056c406d81270ffd14a34d52d63813d88699fdb1e319fc79653118",
+      "name": "causation.digest",
+      "outcome": "digest-changed"
+    }
+  ],
+  "message-and-run-log.v1.json": [
+    {
+      "finalStateDigest": "sha256:c50994e6ab641becf1e903116f140624775f1b7a0f7e584e8719f104ba2ee21e",
+      "name": "serverTimestamp",
+      "outcome": "digest-changed"
+    },
+    {
+      "finalStateDigest": "sha256:c336a71e33fdee9dc0bce778fefa5234cd1175398f5e1a754486e68b555b8636",
+      "name": "correlationId",
+      "outcome": "digest-changed"
+    },
+    {
+      "finalStateDigest": "sha256:a6c66cc3d2692397b09b17012c1653c8a169555594c1b5ebd87ffed83fee4609",
+      "name": "idempotencyKey",
+      "outcome": "digest-changed"
+    },
+    {
+      "finalStateDigest": "sha256:8609f6455771959c6a05487156c70aea95ab83c3a657740743eea3b036246ab4",
+      "name": "actorId",
+      "outcome": "digest-changed"
+    },
+    {
+      "finalStateDigest": "sha256:7c1aa77e3b9544ae324cd5c743ab9be4e5e45510d185e128714ceee8ef954279",
+      "name": "eventId",
+      "outcome": "digest-changed"
+    },
+    {
+      "code": "REPLAY_INVALID_ENVELOPE",
+      "name": "schemaVersion",
+      "offset": "0000000000000001_0000000000000001",
+      "outcome": "validation-failed"
+    },
+    {
+      "finalStateDigest": "sha256:8b4e89e11c011b8a45eaf613859903d79a28a679ee4d1fe58c45dd0897aa6809",
+      "name": "offset",
+      "outcome": "digest-changed"
+    },
+    {
+      "baselineFinalStateDigest": "sha256:101769cd1ea0900db96833366a82c427f66404d5d52bcad09af9c956b83187f6",
+      "finalStateDigest": "sha256:5885bf6235d5e1a0a85b3d0d3af55163638bcdf93e217fefa70215d402e30a17",
+      "name": "causation.digest",
+      "outcome": "digest-changed"
+    }
+  ]
+}

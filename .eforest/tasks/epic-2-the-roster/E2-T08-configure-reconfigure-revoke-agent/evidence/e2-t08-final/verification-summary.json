@@ -1,0 +1,3723 @@
+{
+  "schemaVersion": 1,
+  "task": "E2-T08",
+  "runId": "e2-composed-final-20260806d",
+  "implementationCommit": "db4ff223843b19ce0a5630a7af23804a074f259f",
+  "result": "PASS",
+  "replayDescription": "Replay: N/A (server/CLI agent-control capstone) + mitigation: role matrix, revision/snapshot manifests, revocation race, canary scan, and composite stream replay",
+  "skips": [],
+  "gates": [
+    {
+      "name": "format",
+      "command": "pnpm format:check",
+      "exitCode": 0
+    },
+    {
+      "name": "format-e2-t08",
+      "command": "pnpm format:check:e2-t08",
+      "exitCode": 0
+    },
+    {
+      "name": "lint",
+      "command": "pnpm lint",
+      "exitCode": 0
+    },
+    {
+      "name": "typecheck",
+      "command": "pnpm typecheck",
+      "exitCode": 0
+    },
+    {
+      "name": "test",
+      "command": "pnpm test",
+      "exitCode": 0
+    },
+    {
+      "name": "build",
+      "command": "pnpm build",
+      "exitCode": 0
+    }
+  ],
+  "bootstrap": {
+    "directoryStream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+    "eventCount": 37,
+    "sourceFixture": "E1-T03 channel lifecycle fixture filtered to workspace A"
+  },
+  "workflow": {
+    "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "agentPrincipalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "createdBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "ownerPrincipalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+    "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+    "configurationRevisions": [
+      1,
+      2,
+      3
+    ],
+    "lifecycle": "draft -> active -> retired",
+    "channelContract": [
+      "workspace.membership.invited",
+      "workspace.membership.accepted",
+      "channel.membership.invited",
+      "channel.membership.joined"
+    ],
+    "firstSnapshotByteLength": 7226,
+    "secondSnapshotByteLength": 7214,
+    "firstSnapshotReplayable": true,
+    "secondSnapshotReplayable": true,
+    "historicalSnapshotsStableAfterRevoke": true,
+    "idempotency": {
+      "lostAcknowledgementRecovered": true,
+      "duplicatePrincipalEvents": 1,
+      "changedPayloadExitCode": 4,
+      "changedPayloadRefused": true,
+      "lostAcknowledgementCommands": [
+        {
+          "command": "create",
+          "durableEventCount": 1,
+          "clientAborted": true
+        },
+        {
+          "command": "config-create",
+          "durableEventCount": 1,
+          "clientAborted": true
+        },
+        {
+          "command": "activate",
+          "durableEventCount": 1,
+          "clientAborted": true
+        },
+        {
+          "command": "revise",
+          "durableEventCount": 1,
+          "clientAborted": true
+        },
+        {
+          "command": "activate",
+          "durableEventCount": 1,
+          "clientAborted": true
+        },
+        {
+          "command": "revoke",
+          "durableEventCount": 1,
+          "clientAborted": true
+        }
+      ],
+      "everyMutatingCliCommandLostAcked": true
+    },
+    "historyEntries": 6,
+    "canaryRefusal": {
+      "apiStatus": 400,
+      "cliExitCode": 2,
+      "inputCanaryInjected": true,
+      "sourceHeadsUnchanged": true,
+      "responseAndTranscriptRedacted": true,
+      "result": "PASS"
+    }
+  },
+  "snapshots": {
+    "first": {
+      "snapshotDigest": "sha256:237e2c373a9c6b4139fe90d13e32c74396878ea7567e63558681eb1e1a334b2f",
+      "canonicalBytes": 7135,
+      "configRevision": 1,
+      "configRevisionId": "acr_b0bc066ff12c66b8bdf8aafad1e56031399d2ca6743893e650ec0c406ee1198c",
+      "providerManifestDigest": "sha256:751764325d1387da9404895128892e5a1e95005fb0bd45e27bd9dde42d6ec8b5",
+      "grantRevisions": [
+        1,
+        1
+      ],
+      "sourceManifest": {
+        "config": {
+          "offset": "0000000000000000_0000000000000001",
+          "stateDigest": "sha256:4a4f957056bcb945a6bfddc610007d2c5e35d612300adfcf96c09f3bc54ad47c",
+          "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
+        },
+        "directory": {
+          "offset": "0000000000000000_0000000000000042",
+          "stateDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+        },
+        "providers": {
+          "manifestDigest": "sha256:751764325d1387da9404895128892e5a1e95005fb0bd45e27bd9dde42d6ec8b5",
+          "resolvedProviderDigest": "sha256:541df036a887331550882cddc8f8fb4b27366f24f1d7d632f66813476ea63116"
+        },
+        "workspaceInputs": {
+          "offset": "0000000000000000_0000000000000042",
+          "stateDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+        },
+        "connectionGrants": [
+          {
+            "offset": "0000000000000000_0000000000000001",
+            "stateDigest": "sha256:eb3426131664b7e983c9b80e6ae9f9cbaf7ef8be6197496f4b9ce754fa6208c0",
+            "stream": "connection:conn_a/config"
+          },
+          {
+            "offset": "0000000000000000_0000000000000001",
+            "stateDigest": "sha256:d2478672e673846fbd90b345f783be038520fd5f092bac7eac975248994a27bb",
+            "stream": "connection:conn_agrant_b/config"
+          }
+        ]
+      },
+      "replayable": true
+    },
+    "second": {
+      "snapshotDigest": "sha256:e3eb2aff9e07b08d55cf113ce2c1e1b82ab28ee0eeead18f22ace95282ab56b1",
+      "canonicalBytes": 7123,
+      "configRevision": 2,
+      "configRevisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39",
+      "providerManifestDigest": "sha256:2bd1ea0d725c7b5f48d3b19c1b014889745c42a4220036a39fa54ca991d923a0",
+      "grantRevisions": [
+        2,
+        2
+      ],
+      "sourceManifest": {
+        "config": {
+          "offset": "0000000000000000_0000000000000003",
+          "stateDigest": "sha256:afb8b48a66a020b4295a3f7bd0f34c53d26a6ebfdc61508c69469555ed925490",
+          "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
+        },
+        "directory": {
+          "offset": "0000000000000000_0000000000000042",
+          "stateDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+        },
+        "providers": {
+          "manifestDigest": "sha256:2bd1ea0d725c7b5f48d3b19c1b014889745c42a4220036a39fa54ca991d923a0",
+          "resolvedProviderDigest": "sha256:89d709fcec69cedb90b6c69a9a2bef89ccc5e4503421f331fc3b9ce6d2b8bfce"
+        },
+        "workspaceInputs": {
+          "offset": "0000000000000000_0000000000000042",
+          "stateDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+        },
+        "connectionGrants": [
+          {
+            "offset": "0000000000000000_0000000000000002",
+            "stateDigest": "sha256:96f063364dd4b816352c9fdf4ef71939a4dc07ffe194041d7562f88cd28c6ca0",
+            "stream": "connection:conn_a/config"
+          },
+          {
+            "offset": "0000000000000000_0000000000000002",
+            "stateDigest": "sha256:5f67a2d7be832bd0244038aa9afa8a76cbe8bdf7b833fdd68d88d1150b66bee9",
+            "stream": "connection:conn_agrant_b/config"
+          }
+        ]
+      },
+      "replayable": true
+    },
+    "firstByteStableAfterReconfigure": true,
+    "firstByteStableAfterRevoke": true,
+    "differentCanonicalDigests": true
+  },
+  "matrix": {
+    "actorClasses": [
+      "workspace-admin",
+      "agent-manager",
+      "agent-owner",
+      "channel-manager",
+      "connection-manager",
+      "ordinary-member",
+      "agent-principal",
+      "service-principal"
+    ],
+    "capabilities": [
+      "agent.roster.read",
+      "agent.profile.read",
+      "agent.history.read",
+      "agent.create",
+      "agent.config.read",
+      "agent.config.create",
+      "agent.config.revise",
+      "agent.lifecycle.activate",
+      "agent.lifecycle.disable",
+      "agent.lifecycle.revoke",
+      "channel.membership.manage",
+      "provider.registry.read",
+      "provider.registry.manage",
+      "connection.reference.bind",
+      "connection.grant.manage",
+      "connection.credential.read",
+      "principal.impersonate"
+    ],
+    "policy": {
+      "workspace-admin": [
+        "agent.roster.read",
+        "agent.profile.read",
+        "agent.history.read",
+        "agent.create",
+        "agent.config.read",
+        "agent.config.create",
+        "agent.config.revise",
+        "agent.lifecycle.activate",
+        "agent.lifecycle.disable",
+        "agent.lifecycle.revoke",
+        "channel.membership.manage",
+        "provider.registry.read",
+        "provider.registry.manage",
+        "connection.reference.bind",
+        "connection.grant.manage"
+      ],
+      "agent-manager": [
+        "agent.roster.read",
+        "agent.profile.read",
+        "agent.history.read",
+        "agent.create",
+        "agent.config.read",
+        "agent.config.create",
+        "agent.config.revise",
+        "agent.lifecycle.activate",
+        "agent.lifecycle.disable",
+        "agent.lifecycle.revoke"
+      ],
+      "agent-owner": [
+        "agent.roster.read",
+        "agent.profile.read"
+      ],
+      "channel-manager": [
+        "channel.membership.manage"
+      ],
+      "connection-manager": [
+        "connection.reference.bind",
+        "connection.grant.manage"
+      ],
+      "ordinary-member": [
+        "agent.roster.read",
+        "agent.profile.read"
+      ],
+      "agent-principal": [
+        "agent.roster.read",
+        "agent.profile.read"
+      ],
+      "service-principal": []
+    },
+    "rows": [
+      {
+        "actorClass": "workspace-admin",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "operation": "agent.create",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "workspace-admin"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "workspace-admin",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "operation": "agent.roster.read",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "workspace-admin"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "workspace-admin",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "operation": "provider.registry.read",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "workspace-admin"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "workspace-admin",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "operation": "provider.registry.manage",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "workspace-admin"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "workspace-admin",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "operation": "principal.impersonate",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "workspace-admin"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "workspace-admin",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "operation": "agent.profile.read",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "workspace-admin"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "workspace-admin",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "operation": "agent.history.read",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "workspace-admin"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "workspace-admin",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "operation": "agent.config.read",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "workspace-admin"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "workspace-admin",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "operation": "agent.config.create",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "workspace-admin"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "workspace-admin",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "operation": "agent.config.revise",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "workspace-admin"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "workspace-admin",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "operation": "agent.lifecycle.activate",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "workspace-admin"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "workspace-admin",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "operation": "agent.lifecycle.disable",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "workspace-admin"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "workspace-admin",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "operation": "agent.lifecycle.revoke",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "workspace-admin"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "workspace-admin",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "operation": "channel.membership.manage",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "workspace-admin"
+        ],
+        "resourceId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+        "resourceType": "channel",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "workspace-admin",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "operation": "connection.reference.bind",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "workspace-admin"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "workspace-admin",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "operation": "connection.grant.manage",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "workspace-admin"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "workspace-admin",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "operation": "connection.credential.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "workspace-admin"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "operation": "agent.create",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-manager"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "operation": "agent.roster.read",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-manager"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "operation": "provider.registry.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-manager"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "operation": "provider.registry.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-manager"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "operation": "principal.impersonate",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-manager"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "operation": "agent.profile.read",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-manager"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "operation": "agent.history.read",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-manager"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "operation": "agent.config.read",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-manager"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "operation": "agent.config.create",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-manager"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "operation": "agent.config.revise",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-manager"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "operation": "agent.lifecycle.activate",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-manager"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "operation": "agent.lifecycle.disable",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-manager"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "operation": "agent.lifecycle.revoke",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-manager"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "operation": "channel.membership.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-manager"
+        ],
+        "resourceId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+        "resourceType": "channel",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "operation": "connection.reference.bind",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-manager"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "operation": "connection.grant.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-manager"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "operation": "connection.credential.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-manager"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "agent.create",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "agent.roster.read",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "provider.registry.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "provider.registry.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "principal.impersonate",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "agent.profile.read",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-owner"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "agent.history.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-owner"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "agent.config.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-owner"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "agent.config.create",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-owner"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "agent.config.revise",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-owner"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "agent.lifecycle.activate",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-owner"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "agent.lifecycle.disable",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-owner"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "agent.lifecycle.revoke",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member",
+          "agent-owner"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "channel.membership.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+        "resourceType": "channel",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "connection.reference.bind",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "connection.grant.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "connection.credential.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "agent.create",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "agent.roster.read",
+        "expected": false,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "provider.registry.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "provider.registry.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "principal.impersonate",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "agent.profile.read",
+        "expected": false,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "agent.history.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "agent.config.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "agent.config.create",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "agent.config.revise",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "agent.lifecycle.activate",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "agent.lifecycle.disable",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "agent.lifecycle.revoke",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "channel.membership.manage",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member",
+          "channel-manager"
+        ],
+        "resourceId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+        "resourceType": "channel",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "connection.reference.bind",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "connection.grant.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "connection.credential.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "agent.create",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "agent.roster.read",
+        "expected": false,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "provider.registry.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "provider.registry.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "principal.impersonate",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "agent.profile.read",
+        "expected": false,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "agent.history.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "agent.config.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "agent.config.create",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "agent.config.revise",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "agent.lifecycle.activate",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "agent.lifecycle.disable",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "agent.lifecycle.revoke",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "channel.membership.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+        "resourceType": "channel",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "connection.reference.bind",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member",
+          "connection-manager"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "connection.grant.manage",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member",
+          "connection-manager"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "connection.credential.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member",
+          "connection-manager"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "agent.create",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "agent.roster.read",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "provider.registry.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "provider.registry.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "principal.impersonate",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "agent.profile.read",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "agent.history.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "agent.config.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "agent.config.create",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "agent.config.revise",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "agent.lifecycle.activate",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "agent.lifecycle.disable",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "agent.lifecycle.revoke",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "channel.membership.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+        "resourceType": "channel",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "connection.reference.bind",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "connection.grant.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "connection.credential.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "ordinary-member"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "agent.create",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "agent-principal"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "agent.roster.read",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "agent-principal"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "provider.registry.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "agent-principal"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "provider.registry.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "agent-principal"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "principal.impersonate",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "agent-principal"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "agent.profile.read",
+        "expected": true,
+        "effectiveExpected": true,
+        "allowed": true,
+        "actorClasses": [
+          "agent-principal"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "agent.history.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "agent-principal"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "agent.config.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "agent-principal"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "agent.config.create",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "agent-principal"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "agent.config.revise",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "agent-principal"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "agent.lifecycle.activate",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "agent-principal"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "agent.lifecycle.disable",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "agent-principal"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "agent.lifecycle.revoke",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "agent-principal"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "channel.membership.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "agent-principal"
+        ],
+        "resourceId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+        "resourceType": "channel",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "connection.reference.bind",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "agent-principal"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "connection.grant.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "agent-principal"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "connection.credential.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "agent-principal"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "agent.create",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "service-principal"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "agent.roster.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "service-principal"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "provider.registry.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "service-principal"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "provider.registry.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "service-principal"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "principal.impersonate",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "service-principal"
+        ],
+        "resourceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "resourceType": "workspace",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "agent.profile.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "service-principal"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "agent.history.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "service-principal"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "agent.config.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "service-principal"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "agent.config.create",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "service-principal"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "agent.config.revise",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "service-principal"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "agent.lifecycle.activate",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "service-principal"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "agent.lifecycle.disable",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "service-principal"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "agent.lifecycle.revoke",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "service-principal"
+        ],
+        "resourceId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "resourceType": "agent",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "channel.membership.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "service-principal"
+        ],
+        "resourceId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111",
+        "resourceType": "channel",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "connection.reference.bind",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "service-principal"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "connection.grant.manage",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "service-principal"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "connection.credential.read",
+        "expected": false,
+        "effectiveExpected": false,
+        "allowed": false,
+        "actorClasses": [
+          "service-principal"
+        ],
+        "resourceId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "resourceType": "connection",
+        "source": {
+          "directoryDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+          "directoryHead": "0000000000000000_0000000000000042"
+        }
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "agent.create",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "agent.config.create",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "agent.config.revise",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "agent.lifecycle.activate",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "agent.lifecycle.disable",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "agent.lifecycle.revoke",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "agent.history.read",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "agent.create",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "agent.config.create",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "agent.config.revise",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "agent.lifecycle.activate",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "agent.lifecycle.disable",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "agent.lifecycle.revoke",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "agent.history.read",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "agent.create",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "agent.config.create",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "agent.config.revise",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "agent.lifecycle.activate",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "agent.lifecycle.disable",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "agent.lifecycle.revoke",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "agent.history.read",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "agent.create",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "agent.config.create",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "agent.config.revise",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "agent.lifecycle.activate",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "agent.lifecycle.disable",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "agent.lifecycle.revoke",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "agent.history.read",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "agent.create",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "agent.config.create",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "agent.config.revise",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "agent.lifecycle.activate",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "agent.lifecycle.disable",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "agent.lifecycle.revoke",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "agent.history.read",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "agent.create",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "agent.config.create",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "agent.config.revise",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "agent.lifecycle.activate",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "agent.lifecycle.disable",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "agent.lifecycle.revoke",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "agent.history.read",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "mismatched-workspace-admin",
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "operation": "agent.create",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "mismatched-workspace-admin",
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "operation": "agent.config.create",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "mismatched-workspace-admin",
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "operation": "agent.config.revise",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "mismatched-workspace-admin",
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "operation": "agent.lifecycle.activate",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "mismatched-workspace-admin",
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "operation": "agent.lifecycle.disable",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "mismatched-workspace-admin",
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "operation": "agent.lifecycle.revoke",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "mismatched-workspace-admin",
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "operation": "agent.history.read",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "noExistenceOracle": true
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "connection.reference.bind",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "connection.grant.manage",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "connection.credential.read",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "connection.reference.bind",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "connection.grant.manage",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "connection.credential.read",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "connection.reference.bind",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "connection.grant.manage",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "connection.credential.read",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "connection.reference.bind",
+        "status": 200,
+        "allowed": true,
+        "refusedUnauthorized": false
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "connection.grant.manage",
+        "status": 200,
+        "allowed": true,
+        "refusedUnauthorized": false
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "connection.credential.read",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "connection.reference.bind",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "connection.grant.manage",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "connection.credential.read",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "connection.reference.bind",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "connection.grant.manage",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "connection.credential.read",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "mismatched-workspace-admin",
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "operation": "connection.reference.bind",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "mismatched-workspace-admin",
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "operation": "connection.grant.manage",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "mismatched-workspace-admin",
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "operation": "connection.credential.read",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      }
+    ],
+    "negativeRows": 49,
+    "connectionRows": [
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "connection.reference.bind",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "connection.grant.manage",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "agent-owner",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "operation": "connection.credential.read",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "connection.reference.bind",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "connection.grant.manage",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "ordinary-member",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "operation": "connection.credential.read",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "connection.reference.bind",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "connection.grant.manage",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "agent-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "operation": "connection.credential.read",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "connection.reference.bind",
+        "status": 200,
+        "allowed": true,
+        "refusedUnauthorized": false
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "connection.grant.manage",
+        "status": 200,
+        "allowed": true,
+        "refusedUnauthorized": false
+      },
+      {
+        "actorClass": "connection-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+        "operation": "connection.credential.read",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "connection.reference.bind",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "connection.grant.manage",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "channel-manager",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "operation": "connection.credential.read",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "connection.reference.bind",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "connection.grant.manage",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "service-principal",
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "operation": "connection.credential.read",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "mismatched-workspace-admin",
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "operation": "connection.reference.bind",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "mismatched-workspace-admin",
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "operation": "connection.grant.manage",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      },
+      {
+        "actorClass": "mismatched-workspace-admin",
+        "actorId": "pr_bbbbbbbbbbbbbbbbbbbbbbbbbb_cccccccccccccccccccccccccc",
+        "operation": "connection.credential.read",
+        "status": 404,
+        "allowed": false,
+        "refusedUnauthorized": true
+      }
+    ],
+    "crossScope": [
+      {
+        "name": "sibling agent",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "existenceLeak": false
+      },
+      {
+        "name": "sibling channel",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "existenceLeak": false
+      },
+      {
+        "name": "sibling connection",
+        "status": 404,
+        "sourceHeadsUnchanged": true,
+        "existenceLeak": false
+      }
+    ],
+    "refusedRows": 68,
+    "result": "PASS"
+  },
+  "revocationRaces": {
+    "rows": [
+      {
+        "name": "provider health loss",
+        "code": "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED",
+        "refused": true
+      },
+      {
+        "name": "connection grant revocation",
+        "code": "INVOCATION_SNAPSHOT_CONNECTION_GRANT_REVOKED",
+        "refused": true,
+        "durableSourceRevision": 3,
+        "grantRevision": 2
+      },
+      {
+        "name": "workspace membership removal",
+        "code": "INVOCATION_SNAPSHOT_MEMBERSHIP_INACTIVE",
+        "refused": true
+      },
+      {
+        "name": "historical snapshot after reconfiguration",
+        "code": "INVOCATION_SNAPSHOT_STALE_CONFIG",
+        "refused": true
+      }
+    ],
+    "snapshotAllowedBeforeRevocation": true,
+    "historicalReplayStillValid": true,
+    "sourceHeadsAfterRemoval": {
+      "directory": "0000000000000000_0000000000000043",
+      "stateDigest": "sha256:b6ab65ab76905f3a2181d504e919d7a5d89b3de2abcd99046eb103dab9653d71"
+    },
+    "connectionGrantRevocation": {
+      "sourceRevision": 3,
+      "configuredGrantRevision": 2,
+      "statuses": [
+        "revoked",
+        "revoked"
+      ],
+      "sourceDigests": [
+        "sha256:62d3b1c0005c7ba689aa54117cfd77eb28d205d1ff674d31d12abe92b9884b8c",
+        "sha256:dfe2992929c890a7988ec622a59146594e05d628a63dcb61f59c16bffab67b4d"
+      ]
+    },
+    "everyRaceRefused": true,
+    "result": "PASS",
+    "actualConfigRevoke": {
+      "appendObservedBeforeResponse": true,
+      "clientAbortedAfterDurableAppend": true,
+      "configStatusAfterDurableRetire": "retired",
+      "historicalSnapshotUseRefused": true,
+      "code": "INVOCATION_SNAPSHOT_AGENT_CONFIG_INACTIVE",
+      "requestIdempotencyKey": "ik_revzkezracez0089revzkezrac",
+      "sourceOffset": "0000000000000000_0000000000000006",
+      "historicalSnapshotBytesWereNotMutated": true,
+      "result": "PASS"
+    },
+    "historicalFirstSnapshotStableAfterRevoke": true
+  },
+  "tamperMatrix": {
+    "rows": [
+      {
+        "name": "config revision",
+        "detected": true,
+        "code": "REDUCER_AGENT_CONFIG_INVALID_EVENT",
+        "detail": "config digest does not match canonical config bytes"
+      },
+      {
+        "name": "provider descriptor",
+        "detected": true,
+        "code": "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED",
+        "detail": "exact provider selections did not resolve as runnable"
+      },
+      {
+        "name": "grant reference",
+        "detected": true,
+        "code": "INVOCATION_SNAPSHOT_CONNECTION_GRANT_REVISION_MISMATCH",
+        "detail": "current connection grant revision differs from the config reference"
+      },
+      {
+        "name": "snapshot digest",
+        "detected": true,
+        "code": "INVOCATION_SNAPSHOT_DIGEST_MISMATCH",
+        "detail": "snapshot digest does not match canonical snapshot bytes"
+      },
+      {
+        "name": "directory source",
+        "detected": true,
+        "code": "INVOCATION_SNAPSHOT_STALE_SOURCE",
+        "detail": "workspace input manifest is not bound to the directory source head"
+      },
+      {
+        "name": "provider double",
+        "detected": true,
+        "code": "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED",
+        "detail": "exact provider selections did not resolve as runnable"
+      }
+    ],
+    "historicalSnapshotStillIntact": true,
+    "everyTamperLocalized": true,
+    "result": "PASS"
+  },
+  "replay": {
+    "directoryStateDigest": "sha256:b6ab65ab76905f3a2181d504e919d7a5d89b3de2abcd99046eb103dab9653d71",
+    "configStateDigest": "sha256:31b821c392868544fd44dd5853a3640cb2a3bf175d7229d564dc3d46bfcf957a",
+    "configStreamDigest": "sha256:343243cdcab2b38567f178a4d08b872a765bd3219bcd1f0fd46a60ad0b5857a3",
+    "activeConfigStatus": "retired",
+    "activeRevisionId": null,
+    "historyDigest": "sha256:25509b2e1b06a054072023a0c5f32eabeea22915ff9e442ea9b06352703d3c1b",
+    "rosterDigest": "sha256:f2f69e61fed462a27d48febf5b135683f556652cf8b311ccef74bbfc038471ed",
+    "snapshotManifestDigest": "sha256:38e6bf5cb645707390b27b5e5d7e9a08884bce8b526225b50d3a55349456d85a",
+    "connectionStreams": {
+      "conn_agrant_b": {
+        "nextOffset": "0000000000000000_0000000000000003",
+        "recordCount": 3,
+        "stateDigest": "sha256:6d7c568c82cdc523cbdd717bcf5ab9df380811cdce36f26f0502ca84643a3bef",
+        "stream": "connection:conn_agrant_b/config",
+        "streamDigest": "sha256:dfe2992929c890a7988ec622a59146594e05d628a63dcb61f59c16bffab67b4d"
+      },
+      "conn_a": {
+        "nextOffset": "0000000000000000_0000000000000003",
+        "recordCount": 3,
+        "stateDigest": "sha256:09cce2137fdae750eb0256693ce20a9bd4d24b252fe1f20b259063e60c9c0626",
+        "stream": "connection:conn_a/config",
+        "streamDigest": "sha256:62d3b1c0005c7ba689aa54117cfd77eb28d205d1ff674d31d12abe92b9884b8c"
+      }
+    },
+    "sourceStreams": {
+      "audit": {
+        "nextOffset": "0000000000000000_0000000000000000",
+        "recordCount": 0,
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/audit",
+        "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "config": {
+        "nextOffset": "0000000000000000_0000000000000006",
+        "recordCount": 6,
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+        "streamDigest": "sha256:343243cdcab2b38567f178a4d08b872a765bd3219bcd1f0fd46a60ad0b5857a3"
+      },
+      "connections": {
+        "conn_agrant_b": {
+          "nextOffset": "0000000000000000_0000000000000003",
+          "recordCount": 3,
+          "stateDigest": "sha256:6d7c568c82cdc523cbdd717bcf5ab9df380811cdce36f26f0502ca84643a3bef",
+          "stream": "connection:conn_agrant_b/config",
+          "streamDigest": "sha256:dfe2992929c890a7988ec622a59146594e05d628a63dcb61f59c16bffab67b4d"
+        },
+        "conn_a": {
+          "nextOffset": "0000000000000000_0000000000000003",
+          "recordCount": 3,
+          "stateDigest": "sha256:09cce2137fdae750eb0256693ce20a9bd4d24b252fe1f20b259063e60c9c0626",
+          "stream": "connection:conn_a/config",
+          "streamDigest": "sha256:62d3b1c0005c7ba689aa54117cfd77eb28d205d1ff674d31d12abe92b9884b8c"
+        }
+      },
+      "directory": {
+        "nextOffset": "0000000000000000_0000000000000043",
+        "recordCount": 43,
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+        "streamDigest": "sha256:a16bba46b73ba2db856993709ea5478fed536e473b84aed66531b45e3ac28c8e"
+      },
+      "dispatch": {
+        "nextOffset": "0000000000000000_0000000000000012",
+        "recordCount": 12,
+        "stream": "__stream_slack_dispatch_idempotency__",
+        "streamDigest": "sha256:0633bf3a364d19d25f36f42b08adce962f7eb2b1b71edbb6e6acaa7abb2cc040"
+      }
+    },
+    "compositeDigest": "sha256:7d3a6eaee703f6081d877d9365d4cf2e94f676cd6152f126e79105ba85ebe141",
+    "connectionReplays": {
+      "conn_agrant_b": {
+        "stream": "connection:conn_agrant_b/config",
+        "recordCount": 3,
+        "finalStateDigest": "sha256:6d7c568c82cdc523cbdd717bcf5ab9df380811cdce36f26f0502ca84643a3bef",
+        "sourceStreamDigest": "sha256:dfe2992929c890a7988ec622a59146594e05d628a63dcb61f59c16bffab67b4d"
+      },
+      "conn_a": {
+        "stream": "connection:conn_a/config",
+        "recordCount": 3,
+        "finalStateDigest": "sha256:09cce2137fdae750eb0256693ce20a9bd4d24b252fe1f20b259063e60c9c0626",
+        "sourceStreamDigest": "sha256:62d3b1c0005c7ba689aa54117cfd77eb28d205d1ff674d31d12abe92b9884b8c"
+      }
+    },
+    "projectionDeletedAndReplayed": true,
+    "freshReplayStore": true,
+    "sourceStreamsSeeded": true,
+    "replayedSources": [
+      {
+        "key": "directory",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+        "recordCount": 43,
+        "streamDigest": "sha256:a16bba46b73ba2db856993709ea5478fed536e473b84aed66531b45e3ac28c8e",
+        "identical": true
+      },
+      {
+        "key": "config",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+        "recordCount": 6,
+        "streamDigest": "sha256:343243cdcab2b38567f178a4d08b872a765bd3219bcd1f0fd46a60ad0b5857a3",
+        "identical": true
+      },
+      {
+        "key": "audit",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/audit",
+        "recordCount": 0,
+        "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "identical": true
+      },
+      {
+        "key": "dispatch",
+        "stream": "__stream_slack_dispatch_idempotency__",
+        "recordCount": 12,
+        "streamDigest": "sha256:0633bf3a364d19d25f36f42b08adce962f7eb2b1b71edbb6e6acaa7abb2cc040",
+        "identical": true
+      },
+      {
+        "key": "connection:conn_agrant_b",
+        "stream": "connection:conn_agrant_b/config",
+        "recordCount": 3,
+        "streamDigest": "sha256:dfe2992929c890a7988ec622a59146594e05d628a63dcb61f59c16bffab67b4d",
+        "identical": true
+      },
+      {
+        "key": "connection:conn_a",
+        "stream": "connection:conn_a/config",
+        "recordCount": 3,
+        "streamDigest": "sha256:62d3b1c0005c7ba689aa54117cfd77eb28d205d1ff674d31d12abe92b9884b8c",
+        "identical": true
+      }
+    ],
+    "rosterReproduced": true,
+    "activeConfigReproduced": true,
+    "revisionHistoryReproduced": true,
+    "snapshotManifestsReproduced": true,
+    "connectionStateReproduced": true,
+    "auditAndDispatchRoundTrips": true,
+    "sourceRecordCounts": {
+      "audit": 0,
+      "config": 6,
+      "connections": {
+        "conn_agrant_b": 3,
+        "conn_a": 3
+      },
+      "directory": 43,
+      "dispatch": 12
+    },
+    "result": "PASS"
+  },
+  "sensitivity": {
+    "mutationCount": 9,
+    "mutations": [
+      {
+        "mutation": "tamper config revision",
+        "verifierWentRed": true,
+        "detectorCode": "REDUCER_AGENT_CONFIG_INVALID_EVENT"
+      },
+      {
+        "mutation": "tamper provider descriptor",
+        "verifierWentRed": true,
+        "detectorCode": "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED"
+      },
+      {
+        "mutation": "tamper grant reference",
+        "verifierWentRed": true,
+        "detectorCode": "INVOCATION_SNAPSHOT_CONNECTION_GRANT_REVISION_MISMATCH"
+      },
+      {
+        "mutation": "tamper snapshot digest",
+        "verifierWentRed": true,
+        "detectorCode": "INVOCATION_SNAPSHOT_DIGEST_MISMATCH"
+      },
+      {
+        "mutation": "tamper directory source",
+        "verifierWentRed": true,
+        "detectorCode": "INVOCATION_SNAPSHOT_STALE_SOURCE"
+      },
+      {
+        "mutation": "tamper provider double",
+        "verifierWentRed": true,
+        "detectorCode": "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED"
+      },
+      {
+        "mutation": "replay a sibling-workspace resource",
+        "verifierWentRed": true,
+        "detectorCode": "SCOPED_404_AND_UNCHANGED_HEAD"
+      },
+      {
+        "mutation": "allow a post-revocation snapshot use",
+        "verifierWentRed": true,
+        "detectorCode": "REVOCATION_FENCE"
+      },
+      {
+        "mutation": "mutate replay composite source digest",
+        "verifierWentRed": true,
+        "detectorCode": "REPLAY_COMPOSITE_INTEGRITY",
+        "exitCode": 1
+      }
+    ],
+    "verifierDetectedMutant": true,
+    "result": "PASS"
+  },
+  "canaryScan": {
+    "inputInjected": true,
+    "checked": [
+      "stream dumps",
+      "HTTP transcript",
+      "CLI transcript",
+      "snapshot manifests",
+      "provider doubles",
+      "published evidence"
+    ],
+    "leaked": false,
+    "result": "PASS",
+    "evidenceFiles": [
+      "canary-scan.json",
+      "cli-transcript.json",
+      "cold-clone-transcript.json",
+      "composed-verify-transcript.json",
+      "http-transcript.json",
+      "replay-composite.json",
+      "revocation-races.json",
+      "role-matrix.json",
+      "roster.json",
+      "sensitivity.json",
+      "snapshot-manifests.json",
+      "source-dumps.json",
+      "tamper-matrix.json",
+      "verification-summary.json"
+    ],
+    "publishedEvidenceLeaked": false
+  }
+}

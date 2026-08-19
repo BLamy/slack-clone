@@ -1,0 +1,6 @@
+{
+  "mutation": "replace immutable revision append with in-place replacement",
+  "mutantExitCode": 7,
+  "verifierDetectedMutant": true,
+  "result": "PASS"
+}

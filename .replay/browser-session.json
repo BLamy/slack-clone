@@ -1,0 +1,17 @@
+{
+  "url": "http://127.0.0.1:5175/",
+  "evidence_commit": "2d40835e62f0e5663f7a9720a63637c2f8ffa3b7",
+  "application_commit": "d6abddc8908275931b73fcdd9c8b084353aad3b4",
+  "recording_id": "368a3b30-c22d-4dcd-b010-fb8803bd9406",
+  "replay_url": "https://app.replay.io/recording/368a3b30-c22d-4dcd-b010-fb8803bd9406",
+  "recording_status": "finished",
+  "upload_status": "uploaded",
+  "interrogable": true,
+  "video_path": "/Users/brettlamy/Dev/slack-clone/recordings/e0-t01-2d40835-final.mp4",
+  "mp4_path": "/Users/brettlamy/Dev/slack-clone/recordings/e0-t01-2d40835-final.mp4",
+  "capture_format": "webm-to-mp4",
+  "encoder": "ffmpeg",
+  "playwright_session": "replayio-1785617243215",
+  "started_at": "2026-08-01T20:47:38.559Z",
+  "replay_chromium_path": "/Users/brettlamy/.replay/runtimes/Replay-Chromium.app/Contents/MacOS/Chromium"
+}

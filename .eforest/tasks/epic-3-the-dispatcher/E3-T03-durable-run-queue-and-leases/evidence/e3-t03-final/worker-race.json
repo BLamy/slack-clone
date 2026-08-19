@@ -1,0 +1,11 @@
+{
+  "acceptedLeaseGeneration": 1,
+  "acceptedWorker": "race-worker-0",
+  "capabilityDigest": "sha256:f4c93ed59cc2a9ed3bc0531791d5ce26d8e5b950b31082f672bc6f2470653426",
+  "effectiveLeaseEvents": 1,
+  "loserCodes": [
+    "RUN_QUEUE_LEASE_HELD"
+  ],
+  "workerCount": 100,
+  "result": "PASS"
+}

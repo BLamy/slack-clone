@@ -1,0 +1,968 @@
+[
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "command": "create",
+    "agent": null,
+    "exitCode": 0,
+    "output": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "profile": {
+          "displayName": "E2-T08 Control Plane Agent",
+          "email": "e2-t08-agent@example.test",
+          "handle": "e2-t08-control-plane-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": null,
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:ca8b23923b138c19ac8ed58ce34f8d43bc7bb3e8d0fb1ffedde39c7e3c8cdaba",
+        "eventDigest": "sha256:881fc2f79e6c43e6e6e2a849ec80a92b22527f78a20ad8370e6afe141f292584",
+        "idempotencyKey": "ik_createzzzstzackz0001create",
+        "nextOffset": "0000000000000000_0000000000000038",
+        "operation": "agent.principal.create",
+        "requestDigest": "sha256:16577505f1361b6bab40cf42fcdc074500b86c7c541db54c8612a527cb8aa21e",
+        "status": "accepted",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+      },
+      "source": {
+        "directoryDigest": "sha256:ac8078ec5e2afd8fdb5304d340bbfc92bb9a980acca23e969320dcc49a60dd94",
+        "directoryStateDigest": "sha256:71858116ab2faac266ac2714a3c4c85770d75b80509ad07bbd4618a902dce1fa",
+        "configDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "configStateDigest": "sha256:5cf94f8d2c751a7bb659c69a5439634bda3f02b846bc490527219a903da099d0"
+      }
+    },
+    "stderr": false,
+    "input": "redacted-json",
+    "idempotencyKey": "ik_createzzzstzackz0001create"
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "command": "create",
+    "agent": null,
+    "exitCode": 4,
+    "output": {
+      "ok": false,
+      "code": "DISPATCH_IDEMPOTENCY_CONFLICT",
+      "error": "idempotency key is already bound to a different request scope or payload"
+    },
+    "stderr": false,
+    "input": "redacted-json",
+    "idempotencyKey": "ik_createzzzstzackz0001create"
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "command": "config-create",
+    "agent": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "exitCode": 0,
+    "output": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "profile": {
+          "displayName": "E2-T08 Control Plane Agent",
+          "email": "e2-t08-agent@example.test",
+          "handle": "e2-t08-control-plane-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configRevision": {
+        "configDigest": "sha256:985cb3cc8e3ddfb848768e8f058afad174135e97253eed9376953c0a820973c7",
+        "revision": 1,
+        "revisionId": "acr_b0bc066ff12c66b8bdf8aafad1e56031399d2ca6743893e650ec0c406ee1198c"
+      },
+      "configuration": {
+        "activeConfig": null,
+        "activeRevisionId": null,
+        "headRevision": 1,
+        "lastRevisionId": "acr_b0bc066ff12c66b8bdf8aafad1e56031399d2ca6743893e650ec0c406ee1198c",
+        "runnable": false,
+        "status": "draft"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:7457eafb19b5881255f416f88c1ad047f0aba1e335f24b18a1b3c3aa48734feb",
+        "eventDigest": "sha256:db54a87615b48304c5cfa7655076a015174619519a41a0bc381becd68f4868e4",
+        "idempotencyKey": "ik_cznfzgzcreatezzzstzackz000",
+        "nextOffset": "0000000000000000_0000000000000001",
+        "operation": "agent.config.created",
+        "requestDigest": "sha256:b3b448972c2ea83b9f0defecffccab97c7885eb1d334ebd1a85e6485a1ad2163",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:ac8078ec5e2afd8fdb5304d340bbfc92bb9a980acca23e969320dcc49a60dd94",
+        "directoryStateDigest": "sha256:71858116ab2faac266ac2714a3c4c85770d75b80509ad07bbd4618a902dce1fa",
+        "configDigest": "sha256:7511f7aa5a14915287cbf8fb28e05c00e01341155fd38819187434465967544a",
+        "configStateDigest": "sha256:8d9c00ee8d5162cd73b9406bc7bacf1d9c246bcfa90d4d49edf13f4eda34273f"
+      }
+    },
+    "stderr": false,
+    "input": "redacted-json",
+    "idempotencyKey": "ik_cznfzgzcreatezzzstzackz000"
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "command": "activate",
+    "agent": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "exitCode": 0,
+    "output": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "profile": {
+          "displayName": "E2-T08 Control Plane Agent",
+          "email": "e2-t08-agent@example.test",
+          "handle": "e2-t08-control-plane-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": {
+        "activeConfig": {
+          "schemaVersion": 1,
+          "instructions": {
+            "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+            "task": "Answer the current request using only the authorized context.",
+            "guardrails": [
+              "Never disclose credentials or secret-shaped values.",
+              "Keep replies bounded and auditable."
+            ]
+          },
+          "context": {
+            "scope": "current-channel",
+            "includePrivate": false,
+            "includeThreadHistory": true,
+            "maxMessages": 50,
+            "maxBytes": 65536
+          },
+          "trigger": {
+            "events": [
+              "manual",
+              "mention"
+            ],
+            "requireMention": false,
+            "allowMessageEdits": false
+          },
+          "delegation": {
+            "enabled": false,
+            "maxDepth": 0,
+            "maxChildren": 0,
+            "allowCrossChannel": false
+          },
+          "concurrency": {
+            "maxConcurrentRuns": 4,
+            "maxConcurrentPerChannel": 1,
+            "queueStrategy": "serialize"
+          },
+          "budgets": {
+            "timeoutSeconds": 900,
+            "maxInputTokens": "[REDACTED]",
+            "maxOutputTokens": "[REDACTED]",
+            "maxTotalTokens": "[REDACTED]",
+            "maxCostUsdCents": 250
+          },
+          "harness": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "structured-output"
+            ]
+          },
+          "sandbox": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "ephemeral"
+            ],
+            "lifecycle": "ephemeral",
+            "networkPolicy": "deny-all"
+          },
+          "workspaceInputs": {
+            "source": "workspace",
+            "paths": [
+              "README.md",
+              "docs"
+            ],
+            "maxBytes": 1048576
+          },
+          "connectionGrants": {
+            "maxCallsPerRun": 2,
+            "refs": [
+              {
+                "connectionId": "conn_a",
+                "grantId": "grant_bgrant_c",
+                "purpose": "p",
+                "revision": 1
+              },
+              {
+                "connectionId": "conn_agrant_b",
+                "grantId": "grant_c",
+                "purpose": "p",
+                "revision": 1
+              }
+            ]
+          }
+        },
+        "activeRevisionId": "acr_b0bc066ff12c66b8bdf8aafad1e56031399d2ca6743893e650ec0c406ee1198c",
+        "headRevision": 1,
+        "lastRevisionId": "acr_b0bc066ff12c66b8bdf8aafad1e56031399d2ca6743893e650ec0c406ee1198c",
+        "runnable": true,
+        "status": "active"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:29ebdf293d0b2e82104cf12b352b2bf27f4e9952e22dfe1a570329296e41c945",
+        "eventDigest": "sha256:63b7fda5c5e6ce53c40c4337af84a2991475dfc9a5f477a24faec6f7c97c3a3a",
+        "idempotencyKey": "ik_actzvatez1zzzstzackz0009ac",
+        "nextOffset": "0000000000000000_0000000000000002",
+        "operation": "agent.config.activated",
+        "requestDigest": "sha256:f45b5a1e43262f819f3e15ecfb4ae56a6c7cc4f419a4db394394eed9ebd84107",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:f8c8273b17b2df70df54421b33de220fdd3154c72838358a092a20fdcf1362e6",
+        "directoryStateDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+        "configDigest": "sha256:e1c06a2cae6338b395c924c95afc6d98305b08daa7254d363ce953f3cc237584",
+        "configStateDigest": "sha256:4a4f957056bcb945a6bfddc610007d2c5e35d612300adfcf96c09f3bc54ad47c"
+      }
+    },
+    "stderr": false,
+    "input": "redacted-json",
+    "idempotencyKey": "ik_actzvatez1zzzstzackz0009ac"
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "command": "revise",
+    "agent": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "exitCode": 0,
+    "output": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "profile": {
+          "displayName": "E2-T08 Control Plane Agent",
+          "email": "e2-t08-agent@example.test",
+          "handle": "e2-t08-control-plane-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configRevision": {
+        "configDigest": "sha256:605ae90106dfab2478bbf115803acfa2f53e33756a94bcd8b4df06519dee6553",
+        "revision": 2,
+        "revisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39"
+      },
+      "configuration": {
+        "activeConfig": {
+          "schemaVersion": 1,
+          "instructions": {
+            "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+            "task": "Answer the current request using only the authorized context.",
+            "guardrails": [
+              "Never disclose credentials or secret-shaped values.",
+              "Keep replies bounded and auditable."
+            ]
+          },
+          "context": {
+            "scope": "current-channel",
+            "includePrivate": false,
+            "includeThreadHistory": true,
+            "maxMessages": 50,
+            "maxBytes": 65536
+          },
+          "trigger": {
+            "events": [
+              "manual",
+              "mention"
+            ],
+            "requireMention": false,
+            "allowMessageEdits": false
+          },
+          "delegation": {
+            "enabled": false,
+            "maxDepth": 0,
+            "maxChildren": 0,
+            "allowCrossChannel": false
+          },
+          "concurrency": {
+            "maxConcurrentRuns": 4,
+            "maxConcurrentPerChannel": 1,
+            "queueStrategy": "serialize"
+          },
+          "budgets": {
+            "timeoutSeconds": 900,
+            "maxInputTokens": "[REDACTED]",
+            "maxOutputTokens": "[REDACTED]",
+            "maxTotalTokens": "[REDACTED]",
+            "maxCostUsdCents": 250
+          },
+          "harness": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "structured-output"
+            ]
+          },
+          "sandbox": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "ephemeral"
+            ],
+            "lifecycle": "ephemeral",
+            "networkPolicy": "deny-all"
+          },
+          "workspaceInputs": {
+            "source": "workspace",
+            "paths": [
+              "README.md",
+              "docs"
+            ],
+            "maxBytes": 1048576
+          },
+          "connectionGrants": {
+            "maxCallsPerRun": 2,
+            "refs": [
+              {
+                "connectionId": "conn_a",
+                "grantId": "grant_bgrant_c",
+                "purpose": "p",
+                "revision": 1
+              },
+              {
+                "connectionId": "conn_agrant_b",
+                "grantId": "grant_c",
+                "purpose": "p",
+                "revision": 1
+              }
+            ]
+          }
+        },
+        "activeRevisionId": "acr_b0bc066ff12c66b8bdf8aafad1e56031399d2ca6743893e650ec0c406ee1198c",
+        "headRevision": 2,
+        "lastRevisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39",
+        "runnable": true,
+        "status": "active"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:eb336f66344688cf5962a358ef7bf443ef1841e6c69a4e5ffa3fdcaa6bd62305",
+        "eventDigest": "sha256:340063e6eec10bcfdeaf924e8f9f9058ce321fa163bf3474a39c09d428db66df",
+        "idempotencyKey": "ik_revzsez2zzzstzackz0012revz",
+        "nextOffset": "0000000000000000_0000000000000003",
+        "operation": "agent.config.revised",
+        "requestDigest": "sha256:3e64748cfd4487125013afb2a27ba3170732ff4b83b75f3a515923b031de1a03",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:f8c8273b17b2df70df54421b33de220fdd3154c72838358a092a20fdcf1362e6",
+        "directoryStateDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+        "configDigest": "sha256:445e3a685db58d06e1e006a6bad2a6afc1f0289debcbb1af3c382baa6b8e32d0",
+        "configStateDigest": "sha256:e25fbc912361ff55708a013e06d5c9aec60223c7f36e84d96bfe31abf7712c33"
+      }
+    },
+    "stderr": false,
+    "input": "redacted-json",
+    "idempotencyKey": "ik_revzsez2zzzstzackz0012revz"
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "command": "activate",
+    "agent": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "exitCode": 0,
+    "output": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "profile": {
+          "displayName": "E2-T08 Control Plane Agent",
+          "email": "e2-t08-agent@example.test",
+          "handle": "e2-t08-control-plane-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": {
+        "activeConfig": {
+          "schemaVersion": 1,
+          "instructions": {
+            "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+            "task": "Answer revision two using the same fenced policy.",
+            "guardrails": [
+              "Never disclose credentials or secret-shaped values.",
+              "Keep replies bounded and auditable."
+            ]
+          },
+          "context": {
+            "scope": "current-channel",
+            "includePrivate": false,
+            "includeThreadHistory": true,
+            "maxMessages": 50,
+            "maxBytes": 65536
+          },
+          "trigger": {
+            "events": [
+              "manual",
+              "mention"
+            ],
+            "requireMention": false,
+            "allowMessageEdits": false
+          },
+          "delegation": {
+            "enabled": false,
+            "maxDepth": 0,
+            "maxChildren": 0,
+            "allowCrossChannel": false
+          },
+          "concurrency": {
+            "maxConcurrentRuns": 4,
+            "maxConcurrentPerChannel": 1,
+            "queueStrategy": "serialize"
+          },
+          "budgets": {
+            "timeoutSeconds": 900,
+            "maxInputTokens": "[REDACTED]",
+            "maxOutputTokens": "[REDACTED]",
+            "maxTotalTokens": "[REDACTED]",
+            "maxCostUsdCents": 250
+          },
+          "harness": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "structured-output"
+            ]
+          },
+          "sandbox": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "ephemeral"
+            ],
+            "lifecycle": "ephemeral",
+            "networkPolicy": "deny-all"
+          },
+          "workspaceInputs": {
+            "source": "workspace",
+            "paths": [
+              "README.md",
+              "docs"
+            ],
+            "maxBytes": 1048576
+          },
+          "connectionGrants": {
+            "maxCallsPerRun": 2,
+            "refs": [
+              {
+                "connectionId": "conn_a",
+                "grantId": "grant_bgrant_c",
+                "purpose": "p",
+                "revision": 2
+              },
+              {
+                "connectionId": "conn_agrant_b",
+                "grantId": "grant_c",
+                "purpose": "p",
+                "revision": 2
+              }
+            ]
+          }
+        },
+        "activeRevisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39",
+        "headRevision": 2,
+        "lastRevisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39",
+        "runnable": true,
+        "status": "active"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:baf544b67f7df482a228c1cf28ccfbfbdf64166236ebdda226f49383b6853fc4",
+        "eventDigest": "sha256:4b156639509f057ee6145a60a17eb2509149442358a490cc0de1bc19fb58f482",
+        "idempotencyKey": "ik_actzvatez2zzzstzackz0013ac",
+        "nextOffset": "0000000000000000_0000000000000004",
+        "operation": "agent.config.activated",
+        "requestDigest": "sha256:e558f101fd8fc710e4511aff2d49e4ba99c11272204b62f48bfe8ac48d0d76da",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:f8c8273b17b2df70df54421b33de220fdd3154c72838358a092a20fdcf1362e6",
+        "directoryStateDigest": "sha256:b7bb7691c91f28726bc536f2a84c0576b83ed0f239585e8bf371315bd92d6297",
+        "configDigest": "sha256:1b0ba6539a7eb849f84533ad58e603e8c5730d92c2737212d4653ae0465c8dea",
+        "configStateDigest": "sha256:afb8b48a66a020b4295a3f7bd0f34c53d26a6ebfdc61508c69469555ed925490"
+      }
+    },
+    "stderr": false,
+    "input": "redacted-json",
+    "idempotencyKey": "ik_actzvatez2zzzstzackz0013ac"
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "command": "revise",
+    "agent": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "exitCode": 2,
+    "output": {
+      "ok": false,
+      "code": "AGENT_CONFIG_FORBIDDEN_FIELD",
+      "error": "field is not permitted by the versioned schema"
+    },
+    "stderr": false,
+    "input": "redacted-json",
+    "idempotencyKey": "ik_canaryzczzz0017canaryzczzz"
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "command": "revoke",
+    "agent": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "exitCode": 0,
+    "output": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "profile": {
+          "displayName": "E2-T08 Control Plane Agent",
+          "email": "e2-t08-agent@example.test",
+          "handle": "e2-t08-control-plane-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": {
+        "activeConfig": null,
+        "activeRevisionId": null,
+        "headRevision": 3,
+        "lastRevisionId": "acr_29f39cf8f52a9a91885c890b387b9fbdc8d8ba7150ff8e61734256ba2212ce7e",
+        "runnable": false,
+        "status": "retired"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:ddb90daecf68657a0a33504d60f519295d7b7aa64e06d32a2d7d97f0ea224f98",
+        "eventDigest": "sha256:27cc02be22bdd9388ec3d6acbccde23dc7243af95144faaa1d25be3e8c4e4244",
+        "idempotencyKey": "ik_revzkezracez0089revzkezrac",
+        "nextOffset": "0000000000000000_0000000000000006",
+        "operation": "agent.config.retired",
+        "requestDigest": "sha256:4a20703b628da0726e0da721dfc910a40ec5cd39a7cd556bbfed3140a216adc1",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:a16bba46b73ba2db856993709ea5478fed536e473b84aed66531b45e3ac28c8e",
+        "directoryStateDigest": "sha256:b6ab65ab76905f3a2181d504e919d7a5d89b3de2abcd99046eb103dab9653d71",
+        "configDigest": "sha256:343243cdcab2b38567f178a4d08b872a765bd3219bcd1f0fd46a60ad0b5857a3",
+        "configStateDigest": "sha256:31b821c392868544fd44dd5853a3640cb2a3bf175d7229d564dc3d46bfcf957a"
+      },
+      "revoked": true
+    },
+    "stderr": false,
+    "input": "redacted-json",
+    "idempotencyKey": "ik_revzkezracez0089revzkezrac"
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "command": "revoke",
+    "agent": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "exitCode": 0,
+    "output": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "profile": {
+          "displayName": "E2-T08 Control Plane Agent",
+          "email": "e2-t08-agent@example.test",
+          "handle": "e2-t08-control-plane-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": {
+        "activeConfig": null,
+        "activeRevisionId": null,
+        "headRevision": 3,
+        "lastRevisionId": "acr_29f39cf8f52a9a91885c890b387b9fbdc8d8ba7150ff8e61734256ba2212ce7e",
+        "runnable": false,
+        "status": "retired"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:ddb90daecf68657a0a33504d60f519295d7b7aa64e06d32a2d7d97f0ea224f98",
+        "eventDigest": "sha256:27cc02be22bdd9388ec3d6acbccde23dc7243af95144faaa1d25be3e8c4e4244",
+        "idempotencyKey": "ik_revzkezracez0089revzkezrac",
+        "nextOffset": "0000000000000000_0000000000000006",
+        "operation": "agent.config.retired",
+        "requestDigest": "sha256:4a20703b628da0726e0da721dfc910a40ec5cd39a7cd556bbfed3140a216adc1",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:a16bba46b73ba2db856993709ea5478fed536e473b84aed66531b45e3ac28c8e",
+        "directoryStateDigest": "sha256:b6ab65ab76905f3a2181d504e919d7a5d89b3de2abcd99046eb103dab9653d71",
+        "configDigest": "sha256:343243cdcab2b38567f178a4d08b872a765bd3219bcd1f0fd46a60ad0b5857a3",
+        "configStateDigest": "sha256:31b821c392868544fd44dd5853a3640cb2a3bf175d7229d564dc3d46bfcf957a"
+      },
+      "revoked": true
+    },
+    "stderr": false,
+    "input": "redacted-json",
+    "idempotencyKey": "ik_revzkezracez0089revzkezrac"
+  },
+  {
+    "actor": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+    "command": "history",
+    "agent": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "exitCode": 0,
+    "output": {
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+      "entries": [
+        {
+          "config": {
+            "schemaVersion": 1,
+            "instructions": {
+              "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+              "task": "Answer the current request using only the authorized context.",
+              "guardrails": [
+                "Never disclose credentials or secret-shaped values.",
+                "Keep replies bounded and auditable."
+              ]
+            },
+            "context": {
+              "scope": "current-channel",
+              "includePrivate": false,
+              "includeThreadHistory": true,
+              "maxMessages": 50,
+              "maxBytes": 65536
+            },
+            "trigger": {
+              "events": [
+                "manual",
+                "mention"
+              ],
+              "requireMention": false,
+              "allowMessageEdits": false
+            },
+            "delegation": {
+              "enabled": false,
+              "maxDepth": 0,
+              "maxChildren": 0,
+              "allowCrossChannel": false
+            },
+            "concurrency": {
+              "maxConcurrentRuns": 4,
+              "maxConcurrentPerChannel": 1,
+              "queueStrategy": "serialize"
+            },
+            "budgets": {
+              "timeoutSeconds": 900,
+              "maxInputTokens": "[REDACTED]",
+              "maxOutputTokens": "[REDACTED]",
+              "maxTotalTokens": "[REDACTED]",
+              "maxCostUsdCents": 250
+            },
+            "harness": {
+              "providerId": "scripted",
+              "providerVersion": "1.0.0",
+              "requiredCapabilities": [
+                "structured-output"
+              ]
+            },
+            "sandbox": {
+              "providerId": "scripted",
+              "providerVersion": "1.0.0",
+              "requiredCapabilities": [
+                "ephemeral"
+              ],
+              "lifecycle": "ephemeral",
+              "networkPolicy": "deny-all"
+            },
+            "workspaceInputs": {
+              "source": "workspace",
+              "paths": [
+                "README.md",
+                "docs"
+              ],
+              "maxBytes": 1048576
+            },
+            "connectionGrants": {
+              "maxCallsPerRun": 2,
+              "refs": [
+                {
+                  "connectionId": "conn_a",
+                  "grantId": "grant_bgrant_c",
+                  "purpose": "p",
+                  "revision": 1
+                },
+                {
+                  "connectionId": "conn_agrant_b",
+                  "grantId": "grant_c",
+                  "purpose": "p",
+                  "revision": 1
+                }
+              ]
+            }
+          },
+          "configDigest": "sha256:985cb3cc8e3ddfb848768e8f058afad174135e97253eed9376953c0a820973c7",
+          "eventId": "ev_cznfzgzcreatezzzstzackz000",
+          "expectedRevision": 0,
+          "kind": "revision",
+          "predecessorRevisionId": null,
+          "revision": 1,
+          "revisionId": "acr_b0bc066ff12c66b8bdf8aafad1e56031399d2ca6743893e650ec0c406ee1198c",
+          "sourceOffset": "0000000000000000_0000000000000001"
+        },
+        {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "eventId": "ev_actzvatez1zzzstzackz0009ac",
+          "eventType": "agent.config.activated",
+          "kind": "lifecycle",
+          "revisionId": "acr_b0bc066ff12c66b8bdf8aafad1e56031399d2ca6743893e650ec0c406ee1198c",
+          "sourceOffset": "0000000000000000_0000000000000002",
+          "statusAfter": "active",
+          "statusBefore": "draft"
+        },
+        {
+          "config": {
+            "schemaVersion": 1,
+            "instructions": {
+              "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+              "task": "Answer revision two using the same fenced policy.",
+              "guardrails": [
+                "Never disclose credentials or secret-shaped values.",
+                "Keep replies bounded and auditable."
+              ]
+            },
+            "context": {
+              "scope": "current-channel",
+              "includePrivate": false,
+              "includeThreadHistory": true,
+              "maxMessages": 50,
+              "maxBytes": 65536
+            },
+            "trigger": {
+              "events": [
+                "manual",
+                "mention"
+              ],
+              "requireMention": false,
+              "allowMessageEdits": false
+            },
+            "delegation": {
+              "enabled": false,
+              "maxDepth": 0,
+              "maxChildren": 0,
+              "allowCrossChannel": false
+            },
+            "concurrency": {
+              "maxConcurrentRuns": 4,
+              "maxConcurrentPerChannel": 1,
+              "queueStrategy": "serialize"
+            },
+            "budgets": {
+              "timeoutSeconds": 900,
+              "maxInputTokens": "[REDACTED]",
+              "maxOutputTokens": "[REDACTED]",
+              "maxTotalTokens": "[REDACTED]",
+              "maxCostUsdCents": 250
+            },
+            "harness": {
+              "providerId": "scripted",
+              "providerVersion": "1.0.0",
+              "requiredCapabilities": [
+                "structured-output"
+              ]
+            },
+            "sandbox": {
+              "providerId": "scripted",
+              "providerVersion": "1.0.0",
+              "requiredCapabilities": [
+                "ephemeral"
+              ],
+              "lifecycle": "ephemeral",
+              "networkPolicy": "deny-all"
+            },
+            "workspaceInputs": {
+              "source": "workspace",
+              "paths": [
+                "README.md",
+                "docs"
+              ],
+              "maxBytes": 1048576
+            },
+            "connectionGrants": {
+              "maxCallsPerRun": 2,
+              "refs": [
+                {
+                  "connectionId": "conn_a",
+                  "grantId": "grant_bgrant_c",
+                  "purpose": "p",
+                  "revision": 2
+                },
+                {
+                  "connectionId": "conn_agrant_b",
+                  "grantId": "grant_c",
+                  "purpose": "p",
+                  "revision": 2
+                }
+              ]
+            }
+          },
+          "configDigest": "sha256:605ae90106dfab2478bbf115803acfa2f53e33756a94bcd8b4df06519dee6553",
+          "eventId": "ev_revzsez2zzzstzackz0012revz",
+          "expectedRevision": 1,
+          "kind": "revision",
+          "predecessorRevisionId": "acr_b0bc066ff12c66b8bdf8aafad1e56031399d2ca6743893e650ec0c406ee1198c",
+          "revision": 2,
+          "revisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39",
+          "sourceOffset": "0000000000000000_0000000000000003"
+        },
+        {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "eventId": "ev_actzvatez2zzzstzackz0013ac",
+          "eventType": "agent.config.activated",
+          "kind": "lifecycle",
+          "revisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39",
+          "sourceOffset": "0000000000000000_0000000000000004",
+          "statusAfter": "active",
+          "statusBefore": "active"
+        },
+        {
+          "config": {
+            "schemaVersion": 1,
+            "instructions": {
+              "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+              "task": "concurrent revision alpha",
+              "guardrails": [
+                "Never disclose credentials or secret-shaped values.",
+                "Keep replies bounded and auditable."
+              ]
+            },
+            "context": {
+              "scope": "current-channel",
+              "includePrivate": false,
+              "includeThreadHistory": true,
+              "maxMessages": 50,
+              "maxBytes": 65536
+            },
+            "trigger": {
+              "events": [
+                "manual",
+                "mention"
+              ],
+              "requireMention": false,
+              "allowMessageEdits": false
+            },
+            "delegation": {
+              "enabled": false,
+              "maxDepth": 0,
+              "maxChildren": 0,
+              "allowCrossChannel": false
+            },
+            "concurrency": {
+              "maxConcurrentRuns": 4,
+              "maxConcurrentPerChannel": 1,
+              "queueStrategy": "serialize"
+            },
+            "budgets": {
+              "timeoutSeconds": 900,
+              "maxInputTokens": "[REDACTED]",
+              "maxOutputTokens": "[REDACTED]",
+              "maxTotalTokens": "[REDACTED]",
+              "maxCostUsdCents": 250
+            },
+            "harness": {
+              "providerId": "scripted",
+              "providerVersion": "1.0.0",
+              "requiredCapabilities": [
+                "structured-output"
+              ]
+            },
+            "sandbox": {
+              "providerId": "scripted",
+              "providerVersion": "1.0.0",
+              "requiredCapabilities": [
+                "ephemeral"
+              ],
+              "lifecycle": "ephemeral",
+              "networkPolicy": "deny-all"
+            },
+            "workspaceInputs": {
+              "source": "workspace",
+              "paths": [
+                "README.md",
+                "docs"
+              ],
+              "maxBytes": 1048576
+            },
+            "connectionGrants": {
+              "maxCallsPerRun": 2,
+              "refs": [
+                {
+                  "connectionId": "conn_a",
+                  "grantId": "grant_bgrant_c",
+                  "purpose": "p",
+                  "revision": 2
+                },
+                {
+                  "connectionId": "conn_agrant_b",
+                  "grantId": "grant_c",
+                  "purpose": "p",
+                  "revision": 2
+                }
+              ]
+            }
+          },
+          "configDigest": "sha256:c30df0ed2ab78aa2c537a736589619e288fceb6e5d1a309892c3ce6e487e1b02",
+          "eventId": "ev_racezaz0084racezaz0084race",
+          "expectedRevision": 2,
+          "kind": "revision",
+          "predecessorRevisionId": "acr_c3a527882ea4533b2308d686484434960f9313a7bd8bebea5fbef89f5f46aa39",
+          "revision": 3,
+          "revisionId": "acr_29f39cf8f52a9a91885c890b387b9fbdc8d8ba7150ff8e61734256ba2212ce7e",
+          "sourceOffset": "0000000000000000_0000000000000005"
+        },
+        {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "eventId": "ev_revzkezracez0089revzkezrac",
+          "eventType": "agent.config.retired",
+          "kind": "lifecycle",
+          "revisionId": null,
+          "sourceOffset": "0000000000000000_0000000000000006",
+          "statusAfter": "retired",
+          "statusBefore": "active"
+        }
+      ],
+      "nextCursor": null,
+      "ok": true,
+      "page": {
+        "limit": 20,
+        "returned": 6,
+        "start": 0,
+        "streamDigest": "sha256:343243cdcab2b38567f178a4d08b872a765bd3219bcd1f0fd46a60ad0b5857a3",
+        "stateDigest": "sha256:31b821c392868544fd44dd5853a3640cb2a3bf175d7229d564dc3d46bfcf957a"
+      }
+    },
+    "stderr": false,
+    "input": false,
+    "idempotencyKey": null
+  }
+]

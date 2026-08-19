@@ -1,0 +1,33 @@
+{
+  "controlExitCode": 0,
+  "detectedCount": 5,
+  "mutationCount": 5,
+  "result": "PASS",
+  "results": [
+    {
+      "detected": true,
+      "label": "self-trigger-fence",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "cycle-fence",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "conversation-key-fence",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "aggregate-budget-accumulator",
+      "verifierExitCode": 1
+    },
+    {
+      "detected": true,
+      "label": "aggregate-budget-narrowing",
+      "verifierExitCode": 1
+    }
+  ]
+}

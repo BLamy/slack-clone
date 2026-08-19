@@ -1,0 +1,225 @@
+{
+  "expected": {
+    "iv_jjjjjjjjjjjjjjjjjjjjjjjjjj": "CONVERSATION_SCHEDULER_SELF_TRIGGER",
+    "iv_kkkkkkkkkkkkkkkkkkkkkkkkkk": "CONVERSATION_SCHEDULER_QUOTED_MENTION",
+    "iv_qqqqqqqqqqqqqqqqqqqqqqqqqq": "CONVERSATION_SCHEDULER_QUOTED_MENTION",
+    "iv_mmmmmmmmmmmmmmmmmmmmmmmmmm": "CONVERSATION_SCHEDULER_EDIT_TRIGGER",
+    "iv_nnnnnnnnnnnnnnnnnnnnnnnnnn": "CONVERSATION_SCHEDULER_RETRY_TRIGGER",
+    "iv_rrrrrrrrrrrrrrrrrrrrrrrrrr": "CONVERSATION_SCHEDULER_AGENT_REPLY",
+    "iv_pppppppppppppppppppppppppp": "CONVERSATION_SCHEDULER_REPLAYED_SOURCE"
+  },
+  "refusals": [
+    {
+      "batchId": null,
+      "code": "CONVERSATION_SCHEDULER_SELF_TRIGGER",
+      "conversationKey": "ck_6c49ad5a3bb1537786f7931e88",
+      "invocationId": "iv_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+      "invocationRef": {
+        "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "offset": "0000000000000020_0000000000000000",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+      },
+      "sourceTrigger": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000020_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "status": "non-running",
+      "terminal": true
+    },
+    {
+      "batchId": null,
+      "code": "CONVERSATION_SCHEDULER_QUOTED_MENTION",
+      "conversationKey": "ck_6c49ad5a3bb1537786f7931e88",
+      "invocationId": "iv_kkkkkkkkkkkkkkkkkkkkkkkkkk",
+      "invocationRef": {
+        "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "offset": "0000000000000021_0000000000000000",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+      },
+      "sourceTrigger": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000021_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "status": "non-running",
+      "terminal": true
+    },
+    {
+      "batchId": null,
+      "code": "CONVERSATION_SCHEDULER_QUOTED_MENTION",
+      "conversationKey": "ck_6c49ad5a3bb1537786f7931e88",
+      "invocationId": "iv_qqqqqqqqqqqqqqqqqqqqqqqqqq",
+      "invocationRef": {
+        "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "offset": "0000000000000022_0000000000000000",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+      },
+      "sourceTrigger": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000022_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "status": "non-running",
+      "terminal": true
+    },
+    {
+      "batchId": null,
+      "code": "CONVERSATION_SCHEDULER_EDIT_TRIGGER",
+      "conversationKey": "ck_6c49ad5a3bb1537786f7931e88",
+      "invocationId": "iv_mmmmmmmmmmmmmmmmmmmmmmmmmm",
+      "invocationRef": {
+        "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "offset": "0000000000000023_0000000000000000",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+      },
+      "sourceTrigger": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000023_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "status": "non-running",
+      "terminal": true
+    },
+    {
+      "batchId": null,
+      "code": "CONVERSATION_SCHEDULER_RETRY_TRIGGER",
+      "conversationKey": "ck_6c49ad5a3bb1537786f7931e88",
+      "invocationId": "iv_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+      "invocationRef": {
+        "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "offset": "0000000000000024_0000000000000000",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+      },
+      "sourceTrigger": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000024_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "status": "non-running",
+      "terminal": true
+    },
+    {
+      "batchId": null,
+      "code": "CONVERSATION_SCHEDULER_AGENT_REPLY",
+      "conversationKey": "ck_6c49ad5a3bb1537786f7931e88",
+      "invocationId": "iv_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+      "invocationRef": {
+        "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "offset": "0000000000000025_0000000000000000",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+      },
+      "sourceTrigger": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000025_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "status": "non-running",
+      "terminal": true
+    },
+    {
+      "batchId": null,
+      "code": "CONVERSATION_SCHEDULER_REPLAYED_SOURCE",
+      "conversationKey": "ck_6c49ad5a3bb1537786f7931e88",
+      "invocationId": "iv_pppppppppppppppppppppppppp",
+      "invocationRef": {
+        "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "offset": "0000000000000026_0000000000000000",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+      },
+      "sourceTrigger": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000026_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "status": "non-running",
+      "terminal": true
+    }
+  ],
+  "terminalDispositions": [
+    {
+      "batchId": null,
+      "code": "CONVERSATION_SCHEDULER_SELF_TRIGGER",
+      "disposition": "non-running",
+      "invocationId": "iv_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+      "sourceTrigger": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000020_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "status": "terminal"
+    },
+    {
+      "batchId": null,
+      "code": "CONVERSATION_SCHEDULER_QUOTED_MENTION",
+      "disposition": "non-running",
+      "invocationId": "iv_kkkkkkkkkkkkkkkkkkkkkkkkkk",
+      "sourceTrigger": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000021_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "status": "terminal"
+    },
+    {
+      "batchId": null,
+      "code": "CONVERSATION_SCHEDULER_QUOTED_MENTION",
+      "disposition": "non-running",
+      "invocationId": "iv_qqqqqqqqqqqqqqqqqqqqqqqqqq",
+      "sourceTrigger": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000022_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "status": "terminal"
+    },
+    {
+      "batchId": null,
+      "code": "CONVERSATION_SCHEDULER_EDIT_TRIGGER",
+      "disposition": "non-running",
+      "invocationId": "iv_mmmmmmmmmmmmmmmmmmmmmmmmmm",
+      "sourceTrigger": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000023_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "status": "terminal"
+    },
+    {
+      "batchId": null,
+      "code": "CONVERSATION_SCHEDULER_RETRY_TRIGGER",
+      "disposition": "non-running",
+      "invocationId": "iv_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+      "sourceTrigger": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000024_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "status": "terminal"
+    },
+    {
+      "batchId": null,
+      "code": "CONVERSATION_SCHEDULER_AGENT_REPLY",
+      "disposition": "non-running",
+      "invocationId": "iv_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+      "sourceTrigger": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000025_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "status": "terminal"
+    },
+    {
+      "batchId": null,
+      "code": "CONVERSATION_SCHEDULER_REPLAYED_SOURCE",
+      "disposition": "non-running",
+      "invocationId": "iv_pppppppppppppppppppppppppp",
+      "sourceTrigger": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000026_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "status": "terminal"
+    }
+  ]
+}

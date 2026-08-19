@@ -1,0 +1,72 @@
+[
+  {
+    "name": "duplicate-membership",
+    "code": "REDUCER_WORKSPACE_DUPLICATE_MEMBERSHIP",
+    "offset": "0000000000000000_0000000000000007",
+    "refusedBeforeAppend": true,
+    "sourceDumpUnchangedAfterReducerFailure": true
+  },
+  {
+    "name": "accepting-another-principal-invite",
+    "code": "REDUCER_WORKSPACE_INVITE_ACTOR_MISMATCH",
+    "offset": "0000000000000000_0000000000000008",
+    "refusedBeforeAppend": true,
+    "sourceDumpUnchangedAfterReducerFailure": true
+  },
+  {
+    "name": "stale-workspace-version",
+    "code": "REDUCER_WORKSPACE_REVISION_CONFLICT",
+    "offset": "0000000000000000_0000000000000007",
+    "refusedBeforeAppend": true,
+    "sourceDumpUnchangedAfterReducerFailure": true
+  },
+  {
+    "name": "stale-membership-version",
+    "code": "REDUCER_WORKSPACE_REVISION_CONFLICT",
+    "offset": "0000000000000000_0000000000000011",
+    "refusedBeforeAppend": true,
+    "sourceDumpUnchangedAfterReducerFailure": true
+  },
+  {
+    "name": "self-escalation",
+    "code": "REDUCER_WORKSPACE_SELF_ESCALATION",
+    "offset": "0000000000000000_0000000000000011",
+    "refusedBeforeAppend": true,
+    "sourceDumpUnchangedAfterReducerFailure": true
+  },
+  {
+    "name": "last-owner-suspension",
+    "code": "REDUCER_WORKSPACE_LAST_OWNER",
+    "offset": "0000000000000000_0000000000000012",
+    "refusedBeforeAppend": true,
+    "sourceDumpUnchangedAfterReducerFailure": true
+  },
+  {
+    "name": "cross-tenant-membership-id",
+    "code": "REDUCER_WORKSPACE_SCOPE_MISMATCH",
+    "offset": "0000000000000000_0000000000000011",
+    "refusedBeforeAppend": true,
+    "sourceDumpUnchangedAfterReducerFailure": true
+  },
+  {
+    "name": "cross-tenant-invite-id",
+    "code": "REDUCER_WORKSPACE_SCOPE_MISMATCH",
+    "offset": "0000000000000000_0000000000000007",
+    "refusedBeforeAppend": true,
+    "sourceDumpUnchangedAfterReducerFailure": true
+  },
+  {
+    "name": "role-kind-mismatch",
+    "code": "REDUCER_WORKSPACE_ROLE_KIND_MISMATCH",
+    "offset": "0000000000000000_0000000000000007",
+    "refusedBeforeAppend": true,
+    "sourceDumpUnchangedAfterReducerFailure": true
+  },
+  {
+    "name": "bootstrap-actor-mismatch",
+    "code": "REDUCER_WORKSPACE_BOOTSTRAP_INVALID",
+    "offset": "0000000000000000_0000000000000005",
+    "refusedBeforeAppend": true,
+    "sourceDumpUnchangedAfterReducerFailure": true
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T05",
+  "records": [
+    {
+      "offset": "0000000000000002_0000000000000002",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "data": {
+          "fixtureId": "malformed",
+          "value": true
+        },
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-03-01T00:00:00.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    }
+  ]
+}

@@ -1,0 +1,293 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T05",
+  "runId": "e0-t05-repair-provenance",
+  "implementationCommit": "a23b4962eddf1e413aa76c211a0032d2b2397c7e",
+  "implementationTreeCleanAtStart": true,
+  "result": "PASS",
+  "artifactRoot": "/Users/brettlamy/Dev/slack-clone/.artifacts/e0-t05/e0-t05-repair-provenance",
+  "zeroSkippedGates": true,
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "durationMs": 4117,
+      "name": "format",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "durationMs": 2832,
+      "name": "lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "durationMs": 9360,
+      "name": "typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "durationMs": 28396,
+      "name": "tests",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm build",
+      "durationMs": 1324,
+      "name": "build",
+      "result": "PASS"
+    }
+  ],
+  "replay": "N/A (CLI replay apparatus, not browser behavior) + mitigation: golden event logs, per-prefix digests, purity audit, and mutation tests",
+  "replayUploadAttempted": false,
+  "networkDisabled": true,
+  "queryStorePathAbsent": true,
+  "buildCachePathAbsent": true,
+  "validFixtures": {
+    "ledger-log.v1.json": {
+      "bytesIdenticalAcrossFreshProcesses": true,
+      "finalStateDigest": "sha256:5462e5c9d9d93fa56ae173a15d49ea3c931db073a2ee3da0dd2083ebeb99b79e",
+      "finalStateJson": "{\"appliedEventIds\":[\"ev_aaaaaaaaaaaaaaaaaaaaaaaaaa\",\"ev_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"ev_cccccccccccccccccccccccccc\",\"ev_dddddddddddddddddddddddddd\",\"ev_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"ev_ffffffffffffffffffffffffff\",\"ev_gggggggggggggggggggggggggg\",\"ev_hhhhhhhhhhhhhhhhhhhhhhhhhh\",\"ev_jjjjjjjjjjjjjjjjjjjjjjjjjj\",\"ev_mmmmmmmmmmmmmmmmmmmmmmmmmm\"],\"audits\":{\"audit-alpha\":{\"action\":\"replay.completed\",\"auditId\":\"audit-alpha\",\"detail\":{\"source\":\"golden-log\"},\"subjectId\":\"run-alpha\"}},\"entities\":{\"agents\":{\"ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd\":{\"agentId\":\"ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd\",\"config\":{\"harness\":\"codex\",\"name\":\"Ada\"},\"revision\":1}},\"connections\":{\"cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff\":{\"connectionId\":\"cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff\",\"metadata\":{\"destination\":\"github\",\"policyRevision\":1},\"revision\":1}},\"directory\":{\"channel-alpha\":{\"entityType\":\"channel\",\"id\":\"channel-alpha\",\"revision\":1,\"value\":{\"name\":\"general\",\"private\":false}}},\"fixtures\":{\"fixture-alpha\":{\"value\":\"alpha\"}},\"invocations\":{\"invocation-alpha\":{\"agentId\":\"ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd\",\"channelId\":\"ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc\",\"invocationId\":\"invocation-alpha\",\"prompt\":\"summarize the fixture\"}},\"messages\":{\"message-alpha\":{\"authorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"channelId\":\"ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc\",\"messageId\":\"message-alpha\",\"text\":\"hello from the replay fixture\"}},\"projections\":{\"px_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg\":{\"projectionId\":\"px_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg\",\"sequence\":1,\"sourceOffset\":\"0000000000000000_0000000000000009\",\"sourceStream\":\"workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory\",\"stateDigest\":\"sha256:1111111111111111111111111111111111111111111111111111111111111111\"}},\"runs\":{\"rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee\":{\"from\":\"queued\",\"history\":[{\"from\":null,\"to\":\"queued\"},{\"from\":\"queued\",\"to\":\"running\"}],\"invocationId\":\"invocation-alpha\",\"runId\":\"rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"to\":\"running\"}}},\"eventProvenance\":[{\"envelope\":{\"actorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"causation\":null,\"correlationId\":\"cr_dddddddddddddddddddddddddd\",\"data\":{\"fixtureId\":\"fixture-alpha\",\"value\":\"alpha\"},\"eventId\":\"ev_aaaaaaaaaaaaaaaaaaaaaaaaaa\",\"eventType\":\"ledger.fixture-recorded\",\"idempotencyKey\":\"ik_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"schemaVersion\":1,\"serverTimestamp\":\"2026-01-01T00:00:00.000Z\",\"workspaceId\":\"ws_aaaaaaaaaaaaaaaaaaaaaaaaaa\"},\"offset\":\"0000000000000000_0000000000000001\"},{\"envelope\":{\"actorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"causation\":null,\"correlationId\":\"cr_dddddddddddddddddddddddddd\",\"data\":{\"entityType\":\"channel\",\"id\":\"channel-alpha\",\"revision\":1,\"value\":{\"name\":\"general\",\"private\":false}},\"eventId\":\"ev_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"eventType\":\"workspace.directory.updated\",\"idempotencyKey\":\"ik_ffffffffffffffffffffffffff\",\"schemaVersion\":1,\"serverTimestamp\":\"2026-01-01T00:00:00.001Z\",\"workspaceId\":\"ws_aaaaaaaaaaaaaaaaaaaaaaaaaa\"},\"offset\":\"0000000000000000_0000000000000002\"},{\"envelope\":{\"actorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"causation\":null,\"correlationId\":\"cr_dddddddddddddddddddddddddd\",\"data\":{\"authorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"channelId\":\"ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc\",\"messageId\":\"message-alpha\",\"text\":\"hello from the replay fixture\"},\"eventId\":\"ev_cccccccccccccccccccccccccc\",\"eventType\":\"channel.message.created\",\"idempotencyKey\":\"ik_gggggggggggggggggggggggggg\",\"schemaVersion\":1,\"serverTimestamp\":\"2026-01-01T00:00:00.002Z\",\"workspaceId\":\"ws_aaaaaaaaaaaaaaaaaaaaaaaaaa\"},\"offset\":\"0000000000000000_0000000000000003\"},{\"envelope\":{\"actorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"causation\":null,\"correlationId\":\"cr_dddddddddddddddddddddddddd\",\"data\":{\"agentId\":\"ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd\",\"config\":{\"harness\":\"codex\",\"name\":\"Ada\"},\"revision\":1},\"eventId\":\"ev_dddddddddddddddddddddddddd\",\"eventType\":\"agent.config.revised\",\"idempotencyKey\":\"ik_hhhhhhhhhhhhhhhhhhhhhhhhhh\",\"schemaVersion\":1,\"serverTimestamp\":\"2026-01-01T00:00:00.003Z\",\"workspaceId\":\"ws_aaaaaaaaaaaaaaaaaaaaaaaaaa\"},\"offset\":\"0000000000000000_0000000000000004\"},{\"envelope\":{\"actorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"causation\":null,\"correlationId\":\"cr_dddddddddddddddddddddddddd\",\"data\":{\"agentId\":\"ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd\",\"channelId\":\"ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc\",\"invocationId\":\"invocation-alpha\",\"prompt\":\"summarize the fixture\"},\"eventId\":\"ev_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"eventType\":\"workspace.invocation.requested\",\"idempotencyKey\":\"ik_jjjjjjjjjjjjjjjjjjjjjjjjjj\",\"schemaVersion\":1,\"serverTimestamp\":\"2026-01-01T00:00:00.004Z\",\"workspaceId\":\"ws_aaaaaaaaaaaaaaaaaaaaaaaaaa\"},\"offset\":\"0000000000000000_0000000000000005\"},{\"envelope\":{\"actorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"causation\":null,\"correlationId\":\"cr_dddddddddddddddddddddddddd\",\"data\":{\"from\":null,\"invocationId\":\"invocation-alpha\",\"runId\":\"rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"to\":\"queued\"},\"eventId\":\"ev_ffffffffffffffffffffffffff\",\"eventType\":\"run.lifecycle.changed\",\"idempotencyKey\":\"ik_mmmmmmmmmmmmmmmmmmmmmmmmmm\",\"schemaVersion\":1,\"serverTimestamp\":\"2026-01-01T00:00:00.005Z\",\"workspaceId\":\"ws_aaaaaaaaaaaaaaaaaaaaaaaaaa\"},\"offset\":\"0000000000000000_0000000000000006\"},{\"envelope\":{\"actorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"causation\":null,\"correlationId\":\"cr_dddddddddddddddddddddddddd\",\"data\":{\"from\":\"queued\",\"runId\":\"rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"to\":\"running\"},\"eventId\":\"ev_gggggggggggggggggggggggggg\",\"eventType\":\"run.lifecycle.changed\",\"idempotencyKey\":\"ik_nnnnnnnnnnnnnnnnnnnnnnnnnn\",\"schemaVersion\":1,\"serverTimestamp\":\"2026-01-01T00:00:00.006Z\",\"workspaceId\":\"ws_aaaaaaaaaaaaaaaaaaaaaaaaaa\"},\"offset\":\"0000000000000000_0000000000000007\"},{\"envelope\":{\"actorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"causation\":null,\"correlationId\":\"cr_dddddddddddddddddddddddddd\",\"data\":{\"connectionId\":\"cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff\",\"metadata\":{\"destination\":\"github\",\"policyRevision\":1},\"revision\":1},\"eventId\":\"ev_hhhhhhhhhhhhhhhhhhhhhhhhhh\",\"eventType\":\"connection.config.revised\",\"idempotencyKey\":\"ik_pppppppppppppppppppppppppp\",\"schemaVersion\":1,\"serverTimestamp\":\"2026-01-01T00:00:00.007Z\",\"workspaceId\":\"ws_aaaaaaaaaaaaaaaaaaaaaaaaaa\"},\"offset\":\"0000000000000000_0000000000000008\"},{\"envelope\":{\"actorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"causation\":null,\"correlationId\":\"cr_dddddddddddddddddddddddddd\",\"data\":{\"action\":\"replay.completed\",\"auditId\":\"audit-alpha\",\"detail\":{\"source\":\"golden-log\"},\"subjectId\":\"run-alpha\"},\"eventId\":\"ev_jjjjjjjjjjjjjjjjjjjjjjjjjj\",\"eventType\":\"workspace.audit.recorded\",\"idempotencyKey\":\"ik_qqqqqqqqqqqqqqqqqqqqqqqqqq\",\"schemaVersion\":1,\"serverTimestamp\":\"2026-01-01T00:00:00.008Z\",\"workspaceId\":\"ws_aaaaaaaaaaaaaaaaaaaaaaaaaa\"},\"offset\":\"0000000000000000_0000000000000009\"},{\"envelope\":{\"actorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"causation\":null,\"correlationId\":\"cr_dddddddddddddddddddddddddd\",\"data\":{\"projectionId\":\"px_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg\",\"sequence\":1,\"sourceOffset\":\"0000000000000000_0000000000000009\",\"sourceStream\":\"workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory\",\"stateDigest\":\"sha256:1111111111111111111111111111111111111111111111111111111111111111\"},\"eventId\":\"ev_mmmmmmmmmmmmmmmmmmmmmmmmmm\",\"eventType\":\"projection.checkpointed\",\"idempotencyKey\":\"ik_rrrrrrrrrrrrrrrrrrrrrrrrrr\",\"schemaVersion\":1,\"serverTimestamp\":\"2026-01-01T00:00:00.009Z\",\"workspaceId\":\"ws_aaaaaaaaaaaaaaaaaaaaaaaaaa\"},\"offset\":\"0000000000000000_0000000000000010\"}],\"schemaVersion\":1}",
+      "replayOutputBytes": 17178,
+      "validation": {
+        "finalStateDigest": "sha256:5462e5c9d9d93fa56ae173a15d49ea3c931db073a2ee3da0dd2083ebeb99b79e",
+        "records": 10,
+        "result": "PASS",
+        "task": "E0-T05"
+      }
+    },
+    "message-and-run-log.v1.json": {
+      "bytesIdenticalAcrossFreshProcesses": true,
+      "finalStateDigest": "sha256:abe1b4ab514e5b182efd0e509efef3f42b4b8ae7bf843361b18b991c7d9522ef",
+      "finalStateJson": "{\"appliedEventIds\":[\"ev_qqqqqqqqqqqqqqqqqqqqqqqqqq\",\"ev_rrrrrrrrrrrrrrrrrrrrrrrrrr\",\"ev_ssssssssssssssssssssssssss\",\"ev_tttttttttttttttttttttttttt\"],\"audits\":{},\"entities\":{\"agents\":{},\"connections\":{},\"directory\":{},\"fixtures\":{},\"invocations\":{},\"messages\":{\"message-beta\":{\"authorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"channelId\":\"ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc\",\"messageId\":\"message-beta\",\"text\":\"a second deterministic message\"}},\"projections\":{},\"runs\":{\"rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee\":{\"from\":\"running\",\"history\":[{\"from\":null,\"to\":\"queued\"},{\"from\":\"queued\",\"to\":\"running\"},{\"from\":\"running\",\"to\":\"succeeded\"}],\"invocationId\":null,\"runId\":\"rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"to\":\"succeeded\"}}},\"eventProvenance\":[{\"envelope\":{\"actorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"causation\":null,\"correlationId\":\"cr_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"data\":{\"authorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"channelId\":\"ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc\",\"messageId\":\"message-beta\",\"text\":\"a second deterministic message\"},\"eventId\":\"ev_qqqqqqqqqqqqqqqqqqqqqqqqqq\",\"eventType\":\"channel.message.created\",\"idempotencyKey\":\"ik_aaaaaaaaaaaaaaaaaaaaaaaaaa\",\"schemaVersion\":1,\"serverTimestamp\":\"2026-02-01T12:00:00.000Z\",\"workspaceId\":\"ws_aaaaaaaaaaaaaaaaaaaaaaaaaa\"},\"offset\":\"0000000000000001_0000000000000001\"},{\"envelope\":{\"actorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"causation\":null,\"correlationId\":\"cr_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"data\":{\"from\":null,\"runId\":\"rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"to\":\"queued\"},\"eventId\":\"ev_rrrrrrrrrrrrrrrrrrrrrrrrrr\",\"eventType\":\"run.lifecycle.changed\",\"idempotencyKey\":\"ik_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"schemaVersion\":1,\"serverTimestamp\":\"2026-02-01T12:00:00.001Z\",\"workspaceId\":\"ws_aaaaaaaaaaaaaaaaaaaaaaaaaa\"},\"offset\":\"0000000000000001_0000000000000002\"},{\"envelope\":{\"actorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"causation\":null,\"correlationId\":\"cr_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"data\":{\"from\":\"queued\",\"runId\":\"rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"to\":\"running\"},\"eventId\":\"ev_ssssssssssssssssssssssssss\",\"eventType\":\"run.lifecycle.changed\",\"idempotencyKey\":\"ik_cccccccccccccccccccccccccc\",\"schemaVersion\":1,\"serverTimestamp\":\"2026-02-01T12:00:00.002Z\",\"workspaceId\":\"ws_aaaaaaaaaaaaaaaaaaaaaaaaaa\"},\"offset\":\"0000000000000001_0000000000000003\"},{\"envelope\":{\"actorId\":\"pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb\",\"causation\":null,\"correlationId\":\"cr_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"data\":{\"from\":\"running\",\"runId\":\"rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee\",\"to\":\"succeeded\"},\"eventId\":\"ev_tttttttttttttttttttttttttt\",\"eventType\":\"run.lifecycle.changed\",\"idempotencyKey\":\"ik_dddddddddddddddddddddddddd\",\"schemaVersion\":1,\"serverTimestamp\":\"2026-02-01T12:00:00.003Z\",\"workspaceId\":\"ws_aaaaaaaaaaaaaaaaaaaaaaaaaa\"},\"offset\":\"0000000000000001_0000000000000004\"}],\"schemaVersion\":1}",
+      "replayOutputBytes": 6675,
+      "validation": {
+        "finalStateDigest": "sha256:abe1b4ab514e5b182efd0e509efef3f42b4b8ae7bf843361b18b991c7d9522ef",
+        "records": 4,
+        "result": "PASS",
+        "task": "E0-T05"
+      }
+    }
+  },
+  "invalidFixtures": {
+    "duplicate-logical-id.json": {
+      "code": "REDUCER_DUPLICATE_LOGICAL_ID",
+      "offset": "0000000000000002_0000000000000006",
+      "path": "$.event.data.messageId"
+    },
+    "invalid-offset.json": {
+      "code": "REDUCER_INVALID_OFFSET",
+      "offset": "not-an-offset",
+      "path": "$.records[0].offset"
+    },
+    "illegal-transition.json": {
+      "code": "REDUCER_ILLEGAL_TRANSITION",
+      "offset": "0000000000000002_0000000000000004",
+      "path": "$.event.data.to"
+    },
+    "malformed-envelope.json": {
+      "code": "REPLAY_INVALID_ENVELOPE",
+      "offset": "0000000000000002_0000000000000002",
+      "path": "$.records[0].event"
+    },
+    "unknown-event-type.json": {
+      "code": "REPLAY_INVALID_ENVELOPE",
+      "offset": "0000000000000002_0000000000000001",
+      "path": "$.records[0].event"
+    }
+  },
+  "prefixDigests": {
+    "ledger-log.v1.json": [
+      {
+        "index": 1,
+        "offset": "0000000000000000_0000000000000001",
+        "stateDigest": "sha256:d5701252b9a14a4a3616b55c06f411b1b8a4d7bee390fc01e163dfb054a108df"
+      },
+      {
+        "index": 2,
+        "offset": "0000000000000000_0000000000000002",
+        "stateDigest": "sha256:0d14c2577e36280878f78de3d0758d0f5023d6a6e50f0d966233ffbb73588d91"
+      },
+      {
+        "index": 3,
+        "offset": "0000000000000000_0000000000000003",
+        "stateDigest": "sha256:a4defd97de08884fef04be40ddec287389648c3f2743fbcc4338024135a7b8a3"
+      },
+      {
+        "index": 4,
+        "offset": "0000000000000000_0000000000000004",
+        "stateDigest": "sha256:79aaab98a3ad378d3913484333a502822ce92952e4caa3ee91aa27e63f9956ed"
+      },
+      {
+        "index": 5,
+        "offset": "0000000000000000_0000000000000005",
+        "stateDigest": "sha256:92fb6ee5acf8d16332586ee27fe6f0dd3ea16972e0a22fc04239ec213bb86233"
+      },
+      {
+        "index": 6,
+        "offset": "0000000000000000_0000000000000006",
+        "stateDigest": "sha256:2443f545941e65bf96ec7a50e43f2b547b77ee73da4305ae9a51137d73da2755"
+      },
+      {
+        "index": 7,
+        "offset": "0000000000000000_0000000000000007",
+        "stateDigest": "sha256:0a60b188811a974b88699d6067e583ee4e01fddd024979782c00c1e4aa16271a"
+      },
+      {
+        "index": 8,
+        "offset": "0000000000000000_0000000000000008",
+        "stateDigest": "sha256:7396a6cea2f4cab3368e5145b827f21cb34bb36a20f19d6344549f7ebdf46aaf"
+      },
+      {
+        "index": 9,
+        "offset": "0000000000000000_0000000000000009",
+        "stateDigest": "sha256:2be52df07b32a03c05189cb65bc6d9137b532ea25e070d4cfc3407013dabd789"
+      },
+      {
+        "index": 10,
+        "offset": "0000000000000000_0000000000000010",
+        "stateDigest": "sha256:5462e5c9d9d93fa56ae173a15d49ea3c931db073a2ee3da0dd2083ebeb99b79e"
+      }
+    ],
+    "message-and-run-log.v1.json": [
+      {
+        "index": 1,
+        "offset": "0000000000000001_0000000000000001",
+        "stateDigest": "sha256:a0466db537f11caab742cee8d83325853af81762478ee407ed723d0cd7a66121"
+      },
+      {
+        "index": 2,
+        "offset": "0000000000000001_0000000000000002",
+        "stateDigest": "sha256:50d45030d86c896cac4abfe72aaeb626aa5da5c26db83e75cbe02da510971c8f"
+      },
+      {
+        "index": 3,
+        "offset": "0000000000000001_0000000000000003",
+        "stateDigest": "sha256:7c37f16da2070fdbcca0a0f0f428e703b0f22cb32b76e56eb737419975379572"
+      },
+      {
+        "index": 4,
+        "offset": "0000000000000001_0000000000000004",
+        "stateDigest": "sha256:abe1b4ab514e5b182efd0e509efef3f42b4b8ae7bf843361b18b991c7d9522ef"
+      }
+    ]
+  },
+  "mutationSensitivity": {
+    "ledger-log.v1.json": {
+      "changedBytes": 1,
+      "outcome": "digest-changed",
+      "finalStateDigest": "sha256:472c74fcd345a4d1a58a468636929fac98ec545d27a370d745f73c24d21b237d"
+    },
+    "message-and-run-log.v1.json": {
+      "changedBytes": 1,
+      "outcome": "digest-changed",
+      "finalStateDigest": "sha256:f9f3d9d3934282219a7a2d465c385d406fb753128520b67ae038d6dbdb608f23"
+    }
+  },
+  "provenanceSensitivity": {
+    "ledger-log.v1.json": [
+      {
+        "finalStateDigest": "sha256:ce664ad1f779ccad43e48f49e502745128f4ca34c912d11bd8b7c1d178bb199a",
+        "name": "serverTimestamp",
+        "outcome": "digest-changed"
+      },
+      {
+        "finalStateDigest": "sha256:38c3e14d40952180edd95d0dadd6b620a6ff6068c26b0a5211a677bc50175d89",
+        "name": "correlationId",
+        "outcome": "digest-changed"
+      },
+      {
+        "finalStateDigest": "sha256:a7c21cbd2bd78555107a1c6ff45234be5ebef91b79444ee7b0a98a676369ddef",
+        "name": "idempotencyKey",
+        "outcome": "digest-changed"
+      },
+      {
+        "finalStateDigest": "sha256:a004a6c92372e067762ebe6fa9ebc8fb39eb9b9b699b575526e31176a78dd6f9",
+        "name": "actorId",
+        "outcome": "digest-changed"
+      },
+      {
+        "finalStateDigest": "sha256:a7ded304486d95a6f40d700f512c012d17e00889ab362c7bb930be8f966bc5ea",
+        "name": "eventId",
+        "outcome": "digest-changed"
+      },
+      {
+        "code": "REPLAY_INVALID_ENVELOPE",
+        "name": "schemaVersion",
+        "offset": "0000000000000000_0000000000000001",
+        "outcome": "validation-failed"
+      },
+      {
+        "finalStateDigest": "sha256:f813d088e9372e0ef57f939e34cd8551d13546b557b5342c556537f3e8dc0bd0",
+        "name": "offset",
+        "outcome": "digest-changed"
+      },
+      {
+        "baselineFinalStateDigest": "sha256:fd07653077a9042c51aed5c2a931eba07d6299736f06313dd36788b663093a65",
+        "finalStateDigest": "sha256:397f52805d056c406d81270ffd14a34d52d63813d88699fdb1e319fc79653118",
+        "name": "causation.digest",
+        "outcome": "digest-changed"
+      }
+    ],
+    "message-and-run-log.v1.json": [
+      {
+        "finalStateDigest": "sha256:c50994e6ab641becf1e903116f140624775f1b7a0f7e584e8719f104ba2ee21e",
+        "name": "serverTimestamp",
+        "outcome": "digest-changed"
+      },
+      {
+        "finalStateDigest": "sha256:c336a71e33fdee9dc0bce778fefa5234cd1175398f5e1a754486e68b555b8636",
+        "name": "correlationId",
+        "outcome": "digest-changed"
+      },
+      {
+        "finalStateDigest": "sha256:a6c66cc3d2692397b09b17012c1653c8a169555594c1b5ebd87ffed83fee4609",
+        "name": "idempotencyKey",
+        "outcome": "digest-changed"
+      },
+      {
+        "finalStateDigest": "sha256:8609f6455771959c6a05487156c70aea95ab83c3a657740743eea3b036246ab4",
+        "name": "actorId",
+        "outcome": "digest-changed"
+      },
+      {
+        "finalStateDigest": "sha256:7c1aa77e3b9544ae324cd5c743ab9be4e5e45510d185e128714ceee8ef954279",
+        "name": "eventId",
+        "outcome": "digest-changed"
+      },
+      {
+        "code": "REPLAY_INVALID_ENVELOPE",
+        "name": "schemaVersion",
+        "offset": "0000000000000001_0000000000000001",
+        "outcome": "validation-failed"
+      },
+      {
+        "finalStateDigest": "sha256:8b4e89e11c011b8a45eaf613859903d79a28a679ee4d1fe58c45dd0897aa6809",
+        "name": "offset",
+        "outcome": "digest-changed"
+      },
+      {
+        "baselineFinalStateDigest": "sha256:101769cd1ea0900db96833366a82c427f66404d5d52bcad09af9c956b83187f6",
+        "finalStateDigest": "sha256:5885bf6235d5e1a0a85b3d0d3af55163638bcdf93e217fefa70215d402e30a17",
+        "name": "causation.digest",
+        "outcome": "digest-changed"
+      }
+    ]
+  },
+  "purityAudit": [
+    {
+      "ambientCapabilities": [],
+      "imports": [
+        "./canonical-state.mjs",
+        "./canonical-state.mjs"
+      ],
+      "path": "packages/reducers/src/index.mjs"
+    },
+    {
+      "ambientCapabilities": [],
+      "imports": [],
+      "path": "packages/reducers/src/canonical-state.mjs"
+    }
+  ]
+}

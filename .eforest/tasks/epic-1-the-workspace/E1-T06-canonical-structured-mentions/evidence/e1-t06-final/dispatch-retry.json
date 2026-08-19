@@ -1,0 +1,16 @@
+{
+  "firstSource": {
+    "digest": "sha256:aaa850e6ed60bdebb52aa364f0502c1fbe96f1068601f8520c0b2f98ba59b157",
+    "offset": "0000000000000000_0000000000000001",
+    "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+  },
+  "replayedSource": {
+    "digest": "sha256:aaa850e6ed60bdebb52aa364f0502c1fbe96f1068601f8520c0b2f98ba59b157",
+    "offset": "0000000000000000_0000000000000001",
+    "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+  },
+  "targetEventCountAfterRetry": 1,
+  "refusalLeavesTargetUnchanged": true,
+  "projectedSourceMatchesDispatch": true,
+  "result": "PASS"
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "name": "kind-mutation",
+    "outcome": "rejected",
+    "code": "REDUCER_PRINCIPAL_INVALID_OWNER",
+    "offset": "0000000000000000_0000000000000001",
+    "workPath": ".artifacts/e1-t01/e1-t01-final-39095/kind-mutation.json"
+  },
+  {
+    "name": "owner-scope-mutation",
+    "outcome": "rejected",
+    "code": "REDUCER_PRINCIPAL_SCOPE_MISMATCH",
+    "offset": "0000000000000000_0000000000000003",
+    "workPath": ".artifacts/e1-t01/e1-t01-final-39095/owner-scope-mutation.json"
+  },
+  {
+    "name": "subject-reuse-mutation",
+    "outcome": "rejected",
+    "code": "REDUCER_PRINCIPAL_DUPLICATE_SUBJECT",
+    "offset": "0000000000000000_0000000000000002",
+    "workPath": ".artifacts/e1-t01/e1-t01-final-39095/subject-reuse-mutation.json"
+  },
+  {
+    "name": "profile-authority-mutation",
+    "outcome": "rejected",
+    "code": "REDUCER_PRINCIPAL_INVALID_PROFILE",
+    "offset": "0000000000000000_0000000000000001",
+    "workPath": ".artifacts/e1-t01/e1-t01-final-39095/profile-authority-mutation.json"
+  }
+]

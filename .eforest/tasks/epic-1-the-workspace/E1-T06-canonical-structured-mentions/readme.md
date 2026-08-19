@@ -3,7 +3,7 @@ id: E1-T06
 epic: 1
 title: "Canonical structured mentions as durable trigger facts"
 priority: 106
-status: pending
+status: verified
 depends_on: [E1-T04]
 estimate: M
 capstone: false
@@ -64,3 +64,191 @@ fact only; no agent process runs until Epic 3.
    must fail.
 
 ## Verification log
+
+### Builder — 2026-08-04 — implementation and repaired cold proof
+
+- Implementation commits: `278293ee52b5ecab83a5da39f2e66976adf89ce7` added the canonical
+  mention protocol, resolver, reducer/schema validation, dispatch receipt binding, fixtures,
+  and verifier; `165657df77ed5edbc5b449c5647b75dce7152267` repaired the independent critic's
+  zero-width/format-control finding, sorted Markdown exclusion ranges before inline-code
+  parsing, fixed escaped-backslash and astral-letter boundaries, and restored the existing
+  E0-T03 conformance file to `format:check`. The latter is the exact implementation commit
+  bound by the promoted evidence.
+- Exact promoted cold command: `E1_T06_IMPLEMENTATION_COMMIT=165657df77ed5edbc5b449c5647b75dce7152267
+  PROMOTE_EVIDENCE=1 TEST_RUN_ID=e1-t06-final-20260804-r2 make verify-E1-T06`. The detached
+  checkout was clean before install, initialized the pinned emulator submodule, ran
+  `pnpm install --frozen-lockfile`, `pnpm setup:emulate`, and the verifier; all exited 0.
+  The verifier passed `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (120/120),
+  and `pnpm build`.
+- Parser evidence covers UTF-8 byte spans and fenced/inline/escaped/blockquote/URL exclusions;
+  malformed spans and zero-width space, word joiner, BOM, soft hyphen, and zero-width-inside-
+  handle inputs refuse with `MENTION_INVALID_TEXT`. Typed resolution refusals cover service,
+  disabled, non-member, ambiguous, unknown, forged scope, forged kind, wrong bytes, and
+  overlapping spans without identity leakage.
+- Accepted dispatch facts are source-bound to `channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc`,
+  offset `0000000000000000_0000000000000001`, and event digest
+  `sha256:4e3c1960740e4ee257fb139fa8f4d1d908e839474e20709f6098b8debc5c4f6c`; retry leaves one
+  target event and returns the same source fact. Replay preserves the original `ada` target
+  after a handle change with source digest `sha256:f60c0ff0ca8a831de64ac44b493184152106d29c843699382eea982d04ea9f30`,
+  mention-state digest `sha256:95508697c8887311cdbccb90a00a63feb30d7162df6dc0d7eae257b9c6abae48`,
+  and final state digest `sha256:db29485d3ffd116e870974363d8f39929c15ed2851986624aae740b6835cc66a`.
+- Evidence: `evidence/e1-t06-final/cold-clone-transcript.json`,
+  `verification-summary.json`, `parser-corpus.json`, `resolution-refusal-matrix.json`,
+  `dispatch-retry.json`, `mention-replay-evidence.json`, and `sensitivity.json`. Replay:
+  N/A (server mention parsing and source binding) + mitigation: parser corpus, typed refusal
+  matrix, retry/edit matrix, source-offset evidence, replay digest, and sensitivity proof.
+- Claim: canonical structured mentions resolve only from the authorized replayed workspace
+  state, persist stable principal facts with exact source bytes and accepted stream references,
+  preserve idempotent history across retry/edit/replay/handle changes, and refuse malformed or
+  identity-sensitive inputs without leaking principal identity; awaiting a fresh independent
+  critic.
+
+### Builder — 2026-08-04 — reducer-policy repair and final cold proof
+
+- Repair commit: `cf70595b745c49304f99becc9b9a67ed044917e1` (`Harden reducer mention policy`)
+  makes the reducer compare every persisted mention fact with the canonical visible parser
+  candidates, so a direct event writer cannot smuggle a mention from inline or fenced Markdown
+  into durable state. The unit suite adds the inline-code regression; the previous `1eb49c2`
+  repair remains responsible for format-control plain text, ZWJ preservation, load-bearing fenced
+  exclusion, and dispatch/reducer source-digest alignment.
+- Exact promoted cold command:
+  `E1_T06_IMPLEMENTATION_COMMIT=cf70595b745c49304f99becc9b9a67ed044917e1
+  PROMOTE_EVIDENCE=1 TEST_RUN_ID=e1-t06-final-20260804-r4 make verify-E1-T06`. The detached
+  checkout was clean before install, initialized the pinned emulator submodule, ran frozen
+  install and emulator setup, then passed `pnpm format:check`, `pnpm lint`, `pnpm typecheck`,
+  `pnpm test`, and `pnpm build`.
+- Parser evidence records visible UTF-8 spans, ZWJ emoji followed by a valid mention, all frozen
+  Markdown/URL exclusions, and zero handles for zero-width space, word joiner, BOM, soft hyphen,
+  and zero-width-inside-handle inputs. Typed resolution refusals cover service, disabled,
+  non-member, ambiguous, unknown, forged-scope, forged-kind, wrong-byte, and overlapping-span
+  cases without identity leakage.
+- Retry evidence binds both attempts to one target event and one source checkpoint:
+  `channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc`, offset
+  `0000000000000000_0000000000000001`, digest
+  `sha256:aaa850e6ed60bdebb52aa364f0502c1fbe96f1068601f8520c0b2f98ba59b157`; the reducer
+  projection explicitly reports `projectedSourceMatchesDispatch: true`. Replay twice produces
+  the same final digest `sha256:c952583e83ebaf9417417a02f18a7da7773c3fa87719baeb373c56b138aaabab`,
+  preserves principal `ada` after the profile handle becomes `ada-renamed`, and leaves one
+  trigger fact after edit.
+- Promoted evidence is under `evidence/e1-t06-final/`, including the cold transcript,
+  verification summary, parser corpus, refusal matrix, dispatch retry, replay evidence, and
+  sensitivity proof. Replay: N/A (server mention parsing and source binding) + mitigation:
+  parser corpus, typed refusal matrix, retry/edit matrix, source-offset evidence, replay digest,
+  reducer exclusion regression, and sensitivity proof.
+- Claim: the reducer, parser, resolver, and dispatch receipt together make canonical structured
+  mentions durable, workspace-scoped, Markdown-aware, idempotent, and stable across profile
+  changes; awaiting a fresh independent critic.
+
+### Builder — 2026-08-04 — principal-binding repair and final cold proof
+
+- Repair commit: `ed09c3b715f3d860e5f7351da61b260215ff8695` (`Reject substituted mention
+  principals`) requires every durable mention handle to equal the current canonical principal
+  profile handle in addition to the existing visible-candidate, kind, status, and membership
+  checks. The verifier fixture now attacks an active same-workspace, same-kind principal
+  substitution and expects typed `REDUCER_MENTION_HANDLE_MISMATCH`; the unit suite covers the
+  same attack directly.
+- Exact promoted cold command:
+  `E1_T06_IMPLEMENTATION_COMMIT=ed09c3b715f3d860e5f7351da61b260215ff8695
+  TEST_RUN_ID=e1-t06-final-20260804-r6 PROMOTE_EVIDENCE=1 make verify-E1-T06`. The detached
+  checkout was clean before install, initialized the pinned emulator submodule, ran frozen
+  install and emulator setup, and passed `pnpm format:check`, `pnpm lint`, `pnpm typecheck`,
+  `pnpm test`, and `pnpm build`.
+- The promoted refusal matrix now records `forged-principal-substitution` as
+  `REDUCER_MENTION_HANDLE_MISMATCH` alongside scope, wrong-byte, kind, and overlap refusals.
+  Retry still produces one target event at offset
+  `0000000000000000_0000000000000001` with source digest
+  `sha256:aaa850e6ed60bdebb52aa364f0502c1fbe96f1068601f8520c0b2f98ba59b157`, and the reducer
+  comparison remains `projectedSourceMatchesDispatch: true`. Replay twice still converges on
+  final digest `sha256:c952583e83ebaf9417417a02f18a7da7773c3fa87719baeb373c56b138aaabab`, keeps
+  the original `ada` target after the profile handle changes, and leaves one trigger fact after
+  edit.
+- Promoted evidence is under `evidence/e1-t06-final/`, including the updated cold transcript,
+  verification summary, parser corpus, refusal matrix, dispatch retry, replay evidence, and
+  sensitivity proof. Replay: N/A (server mention parsing and source binding) + mitigation:
+  parser corpus, typed refusal matrix, retry/edit matrix, source-offset evidence, replay digest,
+  reducer exclusion and principal-binding regressions, and sensitivity proof.
+- Claim: direct durable writers can no longer substitute an active principal behind a valid
+  display handle; canonical structured mentions remain durable, workspace-scoped, Markdown-aware,
+  idempotent, and stable across profile changes; awaiting a fresh independent critic.
+
+### Builder — 2026-08-04 — ambiguity and sensitivity repair complete
+
+- Repair commit: `d03bfe20630e6c89cf72d8d59fa1ad83e91bc0bd` (`Close mention ambiguity and
+  sensitivity gaps`) makes the reducer mirror resolver ambiguity policy: a handle must resolve to
+  exactly one workspace principal, otherwise it refuses with typed
+  `REDUCER_MENTION_AMBIGUOUS_TARGET`. The invalid corpus now exercises the two-active-principal
+  `ambiguous` collision. The verifier's sensitivity path creates a disposable worktree, removes
+  the fenced-code exclusion call, installs that mutant, and proves the nested verifier exits 1.
+- Exact promoted cold command:
+  `E1_T06_IMPLEMENTATION_COMMIT=d03bfe20630e6c89cf72d8d59fa1ad83e91bc0bd
+  TEST_RUN_ID=e1-t06-final-20260804-r7 PROMOTE_EVIDENCE=1 make verify-E1-T06`. The clean detached
+  checkout initialized the pinned emulator, completed frozen install and setup, and passed
+  `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`.
+- Final refusal evidence covers foreign scope, wrong bytes, substituted principal, kind mismatch,
+  ambiguous principal target, and overlapping spans. Retry remains one target event at offset
+  `0000000000000000_0000000000000001` with source digest
+  `sha256:aaa850e6ed60bdebb52aa364f0502c1fbe96f1068601f8520c0b2f98ba59b157`; dispatch and
+  reducer projection report equal source references. Replay twice converges at final digest
+  `sha256:c952583e83ebaf9417417a02f18a7da7773c3fa87719baeb373c56b138aaabab`, retains the stable
+  principal through handle change, and leaves one trigger fact after edit.
+- Promoted evidence is under `evidence/e1-t06-final/`; `sensitivity.json` now records the actual
+  mutated file, frozen install exit 0, nested verifier exit 1, and `verifierRejected: true`.
+  Replay: N/A (server mention parsing and source binding) + mitigation: parser corpus, typed
+  refusal matrix, retry/edit matrix, source-offset evidence, replay digest, reducer policy
+  regressions, and a disposable red sensitivity run.
+- Claim: canonical structured mentions now reject mismatched, ambiguous, invisible, malformed,
+  unauthorized, and non-durable trigger inputs at both dispatch and reducer boundaries; awaiting
+  a fresh independent critic.
+
+### Builder — 2026-08-04 — reducer refusal coverage and final cold proof
+
+- Coverage commit: `69300c4810b9d4e1da78452bf6c8fc7f2ddbff82` (`Cover reducer mention refusal
+  branches`) adds durable reducer-level invalid fixtures and unit coverage for disabled and
+  non-member principals. These cases now refuse with `REDUCER_MENTION_TARGET_DISABLED` and
+  `REDUCER_MENTION_TARGET_NOT_MEMBER`, complementing the existing resolver refusal matrix.
+- Exact promoted cold command:
+  `E1_T06_IMPLEMENTATION_COMMIT=69300c4810b9d4e1da78452bf6c8fc7f2ddbff82
+  TEST_RUN_ID=e1-t06-final-20260804-r8 PROMOTE_EVIDENCE=1 make verify-E1-T06`. The detached
+  checkout was clean before install, initialized the pinned emulator submodule, completed
+  frozen install and emulator setup, and passed `pnpm format:check`, `pnpm lint`,
+  `pnpm typecheck`, `pnpm test`, and `pnpm build`.
+- Final parser and refusal evidence covers visible UTF-8 spans, ZWJ preservation, Markdown and
+  URL exclusions, invisible format controls, forged scope, wrong bytes, substituted principal,
+  kind mismatch, ambiguity, disabled target, non-member target, and overlapping spans. All
+  refused facts are typed and the identity-sensitive resolution cases report no identity leak.
+- Retry evidence remains one target event bound to
+  `channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc`, offset
+  `0000000000000000_0000000000000001`, and source digest
+  `sha256:aaa850e6ed60bdebb52aa364f0502c1fbe96f1068601f8520c0b2f98ba59b157`; the reducer
+  projection reports `projectedSourceMatchesDispatch: true`. Replay twice converges on final
+  digest `sha256:c952583e83ebaf9417417a02f18a7da7773c3fa87719baeb373c56b138aaabab`, preserves
+  the stable `ada` target after the profile handle changes, and leaves one trigger fact after
+  edit. Mention-state digest is
+  `sha256:42e4e086c6650de9c37f53a0f44733c9fc2de81360e460bbd4ff2f75e8ec6e25`.
+- Promoted evidence is under `evidence/e1-t06-final/`, including the updated cold transcript,
+  verification summary, parser corpus, refusal matrix, dispatch retry, replay evidence, and
+  sensitivity proof. The sensitivity run removes the fenced-code exclusion in a disposable
+  worktree, installs the mutant, and records nested verifier exit 1. Replay: N/A (server mention
+  parsing and source binding) + mitigation: parser corpus, typed refusal matrix, retry/edit
+  matrix, source-offset evidence, replay digest, reducer regressions, and disposable red
+  sensitivity proof.
+- Claim: canonical structured mentions now reject mismatched, ambiguous, invisible, malformed,
+  unauthorized, and non-durable trigger inputs at both dispatch and reducer boundaries while
+  preserving idempotent source binding and stable replay targets; awaiting a fresh independent
+  critic.
+
+### Critic — 2026-08-04 — verified
+
+- Fresh independent critic session `0d955bd9-be9e-4f90-a043-beb3f6fe86ed` reviewed implementation
+  commit `69300c4810b9d4e1da78452bf6c8fc7f2ddbff82` and promoted evidence commit `b5c073a` without
+  editing files, task state, queue, or history.
+- The critic independently reran `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`,
+  and `pnpm build` (124/124 tests passed), then ran
+  `E1_T06_IMPLEMENTATION_COMMIT=69300c4 E1_T06_SKIP_GATES=1 TEST_RUN_ID=critic-indep-1
+  node scripts/verify-e1-t06.mjs` with exit 0 and matching replay/source digests.
+- Direct reducer attacks independently refused URL, blockquote, escaped, cross-workspace,
+  duplicate-fact, client-source, edited-event, and stale-handle inputs while accepting the
+  legitimate visible control. The critic confirmed the disposable fenced-code mutation installs,
+  causes the nested verifier to exit 1, and leaves no worktree residue.
+- Verdict: `VERDICT: verified`. Advisory notes about stale edit spans, typed refusal oracles, and
+  fixture-state sharing were not acceptance-refuting; no required evidence or product fix remains.

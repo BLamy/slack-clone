@@ -1,0 +1,9 @@
+{
+  "result": "PASS",
+  "packDigest": "sha256:2e15baf66fe66555415c49fef7fb7c150dbb6d15a40e287fc517f72a3f326c7f",
+  "canonicalBytes": 4611,
+  "freshProcessDigest": "sha256:2e15baf66fe66555415c49fef7fb7c150dbb6d15a40e287fc517f72a3f326c7f",
+  "freshProcessBytes": 4611,
+  "byteIdentical": true,
+  "tamperRefused": true
+}

@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "refusals": [
+    {
+      "filename": "unknown-environment-field.json",
+      "code": "AGENT_CONFIG_FORBIDDEN_FIELD",
+      "path": "$.agentConfig.environment"
+    },
+    {
+      "filename": "secret-canary-instructions.json",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "path": "$.agentConfig.instructions.system"
+    },
+    {
+      "filename": "unknown-provider.json",
+      "code": "AGENT_CONFIG_UNKNOWN_PROVIDER",
+      "path": "$.agentConfig.harness.providerId"
+    },
+    {
+      "filename": "future-schema-version.json",
+      "code": "AGENT_CONFIG_UNSUPPORTED_SCHEMA_VERSION",
+      "path": "$.agentConfig.schemaVersion"
+    },
+    {
+      "filename": "fractional-budget.json",
+      "code": "AGENT_CONFIG_INVALID_VALUE",
+      "path": "$.agentConfig.budgets.timeoutSeconds"
+    },
+    {
+      "filename": "contradictory-policy.json",
+      "code": "AGENT_CONFIG_CONTRADICTORY_POLICY",
+      "path": "$.agentConfig.trigger.requireMention"
+    },
+    {
+      "filename": "unversioned-connection.json",
+      "code": "AGENT_CONFIG_MISSING_FIELD",
+      "path": "$.agentConfig.connectionGrants.refs[0].revision"
+    },
+    {
+      "filename": "unknown-startup-command.json",
+      "code": "AGENT_CONFIG_FORBIDDEN_FIELD",
+      "path": "$.agentConfig.sandbox.startupCommand"
+    },
+    {
+      "filename": "unknown-schema-version",
+      "code": "AGENT_CONFIG_UNSUPPORTED_SCHEMA_VERSION",
+      "path": "$.agentConfig.schemaVersion"
+    },
+    {
+      "filename": "unknown-harness-version",
+      "code": "AGENT_CONFIG_UNSUPPORTED_PROVIDER_VERSION",
+      "path": "$.agentConfig.harness.providerVersion"
+    },
+    {
+      "filename": "unknown-capability",
+      "code": "AGENT_CONFIG_INVALID_CAPABILITY",
+      "path": "$.agentConfig.harness.requiredCapabilities[0]"
+    },
+    {
+      "filename": "unknown-trigger",
+      "code": "AGENT_CONFIG_INVALID_ENUM",
+      "path": "$.agentConfig.trigger.events[0]"
+    },
+    {
+      "filename": "negative-budget",
+      "code": "AGENT_CONFIG_INVALID_VALUE",
+      "path": "$.agentConfig.budgets.timeoutSeconds"
+    },
+    {
+      "filename": "fractional-concurrency",
+      "code": "AGENT_CONFIG_INVALID_VALUE",
+      "path": "$.agentConfig.concurrency.maxConcurrentRuns"
+    },
+    {
+      "filename": "cross-channel-with-channel-context",
+      "code": "AGENT_CONFIG_CONTRADICTORY_POLICY",
+      "path": "$.agentConfig.delegation.allowCrossChannel"
+    }
+  ]
+}

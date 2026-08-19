@@ -1,0 +1,71 @@
+{
+  "scripted": [
+    {
+      "finalActiveChildren": [
+        0
+      ],
+      "killEscalated": [
+        true
+      ],
+      "survivors": [
+        0
+      ]
+    },
+    {
+      "finalActiveChildren": [
+        0
+      ],
+      "killEscalated": [
+        true
+      ],
+      "survivors": [
+        0
+      ]
+    },
+    {
+      "finalActiveChildren": [
+        0
+      ],
+      "killEscalated": [
+        true
+      ],
+      "survivors": [
+        0
+      ]
+    },
+    {
+      "finalActiveChildren": [
+        0
+      ],
+      "killEscalated": [
+        true
+      ],
+      "survivors": [
+        0
+      ]
+    },
+    {
+      "finalActiveChildren": [
+        0
+      ],
+      "killEscalated": [
+        true
+      ],
+      "survivors": [
+        0
+      ]
+    }
+  ],
+  "real": {
+    "processGroupId": -35459,
+    "signals": [
+      "SIGTERM",
+      "SIGKILL"
+    ],
+    "outputExceeded": true,
+    "survivors": 0,
+    "durationMs": 57,
+    "withinBound": true,
+    "result": "PASS"
+  }
+}

@@ -1,7 +1,7 @@
 ---
 id: E5-T09
 epic: 5
-title: "Capstone: a real Fly agent uses a real Infisical Agent Proxy connection through one approved tool call without seeing credentials"
+title: "Capstone: a real Cloudflare OS agent uses a real Infisical Agent Proxy connection through one approved tool call without seeing credentials"
 priority: 509
 status: pending
 depends_on: [E5-T04, E5-T08]
@@ -12,8 +12,8 @@ capstone: true
 ## Goal
 
 From a cold clone, an administrator imports a pinned test integration, creates a
-SecretRef-backed connection, grants it to an agent, and runs that agent in a real Fly
-Sprite. The run searches/describes a tool, pauses for exact-request approval, executes
+SecretRef-backed connection, grants it to an agent, and runs that agent in a real
+Cloudflare OS workspace/Gadget. The run searches/describes a tool, pauses for exact-request approval, executes
 through a real Infisical Agent Proxy, receives the test result, then loses access on
 revocation with zero credential leakage or retained provider resource.
 
@@ -25,14 +25,15 @@ caching Proxy is explicitly not the provider under test.
 
 ## Deliverables
 
-- Dedicated canary integration and least-privilege Fly/Infisical test identities.
+- Dedicated canary integration and least-privilege Cloudflare OS/Infisical test identities.
 - End-to-end capstone runner, expected event/request/result digests, canary scans, and
   provider inventory/revocation evidence.
 - `make verify-E5-T09-real` as the registered Epic 5 capstone target.
 
 ## Acceptance criteria
 
-- [ ] `tools/verify/cold_clone.sh verify-E5-T09-real` uses a real Fly Sprite and real
+- [ ] `tools/verify/cold_clone.sh verify-E5-T09-real` uses a real Cloudflare OS
+      workspace/Gadget and real
       Infisical Agent Proxy. Missing either provider exits nonzero with `SKIPPED:`; fake,
       Agent Vault, generic Infisical API, or ordinary caching Proxy cannot pass.
 - [ ] Catalog import and connection/grant creation replay to committed version digests,
@@ -40,14 +41,16 @@ caching Proxy is explicitly not the provider under test.
 - [ ] The first write-class execute pauses; approval of its canonical request digest
       causes exactly one brokered service call and one redacted result event.
 - [ ] Changing one nested input after approval, calling an ungranted operation, direct
-      service networking, and replaying the proxy identity from another Sprite all fail
+      service networking, and replaying the proxy identity from another Cloudflare OS
+      workspace all fail
       before the target service observes a request.
 - [ ] Canary secret bytes are absent from chat, model/harness input, argv, env, workspace,
       retained storage, streams, logs, traces, errors, and evidence; after revoke the same
-      call fails and final Fly inventory is empty.
+      call fails and final Cloudflare OS inventory is empty.
 - [ ] Browser evidence is recorded exactly as `Replay: N/A (real headless brokered-tool
-      capstone) + mitigation: cold-clone Fly plus Infisical Agent Proxy transcript,
-      request/result digests, target-service request count, canary scans, and inventories`.
+      capstone) + mitigation: cold-clone Cloudflare OS plus Infisical Agent Proxy
+      transcript, request/result digests, target-service request count, canary scans, and
+      inventories`.
 
 ## Adversarial verification
 

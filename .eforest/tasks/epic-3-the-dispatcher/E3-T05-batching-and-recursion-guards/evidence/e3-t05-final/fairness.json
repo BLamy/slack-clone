@@ -1,0 +1,40 @@
+{
+  "activeKey": "ck_6c49ad5a3bb1537786f7931e88",
+  "blocked": {
+    "batchId": null,
+    "code": "CONVERSATION_SCHEDULER_CONVERSATION_ACTIVE",
+    "conversationKey": "ck_6c49ad5a3bb1537786f7931e88",
+    "invocationId": "iv_ffffffffffffffffffffffffff",
+    "invocationRef": {
+      "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "offset": "0000000000000011_0000000000000000",
+      "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+    },
+    "sourceTrigger": {
+      "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "offset": "0000000000000011_0000000000000000",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "status": "queued",
+    "terminal": false
+  },
+  "independent": {
+    "batchId": "bt_6ff63b370f87e6a6e83d4dc1ce",
+    "code": null,
+    "conversationKey": "ck_f55872df013121924a6c004140",
+    "invocationId": "iv_gggggggggggggggggggggggggg",
+    "invocationRef": {
+      "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "offset": "0000000000000012_0000000000000000",
+      "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+    },
+    "sourceTrigger": {
+      "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "offset": "0000000000000012_0000000000000000",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "status": "admitted",
+    "terminal": false
+  },
+  "scheduleDigest": "sha256:3f3205b6d0fccc2d28730fc8905465ff54a6eb6f947c8e635fd5f7854de28327"
+}

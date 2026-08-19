@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T02",
+  "role": "critic",
+  "recordedAt": "2026-08-01",
+  "verdict": "refuted",
+  "reviewedRange": {
+    "base": "2cff7718128a0ebe2343efa8f416629e160225b2",
+    "implementationCommit": "db8077fd92e9578913886c543090d5cce0b5b239",
+    "evidenceHead": "b84297e8ff21388a9b14b402086dfd7bd0330e3c"
+  },
+  "predictions": "work/critic-predictions.md",
+  "coldReproduction": {
+    "kind": "local git clone --no-hardlinks",
+    "detachedHead": "db8077fd92e9578913886c543090d5cce0b5b239",
+    "preflightAbsent": [
+      "node_modules",
+      "emulate/packages/emulate/dist/index.js",
+      ".env",
+      "recordings/latest.json"
+    ],
+    "command": "env -u REPLAY_API_KEY -u RECORD_REPLAY_METADATA_FILE -u PLAYWRIGHT_REPLAY_METADATA -u REPLAY_RECORDINGS TEST_RUN_ID=critic-cold-7f3c9a make verify-E0-T02",
+    "exitCode": 0,
+    "node": "v23.11.0",
+    "pnpm": "11.2.2",
+    "emulatorCommit": "8b88027535e4ea6a18c3ce92a13af706382a451f",
+    "rootFrozenInstall": "PASS",
+    "emulatorFrozenInstall": "PASS with a non-fatal emulator Node >=24 engine warning",
+    "gates": {
+      "format": "PASS",
+      "lint": "PASS",
+      "staticAnalysis": {
+        "result": "PASS",
+        "layers": 5,
+        "violations": 0,
+        "syntaxFiles": 35
+      },
+      "unit": {
+        "passed": 12,
+        "failed": 0,
+        "skipped": 0
+      },
+      "integration": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0
+      },
+      "concurrency": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "build": {
+        "result": "PASS",
+        "files": 28
+      }
+    },
+    "streamProof": {
+      "room": "critic-cold-7f3c9a-edit-1785621673987",
+      "nextOffset": "0000000000000000_0000000000000539",
+      "streamDigest": "sha256:2967c3930be9500452335b39588629676ce433ec2c3aa4db7ebf7e29c1516c96",
+      "messageCount": 1,
+      "domMatchedApi": true
+    }
+  },
+  "independentIsolationAttack": {
+    "seed": "7f3c9a",
+    "canary": "E0T02-CRITIC-CANARY-20260801-7f3c9a-DO-NOT-LEAK",
+    "room": "critic-7f3c9a-same-room",
+    "stackAPorts": [20398, 20399, 20400],
+    "stackBPorts": [35786, 35787, 35788],
+    "artifactRootsDistinct": true,
+    "sessionsIsolatedBothDirections": true,
+    "sameRoomStreamsIsolatedBothDirections": true,
+    "canaryCrossedStacks": false,
+    "stackSpecificTeardown": true,
+    "artifactSentinelsUntouched": true,
+    "unrelatedArtifactUntouched": true,
+    "recordingsUnchanged": true,
+    "startupFailureCleanup": [
+      {
+        "failingChild": "emulator",
+        "failingExitCode": 31,
+        "siblingSignal": "SIGTERM",
+        "unrelatedProcessAlive": true,
+        "artifactUntouched": true
+      },
+      {
+        "failingChild": "app",
+        "failingExitCode": 31,
+        "siblingSignal": "SIGTERM",
+        "unrelatedProcessAlive": true,
+        "artifactUntouched": true
+      }
+    ],
+    "result": "PASS"
+  },
+  "sensitivity": [
+    {
+      "name": "ordinary forbidden pure-package import",
+      "mutation": "added import node:fs to packages/protocol/src/index.mjs",
+      "command": "pnpm typecheck",
+      "exitCode": 1,
+      "observation": "packages/protocol/src/index.mjs imports capability module node:fs",
+      "detectorWentRed": true
+    },
+    {
+      "name": "owner-authorization product defect",
+      "mutation": "made messageOwnedBy return true for every user",
+      "command": "TEST_RUN_ID=critic-sensitivity-owner-7f3c9a pnpm verify",
+      "exitCode": 1,
+      "observation": "10 unit tests passed and 2 failed: true !== false at backend-packages.test.mjs:48 and missing expected rejection at line 159",
+      "detectorWentRed": true
+    }
+  ],
+  "findings": [
+    {
+      "id": "C1",
+      "severity": "blocking",
+      "criterion": 3,
+      "title": "Formatter-aware static import bypass false-greens the composed verifier",
+      "mutation": "inserted // prettier-ignore followed by import\"node:fs\"; in the pure protocol package",
+      "commands": [
+        "pnpm format:check",
+        "pnpm lint",
+        "pnpm typecheck",
+        "TEST_RUN_ID=critic-boundary-bypass-7f3c9a pnpm verify"
+      ],
+      "exitCodes": [0, 0, 0, 0],
+      "observation": "The boundary scanner reported layers=5 violations=0 and the full verifier passed 12 unit, 5 browser, 1 concurrency, and build despite the forbidden node:fs import.",
+      "source": "tools/check-boundaries.mjs:92-97 requires whitespace after import and scans source with a regex instead of a parser"
+    },
+    {
+      "id": "C2",
+      "severity": "blocking",
+      "criterion": 4,
+      "title": "Default dynamic port allocation has a reproducible probe-to-bind collision",
+      "mutation": "forced two independent allocator calls to use the same random candidate before either stack bound",
+      "observation": {
+        "allocationsIdenticalBeforeBind": true,
+        "ports": [41631, 41632, 41633],
+        "startFulfilled": 1,
+        "startRejected": 1,
+        "rejection": "app:critic-race-b exited unexpectedly with code 1",
+        "childError": "EADDRINUSE 127.0.0.1:41633"
+      },
+      "source": "scripts/process-utils.mjs:90-110 probes and closes each socket before returning; startStack has no reservation or EADDRINUSE retry"
+    }
+  ],
+  "routineSideEffects": {
+    "pristineCommand": "TEST_RUN_ID=critic-side-effects-7f3c9a pnpm verify",
+    "result": "PASS",
+    "recordingSentinelSha256": "d42cf0b09def5b163c9d301377fb43f91a3f9c144364d89de281d4173cfde2b5",
+    "recordingsUnchanged": true,
+    "replayOrTunnelCallPathFound": false,
+    "outsideBuildTargetCommand": "BUILD_DIR=<task-work>/destructive-target pnpm build",
+    "outsideBuildTargetExitCode": 1,
+    "outsideSentinelSha256": "487180fbfeea4765bb9de23963b90c5408618e1e1eb574e3c2e588dc6a13b442",
+    "outsideSentinelUntouched": true
+  },
+  "leadDisposition": {
+    "isolationBooleans": "Dismissed as a false-green lead: artifact-root, cookie, stream, teardown, and recording assertions execute before the summary is written; the critic independently repeated them.",
+    "combinedIsolationEvidence": "Confirmed as compressed provenance, not a missing test: concurrent-stack facts come from stack-isolation Playwright while unrelated-process cleanup comes from two unit fixtures; both were independently reproduced.",
+    "regexImportScanning": "Confirmed and blocking; prettier-ignore preserves a valid no-whitespace import spelling, so even the preceding format gate does not protect the scanner.",
+    "defaultPlaywrightOutput": "Confirmed only for direct unwrapped Playwright use: the config fallback is test-results/playwright, but every routine verifier wrapper sets PLAYWRIGHT_OUTPUT_DIR under the run artifact root and no default output was produced.",
+    "portProbeBindRace": "Confirmed with a practical EADDRINUSE collision."
+  },
+  "provenance": {
+    "postImplementationChanges": [
+      ".eforest/tasks/QUEUE.md",
+      ".eforest/tasks/epic-0-the-ledger/E0-T02-strangler-backend-workspace/readme.md",
+      ".eforest/tasks/epic-0-the-ledger/E0-T02-strangler-backend-workspace/evidence/build-manifest.json",
+      ".eforest/tasks/epic-0-the-ledger/E0-T02-strangler-backend-workspace/evidence/cold-verification.json",
+      ".eforest/tasks/epic-0-the-ledger/E0-T02-strangler-backend-workspace/evidence/isolation.json",
+      ".eforest/tasks/epic-0-the-ledger/E0-T02-strangler-backend-workspace/evidence/sensitivity.json"
+    ],
+    "committedBuildManifestSha256": "a4624289d6d3707c17f7e0925406244e3fc1b6d9d0601f36de83460215510f6c",
+    "manifestEntriesCheckedAgainstImplementationTree": 28,
+    "manifestEntryMismatches": 0,
+    "criticBuildFilesEqualCommittedBuildFiles": true,
+    "secretScan": "No provider credential, session cookie, customer content, private key, or unredacted HTTP capture found. The emulator fixture token/password are test-only inputs outside the E0-T02 evidence JSON."
+  },
+  "coverage": {
+    "executed": [
+      "all five packages and package manifests",
+      "src/server.mjs composition, auth, static routing, JSON API, SSE, sessions, append/edit/reset behavior",
+      "format, ESLint, static syntax, boundary, unit, integration, concurrency, build, setup, process, run-context, and stack helpers",
+      "root and emulator frozen lockfiles",
+      "Playwright and isolation configs through their wrapper commands",
+      "all E0-T02 unit and browser tests",
+      "build manifest generation and all 28 output entries"
+    ],
+    "explicitlyWaived": [
+      "README.md and docs/backend-packages.md prose after source-to-contract audit",
+      ".gitignore and task/queue metadata as non-product behavior",
+      "pnpm-lock.yaml generated resolution text beyond successful frozen installs"
+    ],
+    "dead": [],
+    "requiringEvidence": []
+  },
+  "replay": "Replay: N/A (server extraction with unchanged browser behavior) + mitigation: inherited Playwright compatibility suite, package-boundary audit, and cold-clone composed gates"
+}

@@ -18,7 +18,7 @@ capabilities have distinct audiences, rotation, revocation, and uniform refusal 
 
 ## Context
 
-Auth0-backed users, agents-as-users, server replicas, Fly Sprites, harnesses, and broker
+Auth0-backed users, agents-as-users, server replicas, Cloudflare OS workspaces, harnesses, and broker
 proxies are different principals. Reusing one token shape or trusting an internal header
 would collapse tenant isolation at production scale.
 

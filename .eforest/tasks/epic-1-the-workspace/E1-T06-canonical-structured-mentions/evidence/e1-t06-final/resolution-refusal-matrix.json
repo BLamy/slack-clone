@@ -1,0 +1,45 @@
+{
+  "cases": [
+    {
+      "code": "PRINCIPAL_SCOPE_MISMATCH",
+      "name": "forged-principal-scope",
+      "result": "REFUSED"
+    },
+    {
+      "code": "MENTION_TEXT_MISMATCH",
+      "name": "wrong-byte-span",
+      "result": "REFUSED"
+    },
+    {
+      "code": "REDUCER_MENTION_HANDLE_MISMATCH",
+      "name": "forged-principal-substitution",
+      "result": "REFUSED"
+    },
+    {
+      "code": "REDUCER_MENTION_KIND_MISMATCH",
+      "name": "forged-kind",
+      "result": "REFUSED"
+    },
+    {
+      "code": "REDUCER_MENTION_AMBIGUOUS_TARGET",
+      "name": "ambiguous-principal-target",
+      "result": "REFUSED"
+    },
+    {
+      "code": "REDUCER_MENTION_TARGET_DISABLED",
+      "name": "disabled-principal-target",
+      "result": "REFUSED"
+    },
+    {
+      "code": "REDUCER_MENTION_TARGET_NOT_MEMBER",
+      "name": "non-member-principal-target",
+      "result": "REFUSED"
+    },
+    {
+      "code": "MENTION_INVALID_SPAN",
+      "name": "overlapping-spans",
+      "result": "REFUSED"
+    }
+  ],
+  "result": "PASS"
+}

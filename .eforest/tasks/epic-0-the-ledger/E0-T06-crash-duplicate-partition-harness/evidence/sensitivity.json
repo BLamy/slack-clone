@@ -1,0 +1,23 @@
+[
+  {
+    "detector": "duplicate-delivery-deduplication",
+    "mutated": "disabled",
+    "code": "REDUCER_OFFSET_REUSED",
+    "offset": "0000000000000000_0000000000000001",
+    "outcome": "rejected"
+  },
+  {
+    "detector": "checkpoint-resume",
+    "mutated": "disabled",
+    "code": "HARNESS_CHECKPOINT_INVALID",
+    "offset": null,
+    "outcome": "rejected"
+  },
+  {
+    "detector": "authoritative-offset-ordering",
+    "mutated": "disabled",
+    "code": "ERR_ASSERTION",
+    "offset": null,
+    "outcome": "rejected"
+  }
+]

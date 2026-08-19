@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stream-slack.local/schemas/principal-events.v1.schema.json",
+  "title": "Stream Slack principal events v1",
+  "oneOf": [
+    {
+      "title": "Principal created",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "ownedBy",
+        "principalId",
+        "profile",
+        "subjectBinding"
+      ],
+      "properties": {
+        "kind": { "enum": ["human", "agent", "service"] },
+        "ownedBy": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "string",
+              "pattern": "^pr_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+            }
+          ]
+        },
+        "principalId": {
+          "type": "string",
+          "pattern": "^pr_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+        },
+        "profile": { "$ref": "#/$defs/profile" },
+        "subjectBinding": { "$ref": "#/$defs/subjectBinding" }
+      }
+    },
+    {
+      "title": "Principal profile updated",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["principalId", "profile", "revision"],
+      "properties": {
+        "principalId": {
+          "type": "string",
+          "pattern": "^pr_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+        },
+        "profile": { "$ref": "#/$defs/profile" },
+        "revision": { "type": "integer", "minimum": 1 }
+      }
+    },
+    {
+      "title": "Principal suspended or deactivated",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["principalId"],
+      "properties": {
+        "principalId": {
+          "type": "string",
+          "pattern": "^pr_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+        },
+        "reason": { "type": "string", "maxLength": 240 }
+      }
+    }
+  ],
+  "$defs": {
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["displayName", "email", "handle"],
+      "properties": {
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "email": { "type": "string", "maxLength": 320 },
+        "handle": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$" }
+      }
+    },
+    "subjectBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["audience", "issuer", "subject"],
+      "properties": {
+        "audience": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "issuer": { "type": "string", "pattern": "^[a-z][a-z0-9._:-]{1,63}$" },
+        "subject": { "type": "string", "minLength": 1, "maxLength": 256 }
+      }
+    }
+  }
+}

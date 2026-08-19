@@ -14,7 +14,7 @@ capstone: false
 A permanent attack suite exercises malicious messages, repository files, tool results,
 service responses, model output, harness configuration, and provider faults against every
 trust boundary. The suite proves that untrusted content cannot gain credentials, broaden
-network/tool scope, escape a Sprite, impersonate a principal, cross tenants, or publish an
+      network/tool scope, escape a Cloudflare OS Gadget, impersonate a principal, cross tenants, or publish an
 unproven reply.
 
 ## Context

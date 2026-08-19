@@ -1,0 +1,117 @@
+{
+  "rows": [
+    {
+      "name": "unknown AlmostNode provider",
+      "code": "PROVIDER_REGISTRY_UNKNOWN_PROVIDER",
+      "path": "$.selection.providerId",
+      "providerKey": "sandbox:almostnode-browser@1.0.0",
+      "result": "PASS"
+    },
+    {
+      "name": "downgraded provider version",
+      "code": "PROVIDER_REGISTRY_UNSUPPORTED_PROVIDER_VERSION",
+      "path": "$.selection.providerVersion",
+      "providerKey": "harness:scripted@0.9.0",
+      "result": "PASS"
+    },
+    {
+      "name": "missing exact selection field",
+      "code": "PROVIDER_REGISTRY_MISSING_SELECTION",
+      "path": "$.selection.requiredCapabilities",
+      "providerKey": null,
+      "result": "PASS"
+    },
+    {
+      "name": "unsupported capability",
+      "code": "PROVIDER_REGISTRY_UNSUPPORTED_CAPABILITY",
+      "path": "$.selection.requiredCapabilities[0]",
+      "providerKey": "harness:scripted@1.0.0",
+      "result": "PASS"
+    },
+    {
+      "name": "duplicate required capability",
+      "code": "PROVIDER_REGISTRY_DUPLICATE_CAPABILITY",
+      "path": "$.selection.requiredCapabilities",
+      "providerKey": null,
+      "result": "PASS"
+    },
+    {
+      "name": "missing provider-owned configuration",
+      "code": "PROVIDER_REGISTRY_MISSING_CONFIGURATION",
+      "path": "$.providerConfiguration",
+      "providerKey": "harness:scripted@1.0.0",
+      "result": "PASS"
+    },
+    {
+      "name": "altered provider-owned schema value",
+      "code": "PROVIDER_REGISTRY_INVALID_CONFIGURATION",
+      "path": "$.providerConfiguration.protocol",
+      "providerKey": null,
+      "result": "PASS"
+    },
+    {
+      "name": "unavailable unimplemented Codex provider",
+      "code": "PROVIDER_REGISTRY_PROVIDER_NOT_INSTALLED",
+      "path": "$.provider.installed",
+      "providerKey": "harness:codex@1.0.0",
+      "result": "PASS"
+    },
+    {
+      "name": "disabled provider",
+      "code": "PROVIDER_REGISTRY_PROVIDER_DISABLED",
+      "path": "$.provider.enabled",
+      "providerKey": "harness:scripted@1.0.0",
+      "result": "PASS"
+    },
+    {
+      "name": "unhealthy provider",
+      "code": "PROVIDER_REGISTRY_PROVIDER_UNHEALTHY",
+      "path": "$.provider.health",
+      "providerKey": "harness:scripted@1.0.0",
+      "result": "PASS"
+    },
+    {
+      "name": "stale provider readiness",
+      "code": "PROVIDER_REGISTRY_PROVIDER_STALE",
+      "path": "$.provider.expiresAt",
+      "providerKey": "harness:scripted@1.0.0",
+      "result": "PASS"
+    },
+    {
+      "name": "removed provider",
+      "code": "PROVIDER_REGISTRY_UNKNOWN_PROVIDER",
+      "path": "$.selection.providerId",
+      "providerKey": "harness:scripted@1.0.0",
+      "result": "PASS"
+    },
+    {
+      "name": "incompatible ready providers",
+      "code": "PROVIDER_REGISTRY_PROVIDER_NOT_IMPLEMENTED",
+      "path": "$.provider.implementationStatus",
+      "providerKey": "harness:codex@1.0.0",
+      "result": "PASS"
+    },
+    {
+      "name": "incompatible ready providers",
+      "code": "PROVIDER_REGISTRY_INCOMPATIBLE_PROVIDERS",
+      "path": "$.config",
+      "providerKey": "harness:codex@1.0.0+sandbox:scripted@1.0.0",
+      "result": "PASS"
+    },
+    {
+      "name": "duplicate descriptor",
+      "code": "PROVIDER_REGISTRY_DUPLICATE_PROVIDER",
+      "path": "$.registry.descriptors",
+      "providerKey": "harness:scripted@1.0.0",
+      "result": "PASS"
+    },
+    {
+      "name": "duplicate descriptor capability",
+      "code": "PROVIDER_REGISTRY_DUPLICATE_CAPABILITY",
+      "path": "$.registry.descriptors[0].capabilities",
+      "providerKey": null,
+      "result": "PASS"
+    }
+  ],
+  "result": "PASS"
+}

@@ -1,0 +1,291 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T02",
+  "role": "independent-critic-final",
+  "recordedAt": "2026-08-01T23:28:21Z",
+  "verdict": "refuted",
+  "review": {
+    "submittedHead": "a502186e0e6d4c91e2332f7b015881051f0230dc",
+    "implementationCommit": "0bdcc0a764513f266de246f904c86a9e49e1e1b8",
+    "latestRefutationCommit": "07d8813419b8a37e2fda82b22432ad553c91bff7",
+    "predictionPath": "work/critic-final-a502186-predictions.md",
+    "reviewedDiff": "07d8813419b8a37e2fda82b22432ad553c91bff7..a502186e0e6d4c91e2332f7b015881051f0230dc",
+    "postImplementationDelta": [
+      ".eforest/tasks/QUEUE.md",
+      ".eforest/tasks/epic-0-the-ledger/E0-T02-strangler-backend-workspace/evidence/builder-capability-rework-verification.json",
+      ".eforest/tasks/epic-0-the-ledger/E0-T02-strangler-backend-workspace/readme.md"
+    ]
+  },
+  "matrixClone": {
+    "kind": "git clone --no-hardlinks --no-checkout followed by detached checkout",
+    "relativePath": "work/critic-matrix-0bdcc0a.xzKn5h/repo",
+    "head": "0bdcc0a764513f266de246f904c86a9e49e1e1b8",
+    "alternatesPresent": false,
+    "preflightAbsent": [
+      "node_modules",
+      "emulate/node_modules",
+      "emulate/packages/emulate/dist",
+      ".env",
+      "recordings/latest.json",
+      ".artifacts"
+    ],
+    "dependencyPreparation": {
+      "command": "CI=1 pnpm install --frozen-lockfile",
+      "result": "PASS",
+      "packagesReused": 154,
+      "packagesDownloaded": 0
+    }
+  },
+  "validControls": {
+    "fixtures": [
+      "a locally declared function named fetch and its local alias",
+      "an injected parameter named fetch",
+      "injected process and Math parameters and aliases",
+      "destructuring fetch from an injected capabilities object",
+      "Map, String, JSON, Array, URL, and other deterministic allowlisted globals",
+      "an in-package relative import"
+    ],
+    "commands": [
+      {
+        "command": "./node_modules/.bin/prettier --check packages/protocol/src/critic-*.mjs",
+        "exitCode": 0
+      },
+      {
+        "command": "./node_modules/.bin/eslint packages/protocol/src/critic-*.mjs",
+        "exitCode": 0
+      },
+      {
+        "command": "node tools/static-analysis.mjs",
+        "exitCode": 0,
+        "observation": "layers=5 violations=0; syntax files=38"
+      }
+    ],
+    "result": "PASS"
+  },
+  "requiredForbiddenMatrix": {
+    "fixtureCalled": false,
+    "applicationOrFixtureRequestMade": false,
+    "formatExitCode": 0,
+    "lintExitCode": 0,
+    "staticAnalysisExitCode": 1,
+    "detected": [
+      "prior globalThis -> optional [\"fe\" + \"tch\"] -> local function form: ambient global globalThis",
+      "direct fetch alias: network",
+      "process alias: environment",
+      "Math alias: randomness",
+      "destructuring fetch from globalThis: ambient global globalThis",
+      "unknown workspaceProvider global: ambient global workspaceProvider",
+      "import.meta: module metadata",
+      "bare critic-external-package import: non-local module from a pure package",
+      "@stream-slack/http/private subpath: forbidden http layer and non-local capability module",
+      "../../../src/server.mjs: relative path outside package protocol"
+    ],
+    "manifestMutations": {
+      "formatExitCode": 0,
+      "lintExitCode": 0,
+      "staticAnalysisExitCode": 1,
+      "observations": [
+        "protocol pure-package manifest declares external dependencies [eslint]",
+        "services manifest declares [] but policy allows [protocol]"
+      ]
+    },
+    "result": "PASS"
+  },
+  "blockingFinding": {
+    "id": "C3",
+    "severity": "blocking",
+    "acceptanceCriterion": 3,
+    "title": "Function-constructor capability escape false-greens the pure-package boundary",
+    "fixture": [
+      "const capabilityFactory = (() => {}).constructor;",
+      "export function retainLatentFetchResolver() {",
+      "  return capabilityFactory(\"return globalThis.fetch\");",
+      "}"
+    ],
+    "called": false,
+    "externalRequestMade": false,
+    "commands": [
+      {
+        "command": "./node_modules/.bin/prettier --check packages/protocol/src/critic-*.mjs packages/protocol/package.json packages/services/package.json",
+        "exitCode": 0,
+        "observation": "All matched files use Prettier code style"
+      },
+      {
+        "command": "./node_modules/.bin/eslint packages/protocol/src/critic-*.mjs",
+        "exitCode": 0,
+        "observation": "No diagnostics"
+      },
+      {
+        "command": "node tools/static-analysis.mjs",
+        "exitCode": 0,
+        "observation": "PASS backend package dependency direction and pure-leaf capability boundary; layers=5 violations=0; syntax files=39"
+      }
+    ],
+    "cause": "The checker rejects unresolved ambient identifiers but permits a function literal's constructor property. That constructor can compile a later globalThis.fetch resolver without any unresolved identifier in the parsed module scope.",
+    "conclusion": "A formatter- and lint-valid inert pure protocol module retains latent dynamic-code/network authority while the package boundary remains green. This directly refutes AC3 and the claim that pure leaves cannot access network or dynamic-code capabilities."
+  },
+  "harnessCorrection": {
+    "initialInvalidControl": "A parameter literally named globalThis was rejected by the repository's no-shadow-restricted-names lint rule. It was replaced by a valid injected capabilities object before the passing negative-control sequence.",
+    "registryLookup": "An initial dummy external-manifest dependency caused pnpm's run-time dependency status check to attempt one registry metadata request, which failed 404 before any fixture executed. The manifest was restored with no lockfile change; the manifest attack was rerun with already-installed eslint plus direct formatter/linter binaries. No fixture or application request was made."
+  },
+  "builderProvenance": {
+    "preservedCloneHead": "0bdcc0a764513f266de246f904c86a9e49e1e1b8",
+    "preservedCloneAlternatesPresent": false,
+    "preservedCloneTrackedStatus": "clean",
+    "sourceHashesMatched": {
+      "tools/import-analysis.mjs": "279f11099017126b27bdc87e3c7b61525ee1fc514681a689b02f19884874b404",
+      "tools/check-boundaries.mjs": "c6cca632cba0e3268e971db8dd714592c148ea2b89923b7a7915f36c77cbaa6a",
+      "test/unit/backend-packages.test.mjs": "487bc9ca9af8dfd4f2a6faa29cb2c70d6923712b76a748d2c9cf861fa70ae14a"
+    },
+    "artifactHashesMatched": {
+      "verification-summary.json": "5980ea53e04cd057f9ee7005a59c79d82a03647b6d8f8e20f3c82ecc40d7c377",
+      "stream-proof.json": "737d8f5b1e5ad2ac7a6158e45f4e9f07d658b7410b9d63406a5c58450f9b83cf",
+      "build-manifest.json": "1d0bfe80b0503202b22d093ce56977e8b2277941dedf8144b83825f2097f614b"
+    },
+    "buildManifestEntries": 28,
+    "buildManifestMismatchesAgainstImplementation": 0,
+    "builderStreamProof": {
+      "nextOffset": "0000000000000000_0000000000000549",
+      "streamDigest": "sha256:eb6f0fc0691b0b813b74cf3a5a95f284576e352bcc8fab0228234289431ab678",
+      "domMatchedApi": true
+    }
+  },
+  "independentColdVerification": {
+    "kind": "fresh git clone --no-hardlinks --no-checkout followed by detached checkout",
+    "relativePath": "work/critic-cold-final-0bdcc0a.Y0WuR3/repo",
+    "head": "0bdcc0a764513f266de246f904c86a9e49e1e1b8",
+    "alternatesPresent": false,
+    "preflightAbsent": [
+      "node_modules",
+      "emulate/node_modules",
+      "emulate/packages/emulate/dist",
+      ".env",
+      "recordings/latest.json",
+      ".artifacts"
+    ],
+    "command": "env -u REPLAY_API_KEY -u RECORD_REPLAY_METADATA_FILE -u PLAYWRIGHT_REPLAY_METADATA -u REPLAY_RECORDINGS -u REPLAY_CHROMIUM_EXECUTABLE_PATH TEST_RUN_ID=critic-final-cold-0bdcc0a make verify-E0-T02",
+    "result": "PASS",
+    "runtime": {
+      "node": "v23.11.0",
+      "pnpm": "11.2.2",
+      "emulatorCommit": "8b88027535e4ea6a18c3ce92a13af706382a451f",
+      "emulatorEngineWarning": "emulate declares Node >=24; frozen install, build, and runtime completed under Node 23.11.0"
+    },
+    "gates": [
+      "frozen root install PASS",
+      "pinned submodule checkout plus frozen emulator install/build PASS",
+      "format PASS",
+      "lint PASS",
+      "static analysis PASS: layers=5 violations=0; syntax files=36",
+      "unit PASS: 18/18; zero skipped",
+      "integration PASS: 5/5 browser tests",
+      "concurrency PASS: 1/1 real two-stack test",
+      "build PASS: 28 files"
+    ],
+    "streamProof": {
+      "room": "critic-final-cold-0bdcc0a-edit-1785626589904",
+      "nextOffset": "0000000000000000_0000000000000553",
+      "streamDigest": "sha256:c2dadedb75552cae78e2c535b678bbdc04d3a40561d6ff674c03d907f3f36349",
+      "messageCount": 1,
+      "domMatchedApi": true
+    }
+  },
+  "runtimeIsolation": {
+    "sameProcessIdenticalCandidate": {
+      "stackA": [45583, 45584, 45585],
+      "stackB": [53502, 53503, 53504],
+      "overlap": false
+    },
+    "independentProcessIdenticalCandidate": {
+      "stackA": [45583, 45584, 45585],
+      "stackB": [53502, 53503, 53504],
+      "overlap": false
+    },
+    "explicitRealStack": {
+      "ports": [41453, 41454, 41455],
+      "healthStatus": 200,
+      "stoppedAndUnreachable": true
+    },
+    "forcedStartupFailure": {
+      "failingChild": "app",
+      "exitCode": 29,
+      "managedSiblingSignal": "SIGTERM",
+      "unrelatedProcessSurvived": true,
+      "unrelatedArtifactSha256": "af07b6e0d3218b9728d395dcdf35374daafa1a982a3f8215edcfed2d4fef8204",
+      "unrelatedArtifactUnchanged": true
+    },
+    "result": "PASS"
+  },
+  "routineSideEffects": {
+    "command": "COREPACK_ENABLE_NETWORK=0 PNPM_CONFIG_OFFLINE=true TEST_RUN_ID=critic-routine-preserve pnpm verify with Replay variables removed",
+    "result": "PASS",
+    "recordingSentinelSha256Before": "e1373d3cf93b27c2eb5f1cb31cbf08e20833c07b834f101df50f018c42bda19a",
+    "recordingSentinelSha256After": "e1373d3cf93b27c2eb5f1cb31cbf08e20833c07b834f101df50f018c42bda19a",
+    "onlyRecordingFileAfter": "recordings/critic-preservation-sentinel.txt",
+    "replayOrTunnelCallPathFoundInRoutineScripts": false,
+    "outsideBuildTarget": {
+      "exitCode": 1,
+      "observation": "BUILD_DIR must remain inside .artifacts",
+      "sentinelSha256Before": "9ab3a76476b712f2bd45c970e79260d6339b48c97ffa758310f4f332439424d5",
+      "sentinelSha256After": "9ab3a76476b712f2bd45c970e79260d6339b48c97ffa758310f4f332439424d5"
+    },
+    "streamProof": {
+      "nextOffset": "0000000000000000_0000000000000549",
+      "streamDigest": "sha256:7214426cf3c69ce088659dad0c64967e0c075e258605b2c480be31f1e24a9fa1",
+      "domMatchedApi": true
+    }
+  },
+  "detectorSensitivity": {
+    "mutation": "messageOwnedBy returns Boolean(record) || Boolean(user)",
+    "command": "TEST_RUN_ID=critic-sensitivity-owner pnpm verify with Replay variables removed and pnpm offline",
+    "exitCode": 1,
+    "priorGates": [
+      "format PASS",
+      "lint PASS",
+      "static analysis PASS"
+    ],
+    "unit": {
+      "passed": 16,
+      "failed": 2,
+      "observations": [
+        "true !== false at test/unit/backend-packages.test.mjs:50",
+        "Missing expected rejection at test/unit/backend-packages.test.mjs:304"
+      ]
+    },
+    "restoredExactImplementation": true,
+    "result": "PASS"
+  },
+  "acceptanceCriteria": {
+    "AC1": "survived: independent exact-head cold composed verification passed all seven gates",
+    "AC2": "survived: 5/5 inherited browser tests preserved homepage, emulator login, stable error layout, two sessions, owner-only persisted edit, and legacy refusal",
+    "AC3": "refuted: constructor-derived latent dynamic-code/network authority remained green",
+    "AC4": "survived: same-process, independent-process, explicit-port real stack, real concurrent stack, teardown, and artifact isolation checks passed",
+    "AC5": "survived: offline routine verification preserved recordings and refused out-of-scope recursive deletion",
+    "AC6": "survived: no public files changed after E0-T01; inherited browser behavior passed",
+    "AC7": "survived: Replay waiver is accurate for this server/static-analysis extraction"
+  },
+  "coverage": {
+    "executed": [
+      "all five package manifests and source layers",
+      "lexical ambient capability and import analyzer",
+      "format, lint, static, unit, browser integration, concurrency, and build gates",
+      "root and pinned emulator frozen installs",
+      "owner-only edit and DOM/API stream correlation",
+      "same-process and independent-process leases, explicit ports, real concurrent stacks, startup teardown, recording preservation, and build deletion containment"
+    ],
+    "explicitlyWaived": [
+      "documentation prose after source-to-contract audit",
+      "task/queue metadata",
+      "generated lockfile text beyond successful frozen installs"
+    ],
+    "dead": [],
+    "requiringEvidence": []
+  },
+  "redaction": {
+    "containsRawSecret": false,
+    "containsSessionCookie": false,
+    "containsProviderToken": false,
+    "containsCustomerContent": false
+  },
+  "replay": "Replay: N/A (server/static-analysis critique with unchanged browser behavior) + mitigation: exact-head cold browser compatibility, DOM/API stream correlation, package-boundary matrix, runtime isolation, and detector-sensitivity proof"
+}

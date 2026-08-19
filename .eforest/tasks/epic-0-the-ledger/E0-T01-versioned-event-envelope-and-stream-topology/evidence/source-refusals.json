@@ -1,0 +1,26 @@
+[
+  {
+    "name": "LedgerValidationError",
+    "code": "LEDGER_INVALID_SOURCE_REFERENCE",
+    "path": "$.causation.offset",
+    "detail": "offset must be two lowercase 64-bit hex words"
+  },
+  {
+    "name": "LedgerValidationError",
+    "code": "LEDGER_INVALID_SOURCE_REFERENCE",
+    "path": "$.causation.offset",
+    "detail": "offset must be two lowercase 64-bit hex words"
+  },
+  {
+    "name": "LedgerValidationError",
+    "code": "LEDGER_INVALID_SOURCE_REFERENCE",
+    "path": "$.causation.digest",
+    "detail": "digest must be a lowercase sha256 reference"
+  },
+  {
+    "name": "LedgerValidationError",
+    "code": "LEDGER_MISSING_FIELD",
+    "path": "$.causation.digest",
+    "detail": "field is required"
+  }
+]

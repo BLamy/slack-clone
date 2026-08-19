@@ -1,0 +1,1723 @@
+[
+  {
+    "name": "baseline",
+    "seed": "e0-t06-baseline",
+    "schedule": [],
+    "coveredHooks": [
+      "validate",
+      "append",
+      "receipt",
+      "publish",
+      "consume",
+      "checkpoint",
+      "acknowledge"
+    ],
+    "matchedScheduleEntries": [],
+    "operations": [
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-0",
+        "requestIndex": 0,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-1-0",
+        "requestIndex": 1,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-2-0",
+        "requestIndex": 2,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      }
+    ],
+    "processRestarts": [],
+    "checkpointCount": 3,
+    "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "invalidCausalOrder": {
+      "rejected": {
+        "code": "REDUCER_ILLEGAL_TRANSITION",
+        "offset": "0000000000000000_0000000000000001"
+      },
+      "citedOffset": "0000000000000000_0000000000000001"
+    },
+    "slowConsumer": {
+      "bounds": {
+        "maxBytes": 1024,
+        "maxRecords": 2,
+        "inputBytes": 1434,
+        "inputRecords": 3,
+        "cancelPeakBytes": 956,
+        "cancelPeakRecords": 2,
+        "catchUpPeakBytes": 956,
+        "catchUpPeakRecords": 2
+      },
+      "cancel": {
+        "code": "HARNESS_SLOW_CONSUMER",
+        "offset": "0000000000000000_0000000000000003",
+        "policy": "cancel",
+        "result": "cancelled"
+      },
+      "catchUp": {
+        "overflowAt": "0000000000000000_0000000000000003",
+        "policy": "catch-up",
+        "result": "caught-up",
+        "resumedFrom": "0000000000000000_0000000000000000",
+        "replayedRecords": 3
+      },
+      "unrelatedStreamProgress": {
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "independent": true,
+        "headOfLineBlocked": false,
+        "partitionedDuringProbe": false,
+        "progressRecords": 5
+      }
+    }
+  },
+  {
+    "name": "validate-crash",
+    "seed": "e0-t06-validate",
+    "schedule": [
+      {
+        "action": "crash",
+        "hook": "validate",
+        "occurrence": 0,
+        "phase": "before",
+        "role": "dispatch"
+      }
+    ],
+    "coveredHooks": [
+      "validate",
+      "append",
+      "receipt",
+      "publish",
+      "consume",
+      "checkpoint",
+      "acknowledge"
+    ],
+    "matchedScheduleEntries": [
+      0
+    ],
+    "operations": [
+      {
+        "attempt": 1,
+        "code": "HARNESS_CRASH",
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-0",
+        "requestIndex": 0,
+        "result": "refused",
+        "receiptCount": 0,
+        "targetCount": 0
+      },
+      {
+        "attempt": 2,
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-1",
+        "requestIndex": 0,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-1-0",
+        "requestIndex": 1,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-2-0",
+        "requestIndex": 2,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      }
+    ],
+    "processRestarts": [
+      {
+        "component": "dispatch",
+        "from": "dispatch-process-0-0",
+        "reason": "HARNESS_CRASH",
+        "stateDeleted": true,
+        "to": "dispatch-process-0-1"
+      }
+    ],
+    "checkpointCount": 3,
+    "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "invalidCausalOrder": {
+      "rejected": {
+        "code": "REDUCER_ILLEGAL_TRANSITION",
+        "offset": "0000000000000000_0000000000000001"
+      },
+      "citedOffset": "0000000000000000_0000000000000001"
+    },
+    "slowConsumer": {
+      "bounds": {
+        "maxBytes": 1024,
+        "maxRecords": 2,
+        "inputBytes": 1434,
+        "inputRecords": 3,
+        "cancelPeakBytes": 956,
+        "cancelPeakRecords": 2,
+        "catchUpPeakBytes": 956,
+        "catchUpPeakRecords": 2
+      },
+      "cancel": {
+        "code": "HARNESS_SLOW_CONSUMER",
+        "offset": "0000000000000000_0000000000000003",
+        "policy": "cancel",
+        "result": "cancelled"
+      },
+      "catchUp": {
+        "overflowAt": "0000000000000000_0000000000000003",
+        "policy": "catch-up",
+        "result": "caught-up",
+        "resumedFrom": "0000000000000000_0000000000000000",
+        "replayedRecords": 3
+      },
+      "unrelatedStreamProgress": {
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "independent": true,
+        "headOfLineBlocked": false,
+        "partitionedDuringProbe": false,
+        "progressRecords": 5
+      }
+    }
+  },
+  {
+    "name": "append-before-crash",
+    "seed": "e0-t06-append-before",
+    "schedule": [
+      {
+        "action": "crash",
+        "hook": "append",
+        "occurrence": 0,
+        "phase": "before",
+        "role": "target"
+      }
+    ],
+    "coveredHooks": [
+      "validate",
+      "append",
+      "receipt",
+      "publish",
+      "consume",
+      "checkpoint",
+      "acknowledge"
+    ],
+    "matchedScheduleEntries": [
+      0
+    ],
+    "operations": [
+      {
+        "attempt": 1,
+        "code": "HARNESS_CRASH",
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-0",
+        "requestIndex": 0,
+        "result": "refused",
+        "receiptCount": 0,
+        "targetCount": 0
+      },
+      {
+        "attempt": 2,
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-1",
+        "requestIndex": 0,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-1-0",
+        "requestIndex": 1,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-2-0",
+        "requestIndex": 2,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      }
+    ],
+    "processRestarts": [
+      {
+        "component": "dispatch",
+        "from": "dispatch-process-0-0",
+        "reason": "HARNESS_CRASH",
+        "stateDeleted": true,
+        "to": "dispatch-process-0-1"
+      }
+    ],
+    "checkpointCount": 3,
+    "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "invalidCausalOrder": {
+      "rejected": {
+        "code": "REDUCER_ILLEGAL_TRANSITION",
+        "offset": "0000000000000000_0000000000000001"
+      },
+      "citedOffset": "0000000000000000_0000000000000001"
+    },
+    "slowConsumer": {
+      "bounds": {
+        "maxBytes": 1024,
+        "maxRecords": 2,
+        "inputBytes": 1434,
+        "inputRecords": 3,
+        "cancelPeakBytes": 956,
+        "cancelPeakRecords": 2,
+        "catchUpPeakBytes": 956,
+        "catchUpPeakRecords": 2
+      },
+      "cancel": {
+        "code": "HARNESS_SLOW_CONSUMER",
+        "offset": "0000000000000000_0000000000000003",
+        "policy": "cancel",
+        "result": "cancelled"
+      },
+      "catchUp": {
+        "overflowAt": "0000000000000000_0000000000000003",
+        "policy": "catch-up",
+        "result": "caught-up",
+        "resumedFrom": "0000000000000000_0000000000000000",
+        "replayedRecords": 3
+      },
+      "unrelatedStreamProgress": {
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "independent": true,
+        "headOfLineBlocked": false,
+        "partitionedDuringProbe": false,
+        "progressRecords": 5
+      }
+    }
+  },
+  {
+    "name": "append-after-crash",
+    "seed": "e0-t06-append-after",
+    "schedule": [
+      {
+        "action": "crash",
+        "hook": "append",
+        "occurrence": 0,
+        "phase": "after",
+        "role": "target"
+      }
+    ],
+    "coveredHooks": [
+      "validate",
+      "append",
+      "receipt",
+      "publish",
+      "consume",
+      "checkpoint",
+      "acknowledge"
+    ],
+    "matchedScheduleEntries": [
+      0
+    ],
+    "operations": [
+      {
+        "attempt": 1,
+        "code": "HARNESS_CRASH",
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-0",
+        "requestIndex": 0,
+        "result": "refused",
+        "receiptCount": 0,
+        "targetCount": 1
+      },
+      {
+        "attempt": 2,
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-1",
+        "requestIndex": 0,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-1-0",
+        "requestIndex": 1,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-2-0",
+        "requestIndex": 2,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      }
+    ],
+    "processRestarts": [
+      {
+        "component": "dispatch",
+        "from": "dispatch-process-0-0",
+        "reason": "HARNESS_CRASH",
+        "stateDeleted": true,
+        "to": "dispatch-process-0-1"
+      }
+    ],
+    "checkpointCount": 3,
+    "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "invalidCausalOrder": {
+      "rejected": {
+        "code": "REDUCER_ILLEGAL_TRANSITION",
+        "offset": "0000000000000000_0000000000000001"
+      },
+      "citedOffset": "0000000000000000_0000000000000001"
+    },
+    "slowConsumer": {
+      "bounds": {
+        "maxBytes": 1024,
+        "maxRecords": 2,
+        "inputBytes": 1434,
+        "inputRecords": 3,
+        "cancelPeakBytes": 956,
+        "cancelPeakRecords": 2,
+        "catchUpPeakBytes": 956,
+        "catchUpPeakRecords": 2
+      },
+      "cancel": {
+        "code": "HARNESS_SLOW_CONSUMER",
+        "offset": "0000000000000000_0000000000000003",
+        "policy": "cancel",
+        "result": "cancelled"
+      },
+      "catchUp": {
+        "overflowAt": "0000000000000000_0000000000000003",
+        "policy": "catch-up",
+        "result": "caught-up",
+        "resumedFrom": "0000000000000000_0000000000000000",
+        "replayedRecords": 3
+      },
+      "unrelatedStreamProgress": {
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "independent": true,
+        "headOfLineBlocked": false,
+        "partitionedDuringProbe": false,
+        "progressRecords": 5
+      }
+    }
+  },
+  {
+    "name": "receipt-before-crash",
+    "seed": "e0-t06-receipt-before",
+    "schedule": [
+      {
+        "action": "crash",
+        "hook": "receipt",
+        "occurrence": 0,
+        "phase": "before",
+        "role": "receipt"
+      }
+    ],
+    "coveredHooks": [
+      "validate",
+      "append",
+      "receipt",
+      "publish",
+      "consume",
+      "checkpoint",
+      "acknowledge"
+    ],
+    "matchedScheduleEntries": [
+      0
+    ],
+    "operations": [
+      {
+        "attempt": 1,
+        "code": "HARNESS_CRASH",
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-0",
+        "requestIndex": 0,
+        "result": "refused",
+        "receiptCount": 0,
+        "targetCount": 1
+      },
+      {
+        "attempt": 2,
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-1",
+        "requestIndex": 0,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-1-0",
+        "requestIndex": 1,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-2-0",
+        "requestIndex": 2,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      }
+    ],
+    "processRestarts": [
+      {
+        "component": "dispatch",
+        "from": "dispatch-process-0-0",
+        "reason": "HARNESS_CRASH",
+        "stateDeleted": true,
+        "to": "dispatch-process-0-1"
+      }
+    ],
+    "checkpointCount": 3,
+    "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "invalidCausalOrder": {
+      "rejected": {
+        "code": "REDUCER_ILLEGAL_TRANSITION",
+        "offset": "0000000000000000_0000000000000001"
+      },
+      "citedOffset": "0000000000000000_0000000000000001"
+    },
+    "slowConsumer": {
+      "bounds": {
+        "maxBytes": 1024,
+        "maxRecords": 2,
+        "inputBytes": 1434,
+        "inputRecords": 3,
+        "cancelPeakBytes": 956,
+        "cancelPeakRecords": 2,
+        "catchUpPeakBytes": 956,
+        "catchUpPeakRecords": 2
+      },
+      "cancel": {
+        "code": "HARNESS_SLOW_CONSUMER",
+        "offset": "0000000000000000_0000000000000003",
+        "policy": "cancel",
+        "result": "cancelled"
+      },
+      "catchUp": {
+        "overflowAt": "0000000000000000_0000000000000003",
+        "policy": "catch-up",
+        "result": "caught-up",
+        "resumedFrom": "0000000000000000_0000000000000000",
+        "replayedRecords": 3
+      },
+      "unrelatedStreamProgress": {
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "independent": true,
+        "headOfLineBlocked": false,
+        "partitionedDuringProbe": false,
+        "progressRecords": 5
+      }
+    }
+  },
+  {
+    "name": "receipt-after-crash",
+    "seed": "e0-t06-receipt-after",
+    "schedule": [
+      {
+        "action": "crash",
+        "hook": "receipt",
+        "occurrence": 0,
+        "phase": "after",
+        "role": "receipt"
+      }
+    ],
+    "coveredHooks": [
+      "validate",
+      "append",
+      "receipt",
+      "publish",
+      "consume",
+      "checkpoint",
+      "acknowledge"
+    ],
+    "matchedScheduleEntries": [
+      0
+    ],
+    "operations": [
+      {
+        "attempt": 1,
+        "code": "HARNESS_CRASH",
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-0",
+        "requestIndex": 0,
+        "result": "refused",
+        "receiptCount": 1,
+        "targetCount": 1
+      },
+      {
+        "attempt": 2,
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-1",
+        "requestIndex": 0,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-1-0",
+        "requestIndex": 1,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-2-0",
+        "requestIndex": 2,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      }
+    ],
+    "processRestarts": [
+      {
+        "component": "dispatch",
+        "from": "dispatch-process-0-0",
+        "reason": "HARNESS_CRASH",
+        "stateDeleted": true,
+        "to": "dispatch-process-0-1"
+      }
+    ],
+    "checkpointCount": 3,
+    "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "invalidCausalOrder": {
+      "rejected": {
+        "code": "REDUCER_ILLEGAL_TRANSITION",
+        "offset": "0000000000000000_0000000000000001"
+      },
+      "citedOffset": "0000000000000000_0000000000000001"
+    },
+    "slowConsumer": {
+      "bounds": {
+        "maxBytes": 1024,
+        "maxRecords": 2,
+        "inputBytes": 1434,
+        "inputRecords": 3,
+        "cancelPeakBytes": 956,
+        "cancelPeakRecords": 2,
+        "catchUpPeakBytes": 956,
+        "catchUpPeakRecords": 2
+      },
+      "cancel": {
+        "code": "HARNESS_SLOW_CONSUMER",
+        "offset": "0000000000000000_0000000000000003",
+        "policy": "cancel",
+        "result": "cancelled"
+      },
+      "catchUp": {
+        "overflowAt": "0000000000000000_0000000000000003",
+        "policy": "catch-up",
+        "result": "caught-up",
+        "resumedFrom": "0000000000000000_0000000000000000",
+        "replayedRecords": 3
+      },
+      "unrelatedStreamProgress": {
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "independent": true,
+        "headOfLineBlocked": false,
+        "partitionedDuringProbe": false,
+        "progressRecords": 5
+      }
+    }
+  },
+  {
+    "name": "append-duplicate",
+    "seed": "e0-t06-append-duplicate",
+    "schedule": [
+      {
+        "action": "duplicate",
+        "hook": "append",
+        "occurrence": 0,
+        "phase": "after",
+        "role": "target"
+      }
+    ],
+    "coveredHooks": [
+      "validate",
+      "append",
+      "receipt",
+      "publish",
+      "consume",
+      "checkpoint",
+      "acknowledge"
+    ],
+    "matchedScheduleEntries": [
+      0
+    ],
+    "operations": [
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-0",
+        "requestIndex": 0,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-1-0",
+        "requestIndex": 1,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-2-0",
+        "requestIndex": 2,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      }
+    ],
+    "processRestarts": [],
+    "checkpointCount": 3,
+    "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "invalidCausalOrder": {
+      "rejected": {
+        "code": "REDUCER_ILLEGAL_TRANSITION",
+        "offset": "0000000000000000_0000000000000001"
+      },
+      "citedOffset": "0000000000000000_0000000000000001"
+    },
+    "slowConsumer": {
+      "bounds": {
+        "maxBytes": 1024,
+        "maxRecords": 2,
+        "inputBytes": 1434,
+        "inputRecords": 3,
+        "cancelPeakBytes": 956,
+        "cancelPeakRecords": 2,
+        "catchUpPeakBytes": 956,
+        "catchUpPeakRecords": 2
+      },
+      "cancel": {
+        "code": "HARNESS_SLOW_CONSUMER",
+        "offset": "0000000000000000_0000000000000003",
+        "policy": "cancel",
+        "result": "cancelled"
+      },
+      "catchUp": {
+        "overflowAt": "0000000000000000_0000000000000003",
+        "policy": "catch-up",
+        "result": "caught-up",
+        "resumedFrom": "0000000000000000_0000000000000000",
+        "replayedRecords": 3
+      },
+      "unrelatedStreamProgress": {
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "independent": true,
+        "headOfLineBlocked": false,
+        "partitionedDuringProbe": false,
+        "progressRecords": 5
+      }
+    }
+  },
+  {
+    "name": "receipt-duplicate",
+    "seed": "e0-t06-receipt-duplicate",
+    "schedule": [
+      {
+        "action": "duplicate",
+        "hook": "receipt",
+        "occurrence": 0,
+        "phase": "after",
+        "role": "receipt"
+      }
+    ],
+    "coveredHooks": [
+      "validate",
+      "append",
+      "receipt",
+      "publish",
+      "consume",
+      "checkpoint",
+      "acknowledge"
+    ],
+    "matchedScheduleEntries": [
+      0
+    ],
+    "operations": [
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-0",
+        "requestIndex": 0,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-1-0",
+        "requestIndex": 1,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-2-0",
+        "requestIndex": 2,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      }
+    ],
+    "processRestarts": [],
+    "checkpointCount": 3,
+    "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "invalidCausalOrder": {
+      "rejected": {
+        "code": "REDUCER_ILLEGAL_TRANSITION",
+        "offset": "0000000000000000_0000000000000001"
+      },
+      "citedOffset": "0000000000000000_0000000000000001"
+    },
+    "slowConsumer": {
+      "bounds": {
+        "maxBytes": 1024,
+        "maxRecords": 2,
+        "inputBytes": 1434,
+        "inputRecords": 3,
+        "cancelPeakBytes": 956,
+        "cancelPeakRecords": 2,
+        "catchUpPeakBytes": 956,
+        "catchUpPeakRecords": 2
+      },
+      "cancel": {
+        "code": "HARNESS_SLOW_CONSUMER",
+        "offset": "0000000000000000_0000000000000003",
+        "policy": "cancel",
+        "result": "cancelled"
+      },
+      "catchUp": {
+        "overflowAt": "0000000000000000_0000000000000003",
+        "policy": "catch-up",
+        "result": "caught-up",
+        "resumedFrom": "0000000000000000_0000000000000000",
+        "replayedRecords": 3
+      },
+      "unrelatedStreamProgress": {
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "independent": true,
+        "headOfLineBlocked": false,
+        "partitionedDuringProbe": false,
+        "progressRecords": 5
+      }
+    }
+  },
+  {
+    "name": "publish-duplicate-reorder",
+    "seed": "e0-t06-publish",
+    "schedule": [
+      {
+        "action": "duplicate",
+        "hook": "publish",
+        "occurrence": 0,
+        "phase": "before",
+        "role": "reader"
+      },
+      {
+        "action": "reorder",
+        "hook": "publish",
+        "occurrence": 0,
+        "phase": "after",
+        "role": "reader"
+      }
+    ],
+    "coveredHooks": [
+      "validate",
+      "append",
+      "receipt",
+      "publish",
+      "consume",
+      "checkpoint",
+      "acknowledge"
+    ],
+    "matchedScheduleEntries": [
+      0,
+      1
+    ],
+    "operations": [
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-0",
+        "requestIndex": 0,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-1-0",
+        "requestIndex": 1,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-2-0",
+        "requestIndex": 2,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      }
+    ],
+    "processRestarts": [],
+    "checkpointCount": 3,
+    "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "invalidCausalOrder": {
+      "rejected": {
+        "code": "REDUCER_ILLEGAL_TRANSITION",
+        "offset": "0000000000000000_0000000000000001"
+      },
+      "citedOffset": "0000000000000000_0000000000000001"
+    },
+    "slowConsumer": {
+      "bounds": {
+        "maxBytes": 1024,
+        "maxRecords": 2,
+        "inputBytes": 1434,
+        "inputRecords": 3,
+        "cancelPeakBytes": 956,
+        "cancelPeakRecords": 2,
+        "catchUpPeakBytes": 956,
+        "catchUpPeakRecords": 2
+      },
+      "cancel": {
+        "code": "HARNESS_SLOW_CONSUMER",
+        "offset": "0000000000000000_0000000000000003",
+        "policy": "cancel",
+        "result": "cancelled"
+      },
+      "catchUp": {
+        "overflowAt": "0000000000000000_0000000000000003",
+        "policy": "catch-up",
+        "result": "caught-up",
+        "resumedFrom": "0000000000000000_0000000000000000",
+        "replayedRecords": 3
+      },
+      "unrelatedStreamProgress": {
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "independent": true,
+        "headOfLineBlocked": false,
+        "partitionedDuringProbe": false,
+        "progressRecords": 5
+      }
+    }
+  },
+  {
+    "name": "consume-partition",
+    "seed": "e0-t06-consume",
+    "schedule": [
+      {
+        "action": "partition",
+        "hook": "consume",
+        "occurrence": 1,
+        "phase": "before",
+        "role": "reader"
+      }
+    ],
+    "coveredHooks": [
+      "validate",
+      "append",
+      "receipt",
+      "publish",
+      "consume",
+      "checkpoint",
+      "acknowledge"
+    ],
+    "matchedScheduleEntries": [
+      0
+    ],
+    "operations": [
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-0",
+        "requestIndex": 0,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-1-0",
+        "requestIndex": 1,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-2-0",
+        "requestIndex": 2,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      }
+    ],
+    "processRestarts": [
+      {
+        "component": "reader",
+        "durableAuthorityRestart": {
+          "exportedStreamCount": 4,
+          "importedStreamCount": 4,
+          "snapshotDigest": "sha256:a427409bf2ff5501bc7bdcb23b8f24ad3df17142fb71bac8b707326695f2b953"
+        },
+        "reason": "HARNESS_PARTITIONED",
+        "stateDeleted": true,
+        "to": "reader-process-1"
+      }
+    ],
+    "checkpointCount": 3,
+    "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "invalidCausalOrder": {
+      "rejected": {
+        "code": "REDUCER_ILLEGAL_TRANSITION",
+        "offset": "0000000000000000_0000000000000001"
+      },
+      "citedOffset": "0000000000000000_0000000000000001"
+    },
+    "slowConsumer": {
+      "bounds": {
+        "maxBytes": 1024,
+        "maxRecords": 2,
+        "inputBytes": 1434,
+        "inputRecords": 3,
+        "cancelPeakBytes": 956,
+        "cancelPeakRecords": 2,
+        "catchUpPeakBytes": 956,
+        "catchUpPeakRecords": 2
+      },
+      "cancel": {
+        "code": "HARNESS_SLOW_CONSUMER",
+        "offset": "0000000000000000_0000000000000003",
+        "policy": "cancel",
+        "result": "cancelled"
+      },
+      "catchUp": {
+        "overflowAt": "0000000000000000_0000000000000003",
+        "policy": "catch-up",
+        "result": "caught-up",
+        "resumedFrom": "0000000000000000_0000000000000000",
+        "replayedRecords": 3
+      },
+      "unrelatedStreamProgress": {
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "independent": true,
+        "headOfLineBlocked": false,
+        "partitionedDuringProbe": true,
+        "progressRecords": 5
+      }
+    }
+  },
+  {
+    "name": "checkpoint-corrupt",
+    "seed": "e0-t06-checkpoint",
+    "schedule": [
+      {
+        "action": "corrupt",
+        "hook": "checkpoint",
+        "occurrence": 0,
+        "phase": "load",
+        "role": "reader"
+      }
+    ],
+    "coveredHooks": [
+      "validate",
+      "append",
+      "receipt",
+      "publish",
+      "consume",
+      "checkpoint",
+      "acknowledge"
+    ],
+    "matchedScheduleEntries": [
+      0
+    ],
+    "operations": [
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-0",
+        "requestIndex": 0,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-1-0",
+        "requestIndex": 1,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-2-0",
+        "requestIndex": 2,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      }
+    ],
+    "processRestarts": [],
+    "checkpointCount": 3,
+    "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "invalidCausalOrder": {
+      "rejected": {
+        "code": "REDUCER_ILLEGAL_TRANSITION",
+        "offset": "0000000000000000_0000000000000001"
+      },
+      "citedOffset": "0000000000000000_0000000000000001"
+    },
+    "slowConsumer": {
+      "bounds": {
+        "maxBytes": 1024,
+        "maxRecords": 2,
+        "inputBytes": 1434,
+        "inputRecords": 3,
+        "cancelPeakBytes": 956,
+        "cancelPeakRecords": 2,
+        "catchUpPeakBytes": 956,
+        "catchUpPeakRecords": 2
+      },
+      "cancel": {
+        "code": "HARNESS_SLOW_CONSUMER",
+        "offset": "0000000000000000_0000000000000003",
+        "policy": "cancel",
+        "result": "cancelled"
+      },
+      "catchUp": {
+        "overflowAt": "0000000000000000_0000000000000003",
+        "policy": "catch-up",
+        "result": "caught-up",
+        "resumedFrom": "0000000000000000_0000000000000000",
+        "replayedRecords": 3
+      },
+      "unrelatedStreamProgress": {
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "independent": true,
+        "headOfLineBlocked": false,
+        "partitionedDuringProbe": false,
+        "progressRecords": 5
+      }
+    }
+  },
+  {
+    "name": "acknowledge-delay",
+    "seed": "e0-t06-ack",
+    "schedule": [
+      {
+        "action": "delay",
+        "hook": "acknowledge",
+        "occurrence": 0,
+        "phase": "before",
+        "role": "dispatch"
+      }
+    ],
+    "coveredHooks": [
+      "validate",
+      "append",
+      "receipt",
+      "publish",
+      "consume",
+      "checkpoint",
+      "acknowledge"
+    ],
+    "matchedScheduleEntries": [
+      0
+    ],
+    "operations": [
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-0",
+        "requestIndex": 0,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": true,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "deferred:3",
+            "deferred:2",
+            "deferred:1",
+            "acknowledged"
+          ],
+          "ticks": 3
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-1-0",
+        "requestIndex": 1,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-2-0",
+        "requestIndex": 2,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      }
+    ],
+    "processRestarts": [],
+    "checkpointCount": 3,
+    "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "invalidCausalOrder": {
+      "rejected": {
+        "code": "REDUCER_ILLEGAL_TRANSITION",
+        "offset": "0000000000000000_0000000000000001"
+      },
+      "citedOffset": "0000000000000000_0000000000000001"
+    },
+    "slowConsumer": {
+      "bounds": {
+        "maxBytes": 1024,
+        "maxRecords": 2,
+        "inputBytes": 1434,
+        "inputRecords": 3,
+        "cancelPeakBytes": 956,
+        "cancelPeakRecords": 2,
+        "catchUpPeakBytes": 956,
+        "catchUpPeakRecords": 2
+      },
+      "cancel": {
+        "code": "HARNESS_SLOW_CONSUMER",
+        "offset": "0000000000000000_0000000000000003",
+        "policy": "cancel",
+        "result": "cancelled"
+      },
+      "catchUp": {
+        "overflowAt": "0000000000000000_0000000000000003",
+        "policy": "catch-up",
+        "result": "caught-up",
+        "resumedFrom": "0000000000000000_0000000000000000",
+        "replayedRecords": 3
+      },
+      "unrelatedStreamProgress": {
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "independent": true,
+        "headOfLineBlocked": false,
+        "partitionedDuringProbe": false,
+        "progressRecords": 5
+      }
+    }
+  },
+  {
+    "name": "seeded-combination",
+    "seed": "e0-t06-combination",
+    "schedule": [
+      {
+        "action": "delay",
+        "hook": "validate",
+        "occurrence": 0,
+        "phase": "before",
+        "role": "dispatch"
+      },
+      {
+        "action": "duplicate",
+        "hook": "append",
+        "occurrence": 0,
+        "phase": "after",
+        "role": "target"
+      },
+      {
+        "action": "duplicate",
+        "hook": "receipt",
+        "occurrence": 0,
+        "phase": "after",
+        "role": "receipt"
+      },
+      {
+        "action": "duplicate",
+        "hook": "publish",
+        "occurrence": 0,
+        "phase": "before",
+        "role": "reader"
+      },
+      {
+        "action": "reorder",
+        "hook": "publish",
+        "occurrence": 0,
+        "phase": "after",
+        "role": "reader"
+      },
+      {
+        "action": "partition",
+        "hook": "consume",
+        "occurrence": 1,
+        "phase": "before",
+        "role": "reader"
+      },
+      {
+        "action": "corrupt",
+        "hook": "checkpoint",
+        "occurrence": 0,
+        "phase": "load",
+        "role": "reader"
+      },
+      {
+        "action": "delay",
+        "hook": "acknowledge",
+        "occurrence": 0,
+        "phase": "before",
+        "role": "dispatch"
+      }
+    ],
+    "coveredHooks": [
+      "validate",
+      "append",
+      "receipt",
+      "publish",
+      "consume",
+      "checkpoint",
+      "acknowledge"
+    ],
+    "matchedScheduleEntries": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "operations": [
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-0-0",
+        "requestIndex": 0,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": true,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "deferred:3",
+            "deferred:2",
+            "deferred:1",
+            "acknowledged"
+          ],
+          "ticks": 3
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-1-0",
+        "requestIndex": 1,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      },
+      {
+        "attempt": 1,
+        "operation": "dispatch",
+        "processId": "dispatch-process-2-0",
+        "requestIndex": 2,
+        "result": "accepted",
+        "acknowledgement": {
+          "delayed": false,
+          "released": true,
+          "stateTrace": [
+            "pending",
+            "acknowledged"
+          ],
+          "ticks": 0
+        }
+      }
+    ],
+    "processRestarts": [
+      {
+        "component": "reader",
+        "durableAuthorityRestart": {
+          "exportedStreamCount": 4,
+          "importedStreamCount": 4,
+          "snapshotDigest": "sha256:b55f1a263cbeba7a97e213c064ad741eba3ba6a3622be46205a62f63630c5479"
+        },
+        "reason": "HARNESS_PARTITIONED",
+        "stateDeleted": true,
+        "to": "reader-process-1"
+      }
+    ],
+    "checkpointCount": 3,
+    "authoritativeFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "readerFinalDigest": "sha256:86d8d7e321a8654b25dfffdd2bffe1a70bc65737e007c6ec27dca3005313d5b0",
+    "invalidCausalOrder": {
+      "rejected": {
+        "code": "REDUCER_ILLEGAL_TRANSITION",
+        "offset": "0000000000000000_0000000000000001"
+      },
+      "citedOffset": "0000000000000000_0000000000000001"
+    },
+    "slowConsumer": {
+      "bounds": {
+        "maxBytes": 1024,
+        "maxRecords": 2,
+        "inputBytes": 1434,
+        "inputRecords": 3,
+        "cancelPeakBytes": 956,
+        "cancelPeakRecords": 2,
+        "catchUpPeakBytes": 956,
+        "catchUpPeakRecords": 2
+      },
+      "cancel": {
+        "code": "HARNESS_SLOW_CONSUMER",
+        "offset": "0000000000000000_0000000000000003",
+        "policy": "cancel",
+        "result": "cancelled"
+      },
+      "catchUp": {
+        "overflowAt": "0000000000000000_0000000000000003",
+        "policy": "catch-up",
+        "result": "caught-up",
+        "resumedFrom": "0000000000000000_0000000000000000",
+        "replayedRecords": 3
+      },
+      "unrelatedStreamProgress": {
+        "stream": "workspace_ws_bbbbbbbbbbbbbbbbbbbbbb",
+        "partitionedStream": "workspace_ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "independent": true,
+        "headOfLineBlocked": false,
+        "partitionedDuringProbe": true,
+        "progressRecords": 5
+      }
+    }
+  }
+]

@@ -1,0 +1,656 @@
+[
+  {
+    "args": [
+      "create",
+      "--workspace",
+      "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--idempotency-key",
+      "ik_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "--input-json",
+      "[JSON]"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "stderr": "",
+    "stdout": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "profile": {
+          "displayName": "Verifier Agent",
+          "email": "verifier@example.test",
+          "handle": "verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": null,
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:d7d65b9025466cba59c80d5303d9303d56fddf120779d001d28d068ce0e07ac2",
+        "eventDigest": "sha256:3761d2e7058e06a675bf99a1aecd3e1fb5a0363f45ee3b92ec15e747f6d1ca2e",
+        "idempotencyKey": "ik_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "nextOffset": "0000000000000000_0000000000000007",
+        "operation": "agent.principal.create",
+        "requestDigest": "sha256:e2aad4d0703592c280bc9fc408aa95b7898a2f43276f8f8b98029665e72a58a1",
+        "status": "accepted",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+      },
+      "source": {
+        "directoryDigest": "sha256:335e0f7569343e0b8b9e97e74e9ed7aabd64bdb55fa4c75c102f32985d94c168",
+        "directoryStateDigest": "sha256:4654a81ebb41e87a68dfb745163d1d55144aea3eced4d47219e89b1b16a5a1de",
+        "configDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "configStateDigest": "sha256:5cf94f8d2c751a7bb659c69a5439634bda3f02b846bc490527219a903da099d0"
+      }
+    }
+  },
+  {
+    "args": [
+      "create",
+      "--workspace",
+      "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--idempotency-key",
+      "ik_cccccccccccccccccccccccccc",
+      "--input-json",
+      "[JSON]"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "stderr": "",
+    "stdout": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "profile": {
+          "displayName": "Second Verifier Agent",
+          "email": "second-verifier@example.test",
+          "handle": "second-verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": null,
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:509b3f098124652b54a6dc44d13f7438c969c2f3e0bf2cc42bf9d2b06dd0ff2c",
+        "eventDigest": "sha256:d5dfa502993ade059eca3e6ce057fe2ca08d189908b48ecf424d4c05e42565b5",
+        "idempotencyKey": "ik_cccccccccccccccccccccccccc",
+        "nextOffset": "0000000000000000_0000000000000008",
+        "operation": "agent.principal.create",
+        "requestDigest": "sha256:142f46de1f624358c91f872604e2b1230800fc5d986a881cb3c8bcc737c1668a",
+        "status": "accepted",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+      },
+      "source": {
+        "directoryDigest": "sha256:42b937871bd011a6d8db60f0147fc7dad675b14f1d137adbf75de26af366b479",
+        "directoryStateDigest": "sha256:8eda7fa9757f9c7dc85c5037251eff5ee5c5a4879ebaf184242ff95eb0f646db",
+        "configDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "configStateDigest": "sha256:5cf94f8d2c751a7bb659c69a5439634bda3f02b846bc490527219a903da099d0"
+      }
+    }
+  },
+  {
+    "args": [
+      "create",
+      "--workspace",
+      "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--idempotency-key",
+      "ik_gggggggggggggggggggggggggg",
+      "--input-json",
+      "[JSON]"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "stderr": "",
+    "stdout": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+        "profile": {
+          "displayName": "Third Verifier Agent",
+          "email": "third-verifier@example.test",
+          "handle": "third-verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": null,
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:1df62abaf022f17994fd937115924f5b5aedaa464e02a199102a00439b82e32f",
+        "eventDigest": "sha256:ee9fcf1e2033d2397871d0de895068379cd4ae37df6ed56fd2fba74c36e057c6",
+        "idempotencyKey": "ik_gggggggggggggggggggggggggg",
+        "nextOffset": "0000000000000000_0000000000000009",
+        "operation": "agent.principal.create",
+        "requestDigest": "sha256:56293589d8a95624c5b4c1a82a9ca733de953cba5538bc6136d6fb3bc1fa5e51",
+        "status": "accepted",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+      },
+      "source": {
+        "directoryDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+        "configDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "configStateDigest": "sha256:5cf94f8d2c751a7bb659c69a5439634bda3f02b846bc490527219a903da099d0"
+      }
+    }
+  },
+  {
+    "args": [
+      "list",
+      "--workspace",
+      "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--limit",
+      "1",
+      "--cursor",
+      "%7B%22index%22%3A1%2C%22kind%22%3A%22agents%22%2C%22version%22%3A1%7D"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "stderr": "",
+    "stdout": {
+      "agents": [
+        {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "kind": "agent",
+          "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "profile": {
+            "displayName": "Second Verifier Agent",
+            "email": "second-verifier@example.test",
+            "handle": "second-verifier-agent"
+          },
+          "profileRevision": 1,
+          "status": "active"
+        }
+      ],
+      "nextCursor": "%7B%22index%22%3A2%2C%22kind%22%3A%22agents%22%2C%22version%22%3A1%7D",
+      "ok": true,
+      "page": {
+        "limit": 1,
+        "returned": 1,
+        "start": 1,
+        "streamDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "stateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76"
+      }
+    }
+  },
+  {
+    "args": [
+      "config-create",
+      "--workspace",
+      "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--agent",
+      "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+      "--idempotency-key",
+      "ik_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--input-json",
+      "[JSON]"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "stderr": "",
+    "stdout": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "profile": {
+          "displayName": "Verifier Agent",
+          "email": "verifier@example.test",
+          "handle": "verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configRevision": {
+        "configDigest": "sha256:985cb3cc8e3ddfb848768e8f058afad174135e97253eed9376953c0a820973c7",
+        "revision": 1,
+        "revisionId": "acr_830d4b027060063bf272fc4968fea6ddab60587fa790c19bc9e8beb8702edd36"
+      },
+      "configuration": {
+        "activeConfig": null,
+        "activeRevisionId": null,
+        "headRevision": 1,
+        "lastRevisionId": "acr_830d4b027060063bf272fc4968fea6ddab60587fa790c19bc9e8beb8702edd36",
+        "runnable": false,
+        "status": "draft"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:096e77129ed9e54e17c95dfa84e494e0017ba8a7982337aaccc011fccb22c6a1",
+        "eventDigest": "sha256:52107a55443cae8c4de60805f567623ca5b645d54b60c7bdcd0f209376f61399",
+        "idempotencyKey": "ik_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "nextOffset": "0000000000000000_0000000000000001",
+        "operation": "agent.config.created",
+        "requestDigest": "sha256:5ece75bd7371178377726fb31f545b66a488e02c268f98f6850d68e31a6f0510",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+        "configDigest": "sha256:d7d304fc7fdd39fbbb376ded838d0d478d22204495bdfbf63f1500b44b1cf355",
+        "configStateDigest": "sha256:a954bb15d15aaa82e1c56d7a561843c73bdf8913eb30e08ab1ce860b8d05673c"
+      }
+    }
+  },
+  {
+    "args": [
+      "revise",
+      "--workspace",
+      "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--agent",
+      "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+      "--idempotency-key",
+      "ik_pppppppppppppppppppppppppp",
+      "--input-json",
+      "[JSON]"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "stderr": "",
+    "stdout": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "profile": {
+          "displayName": "Verifier Agent",
+          "email": "verifier@example.test",
+          "handle": "verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configRevision": {
+        "configDigest": "sha256:0351a26188a83910146eab2b87b814199c6f9519c0ed6368cdcde6b29efe7c42",
+        "revision": 2,
+        "revisionId": "acr_f692b867be8779b297834459a27f7a1b992b75ca338749649cc57f5ac72d578e"
+      },
+      "configuration": {
+        "activeConfig": {
+          "schemaVersion": 1,
+          "instructions": {
+            "system": "You are a workspace assistant. Follow the workspace policy and cite durable facts.",
+            "task": "Answer the current request using only the authorized context.",
+            "guardrails": [
+              "Never disclose credentials or secret-shaped values.",
+              "Keep replies bounded and auditable."
+            ]
+          },
+          "context": {
+            "scope": "current-channel",
+            "includePrivate": false,
+            "includeThreadHistory": true,
+            "maxMessages": 50,
+            "maxBytes": 65536
+          },
+          "trigger": {
+            "events": [
+              "manual",
+              "mention"
+            ],
+            "requireMention": false,
+            "allowMessageEdits": false
+          },
+          "delegation": {
+            "enabled": false,
+            "maxDepth": 0,
+            "maxChildren": 0,
+            "allowCrossChannel": false
+          },
+          "concurrency": {
+            "maxConcurrentRuns": 4,
+            "maxConcurrentPerChannel": 1,
+            "queueStrategy": "serialize"
+          },
+          "budgets": {
+            "timeoutSeconds": 900,
+            "maxInputTokens": "[REDACTED]",
+            "maxOutputTokens": "[REDACTED]",
+            "maxTotalTokens": "[REDACTED]",
+            "maxCostUsdCents": 250
+          },
+          "harness": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "structured-output"
+            ]
+          },
+          "sandbox": {
+            "providerId": "scripted",
+            "providerVersion": "1.0.0",
+            "requiredCapabilities": [
+              "ephemeral"
+            ],
+            "lifecycle": "ephemeral",
+            "networkPolicy": "deny-all"
+          },
+          "workspaceInputs": {
+            "source": "workspace",
+            "paths": [
+              "README.md",
+              "docs"
+            ],
+            "maxBytes": 1048576
+          },
+          "connectionGrants": {
+            "maxCallsPerRun": 2,
+            "refs": [
+              {
+                "connectionId": "conn_a",
+                "grantId": "grant_bgrant_c",
+                "purpose": "p",
+                "revision": 1
+              },
+              {
+                "connectionId": "conn_agrant_b",
+                "grantId": "grant_c",
+                "purpose": "p",
+                "revision": 1
+              }
+            ]
+          }
+        },
+        "activeRevisionId": "acr_830d4b027060063bf272fc4968fea6ddab60587fa790c19bc9e8beb8702edd36",
+        "headRevision": 2,
+        "lastRevisionId": "acr_f692b867be8779b297834459a27f7a1b992b75ca338749649cc57f5ac72d578e",
+        "runnable": true,
+        "status": "active"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:5e569e13438482adc0d479d152f1e88ab24c5a92936507c5b933f546b4c227d0",
+        "eventDigest": "sha256:17e877ad888d0ffe6c8acae942b9908d56030e7d194c9add910fce4bd96078a1",
+        "idempotencyKey": "ik_pppppppppppppppppppppppppp",
+        "nextOffset": "0000000000000000_0000000000000003",
+        "operation": "agent.config.revised",
+        "requestDigest": "sha256:3b450a121cc0844641f833604d50b9f602d25425a1a9c26a0dc01c2412fdac1d",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+        "configDigest": "sha256:daca554661e9aa03f7debabf533aa163322115482485156b87243ba834056eaf",
+        "configStateDigest": "sha256:ae228faebf8d4b8f6a8271e6b3b3713d8312015db103ebb36d1d7faa3a1364d7"
+      }
+    }
+  },
+  {
+    "args": [
+      "disable",
+      "--workspace",
+      "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--agent",
+      "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+      "--idempotency-key",
+      "ik_mmmmmmmmmmmmmmmmmmmmmmmmmm",
+      "--input-json",
+      "[JSON]"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "stderr": "",
+    "stdout": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "profile": {
+          "displayName": "Verifier Agent",
+          "email": "verifier@example.test",
+          "handle": "verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": {
+        "activeConfig": null,
+        "activeRevisionId": null,
+        "headRevision": 2,
+        "lastRevisionId": "acr_f692b867be8779b297834459a27f7a1b992b75ca338749649cc57f5ac72d578e",
+        "runnable": false,
+        "status": "disabled"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:d293bad105f60b9deff8712a4419f3da8ccaf81a1a7b6f3bbe578aaaa2569609",
+        "eventDigest": "sha256:357b6ec688ddae6dc21b012721b27c1edb6a7dcf9b3a7277571f73ceb2ea2fba",
+        "idempotencyKey": "ik_mmmmmmmmmmmmmmmmmmmmmmmmmm",
+        "nextOffset": "0000000000000000_0000000000000004",
+        "operation": "agent.config.disabled",
+        "requestDigest": "sha256:e5d110853fa55327bdb8c535ce2a2db9a4a86c933bbd40f7f66f105e158fe2f9",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+        "configDigest": "sha256:0d9dc6b101219e0ea59873f27039aa7dc372c4fa86130e9a5da178643d3c0b8e",
+        "configStateDigest": "sha256:8d37c7d0e01a6f33989d585f080cd1902b000fbed2310f9fbef399b34412e287"
+      }
+    }
+  },
+  {
+    "args": [
+      "revoke",
+      "--workspace",
+      "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--agent",
+      "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+      "--idempotency-key",
+      "ik_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+      "--input-json",
+      "[JSON]"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "stderr": "",
+    "stdout": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "profile": {
+          "displayName": "Verifier Agent",
+          "email": "verifier@example.test",
+          "handle": "verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": {
+        "activeConfig": null,
+        "activeRevisionId": null,
+        "headRevision": 2,
+        "lastRevisionId": "acr_f692b867be8779b297834459a27f7a1b992b75ca338749649cc57f5ac72d578e",
+        "runnable": false,
+        "status": "retired"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:c5e8f0db7ba43ce9c3541d1ac0315cf9d900071d9feb44ece0aab02c20bfa523",
+        "eventDigest": "sha256:ca04590c3e2938e7150b5b28bbfb6b500210f9158197a447d371f4cfccaa47e8",
+        "idempotencyKey": "ik_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "nextOffset": "0000000000000000_0000000000000006",
+        "operation": "agent.config.retired",
+        "requestDigest": "sha256:96a76f8f23853e6dbcd8877aed7068b25fd3ceca1d615d96dfeaec4655f81b28",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+        "configDigest": "sha256:98eab8974bee892af70a5978c530b2664b0d3e7156740d05e04c23b988075da5",
+        "configStateDigest": "sha256:b6e7620fedb0698a1810052ed4fa8c83ec4e2c3af1f1398e2f01f03bcd5101d4"
+      },
+      "revoked": true
+    }
+  },
+  {
+    "args": [
+      "config-create",
+      "--workspace",
+      "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--agent",
+      "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+      "--idempotency-key",
+      "ik_kkkkkkkkkkkkkkkkkkkkkkkkkk",
+      "--input-json",
+      "[JSON]"
+    ],
+    "exitCode": 2,
+    "signal": null,
+    "stderr": "",
+    "stdout": {
+      "ok": false,
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "error": "secret-shaped values may not be persisted in agent configuration"
+    }
+  },
+  {
+    "args": [
+      "create",
+      "--workspace",
+      "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--idempotency-key",
+      "ik_tttttttttttttttttttttttttt",
+      "--input-json",
+      "[JSON]"
+    ],
+    "exitCode": 5,
+    "signal": null,
+    "stderr": "",
+    "stdout": {
+      "ok": false,
+      "code": "PROVIDER_DOUBLE_FAILURE",
+      "error": "[REDACTED]"
+    }
+  },
+  {
+    "args": [
+      "revoke",
+      "--workspace",
+      "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--agent",
+      "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+      "--idempotency-key",
+      "ik_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+      "--input-json",
+      "[JSON]"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "stderr": "",
+    "stdout": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "profile": {
+          "displayName": "Verifier Agent",
+          "email": "verifier@example.test",
+          "handle": "verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": {
+        "activeConfig": null,
+        "activeRevisionId": null,
+        "headRevision": 2,
+        "lastRevisionId": "acr_f692b867be8779b297834459a27f7a1b992b75ca338749649cc57f5ac72d578e",
+        "runnable": false,
+        "status": "retired"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:c5e8f0db7ba43ce9c3541d1ac0315cf9d900071d9feb44ece0aab02c20bfa523",
+        "eventDigest": "sha256:ca04590c3e2938e7150b5b28bbfb6b500210f9158197a447d371f4cfccaa47e8",
+        "idempotencyKey": "ik_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "nextOffset": "0000000000000000_0000000000000006",
+        "operation": "agent.config.retired",
+        "requestDigest": "sha256:96a76f8f23853e6dbcd8877aed7068b25fd3ceca1d615d96dfeaec4655f81b28",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+        "configDigest": "sha256:98eab8974bee892af70a5978c530b2664b0d3e7156740d05e04c23b988075da5",
+        "configStateDigest": "sha256:b6e7620fedb0698a1810052ed4fa8c83ec4e2c3af1f1398e2f01f03bcd5101d4"
+      },
+      "revoked": true
+    }
+  },
+  {
+    "args": [
+      "revoke",
+      "--workspace",
+      "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--agent",
+      "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+      "--idempotency-key",
+      "ik_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+      "--input-json",
+      "[JSON]"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "stderr": "",
+    "stdout": {
+      "agent": {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "kind": "agent",
+        "ownedBy": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "profile": {
+          "displayName": "Verifier Agent",
+          "email": "verifier@example.test",
+          "handle": "verifier-agent"
+        },
+        "profileRevision": 1,
+        "status": "active"
+      },
+      "configuration": {
+        "activeConfig": null,
+        "activeRevisionId": null,
+        "headRevision": 2,
+        "lastRevisionId": "acr_f692b867be8779b297834459a27f7a1b992b75ca338749649cc57f5ac72d578e",
+        "runnable": false,
+        "status": "retired"
+      },
+      "ok": true,
+      "receipt": {
+        "dispatchEventDigest": "sha256:c5e8f0db7ba43ce9c3541d1ac0315cf9d900071d9feb44ece0aab02c20bfa523",
+        "eventDigest": "sha256:ca04590c3e2938e7150b5b28bbfb6b500210f9158197a447d371f4cfccaa47e8",
+        "idempotencyKey": "ik_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "nextOffset": "0000000000000000_0000000000000006",
+        "operation": "agent.config.retired",
+        "requestDigest": "sha256:96a76f8f23853e6dbcd8877aed7068b25fd3ceca1d615d96dfeaec4655f81b28",
+        "status": "accepted",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+      },
+      "source": {
+        "directoryDigest": "sha256:7cc30858cfa745ce89e908be094bfe697c496590b842b9ca615a8c2e12994e6c",
+        "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+        "configDigest": "sha256:98eab8974bee892af70a5978c530b2664b0d3e7156740d05e04c23b988075da5",
+        "configStateDigest": "sha256:b6e7620fedb0698a1810052ed4fa8c83ec4e2c3af1f1398e2f01f03bcd5101d4"
+      },
+      "revoked": true
+    }
+  }
+]

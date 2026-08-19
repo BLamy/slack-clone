@@ -1,0 +1,39 @@
+{
+  "attacks": [
+    {
+      "attack": "activity-summary",
+      "observedCode": "INVOCATION_RUN_SECRET_VALUE",
+      "offset": "0000000000000006_aaaaaaaaaaaaaaaa",
+      "refused": true
+    },
+    {
+      "attack": "failure-code",
+      "observedCode": "INVOCATION_RUN_SECRET_VALUE",
+      "offset": "0000000000000006_aaaaaaaaaaaaaaaa",
+      "refused": true
+    },
+    {
+      "attack": "artifact-name",
+      "observedCode": "INVOCATION_RUN_SECRET_VALUE",
+      "offset": "0000000000000012_aaaaaaaaaaaaaaaa",
+      "refused": true
+    }
+  ],
+  "canaryRejected": true,
+  "result": "PASS",
+  "canaryPresentInPublishedEvidence": false,
+  "evidenceFiles": [
+    "binding-audit.json",
+    "bounded-records.json",
+    "canary-scan.json",
+    "cold-clone-transcript.json",
+    "invalid-offsets.json",
+    "prefix-replay.json",
+    "sensitivity.json",
+    "terminal-races.json",
+    "verification-summary.json"
+  ],
+  "postVerifierEvidenceScanCompleted": true,
+  "publishedEvidenceLeaked": false,
+  "postVerifierTranscriptChecked": true
+}

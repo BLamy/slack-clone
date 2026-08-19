@@ -1,0 +1,18 @@
+{
+  "attemptedScopes": [
+    "endpoint",
+    "worker",
+    "active-foreign-run",
+    "foreign-agent-coordinator",
+    "foreign-workspace-coordinator",
+    "post-expiry",
+    "generation-two",
+    "forged-token"
+  ],
+  "callbackCalls": 0,
+  "storedCapabilityDigest": "sha256:1d83c9eb86f45e92eb051d22e4ed2dd0ca1c41f1d3e67a1f2aa7bdf7331a7fa3",
+  "reacquiredAttemptId": "at_0bb924f68cca7df3d85c8420dc",
+  "reacquiredGeneration": 2,
+  "bearerPersisted": false,
+  "result": "PASS"
+}

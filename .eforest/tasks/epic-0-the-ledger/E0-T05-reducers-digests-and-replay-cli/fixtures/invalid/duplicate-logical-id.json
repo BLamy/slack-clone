@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T05",
+  "records": [
+    {
+      "offset": "0000000000000002_0000000000000005",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "messageId": "message-duplicate",
+          "text": "first"
+        },
+        "eventId": "ev_yyyyyyyyyyyyyyyyyyyyyyyyyy",
+        "eventType": "channel.message.created",
+        "idempotencyKey": "ik_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-03-01T00:00:00.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000002_0000000000000006",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "messageId": "message-duplicate",
+          "text": "second"
+        },
+        "eventId": "ev_zzzzzzzzzzzzzzzzzzzzzzzzzz",
+        "eventType": "channel.message.created",
+        "idempotencyKey": "ik_ffffffffffffffffffffffffff",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-03-01T00:00:00.001Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    }
+  ]
+}

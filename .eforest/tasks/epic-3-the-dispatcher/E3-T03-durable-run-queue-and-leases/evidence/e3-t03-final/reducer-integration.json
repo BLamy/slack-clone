@@ -1,0 +1,7 @@
+{
+  "finalRunStatus": "leased",
+  "finalLease": null,
+  "leaseHistoryCount": 3,
+  "finalStateDigest": "sha256:1d3fe887ebc71602309d62ef0875137200722a30702d325fec5b67dd1912f35e",
+  "result": "PASS"
+}

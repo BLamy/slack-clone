@@ -1,0 +1,7 @@
+{
+  "command": "node scripts/replay-ledger.mjs replay <principal-directory-offline.json>",
+  "networkDisabled": true,
+  "queryStoreWritten": false,
+  "finalStateDigest": "sha256:1069cdf0c97b7f1456a5b2cbcd2846d790723610f8832cb250e99fe6323181e8",
+  "result": "PASS"
+}

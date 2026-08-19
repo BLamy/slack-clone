@@ -1,0 +1,14 @@
+{
+  "agentCount": 1,
+  "channelCount": 3,
+  "directoryKinds": [
+    "human",
+    "service",
+    "human",
+    "agent"
+  ],
+  "rosterDigest": "sha256:6339894cf3e0c29cffbd3506f5af58df03422adf19f31f114134098ea8dee8a3",
+  "serviceChatMember": false,
+  "streamStateDigest": "sha256:8a61ade8616a7c8814669220cf22e7606130be08dea91ce4e19e98aaa57f717e",
+  "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+}

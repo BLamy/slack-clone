@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "runId": "cold-9987-msawhncx",
+  "entrypoint": "src/server.mjs",
+  "files": [
+    {
+      "path": "docs/backend-packages.md",
+      "bytes": 1430,
+      "sha256": "68014d469f3b25bcc802e70a80572b9ff4b6ac0df7ac7dc186dfbc821e305d26"
+    },
+    {
+      "path": "docs/stream-topology.md",
+      "bytes": 3850,
+      "sha256": "4d2c91707277e96602480461db3cce205900f1fbcafa23a4bbca1d48ff47901b"
+    },
+    {
+      "path": "package.json",
+      "bytes": 3068,
+      "sha256": "0d293fb671013c2e2429e55db21d29d567cb123ed4360ce8efc8af020e8ad7e6"
+    },
+    {
+      "path": "packages/durable-streams/package.json",
+      "bytes": 253,
+      "sha256": "bc09ff42017b2505fbdf02274f74fbdeb6ef993b1498885625d82d696d14f28b"
+    },
+    {
+      "path": "packages/durable-streams/src/index.mjs",
+      "bytes": 2748,
+      "sha256": "3befad8f03d05c749c63e9c57c8d90829d5fdf88d6dcfe4aa0b638e86e34440d"
+    },
+    {
+      "path": "packages/http/package.json",
+      "bytes": 197,
+      "sha256": "f43e60e663c5e2b0735aee6e3d6338e731c7413c62d8b89136185ed09f03db25"
+    },
+    {
+      "path": "packages/http/src/index.mjs",
+      "bytes": 7256,
+      "sha256": "9e53ff58f32c0517a64aec15eaf84367696f7f4285a74c1d17ef57d791937b19"
+    },
+    {
+      "path": "packages/protocol/package.json",
+      "bytes": 132,
+      "sha256": "d5900401555dc0469058f378f667f3d1069f12a49b2ffe63f018b468a925c9f8"
+    },
+    {
+      "path": "packages/protocol/src/index.mjs",
+      "bytes": 1677,
+      "sha256": "6a7f4f4ed7989d05bedf0b4b67a59a862f504176887e8132b6a2f32eb0ed7519"
+    },
+    {
+      "path": "packages/reducers/package.json",
+      "bytes": 132,
+      "sha256": "90171af4b238ff52a9c16ebfecf172955f324199644dedf0f4a275be98a1a5b4"
+    },
+    {
+      "path": "packages/reducers/src/index.mjs",
+      "bytes": 283,
+      "sha256": "e0a57bb1c75c39d9ebe6a41f8e110eca94881338e9f20632b13d17cc4f418907"
+    },
+    {
+      "path": "packages/services/package.json",
+      "bytes": 201,
+      "sha256": "53accc4ad00d797d3ea792ea65d793a04a2c318b8a368479510c61e5b86101ec"
+    },
+    {
+      "path": "packages/services/src/index.mjs",
+      "bytes": 1316,
+      "sha256": "00c247d01a96b9d30bb84dca1bd2cffc079953f261337264b1e3cddbfae9182b"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "bytes": 51941,
+      "sha256": "531f817c29e3e9de8fc63a1c2ef226d656565cd3d52a903fa6298401de15c7d4"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "bytes": 66,
+      "sha256": "9839f5cd9ba62691fff97834781cc91e38edde6366abeff1a08fdfd13ccbf68b"
+    },
+    {
+      "path": "public/app.html",
+      "bytes": 2759,
+      "sha256": "935d0710e26f4473c32e42912cbb31652618d53d851b9145287b68368fdfa9f3"
+    },
+    {
+      "path": "public/app.js",
+      "bytes": 11308,
+      "sha256": "e4c6c7ad075921a5227af5d12e932a6dbb6f1e1e3becb5b49f0b053e9083b85d"
+    },
+    {
+      "path": "public/index.html",
+      "bytes": 5098,
+      "sha256": "3d8c52f1d5cc93e6869a0cfafb397301b081d8424e29be247409b676066bc75d"
+    },
+    {
+      "path": "public/styles.css",
+      "bytes": 13488,
+      "sha256": "7a56a6cb0b88bee5bed5e475d934c7f87b14eff9df2a6b2f7b96972b27a86996"
+    },
+    {
+      "path": "src/ledger/append-boundary.mjs",
+      "bytes": 956,
+      "sha256": "525750dd650a99ee5705befa00186268cec663e84c76cc90f44feb0954cdefbc"
+    },
+    {
+      "path": "src/ledger/canonical-json.mjs",
+      "bytes": 3928,
+      "sha256": "18321805acbd0972e765cf5e8689eca8aae63695325862301b41d95091a9d3f1"
+    },
+    {
+      "path": "src/ledger/envelope.mjs",
+      "bytes": 5876,
+      "sha256": "f90e89e83bfccee96719820cd87c534eca44c9650543bb0d59ea2b5f591683d7"
+    },
+    {
+      "path": "src/ledger/errors.mjs",
+      "bytes": 2290,
+      "sha256": "81d709ecbb5219a8bb38bd39d602f7393dc9970f641401c62ae7c2f1be15c0d4"
+    },
+    {
+      "path": "src/ledger/identifiers.mjs",
+      "bytes": 2165,
+      "sha256": "76c59d3f1bc5bd9a65544b7204e308e3913b63d4328c9df8ec27187dc39e919a"
+    },
+    {
+      "path": "src/ledger/schemas/event-envelope.v1.schema.json",
+      "bytes": 1718,
+      "sha256": "0e1d1e5922fcd22f07a0c9db053c199f1480b0eb6be34151336e398ab188c23a"
+    },
+    {
+      "path": "src/ledger/schemas/source-reference.v1.schema.json",
+      "bytes": 928,
+      "sha256": "c2b02113851617258019d178f3983e3dc9ad7bbfacf828f2d0f0e46245cfdb12"
+    },
+    {
+      "path": "src/ledger/topology.mjs",
+      "bytes": 4551,
+      "sha256": "2055b514761dfda4867d4e99c4f6019484e36c96806a8d80cabb47516532bd1c"
+    },
+    {
+      "path": "src/server.mjs",
+      "bytes": 11442,
+      "sha256": "db70bf909573b03e647e7f39b72df50d74ee4c1efc7c059e65540117d0aa1467"
+    }
+  ]
+}

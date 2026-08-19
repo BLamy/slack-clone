@@ -1,0 +1,33 @@
+{
+  "contentReferencesOnly": true,
+  "attacks": [
+    {
+      "attack": "unrestricted-output-field",
+      "expectedCode": "INVOCATION_RUN_INVALID_DATA",
+      "observedCode": "INVOCATION_RUN_INVALID_DATA",
+      "offset": "0000000000000006_aaaaaaaaaaaaaaaa",
+      "refused": true
+    },
+    {
+      "attack": "oversized-summary",
+      "expectedCode": "INVOCATION_RUN_INVALID_DATA",
+      "observedCode": "INVOCATION_RUN_INVALID_DATA",
+      "offset": "0000000000000006_aaaaaaaaaaaaaaaa",
+      "refused": true
+    }
+  ],
+  "rawProviderOutputFields": 0,
+  "rawSecretFields": 0,
+  "recordCount": 14,
+  "recordTypes": [
+    "activity",
+    "usage",
+    "approval",
+    "artifact",
+    "result",
+    "failure"
+  ],
+  "rejectedOversizedFields": 1,
+  "rejectedRawProviderOutputFields": 1,
+  "result": "PASS"
+}

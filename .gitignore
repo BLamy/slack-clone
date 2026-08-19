@@ -1,8 +1,14 @@
 node_modules/
+__pycache__/
+*.py[cod]
+.playwright-cli/
+tmp/
 playwright-report/
 test-results/
+.artifacts/
 recordings/*.json
 recordings/*.mp4
+recordings/*.webm
 *.log
 .DS_Store
 

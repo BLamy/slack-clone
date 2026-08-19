@@ -1,0 +1,6 @@
+{
+  "mutation": "one UTF-8 byte h->j in valid golden payload",
+  "originalDigest": "sha256:4947425de8918cc240bee9704f7d9b6eaa57253f6bca047cc318f97b0d4c276a",
+  "mutatedDigest": "sha256:80dac11178ff2b2d41725eedea7062c28ceaa0034cda1dfbe151cefabcdfd7e6",
+  "detectorSensitive": true
+}

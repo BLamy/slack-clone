@@ -1,0 +1,116 @@
+{
+  "policyVersion": 1,
+  "cases": [
+    {
+      "handles": [
+        "ada",
+        "helper"
+      ],
+      "name": "unicode-and-visible",
+      "spans": [
+        {
+          "startByte": 6,
+          "endByte": 10
+        },
+        {
+          "startByte": 15,
+          "endByte": 22
+        }
+      ],
+      "text": "Café @ada and @helper"
+    },
+    {
+      "handles": [
+        "ada"
+      ],
+      "name": "zwj-emoji-and-mention",
+      "spans": [
+        {
+          "startByte": 12,
+          "endByte": 16
+        }
+      ],
+      "text": "👩‍💻 @ada"
+    },
+    {
+      "handles": [
+        "helper"
+      ],
+      "name": "inline-code-escaped-and-quote",
+      "spans": [
+        {
+          "startByte": 31,
+          "endByte": 38
+        }
+      ],
+      "text": "`@ada` and \\@ada\n> @ada\nnormal @helper"
+    },
+    {
+      "handles": [
+        "helper"
+      ],
+      "name": "fenced-code",
+      "spans": [
+        {
+          "startByte": 34,
+          "endByte": 41
+        }
+      ],
+      "text": "before\n```markdown\n@ada\n```\nafter @helper"
+    },
+    {
+      "handles": [
+        "helper"
+      ],
+      "name": "url",
+      "spans": [
+        {
+          "startByte": 26,
+          "endByte": 33
+        }
+      ],
+      "text": "https://example.test/@ada @helper"
+    },
+    {
+      "handles": [
+        "helper"
+      ],
+      "name": "malformed-and-email",
+      "spans": [
+        {
+          "startByte": 28,
+          "endByte": 35
+        }
+      ],
+      "text": "ada@example.test @@ada @Ada @helper/child"
+    }
+  ],
+  "invalidCases": [
+    {
+      "handles": [],
+      "name": "zero-width-space-email",
+      "result": "PLAIN_TEXT"
+    },
+    {
+      "handles": [],
+      "name": "word-joiner-before-mention",
+      "result": "PLAIN_TEXT"
+    },
+    {
+      "handles": [],
+      "name": "bom-before-mention",
+      "result": "PLAIN_TEXT"
+    },
+    {
+      "handles": [],
+      "name": "soft-hyphen-before-mention",
+      "result": "PLAIN_TEXT"
+    },
+    {
+      "handles": [],
+      "name": "zero-width-inside-handle",
+      "result": "PLAIN_TEXT"
+    }
+  ],
+  "result": "PASS"
+}

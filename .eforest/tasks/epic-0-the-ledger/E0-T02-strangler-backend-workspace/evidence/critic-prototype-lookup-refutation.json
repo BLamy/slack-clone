@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T02",
+  "role": "fresh-independent-critic",
+  "recordedAt": "2026-08-01T23:52:31Z",
+  "verdict": "refuted",
+  "review": {
+    "submittedHead": "fe42b9e215a1a4fed02fe4b2e6bbf01018a27b65",
+    "implementationCommit": "dc9f273e22b8e7e4d8a2a711c4b86660c7addfc7",
+    "latestPriorRefutation": "5316c6acf136d7ff1539a8885ba37181fe519ab6",
+    "reviewedDiff": "5316c6acf136d7ff1539a8885ba37181fe519ab6..fe42b9e215a1a4fed02fe4b2e6bbf01018a27b65",
+    "predictionPath": "work/critic-predictions-fe42b9e.md",
+    "postImplementationDelta": [
+      ".eforest/tasks/QUEUE.md",
+      ".eforest/tasks/epic-0-the-ledger/E0-T02-strangler-backend-workspace/evidence/builder-prototype-rework-verification.json",
+      ".eforest/tasks/epic-0-the-ledger/E0-T02-strangler-backend-workspace/readme.md"
+    ],
+    "reviewedSourceHashes": {
+      "tools/import-analysis.mjs": "73b0307fa2de09b6dabb3f4ef69fd0ed441e2258f6421a77ab7c4675ccdfe1b9",
+      "test/unit/backend-packages.test.mjs": "46f414333c29b3cb64a4c230a22f8efbda64fcab695d9e7e9945517599983b3c",
+      "docs/backend-packages.md": "27dd01f1d5f1e8e2b5f3522c5bfe26d5cd4baef1c3b6780b1e5d735248ef2297"
+    }
+  },
+  "validControls": {
+    "cloneKind": "git clone --no-hardlinks --no-checkout followed by detached checkout",
+    "head": "fe42b9e215a1a4fed02fe4b2e6bbf01018a27b65",
+    "gitAlternatesPresent": false,
+    "fixtures": [
+      "static dot record property",
+      "static string record property",
+      "numeric literal indices",
+      "deterministic allowlisted globals",
+      "locally bound names",
+      "injected names",
+      "local relative import"
+    ],
+    "commands": [
+      {
+        "command": "pnpm format:check",
+        "exitCode": 0
+      },
+      {
+        "command": "pnpm lint",
+        "exitCode": 0
+      },
+      {
+        "command": "pnpm typecheck",
+        "exitCode": 0,
+        "observation": "PASS backend package dependency direction and pure-leaf capability boundary; layers=5 violations=0; PASS static syntax analysis files=43"
+      }
+    ],
+    "result": "PASS"
+  },
+  "finalExistingMatrixIsolation": {
+    "recordedAt": "2026-08-01T23:52:31Z",
+    "clone": "work/critic-matrix-fe42b9e.hiqL0k/repo",
+    "cloneKind": "git clone --no-hardlinks --no-checkout followed by detached checkout",
+    "head": "fe42b9e215a1a4fed02fe4b2e6bbf01018a27b65",
+    "gitAlternatesPresent": false,
+    "retainedSources": [
+      "critic-control-deterministic-globals.mjs",
+      "critic-control-helper.mjs",
+      "critic-control-injected.mjs",
+      "critic-control-local-bound.mjs",
+      "critic-control-numeric-index.mjs",
+      "critic-control-relative-import.mjs",
+      "critic-control-static-record.mjs",
+      "critic-forbidden-22-legacy-prototype-lookup.mjs"
+    ],
+    "removedForbiddenFixtures": "critic-forbidden-01 through critic-forbidden-21",
+    "fixture22Sha256": "6534adc53a97aa6ed8e905356943223d6985846e3899eec636f76be4e208a91b",
+    "fixtureCalled": false,
+    "dynamicCodeExecuted": false,
+    "externalRequestMade": false,
+    "commands": [
+      {
+        "command": "pnpm format:check",
+        "exitCode": 0,
+        "observation": "All matched files use Prettier code style"
+      },
+      {
+        "command": "pnpm lint",
+        "exitCode": 0,
+        "observation": "No diagnostics"
+      },
+      {
+        "command": "pnpm typecheck",
+        "exitCode": 0,
+        "observation": "PASS backend package dependency direction and pure-leaf capability boundary; layers=5 violations=0; PASS static syntax analysis files=44"
+      }
+    ],
+    "result": "FALSE GREEN CONFIRMED"
+  },
+  "forbiddenMatrix": {
+    "fixturesImportedOrCalled": false,
+    "dynamicCodeExecuted": false,
+    "externalRequestMade": false,
+    "dependencyPreparation": {
+      "command": "CI=1 COREPACK_ENABLE_NETWORK=0 PNPM_CONFIG_OFFLINE=true pnpm install --offline --frozen-lockfile --ignore-scripts",
+      "exitCode": 0,
+      "packagesReused": 154,
+      "packagesDownloaded": 0
+    },
+    "finalSequence": [
+      {
+        "command": "pnpm format:check",
+        "exitCode": 0,
+        "observation": "All matched files use Prettier code style"
+      },
+      {
+        "command": "pnpm lint",
+        "exitCode": 0,
+        "observation": "No diagnostics"
+      },
+      {
+        "command": "pnpm typecheck",
+        "exitCode": 1,
+        "observation": "Static analysis named every required direct constructor, computed constructor, destructuring, direct prototype, direct __proto__, stack, Object, Reflect, Proxy, Symbol, import, Function/eval, descriptor, async-constructor, and generator-constructor fixture, but did not name critic-forbidden-22-legacy-prototype-lookup.mjs"
+      }
+    ],
+    "detectedFixtureCount": 21,
+    "undetectedFixture": "critic-forbidden-22-legacy-prototype-lookup.mjs"
+  },
+  "blockingFinding": {
+    "id": "C4",
+    "severity": "blocking",
+    "acceptanceCriterion": "AC3: package checks prove pure protocol/reducer modules cannot access provider or prototype-derived capabilities",
+    "title": "Legacy prototype getter reflection stays green",
+    "fixture": [
+      "export function lookupPrototypeWithoutDirectKey(value) {",
+      "  const protoGetter = value.__lookupGetter__(\"__proto__\");",
+      "  return protoGetter.call(value);",
+      "}"
+    ],
+    "semantics": "If later called with an ordinary object, the function obtains the inherited __proto__ getter and invokes it to recover the object's prototype without using __proto__ as a MemberExpression property.",
+    "called": false,
+    "externalRequestMade": false,
+    "isolatedClone": {
+      "kind": "git clone --no-hardlinks --no-checkout followed by detached checkout",
+      "head": "fe42b9e215a1a4fed02fe4b2e6bbf01018a27b65",
+      "gitAlternatesPresent": false,
+      "onlySourceFixture": "packages/protocol/src/critic-legacy-prototype-lookup.mjs",
+      "fixtureSha256": "6534adc53a97aa6ed8e905356943223d6985846e3899eec636f76be4e208a91b"
+    },
+    "commands": [
+      {
+        "command": "pnpm format:check",
+        "exitCode": 0,
+        "observation": "All matched files use Prettier code style"
+      },
+      {
+        "command": "pnpm lint",
+        "exitCode": 0,
+        "observation": "No diagnostics"
+      },
+      {
+        "command": "pnpm typecheck",
+        "exitCode": 0,
+        "observation": "PASS backend package dependency direction and pure-leaf capability boundary; layers=5 violations=0; PASS static syntax analysis files=37"
+      }
+    ],
+    "cause": "tools/import-analysis.mjs classifies MemberExpression property names and unresolved ambient globals. __lookupGetter__ is absent from the forbidden-property map, while the forbidden __proto__ spelling is a CallExpression argument rather than the visited property key.",
+    "conclusion": "A formatter- and lint-valid inert pure protocol source retains a prototype-reflection escape hatch while the exact package checker exits zero, directly falsifying AC3 and the submitted strict pure-source claim."
+  },
+  "stoppedAfterRefutation": {
+    "reason": "The human directed the critic to record VERDICT: refuted immediately if any individually isolated forbidden fixture remained green.",
+    "coldCommandHadStarted": "TEST_RUN_ID=critic-cold-fe42b9e make verify-E0-T02 with Replay variables removed, local-only submodule source, and pnpm offline",
+    "coldCommandExitCode": 130,
+    "observation": "The run was interrupted after its real forced-collision concurrency test passed and cleaned up both stacks; no final cold verification summary, build result, or independent stream offset/digest is claimed.",
+    "targetedSensitivityRun": false
+  },
+  "redaction": {
+    "containsRawSecret": false,
+    "containsSessionCookie": false,
+    "containsProviderToken": false,
+    "containsCustomerContent": false,
+    "fixtureContactedExternalHost": false
+  },
+  "replay": "Replay: N/A (server/static-analysis critique with unchanged browser behavior) + mitigation: exact-head no-hardlink inert-source reproduction; no upload or tunnel was invoked"
+}

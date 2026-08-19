@@ -1,0 +1,154 @@
+{
+  "terminalState": "completed",
+  "terminalCount": 1,
+  "terminalLifecycleCount": 1,
+  "lateMutationRefused": true,
+  "schedule": {
+    "racedAtMs": 20,
+    "deadlineAtMs": 100,
+    "timeoutCandidateAtMs": 101
+  },
+  "contenders": [
+    {
+      "contenders": [
+        {
+          "cause": "complete",
+          "result": "fulfilled"
+        },
+        {
+          "cause": "fail",
+          "result": "rejected"
+        },
+        {
+          "cause": "timeout",
+          "result": "fulfilled"
+        },
+        {
+          "cause": "budget",
+          "result": "rejected"
+        },
+        {
+          "cause": "cancel",
+          "result": "fulfilled"
+        }
+      ],
+      "terminalCount": 1,
+      "terminalLifecycleCount": 1,
+      "terminalState": "completed",
+      "winner": "complete"
+    },
+    {
+      "contenders": [
+        {
+          "cause": "fail",
+          "result": "fulfilled"
+        },
+        {
+          "cause": "complete",
+          "result": "rejected"
+        },
+        {
+          "cause": "timeout",
+          "result": "fulfilled"
+        },
+        {
+          "cause": "budget",
+          "result": "rejected"
+        },
+        {
+          "cause": "cancel",
+          "result": "fulfilled"
+        }
+      ],
+      "terminalCount": 1,
+      "terminalLifecycleCount": 1,
+      "terminalState": "failed",
+      "winner": "fail"
+    },
+    {
+      "contenders": [
+        {
+          "cause": "timeout",
+          "result": "fulfilled"
+        },
+        {
+          "cause": "complete",
+          "result": "rejected"
+        },
+        {
+          "cause": "fail",
+          "result": "rejected"
+        },
+        {
+          "cause": "budget",
+          "result": "rejected"
+        },
+        {
+          "cause": "cancel",
+          "result": "fulfilled"
+        }
+      ],
+      "terminalCount": 1,
+      "terminalLifecycleCount": 1,
+      "terminalState": "timed-out",
+      "winner": "timeout"
+    },
+    {
+      "contenders": [
+        {
+          "cause": "budget",
+          "result": "rejected"
+        },
+        {
+          "cause": "complete",
+          "result": "rejected"
+        },
+        {
+          "cause": "fail",
+          "result": "rejected"
+        },
+        {
+          "cause": "timeout",
+          "result": "fulfilled"
+        },
+        {
+          "cause": "cancel",
+          "result": "fulfilled"
+        }
+      ],
+      "terminalCount": 1,
+      "terminalLifecycleCount": 1,
+      "terminalState": "budget-exhausted",
+      "winner": "budget"
+    },
+    {
+      "contenders": [
+        {
+          "cause": "cancel",
+          "result": "fulfilled"
+        },
+        {
+          "cause": "complete",
+          "result": "rejected"
+        },
+        {
+          "cause": "fail",
+          "result": "rejected"
+        },
+        {
+          "cause": "timeout",
+          "result": "fulfilled"
+        },
+        {
+          "cause": "budget",
+          "result": "rejected"
+        }
+      ],
+      "terminalCount": 1,
+      "terminalLifecycleCount": 1,
+      "terminalState": "cancelled",
+      "winner": "cancel"
+    }
+  ],
+  "result": "PASS"
+}

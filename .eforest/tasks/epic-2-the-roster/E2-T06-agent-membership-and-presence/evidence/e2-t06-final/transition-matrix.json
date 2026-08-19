@@ -1,0 +1,90 @@
+{
+  "maxPresenceTtlMs": 60000,
+  "rows": [
+    {
+      "availability": "available",
+      "name": "active prerequisites",
+      "reasonCodes": [],
+      "runnable": true
+    },
+    {
+      "availability": "busy",
+      "name": "fresh busy presence",
+      "reasonCodes": [],
+      "runnable": true
+    },
+    {
+      "availability": "available",
+      "name": "stale heartbeat",
+      "reasonCodes": [],
+      "runnable": true
+    },
+    {
+      "availability": "available",
+      "name": "sibling workspace heartbeat",
+      "reasonCodes": [],
+      "runnable": true
+    },
+    {
+      "availability": "unavailable",
+      "name": "suspended membership",
+      "reasonCodes": [
+        "WORKSPACE_MEMBERSHIP_INACTIVE"
+      ],
+      "runnable": false
+    },
+    {
+      "availability": "unavailable",
+      "name": "removed membership",
+      "reasonCodes": [
+        "WORKSPACE_MEMBERSHIP_INACTIVE"
+      ],
+      "runnable": false
+    },
+    {
+      "availability": "disabled",
+      "name": "disabled configuration",
+      "reasonCodes": [
+        "CONFIG_DISABLED",
+        "CONFIG_NOT_RUNNABLE"
+      ],
+      "runnable": false
+    },
+    {
+      "availability": "unavailable",
+      "name": "invalid configuration",
+      "reasonCodes": [
+        "CONFIG_INVALID"
+      ],
+      "runnable": false
+    },
+    {
+      "availability": "unavailable",
+      "name": "provider health loss",
+      "reasonCodes": [
+        "PROVIDER_UNHEALTHY"
+      ],
+      "runnable": false
+    },
+    {
+      "availability": "unavailable",
+      "name": "provider readiness expiry",
+      "reasonCodes": [
+        "PROVIDER_STALE"
+      ],
+      "runnable": false
+    },
+    {
+      "availability": "disabled",
+      "name": "unknown agent heartbeat",
+      "reasonCodes": [
+        "PRINCIPAL_NOT_FOUND",
+        "WORKSPACE_MEMBERSHIP_MISSING",
+        "CONFIG_MISSING"
+      ],
+      "runnable": false
+    }
+  ],
+  "result": "PASS",
+  "staleHeartbeatDoesNotGrant": true
+}

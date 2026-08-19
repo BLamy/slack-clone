@@ -1,0 +1,36 @@
+{
+  "providerCount": 2,
+  "providers": [
+    {
+      "kind": "harness",
+      "providerId": "scripted",
+      "providerVersion": "1.0.0",
+      "providerKey": "harness:scripted@1.0.0",
+      "status": {
+        "installed": true,
+        "enabled": true,
+        "health": "healthy",
+        "observedAt": 0,
+        "expiresAt": 9007199254740991,
+        "stale": false,
+        "available": true
+      }
+    },
+    {
+      "kind": "sandbox",
+      "providerId": "scripted",
+      "providerVersion": "1.0.0",
+      "providerKey": "sandbox:scripted@1.0.0",
+      "status": {
+        "installed": true,
+        "enabled": true,
+        "health": "healthy",
+        "observedAt": 0,
+        "expiresAt": 9007199254740991,
+        "stale": false,
+        "available": true
+      }
+    }
+  ],
+  "registryManifestDigest": "sha256:751764325d1387da9404895128892e5a1e95005fb0bd45e27bd9dde42d6ec8b5"
+}

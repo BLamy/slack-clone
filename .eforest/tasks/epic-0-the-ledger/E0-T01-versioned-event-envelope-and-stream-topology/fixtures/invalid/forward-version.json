@@ -1,0 +1,19 @@
+{
+  "mode": "decode",
+  "expectedError": {
+    "code": "LEDGER_INVALID_SCHEMA_VERSION",
+    "path": "$.schemaVersion"
+  },
+  "value": {
+    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "causation": null,
+    "correlationId": "cr_dddddddddddddddddddddddddd",
+    "data": {},
+    "eventId": "ev_cccccccccccccccccccccccccc",
+    "eventType": "ledger.fixture-recorded",
+    "idempotencyKey": "ik_eeeeeeeeeeeeeeeeeeeeeeeeee",
+    "schemaVersion": 2,
+    "serverTimestamp": "2026-01-01T00:00:00.000Z",
+    "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+}

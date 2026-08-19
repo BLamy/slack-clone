@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "policyVersion": 1,
+  "parserCases": [
+    {
+      "name": "unicode-and-visible",
+      "text": "Café @ada and @helper",
+      "handles": ["ada", "helper"]
+    },
+    {
+      "name": "zwj-emoji-and-mention",
+      "text": "👩‍💻 @ada",
+      "handles": ["ada"]
+    },
+    {
+      "name": "inline-code-escaped-and-quote",
+      "text": "`@ada` and \\@ada\n> @ada\nnormal @helper",
+      "handles": ["helper"]
+    },
+    {
+      "name": "fenced-code",
+      "text": "before\n```markdown\n@ada\n```\nafter @helper",
+      "handles": ["helper"]
+    },
+    {
+      "name": "url",
+      "text": "https://example.test/@ada @helper",
+      "handles": ["helper"]
+    },
+    {
+      "name": "malformed-and-email",
+      "text": "ada@example.test @@ada @Ada @helper/child",
+      "handles": ["helper"]
+    }
+  ],
+  "invalidParserCases": [
+    {
+      "name": "zero-width-space-email",
+      "text": "ada\u200b@example.test",
+      "handles": []
+    },
+    {
+      "name": "word-joiner-before-mention",
+      "text": "x\u2060@helper",
+      "handles": []
+    },
+    {
+      "name": "bom-before-mention",
+      "text": "x\ufeff@helper",
+      "handles": []
+    },
+    {
+      "name": "soft-hyphen-before-mention",
+      "text": "x\u00ad@helper",
+      "handles": []
+    },
+    {
+      "name": "zero-width-inside-handle",
+      "text": "@ada\u200bxyz",
+      "handles": []
+    }
+  ],
+  "resolutionCases": [
+    { "handle": "ada", "result": "accepted", "kind": "human" },
+    { "handle": "helper", "result": "accepted", "kind": "agent" },
+    {
+      "handle": "service",
+      "result": "refused",
+      "code": "MENTION_TARGET_SERVICE"
+    },
+    {
+      "handle": "disabled",
+      "result": "refused",
+      "code": "MENTION_TARGET_DISABLED"
+    },
+    {
+      "handle": "outsider",
+      "result": "refused",
+      "code": "MENTION_TARGET_NOT_MEMBER"
+    },
+    {
+      "handle": "ambiguous",
+      "result": "refused",
+      "code": "MENTION_AMBIGUOUS_TARGET"
+    },
+    {
+      "handle": "foreign",
+      "result": "refused",
+      "code": "MENTION_TARGET_UNKNOWN"
+    }
+  ]
+}

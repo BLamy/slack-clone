@@ -3,7 +3,7 @@ id: E3-T08
 epic: 3
 title: "Capstone: mention to scripted agent reply"
 priority: 308
-status: pending
+status: verified
 depends_on: [E3-T05, E3-T06, E3-T07]
 estimate: L
 capstone: true
@@ -19,7 +19,7 @@ and recursion attempts are handled honestly.
 ## Context
 
 This is the final provider-neutral server gate. It uses the same registry, queue, lease,
-capability, context, process, and reply contracts that Fly, Infisical, Codex, and Claude Code
+capability, context, process, and reply contracts that Cloudflare OS, Infisical, Codex, and Claude Code
 will implement later, but the scripted harness makes the scenario deterministic and
 credential-free. A green result must be reconstructable from channel, config, invocation,
 run, and audit streams after projections and process state are deleted.
@@ -74,3 +74,32 @@ run, and audit streams after projections and process state are deleted.
    guards and the composed capstone must fail.
 
 ## Verification log
+
+### Builder — c7faa9229352cfeedcd723db46741ff631f39898
+
+- `make verify-E3-T08` passed from a clean detached cold clone with `E3_T08_SKIP_GATES=0` and `E3_T08_SKIP_SENSITIVITY=0`.
+- Gates: `pnpm format:check`, `pnpm format:check:e3-t08`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` all passed.
+- Evidence: `evidence/e3-t08-final/` — source/ref manifest, stream dumps, queue/lease manifest, context pack, reply receipt, fault schedules, attempt/process/cancellation/retry artifacts, projection rebuild, composite replay digest, canary scan, sensitivity, and cold-clone transcript.
+- Composite replay digest: `sha256:3cadfdb13667d6d5c4aeb167e7c1dbf3e7172258bdf7469a1822b34f71fe4124`; rebuilt digest matched.
+- Replay: N/A (server/CLI scripted-agent capstone; real providers and UI land later) + mitigation: multi-process fault schedules, source/ref manifest, canary scans, projection rebuild, and independent composite replay.
+- Claim: the canonical human mention reconciles once, leases once, assembles authorized bounded context, produces one provenance-bound threaded reply, and handles duplicate delivery, batching/recursion refusals, crash retry, cancellation, authority revocation, process cleanup, and stale-write fencing without secret-shaped evidence.
+
+### Builder — f1d3b486513e72af10ce4fdb70b88c86cda72ec7
+
+- Addressed the independent critic's `needs-evidence` finding by persisting the active agent configuration as a two-record Durable Stream and binding the snapshot reference to its replayed state digest and stream head.
+- `make verify-E3-T08` passed from a clean detached cold clone with `E3_T08_SKIP_GATES=0` and `E3_T08_SKIP_SENSITIVITY=0`.
+- Gates: `pnpm format:check`, `pnpm format:check:e3-t08`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` all passed.
+- Evidence: `evidence/e3-t08-final/` — the source/ref manifest now includes the resolved config state reference; projection rebuild independently replays the config stream and matches the pre-delete projection.
+- Composite replay digest: `sha256:0c6b02ddbe3724ccbd22428122e65b6e33fcf4c9a6215edf86c3bf9b2a203880`; rebuilt digest matched.
+- Replay: N/A (server/CLI scripted-agent capstone; real providers and UI land later) + mitigation: multi-process fault schedules, source/ref manifest, canary scans, projection rebuild, and independent composite replay.
+- Claim: the prior config provenance gap is closed; the canonical mention, immutable snapshot, lease, bounded context, scripted run, threaded reply, fault handling, source replay, and evidence canary protections remain reproducible from the exact implementation commit.
+
+### Critic — b53cc35f1259cfd63e484845549df3dbc41c951e
+
+VERDICT: verified
+
+- `make verify-E3-T08` passed from a cold detached checkout (`runId=cold-3978-msxesya`, `result=PASS`, zero task-local skips).
+- Repaired the E3-T01 pinned lifecycle digests after the shared reducer gained its durable `controls` and `failures` fields; the refreshed fixture and promoted E3-T01 evidence now agree on `sha256:93ac7688b87515e347c90b0a4b0349e8db6812e11d275b8b409c9ea3b85db769`.
+- `make verify-E3-T08` passed cold as `runId=cold-68145-msxfvg6a`; the composed `make verify-E3` passed all E3-T01 through E3-T08 gates as `runId=composed-72635-msxfxbcw` with zero skips.
+- The composed transcript is `.artifacts/e3-composed/composed-72635-msxfxbcw/composed-verify-transcript.json`; all five gates, independent attacks, sensitivity checks, and browser proofs passed for each dependency.
+- Replay: N/A (server/CLI scripted-agent capstone; real providers and UI land later) + mitigation: multi-process fault schedules, source/ref manifest, canary scans, projection rebuild, and independent composite replay.

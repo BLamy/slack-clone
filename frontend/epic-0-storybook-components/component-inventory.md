@@ -56,7 +56,7 @@ states visible before implementation is promoted into application composition.
 | Component | Stories and variants | Initial status |
 | --- | --- | --- |
 | `WorkspaceSwitcher` | one workspace, many workspaces, create workspace | planned |
-| `Sidebar` | expanded, collapsed, mobile drawer, unread counts | partial |
+| `Sidebar` | expanded, collapsed, mobile drawer, unread counts, ring-free surface | partial |
 | `SidebarSection` | expanded, collapsed, add action, empty | partial |
 | `NavItem` | active, hover, focus, unread, locked, agent channel | partial |
 | `ChannelList` / `ChannelItem` | public, private, DM, unread, muted, active | partial |
@@ -89,28 +89,33 @@ states visible before implementation is promoted into application composition.
 
 | Component | Stories and variants | Initial status |
 | --- | --- | --- |
-| `MessageCard` | human, agent, edited, owner actions, hover/focus | foundation ready |
+| `MessageCard` | human, agent, edited, neutral surface, owner actions, hover/focus | foundation ready |
 | `MessageHeader` | author, timestamp, edited, agent badge, verified marker | partial |
 | `MessageBody` | plain text, links, code, long wrap, mention highlight | planned |
-| `MessageActions` | edit, reply, react, more; owner/non-owner | planned |
+| `MessageActions` | edit, delete, reply, react, more; owner/non-owner, confirmation | foundation ready |
 | `Reaction` / `ReactionPicker` | none, one, many, selected, overflow | planned |
-| `ThreadPanel` | empty, active, replies, unread, mobile sheet | planned |
-| `ThreadMessage` | root, reply, nested metadata | planned |
+| `ThreadPanel` | empty, active, replies, unread, selected agent run, mobile sheet | foundation ready |
+| `ThreadMessage` | root, reply, nested metadata, agent response trigger | foundation ready |
 | `Composer` | empty, focused, text, multiline, sending, disabled, error | planned |
 | `ComposerToolbar` | attachment, emoji, mention, formatting, shortcuts | planned |
 | `MentionAutocomplete` | humans, agents, loading, no results, keyboard selection | planned |
 | `AttachmentCard` | image, file, upload, rejected, permission denied | planned |
 | `LinkPreview` | loading, resolved, unavailable, external link warning | planned |
-| `MessageEditForm` | editing, save, cancel, invalid, conflict | planned |
+| `MessageEditForm` | editing, save, cancel, invalid, conflict | foundation ready |
 
 ## Agent and run surfaces
 
 | Component | Stories and variants | Initial status |
 | --- | --- | --- |
+| `AgentDirectory` | active, draft, empty, actions, responsive | foundation ready |
+| `AgentCreationWizard` | identity, permissions, review, current/completed steps | foundation ready |
+| `AgentIdentityForm` | display name, handle, description, harness, preview | foundation ready |
+| `AgentPermissionReview` | grants, warnings, draft, submit-for-review, dark mode | foundation ready |
 | `AgentBadge` / `AgentAvatar` | enabled, disabled, owner, harness label | planned |
-| `RunStatusBadge` | queued, running, waiting approval, succeeded, failed, canceled | planned |
-| `RunTimeline` | pending, streaming, tool call, approval, terminal | planned |
-| `ToolCallCard` | read, write, blocked, approval required, redacted args | planned |
+| `AgentRunLogPanel` | empty selection, selected response, timeline, tool calls, redacted raw log, mobile | foundation ready |
+| `RunStatusBadge` | queued, running, waiting approval, succeeded, failed, canceled | partial |
+| `RunTimeline` | pending, streaming, tool call, approval, terminal | partial |
+| `ToolCallCard` | read, write, blocked, approval required, redacted args | partial |
 | `ApprovalCard` | exact request, approve, reject, expired, changed digest | planned |
 | `RunControls` | cancel, retry, open details, disabled by state | planned |
 | `ArtifactCard` | diff, log, image, link, checksum, unavailable | planned |

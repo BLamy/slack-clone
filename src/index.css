@@ -1,0 +1,199 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is([data-theme="dark"] *));
+
+:root {
+  --radius: 0.75rem;
+  --background: oklch(0.976 0.015 284);
+  --foreground: oklch(0.245 0.035 286);
+  --card: oklch(0.995 0.006 284);
+  --card-foreground: oklch(0.245 0.035 286);
+  --popover: oklch(0.995 0.006 284);
+  --popover-foreground: oklch(0.245 0.035 286);
+  --primary: oklch(0.66 0.13 174);
+  --primary-foreground: oklch(0.19 0.035 220);
+  --secondary: oklch(0.931 0.031 278);
+  --secondary-foreground: oklch(0.31 0.06 286);
+  --muted: oklch(0.934 0.021 282);
+  --muted-foreground: oklch(0.51 0.04 285);
+  --accent: oklch(0.87 0.09 216);
+  --accent-foreground: oklch(0.23 0.06 258);
+  --destructive: oklch(0.49 0.18 25);
+  --link: oklch(0.48 0.13 174);
+  --border: oklch(0.88 0.027 282);
+  --input: oklch(0.84 0.031 282);
+  --ring: oklch(0.66 0.13 174);
+  --chart-1: oklch(0.66 0.13 174);
+  --chart-2: oklch(0.69 0.12 226);
+  --chart-3: oklch(0.58 0.14 286);
+  --chart-4: oklch(0.76 0.14 84);
+  --chart-5: oklch(0.65 0.17 28);
+  --sidebar: oklch(0.235 0.062 298);
+  --sidebar-foreground: oklch(0.95 0.018 284);
+  --sidebar-primary: oklch(0.75 0.12 174);
+  --sidebar-primary-foreground: oklch(0.18 0.035 220);
+  --sidebar-accent: oklch(0.78 0.13 201);
+  --sidebar-accent-foreground: oklch(0.2 0.05 260);
+  --sidebar-border: oklch(0.39 0.07 298);
+  --sidebar-ring: oklch(0.76 0.12 201);
+  --sidebar-muted: oklch(0.77 0.045 286);
+  --sidebar-raised: oklch(0.29 0.07 298);
+  --sidebar-active: oklch(0.36 0.1 296);
+  --sidebar-kbd: oklch(0.39 0.075 298);
+  --message-surface: oklch(0.966 0.016 284);
+  --message-hover: oklch(0.94 0.028 284);
+  --message-foreground: oklch(0.3 0.038 286);
+  --composer-surface: oklch(0.992 0.008 284);
+  --date-pill: oklch(0.91 0.045 274);
+  --date-pill-foreground: oklch(0.38 0.075 286);
+  --agent-surface: oklch(0.925 0.06 207);
+  --agent-border: oklch(0.75 0.11 207);
+  --agent-foreground: oklch(0.29 0.07 242);
+  --avatar-surface: oklch(0.84 0.08 226);
+  --avatar-foreground: oklch(0.28 0.08 250);
+  --online: oklch(0.72 0.16 151);
+  --brand-cyan: oklch(0.79 0.13 201);
+  --brand-teal: oklch(0.7 0.15 174);
+  --font-display: "Avenir Next", "Nunito Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+[data-theme="dark"] {
+  --background: oklch(0.19 0.026 285);
+  --foreground: oklch(0.94 0.018 284);
+  --card: oklch(0.235 0.033 286);
+  --card-foreground: oklch(0.94 0.018 284);
+  --popover: oklch(0.25 0.04 286);
+  --popover-foreground: oklch(0.94 0.018 284);
+  --primary: oklch(0.75 0.14 174);
+  --primary-foreground: oklch(0.18 0.035 220);
+  --secondary: oklch(0.31 0.05 286);
+  --secondary-foreground: oklch(0.93 0.02 284);
+  --muted: oklch(0.29 0.04 286);
+  --muted-foreground: oklch(0.72 0.04 284);
+  --accent: oklch(0.35 0.1 221);
+  --accent-foreground: oklch(0.92 0.035 214);
+  --destructive: oklch(0.76 0.15 25);
+  --link: oklch(0.78 0.13 174);
+  --border: oklch(0.36 0.045 286);
+  --input: oklch(0.39 0.05 286);
+  --ring: oklch(0.75 0.14 174);
+  --chart-1: oklch(0.75 0.14 174);
+  --chart-2: oklch(0.74 0.13 226);
+  --chart-3: oklch(0.72 0.13 286);
+  --chart-4: oklch(0.81 0.13 84);
+  --chart-5: oklch(0.72 0.15 28);
+  --sidebar: oklch(0.14 0.038 298);
+  --sidebar-foreground: oklch(0.94 0.018 284);
+  --sidebar-primary: oklch(0.78 0.14 174);
+  --sidebar-primary-foreground: oklch(0.16 0.032 220);
+  --sidebar-accent: oklch(0.78 0.13 201);
+  --sidebar-accent-foreground: oklch(0.17 0.045 260);
+  --sidebar-border: oklch(0.31 0.06 298);
+  --sidebar-ring: oklch(0.78 0.13 201);
+  --sidebar-muted: oklch(0.69 0.045 286);
+  --sidebar-raised: oklch(0.21 0.052 298);
+  --sidebar-active: oklch(0.29 0.09 296);
+  --sidebar-kbd: oklch(0.31 0.062 298);
+  --message-surface: oklch(0.205 0.028 285);
+  --message-hover: oklch(0.26 0.042 285);
+  --message-foreground: oklch(0.86 0.025 284);
+  --composer-surface: oklch(0.235 0.033 286);
+  --date-pill: oklch(0.3 0.06 278);
+  --date-pill-foreground: oklch(0.86 0.04 284);
+  --agent-surface: oklch(0.25 0.07 220);
+  --agent-border: oklch(0.49 0.11 211);
+  --agent-foreground: oklch(0.86 0.05 216);
+  --avatar-surface: oklch(0.38 0.1 226);
+  --avatar-foreground: oklch(0.9 0.04 220);
+  --online: oklch(0.78 0.16 151);
+  --brand-cyan: oklch(0.82 0.13 201);
+  --brand-teal: oklch(0.78 0.15 174);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-link: var(--link);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-muted: var(--sidebar-muted);
+  --color-sidebar-raised: var(--sidebar-raised);
+  --color-sidebar-active: var(--sidebar-active);
+  --color-sidebar-kbd: var(--sidebar-kbd);
+  --color-message-surface: var(--message-surface);
+  --color-message-hover: var(--message-hover);
+  --color-message-foreground: var(--message-foreground);
+  --color-composer-surface: var(--composer-surface);
+  --color-date-pill: var(--date-pill);
+  --color-date-pill-foreground: var(--date-pill-foreground);
+  --color-agent-surface: var(--agent-surface);
+  --color-agent-border: var(--agent-border);
+  --color-agent-foreground: var(--agent-foreground);
+  --color-avatar-surface: var(--avatar-surface);
+  --color-avatar-foreground: var(--avatar-foreground);
+  --color-online: var(--online);
+  --color-brand-cyan: var(--brand-cyan);
+  --color-brand-teal: var(--brand-teal);
+  --font-display: var(--font-display);
+  --radius-sm: calc(var(--radius) - 0.25rem);
+  --radius-md: calc(var(--radius) - 0.125rem);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.25rem);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+}
+
+html {
+  min-width: 320px;
+  background: var(--background);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Avenir Next", "Nunito Sans", ui-sans-serif, system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+a,
+input,
+textarea,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: color-mix(in oklch, var(--accent), transparent 25%);
+  color: var(--accent-foreground);
+}

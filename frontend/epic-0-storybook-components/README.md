@@ -67,4 +67,40 @@ backend remains out of scope until the screenshot set is approved.
 
 ## Verification log
 
-<!-- Append screenshot manifests, commands, and approval notes here. -->
+- 2026-08-01 builder run, commits `195e2a4` and `0eddae5`: `pnpm exec tsc --noEmit`,
+  `pnpm build`, `pnpm build-storybook`, and `pnpm test:storybook` passed. The
+  Storybook suite reports 1 file and 4 tests passed. `pnpm storybook:screenshots`
+  captured five variants in `evidence/`; the manifest records zero console errors
+  and zero request failures. Light and dark theme scans report zero accessibility
+  violations. `git diff --check` passed.
+- `pnpm test` remains blocked in this clean worktree because the pinned `emulate`
+  submodule is present only as an uninitialized gitlink and
+  `emulate/packages/emulate/dist/index.js` is missing. The submodule was not edited.
+  Replay: N/A (approval-gated Storybook-only frontend pass; no backend browser claim)
+  + mitigation: the local screenshot harness covers visual, console, request-failure,
+  responsive, keyboard-focus, and accessibility checks; backend tests stay deferred
+  to the post-approval app branch.
+- 2026-08-01 component iteration, commit `510537f`: neutralized agent message
+  surfaces, added owner edit/delete actions with inline edit and delete confirmation
+  states, removed the sidebar border artifact, and added agent directory, identity,
+  and review page compositions. `pnpm exec tsc --noEmit`, `pnpm build`,
+  `pnpm build-storybook`, and `pnpm test:storybook` passed; the Storybook suite reports
+  3 files and 10 tests passed. `pnpm storybook:screenshots` captured 12 variants with
+  zero console errors and zero request failures. Browser accessibility scans reported
+  zero violations for message actions, workspace shell, agent directory, identity,
+  review, and dark review stories.
+- Replay: N/A (Storybook-only component iteration; no backend or external upload was
+  authorized) + mitigation: screenshot evidence is committed under `evidence/` and
+  backend wiring remains prohibited until human visual approval.
+- 2026-08-01 thread iteration, commit `3b3b63a`: added the fixture-only thread view,
+  clickable AI response, selected/unselected run-log states, run timeline, tool-call
+  details, redacted raw output, and responsive mobile stacking. `pnpm exec tsc --noEmit`,
+  `pnpm build`, `pnpm build-storybook`, `pnpm test:storybook`, and `git diff --check`
+  passed; the Storybook suite reports 4 files and 13 tests passed. `pnpm
+  storybook:screenshots` captured 16 variants with zero console errors and zero request
+  failures. Browser verification confirmed keyboard Enter opens the full run logs,
+  dismissal restores the empty state, and the light and dark selected stories report
+  zero accessibility violations. Replay: N/A (fixture-only Storybook work; no backend
+  or external upload was authorized) + mitigation: local Storybook evidence is committed
+  under `evidence/` and backend wiring remains prohibited until human visual approval.
+- Human visual approval: pending.

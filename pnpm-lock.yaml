@@ -37,11 +37,11 @@ importers:
         specifier: ^5.2.1
         version: 5.2.1(storybook@10.5.5(@types/react@19.2.18)(react@19.2.8))
       '@playwright/test':
-        specifier: ^1.58.2
-        version: 1.61.1
+        specifier: ^1.62.1
+        version: 1.62.1
       '@replayio/playwright':
         specifier: ^5.0.3
-        version: 5.0.3(@emnapi/core@2.0.0-alpha.3)(@emnapi/runtime@2.0.0-alpha.3)(@playwright/test@1.61.1)
+        version: 5.0.3(@emnapi/core@2.0.0-alpha.3)(@emnapi/runtime@2.0.0-alpha.3)(@playwright/test@1.62.1)
       '@storybook/addon-a11y':
         specifier: ^10.5.5
         version: 10.5.5(storybook@10.5.5(@types/react@19.2.18)(react@19.2.8))
@@ -783,9 +783,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@playwright/test@1.61.1':
-    resolution: {integrity: sha512-8nKv6+0RJSL9FE4jYOEGXnPeM/Hg12qZpmqzZjRh3qM0Y7c3z1mrOTfFLids72RDQYVh9WpLEfR5WdpNX4fkig==}
-    engines: {node: '>=18'}
+  '@playwright/test@1.62.1':
+    resolution: {integrity: sha512-DTcUc8qii+cpHvtOwggMtBRMjKZHXYWdw8syRYu2vtzuq4Wxphqq4NfCs5Zt44L6mA8rfDfj+PHnxFc/FeK6mQ==}
+    engines: {node: '>=20'}
     hasBin: true
 
   '@polka/url@1.0.0-next.29':
@@ -2087,19 +2087,9 @@ packages:
     resolution: {integrity: sha512-RvwwcruNjI1ncT5xRakeyS9Lf8lcItv34KD+aif+VH9kduAyfYBipGh12274xtenIPZ119/R9BdTBa8gAwSh0A==}
     engines: {node: '>=12'}
 
-  playwright-core@1.61.1:
-    resolution: {integrity: sha512-h7Qlt6m4REp25qvIdvbDtVmD4LqVXfpRxhORv9L0jzETM05p4fuPJ3dKyuSXQxDSbXnmS79HAgi9589lGSpLkg==}
-    engines: {node: '>=18'}
-    hasBin: true
-
   playwright-core@1.62.1:
     resolution: {integrity: sha512-wPYSwEBJY9GHraISXqyqtx0na0LpO3XEX7jNDhntbex7tzUS7kLnZsOlFruFJB4Hi/rhDMjXGqHewDZ68nYZVw==}
     engines: {node: '>=20'}
-    hasBin: true
-
-  playwright@1.61.1:
-    resolution: {integrity: sha512-DWnY5o3YbLWK4GovuAVwpqL+1VwGNdUGrRr++8j8PtQQzvAVZUIMjKQ90fY689sEJZJBbZVw1rXaOKSTitkzPQ==}
-    engines: {node: '>=18'}
     hasBin: true
 
   playwright@1.62.1:
@@ -3054,9 +3044,9 @@ snapshots:
   '@oxc-resolver/binding-win32-x64-msvc@11.24.2':
     optional: true
 
-  '@playwright/test@1.61.1':
+  '@playwright/test@1.62.1':
     dependencies:
-      playwright: 1.61.1
+      playwright: 1.62.1
 
   '@polka/url@1.0.0-next.29': {}
 
@@ -3084,9 +3074,9 @@ snapshots:
     dependencies:
       react: 19.2.8
 
-  '@replayio/playwright@5.0.3(@emnapi/core@2.0.0-alpha.3)(@emnapi/runtime@2.0.0-alpha.3)(@playwright/test@1.61.1)':
+  '@replayio/playwright@5.0.3(@emnapi/core@2.0.0-alpha.3)(@emnapi/runtime@2.0.0-alpha.3)(@playwright/test@1.62.1)':
     dependencies:
-      '@playwright/test': 1.61.1
+      '@playwright/test': 1.62.1
       chalk: 4.1.2
       debug: 4.4.3
       fs-extra: 11.3.6
@@ -4199,15 +4189,7 @@ snapshots:
 
   picomatch@4.0.5: {}
 
-  playwright-core@1.61.1: {}
-
   playwright-core@1.62.1: {}
-
-  playwright@1.61.1:
-    dependencies:
-      playwright-core: 1.61.1
-    optionalDependencies:
-      fsevents: 2.3.2
 
   playwright@1.62.1:
     dependencies:

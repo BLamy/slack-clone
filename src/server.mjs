@@ -7,7 +7,7 @@ import crypto from "node:crypto";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
-const publicDir = path.join(rootDir, "public");
+const clientDir = path.join(rootDir, "dist", "client");
 
 const PORT = Number(process.env.PORT ?? 5175);
 const HOST = process.env.HOST ?? "127.0.0.1";
@@ -18,6 +18,7 @@ const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID ?? "slack-clone-auth0";
 const AUTH0_CLIENT_SECRET = process.env.AUTH0_CLIENT_SECRET ?? "slack-clone-secret";
 const AUTH0_REALM = process.env.AUTH0_REALM ?? "Username-Password-Authentication";
 const ZERO_OFFSET = "0000000000000000_0000000000000000";
+const DEFAULT_CHAT_PATH = "/app?room=demo";
 
 const rooms = new Map();
 const sessions = new Map();
@@ -64,62 +65,9 @@ function redirect(res, location, statusCode = 302) {
 }
 
 function safeReturnTo(value) {
-  if (!value || !value.startsWith("/")) return "/";
-  if (value.startsWith("//")) return "/";
+  if (!value || !value.startsWith("/")) return DEFAULT_CHAT_PATH;
+  if (value.startsWith("//")) return DEFAULT_CHAT_PATH;
   return value;
-}
-
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function renderLoginPage({ returnTo = "/", error = "" } = {}) {
-  const safePath = safeReturnTo(returnTo);
-  const errorHtml = error
-    ? `<div class="login__error" data-testid="login-error">${escapeHtml(error)}</div>`
-    : "";
-
-  return `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sign in - Stream Slack</title>
-    <link rel="stylesheet" href="/styles.css" />
-  </head>
-  <body class="login-page">
-    <main class="login">
-      <section class="login__panel">
-        <div class="workspace__mark login__mark">S</div>
-        <h1>Sign in to Stream Slack</h1>
-        <p>Credentials are checked by the local Auth0 emulator at <span data-testid="auth0-emulator-url">${escapeHtml(AUTH0_EMULATOR_URL)}</span>.</p>
-        ${errorHtml}
-        <form class="login__form" method="post" action="/login" data-testid="login-form">
-          <input type="hidden" name="returnTo" value="${escapeHtml(safePath)}" />
-          <label>
-            <span>Email</span>
-            <input data-testid="email-input" name="email" autocomplete="username" value="ada@example.test" />
-          </label>
-          <label>
-            <span>Password</span>
-            <input data-testid="password-input" name="password" type="password" autocomplete="current-password" value="DemoPass123" />
-          </label>
-          <button data-testid="login-button" type="submit">Sign in with Auth0 emulator</button>
-        </form>
-        <div class="login__users">
-          <span>Seeded users</span>
-          <code>ada@example.test</code>
-          <code>linus@example.test</code>
-        </div>
-      </section>
-    </main>
-  </body>
-</html>`;
 }
 
 function sendHtml(res, statusCode, html) {
@@ -128,6 +76,15 @@ function sendHtml(res, statusCode, html) {
     "Cache-Control": "no-store",
   });
   res.end(html);
+}
+
+async function sendClientApp(res, statusCode = 200) {
+  try {
+    const html = await readFile(path.join(clientDir, "index.html"), "utf8");
+    sendHtml(res, statusCode, html);
+  } catch {
+    sendHtml(res, 503, "Client bundle missing. Run pnpm build before starting the Node server.");
+  }
 }
 
 async function readForm(req) {
@@ -179,7 +136,7 @@ async function exchangePassword(username, password) {
 
 async function handleAuth(req, res, url) {
   if (url.pathname === "/login" && req.method === "GET") {
-    sendHtml(res, 200, renderLoginPage({ returnTo: url.searchParams.get("returnTo") ?? "/" }));
+    await sendClientApp(res);
     return true;
   }
 
@@ -197,13 +154,9 @@ async function handleAuth(req, res, url) {
       setSessionCookie(res, sessionId);
       redirect(res, returnTo);
     } catch (err) {
-      sendHtml(
+      redirect(
         res,
-        401,
-        renderLoginPage({
-          returnTo,
-          error: err instanceof Error ? err.message : String(err),
-        }),
+        `/login?returnTo=${encodeURIComponent(returnTo)}&error=${encodeURIComponent(err instanceof Error ? err.message : String(err))}`,
       );
     }
     return true;
@@ -268,13 +221,42 @@ async function readMessages(roomId, offset = "-1") {
   }
 
   const nextOffset = res.headers.get("Stream-Next-Offset") ?? ZERO_OFFSET;
-  const messages = await res.json();
-  return { messages: Array.isArray(messages) ? messages : [], nextOffset };
+  const records = await res.json();
+  const normalizedRecords = Array.isArray(records) ? records : [];
+  return {
+    records: normalizedRecords,
+    messages: materializeMessages(normalizedRecords),
+    nextOffset,
+  };
+}
+
+function materializeMessages(records) {
+  const messages = new Map();
+  for (const record of records) {
+    if (!record || typeof record !== "object" || typeof record.id !== "string") continue;
+    messages.set(record.id, record);
+  }
+  return [...messages.values()].filter((message) => !message.deletedAt);
+}
+
+async function appendStreamRecord(roomId, record) {
+  await ensureStream(roomId);
+
+  const res = await fetch(streamUrl(roomId), {
+    method: "POST",
+    headers: authHeaders("application/json"),
+    body: JSON.stringify(record),
+  });
+
+  if (res.status === 200 || res.status === 204) {
+    return { message: record, nextOffset: res.headers.get("Stream-Next-Offset") ?? ZERO_OFFSET };
+  }
+
+  const text = await res.text();
+  throw new Error(`Failed to append message to durable stream for ${roomId}: ${res.status} ${text}`);
 }
 
 async function appendMessage(roomId, input, user) {
-  await ensureStream(roomId);
-
   const message = {
     id: crypto.randomUUID(),
     room: normalizeRoomId(roomId),
@@ -290,18 +272,73 @@ async function appendMessage(roomId, input, user) {
     throw err;
   }
 
-  const res = await fetch(streamUrl(roomId), {
-    method: "POST",
-    headers: authHeaders("application/json"),
-    body: JSON.stringify(message),
-  });
+  return appendStreamRecord(roomId, message);
+}
 
-  if (res.status === 200 || res.status === 204) {
-    return { message, nextOffset: res.headers.get("Stream-Next-Offset") ?? ZERO_OFFSET };
+async function updateMessage(roomId, messageId, input, user) {
+  const id = String(messageId ?? "").trim();
+  if (!id) {
+    const err = new Error("Message id is required");
+    err.statusCode = 400;
+    throw err;
   }
 
-  const text = await res.text();
-  throw new Error(`Failed to append message to durable stream for ${roomId}: ${res.status} ${text}`);
+  const current = (await readMessages(roomId, "-1")).records.findLast((record) => record?.id === id);
+  if (!current) {
+    const err = new Error("Message not found");
+    err.statusCode = 404;
+    throw err;
+  }
+
+  const ownsMessage = current.email
+    ? current.email === user.email
+    : current.user === (user.name ?? user.email ?? "");
+  if (!ownsMessage) {
+    const err = new Error("You can only edit your own messages");
+    err.statusCode = 403;
+    throw err;
+  }
+
+  const text = String(input.text ?? "").trim().slice(0, 2000);
+  if (!text) {
+    const err = new Error("Message text is required");
+    err.statusCode = 400;
+    throw err;
+  }
+
+  return appendStreamRecord(roomId, {
+    ...current,
+    id,
+    text,
+    editedAt: new Date().toISOString(),
+    deletedAt: undefined,
+  });
+}
+
+async function deleteMessage(roomId, messageId, user) {
+  const id = String(messageId ?? "").trim();
+  const current = (await readMessages(roomId, "-1")).records.findLast((record) => record?.id === id);
+  if (!current) {
+    const err = new Error("Message not found");
+    err.statusCode = 404;
+    throw err;
+  }
+
+  const ownsMessage = current.email
+    ? current.email === user.email
+    : current.user === (user.name ?? user.email ?? "");
+  if (!ownsMessage) {
+    const err = new Error("You can only delete your own messages");
+    err.statusCode = 403;
+    throw err;
+  }
+
+  return appendStreamRecord(roomId, {
+    ...current,
+    id,
+    text: "",
+    deletedAt: new Date().toISOString(),
+  });
 }
 
 function roomState(roomId) {
@@ -344,8 +381,8 @@ async function pollRoom(state) {
     const result = await readMessages(state.room, state.nextOffset);
     state.nextOffset = result.nextOffset;
 
-    for (const message of result.messages) {
-      broadcast(state, "message", message);
+    for (const record of result.records) {
+      broadcast(state, "message", record);
     }
 
     broadcast(state, "status", {
@@ -432,7 +469,7 @@ async function handleApi(req, res, url) {
     return true;
   }
 
-  const match = url.pathname.match(/^\/api\/rooms\/([^/]+)\/(messages|events)$/);
+  const match = url.pathname.match(/^\/api\/rooms\/([^/]+)\/(messages|events)(?:\/([^/]+))?$/);
   if (!match) return false;
 
   const user = sessionUser(req);
@@ -443,6 +480,7 @@ async function handleApi(req, res, url) {
 
   const room = normalizeRoomId(decodeURIComponent(match[1]));
   const resource = match[2];
+  const messageId = match[3] ? decodeURIComponent(match[3]) : null;
 
   if (resource === "events" && req.method === "GET") {
     const state = roomState(room);
@@ -503,7 +541,30 @@ async function handleApi(req, res, url) {
     return true;
   }
 
-  if (resource === "messages" && req.method === "DELETE") {
+  if (resource === "messages" && messageId && req.method === "PATCH") {
+    const body = await readJson(req);
+    const result = await updateMessage(room, messageId, body, user);
+    sendJson(res, 200, {
+      ok: true,
+      room,
+      message: result.message,
+      nextOffset: result.nextOffset,
+    });
+    return true;
+  }
+
+  if (resource === "messages" && messageId && req.method === "DELETE") {
+    const result = await deleteMessage(room, messageId, user);
+    sendJson(res, 200, {
+      ok: true,
+      room,
+      message: result.message,
+      nextOffset: result.nextOffset,
+    });
+    return true;
+  }
+
+  if (resource === "messages" && !messageId && req.method === "DELETE") {
     await deleteStream(room);
     await ensureStream(room);
     const state = roomState(room);
@@ -521,36 +582,73 @@ const contentTypes = new Map([
   [".html", "text/html; charset=utf-8"],
   [".js", "text/javascript; charset=utf-8"],
   [".json", "application/json; charset=utf-8"],
+  [".map", "application/json; charset=utf-8"],
   [".svg", "image/svg+xml"],
 ]);
 
-async function serveStatic(req, res, url) {
-  const pathname = url.pathname === "/" ? "/index.html" : url.pathname;
-  const filePath = path.join(publicDir, path.normalize(pathname).replace(/^(\.\.[/\\])+/, ""));
+function hasChatQuery(url) {
+  return url.searchParams.has("room") || url.searchParams.has("autopilot") || url.searchParams.has("expect") || url.searchParams.has("persona");
+}
 
-  if (!filePath.startsWith(publicDir)) {
+function isChatRequest(url) {
+  return url.pathname === "/app" || url.pathname === "/app/" || url.pathname === "/app.html" || (url.pathname === "/" && hasChatQuery(url));
+}
+
+function isPublicPage(url) {
+  return url.pathname === "/" && !isChatRequest(url);
+}
+
+function routeToStaticPath(url) {
+  if (isChatRequest(url) || url.pathname === "/login") return "/index.html";
+  return url.pathname === "/" ? "/index.html" : url.pathname;
+}
+
+function isClientAsset(url) {
+  return url.pathname.startsWith("/assets/") || url.pathname === "/vite.svg";
+}
+
+function staticFilePath(baseDir, pathname) {
+  const filePath = path.join(baseDir, path.normalize(pathname).replace(/^(\.\.[/\\])+/, ""));
+  return filePath.startsWith(baseDir) ? filePath : null;
+}
+
+async function serveStatic(req, res, url) {
+  const pathname = routeToStaticPath(url);
+  const filePaths = [staticFilePath(clientDir, pathname)].filter(Boolean);
+
+  if (filePaths.length === 0) {
     res.writeHead(403);
     res.end("Forbidden");
     return;
   }
 
-  try {
-    const info = await stat(filePath);
-    if (!info.isFile()) throw new Error("not a file");
+  for (const filePath of filePaths) {
+    try {
+      const info = await stat(filePath);
+      if (!info.isFile()) continue;
 
-    const ext = path.extname(filePath);
-    res.writeHead(200, {
-      "Content-Type": contentTypes.get(ext) ?? "application/octet-stream",
-      "Cache-Control": "no-store",
-    });
-    createReadStream(filePath).pipe(res);
-  } catch {
-    const fallback = await readFile(path.join(publicDir, "index.html"), "utf8");
+      const ext = path.extname(filePath);
+      res.writeHead(200, {
+        "Content-Type": contentTypes.get(ext) ?? "application/octet-stream",
+        "Cache-Control": "no-store",
+      });
+      createReadStream(filePath).pipe(res);
+      return;
+    } catch {
+      // Try the next static root, then the entry fallback below.
+    }
+  }
+
+  try {
+    const fallback = await readFile(path.join(clientDir, "index.html"), "utf8");
     res.writeHead(200, {
       "Content-Type": "text/html; charset=utf-8",
       "Cache-Control": "no-store",
     });
     res.end(fallback);
+    return;
+  } catch {
+    sendJson(res, 503, { ok: false, error: "client_bundle_missing" });
   }
 }
 
@@ -566,14 +664,18 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    const isPublicAsset = url.pathname === "/styles.css" || url.pathname === "/app.js";
-    if (!isPublicAsset && !currentSession(req)) {
+    const isPublicAsset = isClientAsset(url);
+    if (!isPublicAsset && !isPublicPage(url) && !currentSession(req)) {
       redirect(res, `/login?returnTo=${encodeURIComponent(`${url.pathname}${url.search}`)}`);
       return;
     }
 
     await serveStatic(req, res, url);
   } catch (err) {
+    if (res.headersSent) {
+      if (!res.writableEnded) writeSse(res, "error", { message: err instanceof Error ? err.message : String(err) });
+      return;
+    }
     sendError(res, err);
   }
 });

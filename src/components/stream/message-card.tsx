@@ -11,6 +11,7 @@ export type MessageCardProps = {
   initials: string;
   timestamp: string;
   body: string;
+  messageId?: string;
   edited?: boolean;
   online?: boolean;
   canEdit?: boolean;
@@ -31,6 +32,7 @@ export function MessageCard({
   initials,
   timestamp,
   body,
+  messageId,
   edited = false,
   online = true,
   canEdit = false,
@@ -50,6 +52,8 @@ export function MessageCard({
       className="group/message flex gap-3 rounded-2xl px-3 py-3 transition-colors hover:bg-message-hover"
       data-tone={tone}
       data-slot="message-card"
+      data-testid="message"
+      data-message-id={messageId}
     >
       <Avatar size="default" className="mt-0.5 bg-avatar-surface">
         <AvatarFallback className="bg-avatar-surface font-semibold text-avatar-foreground">
@@ -62,12 +66,13 @@ export function MessageCard({
           <span className="font-semibold text-foreground">{author}</span>
           {tone === 'agent' && <Badge variant="agent">agent</Badge>}
           <time className="text-xs text-muted-foreground">{timestamp}</time>
-          {edited && <span className="text-xs text-muted-foreground">(edited)</span>}
+          {edited && <span className="text-xs text-muted-foreground" data-testid="message-edited">(edited)</span>}
         </div>
         {isEditing ? (
           <div className="mt-2 space-y-2">
             <Textarea
               aria-label={`Edit ${author}'s message`}
+              data-testid="edit-message-input"
               rows={3}
               value={editValue ?? body}
               onChange={(event) => onEditValueChange?.(event.target.value)}
@@ -98,7 +103,7 @@ export function MessageCard({
       >
         {canEdit && !isEditing && (
           <Button
-            aria-label={`Edit ${author}'s message`}
+            aria-label="Edit message"
             className="text-muted-foreground"
             size="icon-sm"
             variant="ghost"
@@ -109,7 +114,7 @@ export function MessageCard({
         )}
         {canDelete && !isEditing && (
           <Button
-            aria-label={`Delete ${author}'s message`}
+            aria-label="Delete message"
             className="text-destructive"
             size="icon-sm"
             variant="ghost"

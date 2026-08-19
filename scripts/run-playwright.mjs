@@ -1,5 +1,7 @@
 import { spawnLogged, run, stop, waitForHttp } from "./process-utils.mjs";
 
+await run("pnpm", ["build"], { name: "client-build" });
+
 const emulator = spawnLogged(
   "node",
   [

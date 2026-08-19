@@ -103,4 +103,4 @@ backend remains out of scope until the screenshot set is approved.
   zero accessibility violations. Replay: N/A (fixture-only Storybook work; no backend
   or external upload was authorized) + mitigation: local Storybook evidence is committed
   under `evidence/` and backend wiring remains prohibited until human visual approval.
-- Human visual approval: pending.
+- Human visual approval: granted in the follow-up implementation request; connected app work is now on `codex/react-aria-shadcn-app`.

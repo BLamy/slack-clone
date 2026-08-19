@@ -7,6 +7,8 @@ const appBaseUrl = "http://127.0.0.1:5175";
 const recordingsDir = path.resolve("recordings");
 const testResultsDir = path.resolve("test-results");
 
+await run("pnpm", ["build"], { name: "client-build" });
+
 const emulator = spawnLogged(
   "node",
   [

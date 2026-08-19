@@ -19,6 +19,12 @@ export async function startStack(context, options = {}) {
       "emulate.config.yaml",
     ],
     name: `emulate:${context.runId}`,
+    env: {
+      ...process.env,
+      AUTH0_REDIRECT_URI: `${context.appBaseUrl}/auth/callback`,
+      AUTH0_EMULATOR_URL: context.auth0EmulatorUrl,
+      DURABLE_STREAMS_URL: context.durableStreamsUrl,
+    },
   };
   const appSpec = options.appSpec ?? {
     command: "node",
@@ -31,6 +37,7 @@ export async function startStack(context, options = {}) {
       AUTH0_CLIENT_ID: "slack-clone-auth0",
       AUTH0_CLIENT_SECRET: "slack-clone-secret",
       AUTH0_REALM: "Username-Password-Authentication",
+      AUTH0_REDIRECT_URI: `${context.appBaseUrl}/auth/callback`,
       HOST: context.host,
       PORT: String(context.appPort),
     },

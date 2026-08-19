@@ -13,7 +13,9 @@
           <div class="workspace__mark">S</div>
           <div>
             <div class="workspace__name">Stream Slack</div>
-            <div class="workspace__status" data-testid="connection-state">connecting</div>
+            <div class="workspace__status" data-testid="connection-state">
+              connecting
+            </div>
           </div>
         </div>
         <nav class="channels" aria-label="Channels">
@@ -24,11 +26,15 @@
         </nav>
         <section class="details">
           <div class="details__label">Auth</div>
-          <div class="details__value" data-testid="auth-provider">Auth0 emulator</div>
+          <div class="details__value" data-testid="auth-provider">
+            Auth0 emulator
+          </div>
           <div class="details__label">Signed in</div>
           <div class="details__value" data-testid="auth-user">pending</div>
           <div class="details__label">Durable stream</div>
-          <div class="details__value" data-testid="stream-path">/rooms/durable-streams-demo/messages</div>
+          <div class="details__value" data-testid="stream-path">
+            /rooms/durable-streams-demo/messages
+          </div>
           <div class="details__label">Next offset</div>
           <div class="details__value" data-testid="stream-offset">pending</div>
           <div class="details__label">Canonical digest</div>
@@ -39,8 +45,13 @@
       <section class="chat">
         <header class="chat__header">
           <div>
-            <h1 class="chat__channel"># <span data-testid="header-room">durable-streams-demo</span></h1>
-            <div class="chat__subtitle">Auth0 is emulated locally; messages are appended to Durable Streams and replayed to each connected client.</div>
+            <h1 class="chat__channel">
+              # <span data-testid="header-room">durable-streams-demo</span>
+            </h1>
+            <div class="chat__subtitle">
+              Auth0 is emulated locally; messages are appended to Durable
+              Streams and replayed to each connected client.
+            </div>
           </div>
           <div class="chat__identity">
             <div class="chat__pill" data-testid="persona-label">visitor</div>
@@ -51,8 +62,25 @@
         <div class="messages" data-testid="messages" aria-live="polite"></div>
 
         <form class="composer" data-testid="composer">
-          <label class="visually-hidden" for="message-input">Message to channel</label>
-          <input id="message-input" data-testid="message-input" name="message" autocomplete="off" placeholder="Message #durable-streams-demo" />
+          <div class="composer__input-wrap">
+            <label class="visually-hidden" for="message-input"
+              >Message to channel</label
+            >
+            <input
+              id="message-input"
+              data-testid="message-input"
+              name="message"
+              autocomplete="off"
+              placeholder="Message #durable-streams-demo"
+            />
+            <div
+              class="mention-popover"
+              data-testid="mention-popover"
+              role="listbox"
+              aria-label="Mention suggestions"
+              hidden
+            ></div>
+          </div>
           <button data-testid="send-button" type="submit">Send</button>
         </form>
       </section>

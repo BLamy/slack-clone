@@ -9,6 +9,9 @@ const AUTH0_EMULATOR_URL =
 const DURABLE_STREAMS_URL =
   process.env.DURABLE_STREAMS_URL ?? "http://127.0.0.1:4100";
 const ROOM_PREFIX = process.env.TEST_ROOM_PREFIX ?? "playwright";
+const AUTH0_AUTHORIZE_URL = new RegExp(
+  `${AUTH0_EMULATOR_URL.replace(/[.*+?^${}()|[\\]\\]/g, "\\\\$&")}/authorize`,
+);
 const fixtureStreamStore = createDurableStreamsStore({
   baseUrl: DURABLE_STREAMS_URL,
   token:
@@ -23,7 +26,7 @@ test.afterAll(() => fixtureStreamStore.close());
 
 async function signIn(page, room, email) {
   await page.goto(`/app?room=${room}`);
-  await expect(page).toHaveURL(/\/login\?returnTo=/);
+  await expect(page).toHaveURL(AUTH0_AUTHORIZE_URL);
   await expect(page.getByTestId("auth0-emulator-url")).toHaveText(
     AUTH0_EMULATOR_URL,
   );
@@ -48,7 +51,7 @@ test("homepage sends a user through the emulator login into the chat", async ({
     }),
   ).toBeVisible();
   await page.getByTestId("home-open-chat").click();
-  await expect(page).toHaveURL(/\/login\?returnTo=/);
+  await expect(page).toHaveURL(AUTH0_AUTHORIZE_URL);
   await expect(page.getByTestId("auth0-emulator-url")).toHaveText(
     AUTH0_EMULATOR_URL,
   );
@@ -84,6 +87,7 @@ test("homepage sends a user through the emulator login into the chat", async ({
 
 test("login errors do not move the form", async ({ page }) => {
   await page.goto("/login?returnTo=%2Fapp%3Froom%3Ddemo");
+  await expect(page).toHaveURL(AUTH0_AUTHORIZE_URL);
   const before = await page.getByTestId("login-form").boundingBox();
 
   await page.getByTestId("password-input").fill("incorrect-password");

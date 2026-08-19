@@ -16,7 +16,21 @@ pnpm setup:emulate
 pnpm dev
 ```
 
-Open `http://127.0.0.1:5175/` for the homepage, then choose **Open demo room** to enter the chat at `http://127.0.0.1:5175/app?room=demo`. The chat route redirects to a local Auth0-backed login form when there is no session. Sign in with seeded users `ada@example.test` or `linus@example.test` using password `DemoPass123`. Messages are appended to the durable stream, reflected in the other window, and can be edited by their author with the update persisted as another stream record.
+Open `http://127.0.0.1:5175/` for the homepage, then choose **Open demo room** to enter the chat at `http://127.0.0.1:5175/app?room=demo`. The chat route redirects to the local Auth0 Universal Login connection picker when there is no session. Choose the seeded username/password connection and sign in with `ada@example.test` or `linus@example.test` using password `DemoPass123`; the GitHub and Google buttons are deterministic local social-connection fixtures. Messages are appended to the durable stream, reflected in the other window, and can be edited by their author with the update persisted as another stream record.
+
+The local services are configured together in [`emulate.config.yaml`](emulate.config.yaml). `pnpm dev:emulate` loads that file and starts Durable Streams, Auth0, and the Cloudflare OS proxy from their configured ports. The Cloudflare OS entry is disabled by default because its `source` must point to a local checkout of the official `cloudflare-os` repository; enable it after setting that path:
+
+```yaml
+cloudflare-os:
+  port: 4102
+  runtime:
+    enabled: true
+    source: ../cloudflare-os
+    port: 8787
+    startup_timeout_ms: 120000
+```
+
+The Cloudflare package launches the checkout's official `pnpm run-local` Wrangler runtime and proxies it locally; it is development infrastructure and does not replace the real-provider `make verify-E4-T08-real` gate.
 
 ## Verify
 

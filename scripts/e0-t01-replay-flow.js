@@ -29,7 +29,7 @@ async (page) => {
   await heading.waitFor();
   const landingUrl = page.url();
   await page.getByTestId("home-open-chat").click();
-  await page.waitForURL(/\/login\?returnTo=/);
+  await page.waitForURL(/\/authorize/);
 
   await page.getByTestId("password-input").fill("incorrect-password");
   await page.getByTestId("login-button").click();
@@ -129,7 +129,7 @@ async (page) => {
   const afterEdit = await compareStreamState();
 
   await page.goto("/logout");
-  await page.waitForURL(/\/login/);
+  await page.waitForURL(/\/authorize/);
   await page.getByTestId("email-input").fill("linus@example.test");
   await page.getByTestId("password-input").fill("DemoPass123");
   await page.getByTestId("login-button").click();

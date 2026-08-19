@@ -1,9 +1,20 @@
-durable-streams: {}
+durable-streams:
+  baseUrl: "${DURABLE_STREAMS_URL:-http://127.0.0.1:4100}"
 
 auth0:
+  baseUrl: "${AUTH0_EMULATOR_URL:-http://127.0.0.1:4101}"
   connections:
     - name: Username-Password-Authentication
       strategy: auth0
+      display_name: Username and password
+    - name: github
+      strategy: github
+      display_name: Continue with GitHub
+      default_user_id: auth0|ada
+    - name: google-oauth2
+      strategy: google-oauth2
+      display_name: Continue with Google
+      default_user_id: auth0|ada
   users:
     - user_id: ada
       email: ada@example.test
@@ -23,6 +34,17 @@ auth0:
     - client_id: slack-clone-auth0
       client_secret: slack-clone-secret
       name: Slack Clone Auth0 Demo
+      redirect_uris:
+        - "${AUTH0_REDIRECT_URI:-http://127.0.0.1:5175/auth/callback}"
       grant_types:
+        - authorization_code
         - http://auth0.com/oauth/grant-type/password-realm
         - refresh_token
+
+cloudflare-os:
+  port: 4102
+  runtime:
+    enabled: false
+    source: ../cloudflare-os
+    port: 8787
+    startup_timeout_ms: 120000

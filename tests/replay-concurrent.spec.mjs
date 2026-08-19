@@ -31,13 +31,14 @@ const conversation = [
     message: "Received. The second browser has the full staggered conversation.",
   },
 ];
+const AUTH0_AUTHORIZE_URL = /http:\/\/127\.0\.0\.1:4101\/authorize/;
 
 test.describe.configure({ mode: "parallel" });
 
 for (const peer of peers) {
   test(`${peer.persona} records the shared durable stream room`, async ({ page }) => {
     await page.goto(`/app?room=${room}`);
-    await expect(page).toHaveURL(/\/login\?returnTo=/);
+    await expect(page).toHaveURL(AUTH0_AUTHORIZE_URL);
     await expect(page.getByTestId("auth0-emulator-url")).toHaveText("http://127.0.0.1:4101");
     await page.getByTestId("email-input").fill(peer.email);
     await page.getByTestId("password-input").fill("DemoPass123");

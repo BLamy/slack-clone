@@ -17,6 +17,10 @@ const state = {
   editingMessageId: null,
   eventSource: null,
   lastAckedOffset: null,
+  mentionIndex: 0,
+  mentionMatches: [],
+  mentionMembers: [],
+  mentionRange: null,
   messages: new Map(),
   reconnectTimer: null,
   sentAutopilot: false,
@@ -27,6 +31,9 @@ const state = {
 const messagesEl = document.querySelector("[data-testid='messages']");
 const formEl = document.querySelector("[data-testid='composer']");
 const inputEl = document.querySelector("[data-testid='message-input']");
+const mentionPopoverEl = document.querySelector(
+  "[data-testid='mention-popover']",
+);
 const sendButton = document.querySelector("[data-testid='send-button']");
 const connectionStateEl = document.querySelector(
   "[data-testid='connection-state']",
@@ -45,24 +52,72 @@ window.__demoComplete = false;
 
 formEl.addEventListener("submit", async (event) => {
   event.preventDefault();
+  hideMentionPopover();
   const text = inputEl.value.trim();
   if (!text) return;
   inputEl.value = "";
   await sendMessage(text);
 });
 
+inputEl.addEventListener("input", updateMentionPopover);
+
+inputEl.addEventListener("keydown", (event) => {
+  if (mentionPopoverEl.hidden || state.mentionMatches.length === 0) return;
+
+  if (event.key === "ArrowDown") {
+    event.preventDefault();
+    state.mentionIndex = (state.mentionIndex + 1) % state.mentionMatches.length;
+    renderMentionPopover();
+  } else if (event.key === "ArrowUp") {
+    event.preventDefault();
+    state.mentionIndex =
+      (state.mentionIndex - 1 + state.mentionMatches.length) %
+      state.mentionMatches.length;
+    renderMentionPopover();
+  } else if (event.key === "Enter") {
+    event.preventDefault();
+    selectMention(state.mentionIndex);
+  } else if (event.key === "Escape") {
+    event.preventDefault();
+    hideMentionPopover();
+  }
+});
+
+inputEl.addEventListener("blur", () => {
+  setTimeout(hideMentionPopover, 120);
+});
+
+mentionPopoverEl.addEventListener("pointerdown", (event) => {
+  const target = event.target instanceof Element ? event.target : null;
+  const option = target?.closest("[data-mention-index]");
+  if (!option) return;
+  event.preventDefault();
+  selectMention(Number(option.dataset.mentionIndex));
+});
+
 messagesEl.addEventListener("click", (event) => {
   const target = event.target instanceof Element ? event.target : null;
   const button = target?.closest("button[data-message-action]");
-  const messageEl = button?.closest("[data-message-id]");
+  const messageEl = target?.closest("[data-message-id]");
   const messageId = messageEl?.dataset.messageId;
-  if (!button || !messageId) return;
+  if (!messageEl || !messageId) return;
 
-  if (button.dataset.messageAction === "edit") {
+  if (button?.dataset.messageAction === "edit") {
     startEditing(messageId);
-  } else if (button.dataset.messageAction === "cancel-edit") {
+  } else if (button?.dataset.messageAction === "cancel-edit") {
     stopEditing();
+  } else if (!target.closest("button, input, textarea, select, a, form")) {
+    startEditing(messageId);
   }
+});
+
+messagesEl.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter" && event.key !== " ") return;
+  const target = event.target instanceof Element ? event.target : null;
+  const messageEl = target?.closest("[data-message-id]");
+  if (!messageEl || target !== messageEl) return;
+  event.preventDefault();
+  startEditing(messageEl.dataset.messageId);
 });
 
 messagesEl.addEventListener("input", (event) => {
@@ -136,12 +191,27 @@ async function init() {
   if (!body.ok) throw new Error(body.error || "Failed to load session");
   state.session = body;
 
+  await loadMentionMembers();
+
   const userName = body.user.name || body.user.email || "Authenticated User";
   personaLabelEl.textContent = userName;
   authUserEl.textContent = body.user.email || userName;
   authProviderEl.textContent = `${body.provider.name} (${body.provider.url})`;
 
   connect();
+}
+
+async function loadMentionMembers() {
+  try {
+    const res = await applicationApiFetch("/api/members");
+    const body = await res.json();
+    if (!res.ok || !body.ok || !Array.isArray(body.members)) {
+      throw new Error(body.error || "Failed to load workspace members");
+    }
+    state.mentionMembers = body.members;
+  } catch {
+    state.mentionMembers = [];
+  }
 }
 
 function connect() {
@@ -282,7 +352,7 @@ function renderMessage(message) {
     : `<div class="message__text">${escapeHtml(message.text)}</div>`;
 
   return `
-    <article class="message" data-testid="message" data-message-id="${escapeAttr(message.id)}">
+    <article class="message" data-testid="message" data-message-id="${escapeAttr(message.id)}"${isOwn ? ' tabindex="0" aria-label="Edit message"' : ""}>
       <div class="message__avatar">${escapeHtml(initials(message.user))}</div>
       <div>
         <div class="message__meta">
@@ -295,6 +365,86 @@ function renderMessage(message) {
       </div>
     </article>
   `;
+}
+
+function updateMentionPopover() {
+  const context = currentMentionContext();
+  if (!context) {
+    hideMentionPopover();
+    return;
+  }
+
+  const query = context.query.toLowerCase();
+  state.mentionMatches = state.mentionMembers
+    .filter((member) => {
+      const searchable = `${member.handle} ${member.displayName}`.toLowerCase();
+      return searchable.includes(query);
+    })
+    .slice(0, 8);
+  state.mentionRange = context;
+  state.mentionIndex = 0;
+
+  if (state.mentionMatches.length === 0) {
+    hideMentionPopover();
+    return;
+  }
+  renderMentionPopover();
+}
+
+function currentMentionContext() {
+  const caret = inputEl.selectionStart ?? inputEl.value.length;
+  const beforeCaret = inputEl.value.slice(0, caret);
+  const match = beforeCaret.match(/(?:^|\s)@([a-z0-9_-]*)$/i);
+  if (!match) return null;
+  return {
+    end: caret,
+    query: match[1],
+    start: caret - match[1].length - 1,
+  };
+}
+
+function renderMentionPopover() {
+  mentionPopoverEl.innerHTML = state.mentionMatches
+    .map(
+      (member, index) => `
+        <button
+          class="mention-option${index === state.mentionIndex ? " is-active" : ""}"
+          type="button"
+          role="option"
+          aria-selected="${index === state.mentionIndex}"
+          data-mention-index="${index}"
+        >
+          <span class="mention-option__handle">@${escapeHtml(member.handle)}</span>
+          <span class="mention-option__name">${escapeHtml(member.displayName)}</span>
+        </button>
+      `,
+    )
+    .join("");
+  mentionPopoverEl.hidden = false;
+}
+
+function selectMention(index) {
+  const member = state.mentionMatches[index];
+  const range = state.mentionRange;
+  if (!member || !range) return;
+
+  const replacement = `@${member.handle} `;
+  inputEl.value =
+    inputEl.value.slice(0, range.start) +
+    replacement +
+    inputEl.value.slice(range.end);
+  const caret = range.start + replacement.length;
+  inputEl.focus();
+  inputEl.setSelectionRange(caret, caret);
+  hideMentionPopover();
+}
+
+function hideMentionPopover() {
+  state.mentionMatches = [];
+  state.mentionRange = null;
+  state.mentionIndex = 0;
+  mentionPopoverEl.hidden = true;
+  mentionPopoverEl.replaceChildren();
 }
 
 function isOwnMessage(message) {

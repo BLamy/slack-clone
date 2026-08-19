@@ -8,11 +8,16 @@ const stackB = {
   app: process.env.PEER_APP_BASE_URL,
   auth: process.env.PEER_AUTH0_EMULATOR_URL,
 };
+function auth0AuthorizeUrl(stack) {
+  return new RegExp(
+    `${stack.auth.replace(/[.*+?^${}()|[\\]\\]/g, "\\\\$&")}/authorize`,
+  );
+}
 const room = `${process.env.TEST_ROOM_PREFIX ?? "isolation"}-same-room`;
 
 async function signIn(page, stack, email) {
   await page.goto(`${stack.app}/app?room=${room}`);
-  await expect(page).toHaveURL(/\/login\?returnTo=/);
+  await expect(page).toHaveURL(auth0AuthorizeUrl(stack));
   await expect(page.getByTestId("auth0-emulator-url")).toHaveText(stack.auth);
   await page.getByTestId("email-input").fill(email);
   await page.getByTestId("password-input").fill("DemoPass123");

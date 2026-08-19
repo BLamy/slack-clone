@@ -47,6 +47,8 @@ const AUTH0_CLIENT_SECRET =
   process.env.AUTH0_CLIENT_SECRET ?? "slack-clone-secret";
 const AUTH0_REALM =
   process.env.AUTH0_REALM ?? "Username-Password-Authentication";
+const AUTH0_REDIRECT_URI =
+  process.env.AUTH0_REDIRECT_URI ?? `http://${HOST}:${PORT}/auth/callback`;
 const SESSION_COOKIE = "slack_clone_session";
 const CHAT_WORKSPACE_ID = "ws_00000000000000000000000000";
 const CHAT_WORKSPACE_TOKEN = CHAT_WORKSPACE_ID.slice(3);
@@ -107,6 +109,7 @@ const CHAT_DIRECTORY_BOOTSTRAP = Object.freeze([
 ]);
 
 const sessions = new Map();
+const loginStates = new Map();
 const auth0Client = createAuth0Client({
   baseUrl: AUTH0_EMULATOR_URL,
   clientId: AUTH0_CLIENT_ID,
@@ -233,13 +236,105 @@ async function readForm(request) {
   return new URLSearchParams(Buffer.concat(chunks).toString("utf8"));
 }
 
+function beginAuth(response, returnTo) {
+  const safePath = safeReturnTo(returnTo);
+  const state = crypto.randomBytes(24).toString("base64url");
+  loginStates.set(state, { returnTo: safePath, createdAt: Date.now() });
+  const authorizationUrl = new URL("/authorize", auth0Client.origin);
+  authorizationUrl.search = new URLSearchParams({
+    client_id: AUTH0_CLIENT_ID,
+    redirect_uri: AUTH0_REDIRECT_URI,
+    response_type: "code",
+    scope: "openid profile email",
+    state,
+  }).toString();
+  redirect(response, authorizationUrl.toString());
+}
+
+async function establishSession(response, tokenResult, returnTo) {
+  const { user, token } = tokenResult;
+  const principal = await workspaceDirectory.lookupPrincipalBySubject(
+    CHAT_WORKSPACE_ID,
+    {
+      audience: CHAT_SUBJECT_AUDIENCE,
+      issuer: CHAT_SUBJECT_ISSUER,
+      subject: user.sub,
+    },
+  );
+  const principalId = principal?.principalId ?? null;
+  if (!principalId) {
+    throw new Error("authenticated user is not a workspace member");
+  }
+  const sessionId = crypto.randomUUID();
+  sessions.set(sessionId, {
+    authenticatedSubject: user.sub,
+    user: { ...user, sub: principalId },
+    accessToken: token.access_token,
+    createdAt: Date.now(),
+  });
+  setSessionCookie(response, sessionId);
+  redirect(response, safeReturnTo(returnTo));
+}
+
 async function handleAuth(request, response, url) {
   if (url.pathname === "/login" && request.method === "GET") {
-    sendHtml(
-      response,
-      200,
-      renderLoginPage({ returnTo: url.searchParams.get("returnTo") ?? "/" }),
-    );
+    beginAuth(response, url.searchParams.get("returnTo") ?? DEFAULT_CHAT_PATH);
+    return true;
+  }
+
+  if (url.pathname === "/auth/callback" && request.method === "GET") {
+    const state = url.searchParams.get("state") ?? "";
+    const pending = loginStates.get(state);
+    loginStates.delete(state);
+    if (!pending || Date.now() - pending.createdAt > 10 * 60 * 1000) {
+      sendHtml(
+        response,
+        400,
+        renderLoginPage({
+          error: "The Auth0 login state is invalid or expired.",
+        }),
+      );
+      return true;
+    }
+    const providerError =
+      url.searchParams.get("error_description") ??
+      url.searchParams.get("error");
+    if (providerError) {
+      sendHtml(
+        response,
+        400,
+        renderLoginPage({ returnTo: pending.returnTo, error: providerError }),
+      );
+      return true;
+    }
+    const code = url.searchParams.get("code") ?? "";
+    if (!code) {
+      sendHtml(
+        response,
+        400,
+        renderLoginPage({
+          returnTo: pending.returnTo,
+          error: "Auth0 did not return an authorization code.",
+        }),
+      );
+      return true;
+    }
+    try {
+      const tokenResult = await auth0Client.exchangeAuthorizationCode(
+        code,
+        AUTH0_REDIRECT_URI,
+      );
+      await establishSession(response, tokenResult, pending.returnTo);
+    } catch (error) {
+      sendHtml(
+        response,
+        200,
+        renderLoginPage({
+          returnTo: pending.returnTo,
+          error: error instanceof Error ? error.message : String(error),
+        }),
+      );
+    }
     return true;
   }
 
@@ -247,31 +342,11 @@ async function handleAuth(request, response, url) {
     const form = await readForm(request);
     const returnTo = safeReturnTo(form.get("returnTo") ?? "/");
     try {
-      const { user, token } = await auth0Client.exchangePassword(
+      const tokenResult = await auth0Client.exchangePassword(
         form.get("email") ?? "",
         form.get("password") ?? "",
       );
-      const principal = await workspaceDirectory.lookupPrincipalBySubject(
-        CHAT_WORKSPACE_ID,
-        {
-          audience: CHAT_SUBJECT_AUDIENCE,
-          issuer: CHAT_SUBJECT_ISSUER,
-          subject: user.sub,
-        },
-      );
-      const principalId = principal?.principalId ?? null;
-      if (!principalId) {
-        throw new Error("authenticated user is not a workspace member");
-      }
-      const sessionId = crypto.randomUUID();
-      sessions.set(sessionId, {
-        authenticatedSubject: user.sub,
-        user: { ...user, sub: principalId },
-        accessToken: token.access_token,
-        createdAt: Date.now(),
-      });
-      setSessionCookie(response, sessionId);
-      redirect(response, returnTo);
+      await establishSession(response, tokenResult, returnTo);
     } catch (error) {
       sendHtml(
         response,
@@ -293,6 +368,33 @@ async function handleAuth(request, response, url) {
     return true;
   }
   return false;
+}
+
+async function handleMembersApi(request, response, url) {
+  if (url.pathname !== "/api/members") return false;
+  if (request.method !== "GET") {
+    sendJson(response, 405, { ok: false, error: "Method not allowed" });
+    return true;
+  }
+  if (!sessionUser(request)) {
+    sendJson(response, 401, { ok: false, error: "Authentication required" });
+    return true;
+  }
+
+  const directory = await workspaceDirectory.read();
+  const members = Object.values(directory.state.entities.principals ?? {})
+    .filter((principal) => principal.status === "active")
+    .sort((left, right) =>
+      left.profile.handle.localeCompare(right.profile.handle),
+    )
+    .map((principal) => ({
+      displayName: principal.profile.displayName,
+      handle: principal.profile.handle,
+      kind: principal.kind,
+      principalId: principal.principalId,
+    }));
+  sendJson(response, 200, { ok: true, members });
+  return true;
 }
 
 const streamStore = createNodeDurableStreamsStore({
@@ -452,6 +554,8 @@ const server = createInboundHttpServer(async (request, response) => {
   try {
     if (await handleAuth(request, response, url)) return;
     if (url.pathname.startsWith("/api/")) {
+      const membersHandled = await handleMembersApi(request, response, url);
+      if (membersHandled) return;
       const agentHandled = await agentManagementHttp.handleApi(
         request,
         response,

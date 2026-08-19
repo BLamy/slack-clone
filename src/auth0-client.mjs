@@ -65,39 +65,7 @@ export function createAuth0Client({
     return response;
   }
 
-  async function exchangePassword(username, password) {
-    const tokenResponse = await request("/oauth/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        grant_type: "http://auth0.com/oauth/grant-type/password-realm",
-        username,
-        password,
-        realm,
-        scope: "openid profile email",
-        client_id: clientId,
-        client_secret: clientSecret,
-      }),
-    });
-    const token = await readJsonResponse(tokenResponse);
-    if (!tokenResponse.ok) {
-      throw new Auth0ClientError(
-        token.error_description ??
-          token.error ??
-          `Auth0 token exchange failed: ${tokenResponse.status}`,
-        { status: tokenResponse.status },
-      );
-    }
-    if (
-      typeof token.access_token !== "string" ||
-      token.access_token.length === 0
-    ) {
-      throw new Auth0ClientError("Auth0 token response omitted access_token", {
-        code: "AUTH0_MALFORMED_RESPONSE",
-        status: tokenResponse.status,
-      });
-    }
-
+  async function profileForToken(token) {
     const userInfoResponse = await request("/userinfo", {
       headers: { Authorization: `Bearer ${token.access_token}` },
     });
@@ -122,6 +90,55 @@ export function createAuth0Client({
     };
   }
 
+  async function exchangeToken(body) {
+    const tokenResponse = await request("/oauth/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...body,
+        client_id: clientId,
+        client_secret: clientSecret,
+      }),
+    });
+    const token = await readJsonResponse(tokenResponse);
+    if (!tokenResponse.ok) {
+      throw new Auth0ClientError(
+        token.error_description ??
+          token.error ??
+          `Auth0 token exchange failed: ${tokenResponse.status}`,
+        { status: tokenResponse.status },
+      );
+    }
+    if (
+      typeof token.access_token !== "string" ||
+      token.access_token.length === 0
+    ) {
+      throw new Auth0ClientError("Auth0 token response omitted access_token", {
+        code: "AUTH0_MALFORMED_RESPONSE",
+        status: tokenResponse.status,
+      });
+    }
+    return profileForToken(token);
+  }
+
+  async function exchangePassword(username, password) {
+    return exchangeToken({
+      grant_type: "http://auth0.com/oauth/grant-type/password-realm",
+      username,
+      password,
+      realm,
+      scope: "openid profile email",
+    });
+  }
+
+  async function exchangeAuthorizationCode(code, redirectUri) {
+    return exchangeToken({
+      grant_type: "authorization_code",
+      code,
+      redirect_uri: redirectUri,
+    });
+  }
+
   async function health() {
     const response = await request("/.well-known/openid-configuration");
     const ok = response.ok;
@@ -129,7 +146,12 @@ export function createAuth0Client({
     return ok;
   }
 
-  return Object.freeze({ exchangePassword, health, origin });
+  return Object.freeze({
+    exchangeAuthorizationCode,
+    exchangePassword,
+    health,
+    origin,
+  });
 }
 
 function normalizeAuth0BaseUrl(value) {

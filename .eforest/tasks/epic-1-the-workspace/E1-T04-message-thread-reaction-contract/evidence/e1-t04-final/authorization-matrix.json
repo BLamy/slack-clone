@@ -1,0 +1,42 @@
+{
+  "observed": [
+    {
+      "name": "member-edit-other-author",
+      "expected": "MESSAGE_NOT_AUTHOR",
+      "result": "refused"
+    },
+    {
+      "name": "admin-delete-with-membership",
+      "expected": "allowed",
+      "result": "allowed"
+    },
+    {
+      "name": "member-delete-other-author",
+      "expected": "MODERATOR_REQUIRED",
+      "result": "refused"
+    },
+    {
+      "name": "author-edit",
+      "expected": "allowed",
+      "result": "allowed"
+    },
+    {
+      "name": "stale-edit",
+      "expected": "REVISION_CONFLICT",
+      "result": "refused"
+    },
+    {
+      "name": "archived-create",
+      "expected": "CHANNEL_ARCHIVED",
+      "result": "refused"
+    },
+    {
+      "name": "inactive-member-reply",
+      "expected": "MEMBERSHIP_INACTIVE",
+      "result": "refused"
+    }
+  ],
+  "authorEditOnly": true,
+  "moderatorDeleteRequiresActiveMembership": true,
+  "refusalLeavesSourceHeadUnchanged": true
+}

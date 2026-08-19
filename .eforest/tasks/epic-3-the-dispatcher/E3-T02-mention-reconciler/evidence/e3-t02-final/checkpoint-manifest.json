@@ -1,0 +1,14 @@
+{
+  "checkpointStream": "projection:px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "records": [
+    {
+      "eventId": "ev_0d8928af4ab65f9bf75b61663d",
+      "projectionId": "px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "sequence": 1,
+      "sourceOffset": "0000000000000001_0000000000000001",
+      "sourceStream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "stateDigest": "sha256:58b214f59241b16985ac7989460d620968c1d68ae080de9dc68ba2c1b95fb504"
+    }
+  ],
+  "streamDigest": "sha256:8fd06edf552ce3146ee05ec97b605f0a6c5f164b3fdd93fe7cba7ac003053333"
+}

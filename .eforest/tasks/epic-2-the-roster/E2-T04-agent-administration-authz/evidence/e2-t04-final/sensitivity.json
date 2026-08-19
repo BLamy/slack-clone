@@ -1,0 +1,31 @@
+{
+  "mutationCount": 3,
+  "mutations": [
+    {
+      "exitCode": 1,
+      "isolatedMutantModule": true,
+      "mutation": "remove authorizeMutation capability check",
+      "observedNonZeroExit": true,
+      "signal": null,
+      "verifierDetectedMutant": true
+    },
+    {
+      "exitCode": 1,
+      "isolatedMutantModule": true,
+      "mutation": "remove authorizeRead capability check",
+      "observedNonZeroExit": true,
+      "signal": null,
+      "verifierDetectedMutant": true
+    },
+    {
+      "exitCode": 1,
+      "isolatedMutantModule": true,
+      "mutation": "remove grant resource scope check",
+      "observedNonZeroExit": true,
+      "signal": null,
+      "verifierDetectedMutant": true
+    }
+  ],
+  "verifierDetectedMutant": true,
+  "result": "PASS"
+}

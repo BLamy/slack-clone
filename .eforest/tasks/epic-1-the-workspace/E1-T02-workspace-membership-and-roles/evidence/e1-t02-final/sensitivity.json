@@ -1,0 +1,12 @@
+{
+  "mutation": "disable trusted workspace context comparison in scratch module",
+  "unsafeBypassObserved": true,
+  "baselineConformanceMatrixMustRefuseTheSameInput": true,
+  "implementationTreeBinding": {
+    "mutatedPath": "src/auth0-client.mjs",
+    "verifierRejectedPostImplementationChange": true,
+    "result": "PASS"
+  },
+  "scratchPath": ".artifacts/e1-t02/e1-t02-full-tree-binding-sensitive-final-20260803/workspace-auth-context-comparison-disabled.mjs",
+  "result": "PASS"
+}

@@ -1,0 +1,98 @@
+{
+  "principal-directory.v1.json": {
+    "finalStateDigest": "sha256:1069cdf0c97b7f1456a5b2cbcd2846d790723610f8832cb250e99fe6323181e8",
+    "offsets": [
+      "0000000000000000_0000000000000001",
+      "0000000000000000_0000000000000002",
+      "0000000000000000_0000000000000003",
+      "0000000000000000_0000000000000004",
+      "0000000000000000_0000000000000005",
+      "0000000000000000_0000000000000006",
+      "0000000000000000_0000000000000007",
+      "0000000000000000_0000000000000008",
+      "0000000000000000_0000000000000009"
+    ],
+    "perPrefixDigests": [
+      {
+        "index": 1,
+        "offset": "0000000000000000_0000000000000001",
+        "stateDigest": "sha256:58a3bbdfb1aecff202ff27394471ca219107e0f2d26e703a01ffd122a868cca8"
+      },
+      {
+        "index": 2,
+        "offset": "0000000000000000_0000000000000002",
+        "stateDigest": "sha256:1c815340d63397246b9efadfa2f85b1f76e743092e10720a4f37450de8177401"
+      },
+      {
+        "index": 3,
+        "offset": "0000000000000000_0000000000000003",
+        "stateDigest": "sha256:750819fa4c9670bb5f881ec106d0f67f671bdc681f28c7b4f45164a4cbec63da"
+      },
+      {
+        "index": 4,
+        "offset": "0000000000000000_0000000000000004",
+        "stateDigest": "sha256:764dc4364a9b16d088b34c71cec598ce5967683efc0d47e07b7afa4b35e2b043"
+      },
+      {
+        "index": 5,
+        "offset": "0000000000000000_0000000000000005",
+        "stateDigest": "sha256:a46b196c5ae0898eca6ee505b12456797af8fc0fa3c38d5aef9226b566528d63"
+      },
+      {
+        "index": 6,
+        "offset": "0000000000000000_0000000000000006",
+        "stateDigest": "sha256:d22d595f984cae9b380377128c479d40aab0da154f04851e6ddcebf07e91c8ba"
+      },
+      {
+        "index": 7,
+        "offset": "0000000000000000_0000000000000007",
+        "stateDigest": "sha256:686df620879ee7a6ff58f584a0b034c7cbcf1ea364a56f2506e6d9dab6a091c0"
+      },
+      {
+        "index": 8,
+        "offset": "0000000000000000_0000000000000008",
+        "stateDigest": "sha256:78bbd423e629b4729c4aa55716179f7ac7ecce2bb3f4fc34edbddb9835c70c5f"
+      },
+      {
+        "index": 9,
+        "offset": "0000000000000000_0000000000000009",
+        "stateDigest": "sha256:1069cdf0c97b7f1456a5b2cbcd2846d790723610f8832cb250e99fe6323181e8"
+      }
+    ],
+    "records": 9,
+    "replayedTwiceWithIdenticalBytes": true
+  },
+  "principal-lifecycle.v1.json": {
+    "finalStateDigest": "sha256:a83a8deaa47c05b59da9087e63326059d21b7457ad7b71a04caf5772303447bb",
+    "offsets": [
+      "0000000000000001_0000000000000001",
+      "0000000000000001_0000000000000002",
+      "0000000000000001_0000000000000003",
+      "0000000000000001_0000000000000004"
+    ],
+    "perPrefixDigests": [
+      {
+        "index": 1,
+        "offset": "0000000000000001_0000000000000001",
+        "stateDigest": "sha256:8bb11376e5e75a7400b92ee5f783dd3591d47591f11f82c803ba93ab6a2802dd"
+      },
+      {
+        "index": 2,
+        "offset": "0000000000000001_0000000000000002",
+        "stateDigest": "sha256:44d551ad5a2253d908a68f844b0968603a2b0c04d2fb0d895ed0bc35234857cd"
+      },
+      {
+        "index": 3,
+        "offset": "0000000000000001_0000000000000003",
+        "stateDigest": "sha256:5aa45ece27e1ed318fceeda072802c55b3aac1c48add374d9a5d65676ae5d45d"
+      },
+      {
+        "index": 4,
+        "offset": "0000000000000001_0000000000000004",
+        "stateDigest": "sha256:a83a8deaa47c05b59da9087e63326059d21b7457ad7b71a04caf5772303447bb"
+      }
+    ],
+    "records": 4,
+    "replayedTwiceWithIdenticalBytes": true
+  }
+}

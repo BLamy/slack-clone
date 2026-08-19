@@ -1,0 +1,74 @@
+{
+  "accounting": {
+    "attachmentBytes": 0,
+    "bytes": 213,
+    "estimatedTokens": 10,
+    "historyItems": 1,
+    "items": 1
+  },
+  "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+  "context": {
+    "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "scope": "current-channel",
+    "threadId": null
+  },
+  "instructions": [],
+  "items": [
+    {
+      "citation": {
+        "contentKind": "conversation-message",
+        "eventDigest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+        "offset": "0000000000000001_0000000000000001",
+        "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "content": {
+        "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "contentType": "text/plain",
+        "messageId": "capstone-trigger",
+        "revision": 1,
+        "rootMessageId": null,
+        "text": "@helper summarize the authorized thread"
+      },
+      "contentKind": "conversation-message",
+      "id": "message:capstone-trigger",
+      "ordinal": 1,
+      "trust": "untrusted-content"
+    }
+  ],
+  "kind": "context-pack",
+  "omitted": [],
+  "policy": {
+    "includePrivate": false,
+    "includeThreadHistory": true,
+    "maxAttachmentBytes": 64000,
+    "maxBytes": 20000,
+    "maxEstimatedTokens": 4000,
+    "maxHistoryDepth": 100,
+    "maxItems": 8,
+    "maxMessages": 4,
+    "workspaceInputPaths": []
+  },
+  "schemaVersion": 1,
+  "sourceHeads": [
+    {
+      "digest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+      "offset": "0000000000000001_0000000000000001",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  ],
+  "trigger": {
+    "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "messageId": "capstone-trigger",
+    "threadId": null,
+    "citation": {
+      "contentKind": "conversation-trigger",
+      "eventDigest": "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+      "offset": "0000000000000001_0000000000000001",
+      "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  },
+  "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "packDigest": "sha256:dbf16d9663a8253750b375776ac8491ba378cae1e09426bb47b3f771e389318a"
+}

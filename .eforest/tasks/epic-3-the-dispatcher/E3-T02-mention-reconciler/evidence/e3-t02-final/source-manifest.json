@@ -1,0 +1,12 @@
+{
+  "channelStream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "records": [
+    {
+      "digest": "sha256:a0e93a776d075a14351f85adda445cd5890ed3f246fab144cd140d264c3e1d67",
+      "eventType": "channel.message.created",
+      "mentions": 1,
+      "offset": "0000000000000001_0000000000000001"
+    }
+  ],
+  "streamDigest": "sha256:0a601331d9f6ecab0b833e11a118b7ba9458545456fe076404e2d204ac705ffe"
+}

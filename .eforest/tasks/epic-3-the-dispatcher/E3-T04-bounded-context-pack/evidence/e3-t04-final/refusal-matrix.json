@@ -1,0 +1,45 @@
+{
+  "result": "PASS",
+  "cases": [
+    {
+      "label": "archived-channel",
+      "code": "CONTEXT_PACK_CHANNEL_INACTIVE",
+      "refused": true
+    },
+    {
+      "label": "revoked-workspace",
+      "code": "CONTEXT_PACK_MEMBERSHIP_INACTIVE",
+      "refused": true
+    },
+    {
+      "label": "source-head-drift",
+      "code": "CONTEXT_PACK_SOURCE_HEAD",
+      "refused": true
+    },
+    {
+      "label": "workspace-path",
+      "code": "CONTEXT_PACK_WORKSPACE_INPUT_SCOPE",
+      "refused": true
+    },
+    {
+      "label": "instruction-source",
+      "code": "CONTEXT_PACK_INSTRUCTION_SCOPE",
+      "refused": true
+    },
+    {
+      "label": "unauthorized-source-head",
+      "code": "CONTEXT_PACK_SOURCE_SCOPE",
+      "refused": true
+    },
+    {
+      "label": "wrong-thread-root",
+      "code": "CONTEXT_PACK_TRIGGER_INVALID",
+      "refused": true
+    },
+    {
+      "label": "deleted-trigger",
+      "code": "CONTEXT_PACK_TRIGGER_INVALID",
+      "refused": true
+    }
+  ]
+}

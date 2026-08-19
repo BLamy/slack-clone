@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "location": "instructions.system",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "path": "$.agentConfig.instructions.system"
+    },
+    {
+      "location": "instructions.task",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "path": "$.agentConfig.instructions.task"
+    },
+    {
+      "location": "instructions.guardrails[0]",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "path": "$.agentConfig.instructions.guardrails[0]"
+    },
+    {
+      "location": "harness.providerId",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "path": "$.agentConfig.harness.providerId"
+    },
+    {
+      "location": "harness.providerVersion",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "path": "$.agentConfig.harness.providerVersion"
+    },
+    {
+      "location": "harness.requiredCapabilities[0]",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "path": "$.agentConfig.harness.requiredCapabilities[0]"
+    },
+    {
+      "location": "sandbox.providerId",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "path": "$.agentConfig.sandbox.providerId"
+    },
+    {
+      "location": "sandbox.providerVersion",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "path": "$.agentConfig.sandbox.providerVersion"
+    },
+    {
+      "location": "sandbox.requiredCapabilities[0]",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "path": "$.agentConfig.sandbox.requiredCapabilities[0]"
+    },
+    {
+      "location": "workspaceInputs.source",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "path": "$.agentConfig.workspaceInputs.source"
+    },
+    {
+      "location": "workspaceInputs.paths[0]",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "path": "$.agentConfig.workspaceInputs.paths[0]"
+    },
+    {
+      "location": "connectionGrants.refs[0].connectionId",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "path": "$.agentConfig.connectionGrants.refs[0].connectionId"
+    },
+    {
+      "location": "connectionGrants.refs[0].grantId",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "path": "$.agentConfig.connectionGrants.refs[0].grantId"
+    },
+    {
+      "location": "connectionGrants.refs[0].purpose",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "path": "$.agentConfig.connectionGrants.refs[0].purpose"
+    }
+  ],
+  "allRejected": true
+}

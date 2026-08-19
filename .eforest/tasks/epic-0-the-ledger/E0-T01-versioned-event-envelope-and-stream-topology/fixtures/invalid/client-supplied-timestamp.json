@@ -1,0 +1,18 @@
+{
+  "mode": "issue",
+  "expectedError": {
+    "code": "LEDGER_EXTRA_KEY",
+    "path": "$.input.serverTimestamp"
+  },
+  "input": {
+    "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "causation": null,
+    "correlationId": "cr_dddddddddddddddddddddddddd",
+    "data": {},
+    "eventType": "ledger.fixture-recorded",
+    "idempotencyKey": "ik_eeeeeeeeeeeeeeeeeeeeeeeeee",
+    "schemaVersion": 1,
+    "serverTimestamp": "1999-01-01T00:00:00.000Z",
+    "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+}

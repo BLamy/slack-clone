@@ -1,0 +1,28 @@
+{
+  "seed": "e1-t08-repair-final-2",
+  "sourceOrderChanged": true,
+  "messageOrderChanged": true,
+  "sourceCausalPrerequisitesPreserved": true,
+  "randomizedMessageInterleavingReplayed": true,
+  "firstMessageOrder": [
+    "public-root",
+    "public-offline",
+    "private-root",
+    "private-reply",
+    "dm-reply",
+    "dm-root"
+  ],
+  "secondMessageOrder": [
+    "public-root",
+    "private-root",
+    "dm-reply",
+    "dm-root",
+    "private-reply",
+    "public-offline"
+  ],
+  "firstReplayMatchesSourceOrder": true,
+  "secondReplayMatchesSourceOrder": true,
+  "finalMessageShapeDigest": "sha256:d023106cb05cb8de17b27cbff8d6277b14b876f2fcbbc09e32b51a2364aba172",
+  "finalOrderingMayDifferBecauseSourceOrderDiffers": true,
+  "result": "PASS"
+}

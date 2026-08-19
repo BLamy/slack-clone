@@ -1,0 +1,324 @@
+{
+  "stream": "e0-t07-composed-authoritative",
+  "records": [
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-composed-duplicate-logical-operation-0",
+          "value": "value-0"
+        },
+        "eventId": "ev_00000000000000000000000000",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_00000000000000000000000000",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:00.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "dispatch": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "expectedHead": "0000000000000000_0000000000000000",
+        "idempotencyKey": "ik_00000000000000000000000000",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:dfc6c1d8922957206eb742c8ba6a5d807146389c2ddc6bca48651e7a1184a3dc",
+        "schemaVersion": 1,
+        "stream": "e0-t07-composed-authoritative",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-composed-pre-partition-0-a-1",
+          "value": "value-1"
+        },
+        "eventId": "ev_00000000000000000000000001",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_00000000000000000000000001",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:01.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "dispatch": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "expectedHead": "0000000000000000_0000000000000894",
+        "idempotencyKey": "ik_00000000000000000000000001",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:a4cf8765433536067e0f2721fa5eae21658bfc708b94ba814b0a83c32fd9b75b",
+        "schemaVersion": 1,
+        "stream": "e0-t07-composed-authoritative",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-composed-pre-partition-1-b-4",
+          "value": "value-4"
+        },
+        "eventId": "ev_00000000000000000000000004",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_00000000000000000000000004",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:04.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "dispatch": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "expectedHead": "0000000000000000_0000000000001778",
+        "idempotencyKey": "ik_00000000000000000000000004",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:902e70059053e97d8ce34ee330f3ac3b5c904de57018f0cd792bf7140609483a",
+        "schemaVersion": 1,
+        "stream": "e0-t07-composed-authoritative",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-composed-non-conflicting-main-5",
+          "value": "value-5"
+        },
+        "eventId": "ev_00000000000000000000000005",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_00000000000000000000000005",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:05.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "dispatch": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "expectedHead": "0000000000000000_0000000000002662",
+        "idempotencyKey": "ik_00000000000000000000000005",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:6d6f9374a5f4ff86b27120fd360276acb2149ad22a5de3297a2e8ee733bc72a8",
+        "schemaVersion": 1,
+        "stream": "e0-t07-composed-authoritative",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-composed-partition-0-b-8",
+          "value": "value-8"
+        },
+        "eventId": "ev_00000000000000000000000008",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_00000000000000000000000008",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:08.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "dispatch": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "expectedHead": "0000000000000000_0000000000003549",
+        "idempotencyKey": "ik_00000000000000000000000008",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:3dbfe03ea08cebc25a0e212b8f02aa5eb5b5fcc7b34ddb831bfd3892b487635c",
+        "schemaVersion": 1,
+        "stream": "e0-t07-composed-authoritative",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-composed-partition-1-b-10",
+          "value": "value-10"
+        },
+        "eventId": "ev_0000000000000000000000000a",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_0000000000000000000000000a",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:10.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "dispatch": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "expectedHead": "0000000000000000_0000000000004429",
+        "idempotencyKey": "ik_0000000000000000000000000a",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:47e3c26e63e702bc03352cf7e9e3508f656e30b14b7d284115f8071f97c917ca",
+        "schemaVersion": 1,
+        "stream": "e0-t07-composed-authoritative",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-composed-post-restart-b-12",
+          "value": "value-12"
+        },
+        "eventId": "ev_0000000000000000000000000c",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_0000000000000000000000000c",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:12.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "dispatch": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "expectedHead": "0000000000000000_0000000000005311",
+        "idempotencyKey": "ik_0000000000000000000000000c",
+        "operation": "ledger.event.append",
+        "requestDigest": "sha256:0e6abe9202104a06148ff83d09533a88151c88e9ed946f10a0a407253c48bdb4",
+        "schemaVersion": 1,
+        "stream": "e0-t07-composed-authoritative",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    }
+  ],
+  "nextOffset": "0000000000000000_0000000000006194",
+  "streamDigest": "sha256:95cc9a1b89d24b415ea6d28859ffaf39878275391b2715166611e9a1a9bcfb00",
+  "offsetRecords": [
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-composed-duplicate-logical-operation-0",
+          "value": "value-0"
+        },
+        "eventId": "ev_00000000000000000000000000",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_00000000000000000000000000",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:00.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "offset": "0000000000000000_0000000000000894"
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-composed-pre-partition-0-a-1",
+          "value": "value-1"
+        },
+        "eventId": "ev_00000000000000000000000001",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_00000000000000000000000001",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:01.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "offset": "0000000000000000_0000000000001778"
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-composed-pre-partition-1-b-4",
+          "value": "value-4"
+        },
+        "eventId": "ev_00000000000000000000000004",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_00000000000000000000000004",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:04.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "offset": "0000000000000000_0000000000002662"
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-composed-non-conflicting-main-5",
+          "value": "value-5"
+        },
+        "eventId": "ev_00000000000000000000000005",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_00000000000000000000000005",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:05.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "offset": "0000000000000000_0000000000003549"
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-composed-partition-0-b-8",
+          "value": "value-8"
+        },
+        "eventId": "ev_00000000000000000000000008",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_00000000000000000000000008",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:08.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "offset": "0000000000000000_0000000000004429"
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-composed-partition-1-b-10",
+          "value": "value-10"
+        },
+        "eventId": "ev_0000000000000000000000000a",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_0000000000000000000000000a",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:10.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "offset": "0000000000000000_0000000000005311"
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "e0-t07-e0-t07-composed-post-restart-b-12",
+          "value": "value-12"
+        },
+        "eventId": "ev_0000000000000000000000000c",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_0000000000000000000000000c",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T00:00:12.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "offset": "0000000000000000_0000000000006194"
+    }
+  ]
+}

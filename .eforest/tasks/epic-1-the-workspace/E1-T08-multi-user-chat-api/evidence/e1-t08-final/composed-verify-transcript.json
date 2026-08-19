@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "runId": "e1-composed-clean-final",
+  "command": "E1_T08_IMPLEMENTATION_COMMIT=8dc0f53d8f194fa82fcda045b1a4723bd915500a TEST_RUN_ID=e1-composed-clean-final make verify-E1",
+  "rootCheckoutCleanBeforeRun": true,
+  "targetOrder": [
+    "verify-E1-T01",
+    "verify-E1-T02",
+    "verify-E1-T03",
+    "verify-E1-T04",
+    "verify-E1-T05",
+    "verify-E1-T06",
+    "verify-E1-T07",
+    "verify-E1-T08"
+  ],
+  "targetImplementationCommits": {
+    "verify-E1-T01": "185b93e8b4ff0143ebc4deb88c94a54930f72da3",
+    "verify-E1-T02": "185b93e8b4ff0143ebc4deb88c94a54930f72da3",
+    "verify-E1-T03": "185b93e8b4ff0143ebc4deb88c94a54930f72da3",
+    "verify-E1-T04": "185b93e8b4ff0143ebc4deb88c94a54930f72da3",
+    "verify-E1-T05": "185b93e8b4ff0143ebc4deb88c94a54930f72da3",
+    "verify-E1-T06": "185b93e8b4ff0143ebc4deb88c94a54930f72da3",
+    "verify-E1-T07": "185b93e8b4ff0143ebc4deb88c94a54930f72da3",
+    "verify-E1-T08": "8dc0f53d8f194fa82fcda045b1a4723bd915500a"
+  },
+  "commands": [
+    {
+      "command": "make verify-E1-T01",
+      "durationMs": 31804,
+      "exitCode": 0,
+      "target": "verify-E1-T01"
+    },
+    {
+      "command": "make verify-E1-T02",
+      "durationMs": 34930,
+      "exitCode": 0,
+      "target": "verify-E1-T02"
+    },
+    {
+      "command": "make verify-E1-T03",
+      "durationMs": 35312,
+      "exitCode": 0,
+      "target": "verify-E1-T03"
+    },
+    {
+      "command": "make verify-E1-T04",
+      "durationMs": 34674,
+      "exitCode": 0,
+      "target": "verify-E1-T04"
+    },
+    {
+      "command": "make verify-E1-T05",
+      "durationMs": 122493,
+      "exitCode": 0,
+      "target": "verify-E1-T05"
+    },
+    {
+      "command": "make verify-E1-T06",
+      "durationMs": 132765,
+      "exitCode": 0,
+      "target": "verify-E1-T06"
+    },
+    {
+      "command": "make verify-E1-T07",
+      "durationMs": 245461,
+      "exitCode": 0,
+      "target": "verify-E1-T07"
+    },
+    {
+      "command": "make verify-E1-T08",
+      "durationMs": 221359,
+      "exitCode": 0,
+      "target": "verify-E1-T08"
+    }
+  ],
+  "zeroSkips": true,
+  "skipVariables": [],
+  "result": "PASS",
+  "failure": null
+}

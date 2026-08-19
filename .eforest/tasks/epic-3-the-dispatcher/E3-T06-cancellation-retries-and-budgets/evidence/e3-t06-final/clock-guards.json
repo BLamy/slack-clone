@@ -1,0 +1,8 @@
+{
+  "rollbackObservedAtMs": 10,
+  "rollbackRefused": true,
+  "deadlineObservedAtMs": 101,
+  "deadlineFenced": true,
+  "terminal": "timed-out",
+  "result": "PASS"
+}

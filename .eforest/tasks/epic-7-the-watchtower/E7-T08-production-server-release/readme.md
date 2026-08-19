@@ -12,7 +12,8 @@ capstone: true
 ## Goal
 
 A signed production deployment with at least two server/worker replicas accepts Slack API
-messages that mention Codex- and Claude-backed agents, schedules real Fly Sprites, injects
+messages that mention Codex- and Claude-backed agents, schedules real Cloudflare OS
+workspaces/Gadgets, injects
 connections through real Infisical Agent Proxy, executes approved tools, publishes one
 provenance-bound reply per invocation, and survives replica failover with exact replay,
 cost, security, and cleanup evidence.
@@ -35,20 +36,22 @@ with least privilege and an explicit cleanup inventory.
 ## Acceptance criteria
 
 - [ ] `tools/verify/cold_clone.sh verify-E7-T08-production` targets the attested production
-      deployment with multiple replicas, real Durable Streams, Fly Sprites, Infisical
+      deployment with multiple replicas, real Durable Streams, Cloudflare OS workspaces,
+      Infisical
       Agent Proxy, Codex CLI, and Claude Code; missing/false provider evidence exits
       nonzero with `SKIPPED:` and no local/fake fallback can pass.
 - [ ] Two authenticated tenant users mention differently configured agents; each invocation
       captures exact config/context/catalog/grant/harness digests and publishes exactly one
       reply attributed to the correct agent and run.
 - [ ] Killing the active replica after sandbox create and during tool execution transfers
-      ownership without a second Sprite, service call, cost charge, or reply; stale-owner
+      ownership without a second Cloudflare OS workspace/Gadget, service call, cost charge,
+      or reply; stale-owner
       writes are refused and the run stream replays to the observed terminal state.
 - [ ] Approval mutation, cross-tenant ids, direct egress, stolen proxy identity, prompt/
       workspace injection, over-budget continuation, and post-cancel tool/message effects
       all fail with unchanged forbidden heads and no canary leakage.
 - [ ] Exporting the isolated tenant and rebuilding every projection yields exact live
-      digests; cost ledger matches provider observations; final Fly/proxy/run inventories
+      digests; cost ledger matches provider observations; final Cloudflare OS/proxy/run inventories
       contain no test resources or active identities.
 - [ ] Browser evidence is recorded exactly as `Replay: N/A (API-driven production server
       capstone; product UI release is later) + mitigation: cold-clone production-provider
@@ -58,7 +61,7 @@ with least privilege and an explicit cleanup inventory.
 ## Adversarial verification
 
 1. Independently attest artifact signature, deployment replica count, provider identities,
-   harness process/version, Sprite ids, broker mode, service audit requests, and message
+   harness process/version, Cloudflare OS workspace/Gadget ids, broker mode, service audit requests, and message
    events. Any fake/local substitution refutes release.
 2. Kill/partition replicas at every external-effect boundary and heal stale replicas.
    Logical effects must remain exactly once and ownership fencing visible in events.

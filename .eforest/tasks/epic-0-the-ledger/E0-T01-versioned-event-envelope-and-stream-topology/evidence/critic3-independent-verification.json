@@ -1,0 +1,171 @@
+{
+  "proofType": "critic 3 independent verification of the interrogable-Replay rework",
+  "criticRole": "fresh critic; did not implement E0-T01",
+  "reviewedHead": "5d8cb6958f393429cfac680440cdb61d30e6821d",
+  "submittedHeadInRequest": "5d8cb6999c69a10a487d86a7ad91ef27c09518",
+  "headHashNote": "The hash supplied in the critic request diverges after the 7-char prefix 5d8cb69. The actual branch head, confirmed with `git rev-parse HEAD`, is 5d8cb6958f393429cfac680440cdb61d30e6821d and is what was reviewed.",
+  "evidenceCommit": "2d40835e62f0e5663f7a9720a63637c2f8ffa3b7",
+  "applicationCommit": "d6abddc8908275931b73fcdd9c8b084353aad3b4",
+  "predictionsWrittenBefore": "work/critic3-predictions.md",
+  "diffAudit": {
+    "command": "git diff --stat d6abddc 5d8cb69",
+    "productCodeChanged": false,
+    "changedPaths": [
+      ".eforest/tasks/QUEUE.md",
+      "evidence/browser-proof.json",
+      "evidence/cold-clone-proof.json",
+      "evidence/critic2-independent-verification.json",
+      "evidence/gate-summary.json",
+      "evidence/replay-interrogation.json",
+      "evidence/verifier-sensitivity.json",
+      "readme.md",
+      ".replay/browser-session.json",
+      "scripts/e0-t01-replay-flow.js",
+      "scripts/e0-t01-replay-metadata.json"
+    ],
+    "note": "No change under src/, public/, tests/, or tools/ after the pinned application commit. scripts/e0-t01-replay-flow.js and scripts/e0-t01-replay-metadata.json are new evidence-harness files, not product code."
+  },
+  "reproduced": {
+    "coldClone": "git clone --no-hardlinks . work/critic3-clone; git checkout --detach 5d8cb69",
+    "makeVerify": {
+      "result": "PASS",
+      "checks": 9,
+      "skipped": 0,
+      "exitCode": 0,
+      "byteIdenticalToCommittedEvidence": true,
+      "comparedAgainst": "evidence/verify-output.txt"
+    },
+    "pnpmTestLedger": { "result": "PASS", "tests": 6, "failed": 0 },
+    "pnpmTest": {
+      "result": "PASS",
+      "ledgerTests": 6,
+      "browserTests": 5,
+      "failed": 0,
+      "note": "Matches evidence/gate-summary.json. Browser test 5 (tests/two-sessions.spec.mjs:185) covers the legacy display-name-only record staying readable but non-editable."
+    },
+    "goldenDigests": {
+      "event-envelope.v1.json": "sha256:4947425de8918cc240bee9704f7d9b6eaa57253f6bca047cc318f97b0d4c276a",
+      "source-reference.v1.json": "sha256:930748f19cbf2a9d8f4986a6d411c81279d0c080a53f701d01f845011abb97bd",
+      "recomputedIndependently": true,
+      "match": true
+    }
+  },
+  "independentAttacks": {
+    "harness": "work/critic3-attacks.mjs",
+    "seed": "0x3c317",
+    "freshWorkspaceIds": ["ws_3c317qkbmz8hd5v0rtn29fjw6y", "ws_9pmwr4t0zx6cbk1hs82dnvgj73"],
+    "canary": "CRITIC3-CANARY-3c317-DO-NOT-LEAK",
+    "checks": 147,
+    "passed": 147,
+    "failed": 0,
+    "categories": [
+      "28 hostile workspace-id forms (traversal, %2e%2e, separators, LF/CRLF/tab/space, case, length, Crockford-excluded i/l/o/u, Cyrillic а, Greek ο, fullwidth ａ, Turkish dotless ı, ZWJ, RTL override, lone surrogate, sibling concatenation, empty, prefix-only, stream-prefixed) — all refused",
+      "9 non-string identifier types including Symbol, BigInt and boxed String — all refused",
+      "zero collisions of any hostile form onto the legitimate stream name",
+      "cross-workspace channel construction and parseStreamName scope mismatch — refused",
+      "7 non-canonical stream names including embedded traversal and trailing newline — refused",
+      "14 canonical-encoder hostility cases (NaN, ±Infinity, 2^53, 1e400, lone surrogate, function, symbol, bigint, Date, Map, sparse array, undefined, cycle) — refused",
+      "key-order independence and digest repeatability confirmed",
+      "__proto__ payload caused no global prototype pollution",
+      "28 envelope mutations including forward/zero/string/float schema versions, unregistered and case-variant event types, cross-workspace actor, extra key, client-supplied serverTimestamp and eventId, and six incomplete/malformed causation shapes — all refused",
+      "zero calls to the append callback across the entire mutation matrix",
+      "every one-byte flip at three bit positions across the whole canonical encoding changed the digest or failed closed; zero survivors",
+      "NEW attack not on the builder's list: issuance-side injection — attacker-controlled extra issuance keys, a clock returning a non-Date, a clock returning an invalid Date, a missing clock, and a client-supplied serverTimestamp issuance key — all refused"
+    ],
+    "correctedCriticExpectations": [
+      "causation: null is required-but-nullable by design for root events, declared in src/ledger/schemas/event-envelope.v1.schema.json:24-28 and enforced at src/ledger/envelope.mjs:96. The critic's initial harness wrongly expected refusal; incomplete causation objects ARE refused.",
+      "A null-prototype plain object is deliberately accepted at src/ledger/errors.mjs:45; class instances and other non-plain prototypes are refused. The critic's initial harness wrongly expected refusal."
+    ]
+  },
+  "detectorSensitivity": {
+    "clone": "work/critic3-sabotage (disposable clone detached at 5d8cb69)",
+    "defect": "disabled the validateEventEnvelope schemaVersion equality fence at src/ledger/envelope.mjs:75",
+    "nodeCommand": "node tools/verify-e0-t01.mjs",
+    "observedNodeExitCode": 1,
+    "makeCommand": "make verify-E0-T01",
+    "observedMakeExitCode": 2,
+    "observedMakeTrailer": "make: *** [verify-E0-T01] Error 1",
+    "failureSite": "tools/verify-e0-t01.mjs:148 — assert.ok(caught instanceof LedgerValidationError)",
+    "matchesCommittedArtifact": true,
+    "clearsCritic2Finding2": true
+  },
+  "browserEvidence": {
+    "mp4": {
+      "path": "recordings/e0-t01-2d40835-final.mp4",
+      "sha256Recomputed": "33fb975ea66928e5179a787ccb147af2d2506a29180266f8ba6d54fc373b4c9f",
+      "sha256Claimed": "33fb975ea66928e5179a787ccb147af2d2506a29180266f8ba6d54fc373b4c9f",
+      "match": true,
+      "bytes": 284018,
+      "codec": "h264",
+      "profile": "High",
+      "resolution": "1280x720",
+      "durationSeconds": 19.6,
+      "frames": 588,
+      "verdict": "authentic and exactly as claimed"
+    },
+    "captureWebm": {
+      "path": "recordings/e0-t01-2d40835-final.capture.webm",
+      "durationSeconds": 42.16,
+      "sha256": "1b1b008466a4991ec6f8a69bb85dc12fb15b8efec72b4f181a8bc47529fce44a",
+      "note": "Consistent in magnitude with the 49.4 s session duration reported for the recording and with stale-frame compression down to the 19.6 s MP4; corroborates same-session origin but does not prove upload."
+    },
+    "replayRecordingId": "368a3b30-c22d-4dcd-b010-fb8803bd9406",
+    "independentUploadConfirmation": "NOT POSSIBLE IN THIS SESSION",
+    "independentUploadConfirmationDetail": "No Replay MCP tools are configured in this session (ToolSearch returned only Playwright, Box and Gmail servers). `npx replayio list`, `curl` to app.replay.io, and reads of ~/.replay/recordings.log were all denied by the session sandbox, which restricts filesystem access to the project directory and blocks network egress. Critic protocol step 7 could therefore not be performed against this recording.",
+    "priorCriticComparison": "Critic 2 independently confirmed the PREVIOUS recording d8fdc763-b621-453f-a00c-9010c6cb5a5f as Uploaded via `replayio list`. The new recording 368a3b30 has not been independently confirmed as uploaded by any critic."
+  },
+  "findings": [
+    {
+      "id": "C3-F1",
+      "severity": "blocking-for-signoff",
+      "type": "verification-gap, not a product defect",
+      "summary": "Critic protocol step 7 could not be performed against recording 368a3b30. Its upload status and Replay query results rest solely on builder-authored artifacts (.replay/browser-session.json, evidence/browser-proof.json, evidence/replay-interrogation.json, evidence/gate-summary.json). evidence/replay-interrogation.json is produced by no committed script and is structurally the same class of unreproducible hand-authored artifact that critic 2 flagged in its Finding 1.",
+      "mitigatingFacts": [
+        "The substantive AC7 fact — zero console errors — is now backed by a committed executable assertion: scripts/e0-t01-replay-flow.js:157-168 throws on any console error, console warning, request failure, or page response >= 400.",
+        "Critic 2's console-count confound is genuinely removed: the deliberate edit failure is now an HTTP-200 application error (scripts/e0-t01-replay-flow.js:88-94), so no browser resource-load error is emitted.",
+        "The counting definition is now explicitly disclosed in evidence/browser-proof.json:71-79 (flowConsoleErrors, playwrightCliConsoleErrors, replayConsoleErrors) and evidence/browser-proof.json:107-111 (pageResponses.observedStatuses with a redirect note).",
+        "The same-session MP4 is byte-authenticated by this critic.",
+        "This gap is caused by the critic session's environment, not by any deficiency the builder can remedy through rework."
+      ]
+    },
+    {
+      "id": "C3-F2",
+      "severity": "minor",
+      "type": "evidence-accuracy",
+      "summary": "readme.md:381 states that `scripts/e0-t01-replay-metadata.json` \"makes its lifecycle recording queryable by Replay\", and evidence/browser-proof.json:6 cites it as metadataFile. The committed file contains exactly `{}` — an empty object supplying no title, no test metadata, and nothing that would make a recording queryable. The stated purpose of a committed evidence artifact is not true of its contents."
+    },
+    {
+      "id": "C3-F3",
+      "severity": "minor",
+      "type": "evidence-accuracy / undisclosed measurement boundary",
+      "summary": "Two committed artifacts describing the same session disagree, and one zero-count is structurally unable to observe the error it implies. evidence/replay-interrogation.json:30-32 reports statusDistribution {\"2xx\": 21} for all 21 requests, while evidence/browser-proof.json:109 reports observedStatuses [200, 201, 302] — a 302 is not 2xx. Separately, the deliberate identity-spoof probe is issued through Playwright's APIRequestContext (scripts/e0-t01-replay-flow.js:143-146), not through the page, so its 403 appears in neither page-level response capture nor Replay's network panel; consistently, replay-interrogation.json records only 2 PATCH requests and no 4xx. The reported \"0 failed requests\" is therefore not evidence that error paths were exercised, and that boundary is not disclosed the way the console-counting boundary now is."
+    }
+  ],
+  "coverageAudit": {
+    "executedByEvidenceThisCriticReran": [
+      "src/ledger/* (8 modules) and src/ledger/schemas/* — 147 independent attacks plus 9 verifier checks plus 6 ledger tests",
+      "all 8 fixtures — digests recomputed independently",
+      "docs/stream-topology.md — verifier check 8",
+      "tools/verify-e0-t01.mjs — run green in a cold clone and red under sabotage",
+      "src/server.mjs routing, sessionless-/ boundary, updateMessage ownership, and public/app.js edit surface — 5/5 committed browser tests rerun"
+    ],
+    "explicitlyWaived": [
+      "AGENTS.md, ROADMAP.md, CLAUDE.md, README.md — documentation, no runtime behavior",
+      ".eforest/** task metadata, .github/pull_request_template.md, .gitignore — planning/config",
+      "tools/build_queue.py, tools/audit_backlog.py, Makefile, package.json wiring — build/config",
+      ".replay/browser-session.json, scripts/e0-t01-replay-metadata.json — evidence metadata"
+    ],
+    "requiringEvidence": [
+      "Replay recording 368a3b30 upload status and console/network/exception query results (C3-F1)"
+    ],
+    "dead": [],
+    "notes": "scripts/e0-t01-replay-flow.js is committed and readable but is wired into no committed npm script, test, or record harness; it was run ad hoc via playwright-cli run-code against a live Replay Chromium session (evidence/browser-proof.json:11). Reproducing it requires manually starting the stack and a Replay Chromium session. tests/replay-concurrent.spec.mjs remains excluded by playwright.config.mjs testIgnore, as critic 2 noted."
+  },
+  "redactionAudit": {
+    "scanned": ["evidence/*", "scripts/e0-t01-replay-flow.js", "scripts/e0-t01-replay-metadata.json", ".replay/browser-session.json"],
+    "rawSecretsFound": false,
+    "note": "Only a deliberately incorrect login password literal and the local emulator fixture token `test_token_admin` appear. Neither is a real upstream credential; the emulator prints that token itself at startup."
+  },
+  "verdict": "needs-evidence",
+  "verdictScope": "The ledger envelope, identifier grammar, stream topology, canonical encoding, refusal-before-append boundary, digest sensitivity, and verifier detector sensitivity were all independently reproduced and NOT falsified. Critic 2's Finding 2 (exit code) is fully cleared. Critic 2's Finding 1 is substantially addressed. The gate remains open only because critic protocol step 7 was not performable in this session and two minor evidence-accuracy items (C3-F2, C3-F3) are outstanding."
+}

@@ -258,4 +258,3 @@ A ticket is done only when:
 - status is `verified` and the regenerated queue is committed;
 - any publication requested by the workflow is complete, without inferring merge
   authority.
-

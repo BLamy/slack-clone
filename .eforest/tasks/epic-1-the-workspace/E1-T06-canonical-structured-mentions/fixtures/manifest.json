@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "files": {
+    "mention-corpus.v1.json": {
+      "policyVersion": 1,
+      "parserCases": 5,
+      "resolutionCases": 7
+    },
+    "invalid/mention-facts.v1.json": {
+      "invalidFactCases": 4
+    }
+  }
+}

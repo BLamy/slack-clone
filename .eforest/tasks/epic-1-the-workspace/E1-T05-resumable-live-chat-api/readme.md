@@ -3,7 +3,7 @@ id: E1-T05
 epic: 1
 title: "Resumable live chat API without polling"
 priority: 105
-status: pending
+status: verified
 depends_on: [E1-T04]
 estimate: L
 capstone: false
@@ -61,3 +61,239 @@ verification, while the server remains responsible for reduction and authorizati
 5. Restore the old polling loop in a scratch worktree; the request-budget gate must fail.
 
 ## Verification log
+
+### Builder — 2026-08-02 — implementation complete
+
+- Implementation commit: `7370d35c99035bff3e979ac8e3c1f7c0a0f5cb90` (`E1-T05: implement
+  resumable live chat API`). The live HTTP path now uses per-client official Durable Streams
+  follows from opaque acknowledged checkpoints, emits typed resume/status/terminal SSE
+  frames, serializes bounded writes with drain timeouts, and revalidates session/workspace
+  authorization before batches and heartbeats. The browser reconnects from its last
+  acknowledged status checkpoint. The old shared room cursor, reset stop/restart path, and
+  350 ms polling shape are gone.
+- Focused evidence: `test/unit/live-chat-http.test.mjs` covers independent client follows,
+  reconnect suffix delivery, checkpoint conflict/refusal, membership and heartbeat
+  revocation, bounded slow-reader resync, and shutdown closure. The existing request-budget
+  fixture covers a 900,000 ms idle window with one bounded read, one follow, 90 heartbeats,
+  and zero additional adapter calls; its 350 ms polling positive control remains sensitive.
+- Exact full verifier: `E1_T05_IMPLEMENTATION_COMMIT=7370d35c99035bff3e979ac8e3c1f7c0a0f5cb90
+  TEST_RUN_ID=promoted-e1-t05 node scripts/verify-e1-t05.mjs`. Fresh emulator and browser
+  gates passed: format, lint, typecheck, 104 unit tests, 5 Playwright integration tests,
+  and build. Promoted evidence is under `evidence/e1-t05-final/`.
+- Real-emulator two-client transcript resumed Ada from
+  `0000000000000000_0000000000000694` to
+  `0000000000000000_0000000000001398` with no duplicate logical effects. Ada and Linus
+  converged on final digest
+  `sha256:183cdaae419b2dffafd80d94b3661cc53c0f778f575df80d6baa2a7dcab42421`; malformed
+  checkpoints returned typed `LIVE_CHECKPOINT_INVALID` status 400. Evidence:
+  `evidence/e1-t05-final/verification-summary.json`,
+  `evidence/e1-t05-final/network-transcript.json`, and
+  `evidence/e1-t05-final/idle-request-budget.json`.
+- Claim: authenticated live chat now preserves ordered logical effects across disconnect and
+  reconnect without hot polling; slow clients are isolated behind bounded delivery and typed
+  resync/closure policy; live authorization is rechecked throughout each connection; and
+  shutdown/cancellation paths do not issue a second JSON response. Replay: N/A (server
+  live-delivery API) + mitigation: real-emulator network transcript, reconnect matrix,
+  request counts, and digest convergence.
+
+### Builder — 2026-08-03 — needs-evidence repair complete
+
+- Repair commit: `2d30a94118d0df72c7b1aa45757de517b47e7f2e` (`E1-T05: close live delivery
+  evidence gaps`). Snapshot failures now preserve the provider error before client cleanup,
+  so stale provider checkpoints return typed `LIVE_CHECKPOINT_INVALID` 409 responses;
+  session revocation retains `LIVE_SESSION_REVOKED` through queued delivery.
+- The idle harness now wires the real workspace authorization core: one subscription
+  directory read, 90 heartbeat revalidation reads, one bounded snapshot read, and one live
+  follow across 900,000 deterministic milliseconds. The polling positive control remains
+  sensitive. Focused tests add stale checkpoint scope, logout revocation, and slow-reader
+  cross-room isolation.
+- Exact promoted cold target: `PROMOTE_EVIDENCE=1
+  E1_T05_IMPLEMENTATION_COMMIT=2d30a94118d0df72c7b1aa45757de517b47e7f2e
+  TEST_RUN_ID=promoted-e1-t05-repair make verify-E1-T05`. Format, lint, typecheck, 107 unit
+  tests, 5 Playwright tests, build, fresh emulator, and real two-client scenario passed.
+  The final digest is `sha256:0e7d26ed4c3cf2cf161236ef335a503599c66fd93e523255e13ce562c93ea84b`; both
+  clients converged at `0000000000000000_0000000000001426`, and the reconnect delivered
+  only the missed second message. The cold bootstrap transcript is committed in
+  `evidence/e1-t05-final/cold-clone-transcript.json`.
+- Additional live evidence: an idle sibling room received no cross-room event, and a
+  logged-out Ada connection terminated with `LIVE_SESSION_REVOKED`. Promoted files are
+  `verification-summary.json`, `network-transcript.json`, `idle-request-budget.json`, and
+  `cold-clone-transcript.json` under `evidence/e1-t05-final/`. Replay: N/A (server
+  live-delivery API) + mitigation: real-emulator network transcript, reconnect matrix,
+  request counts, digest convergence, and focused authorization/backpressure tests.
+- Claim: the prior evidence gap is closed and the typed stale-checkpoint and logout paths
+  are now proven against the implementation commit; awaiting a fresh independent critic.
+
+### Builder — 2026-08-03 — archive and boundary repair complete
+
+- Repair commit: `c0d0901b96a8ecd3a2ebcc2cc2d816c4b58cb2a4` (`E1-T05: enforce archived
+  channel live revocation`). The chat stream now treats the durable `chat.room.archived`
+  fact as channel-status authority, skips it as a message, and closes the live client with
+  typed `LIVE_CHANNEL_ARCHIVED` at its last acknowledged checkpoint. Production revalidation
+  checks both the fenced workspace membership and authoritative room status; the HTTP archive
+  command appends the durable status fact.
+- Focused boundary coverage now includes archive revocation, disconnect after message write
+  before status acknowledgement, disconnect during heartbeat, and sibling-workspace event
+  checkpoint refusal. The verifier's real-emulator transcript includes archive closure,
+  cross-room isolation, logout closure, reconnect suffix delivery, and digest convergence.
+- Exact promoted cold target: `PROMOTE_EVIDENCE=1
+  E1_T05_IMPLEMENTATION_COMMIT=c0d0901b96a8ecd3a2ebcc2cc2d816c4b58cb2a4
+  TEST_RUN_ID=promoted-e1-t05-archive-repair make verify-E1-T05`. Format, lint, typecheck, 111
+  unit tests, 5 Playwright tests, build, fresh emulator, and the real two-client scenario
+  passed. The final digest is
+  `sha256:0f5a01ff6e361489c031f06cfac197148e5b07c02b06f7089ec4687bab480b0f`; both clients
+  converged at `0000000000000000_0000000000001458`, and the archive terminal checkpoint is
+  `0000000000000000_0000000000000733`.
+- Promoted evidence is under `evidence/e1-t05-final/`: `verification-summary.json`,
+  `network-transcript.json`, `idle-request-budget.json`, and `cold-clone-transcript.json`.
+  The idle budget records 1 subscription directory read, 90 workspace revalidations, 90
+  channel-status reads, 1 bounded snapshot read, and 1 live follow across 900,000
+  deterministic milliseconds. Replay: N/A (server live-delivery API) + mitigation:
+  real-emulator network transcript, reconnect matrix, request counts, digest convergence,
+  and focused authorization/backpressure tests.
+- Claim: channel archive and all critic-identified live boundary gaps are now implemented
+  and evidenced against the exact repair commit; awaiting a fresh independent critic.
+
+### Builder — 2026-08-03 — archive reconnect authority repair complete
+
+- Repair commit: `a34ac48bc18a21c4d73ba5c936fa4f584542e196` (`E1-T05: close archive
+  reconnect authority gap`). Every live connection now performs the room-status check before
+  SSE headers, including resumed checkpoints after the archive fact. The check shares one
+  revalidator between production and the request-budget harness; it avoids recursively
+  reacquiring the workspace fence already held by subscription authorization. Archive is
+  manager-only through `workspace.channel.manage`, and the chat service rejects message,
+  edit, and reset mutations after the durable archive fact.
+- The focused verifier adds the previously missing reconnect-after-archive and
+  post-archive-write attacks. The real emulator returned `409 LIVE_CHANNEL_ARCHIVED` for a
+  post-archive checkpoint and `409 CHAT_ROOM_ARCHIVED` for a post-archive message; the live
+  client still terminated with `LIVE_CHANNEL_ARCHIVED` at its acknowledged checkpoint.
+- Exact promoted cold target: `PROMOTE_EVIDENCE=1
+  E1_T05_IMPLEMENTATION_COMMIT=a34ac48bc18a21c4d73ba5c936fa4f584542e196
+  TEST_RUN_ID=promoted-e1-t05-archive-reconnect make verify-E1-T05`. Format, lint, typecheck,
+  112 unit tests, 5 Playwright tests, build, fresh emulator, and the real two-client scenario
+  passed. The final digest is
+  `sha256:46c9c0a5b2e891f9c5f65f2d998026c48dee1be2d212648fa0a773068bbcb2cd`; both clients
+  converged at `0000000000000000_0000000000001470`, and the archive terminal checkpoint is
+  `0000000000000000_0000000000000739`.
+- Promoted evidence is under `evidence/e1-t05-final/`: `verification-summary.json`,
+  `network-transcript.json`, `idle-request-budget.json`, and `cold-clone-transcript.json`.
+  The idle budget records one authorized subscription, 90 workspace membership
+  revalidations, 91 authoritative room-status reads (one at open plus 90 heartbeats), one
+  bounded snapshot read, one live follow, and zero polling calls across 900,000 deterministic
+  milliseconds. Replay: N/A (server live-delivery API) + mitigation: real-emulator network
+  transcript, reconnect matrix, request counts, digest convergence, and focused tests.
+- Claim: the archive reconnect authority bypass and post-archive mutation path are closed
+  against the exact repair commit; awaiting a fresh independent critic.
+
+### Builder — 2026-08-03 — workspace fence repair complete
+
+- Repair commit: `b4dc236c5aed39fbb36abe5afe001b26d43a7057` (`E1-T05: release workspace
+  fence before live delivery`). Workspace subscription authorization now completes its
+  fenced membership check before registering the long-lived HTTP delivery. The delivery then
+  performs its own open workspace and room-status revalidation, so a slow initial socket
+  cannot hold the workspace fence while waiting for drain.
+- A real-fence unit attack proves an unrelated workspace read completes while another SSE
+  client is non-draining. The real emulator also passed archive reconnect refusal,
+  post-archive mutation refusal, logout closure, cross-room isolation, and digest convergence.
+- Exact promoted cold target: `PROMOTE_EVIDENCE=1
+  E1_T05_IMPLEMENTATION_COMMIT=b4dc236c5aed39fbb36abe5afe001b26d43a7057
+  TEST_RUN_ID=promoted-e1-t05-fence-repair make verify-E1-T05`. Format, lint, typecheck,
+  113 unit tests, 5 Playwright tests, build, fresh emulator, and the real two-client scenario
+  passed. The final digest is
+  `sha256:e2323b11e208a2a69d89fd3db860857b45548f12208209e36762c44d98e5bd04`; both clients
+  converged at `0000000000000000_0000000000001450`, and the archive terminal checkpoint is
+  `0000000000000000_0000000000000729`.
+- Promoted evidence is under `evidence/e1-t05-final/`. Its idle budget records one
+  subscription check, 91 workspace checks, 91 room-status reads, one message snapshot, one
+  follow, and no additional message-delivery calls while idle; the polling positive control
+  remains sensitive. Replay: N/A (server live-delivery API) + mitigation: real-emulator
+  network transcript, reconnect matrix, request counts, digest convergence, and focused
+  authorization/backpressure tests.
+- Claim: the workspace-fence slow-reader bypass is closed against the exact repair commit;
+  awaiting a fresh independent critic.
+
+### Builder — 2026-08-02 — stream accounting repair complete
+
+- Repair commit: `a228ee99bada05eade5c8168fb25ab9034d15a14` (`E1-T05: account for
+  authorization stream reads`). The idle request probe now delegates room-status checks to
+  the real `createChatService.readRoomStatus` implementation and counts its underlying
+  Durable Stream reads through the fake stream store. Evidence distinguishes the HTTP
+  message-delivery budget from the authorization/status reads required by the open check and
+  90 deterministic heartbeats.
+- Exact promoted cold target: `PROMOTE_EVIDENCE=1
+  E1_T05_IMPLEMENTATION_COMMIT=a228ee99bada05eade5c8168fb25ab9034d15a14
+  TEST_RUN_ID=promoted-e1-t05-stream-accounting make verify-E1-T05`. Format, lint, typecheck,
+  113 unit tests, 5 Playwright tests, build, fresh emulator, and the real two-client scenario
+  passed. The final digest is
+  `sha256:b65a0aa4a8c964817a76aaa77597682ae3947fbbacacf12f913e916bde3d9ff3`; both clients
+  converged at `0000000000000000_0000000000001470`, and the archive terminal checkpoint is
+  `0000000000000000_0000000000000739`.
+- Promoted idle evidence records 91 authorization reads, 92 directory reads, 91 room-status
+  reads, 2 Durable Stream reads before logical time advances, 92 afterward, and a delta of 90
+  status reads matching the 90 heartbeat executions. Message-delivery reads/follows remain
+  constant at one each with zero polling calls. The real emulator also proved archive
+  reconnect refusal (`409 LIVE_CHANNEL_ARCHIVED`), post-archive mutation refusal
+  (`409 CHAT_ROOM_ARCHIVED`), logout closure, cross-room isolation, opaque-checkpoint resume,
+  and digest convergence. Replay: N/A (server live-delivery API) + mitigation: real-emulator
+  network transcript, reconnect matrix, request counts, digest convergence, and focused
+  authorization/backpressure tests.
+- Claim: the idle-budget evidence now measures the actual authorization stream path and the
+  implementation commit is ready for a fresh independent critic.
+
+### Builder — 2026-08-02 — cold-checkout evidence repair complete
+
+- Repair commit: `58546f41f98eed41b78d0e453ac4ceae9c64a9c3` (`E1-T05: verify from disposable
+  cold checkout`). The cold verifier now creates a disposable detached Git worktree at the
+  declared implementation commit, initializes the pinned emulator submodule, proves the
+  checkout has no tracked or untracked files before installation, runs installation/build and
+  the verifier inside that checkout, copies only the promoted evidence back, and removes the
+  checkout. This closes the prior in-place cold-run gap where unrelated untracked files could
+  influence the result.
+- Exact promoted cold target: `PROMOTE_EVIDENCE=1
+  E1_T05_IMPLEMENTATION_COMMIT=58546f41f98eed41b78d0e453ac4ceae9c64a9c3
+  TEST_RUN_ID=promoted-e1-t05-cold-checkout make verify-E1-T05`. The disposable checkout
+  passed its clean-status assertion, format, lint, typecheck, 113 unit tests, 5 Playwright
+  tests, build, fresh emulator bootstrap, and the real two-client scenario. The final digest
+  is `sha256:a3bc45285c0fd5d5fed7f057c765cacd917af2d06e896f78265bc6a223ddb4e6`; both clients
+  converged at `0000000000000000_0000000000001454`, and the archive terminal checkpoint is
+  `0000000000000000_0000000000000731`.
+- Promoted `cold-clone-transcript.json` records the detached worktree, exact implementation
+  commit, clean pre-install status, submodule initialization, frozen install, emulator build,
+  verifier exit codes, and PASS. The idle evidence remains service-backed: 2 Durable Stream
+  reads before logical time advances, 92 afterward, delta 90 matching heartbeats, one
+  message snapshot, one follow, and zero polling calls. Archive reconnect and post-archive
+  mutation remain typed 409 refusals; logout, isolation, resume, and digest convergence also
+  passed. Replay: N/A (server live-delivery API) + mitigation: real-emulator network
+  transcript, reconnect matrix, request counts, digest convergence, focused
+  authorization/backpressure tests, and disposable-checkout proof.
+- Claim: the cold-start proof now excludes ambient working-tree files and is tied to the exact
+  implementation commit; awaiting a fresh independent critic.
+
+### Critic — 2026-08-02 — verified
+
+VERDICT: verified
+
+- Fresh critic session reviewed implementation commit `58546f41f98eed41b78d0e453ac4ceae9c64a9c3`
+  and promoted evidence commit `60b0475` without editing the repository. The critic traced
+  `scripts/cold-verify-e1-t05.mjs` and confirmed the detached worktree, pinned submodule,
+  zero tracked/untracked pre-install status, in-checkout install/build/verifier execution,
+  named evidence copy, and success-path cleanup. The committed cold transcript records the
+  same facts and no E1-T05 worktree remains.
+- Independent bounded commands passed: `node --test
+  test/unit/workspace-http.test.mjs test/unit/live-chat-http.test.mjs` (17/17) and
+  `test/unit/durable-streams-adapter.test.mjs` (23/23). The critic reproduced the real-fence
+  slow-reader mutant distinction and confirmed the polling positive control goes red. It
+  confirmed actual `createChatService.readRoomStatus` delegation and underlying stream-read
+  accounting, plus the open/batch/heartbeat, checkpoint, revocation, archive, reconnect,
+  mutation, isolation, cancellation, and duplicate-response coverage against the promoted
+  transcript.
+- The only noted gap is a non-blocking end-to-end HTTP test for an active member with an
+  insufficient role attempting archive; the capability table and E1-T02 role contract cover
+  the authorization mapping, and the critic did not refute E1-T05.
+- Evidence: `evidence/e1-t05-final/cold-clone-transcript.json`, `verification-summary.json`,
+  `network-transcript.json`, and `idle-request-budget.json`. Replay: N/A (server live-delivery
+  API) + mitigation: real-emulator network transcript, reconnect matrix, request counts,
+  digest convergence, focused authorization/backpressure tests, and disposable-checkout
+  proof.
+- Claim: every E1-T05 acceptance criterion is verified against the exact implementation and
+  promoted evidence commits.

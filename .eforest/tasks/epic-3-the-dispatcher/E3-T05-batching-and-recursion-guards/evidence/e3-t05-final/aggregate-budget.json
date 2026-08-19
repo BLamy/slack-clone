@@ -1,0 +1,132 @@
+{
+  "budget": {
+    "costUsdCents": 3,
+    "inputTokens": 15,
+    "outputTokens": 8,
+    "totalTokens": 23
+  },
+  "decisions": [
+    {
+      "batchId": "bt_0ae694d5451464ed4c8a985ce3",
+      "code": null,
+      "conversationKey": "ck_5f36cf09274d3a9182a2d261ae",
+      "invocationId": "iv_gggggggggggggggggggggggggg",
+      "invocationRef": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000040_0000000000000000",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+      },
+      "sourceTrigger": {
+        "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "offset": "0000000000000040_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "status": "admitted",
+      "terminal": false
+    },
+    {
+      "batchId": null,
+      "code": "CONVERSATION_SCHEDULER_BUDGET_EXCEEDED",
+      "conversationKey": "ck_5f36cf09274d3a9182a2d261ae",
+      "invocationId": "iv_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+      "invocationRef": {
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "offset": "0000000000000041_0000000000000000",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+      },
+      "sourceTrigger": {
+        "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "offset": "0000000000000041_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "status": "non-running",
+      "terminal": true
+    }
+  ],
+  "entries": [
+    {
+      "aggregateBudget": {
+        "costUsdCents": 3,
+        "inputTokens": 15,
+        "outputTokens": 8,
+        "totalTokens": 23
+      },
+      "aggregateUsageAfter": {
+        "costUsdCents": 1,
+        "inputTokens": 10,
+        "outputTokens": 5,
+        "totalTokens": 15
+      },
+      "aggregateUsageBefore": {
+        "costUsdCents": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "totalTokens": 0
+      },
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+      "ancestors": [
+        {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "sourceRef": {
+            "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "offset": "0000000000000039_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        }
+      ],
+      "depth": 1,
+      "invocationId": "iv_gggggggggggggggggggggggggg",
+      "parentInvocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "rootInvocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "sourceTrigger": {
+        "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "offset": "0000000000000040_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "aggregateBudget": {
+        "costUsdCents": 3,
+        "inputTokens": 15,
+        "outputTokens": 8,
+        "totalTokens": 23
+      },
+      "aggregateUsageAfter": null,
+      "aggregateUsageBefore": {
+        "costUsdCents": 1,
+        "inputTokens": 10,
+        "outputTokens": 5,
+        "totalTokens": 15
+      },
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+      "ancestors": [
+        {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "sourceRef": {
+            "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "offset": "0000000000000040_0000000000000000",
+            "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        }
+      ],
+      "depth": 1,
+      "invocationId": "iv_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+      "parentInvocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "rootInvocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "sourceTrigger": {
+        "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "offset": "0000000000000041_0000000000000000",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    }
+  ],
+  "secondDeclaredBudget": {
+    "costUsdCents": 100,
+    "inputTokens": 100,
+    "outputTokens": 100,
+    "totalTokens": 200
+  },
+  "scheduleDigest": "sha256:9f6aebe6fc2e5c8f393b86a98b930eb007b10981e9613986c399ff08a16172e5"
+}

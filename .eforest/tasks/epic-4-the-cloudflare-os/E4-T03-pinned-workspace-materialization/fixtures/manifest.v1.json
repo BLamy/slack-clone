@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "invocationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "expectedWorkspaceDigest": "sha256:04b3124949eb9b50a02072f0b361f91dbb62590bfd84aee7e111faf98d232299",
+  "entries": [
+    {
+      "path": "README.md",
+      "type": "file",
+      "mode": 420,
+      "content": "Pinned workspace\n"
+    },
+    {
+      "path": "bin/run",
+      "type": "file",
+      "mode": 493,
+      "bytes": "AP8K"
+    },
+    {
+      "path": "empty",
+      "type": "directory",
+      "mode": 493
+    }
+  ]
+}

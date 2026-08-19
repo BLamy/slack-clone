@@ -1,0 +1,50 @@
+{
+  "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+  "correlationId": "cr_8e5d064dd79a76c1490c3f1b7c",
+  "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+  "snapshotDigest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+  "sourceTrigger": {
+    "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "offset": "0000000000000090_aaaaaaaaaaaaaaaa",
+    "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "reuseAttacks": [
+    {
+      "attack": "agent",
+      "expectedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+      "observedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+      "offset": "0000000000000002_aaaaaaaaaaaaaaaa",
+      "refused": true
+    },
+    {
+      "attack": "snapshot-digest",
+      "expectedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+      "observedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+      "offset": "0000000000000002_aaaaaaaaaaaaaaaa",
+      "refused": true
+    },
+    {
+      "attack": "source-trigger",
+      "expectedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+      "observedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+      "offset": "0000000000000002_aaaaaaaaaaaaaaaa",
+      "refused": true
+    },
+    {
+      "attack": "invocation",
+      "expectedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+      "observedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+      "offset": "0000000000000002_aaaaaaaaaaaaaaaa",
+      "refused": true
+    },
+    {
+      "attack": "workspace",
+      "expectedCode": "INVOCATION_RUN_INVALID_SOURCE",
+      "observedCode": "INVOCATION_RUN_INVALID_SOURCE",
+      "offset": "0000000000000002_aaaaaaaaaaaaaaaa",
+      "refused": true
+    }
+  ],
+  "result": "PASS"
+}

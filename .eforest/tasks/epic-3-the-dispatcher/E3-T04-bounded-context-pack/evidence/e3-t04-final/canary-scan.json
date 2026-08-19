@@ -1,0 +1,61 @@
+{
+  "files": [
+    {
+      "leaked": false,
+      "name": "acl-canaries.json"
+    },
+    {
+      "leaked": false,
+      "name": "canary-scan.json"
+    },
+    {
+      "leaked": false,
+      "name": "cold-clone-transcript.json"
+    },
+    {
+      "leaked": false,
+      "name": "pack-manifest.json"
+    },
+    {
+      "leaked": false,
+      "name": "refusal-matrix.json"
+    },
+    {
+      "leaked": false,
+      "name": "replay-digests.json"
+    },
+    {
+      "leaked": false,
+      "name": "sensitivity.json"
+    },
+    {
+      "leaked": false,
+      "name": "truncation.json"
+    },
+    {
+      "leaked": false,
+      "name": "trust-boundary.json"
+    },
+    {
+      "leaked": false,
+      "name": "verification-summary.json"
+    }
+  ],
+  "leaked": false,
+  "evidenceFiles": [
+    "acl-canaries.json",
+    "canary-scan.json",
+    "cold-clone-transcript.json",
+    "pack-manifest.json",
+    "refusal-matrix.json",
+    "replay-digests.json",
+    "sensitivity.json",
+    "truncation.json",
+    "trust-boundary.json",
+    "verification-summary.json"
+  ],
+  "postVerifierTranscriptChecked": true,
+  "publishedEvidenceLeaked": false,
+  "canaryPresentInPublishedEvidence": false,
+  "finalEvidenceChecked": true
+}

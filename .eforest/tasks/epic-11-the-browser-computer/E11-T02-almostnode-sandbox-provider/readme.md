@@ -13,7 +13,7 @@ capstone: false
 
 A reach-only AlmostNode sandbox adapter implements the provider-neutral lifecycle using
 the `@agent-wasm/sdk` workspace and `AgentAdapter`: provision, execute, stream, cancel,
-inspect health, and destroy without becoming a Fly fallback or production default.
+inspect health, and destroy without becoming a Cloudflare OS fallback or production default.
 
 ## Context
 
@@ -35,7 +35,7 @@ behind a reach flag; unsupported operations return typed capability errors befor
       destroy removes its persisted bytes and capabilities within the documented boundary.
 - [ ] Cancellation fences later output/tool effects and reaches one terminal state across
       duplicate cancel, tab close, worker crash, and reconnect.
-- [ ] Provider selection requires the reach gate and explicit user choice; Fly remains the
+- [ ] Provider selection requires the reach gate and explicit user choice; Cloudflare OS remains the
       unchanged production default, and AlmostNode is never an automatic retry target.
 - [ ] The final provision/run/cancel/destroy walkthrough has Replay and same-session MP4,
       zero console errors, and lifecycle stream offsets/digests equal replay.
@@ -49,6 +49,6 @@ behind a reach flag; unsupported operations return typed capability errors befor
 3. Race cancel/destroy with output and broker calls, then reconnect; post-fence effects or
    multiple terminal states refute lifecycle fencing.
 4. Disable the reach flag and fail the adapter; any automatic AlmostNode route or altered
-   Fly behavior refutes production-path isolation.
+   Cloudflare OS behavior refutes production-path isolation.
 
 ## Verification log

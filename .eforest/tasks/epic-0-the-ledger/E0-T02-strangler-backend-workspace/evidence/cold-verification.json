@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T02",
+  "role": "builder",
+  "recordedAt": "2026-08-01T21:48:21Z",
+  "implementationCommit": "db8077fd92e9578913886c543090d5cce0b5b239",
+  "command": "make verify-E0-T02",
+  "coldClone": {
+    "kind": "local no-hardlink clone",
+    "detachedHead": "db8077fd92e9578913886c543090d5cce0b5b239",
+    "preflightAbsent": [
+      "node_modules",
+      "emulate/packages/emulate/dist/index.js",
+      ".env",
+      "recordings/latest.json"
+    ],
+    "emulatorCommit": "8b88027535e4ea6a18c3ce92a13af706382a451f",
+    "rootInstall": "pnpm install --frozen-lockfile",
+    "emulatorInstall": "pnpm install --frozen-lockfile"
+  },
+  "result": "PASS",
+  "zeroSkips": true,
+  "gates": [
+    {
+      "name": "format",
+      "command": "pnpm format:check",
+      "result": "PASS"
+    },
+    {
+      "name": "lint",
+      "command": "pnpm lint",
+      "result": "PASS"
+    },
+    {
+      "name": "static-analysis",
+      "command": "pnpm typecheck",
+      "result": "PASS",
+      "packageLayers": 5,
+      "boundaryViolations": 0,
+      "syntaxFiles": 35
+    },
+    {
+      "name": "unit",
+      "command": "pnpm test:unit",
+      "result": "PASS",
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "integration",
+      "command": "pnpm test:integration",
+      "result": "PASS",
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "covered": [
+        "homepage and emulator login",
+        "stable login error layout",
+        "two authenticated sessions",
+        "owner-only persisted edit",
+        "legacy display-name ownership denial"
+      ]
+    },
+    {
+      "name": "concurrency",
+      "command": "pnpm test:concurrency",
+      "result": "PASS",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "build",
+      "command": "pnpm build",
+      "result": "PASS",
+      "fileCount": 28,
+      "manifestSha256": "a4624289d6d3707c17f7e0925406244e3fc1b6d9d0601f36de83460215510f6c"
+    }
+  ],
+  "streamProof": {
+    "room": "cold-9987-msawhncx-edit-1785620777253",
+    "stream": "/rooms/cold-9987-msawhncx-edit-1785620777253/messages",
+    "nextOffset": "0000000000000000_0000000000000539",
+    "streamDigest": "sha256:5918b9ceb2acc0872442eb970b1733b75fb8945f26302051bdcad6afc967c976",
+    "messageCount": 1,
+    "domMatchedApi": true,
+    "persistedAfterReload": true
+  },
+  "rebuildProof": {
+    "pureReducerUnit": "PASS",
+    "coldBuildManifest": "evidence/build-manifest.json"
+  },
+  "routineSideEffects": {
+    "replayUploadAttempted": false,
+    "externalTunnelAttempted": false,
+    "recordingsUnchanged": true,
+    "recursiveDeletionRestrictedTo": ".artifacts"
+  },
+  "replay": "Replay: N/A (server extraction with unchanged browser behavior) + mitigation: inherited Playwright compatibility suite, package-boundary audit, and cold-clone composed gates",
+  "claim": "The monolithic server is now composed from protocol, reducer, Durable Streams, service, and HTTP package seams without changing the authenticated two-user browser contract; the root verifier is cold-clone portable, isolated, side-effect bounded, and sensitive to the declared boundary and edit-authorization defects."
+}

@@ -3,7 +3,7 @@ id: E3-T06
 epic: 3
 title: "Cancellation, retries, deadlines, and resource budgets"
 priority: 306
-status: pending
+status: verified
 depends_on: [E3-T03]
 estimate: L
 capstone: false
@@ -64,3 +64,37 @@ testable, not sleeps embedded in tests.
    mutation must make the verifier fail.
 
 ## Verification log
+
+### Builder — 2026-08-08 — commit `c266a78614a046ff94960f859dbd8e820cc1f5b5`
+
+- Cold proof: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e3-t06-final-c266a78 make verify-E3-T06` exited 0 from a clean detached worktree at the exact commit after local-reference submodule initialization, frozen install, and emulator setup. The transcript is recorded in `evidence/e3-t06-final/cold-clone-transcript.json`.
+- Gates: `pnpm format:check:e3-t06`, `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` all passed; the test gate included 180 unit/ledger tests and five two-session browser integration tests.
+- Run-control evidence: `attempt-timelines.json` records two attempts with deterministic backoff and distinct lease/capability digests; `fake-clock-schedules.json`, `capability-revocations.json`, `process-resource-counts.json`, `usage-accounting.json`, `terminal-races.json`, and `crash-recovery.json` cover the frozen schedules, fencing order, complete process-tree termination, all budget dimensions, terminal races, and idempotent restart recovery.
+- Replay/evidence integrity: `replay-digests.json` records reducer digest `sha256:b4cd46283d1b20bea8d63405093c3a975bfff8a779dc0b09db14c53c90ce4f83`, lease digest `sha256:2e73c4c5082a385793e40e51887d048b20f72c5e8b6fbbcbe63b1a2f1d773dd4`, 23 reducer prefixes, and four lease prefixes. `canary-scan.json` reports no leaked credential-shaped values. `sensitivity.json` shows the capability-fence mutation made the verifier exit 1.
+- Replay: `Replay: N/A (headless run-control protocol) + mitigation: real process-tree probes, fake-clock schedules, usage manifests, terminal races, and replay`.
+- Claim: cancellation, deadlines, retries, bounded backoff, attempt/aggregate resource budgets, terminal immutability, process-group cleanup, and crash-safe idempotent logical actions are implemented and supported by the exact diff plus promoted cold evidence; ready for a fresh critic.
+
+### Critic — 2026-08-08 — review of commit `07f1a99`
+
+VERDICT: refuted
+
+- The fresh critic could not execute commands in its sandbox, but its static findings are reproducible against the exact diff: usage deduplication was rehydrated with envelope `ik_` keys while `reportUsage` checked caller keys; the restart watermark `initialLeaseRecordCount` was accepted by the verifier harness but ignored by the coordinator; an over-budget `reportUsage` could finalize before validating the supplied capability; and mutating operations trusted caller timestamps without a monotonic deadline guard.
+- These gaps refute the restart/accounting, stale-capability fencing, and deadline portions of the acceptance criteria. The builder is returning the task to implementation to repair them and add independent verifier coverage before another critic.
+
+### Builder repair — 2026-08-08 — commit `d8e34fef90430ed5ac90a69c1f9a3be7c59e9506`
+
+- Cold proof: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e3-t06-repair-final-d8e34fe make verify-E3-T06` exited 0 from a clean detached worktree at the exact repair commit after local-reference submodule initialization, frozen install, and emulator setup. The promoted transcript is `evidence/e3-t06-final/cold-clone-transcript.json`.
+- Gates: `pnpm format:check:e3-t06`, `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` all passed; the test gate included 180 unit/ledger tests and five two-session browser integration tests.
+- Repairs and coverage: usage replay is refused without a second charge and aggregate usage is preserved; the lease flush watermark prevents duplicate lease event IDs after restart; stale over-budget capabilities are refused before budget terminalization; and `clock-guards.json` records rollback refusal at +9 ms after +10 ms observation plus deadline fencing at +101 ms with a single `timed-out` terminal. `crash-recovery.json`, `usage-accounting.json`, `terminal-races.json`, and `process-resource-counts.json` carry the corresponding durable evidence.
+- Sensitivity: `sensitivity.json` reports five of five independent mutants detected with verifier exit 1: capability fencing, usage replay dedupe, lease watermark, stale-capability preflight, and deadline fencing. `canary-scan.json` reports no leaked credential-shaped values.
+- Replay: `Replay: N/A (headless run-control protocol) + mitigation: real process-tree probes, fake-clock schedules, usage manifests, terminal races, and replay`. `replay-digests.json` records reducer digest `sha256:b4cd46283d1b20bea8d63405093c3a975bfff8a779dc0b09db14c53c90ce4f83`, lease digest `sha256:2e73c4c5082a385793e40e51887d048b20f72c5e8b6fbbcbe63b1a2f1d773dd4`, 23 reducer prefixes, and four lease prefixes.
+- Claim: the critic’s four refutations are repaired and independently sensitivity-covered; the exact diff and promoted cold evidence are ready for a fresh critic.
+
+### Critic — 2026-08-08 — repair commit `d8e34fef90430ed5ac90a69c1f9a3be7c59e9506`, evidence commit `61f218a`
+
+VERDICT: verified
+
+- Provenance: the critic confirmed that `61f218a` changes only evidence, readme, project, and queue files after repair commit `d8e34fe`; the promoted transcript and summary both pin the cold run to `d8e34fe`.
+- Re-audit: usage replay dedupe, the `initialLeaseRecordCount` watermark, stale-capability preflight before budget finalization, and monotonic deadline fencing all match their repair assertions and each goes red under its named sensitivity mutation in `sensitivity.json` (five of five detectors, exit 1).
+- Acceptance: the critic found no contradiction in the cold gates, process-tree cleanup, retry/backoff and attempt budget, all resource dimensions and aggregate accounting, terminal races and late-mutation refusal, crash recovery, replay/redaction, or the exact Replay declaration. Its review was static/documentary because Claude execution permissions denied subprocesses; it did not claim a fresh test run.
+- Final claim: E3-T06 is verified against the exact repair diff and promoted cold evidence.

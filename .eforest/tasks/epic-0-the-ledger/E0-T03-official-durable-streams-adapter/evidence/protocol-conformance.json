@@ -1,0 +1,414 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T03",
+  "runId": "e0-t03-repair9-resources",
+  "implementationCommit": "1df738ffcf827cd07113fcf94aec14205d786125",
+  "result": "PASS",
+  "room": "e0-t03-repair9-resources-adapter",
+  "officialClient": "@durable-streams/client@0.2.6",
+  "createOnce": {
+    "ensureCalls": 3,
+    "createRequests": 1
+  },
+  "acceptedIds": [
+    "record-1",
+    "record-2",
+    "record-3",
+    "record-live",
+    "record-live-2"
+  ],
+  "capturedOffsets": [
+    "0000000000000000_0000000000000096",
+    "0000000000000000_0000000000000193",
+    "0000000000000000_0000000000000289",
+    "0000000000000000_0000000000000409",
+    "0000000000000000_0000000000000535"
+  ],
+  "resumeMatrix": [
+    {
+      "checkpoint": "-1",
+      "expectedIds": [
+        "record-1",
+        "record-2",
+        "record-3",
+        "record-live",
+        "record-live-2"
+      ],
+      "observedIds": [
+        "record-1",
+        "record-2",
+        "record-3",
+        "record-live",
+        "record-live-2"
+      ],
+      "nextOffset": "0000000000000000_0000000000000535",
+      "streamDigest": "sha256:b806fa177276e46105e866fc41b756e4a3f81d12edd1cc0d1fc3ae4bdbbbd178"
+    },
+    {
+      "checkpoint": "0000000000000000_0000000000000096",
+      "expectedIds": [
+        "record-2",
+        "record-3",
+        "record-live",
+        "record-live-2"
+      ],
+      "observedIds": [
+        "record-2",
+        "record-3",
+        "record-live",
+        "record-live-2"
+      ],
+      "nextOffset": "0000000000000000_0000000000000535",
+      "streamDigest": "sha256:83cac8b0577b3f6fe20209f6d65774d395713900c021f8adcbefb9d08962e4de"
+    },
+    {
+      "checkpoint": "0000000000000000_0000000000000193",
+      "expectedIds": [
+        "record-3",
+        "record-live",
+        "record-live-2"
+      ],
+      "observedIds": [
+        "record-3",
+        "record-live",
+        "record-live-2"
+      ],
+      "nextOffset": "0000000000000000_0000000000000535",
+      "streamDigest": "sha256:c0f14151f3e7e13aed2db567e6997809a912f01d37898f74c19cdd5a99d68dd6"
+    },
+    {
+      "checkpoint": "0000000000000000_0000000000000289",
+      "expectedIds": [
+        "record-live",
+        "record-live-2"
+      ],
+      "observedIds": [
+        "record-live",
+        "record-live-2"
+      ],
+      "nextOffset": "0000000000000000_0000000000000535",
+      "streamDigest": "sha256:0e3c55f6e35610532cf138b0ddaf566415cd08f5dcea4b02527b315850602d4e"
+    },
+    {
+      "checkpoint": "0000000000000000_0000000000000409",
+      "expectedIds": [
+        "record-live-2"
+      ],
+      "observedIds": [
+        "record-live-2"
+      ],
+      "nextOffset": "0000000000000000_0000000000000535",
+      "streamDigest": "sha256:e8969b669234d2882be251a94f03b1da05d97087872c8ab80263b8ec5d93c2c7"
+    },
+    {
+      "checkpoint": "0000000000000000_0000000000000535",
+      "expectedIds": [],
+      "observedIds": [],
+      "nextOffset": "0000000000000000_0000000000000535",
+      "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  ],
+  "liveFollow": {
+    "mode": "sse",
+    "deliveredIds": [
+      "record-live",
+      "record-live-2"
+    ],
+    "finalOffset": "0000000000000000_0000000000000535"
+  },
+  "cancellation": {
+    "repeatedCancelSafe": true,
+    "activeFollowers": 0,
+    "pendingIdleWaiters": 0
+  },
+  "strictTransport": {
+    "malformedRetryAfter": {
+      "malformedValue": "[MALFORMED]",
+      "rejectionCode": "INVALID_RETRY_AFTER",
+      "responseStatus": 503,
+      "getAttempts": 1,
+      "silentlyRetried": false,
+      "invalidCases": [
+        {
+          "name": "non-date",
+          "retryAfter": "conformance-not-a-delay",
+          "rejectionCode": "INVALID_RETRY_AFTER",
+          "responseStatus": 503,
+          "getAttempts": 1,
+          "silentlyRetried": false
+        },
+        {
+          "name": "impossible-imf-date",
+          "retryAfter": "Mon, 31 Feb 2026 00:00:00 GMT",
+          "rejectionCode": "INVALID_RETRY_AFTER",
+          "responseStatus": 503,
+          "getAttempts": 1,
+          "silentlyRetried": false
+        }
+      ],
+      "canonicalHttpDate": {
+        "retryAfter": "Thu, 01 Jan 1970 00:00:00 GMT",
+        "accepted": true,
+        "getAttempts": 2
+      }
+    },
+    "redirectBoundary": {
+      "configuredOriginRequests": 1,
+      "redirectedOriginRequests": 0,
+      "rejectionCode": "ORIGIN_VIOLATION",
+      "responseStatus": 307,
+      "targetReceivedRequest": false
+    },
+    "wrongLiveMedia": {
+      "responseContentType": "application/json",
+      "rejectionCode": "CONTENT_TYPE_MISMATCH",
+      "responseStatus": 200,
+      "liveRequests": 1,
+      "closedSettled": true
+    }
+  },
+  "requestTranscript": [
+    {
+      "sequence": 1,
+      "method": "HEAD",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {},
+      "status": 404,
+      "contentType": "text/plain; charset=UTF-8",
+      "nextOffset": null,
+      "streamClosed": null,
+      "durationMs": 56
+    },
+    {
+      "sequence": 2,
+      "method": "PUT",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {},
+      "status": 201,
+      "contentType": "application/json",
+      "nextOffset": "0000000000000000_0000000000000000",
+      "streamClosed": null,
+      "durationMs": 82
+    },
+    {
+      "sequence": 3,
+      "method": "POST",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {},
+      "status": 204,
+      "contentType": null,
+      "nextOffset": "0000000000000000_0000000000000096",
+      "streamClosed": null,
+      "durationMs": 32
+    },
+    {
+      "sequence": 4,
+      "method": "POST",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {},
+      "status": 204,
+      "contentType": null,
+      "nextOffset": "0000000000000000_0000000000000193",
+      "streamClosed": null,
+      "durationMs": 41
+    },
+    {
+      "sequence": 5,
+      "method": "POST",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {},
+      "status": 204,
+      "contentType": null,
+      "nextOffset": "0000000000000000_0000000000000289",
+      "streamClosed": null,
+      "durationMs": 87
+    },
+    {
+      "sequence": 6,
+      "method": "GET",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {
+        "offset": "0000000000000000_0000000000000289"
+      },
+      "status": 200,
+      "contentType": "application/json",
+      "nextOffset": "0000000000000000_0000000000000289",
+      "streamClosed": null,
+      "durationMs": 11
+    },
+    {
+      "sequence": 7,
+      "method": "GET",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {
+        "offset": "0000000000000000_0000000000000289",
+        "live": "sse"
+      },
+      "status": 200,
+      "contentType": "text/event-stream",
+      "nextOffset": null,
+      "streamClosed": null,
+      "durationMs": 9
+    },
+    {
+      "sequence": 8,
+      "method": "GET",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {
+        "offset": "0000000000000000_0000000000000289",
+        "live": "sse",
+        "cursor": "1785690587"
+      },
+      "status": 200,
+      "contentType": "text/event-stream",
+      "nextOffset": null,
+      "streamClosed": null,
+      "durationMs": 31
+    },
+    {
+      "sequence": 8,
+      "method": "POST",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {},
+      "status": 204,
+      "contentType": null,
+      "nextOffset": "0000000000000000_0000000000000409",
+      "streamClosed": null,
+      "durationMs": 64
+    },
+    {
+      "sequence": 10,
+      "method": "GET",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {
+        "offset": "0000000000000000_0000000000000289",
+        "live": "sse",
+        "cursor": "1785690587"
+      },
+      "status": 200,
+      "contentType": "text/event-stream",
+      "nextOffset": null,
+      "streamClosed": null,
+      "durationMs": 9
+    },
+    {
+      "sequence": 11,
+      "method": "GET",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {
+        "offset": "0000000000000000_0000000000000409",
+        "live": "sse",
+        "cursor": "1785690587"
+      },
+      "status": 200,
+      "contentType": "text/event-stream",
+      "nextOffset": null,
+      "streamClosed": null,
+      "durationMs": 3
+    },
+    {
+      "sequence": 12,
+      "method": "POST",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {},
+      "status": 204,
+      "contentType": null,
+      "nextOffset": "0000000000000000_0000000000000535",
+      "streamClosed": null,
+      "durationMs": 4
+    },
+    {
+      "sequence": 13,
+      "method": "GET",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {
+        "offset": "0000000000000000_0000000000000409",
+        "live": "sse",
+        "cursor": "1785690587"
+      },
+      "status": 200,
+      "contentType": "text/event-stream",
+      "nextOffset": null,
+      "streamClosed": null,
+      "durationMs": 5
+    },
+    {
+      "sequence": 14,
+      "method": "GET",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {
+        "offset": "-1"
+      },
+      "status": 200,
+      "contentType": "application/json",
+      "nextOffset": "0000000000000000_0000000000000535",
+      "streamClosed": null,
+      "durationMs": 9
+    },
+    {
+      "sequence": 15,
+      "method": "GET",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {
+        "offset": "0000000000000000_0000000000000096"
+      },
+      "status": 200,
+      "contentType": "application/json",
+      "nextOffset": "0000000000000000_0000000000000535",
+      "streamClosed": null,
+      "durationMs": 11
+    },
+    {
+      "sequence": 16,
+      "method": "GET",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {
+        "offset": "0000000000000000_0000000000000193"
+      },
+      "status": 200,
+      "contentType": "application/json",
+      "nextOffset": "0000000000000000_0000000000000535",
+      "streamClosed": null,
+      "durationMs": 1
+    },
+    {
+      "sequence": 17,
+      "method": "GET",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {
+        "offset": "0000000000000000_0000000000000289"
+      },
+      "status": 200,
+      "contentType": "application/json",
+      "nextOffset": "0000000000000000_0000000000000535",
+      "streamClosed": null,
+      "durationMs": 3
+    },
+    {
+      "sequence": 18,
+      "method": "GET",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {
+        "offset": "0000000000000000_0000000000000409"
+      },
+      "status": 200,
+      "contentType": "application/json",
+      "nextOffset": "0000000000000000_0000000000000535",
+      "streamClosed": null,
+      "durationMs": 2
+    },
+    {
+      "sequence": 19,
+      "method": "GET",
+      "path": "/rooms/e0-t03-repair9-resources-adapter/messages",
+      "query": {
+        "offset": "0000000000000000_0000000000000535"
+      },
+      "status": 200,
+      "contentType": "application/json",
+      "nextOffset": "0000000000000000_0000000000000535",
+      "streamClosed": null,
+      "durationMs": 6
+    }
+  ]
+}

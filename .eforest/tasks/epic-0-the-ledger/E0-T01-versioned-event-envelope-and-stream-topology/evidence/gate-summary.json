@@ -1,0 +1,51 @@
+{
+  "availableGates": [
+    {
+      "command": "pnpm test:ledger",
+      "result": "PASS",
+      "tests": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "make verify-E0-T01",
+      "result": "PASS",
+      "checks": 9,
+      "skipped": 0
+    },
+    {
+      "command": "pnpm test",
+      "result": "PASS",
+      "ledgerTests": 6,
+      "browserTests": 5,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "undefinedGates": [
+    "pnpm format:check",
+    "pnpm lint",
+    "pnpm typecheck",
+    "pnpm build"
+  ],
+  "replay": {
+    "result": "PASS",
+    "url": "https://app.replay.io/recording/368a3b30-c22d-4dcd-b010-fb8803bd9406",
+    "recordingStatus": "finished",
+    "uploadStatus": "uploaded",
+    "interrogationResult": "PASS",
+    "sameSessionMp4": "/Users/brettlamy/Dev/slack-clone/recordings/e0-t01-2d40835-final.mp4",
+    "consoleErrors": 0,
+    "consoleWarnings": 0,
+    "uncaughtExceptions": 0,
+    "replayPageFailedNetworkRequests": 0,
+    "playwrightPageUnhandledRequestFailures": 0,
+    "offPageExpectedRefusals": [
+      {
+        "operation": "legacy identity-spoof PATCH via Playwright APIRequestContext",
+        "status": 403,
+        "includedInPageNetworkCounts": false
+      }
+    ]
+  }
+}

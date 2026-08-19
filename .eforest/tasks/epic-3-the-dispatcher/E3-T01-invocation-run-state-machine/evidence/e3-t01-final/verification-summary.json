@@ -1,0 +1,369 @@
+{
+  "schemaVersion": 1,
+  "task": "E3-T01",
+  "runId": "e3-t01-digest-refresh-20260817",
+  "implementationCommit": "b53cc35f1259cfd63e484845549df3dbc41c951e",
+  "implementationTreeCleanAtStart": true,
+  "result": "PASS",
+  "replay": "Replay: N/A (server run protocol) + mitigation: lifecycle corpus, source-reference audit, secret canary scan, and per-prefix replay digests",
+  "replayUploadAttempted": false,
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "durationMs": 2184,
+      "name": "format",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "durationMs": 2059,
+      "name": "lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "durationMs": 5926,
+      "name": "typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "durationMs": 19318,
+      "name": "tests",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm build",
+      "durationMs": 715,
+      "name": "build",
+      "result": "PASS"
+    }
+  ],
+  "bindingAudit": {
+    "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+    "correlationId": "cr_8e5d064dd79a76c1490c3f1b7c",
+    "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+    "snapshotDigest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+    "sourceTrigger": {
+      "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "offset": "0000000000000090_aaaaaaaaaaaaaaaa",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "reuseAttacks": [
+      {
+        "attack": "agent",
+        "expectedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+        "observedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+        "offset": "0000000000000002_aaaaaaaaaaaaaaaa",
+        "refused": true
+      },
+      {
+        "attack": "snapshot-digest",
+        "expectedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+        "observedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+        "offset": "0000000000000002_aaaaaaaaaaaaaaaa",
+        "refused": true
+      },
+      {
+        "attack": "source-trigger",
+        "expectedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+        "observedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+        "offset": "0000000000000002_aaaaaaaaaaaaaaaa",
+        "refused": true
+      },
+      {
+        "attack": "invocation",
+        "expectedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+        "observedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+        "offset": "0000000000000002_aaaaaaaaaaaaaaaa",
+        "refused": true
+      },
+      {
+        "attack": "workspace",
+        "expectedCode": "INVOCATION_RUN_INVALID_SOURCE",
+        "observedCode": "INVOCATION_RUN_INVALID_SOURCE",
+        "offset": "0000000000000002_aaaaaaaaaaaaaaaa",
+        "refused": true
+      }
+    ],
+    "result": "PASS"
+  },
+  "boundedRecords": {
+    "contentReferencesOnly": true,
+    "attacks": [
+      {
+        "attack": "unrestricted-output-field",
+        "expectedCode": "INVOCATION_RUN_INVALID_DATA",
+        "observedCode": "INVOCATION_RUN_INVALID_DATA",
+        "offset": "0000000000000006_aaaaaaaaaaaaaaaa",
+        "refused": true
+      },
+      {
+        "attack": "oversized-summary",
+        "expectedCode": "INVOCATION_RUN_INVALID_DATA",
+        "observedCode": "INVOCATION_RUN_INVALID_DATA",
+        "offset": "0000000000000006_aaaaaaaaaaaaaaaa",
+        "refused": true
+      }
+    ],
+    "rawProviderOutputFields": 0,
+    "rawSecretFields": 0,
+    "recordCount": 14,
+    "recordTypes": [
+      "activity",
+      "usage",
+      "approval",
+      "artifact",
+      "result",
+      "failure"
+    ],
+    "rejectedOversizedFields": 1,
+    "rejectedRawProviderOutputFields": 1,
+    "result": "PASS"
+  },
+  "canaryScan": {
+    "attacks": [
+      {
+        "attack": "activity-summary",
+        "observedCode": "INVOCATION_RUN_SECRET_VALUE",
+        "offset": "0000000000000006_aaaaaaaaaaaaaaaa",
+        "refused": true
+      },
+      {
+        "attack": "failure-code",
+        "observedCode": "INVOCATION_RUN_SECRET_VALUE",
+        "offset": "0000000000000006_aaaaaaaaaaaaaaaa",
+        "refused": true
+      },
+      {
+        "attack": "artifact-name",
+        "observedCode": "INVOCATION_RUN_SECRET_VALUE",
+        "offset": "0000000000000012_aaaaaaaaaaaaaaaa",
+        "refused": true
+      }
+    ],
+    "canaryRejected": true,
+    "result": "PASS",
+    "canaryPresentInPublishedEvidence": false,
+    "evidenceFiles": [
+      "binding-audit.json",
+      "bounded-records.json",
+      "canary-scan.json",
+      "cold-clone-transcript.json",
+      "invalid-offsets.json",
+      "prefix-replay.json",
+      "sensitivity.json",
+      "terminal-races.json",
+      "verification-summary.json"
+    ],
+    "postVerifierEvidenceScanCompleted": true,
+    "publishedEvidenceLeaked": false,
+    "postVerifierTranscriptChecked": true
+  },
+  "invalidOffsets": [
+    {
+      "field": "state",
+      "expectedCode": "INVOCATION_RUN_INVALID_TRANSITION",
+      "observedCode": "INVOCATION_RUN_INVALID_TRANSITION",
+      "offset": "0000000000000003_aaaaaaaaaaaaaaaa",
+      "refused": true
+    },
+    {
+      "field": "sequence",
+      "expectedCode": "INVOCATION_RUN_INVALID_STATE",
+      "observedCode": "INVOCATION_RUN_INVALID_STATE",
+      "offset": "0000000000000007_aaaaaaaaaaaaaaaa",
+      "refused": true
+    },
+    {
+      "field": "runId",
+      "expectedCode": "INVOCATION_RUN_INVALID_TRANSITION",
+      "observedCode": "INVOCATION_RUN_INVALID_TRANSITION",
+      "offset": "0000000000000005_aaaaaaaaaaaaaaaa",
+      "refused": true
+    },
+    {
+      "field": "attemptId",
+      "expectedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+      "observedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+      "offset": "0000000000000006_aaaaaaaaaaaaaaaa",
+      "refused": true
+    },
+    {
+      "field": "sourceRef",
+      "expectedCode": "INVOCATION_RUN_INVALID_SOURCE",
+      "observedCode": "INVOCATION_RUN_INVALID_SOURCE",
+      "offset": "0000000000000004_aaaaaaaaaaaaaaaa",
+      "refused": true
+    },
+    {
+      "field": "usage",
+      "expectedCode": "INVOCATION_RUN_INVALID_DATA",
+      "observedCode": "INVOCATION_RUN_INVALID_DATA",
+      "offset": "0000000000000007_aaaaaaaaaaaaaaaa",
+      "refused": true
+    },
+    {
+      "field": "terminal",
+      "expectedCode": "INVOCATION_RUN_INVALID_STATE",
+      "observedCode": "INVOCATION_RUN_INVALID_STATE",
+      "offset": "0000000000000014_aaaaaaaaaaaaaaaa",
+      "refused": true
+    }
+  ],
+  "replayEvidence": {
+    "finalStateDigest": "sha256:93ac7688b87515e347c90b0a4b0349e8db6812e11d275b8b409c9ea3b85db769",
+    "networkUsed": false,
+    "perPrefixDigests": [
+      {
+        "index": 1,
+        "offset": "0000000000000001_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:5ed42b8b1c177bb2694285f2a0829f292a82d7f87fae347735763774a3774d97"
+      },
+      {
+        "index": 2,
+        "offset": "0000000000000002_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:ea3d9a220f7d5885481043176cc9ba03060f401b698c35636b1c618e1ec41fd3"
+      },
+      {
+        "index": 3,
+        "offset": "0000000000000003_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:acef253ee89c73b931aee9552af060630a59268be38fda7545e27577eadcfb91"
+      },
+      {
+        "index": 4,
+        "offset": "0000000000000004_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:9148f0a0488b4a27e6dbcca5939d477f65e1deb5029abcf40fa7881d6cba3b1d"
+      },
+      {
+        "index": 5,
+        "offset": "0000000000000005_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:ee70a9fc03fc4298d3f0ebfa67c13d303a261f6fdf2666671ae2bd0ca5e99710"
+      },
+      {
+        "index": 6,
+        "offset": "0000000000000006_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:d791711413d242b4789f6be158edca70ad2194d84f7323e5f85ace41704317ee"
+      },
+      {
+        "index": 7,
+        "offset": "0000000000000007_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:c3f092a83d1823b548a52c82676cd8597baf1dfe086528bc7cf47846089df957"
+      },
+      {
+        "index": 8,
+        "offset": "0000000000000008_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:a62a878edbc810be52a77727ac6bb1d2de325a1481670b682d32c2055cfaadda"
+      },
+      {
+        "index": 9,
+        "offset": "0000000000000009_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:4b3583b348fa334110e459aa0ca1462011ee4e87d290d1552eb8c15d0f9e62c4"
+      },
+      {
+        "index": 10,
+        "offset": "0000000000000010_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:4d4a3d675c0c7417b680753014a41efb912ae405c8fd1cc404f1973a8ed7fd6b"
+      },
+      {
+        "index": 11,
+        "offset": "0000000000000011_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:4d250924c501a6da415431e0562ec61eef0b6854d952894cdd219fa26744d831"
+      },
+      {
+        "index": 12,
+        "offset": "0000000000000012_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:71352e17412460b45e8fb91ec744528307fb7dd429860a3edb2c71963e7d538c"
+      },
+      {
+        "index": 13,
+        "offset": "0000000000000013_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:a93b5af22e2036626c808faaa26fb2d389538c108ee108e4e5cfbd4a55da10d4"
+      },
+      {
+        "index": 14,
+        "offset": "0000000000000014_aaaaaaaaaaaaaaaa",
+        "stateDigest": "sha256:93ac7688b87515e347c90b0a4b0349e8db6812e11d275b8b409c9ea3b85db769"
+      }
+    ],
+    "replayedTwiceWithIdenticalDigest": true,
+    "result": "PASS",
+    "runState": "completed",
+    "usage": {
+      "costUsdCents": 7,
+      "inputTokens": 12,
+      "outputBytes": 128,
+      "outputTokens": 8,
+      "totalTokens": 20,
+      "wallTimeMs": 40
+    },
+    "queryStoreUsed": false
+  },
+  "sensitivityEvidence": {
+    "mutations": [
+      {
+        "mutation": "disable secret canary rejection",
+        "verifierCommand": "node --test test/unit/invocation-run.test.mjs",
+        "verifierExitCode": 1,
+        "verifierRejected": true,
+        "result": "PASS"
+      },
+      {
+        "mutation": "disable completed-result terminal check",
+        "verifierCommand": "node scripts/verify-e3-t01.mjs",
+        "verifierExitCode": 1,
+        "verifierRejected": true,
+        "result": "PASS"
+      }
+    ],
+    "result": "PASS"
+  },
+  "terminalRaces": {
+    "candidates": [
+      {
+        "contender": "failed",
+        "expectedCode": "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+        "observedCode": "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+        "offset": "0000000000000016_aaaaaaaaaaaaaaaa",
+        "refused": true,
+        "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
+        "winner": "completed",
+        "winnerStateDigest": "sha256:bff1c61f80012183f79385d8f8bec9db587671729d85a91763be3eae86b6c4c4"
+      },
+      {
+        "contender": "timed-out",
+        "expectedCode": "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+        "observedCode": "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+        "offset": "0000000000000016_aaaaaaaaaaaaaaaa",
+        "refused": true,
+        "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
+        "winner": "failed",
+        "winnerStateDigest": "sha256:3ef4fea4dcb245319fac16812d8430dcfb7633e0c5fae6b222bdefe0e4ba3d4c"
+      },
+      {
+        "contender": "cancelled",
+        "expectedCode": "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+        "observedCode": "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+        "offset": "0000000000000016_aaaaaaaaaaaaaaaa",
+        "refused": true,
+        "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
+        "winner": "timed-out",
+        "winnerStateDigest": "sha256:6fbb5b941b980195de365cf47077a26a0e1b2da852f648851fbb54db1b054f15"
+      },
+      {
+        "contender": "completed",
+        "expectedCode": "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+        "observedCode": "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+        "offset": "0000000000000016_aaaaaaaaaaaaaaaa",
+        "refused": true,
+        "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
+        "winner": "cancelled",
+        "winnerStateDigest": "sha256:5954b60668ec803fe55071ca7c650e214fe5bfecbc2b36707c978b6f43a5faca"
+      }
+    ],
+    "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
+    "oneWinnerPerExpectedHead": true,
+    "result": "PASS"
+  }
+}

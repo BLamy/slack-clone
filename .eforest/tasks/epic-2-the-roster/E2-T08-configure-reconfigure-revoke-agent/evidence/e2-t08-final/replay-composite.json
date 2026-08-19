@@ -1,0 +1,147 @@
+{
+  "directoryStateDigest": "sha256:b6ab65ab76905f3a2181d504e919d7a5d89b3de2abcd99046eb103dab9653d71",
+  "configStateDigest": "sha256:31b821c392868544fd44dd5853a3640cb2a3bf175d7229d564dc3d46bfcf957a",
+  "configStreamDigest": "sha256:343243cdcab2b38567f178a4d08b872a765bd3219bcd1f0fd46a60ad0b5857a3",
+  "activeConfigStatus": "retired",
+  "activeRevisionId": null,
+  "historyDigest": "sha256:25509b2e1b06a054072023a0c5f32eabeea22915ff9e442ea9b06352703d3c1b",
+  "rosterDigest": "sha256:f2f69e61fed462a27d48febf5b135683f556652cf8b311ccef74bbfc038471ed",
+  "snapshotManifestDigest": "sha256:38e6bf5cb645707390b27b5e5d7e9a08884bce8b526225b50d3a55349456d85a",
+  "connectionStreams": {
+    "conn_agrant_b": {
+      "nextOffset": "0000000000000000_0000000000000003",
+      "recordCount": 3,
+      "stateDigest": "sha256:6d7c568c82cdc523cbdd717bcf5ab9df380811cdce36f26f0502ca84643a3bef",
+      "stream": "connection:conn_agrant_b/config",
+      "streamDigest": "sha256:dfe2992929c890a7988ec622a59146594e05d628a63dcb61f59c16bffab67b4d"
+    },
+    "conn_a": {
+      "nextOffset": "0000000000000000_0000000000000003",
+      "recordCount": 3,
+      "stateDigest": "sha256:09cce2137fdae750eb0256693ce20a9bd4d24b252fe1f20b259063e60c9c0626",
+      "stream": "connection:conn_a/config",
+      "streamDigest": "sha256:62d3b1c0005c7ba689aa54117cfd77eb28d205d1ff674d31d12abe92b9884b8c"
+    }
+  },
+  "sourceStreams": {
+    "audit": {
+      "nextOffset": "0000000000000000_0000000000000000",
+      "recordCount": 0,
+      "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/audit",
+      "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "config": {
+      "nextOffset": "0000000000000000_0000000000000006",
+      "recordCount": 6,
+      "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+      "streamDigest": "sha256:343243cdcab2b38567f178a4d08b872a765bd3219bcd1f0fd46a60ad0b5857a3"
+    },
+    "connections": {
+      "conn_agrant_b": {
+        "nextOffset": "0000000000000000_0000000000000003",
+        "recordCount": 3,
+        "stateDigest": "sha256:6d7c568c82cdc523cbdd717bcf5ab9df380811cdce36f26f0502ca84643a3bef",
+        "stream": "connection:conn_agrant_b/config",
+        "streamDigest": "sha256:dfe2992929c890a7988ec622a59146594e05d628a63dcb61f59c16bffab67b4d"
+      },
+      "conn_a": {
+        "nextOffset": "0000000000000000_0000000000000003",
+        "recordCount": 3,
+        "stateDigest": "sha256:09cce2137fdae750eb0256693ce20a9bd4d24b252fe1f20b259063e60c9c0626",
+        "stream": "connection:conn_a/config",
+        "streamDigest": "sha256:62d3b1c0005c7ba689aa54117cfd77eb28d205d1ff674d31d12abe92b9884b8c"
+      }
+    },
+    "directory": {
+      "nextOffset": "0000000000000000_0000000000000043",
+      "recordCount": 43,
+      "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+      "streamDigest": "sha256:a16bba46b73ba2db856993709ea5478fed536e473b84aed66531b45e3ac28c8e"
+    },
+    "dispatch": {
+      "nextOffset": "0000000000000000_0000000000000012",
+      "recordCount": 12,
+      "stream": "__stream_slack_dispatch_idempotency__",
+      "streamDigest": "sha256:0633bf3a364d19d25f36f42b08adce962f7eb2b1b71edbb6e6acaa7abb2cc040"
+    }
+  },
+  "compositeDigest": "sha256:7d3a6eaee703f6081d877d9365d4cf2e94f676cd6152f126e79105ba85ebe141",
+  "connectionReplays": {
+    "conn_agrant_b": {
+      "stream": "connection:conn_agrant_b/config",
+      "recordCount": 3,
+      "finalStateDigest": "sha256:6d7c568c82cdc523cbdd717bcf5ab9df380811cdce36f26f0502ca84643a3bef",
+      "sourceStreamDigest": "sha256:dfe2992929c890a7988ec622a59146594e05d628a63dcb61f59c16bffab67b4d"
+    },
+    "conn_a": {
+      "stream": "connection:conn_a/config",
+      "recordCount": 3,
+      "finalStateDigest": "sha256:09cce2137fdae750eb0256693ce20a9bd4d24b252fe1f20b259063e60c9c0626",
+      "sourceStreamDigest": "sha256:62d3b1c0005c7ba689aa54117cfd77eb28d205d1ff674d31d12abe92b9884b8c"
+    }
+  },
+  "projectionDeletedAndReplayed": true,
+  "freshReplayStore": true,
+  "sourceStreamsSeeded": true,
+  "replayedSources": [
+    {
+      "key": "directory",
+      "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+      "recordCount": 43,
+      "streamDigest": "sha256:a16bba46b73ba2db856993709ea5478fed536e473b84aed66531b45e3ac28c8e",
+      "identical": true
+    },
+    {
+      "key": "config",
+      "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_jjjjjjjjjjjjjjjjjjjjjjjjjj/config",
+      "recordCount": 6,
+      "streamDigest": "sha256:343243cdcab2b38567f178a4d08b872a765bd3219bcd1f0fd46a60ad0b5857a3",
+      "identical": true
+    },
+    {
+      "key": "audit",
+      "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/audit",
+      "recordCount": 0,
+      "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "identical": true
+    },
+    {
+      "key": "dispatch",
+      "stream": "__stream_slack_dispatch_idempotency__",
+      "recordCount": 12,
+      "streamDigest": "sha256:0633bf3a364d19d25f36f42b08adce962f7eb2b1b71edbb6e6acaa7abb2cc040",
+      "identical": true
+    },
+    {
+      "key": "connection:conn_agrant_b",
+      "stream": "connection:conn_agrant_b/config",
+      "recordCount": 3,
+      "streamDigest": "sha256:dfe2992929c890a7988ec622a59146594e05d628a63dcb61f59c16bffab67b4d",
+      "identical": true
+    },
+    {
+      "key": "connection:conn_a",
+      "stream": "connection:conn_a/config",
+      "recordCount": 3,
+      "streamDigest": "sha256:62d3b1c0005c7ba689aa54117cfd77eb28d205d1ff674d31d12abe92b9884b8c",
+      "identical": true
+    }
+  ],
+  "rosterReproduced": true,
+  "activeConfigReproduced": true,
+  "revisionHistoryReproduced": true,
+  "snapshotManifestsReproduced": true,
+  "connectionStateReproduced": true,
+  "auditAndDispatchRoundTrips": true,
+  "sourceRecordCounts": {
+    "audit": 0,
+    "config": 6,
+    "connections": {
+      "conn_agrant_b": 3,
+      "conn_a": 3
+    },
+    "directory": 43,
+    "dispatch": 12
+  },
+  "result": "PASS"
+}

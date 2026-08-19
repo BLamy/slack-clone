@@ -1,0 +1,60 @@
+{
+  "runControl": [
+    {
+      "boundary": "crash-after-side-effect-before-ack",
+      "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+    },
+    {
+      "boundary": "retry-backoff-elapsed",
+      "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+    },
+    {
+      "boundary": "cancellation-before-late-write",
+      "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+    },
+    {
+      "boundary": "crash-after-side-effect-before-ack",
+      "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+    },
+    {
+      "boundary": "retry-backoff-elapsed",
+      "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+    },
+    {
+      "boundary": "cancellation-before-late-write",
+      "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv"
+    }
+  ],
+  "streamBoundaries": [
+    {
+      "boundary": "after-append",
+      "index": 0,
+      "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+    },
+    {
+      "boundary": "after-append",
+      "index": 1,
+      "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+    },
+    {
+      "boundary": "after-append",
+      "index": 0,
+      "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+    },
+    {
+      "boundary": "after-append",
+      "index": 0,
+      "stream": "__stream_slack_dispatch_idempotency__"
+    },
+    {
+      "boundary": "after-append",
+      "index": 0,
+      "stream": "projection:px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    {
+      "boundary": "after-append",
+      "index": 1,
+      "stream": "__stream_slack_dispatch_idempotency__"
+    }
+  ]
+}

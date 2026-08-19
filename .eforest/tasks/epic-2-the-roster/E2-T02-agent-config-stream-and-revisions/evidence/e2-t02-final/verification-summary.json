@@ -1,0 +1,572 @@
+{
+  "schemaVersion": 1,
+  "task": "E2-T02",
+  "runId": "e2-t02-compat-hardening-final",
+  "implementationCommit": "a64f2866709b2fcd2543e11263f29018b7f92cdc",
+  "result": "PASS",
+  "replay": "Replay: N/A (server config revision protocol) + mitigation: concurrent revision races, immutable manifests, canary scan, and replay digests",
+  "skips": [],
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "exitCode": 0,
+      "name": "format"
+    },
+    {
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "name": "lint"
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "name": "typecheck"
+    },
+    {
+      "command": "pnpm test",
+      "exitCode": 0,
+      "name": "test"
+    },
+    {
+      "command": "pnpm build",
+      "exitCode": 0,
+      "name": "build"
+    }
+  ],
+  "replayEvidence": {
+    "finalStateDigest": "sha256:a48f87c190bac1ea973d22e67ed240169af9b23d3b9081ffee0e3cd5dc2ca223",
+    "offsets": [
+      "0000000000000000_0000000000000001",
+      "0000000000000000_0000000000000002",
+      "0000000000000000_0000000000000003",
+      "0000000000000000_0000000000000004",
+      "0000000000000000_0000000000000005",
+      "0000000000000000_0000000000000006",
+      "0000000000000000_0000000000000007"
+    ],
+    "perPrefixDigests": [
+      {
+        "index": 1,
+        "offset": "0000000000000000_0000000000000001",
+        "stateDigest": "sha256:a7ffc2fe46ae8e5a245d79a9b60c98a6e52da03a995656280e40177466b5c6de"
+      },
+      {
+        "index": 2,
+        "offset": "0000000000000000_0000000000000002",
+        "stateDigest": "sha256:d584506fbd6d52032f34e4a15a331fb13c4d0468cdb3d0ca36bb06b3d4f5331f"
+      },
+      {
+        "index": 3,
+        "offset": "0000000000000000_0000000000000003",
+        "stateDigest": "sha256:ceeb83c26a9076125bb3db982ba4cf2762d57e4338d8344d9f98677d92f44c24"
+      },
+      {
+        "index": 4,
+        "offset": "0000000000000000_0000000000000004",
+        "stateDigest": "sha256:e93f8b4b10a20035062360d8a916480d94fcdc36559ec92ac118ba5d06046972"
+      },
+      {
+        "index": 5,
+        "offset": "0000000000000000_0000000000000005",
+        "stateDigest": "sha256:f3393491321da61f55603875547dd3f808f6f74056f044d3d52a88f6eb4c4967"
+      },
+      {
+        "index": 6,
+        "offset": "0000000000000000_0000000000000006",
+        "stateDigest": "sha256:7cbe890719fc2bfee551c46f3a9cd94eea5a4fffe90bff73dde2133edc3f1345"
+      },
+      {
+        "index": 7,
+        "offset": "0000000000000000_0000000000000007",
+        "stateDigest": "sha256:a48f87c190bac1ea973d22e67ed240169af9b23d3b9081ffee0e3cd5dc2ca223"
+      }
+    ],
+    "records": 7,
+    "revisions": 2,
+    "historyManifest": [
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "eventId": "ev_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventType": "agent.config.created",
+        "revisionId": "acr_8904644369c210752d46446543fe8c205a340b95716e61f1cd5512a745386759",
+        "sourceOffset": "0000000000000000_0000000000000001",
+        "statusAfter": "draft",
+        "statusBefore": null
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "eventId": "ev_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "eventType": "agent.config.activated",
+        "revisionId": "acr_8904644369c210752d46446543fe8c205a340b95716e61f1cd5512a745386759",
+        "sourceOffset": "0000000000000000_0000000000000002",
+        "statusAfter": "active",
+        "statusBefore": "draft"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "eventId": "ev_cccccccccccccccccccccccccc",
+        "eventType": "agent.config.revised",
+        "revisionId": "acr_a32e82ec1d251d8bf8ea12030cd4f7c1d4c55a734758c065aa656e74d7e41799",
+        "sourceOffset": "0000000000000000_0000000000000003",
+        "statusAfter": "active",
+        "statusBefore": "active"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "eventId": "ev_dddddddddddddddddddddddddd",
+        "eventType": "agent.config.activated",
+        "revisionId": "acr_a32e82ec1d251d8bf8ea12030cd4f7c1d4c55a734758c065aa656e74d7e41799",
+        "sourceOffset": "0000000000000000_0000000000000004",
+        "statusAfter": "active",
+        "statusBefore": "active"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "eventId": "ev_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "eventType": "agent.config.disabled",
+        "revisionId": null,
+        "sourceOffset": "0000000000000000_0000000000000005",
+        "statusAfter": "disabled",
+        "statusBefore": "active"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "eventId": "ev_ffffffffffffffffffffffffff",
+        "eventType": "agent.config.activated",
+        "revisionId": "acr_8904644369c210752d46446543fe8c205a340b95716e61f1cd5512a745386759",
+        "sourceOffset": "0000000000000000_0000000000000006",
+        "statusAfter": "active",
+        "statusBefore": "disabled"
+      },
+      {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "eventId": "ev_gggggggggggggggggggggggggg",
+        "eventType": "agent.config.retired",
+        "revisionId": null,
+        "sourceOffset": "0000000000000000_0000000000000007",
+        "statusAfter": "retired",
+        "statusBefore": "active"
+      }
+    ],
+    "replayedTwiceWithIdenticalBytes": true,
+    "activeRevisionAfterRetire": null,
+    "sourceOffsetsBound": true
+  },
+  "schema": {
+    "envelopeEventTypes": [
+      "ledger.fixture-recorded",
+      "workspace.directory.updated",
+      "channel.message.created",
+      "channel.message.replied",
+      "channel.message.edited",
+      "channel.message.deleted",
+      "channel.message.reaction.added",
+      "channel.message.reaction.removed",
+      "agent.config.created",
+      "agent.config.revised",
+      "agent.config.activated",
+      "agent.config.disabled",
+      "agent.config.retired",
+      "workspace.invocation.requested",
+      "run.lifecycle.changed",
+      "connection.config.revised",
+      "workspace.audit.recorded",
+      "projection.checkpointed",
+      "principal.created",
+      "principal.profile.updated",
+      "principal.suspended",
+      "principal.deactivated",
+      "channel.created",
+      "channel.renamed",
+      "channel.archived",
+      "channel.unarchived",
+      "channel.membership.invited",
+      "channel.membership.joined",
+      "channel.membership.left",
+      "channel.membership.removed",
+      "channel.direct.created",
+      "workspace.created",
+      "workspace.membership.invited",
+      "workspace.membership.accepted",
+      "workspace.membership.role.changed",
+      "workspace.membership.suspended",
+      "workspace.membership.removed"
+    ],
+    "agentConfigEventTypes": [
+      "agent.config.created",
+      "agent.config.revised",
+      "agent.config.activated",
+      "agent.config.disabled",
+      "agent.config.retired"
+    ],
+    "eventSchemaVariants": 5,
+    "strictRevisionData": true,
+    "result": "PASS"
+  },
+  "upgrade": {
+    "from": 0,
+    "to": 1,
+    "deterministic": true,
+    "securityDefaultsInvented": false,
+    "configDigest": "sha256:985cb3cc8e3ddfb848768e8f058afad174135e97253eed9376953c0a820973c7",
+    "revisionId": "acr_71a1f33a701c17ce44c8446511f0f0445159919c9117c8e5144d5819d63819d3",
+    "result": "PASS"
+  },
+  "refusals": [
+    {
+      "name": "forged-predecessor",
+      "code": "REDUCER_AGENT_CONFIG_INVALID_EVENT",
+      "offset": "0000000000000000_0000000000000003",
+      "result": "REFUSED"
+    },
+    {
+      "name": "config-digest-mismatch",
+      "code": "REDUCER_AGENT_CONFIG_INVALID_EVENT",
+      "offset": "0000000000000000_0000000000000003",
+      "result": "REFUSED"
+    },
+    {
+      "name": "sibling-agent-scope",
+      "code": "REDUCER_AGENT_CONFIG_INVALID_EVENT",
+      "offset": "0000000000000000_0000000000000001",
+      "result": "REFUSED"
+    },
+    {
+      "name": "unknown-activation-target",
+      "code": "REDUCER_AGENT_CONFIG_NOT_FOUND",
+      "offset": "0000000000000000_0000000000000004",
+      "result": "REFUSED"
+    },
+    {
+      "name": "activate-retired",
+      "code": "REDUCER_AGENT_CONFIG_IMMUTABLE",
+      "offset": "0000000000000000_0000000000000008",
+      "result": "REFUSED"
+    },
+    {
+      "name": "legacy-revision-shadow",
+      "code": "REDUCER_AGENT_CONFIG_INVALID_EVENT",
+      "offset": "0000000000000000_0000000000000008",
+      "result": "REFUSED"
+    },
+    {
+      "name": "legacy-revision-shadow-under-compat",
+      "code": "REDUCER_AGENT_CONFIG_INVALID_EVENT",
+      "offset": "0000000000000000_0000000000000008",
+      "result": "REFUSED"
+    },
+    {
+      "name": "legacy-revision-shadow-fixture",
+      "code": "REDUCER_AGENT_CONFIG_INVALID_EVENT",
+      "offset": "0000000000000000_0000000000000002",
+      "result": "REFUSED"
+    }
+  ],
+  "lifecycle": {
+    "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc/config",
+    "records": [
+      {
+        "digest": "sha256:a34bddada4c9add7ee6369b95bac62fd7cf8baf6457dc8c1609fcc1f92ce5b8d",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "causation": null,
+          "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+            "config": {
+              "schemaVersion": 1,
+              "instructions": {
+                "system": "system",
+                "task": "",
+                "guardrails": []
+              },
+              "context": {
+                "scope": "none",
+                "includePrivate": false,
+                "includeThreadHistory": false,
+                "maxMessages": 0,
+                "maxBytes": 0
+              },
+              "trigger": {
+                "events": [
+                  "manual"
+                ],
+                "requireMention": false,
+                "allowMessageEdits": false
+              },
+              "delegation": {
+                "enabled": false,
+                "maxDepth": 0,
+                "maxChildren": 0,
+                "allowCrossChannel": false
+              },
+              "concurrency": {
+                "maxConcurrentRuns": 1,
+                "maxConcurrentPerChannel": 1,
+                "queueStrategy": "serialize"
+              },
+              "budgets": {
+                "timeoutSeconds": 1,
+                "maxInputTokens": 1,
+                "maxOutputTokens": 1,
+                "maxTotalTokens": 2,
+                "maxCostUsdCents": 1
+              },
+              "harness": {
+                "providerId": "scripted",
+                "providerVersion": "1.0.0",
+                "requiredCapabilities": []
+              },
+              "sandbox": {
+                "providerId": "scripted",
+                "providerVersion": "1.0.0",
+                "requiredCapabilities": [
+                  "ephemeral"
+                ],
+                "lifecycle": "ephemeral",
+                "networkPolicy": "deny-all"
+              },
+              "workspaceInputs": {
+                "source": "none",
+                "paths": [],
+                "maxBytes": 0
+              },
+              "connectionGrants": {
+                "maxCallsPerRun": 0,
+                "refs": []
+              }
+            },
+            "configDigest": "sha256:8d7abbc24665b117724a03950506dedaa3b34dc90b8897c48774100e70dde3c7",
+            "expectedRevision": 0,
+            "expectedRevisionId": null,
+            "predecessorRevisionId": null,
+            "revision": 1,
+            "revisionId": "acr_8904644369c210752d46446543fe8c205a340b95716e61f1cd5512a745386759"
+          },
+          "eventType": "agent.config.created",
+          "idempotencyKey": "ik_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "serverTimestamp": "2026-08-05T00:01:01.000Z"
+        },
+        "offset": "0000000000000000_0000000000000001",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc/config"
+      },
+      {
+        "digest": "sha256:0eef090834fe7c4009e85d8f779399b4123c6b0c8ca48a3b5fe2d52f87bc25a3",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "causation": null,
+          "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+            "expectedRevision": 1,
+            "expectedRevisionId": "acr_8904644369c210752d46446543fe8c205a340b95716e61f1cd5512a745386759",
+            "revisionId": "acr_8904644369c210752d46446543fe8c205a340b95716e61f1cd5512a745386759"
+          },
+          "eventType": "agent.config.activated",
+          "idempotencyKey": "ik_cccccccccccccccccccccccccc",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_cccccccccccccccccccccccccc",
+          "serverTimestamp": "2026-08-05T00:01:02.000Z"
+        },
+        "offset": "0000000000000000_0000000000000002",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc/config"
+      },
+      {
+        "digest": "sha256:13b94829d665c37e7237365dc88edb3b210e56187004c0fd3423eb0b20bd0ff8",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "causation": null,
+          "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+            "config": {
+              "schemaVersion": 1,
+              "instructions": {
+                "system": "system",
+                "task": "",
+                "guardrails": []
+              },
+              "context": {
+                "scope": "none",
+                "includePrivate": false,
+                "includeThreadHistory": false,
+                "maxMessages": 0,
+                "maxBytes": 0
+              },
+              "trigger": {
+                "events": [
+                  "manual"
+                ],
+                "requireMention": false,
+                "allowMessageEdits": false
+              },
+              "delegation": {
+                "enabled": false,
+                "maxDepth": 0,
+                "maxChildren": 0,
+                "allowCrossChannel": false
+              },
+              "concurrency": {
+                "maxConcurrentRuns": 1,
+                "maxConcurrentPerChannel": 1,
+                "queueStrategy": "serialize"
+              },
+              "budgets": {
+                "timeoutSeconds": 2,
+                "maxInputTokens": 1,
+                "maxOutputTokens": 1,
+                "maxTotalTokens": 2,
+                "maxCostUsdCents": 1
+              },
+              "harness": {
+                "providerId": "scripted",
+                "providerVersion": "1.0.0",
+                "requiredCapabilities": []
+              },
+              "sandbox": {
+                "providerId": "scripted",
+                "providerVersion": "1.0.0",
+                "requiredCapabilities": [
+                  "ephemeral"
+                ],
+                "lifecycle": "ephemeral",
+                "networkPolicy": "deny-all"
+              },
+              "workspaceInputs": {
+                "source": "none",
+                "paths": [],
+                "maxBytes": 0
+              },
+              "connectionGrants": {
+                "maxCallsPerRun": 0,
+                "refs": []
+              }
+            },
+            "configDigest": "sha256:3d82b2cb40e3d47ce7b6b6eb09ca2ad9fd67809189bd723278e5bb55b57d270f",
+            "expectedRevision": 1,
+            "expectedRevisionId": "acr_8904644369c210752d46446543fe8c205a340b95716e61f1cd5512a745386759",
+            "predecessorRevisionId": "acr_8904644369c210752d46446543fe8c205a340b95716e61f1cd5512a745386759",
+            "revision": 2,
+            "revisionId": "acr_a32e82ec1d251d8bf8ea12030cd4f7c1d4c55a734758c065aa656e74d7e41799"
+          },
+          "eventType": "agent.config.revised",
+          "idempotencyKey": "ik_dddddddddddddddddddddddddd",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_dddddddddddddddddddddddddd",
+          "serverTimestamp": "2026-08-05T00:01:03.000Z"
+        },
+        "offset": "0000000000000000_0000000000000003",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc/config"
+      },
+      {
+        "digest": "sha256:ce6e85464d2cdeaf89a185ffacd95a395f4d127e21213e4bacd0396e1f285242",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "causation": null,
+          "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+            "expectedRevision": 2,
+            "expectedRevisionId": "acr_a32e82ec1d251d8bf8ea12030cd4f7c1d4c55a734758c065aa656e74d7e41799"
+          },
+          "eventType": "agent.config.disabled",
+          "idempotencyKey": "ik_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "serverTimestamp": "2026-08-05T00:01:04.000Z"
+        },
+        "offset": "0000000000000000_0000000000000004",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc/config"
+      },
+      {
+        "digest": "sha256:936f5f4c4f2929752c9815695c16700c133e195b74e5189297327dffc1dbad29",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "causation": null,
+          "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+            "expectedRevision": 2,
+            "expectedRevisionId": "acr_a32e82ec1d251d8bf8ea12030cd4f7c1d4c55a734758c065aa656e74d7e41799",
+            "revisionId": "acr_a32e82ec1d251d8bf8ea12030cd4f7c1d4c55a734758c065aa656e74d7e41799"
+          },
+          "eventType": "agent.config.activated",
+          "idempotencyKey": "ik_ffffffffffffffffffffffffff",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_ffffffffffffffffffffffffff",
+          "serverTimestamp": "2026-08-05T00:01:05.000Z"
+        },
+        "offset": "0000000000000000_0000000000000005",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc/config"
+      },
+      {
+        "digest": "sha256:0afe544f5eb887693868198d1627acebcecfc004450825ffc27f3e3e39d6f1c1",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "causation": null,
+          "correlationId": "cr_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+            "expectedRevision": 2,
+            "expectedRevisionId": "acr_a32e82ec1d251d8bf8ea12030cd4f7c1d4c55a734758c065aa656e74d7e41799"
+          },
+          "eventType": "agent.config.retired",
+          "idempotencyKey": "ik_gggggggggggggggggggggggggg",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_gggggggggggggggggggggggggg",
+          "serverTimestamp": "2026-08-05T00:01:06.000Z"
+        },
+        "offset": "0000000000000000_0000000000000006",
+        "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc/config"
+      }
+    ],
+    "disabledNotRunnable": true,
+    "retiredNotRunnable": true,
+    "replayedWithoutProjection": true,
+    "finalStatus": "retired",
+    "finalRevisionId": "acr_a32e82ec1d251d8bf8ea12030cd4f7c1d4c55a734758c065aa656e74d7e41799",
+    "result": "PASS"
+  },
+  "concurrency": {
+    "concurrentAttempts": 2,
+    "winnerCount": 1,
+    "staleRefusalCount": 1,
+    "refusalCode": "AGENT_CONFIG_STREAM_STALE_REVISION",
+    "finalLogicalEvents": 1,
+    "losingPayloadAppended": false,
+    "winnerConfigDigest": "sha256:8d7abbc24665b117724a03950506dedaa3b34dc90b8897c48774100e70dde3c7",
+    "result": "PASS"
+  },
+  "canaries": {
+    "cases": 2,
+    "allRejected": true,
+    "persistedCanary": false,
+    "locations": [
+      {
+        "location": "instructions.system",
+        "code": "AGENT_CONFIG_SECRET_VALUE",
+        "persisted": false
+      },
+      {
+        "location": "instructions.task",
+        "code": "AGENT_CONFIG_SECRET_VALUE",
+        "persisted": false
+      }
+    ],
+    "result": "PASS"
+  },
+  "sensitivity": {
+    "mutation": "replace immutable revision append with in-place replacement",
+    "mutantExitCode": 7,
+    "verifierDetectedMutant": true,
+    "result": "PASS"
+  }
+}

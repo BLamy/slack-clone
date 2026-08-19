@@ -1,0 +1,8 @@
+{
+  "sameReceiptAfterRestart": true,
+  "directoryStateDigest": "sha256:4535ebed4ffd2c8d7b84f3d6a9abc2636864848203075fe46b6af6d1644d4f76",
+  "configStateDigest": "sha256:b6e7620fedb0698a1810052ed4fa8c83ec4e2c3af1f1398e2f01f03bcd5101d4",
+  "historyEventCount": 8,
+  "processStateRebuilt": true,
+  "result": "PASS"
+}

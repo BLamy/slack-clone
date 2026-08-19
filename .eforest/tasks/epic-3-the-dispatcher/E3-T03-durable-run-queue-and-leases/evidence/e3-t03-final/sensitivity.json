@@ -1,0 +1,23 @@
+{
+  "mutationCount": 3,
+  "controlExitCode": 0,
+  "controlPassed": true,
+  "verifierDetectedMutant": true,
+  "results": [
+    {
+      "label": "queue-proof-binding",
+      "verifierExitCode": 1,
+      "detected": true
+    },
+    {
+      "label": "capability-endpoint-scope",
+      "verifierExitCode": 1,
+      "detected": true
+    },
+    {
+      "label": "lease-generation-fence",
+      "verifierExitCode": 1,
+      "detected": true
+    }
+  ]
+}

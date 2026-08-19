@@ -1,0 +1,8 @@
+{
+  "event-envelope.v1.json": {
+    "canonicalSha256": "sha256:4947425de8918cc240bee9704f7d9b6eaa57253f6bca047cc318f97b0d4c276a"
+  },
+  "source-reference.v1.json": {
+    "canonicalSha256": "sha256:930748f19cbf2a9d8f4986a6d411c81279d0c080a53f701d01f845011abb97bd"
+  }
+}

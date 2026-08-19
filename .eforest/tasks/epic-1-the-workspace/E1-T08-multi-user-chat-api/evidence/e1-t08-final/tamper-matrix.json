@@ -1,0 +1,21 @@
+{
+  "sourceEvent": {
+    "code": "PROJECTION_SOURCE_DIGEST_MISMATCH",
+    "detail": "source record 0 digest does not match event bytes",
+    "localized": true
+  },
+  "projectionRow": {
+    "code": "PROJECTION_CORRUPT_ROW",
+    "localized": true
+  },
+  "checkpoint": {
+    "code": "PROJECTION_CHECKPOINT_INVALID",
+    "localized": true
+  },
+  "claimedCompositeDigest": {
+    "code": "COMPOSITE_DIGEST_MISMATCH",
+    "detail": "claimed composite digest sha256:2b9db2630e42f4ff910d7702c2b6c317257dd8816dc772025b5cfcb9da7664c0 does not match sha256:2b9db2630e42f4ff910d7702c2b6c317257dd8816dc772025b5cfcb9da7664cc",
+    "localized": true
+  },
+  "result": "PASS"
+}

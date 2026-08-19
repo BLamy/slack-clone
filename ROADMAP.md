@@ -5,7 +5,7 @@
 Build a self-hostable Slack-shaped workspace where humans and AI agents work in the same
 channels as first-class members. Mentioning an enabled agent creates a durable,
 observable run. The workspace owner chooses the agent's harness (Codex or Claude Code),
-sandbox (Fly Sprites first; AlmostNode as a final reach), instructions, context policy,
+sandbox (Cloudflare OS first; AlmostNode as a final reach), instructions, context policy,
 budgets, and service connections.
 
 The product borrows Buzz's useful product bet—people, agents, workflows, project context,
@@ -24,43 +24,12 @@ every harness—while keeping credentials behind Infisical Agent Proxy.
 - [Infisical Agent Proxy](https://infisical.com/blog/agent-proxy) and
   [Agent Vault](https://github.com/Infisical/agent-vault) — production and local
   credential-brokering references.
-- [Fly Sprites](https://fly.io/sprites/) — the first production sandbox provider and its
-  checkpoint, execution, isolation, and network-policy surfaces.
+- [Cloudflare OS](https://github.com/cloudflare/cloudflare-os/tree/main) — the first
+  production sandbox reference: isolated Gadgets on Dynamic Worker Facets, Durable Object
+  workspaces, and capability-based Gatekeepers for controlled external access.
 - AlmostNode is the local reach reference for `@agent-wasm/sdk` and browser-hosted
   harness adapters. It is not vendored here, so cold-clone task contracts cannot depend
   on reading that adjacent checkout at runtime.
-
-## Frontend track: Epic 0 — The Storybook Workbench
-
-The frontend has a deliberately separate Epic 0 for the pre-Epic-7 visual approval
-slice. Its source of truth is the component inventory and Storybook stories under
-`frontend/epic-0-storybook-components/`. It does not replace or reorder the server
-Epic 0 above, and it does not add a gate to `.eforest/tasks/QUEUE.md`.
-
-Every frontend component is built first against local fixtures in Storybook. Each story
-must make its states explicit—light, dark, system, keyboard focus, disabled/loading,
-error/empty where applicable, and responsive narrow/wide layouts—before a component is
-used by a page or connected to an API. The review loop is:
-
-```text
-component contract → Storybook variants → local screenshots → human approval
-                                                        │
-                                                        ▼
-                                       page composition → backend wiring
-```
-
-The Epic 0 inventory is intentionally broader than the first chat slice. It covers the
-shared primitives, workspace shell, message timeline, agent/run surfaces, onboarding,
-feedback states, and the accessibility/responsive harness needed to keep those surfaces
-reviewable as the product grows.
-
-**Epic 0 exit:** the component inventory has stories and screenshots for the agreed
-variants, `pnpm build-storybook` and the Storybook test suite are green, and the human
-reviewer approves the visual direction. Backend wiring starts only after that approval.
-
-See [`frontend/epic-0-storybook-components/README.md`](frontend/epic-0-storybook-components/README.md)
-and [`frontend/epic-0-storybook-components/component-inventory.md`](frontend/epic-0-storybook-components/component-inventory.md)
-for the working breakdown.
 
 ## The architectural bet
 
@@ -74,7 +43,7 @@ channel message @agent
 mention reconciler ── deterministic invocation ──► durable run queue
                                                      │ fenced lease
                                                      ▼
-                                           sandbox provider (Fly first)
+                                           sandbox provider (Cloudflare OS first)
                                                      │
                                   credential broker ◄┼► harness (Codex/Claude)
                                                      │ normalized events
@@ -163,21 +132,23 @@ guards, cancellation/retry/budget policy, and provenance-bound agent replies.
 **Capstone:** a deterministic fake sandbox and harness complete mention → run → threaded
 agent reply across injected crashes at every saga boundary with one logical execution.
 
-### Epic 4 — The Sprite
+### Epic 4 — The Cloudflare OS Sandbox
 
-Define the provider-neutral sandbox contract and make Fly Sprites the first real
-implementation. Cover tenant-safe control-plane addressing, pinned workspace
-materialization, streaming exec, process-tree cancellation, default-deny egress,
-ephemeral/persistent modes, checkpoints, quotas, cost events, and orphan collection.
+Define the provider-neutral sandbox contract and make Cloudflare OS the first real
+implementation. Cover tenant-safe workspace/Gadget control-plane addressing, pinned
+workspace materialization, streaming execution, process-tree cancellation, default-deny
+egress through explicit Gatekeepers, ephemeral/persistent modes, checkpoints, quotas, cost
+events, and orphan collection.
 
-**Capstone:** a real Fly Sprite passes the provider conformance suite from cold config,
-including restart, restore, cancel, revoke, and destroy with no public app URL.
+**Capstone:** a real Cloudflare OS workspace/Gadget passes the provider conformance suite
+from cold config, including restart, restore, cancel, revoke, and destroy with no public
+app URL.
 
 ### Epic 5 — The Switchboard
 
 Build the Infisical Agent Proxy and Executor-like service plane. Freeze service,
 connection, secret-reference, and grant models; mint short-lived run proxy identities;
-bootstrap the proxy into Sprites; import OpenAPI and MCP integrations; expose one
+bootstrap the proxy into Cloudflare OS Gatekeepers; import OpenAPI and MCP integrations; expose one
 search/describe/execute gateway; bind mutation policy to exact approvals; and prove
 cross-tenant isolation, rotation, revocation, and redaction.
 
@@ -195,7 +166,7 @@ Normalize Codex and Claude Code behind one harness protocol. Pin and attest inst
 stream common lifecycle/tool/artifact/approval events, give both the same run-scoped
 service catalog, enforce fresh-session context, and normalize cancellation and exit.
 
-**Capstone:** two configured agent members—one Codex, one Claude Code—run on Fly, use the
+**Capstone:** two configured agent members—one Codex, one Claude Code—run on Cloudflare OS, use the
 same brokered gateway, and reply with exact config/run/tool provenance.
 
 ### Epic 7 — The Watchtower
@@ -206,7 +177,7 @@ redacted metrics/traces, export/rebuild/migrations, an adversarial security suit
 least-privileged deployment identities.
 
 **Server release:** two API replicas and two workers survive kill, rotate, cancel, and
-revoke operations during real Codex and Claude runs on Fly plus Infisical Agent Proxy,
+revoke operations during real Codex and Claude runs on Cloudflare OS plus Infisical Agent Proxy,
 then replay to the same digest with no duplicate reply or tool effect.
 
 ### Epic 8 — The Room
@@ -240,7 +211,7 @@ offset/digest with no Nostr, Git, or database record acting as hidden authority.
 
 ### Epic 11 — The Browser Computer (reach)
 
-AlmostNode is intentionally last and is not on the production Fly critical path. First
+AlmostNode is intentionally last and is not on the production Cloudflare OS critical path. First
 classify its weaker browser trust/isolation and unsupported OS surface. Only then register
 `almostnode-browser` behind the unchanged sandbox contract, prove lifecycle/network/
 resource behavior, bridge Codex and Claude where feasible, and integrate brokered egress.
@@ -249,10 +220,10 @@ Current reference surfaces include `@agent-wasm/sdk` for workspace/agent lifecyc
 `@agent-wasm/codex` for browser-hosted Codex. Claude-in-browser is a feasibility gate,
 not an assumed capability.
 
-**Reach capstone:** change only an existing agent's sandbox provider from Fly to
+**Reach capstone:** change only an existing agent's sandbox provider from Cloudflare OS to
 AlmostNode and pass the same mention/tool/approval/reply scenario across the two-harness ×
 two-sandbox matrix. A documented infeasibility may stop this reach without weakening the
-Fly production release.
+Cloudflare OS production release.
 
 ## Dependency spine
 
@@ -263,24 +234,24 @@ E0 → E1 → E2 → E3 ─┬→ E4 ─┐
 
 E4 and E5 may progress in parallel after E3 because their contracts meet at E6. All
 browser product work is downstream of E7. E11 cannot be pulled forward to solve a server
-contract and must not become a hidden prerequisite for the Fly path.
+contract and must not become a hidden prerequisite for the Cloudflare OS path.
 
 ## Explicit non-goals for the first server release
 
 - Nostr compatibility, cross-relay federation, portable Nostr identities, or gossip;
 - end-to-end encrypted channels;
-- arbitrary provider plugins before the fake/Fly and Codex/Claude matrices are proven;
+- arbitrary provider plugins before the fake/Cloudflare OS and Codex/Claude matrices are proven;
 - giving a model raw credentials for convenience;
 - an autonomous agent bypass around exact approvals;
-- making browser sandbox isolation claims equivalent to Fly hardware isolation;
+- making browser sandbox isolation claims equivalent to Cloudflare OS worker isolation;
 - replacing the current demo before its behaviors have migrated behind tested seams.
 
 ## Definition of the product milestones
 
 - **Agent backend MVP:** E3 capstone—mentions drive a durable fake run exactly once.
-- **Real agent backend:** E6 capstone—Codex and Claude run on Fly with brokered services.
+- **Real agent backend:** E6 capstone—Codex and Claude run on Cloudflare OS with brokered services.
 - **Production server:** E7 capstone—multi-replica, recoverable, secure, observable.
 - **Usable Slack agent product:** E9 capstone—UI plus first-class onboarding.
 - **Buzz-like workspace:** E10 capstone—workflows, project context, delegation, evidence.
 - **Browser reach:** E11 capstone—AlmostNode earns adapter parity without weakening the
-  earlier gates.
+  earlier Cloudflare OS gates.

@@ -1,0 +1,31 @@
+{
+  "historicalReplayStillValid": true,
+  "rows": [
+    {
+      "code": "INVOCATION_SNAPSHOT_AGENT_CONFIG_INACTIVE",
+      "name": "configuration disabled",
+      "rejected": true
+    },
+    {
+      "code": "INVOCATION_SNAPSHOT_MEMBERSHIP_INACTIVE",
+      "name": "membership suspended",
+      "rejected": true
+    },
+    {
+      "code": "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED",
+      "name": "provider health revoked",
+      "rejected": true
+    },
+    {
+      "code": "INVOCATION_SNAPSHOT_CONNECTION_GRANT_REVOKED",
+      "name": "all connection grants revoked",
+      "rejected": true
+    },
+    {
+      "code": "INVOCATION_SNAPSHOT_STALE_WORKSPACE_INPUT",
+      "name": "workspace input source revoked",
+      "rejected": true
+    }
+  ],
+  "result": "PASS"
+}

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "from": 0,
+      "to": 1,
+      "deterministic": true,
+      "securityDefaultsInvented": false,
+      "digest": "sha256:985cb3cc8e3ddfb848768e8f058afad174135e97253eed9376953c0a820973c7"
+    }
+  ]
+}

@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 1,
+  "runId": "e2-t01-canonical-repair-final",
+  "implementationCommit": "444b5c392eee30e13f875126826dbcc3365ad9ea",
+  "result": "PASS",
+  "skips": [],
+  "canonical": {
+    "byteLength": 1380,
+    "canonicalUtf8": "{\"budgets\":{\"maxCostUsdCents\":250,\"maxInputTokens\":8000,\"maxOutputTokens\":4000,\"maxTotalTokens\":12000,\"timeoutSeconds\":900},\"concurrency\":{\"maxConcurrentPerChannel\":1,\"maxConcurrentRuns\":4,\"queueStrategy\":\"serialize\"},\"connectionGrants\":{\"maxCallsPerRun\":2,\"refs\":[{\"connectionId\":\"conn_a\",\"grantId\":\"grant_bgrant_c\",\"purpose\":\"p\",\"revision\":1},{\"connectionId\":\"conn_agrant_b\",\"grantId\":\"grant_c\",\"purpose\":\"p\",\"revision\":1}]},\"context\":{\"includePrivate\":false,\"includeThreadHistory\":true,\"maxBytes\":65536,\"maxMessages\":50,\"scope\":\"current-channel\"},\"delegation\":{\"allowCrossChannel\":false,\"enabled\":false,\"maxChildren\":0,\"maxDepth\":0},\"harness\":{\"providerId\":\"scripted\",\"providerVersion\":\"1.0.0\",\"requiredCapabilities\":[\"structured-output\"]},\"instructions\":{\"guardrails\":[\"Never disclose credentials or secret-shaped values.\",\"Keep replies bounded and auditable.\"],\"system\":\"You are a workspace assistant. Follow the workspace policy and cite durable facts.\",\"task\":\"Answer the current request using only the authorized context.\"},\"sandbox\":{\"lifecycle\":\"ephemeral\",\"networkPolicy\":\"deny-all\",\"providerId\":\"scripted\",\"providerVersion\":\"1.0.0\",\"requiredCapabilities\":[\"ephemeral\"]},\"schemaVersion\":1,\"trigger\":{\"allowMessageEdits\":false,\"events\":[\"manual\",\"mention\"],\"requireMention\":false},\"workspaceInputs\":{\"maxBytes\":1048576,\"paths\":[\"README.md\",\"docs\"],\"source\":\"workspace\"}}",
+    "digest": "sha256:985cb3cc8e3ddfb848768e8f058afad174135e97253eed9376953c0a820973c7",
+    "mapAndUnorderedArrayParity": true,
+    "semanticMutationChangesDigest": true
+  },
+  "upgrade": {
+    "from": 0,
+    "to": 1,
+    "deterministic": true,
+    "securityDefaultsInvented": false
+  },
+  "refusals": [
+    {
+      "filename": "unknown-environment-field.json",
+      "code": "AGENT_CONFIG_FORBIDDEN_FIELD",
+      "path": "$.agentConfig.environment"
+    },
+    {
+      "filename": "secret-canary-instructions.json",
+      "code": "AGENT_CONFIG_SECRET_VALUE",
+      "path": "$.agentConfig.instructions.system"
+    },
+    {
+      "filename": "unknown-provider.json",
+      "code": "AGENT_CONFIG_UNKNOWN_PROVIDER",
+      "path": "$.agentConfig.harness.providerId"
+    },
+    {
+      "filename": "future-schema-version.json",
+      "code": "AGENT_CONFIG_UNSUPPORTED_SCHEMA_VERSION",
+      "path": "$.agentConfig.schemaVersion"
+    },
+    {
+      "filename": "fractional-budget.json",
+      "code": "AGENT_CONFIG_INVALID_VALUE",
+      "path": "$.agentConfig.budgets.timeoutSeconds"
+    },
+    {
+      "filename": "contradictory-policy.json",
+      "code": "AGENT_CONFIG_CONTRADICTORY_POLICY",
+      "path": "$.agentConfig.trigger.requireMention"
+    },
+    {
+      "filename": "unversioned-connection.json",
+      "code": "AGENT_CONFIG_MISSING_FIELD",
+      "path": "$.agentConfig.connectionGrants.refs[0].revision"
+    },
+    {
+      "filename": "unknown-startup-command.json",
+      "code": "AGENT_CONFIG_FORBIDDEN_FIELD",
+      "path": "$.agentConfig.sandbox.startupCommand"
+    },
+    {
+      "filename": "unknown-schema-version",
+      "code": "AGENT_CONFIG_UNSUPPORTED_SCHEMA_VERSION",
+      "path": "$.agentConfig.schemaVersion"
+    },
+    {
+      "filename": "unknown-harness-version",
+      "code": "AGENT_CONFIG_UNSUPPORTED_PROVIDER_VERSION",
+      "path": "$.agentConfig.harness.providerVersion"
+    },
+    {
+      "filename": "unknown-capability",
+      "code": "AGENT_CONFIG_INVALID_CAPABILITY",
+      "path": "$.agentConfig.harness.requiredCapabilities[0]"
+    },
+    {
+      "filename": "unknown-trigger",
+      "code": "AGENT_CONFIG_INVALID_ENUM",
+      "path": "$.agentConfig.trigger.events[0]"
+    },
+    {
+      "filename": "negative-budget",
+      "code": "AGENT_CONFIG_INVALID_VALUE",
+      "path": "$.agentConfig.budgets.timeoutSeconds"
+    },
+    {
+      "filename": "fractional-concurrency",
+      "code": "AGENT_CONFIG_INVALID_VALUE",
+      "path": "$.agentConfig.concurrency.maxConcurrentRuns"
+    },
+    {
+      "filename": "cross-channel-with-channel-context",
+      "code": "AGENT_CONFIG_CONTRADICTORY_POLICY",
+      "path": "$.agentConfig.delegation.allowCrossChannel"
+    }
+  ],
+  "canaries": {
+    "cases": 14,
+    "allRejected": true,
+    "locations": [
+      {
+        "location": "instructions.system",
+        "code": "AGENT_CONFIG_SECRET_VALUE",
+        "path": "$.agentConfig.instructions.system"
+      },
+      {
+        "location": "instructions.task",
+        "code": "AGENT_CONFIG_SECRET_VALUE",
+        "path": "$.agentConfig.instructions.task"
+      },
+      {
+        "location": "instructions.guardrails[0]",
+        "code": "AGENT_CONFIG_SECRET_VALUE",
+        "path": "$.agentConfig.instructions.guardrails[0]"
+      },
+      {
+        "location": "harness.providerId",
+        "code": "AGENT_CONFIG_SECRET_VALUE",
+        "path": "$.agentConfig.harness.providerId"
+      },
+      {
+        "location": "harness.providerVersion",
+        "code": "AGENT_CONFIG_SECRET_VALUE",
+        "path": "$.agentConfig.harness.providerVersion"
+      },
+      {
+        "location": "harness.requiredCapabilities[0]",
+        "code": "AGENT_CONFIG_SECRET_VALUE",
+        "path": "$.agentConfig.harness.requiredCapabilities[0]"
+      },
+      {
+        "location": "sandbox.providerId",
+        "code": "AGENT_CONFIG_SECRET_VALUE",
+        "path": "$.agentConfig.sandbox.providerId"
+      },
+      {
+        "location": "sandbox.providerVersion",
+        "code": "AGENT_CONFIG_SECRET_VALUE",
+        "path": "$.agentConfig.sandbox.providerVersion"
+      },
+      {
+        "location": "sandbox.requiredCapabilities[0]",
+        "code": "AGENT_CONFIG_SECRET_VALUE",
+        "path": "$.agentConfig.sandbox.requiredCapabilities[0]"
+      },
+      {
+        "location": "workspaceInputs.source",
+        "code": "AGENT_CONFIG_SECRET_VALUE",
+        "path": "$.agentConfig.workspaceInputs.source"
+      },
+      {
+        "location": "workspaceInputs.paths[0]",
+        "code": "AGENT_CONFIG_SECRET_VALUE",
+        "path": "$.agentConfig.workspaceInputs.paths[0]"
+      },
+      {
+        "location": "connectionGrants.refs[0].connectionId",
+        "code": "AGENT_CONFIG_SECRET_VALUE",
+        "path": "$.agentConfig.connectionGrants.refs[0].connectionId"
+      },
+      {
+        "location": "connectionGrants.refs[0].grantId",
+        "code": "AGENT_CONFIG_SECRET_VALUE",
+        "path": "$.agentConfig.connectionGrants.refs[0].grantId"
+      },
+      {
+        "location": "connectionGrants.refs[0].purpose",
+        "code": "AGENT_CONFIG_SECRET_VALUE",
+        "path": "$.agentConfig.connectionGrants.refs[0].purpose"
+      }
+    ]
+  },
+  "schema": {
+    "additionalPropertiesFalse": true,
+    "requiredFields": [
+      "schemaVersion",
+      "instructions",
+      "context",
+      "trigger",
+      "delegation",
+      "concurrency",
+      "budgets",
+      "harness",
+      "sandbox",
+      "workspaceInputs",
+      "connectionGrants"
+    ],
+    "forbiddenFieldsAbsent": true
+  },
+  "sensitivity": {
+    "mutation": "disabled unknown-field rejection in disposable module copy",
+    "sourceGuardOccurrences": 1,
+    "mutantExitCode": 7,
+    "verifierDetectedMutant": true,
+    "rejectedByMutant": false
+  },
+  "gates": [
+    {
+      "name": "format",
+      "command": "pnpm format:check",
+      "exitCode": 0
+    },
+    {
+      "name": "lint",
+      "command": "pnpm lint",
+      "exitCode": 0
+    },
+    {
+      "name": "typecheck",
+      "command": "pnpm typecheck",
+      "exitCode": 0
+    },
+    {
+      "name": "test",
+      "command": "pnpm test",
+      "exitCode": 0
+    },
+    {
+      "name": "build",
+      "command": "pnpm build",
+      "exitCode": 0
+    }
+  ]
+}

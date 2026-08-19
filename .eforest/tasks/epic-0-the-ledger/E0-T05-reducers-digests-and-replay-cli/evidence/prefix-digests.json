@@ -1,0 +1,76 @@
+{
+  "ledger-log.v1.json": [
+    {
+      "index": 1,
+      "offset": "0000000000000000_0000000000000001",
+      "stateDigest": "sha256:d5701252b9a14a4a3616b55c06f411b1b8a4d7bee390fc01e163dfb054a108df"
+    },
+    {
+      "index": 2,
+      "offset": "0000000000000000_0000000000000002",
+      "stateDigest": "sha256:0d14c2577e36280878f78de3d0758d0f5023d6a6e50f0d966233ffbb73588d91"
+    },
+    {
+      "index": 3,
+      "offset": "0000000000000000_0000000000000003",
+      "stateDigest": "sha256:a4defd97de08884fef04be40ddec287389648c3f2743fbcc4338024135a7b8a3"
+    },
+    {
+      "index": 4,
+      "offset": "0000000000000000_0000000000000004",
+      "stateDigest": "sha256:79aaab98a3ad378d3913484333a502822ce92952e4caa3ee91aa27e63f9956ed"
+    },
+    {
+      "index": 5,
+      "offset": "0000000000000000_0000000000000005",
+      "stateDigest": "sha256:92fb6ee5acf8d16332586ee27fe6f0dd3ea16972e0a22fc04239ec213bb86233"
+    },
+    {
+      "index": 6,
+      "offset": "0000000000000000_0000000000000006",
+      "stateDigest": "sha256:2443f545941e65bf96ec7a50e43f2b547b77ee73da4305ae9a51137d73da2755"
+    },
+    {
+      "index": 7,
+      "offset": "0000000000000000_0000000000000007",
+      "stateDigest": "sha256:0a60b188811a974b88699d6067e583ee4e01fddd024979782c00c1e4aa16271a"
+    },
+    {
+      "index": 8,
+      "offset": "0000000000000000_0000000000000008",
+      "stateDigest": "sha256:7396a6cea2f4cab3368e5145b827f21cb34bb36a20f19d6344549f7ebdf46aaf"
+    },
+    {
+      "index": 9,
+      "offset": "0000000000000000_0000000000000009",
+      "stateDigest": "sha256:2be52df07b32a03c05189cb65bc6d9137b532ea25e070d4cfc3407013dabd789"
+    },
+    {
+      "index": 10,
+      "offset": "0000000000000000_0000000000000010",
+      "stateDigest": "sha256:5462e5c9d9d93fa56ae173a15d49ea3c931db073a2ee3da0dd2083ebeb99b79e"
+    }
+  ],
+  "message-and-run-log.v1.json": [
+    {
+      "index": 1,
+      "offset": "0000000000000001_0000000000000001",
+      "stateDigest": "sha256:a0466db537f11caab742cee8d83325853af81762478ee407ed723d0cd7a66121"
+    },
+    {
+      "index": 2,
+      "offset": "0000000000000001_0000000000000002",
+      "stateDigest": "sha256:50d45030d86c896cac4abfe72aaeb626aa5da5c26db83e75cbe02da510971c8f"
+    },
+    {
+      "index": 3,
+      "offset": "0000000000000001_0000000000000003",
+      "stateDigest": "sha256:7c37f16da2070fdbcca0a0f0f428e703b0f22cb32b76e56eb737419975379572"
+    },
+    {
+      "index": 4,
+      "offset": "0000000000000001_0000000000000004",
+      "stateDigest": "sha256:abe1b4ab514e5b182efd0e509efef3f42b4b8ae7bf843361b18b991c7d9522ef"
+    }
+  ]
+}

@@ -47,14 +47,14 @@ export function LoginPage() {
             <CardDescription>Credentials are checked by the local Auth0 emulator at <code data-testid="auth0-emulator-url" className="break-all text-xs">{auth0EmulatorUrl}</code>.</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="min-h-12" aria-live="polite">
-              {error && <div className="mb-4 rounded-xl border border-destructive/40 bg-destructive/10 px-3 py-2.5 text-sm text-destructive" data-testid="login-error" role="alert">{error}</div>}
+            <div className="min-h-16" aria-live="polite" data-testid="login-error-slot">
+              {error && <div className="rounded-xl border border-destructive/40 bg-destructive/10 px-3 py-2.5 text-sm text-destructive" data-testid="login-error" role="alert">{error}</div>}
             </div>
             <form method="post" action="/login" data-testid="login-form" className="space-y-4">
               <input type="hidden" name="returnTo" value={returnTo} />
               <label className="grid gap-2 text-sm font-medium" htmlFor="email-input">
                 Email
-                <Input id="email-input" data-testid="email-input" name="email" autoComplete="username" defaultValue="ada@example.test" />
+                <Input id="email-input" data-testid="email-input" name="email" autoComplete="username" placeholder="ada@example.test" />
               </label>
               <label className="grid gap-2 text-sm font-medium" htmlFor="password-input">
                 Password

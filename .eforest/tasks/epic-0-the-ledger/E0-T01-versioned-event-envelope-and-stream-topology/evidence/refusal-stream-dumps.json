@@ -1,0 +1,77 @@
+[
+  {
+    "fixture": "client-supplied-timestamp.json",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_EXTRA_KEY",
+      "path": "$.input.serverTimestamp",
+      "detail": "field is not allowed"
+    },
+    "appendCalls": 0,
+    "beforeBase64": "eyJzZWVkIjoidW5jaGFuZ2VkIn0K",
+    "afterBase64": "eyJzZWVkIjoidW5jaGFuZ2VkIn0K",
+    "beforeSha256": "sha256:7fc286fe6cd013f2a00a8aae545dab1e4368a3051b5def81c270352f4b75ebd5",
+    "afterSha256": "sha256:7fc286fe6cd013f2a00a8aae545dab1e4368a3051b5def81c270352f4b75ebd5",
+    "byteIdentical": true
+  },
+  {
+    "fixture": "forward-version.json",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_INVALID_SCHEMA_VERSION",
+      "path": "$.schemaVersion",
+      "detail": "supported version is 1"
+    },
+    "appendCalls": 0,
+    "beforeBase64": "eyJzZWVkIjoidW5jaGFuZ2VkIn0K",
+    "afterBase64": "eyJzZWVkIjoidW5jaGFuZ2VkIn0K",
+    "beforeSha256": "sha256:7fc286fe6cd013f2a00a8aae545dab1e4368a3051b5def81c270352f4b75ebd5",
+    "afterSha256": "sha256:7fc286fe6cd013f2a00a8aae545dab1e4368a3051b5def81c270352f4b75ebd5",
+    "byteIdentical": true
+  },
+  {
+    "fixture": "incomplete-source-reference.json",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_MISSING_FIELD",
+      "path": "$.causation.digest",
+      "detail": "field is required"
+    },
+    "appendCalls": 0,
+    "beforeBase64": "eyJzZWVkIjoidW5jaGFuZ2VkIn0K",
+    "afterBase64": "eyJzZWVkIjoidW5jaGFuZ2VkIn0K",
+    "beforeSha256": "sha256:7fc286fe6cd013f2a00a8aae545dab1e4368a3051b5def81c270352f4b75ebd5",
+    "afterSha256": "sha256:7fc286fe6cd013f2a00a8aae545dab1e4368a3051b5def81c270352f4b75ebd5",
+    "byteIdentical": true
+  },
+  {
+    "fixture": "malformed-workspace-id.json",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_INVALID_ID",
+      "path": "$.workspaceId",
+      "detail": "invalid workspace id"
+    },
+    "appendCalls": 0,
+    "beforeBase64": "eyJzZWVkIjoidW5jaGFuZ2VkIn0K",
+    "afterBase64": "eyJzZWVkIjoidW5jaGFuZ2VkIn0K",
+    "beforeSha256": "sha256:7fc286fe6cd013f2a00a8aae545dab1e4368a3051b5def81c270352f4b75ebd5",
+    "afterSha256": "sha256:7fc286fe6cd013f2a00a8aae545dab1e4368a3051b5def81c270352f4b75ebd5",
+    "byteIdentical": true
+  },
+  {
+    "fixture": "unknown-event-type.json",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_INVALID_EVENT_TYPE",
+      "path": "$.eventType",
+      "detail": "event type is not registered for v1"
+    },
+    "appendCalls": 0,
+    "beforeBase64": "eyJzZWVkIjoidW5jaGFuZ2VkIn0K",
+    "afterBase64": "eyJzZWVkIjoidW5jaGFuZ2VkIn0K",
+    "beforeSha256": "sha256:7fc286fe6cd013f2a00a8aae545dab1e4368a3051b5def81c270352f4b75ebd5",
+    "afterSha256": "sha256:7fc286fe6cd013f2a00a8aae545dab1e4368a3051b5def81c270352f4b75ebd5",
+    "byteIdentical": true
+  }
+]

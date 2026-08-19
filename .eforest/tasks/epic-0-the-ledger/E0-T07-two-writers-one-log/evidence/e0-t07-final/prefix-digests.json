@@ -1,0 +1,40 @@
+{
+  "finalStateDigest": "sha256:812ee10ccdd27243ca89bec97b93069584cff4fd4a82cab8bd90ce37ae395990",
+  "prefixes": [
+    {
+      "index": 1,
+      "offset": "0000000000000000_0000000000000888",
+      "stateDigest": "sha256:9955b814e0d29f7a73e9a537efdf7b6b2e65895488a28a6843b82846f3c93ff8"
+    },
+    {
+      "index": 2,
+      "offset": "0000000000000000_0000000000001766",
+      "stateDigest": "sha256:2df5020c782f2f83a9226b30931223bb6db16a107ed982680ea07b0e6ef3f777"
+    },
+    {
+      "index": 3,
+      "offset": "0000000000000000_0000000000002644",
+      "stateDigest": "sha256:0d531a6304aa48abe9159540e36f1d15e8d271825655a17a3753490ea42f110d"
+    },
+    {
+      "index": 4,
+      "offset": "0000000000000000_0000000000003525",
+      "stateDigest": "sha256:2bf69a5fbab6aff5d0cca5303e4d455682ab59717d16fc50da824fe8546c0423"
+    },
+    {
+      "index": 5,
+      "offset": "0000000000000000_0000000000004399",
+      "stateDigest": "sha256:962ee944c2ce5ab2a50148beee17dbd357392d925d9be5d0fba185c8cb966a9b"
+    },
+    {
+      "index": 6,
+      "offset": "0000000000000000_0000000000005275",
+      "stateDigest": "sha256:b2ff35e49073adb78fe9fa8c7934975a8935a09c7f19935cc98071081d8a6db8"
+    },
+    {
+      "index": 7,
+      "offset": "0000000000000000_0000000000006152",
+      "stateDigest": "sha256:812ee10ccdd27243ca89bec97b93069584cff4fd4a82cab8bd90ce37ae395990"
+    }
+  ]
+}

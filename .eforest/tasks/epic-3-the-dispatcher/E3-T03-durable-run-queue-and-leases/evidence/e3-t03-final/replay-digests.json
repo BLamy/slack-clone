@@ -1,0 +1,33 @@
+{
+  "finalStateDigest": "sha256:fd309e6b8d0bca2d0d53eaf5ab7d7f20e41dd285fd203e40f9661100274911c0",
+  "perPrefixDigests": [
+    {
+      "eventId": "ev_81c9e3ea9b9d4023dda211f086",
+      "eventType": "run.lease.acquired",
+      "offset": "0000000000000001_0000000000000000",
+      "stateDigest": "sha256:cd3a98088b9d395dee69e8b15b4af45baa07276edad98c51cbef88a74d120b41"
+    },
+    {
+      "eventId": "ev_699c618ffd76113a2e20d98465",
+      "eventType": "run.lease.heartbeat",
+      "offset": "0000000000000002_0000000000000000",
+      "stateDigest": "sha256:00e227f5dbee33dbc64f27721154d7b68df9c03d63671f53ec464ea3fb3c7756"
+    },
+    {
+      "eventId": "ev_e39d8d3bb0502293b259de8b90",
+      "eventType": "run.lease.expired",
+      "offset": "0000000000000003_0000000000000000",
+      "stateDigest": "sha256:30f7397725cf62dc9d834bc77092a65db2e3f3d9273f3d87e498c0e5282a3c04"
+    },
+    {
+      "eventId": "ev_5b2741daa9bc892be6180ac6b8",
+      "eventType": "run.lease.acquired",
+      "offset": "0000000000000004_0000000000000000",
+      "stateDigest": "sha256:fd309e6b8d0bca2d0d53eaf5ab7d7f20e41dd285fd203e40f9661100274911c0"
+    }
+  ],
+  "replayedTwiceWithIdenticalDigest": true,
+  "staleGenerationRefused": true,
+  "capabilityValuesPersisted": false,
+  "result": "PASS"
+}

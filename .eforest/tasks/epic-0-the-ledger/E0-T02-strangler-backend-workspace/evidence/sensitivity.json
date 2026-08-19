@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T02",
+  "implementationCommit": "db8077fd92e9578913886c543090d5cce0b5b239",
+  "disposableClone": "work/cold-db8077f",
+  "probes": [
+    {
+      "name": "pure package capability import",
+      "mutation": "added import node:fs to packages/protocol/src/index.mjs",
+      "command": "pnpm typecheck",
+      "expected": "non-zero with the forbidden import identified",
+      "actualExitCode": 1,
+      "observation": "packages/protocol/src/index.mjs imports capability module node:fs",
+      "result": "PASS"
+    },
+    {
+      "name": "owner-edit compatibility assertion",
+      "mutation": "inverted the inherited non-owner PATCH expectation from 403 to 200",
+      "command": "TEST_RUN_ID=sensitivity-edit-auth-final pnpm verify",
+      "expected": "the composed target reaches integration and exits non-zero",
+      "actualExitCode": 1,
+      "observation": "Playwright expected 200 and received 403 at tests/two-sessions.spec.mjs:199; four sibling scenarios passed and the owner-edit scenario failed",
+      "result": "PASS"
+    },
+    {
+      "name": "managed child startup failure",
+      "mutation": "unit fixtures force each managed child to exit during startup",
+      "command": "pnpm test:unit",
+      "expected": "managed sibling terminates while unrelated process survives",
+      "actual": "both startup-failure tests passed",
+      "result": "PASS"
+    }
+  ],
+  "cloneRestoredAfterProbes": true
+}

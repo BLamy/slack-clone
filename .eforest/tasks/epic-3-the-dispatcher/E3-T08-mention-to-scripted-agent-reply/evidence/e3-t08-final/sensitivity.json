@@ -1,0 +1,30 @@
+{
+  "mutationCount": 3,
+  "mutations": [
+    {
+      "exitCode": 1,
+      "file": "scripts/verify-e3-t08.mjs",
+      "mutation": "reply-endpoint-scope",
+      "stderrSha256": "sha256:9c9555292f7fe54142011274f950e5fa7a33793b5f1a7c60841c53802db3ec18",
+      "stdoutSha256": "sha256:12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "result": "VERIFIER_FAILED_AS_EXPECTED"
+    },
+    {
+      "exitCode": 1,
+      "file": "src/ledger/run-control.mjs",
+      "mutation": "activity-event-type",
+      "stderrSha256": "sha256:8cd1817498068e1e53dd4e166ed923336702f5def0fd944660edb743188d5577",
+      "stdoutSha256": "sha256:12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "result": "VERIFIER_FAILED_AS_EXPECTED"
+    },
+    {
+      "exitCode": 1,
+      "file": "src/ledger/mention-reconciler.mjs",
+      "mutation": "dispatch-door-adapter",
+      "stderrSha256": "sha256:105888e2ea90430318f3fdfefbb2ade2d867da323fa592a635ded08dbf48562b",
+      "stdoutSha256": "sha256:12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "result": "VERIFIER_FAILED_AS_EXPECTED"
+    }
+  ],
+  "result": "PASS"
+}

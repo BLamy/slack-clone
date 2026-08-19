@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "seed": "e0-t07-e0-t07-composed",
+  "schedule": [
+    {
+      "boundary": "dispatch",
+      "order": [
+        "a",
+        "b"
+      ],
+      "step": "duplicate-idempotency"
+    },
+    {
+      "boundary": "dispatch",
+      "order": [
+        "a",
+        "b"
+      ],
+      "step": "conflict-0"
+    },
+    {
+      "boundary": "dispatch",
+      "order": [
+        "b",
+        "a"
+      ],
+      "step": "conflict-1"
+    },
+    {
+      "boundary": "dispatch",
+      "order": [
+        "b",
+        "a"
+      ],
+      "step": "non-conflicting-streams"
+    },
+    {
+      "boundary": "follower",
+      "signal": "SIGSTOP",
+      "step": "partition"
+    },
+    {
+      "boundary": "dispatch",
+      "order": [
+        "a",
+        "b"
+      ],
+      "step": "partition-conflict-0"
+    },
+    {
+      "boundary": "dispatch",
+      "order": [
+        "b",
+        "a"
+      ],
+      "step": "partition-conflict-1"
+    },
+    {
+      "boundary": "follower",
+      "signal": "SIGKILL",
+      "step": "process-restart"
+    },
+    {
+      "boundary": "dispatch",
+      "order": [
+        "a",
+        "b"
+      ],
+      "step": "post-restart-conflict"
+    }
+  ],
+  "writerProcesses": [
+    {
+      "producerId": "e0-t07-e0-t07-composed-writer-a",
+      "role": "writer-a"
+    },
+    {
+      "producerId": "e0-t07-e0-t07-composed-writer-b",
+      "role": "writer-b"
+    }
+  ]
+}

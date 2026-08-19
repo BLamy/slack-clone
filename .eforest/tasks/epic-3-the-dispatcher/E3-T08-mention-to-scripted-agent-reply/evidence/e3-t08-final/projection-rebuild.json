@@ -1,0 +1,31 @@
+{
+  "after": {
+    "auditDigest": "sha256:78246b3c4cf9311c5e0e43da1a566f5f37586040aa76f3f2cd5b68517ee444bc",
+    "configStateDigest": "sha256:c8c1616c2bb0d96b440c0594ee50bf85b6ad051afdca2f8ab1bd7c9e4b167cb2",
+    "contextDigest": "sha256:dbf16d9663a8253750b375776ac8491ba378cae1e09426bb47b3f771e389318a",
+    "conversationDigest": "sha256:b1417b7230114c303e9178dc649d1536cf52084c47839f7a5dc1cb1f4e766d33",
+    "leaseStateDigest": "sha256:9178487f0fac5100027ff64f10b39ff0064394dca7281463df69494c6d4413be",
+    "queueDigest": "sha256:ae051b65ae38524d7bc302c4b362a7c6b60eed337905aa3e7a249a76e9571c9c",
+    "runDigest": "sha256:5d7a4b4e13bd964ceade2a5a7f9276c0b5fb4436ec20ec260bfce9b42134a3b2",
+    "projectionDigest": "sha256:c9e3b601e28eb8814eafc9bc471143f3def485c58297626066dddc6414deefe4"
+  },
+  "before": {
+    "auditDigest": "sha256:78246b3c4cf9311c5e0e43da1a566f5f37586040aa76f3f2cd5b68517ee444bc",
+    "configStateDigest": "sha256:c8c1616c2bb0d96b440c0594ee50bf85b6ad051afdca2f8ab1bd7c9e4b167cb2",
+    "contextDigest": "sha256:dbf16d9663a8253750b375776ac8491ba378cae1e09426bb47b3f771e389318a",
+    "conversationDigest": "sha256:b1417b7230114c303e9178dc649d1536cf52084c47839f7a5dc1cb1f4e766d33",
+    "leaseStateDigest": "sha256:9178487f0fac5100027ff64f10b39ff0064394dca7281463df69494c6d4413be",
+    "queueDigest": "sha256:ae051b65ae38524d7bc302c4b362a7c6b60eed337905aa3e7a249a76e9571c9c",
+    "runDigest": "sha256:5d7a4b4e13bd964ceade2a5a7f9276c0b5fb4436ec20ec260bfce9b42134a3b2",
+    "projectionDigest": "sha256:c9e3b601e28eb8814eafc9bc471143f3def485c58297626066dddc6414deefe4"
+  },
+  "replayed": {
+    "conversationMessageCount": 2,
+    "configStateDigest": "sha256:c8c1616c2bb0d96b440c0594ee50bf85b6ad051afdca2f8ab1bd7c9e4b167cb2",
+    "contextDigest": "sha256:dbf16d9663a8253750b375776ac8491ba378cae1e09426bb47b3f771e389318a",
+    "leaseStateDigest": "sha256:9178487f0fac5100027ff64f10b39ff0064394dca7281463df69494c6d4413be",
+    "queueDigest": "sha256:ae051b65ae38524d7bc302c4b362a7c6b60eed337905aa3e7a249a76e9571c9c",
+    "runRecordCount": 12,
+    "scheduleDigest": "sha256:b0d766b8986d746a631d4bc5e078d7733c71c109d3af90d40dd2f6c9ccb708f5"
+  }
+}

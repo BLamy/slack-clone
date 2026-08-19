@@ -13,7 +13,7 @@ capstone: false
 
 The server, scheduler/worker, migration tooling, and verification utilities build into
 reproducible signed artifacts with SBOMs and immutable configuration. Each deployment role
-uses a distinct least-privilege identity for Durable Streams, Fly, Infisical Agent Proxy,
+uses a distinct least-privilege identity for Durable Streams, Cloudflare, Infisical Agent Proxy,
 model providers, telemetry, and release control; no long-lived secret is baked into an
 image or shared across roles.
 
@@ -42,10 +42,11 @@ brokered secrets constrain what compromise of any one replica can reach.
       committed matrix proves each required operation succeeds and every undeclared
       cross-role operation is refused.
 - [ ] Production accepts Infisical Agent Proxy only; Agent Vault, ordinary Infisical
-      caching Proxy, fake Fly, local harnesses, and unsigned/unattested artifacts fail
+      caching Proxy, fake Cloudflare OS, local harnesses, and unsigned/unattested artifacts fail
       startup before queue consumption.
 - [ ] Staging conformance uses real least-privilege identities to read/write only its
-      isolated test resources, then inventory proves no Sprite or proxy identity remains;
+      isolated test resources, then inventory proves no Cloudflare OS workspace/Gadget or
+      proxy identity remains;
       missing provider access exits nonzero with `SKIPPED:`.
 - [ ] Browser evidence is recorded exactly as `Replay: N/A (production packaging and
       workload identities) + mitigation: cold-clone reproducible builds, signatures/SBOM,

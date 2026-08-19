@@ -1,0 +1,13 @@
+{
+  "compactMessageAcceptedWithoutShapeChange": true,
+  "compactMessageRequiresExplicitE0Compatibility": true,
+  "foreignWorkspaceChannelRefused": true,
+  "unknownSameWorkspaceChannelRefused": true,
+  "forgedAuthorRefused": true,
+  "compactControlsRefused": [
+    "C0",
+    "C1"
+  ],
+  "legacyProjectionPreserved": true,
+  "result": "PASS"
+}

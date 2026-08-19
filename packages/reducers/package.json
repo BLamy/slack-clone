@@ -1,0 +1,10 @@
+{
+  "name": "@stream-slack/reducers",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@stream-slack/protocol": "workspace:*"
+  },
+  "exports": "./src/index.mjs"
+}

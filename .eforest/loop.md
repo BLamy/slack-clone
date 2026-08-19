@@ -65,4 +65,3 @@ met within the ticket's contract. Record the exact reason in `statusReason` and 
 Rework does not patch a verdict in place. The builder returns to the cheapest applicable
 gate, reruns all later gates, records new evidence, and appends a new claim. Old
 Verification log entries are immutable history. Never delete or rewrite a refutation.
-

@@ -1,0 +1,47 @@
+{
+  "candidates": [
+    {
+      "contender": "failed",
+      "expectedCode": "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+      "observedCode": "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+      "offset": "0000000000000016_aaaaaaaaaaaaaaaa",
+      "refused": true,
+      "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
+      "winner": "completed",
+      "winnerStateDigest": "sha256:bff1c61f80012183f79385d8f8bec9db587671729d85a91763be3eae86b6c4c4"
+    },
+    {
+      "contender": "timed-out",
+      "expectedCode": "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+      "observedCode": "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+      "offset": "0000000000000016_aaaaaaaaaaaaaaaa",
+      "refused": true,
+      "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
+      "winner": "failed",
+      "winnerStateDigest": "sha256:3ef4fea4dcb245319fac16812d8430dcfb7633e0c5fae6b222bdefe0e4ba3d4c"
+    },
+    {
+      "contender": "cancelled",
+      "expectedCode": "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+      "observedCode": "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+      "offset": "0000000000000016_aaaaaaaaaaaaaaaa",
+      "refused": true,
+      "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
+      "winner": "timed-out",
+      "winnerStateDigest": "sha256:6fbb5b941b980195de365cf47077a26a0e1b2da852f648851fbb54db1b054f15"
+    },
+    {
+      "contender": "completed",
+      "expectedCode": "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+      "observedCode": "INVOCATION_RUN_TERMINAL_IMMUTABLE",
+      "offset": "0000000000000016_aaaaaaaaaaaaaaaa",
+      "refused": true,
+      "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
+      "winner": "cancelled",
+      "winnerStateDigest": "sha256:5954b60668ec803fe55071ca7c650e214fe5bfecbc2b36707c978b6f43a5faca"
+    }
+  ],
+  "sharedHeadOffset": "0000000000000014_aaaaaaaaaaaaaaaa",
+  "oneWinnerPerExpectedHead": true,
+  "result": "PASS"
+}

@@ -12,7 +12,7 @@ capstone: false
 ## Goal
 
 `packages/harness-claude` launches the pinned Claude Code CLI noninteractively inside the
-claimed Sprite, supplies only the immutable context pack and shared tool gateway,
+claimed Cloudflare OS workspace, supplies only the immutable context pack and shared tool gateway,
 normalizes its structured activity, and fences tools/output when the run cancels, expires,
 or loses its lease.
 

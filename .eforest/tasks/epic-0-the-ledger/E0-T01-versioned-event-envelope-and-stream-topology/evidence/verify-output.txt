@@ -1,0 +1,14 @@
+E0-T01 deterministic verifier
+runtime-contract=Node.js>=22
+PASS versioned schemas match the runtime registry
+PASS canonical bytes and SHA-256 match golden parity values
+PASS invalid golden fixtures are refused before the append callback
+PASS field mutations, overflow, extra keys, and invalid UTF-8 fail closed
+PASS topology builders preserve workspace isolation without normalization
+PASS source references require canonical complete offsets and digests
+PASS one-byte golden mutations change the digest or fail decoding
+PASS topology documentation declares authority, rebuilds, and idempotent sagas
+PASS deterministic evidence artifacts written
+checks=9 skipped=0
+Replay: REQUIRED (bundled browser surface) + evidence recorded separately from this deterministic ledger verifier
+RESULT PASS

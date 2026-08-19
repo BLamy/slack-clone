@@ -1,0 +1,29 @@
+{
+  "role": {
+    "staleDecisionAllowedBeforeRevocation": true,
+    "refusalStatus": 404,
+    "refused": true,
+    "configHeadBefore": "0000000000000000_0000000000000002",
+    "configHeadAfter": "0000000000000000_0000000000000002",
+    "result": "PASS"
+  },
+  "grant": {
+    "staleDecisionAllowedBeforeRevocation": true,
+    "grantStatusAfter": "revoked",
+    "refusalStatus": 404,
+    "refused": true,
+    "configHeadBefore": "0000000000000000_0000000000000002",
+    "configHeadAfter": "0000000000000000_0000000000000002",
+    "result": "PASS"
+  },
+  "ownership": {
+    "staleDecisionAllowedBeforeRevocation": true,
+    "refusalStatus": 404,
+    "refused": true,
+    "configHeadBefore": "0000000000000000_0000000000000002",
+    "configHeadAfter": "0000000000000000_0000000000000002",
+    "result": "PASS"
+  },
+  "everyRaceRefused": true,
+  "result": "PASS"
+}

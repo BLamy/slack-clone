@@ -19,7 +19,7 @@ isolation and fail-closed recovery demonstrated under hostile workloads.
 
 A browser tab is not a security boundary by assertion. This reach provider must survive
 resource exhaustion, worker/service-worker abuse, storage leakage, broker attacks, and
-supply-chain/version drift without degrading the Fly production path.
+supply-chain/version drift without degrading the Cloudflare OS production path.
 
 ## Deliverables
 

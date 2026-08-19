@@ -1,0 +1,316 @@
+{
+  "schemaVersion": 1,
+  "task": "E2-T07",
+  "runId": "e2-t07-cold-final-v3",
+  "implementationCommit": "31101554e960a1033cb6e50dd6b43b03a17ddf7e",
+  "result": "PASS",
+  "replayDescription": "Replay: N/A (server invocation-resolution contract) + mitigation: source-bound snapshot manifests, canary scans, reconfiguration races, and digest tests",
+  "skips": [],
+  "gates": {
+    "format:check": {
+      "command": "pnpm format:check",
+      "exitCode": 0
+    },
+    "lint": {
+      "command": "pnpm lint",
+      "exitCode": 0
+    },
+    "typecheck": {
+      "command": "pnpm typecheck",
+      "exitCode": 0
+    },
+    "test": {
+      "command": "pnpm test",
+      "exitCode": 0
+    },
+    "build": {
+      "command": "pnpm build",
+      "exitCode": 0
+    }
+  },
+  "snapshot": {
+    "canonicalByteLength": 7127,
+    "initialDigest": "sha256:470c2121c38bc9d4a720bf3cfab256c53cd2026c3bb62eefed292c6581529260",
+    "replayable": true,
+    "updates": [
+      {
+        "historicalDigest": "sha256:470c2121c38bc9d4a720bf3cfab256c53cd2026c3bb62eefed292c6581529260",
+        "name": "config revision",
+        "nextDigest": "sha256:02624697c389cfc7760359e9d5eab00eb50c28b98a75f9c1cfda4726bb22d81a",
+        "historicalBytesStable": true,
+        "sourceManifestChanged": true
+      },
+      {
+        "historicalDigest": "sha256:470c2121c38bc9d4a720bf3cfab256c53cd2026c3bb62eefed292c6581529260",
+        "name": "provider descriptor manifest",
+        "nextDigest": "sha256:db3903f067a4aeab37b7330d1e9d8b56b4d1f64e98dd807f7f940d3bb7097c77",
+        "historicalBytesStable": true,
+        "sourceManifestChanged": true
+      },
+      {
+        "historicalDigest": "sha256:470c2121c38bc9d4a720bf3cfab256c53cd2026c3bb62eefed292c6581529260",
+        "name": "membership revision",
+        "nextDigest": "sha256:6c9683bff668db733fcb1adde763052ce0ef371fb7a0e889ea32388cfddc593f",
+        "historicalBytesStable": true,
+        "sourceManifestChanged": true
+      },
+      {
+        "historicalDigest": "sha256:470c2121c38bc9d4a720bf3cfab256c53cd2026c3bb62eefed292c6581529260",
+        "name": "connection grant source",
+        "nextDigest": "sha256:cd4ccc230aad8209fb7679c9397524e5d2faf43f536da2d96c6ecd77a8bbd136",
+        "historicalBytesStable": true,
+        "sourceManifestChanged": true
+      },
+      {
+        "historicalDigest": "sha256:470c2121c38bc9d4a720bf3cfab256c53cd2026c3bb62eefed292c6581529260",
+        "name": "workspace input directory source",
+        "nextDigest": "sha256:d40e56eb5698f758d9542edd25780cfeb390cffb3074073436743ff13a4b21aa",
+        "historicalBytesStable": true,
+        "sourceManifestChanged": true
+      }
+    ]
+  },
+  "snapshotIntegrity": {
+    "checkUseCode": "INVOCATION_SNAPSHOT_DIGEST_MISMATCH",
+    "replayCode": "INVOCATION_SNAPSHOT_DIGEST_MISMATCH",
+    "result": "PASS",
+    "tamperedField": "sourceManifest.config.stateDigest",
+    "tamperDetected": true
+  },
+  "sourceReferences": {
+    "config": {
+      "offset": "0000000000000030_aaaaaaaaaaaaaaaa",
+      "stateDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff/config"
+    },
+    "directory": {
+      "offset": "0000000000000040_bbbbbbbbbbbbbbbb",
+      "stateDigest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+    },
+    "workspaceInputs": {
+      "offset": "0000000000000040_bbbbbbbbbbbbbbbb",
+      "stateDigest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+    },
+    "connectionGrants": [
+      {
+        "offset": "0000000000000051_cccccccccccccccc",
+        "stateDigest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+        "stream": "connection:conn_a/config"
+      },
+      {
+        "offset": "0000000000000050_cccccccccccccccc",
+        "stateDigest": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+        "stream": "connection:conn_agrant_b/config"
+      }
+    ],
+    "providers": {
+      "manifestDigest": "sha256:751764325d1387da9404895128892e5a1e95005fb0bd45e27bd9dde42d6ec8b5",
+      "resolvedProviderDigest": "sha256:541df036a887331550882cddc8f8fb4b27366f24f1d7d632f66813476ea63116"
+    },
+    "snapshotDigest": "sha256:470c2121c38bc9d4a720bf3cfab256c53cd2026c3bb62eefed292c6581529260"
+  },
+  "refusalMatrix": {
+    "providerSideEffectsBeforeRefusal": 0,
+    "providerResolutionCountedAcrossRows": true,
+    "rows": [
+      {
+        "code": "INVOCATION_SNAPSHOT_AGENT_CONFIG_INACTIVE",
+        "detail": "agent configuration is not active and runnable",
+        "name": "disabled configuration",
+        "providerResolutionCalls": {
+          "describe": 0,
+          "manifestDigest": 0,
+          "resolveConfiguration": 0
+        },
+        "providerSideEffects": 0,
+        "refused": true,
+        "sourceCode": null
+      },
+      {
+        "code": "INVOCATION_SNAPSHOT_MEMBERSHIP_INACTIVE",
+        "detail": "workspace membership is not active",
+        "name": "suspended membership",
+        "providerResolutionCalls": {
+          "describe": 0,
+          "manifestDigest": 0,
+          "resolveConfiguration": 0
+        },
+        "providerSideEffects": 0,
+        "refused": true,
+        "sourceCode": null
+      },
+      {
+        "code": "INVOCATION_SNAPSHOT_MEMBERSHIP_INACTIVE",
+        "detail": "workspace membership is outside the requested agent scope",
+        "name": "non-member principal reference",
+        "providerResolutionCalls": {
+          "describe": 0,
+          "manifestDigest": 0,
+          "resolveConfiguration": 0
+        },
+        "providerSideEffects": 0,
+        "refused": true,
+        "sourceCode": null
+      },
+      {
+        "code": "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED",
+        "detail": "exact provider selections did not resolve as runnable",
+        "name": "unhealthy provider",
+        "providerResolutionCalls": {
+          "describe": 2,
+          "manifestDigest": 0,
+          "resolveConfiguration": 1
+        },
+        "providerSideEffects": 0,
+        "refused": true,
+        "sourceCode": "PROVIDER_REGISTRY_PROVIDER_UNHEALTHY"
+      },
+      {
+        "code": "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED",
+        "detail": "exact provider selections did not resolve as runnable",
+        "name": "incompatible providers",
+        "providerResolutionCalls": {
+          "describe": 2,
+          "manifestDigest": 0,
+          "resolveConfiguration": 1
+        },
+        "providerSideEffects": 0,
+        "refused": true,
+        "sourceCode": "PROVIDER_REGISTRY_INCOMPATIBLE_PROVIDERS"
+      },
+      {
+        "code": "INVOCATION_SNAPSHOT_CONNECTION_GRANT_EXPIRED",
+        "detail": "connection grant has expired",
+        "name": "expired grant",
+        "providerResolutionCalls": {
+          "describe": 0,
+          "manifestDigest": 0,
+          "resolveConfiguration": 0
+        },
+        "providerSideEffects": 0,
+        "refused": true,
+        "sourceCode": null
+      },
+      {
+        "code": "INVOCATION_SNAPSHOT_BUDGET_EXCEEDED",
+        "detail": "current invocation usage exceeds the immutable budget",
+        "name": "over-budget invocation",
+        "providerResolutionCalls": {
+          "describe": 0,
+          "manifestDigest": 0,
+          "resolveConfiguration": 0
+        },
+        "providerSideEffects": 0,
+        "refused": true,
+        "sourceCode": null
+      },
+      {
+        "code": "INVOCATION_SNAPSHOT_CONNECTION_GRANT_SCOPE_MISMATCH",
+        "detail": "connection grant is outside the agent, purpose, or workspace scope",
+        "name": "cross-workspace connection grant",
+        "providerResolutionCalls": {
+          "describe": 0,
+          "manifestDigest": 0,
+          "resolveConfiguration": 0
+        },
+        "providerSideEffects": 0,
+        "refused": true,
+        "sourceCode": null
+      }
+    ],
+    "result": "PASS"
+  },
+  "revocationRaces": {
+    "historicalReplayStillValid": true,
+    "rows": [
+      {
+        "code": "INVOCATION_SNAPSHOT_AGENT_CONFIG_INACTIVE",
+        "name": "configuration disabled",
+        "rejected": true
+      },
+      {
+        "code": "INVOCATION_SNAPSHOT_MEMBERSHIP_INACTIVE",
+        "name": "membership suspended",
+        "rejected": true
+      },
+      {
+        "code": "INVOCATION_SNAPSHOT_PROVIDER_RESOLUTION_REFUSED",
+        "name": "provider health revoked",
+        "rejected": true
+      },
+      {
+        "code": "INVOCATION_SNAPSHOT_CONNECTION_GRANT_REVOKED",
+        "name": "all connection grants revoked",
+        "rejected": true
+      },
+      {
+        "code": "INVOCATION_SNAPSHOT_STALE_WORKSPACE_INPUT",
+        "name": "workspace input source revoked",
+        "rejected": true
+      }
+    ],
+    "result": "PASS"
+  },
+  "canaryScan": {
+    "checked": [
+      "snapshot JSON bytes",
+      "canonical snapshot bytes",
+      "source manifest",
+      "published refusal details"
+    ],
+    "leaked": false,
+    "result": "PASS",
+    "evidenceFiles": [
+      "canary-scan.json",
+      "cold-clone-transcript.json",
+      "refusal-matrix.json",
+      "revocation-races.json",
+      "sensitivity.json",
+      "snapshot-integrity.json",
+      "snapshot-manifest.json",
+      "source-references.json",
+      "verification-summary.json"
+    ],
+    "publishedEvidenceLeaked": false,
+    "postVerifierTranscriptChecked": true
+  },
+  "sensitivity": {
+    "mutationCount": 5,
+    "mutations": [
+      {
+        "exitCode": 1,
+        "mutation": "bind config source digest to the wrong stream",
+        "result": "PASS",
+        "verifierDetectedMutant": true
+      },
+      {
+        "exitCode": 1,
+        "mutation": "remove connection grant source references",
+        "result": "PASS",
+        "verifierDetectedMutant": true
+      },
+      {
+        "exitCode": 1,
+        "mutation": "bind source manifest config to directory source",
+        "result": "PASS",
+        "verifierDetectedMutant": true
+      },
+      {
+        "exitCode": 1,
+        "mutation": "bind workspace input source to config source",
+        "result": "PASS",
+        "verifierDetectedMutant": true
+      },
+      {
+        "exitCode": 1,
+        "mutation": "disable snapshot digest verification",
+        "result": "PASS",
+        "verifierDetectedMutant": true
+      }
+    ],
+    "result": "PASS",
+    "verifierDetectedMutant": true
+  }
+}

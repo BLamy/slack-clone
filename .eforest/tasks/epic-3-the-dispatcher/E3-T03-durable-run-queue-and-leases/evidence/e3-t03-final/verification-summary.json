@@ -1,0 +1,371 @@
+{
+  "schemaVersion": 1,
+  "task": "E3-T03",
+  "runId": "e3-t03-final-cold-20260807",
+  "implementationCommit": "d679aa608e1d12ae048b253fcea6dfb470178fc6",
+  "implementationTreeCleanAtStart": true,
+  "result": "PASS",
+  "replay": "Replay: N/A (server queue and lease protocol) + mitigation: hundred-worker race, partition/supersession schedules, queue rebuild, and stream digests",
+  "replayUploadAttempted": false,
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "durationMs": 7688,
+      "name": "format",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "durationMs": 6880,
+      "name": "lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "durationMs": 26773,
+      "name": "typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "durationMs": 36174,
+      "name": "tests",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm build",
+      "durationMs": 1890,
+      "name": "build",
+      "result": "PASS"
+    }
+  ],
+  "queue": {
+    "rebuiltQueueDigest": "sha256:ac5983f8a2127f4cc762f7ffd6a0679411b82c1a0db64acb537b9bd2a36e22a8",
+    "eligibleOrder": [
+      "iv_ffffffffffffffffffffffffff",
+      "iv_eeeeeeeeeeeeeeeeeeeeeeeeee",
+      "iv_dddddddddddddddddddddddddd"
+    ],
+    "entryDigests": [
+      "sha256:5f7af8c47efd071b95723e00dfb129dc0b2bb18817785992aed4e5e65799f98b",
+      "sha256:7e3bec89a6cce842a133eab5f3d51abb7dcc7473cf3a83d92a1e48e9f34aea44",
+      "sha256:6179a2021d42955ddf95853e856a78a16424e0ae210d297aa5cd7b43beacc443"
+    ],
+    "invocationStreamDigest": "sha256:9b0ae935fced669b4b6c4c103cd88bd0c169974fa7b6be88e61dfed3569d310c",
+    "runStreamDigest": "sha256:0c73479c6db0344b93427db7f8edc8f4ccf68f1e2ff2f1458d42fc72b7a9da86",
+    "queueDigest": "sha256:ac5983f8a2127f4cc762f7ffd6a0679411b82c1a0db64acb537b9bd2a36e22a8",
+    "forgedProofRefused": true,
+    "result": "PASS"
+  },
+  "race": {
+    "acceptedLeaseGeneration": 1,
+    "acceptedWorker": "race-worker-0",
+    "capabilityDigest": "sha256:f4c93ed59cc2a9ed3bc0531791d5ce26d8e5b950b31082f672bc6f2470653426",
+    "effectiveLeaseEvents": 1,
+    "loserCodes": [
+      "RUN_QUEUE_LEASE_HELD"
+    ],
+    "workerCount": 100,
+    "result": "PASS"
+  },
+  "leases": {
+    "firstGeneration": 1,
+    "secondGeneration": 2,
+    "heartbeatCount": 1,
+    "expiredCount": 1,
+    "staleWorkerRefusals": 3,
+    "staleWorkerErrorCodes": [
+      "RUN_QUEUE_CAPABILITY_INVALID",
+      "RUN_QUEUE_CAPABILITY_INVALID",
+      "RUN_QUEUE_CAPABILITY_INVALID"
+    ],
+    "journal": [
+      {
+        "digest": "sha256:33d71120872df4fc7c3bb88ffd34b6a5dbceb4964ba619ad0069768aefbdd208",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "causation": {
+            "digest": "sha256:a1ec2881e1ac4386431fa0ec2367acf7242513d8230228912c3fe698d11eb42b",
+            "offset": "0000000000000105_0000000000000000",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_29e63db92154e4a851bbd1960d",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+            "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+            "attemptNumber": 1,
+            "capabilityDigest": "sha256:326371936a9739f4e700b36836c52b3d136acd95cdac01eaa60dad6fed9fe2d1",
+            "endpoints": [
+              "run.events.write"
+            ],
+            "entryDigest": "sha256:5f7af8c47efd071b95723e00dfb129dc0b2bb18817785992aed4e5e65799f98b",
+            "expiresAt": "2026-08-07T00:00:01.000Z",
+            "invocationId": "iv_ffffffffffffffffffffffffff",
+            "issuedAt": "2026-08-07T00:00:00.000Z",
+            "leaseGeneration": 1,
+            "leaseId": "ls_0dd12221fa127e909d72a13f8b",
+            "queueDigest": "sha256:ac5983f8a2127f4cc762f7ffd6a0679411b82c1a0db64acb537b9bd2a36e22a8",
+            "reason": null,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sourceRef": {
+              "digest": "sha256:a1ec2881e1ac4386431fa0ec2367acf7242513d8230228912c3fe698d11eb42b",
+              "offset": "0000000000000105_0000000000000000",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "workerId": "partitioned-worker"
+          },
+          "eventType": "run.lease.acquired",
+          "idempotencyKey": "ik_81c9e3ea9b9d4023dda211f086",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_81c9e3ea9b9d4023dda211f086",
+          "serverTimestamp": "2026-08-07T00:00:00.000Z"
+        },
+        "offset": "0000000000000001_0000000000000000"
+      },
+      {
+        "digest": "sha256:a8813a3c6597bc62d06b4fb104a25cf6dd33dd6ffc832b8e01f96cf0aa96084d",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "causation": {
+            "digest": "sha256:a1ec2881e1ac4386431fa0ec2367acf7242513d8230228912c3fe698d11eb42b",
+            "offset": "0000000000000105_0000000000000000",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_29e63db92154e4a851bbd1960d",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+            "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+            "attemptNumber": 1,
+            "capabilityDigest": "sha256:326371936a9739f4e700b36836c52b3d136acd95cdac01eaa60dad6fed9fe2d1",
+            "endpoints": [
+              "run.events.write"
+            ],
+            "entryDigest": "sha256:5f7af8c47efd071b95723e00dfb129dc0b2bb18817785992aed4e5e65799f98b",
+            "expiresAt": "2026-08-07T00:00:01.500Z",
+            "invocationId": "iv_ffffffffffffffffffffffffff",
+            "issuedAt": "2026-08-07T00:00:00.500Z",
+            "leaseGeneration": 1,
+            "leaseId": "ls_0dd12221fa127e909d72a13f8b",
+            "queueDigest": "sha256:ac5983f8a2127f4cc762f7ffd6a0679411b82c1a0db64acb537b9bd2a36e22a8",
+            "reason": null,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sourceRef": {
+              "digest": "sha256:a1ec2881e1ac4386431fa0ec2367acf7242513d8230228912c3fe698d11eb42b",
+              "offset": "0000000000000105_0000000000000000",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "workerId": "partitioned-worker"
+          },
+          "eventType": "run.lease.heartbeat",
+          "idempotencyKey": "ik_699c618ffd76113a2e20d98465",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_699c618ffd76113a2e20d98465",
+          "serverTimestamp": "2026-08-07T00:00:00.500Z"
+        },
+        "offset": "0000000000000002_0000000000000000"
+      },
+      {
+        "digest": "sha256:7172137d37937805f738c60acdb9d524515ab2e6d208ae242d007ca9cd55baeb",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "causation": {
+            "digest": "sha256:a1ec2881e1ac4386431fa0ec2367acf7242513d8230228912c3fe698d11eb42b",
+            "offset": "0000000000000105_0000000000000000",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_29e63db92154e4a851bbd1960d",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+            "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+            "attemptNumber": 1,
+            "capabilityDigest": "sha256:326371936a9739f4e700b36836c52b3d136acd95cdac01eaa60dad6fed9fe2d1",
+            "endpoints": [
+              "run.events.write"
+            ],
+            "entryDigest": "sha256:5f7af8c47efd071b95723e00dfb129dc0b2bb18817785992aed4e5e65799f98b",
+            "expiresAt": "2026-08-07T00:00:01.500Z",
+            "invocationId": "iv_ffffffffffffffffffffffffff",
+            "issuedAt": "2026-08-07T00:00:02.000Z",
+            "leaseGeneration": 1,
+            "leaseId": "ls_0dd12221fa127e909d72a13f8b",
+            "queueDigest": "sha256:ac5983f8a2127f4cc762f7ffd6a0679411b82c1a0db64acb537b9bd2a36e22a8",
+            "reason": "lease-expired",
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sourceRef": {
+              "digest": "sha256:a1ec2881e1ac4386431fa0ec2367acf7242513d8230228912c3fe698d11eb42b",
+              "offset": "0000000000000105_0000000000000000",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "workerId": "partitioned-worker"
+          },
+          "eventType": "run.lease.expired",
+          "idempotencyKey": "ik_e39d8d3bb0502293b259de8b90",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_e39d8d3bb0502293b259de8b90",
+          "serverTimestamp": "2026-08-07T00:00:02.000Z"
+        },
+        "offset": "0000000000000003_0000000000000000"
+      },
+      {
+        "digest": "sha256:35fdcd86a2a0a4e2ac4f3aa79e8426f72701de3d718189f59d2b682553831a44",
+        "event": {
+          "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "causation": {
+            "digest": "sha256:a1ec2881e1ac4386431fa0ec2367acf7242513d8230228912c3fe698d11eb42b",
+            "offset": "0000000000000105_0000000000000000",
+            "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+          },
+          "correlationId": "cr_29e63db92154e4a851bbd1960d",
+          "data": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+            "attemptId": "at_0bb924f68cca7df3d85c8420dc",
+            "attemptNumber": 1,
+            "capabilityDigest": "sha256:69c795e7e8b50b9cd6e6b5e781ad80dce6553ad3a75f688e62a4f70e0c9bd0cf",
+            "endpoints": [
+              "run.events.write"
+            ],
+            "entryDigest": "sha256:5f7af8c47efd071b95723e00dfb129dc0b2bb18817785992aed4e5e65799f98b",
+            "expiresAt": "2026-08-07T00:00:03.100Z",
+            "invocationId": "iv_ffffffffffffffffffffffffff",
+            "issuedAt": "2026-08-07T00:00:02.100Z",
+            "leaseGeneration": 2,
+            "leaseId": "ls_433874da906e6e66fa5312b39c",
+            "queueDigest": "sha256:ac5983f8a2127f4cc762f7ffd6a0679411b82c1a0db64acb537b9bd2a36e22a8",
+            "reason": null,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+            "schemaVersion": 1,
+            "sourceRef": {
+              "digest": "sha256:a1ec2881e1ac4386431fa0ec2367acf7242513d8230228912c3fe698d11eb42b",
+              "offset": "0000000000000105_0000000000000000",
+              "stream": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff"
+            },
+            "workerId": "replacement-worker"
+          },
+          "eventType": "run.lease.acquired",
+          "idempotencyKey": "ik_5b2741daa9bc892be6180ac6b8",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "eventId": "ev_5b2741daa9bc892be6180ac6b8",
+          "serverTimestamp": "2026-08-07T00:00:02.100Z"
+        },
+        "offset": "0000000000000004_0000000000000000"
+      }
+    ],
+    "result": "PASS"
+  },
+  "authority": {
+    "agentRevocationFenced": true,
+    "workspaceSuspensionFenced": true,
+    "callbackCalls": 0,
+    "finalFenceGeneration": 3,
+    "result": "PASS"
+  },
+  "capabilities": {
+    "attemptedScopes": [
+      "endpoint",
+      "worker",
+      "active-foreign-run",
+      "foreign-agent-coordinator",
+      "foreign-workspace-coordinator",
+      "post-expiry",
+      "generation-two",
+      "forged-token"
+    ],
+    "callbackCalls": 0,
+    "storedCapabilityDigest": "sha256:1d83c9eb86f45e92eb051d22e4ed2dd0ca1c41f1d3e67a1f2aa7bdf7331a7fa3",
+    "reacquiredAttemptId": "at_0bb924f68cca7df3d85c8420dc",
+    "reacquiredGeneration": 2,
+    "bearerPersisted": false,
+    "result": "PASS"
+  },
+  "replayEvidence": {
+    "finalStateDigest": "sha256:fd309e6b8d0bca2d0d53eaf5ab7d7f20e41dd285fd203e40f9661100274911c0",
+    "perPrefixDigests": [
+      {
+        "eventId": "ev_81c9e3ea9b9d4023dda211f086",
+        "eventType": "run.lease.acquired",
+        "offset": "0000000000000001_0000000000000000",
+        "stateDigest": "sha256:cd3a98088b9d395dee69e8b15b4af45baa07276edad98c51cbef88a74d120b41"
+      },
+      {
+        "eventId": "ev_699c618ffd76113a2e20d98465",
+        "eventType": "run.lease.heartbeat",
+        "offset": "0000000000000002_0000000000000000",
+        "stateDigest": "sha256:00e227f5dbee33dbc64f27721154d7b68df9c03d63671f53ec464ea3fb3c7756"
+      },
+      {
+        "eventId": "ev_e39d8d3bb0502293b259de8b90",
+        "eventType": "run.lease.expired",
+        "offset": "0000000000000003_0000000000000000",
+        "stateDigest": "sha256:30f7397725cf62dc9d834bc77092a65db2e3f3d9273f3d87e498c0e5282a3c04"
+      },
+      {
+        "eventId": "ev_5b2741daa9bc892be6180ac6b8",
+        "eventType": "run.lease.acquired",
+        "offset": "0000000000000004_0000000000000000",
+        "stateDigest": "sha256:fd309e6b8d0bca2d0d53eaf5ab7d7f20e41dd285fd203e40f9661100274911c0"
+      }
+    ],
+    "replayedTwiceWithIdenticalDigest": true,
+    "staleGenerationRefused": true,
+    "capabilityValuesPersisted": false,
+    "result": "PASS"
+  },
+  "reducer": {
+    "finalRunStatus": "leased",
+    "finalLease": null,
+    "leaseHistoryCount": 3,
+    "finalStateDigest": "sha256:1d3fe887ebc71602309d62ef0875137200722a30702d325fec5b67dd1912f35e",
+    "result": "PASS"
+  },
+  "sensitivity": {
+    "mutationCount": 3,
+    "controlExitCode": 0,
+    "controlPassed": true,
+    "verifierDetectedMutant": true,
+    "results": [
+      {
+        "label": "queue-proof-binding",
+        "verifierExitCode": 1,
+        "detected": true
+      },
+      {
+        "label": "capability-endpoint-scope",
+        "verifierExitCode": 1,
+        "detected": true
+      },
+      {
+        "label": "lease-generation-fence",
+        "verifierExitCode": 1,
+        "detected": true
+      }
+    ]
+  },
+  "canaryScan": {
+    "checked": true,
+    "evidenceFiles": [
+      "authority-fences.json",
+      "canary-scan.json",
+      "capability-scopes.json",
+      "cold-clone-transcript.json",
+      "lease-schedules.json",
+      "queue-proof.json",
+      "reducer-integration.json",
+      "replay-digests.json",
+      "sensitivity.json",
+      "verification-summary.json",
+      "worker-race.json"
+    ],
+    "leaked": false,
+    "postVerifierScanCompleted": true,
+    "postVerifierTranscriptChecked": true,
+    "publishedEvidenceLeaked": false,
+    "canaryPresentInPublishedEvidence": false
+  }
+}

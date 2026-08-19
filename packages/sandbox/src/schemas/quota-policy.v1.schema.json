@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:stream-slack:sandbox-quota-policy:v1",
+  "title": "Stream Slack sandbox quota policy v1",
+  "description": "Scoped reservation ceilings and provider usage pricing metadata.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "scope",
+    "limits",
+    "pricingVersion",
+    "ratesMicros"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tenantId", "workspaceId", "agentId"],
+      "properties": {
+        "tenantId": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,160}$" },
+        "workspaceId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,160}$"
+        },
+        "agentId": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,160}$" }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sandboxes",
+        "cpuMillis",
+        "memoryBytes",
+        "storageBytes",
+        "durationMs",
+        "spendCents"
+      ],
+      "properties": {
+        "sandboxes": { "type": "integer", "minimum": 1 },
+        "cpuMillis": { "type": "integer", "minimum": 0 },
+        "memoryBytes": { "type": "integer", "minimum": 0 },
+        "storageBytes": { "type": "integer", "minimum": 0 },
+        "durationMs": { "type": "integer", "minimum": 0 },
+        "spendCents": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "pricingVersion": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,160}$"
+    },
+    "ratesMicros": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cpuMillis", "memoryByteMs", "storageByteMs", "durationMs"],
+      "properties": {
+        "cpuMillis": { "type": "integer", "minimum": 0 },
+        "memoryByteMs": { "type": "integer", "minimum": 0 },
+        "storageByteMs": { "type": "integer", "minimum": 0 },
+        "durationMs": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

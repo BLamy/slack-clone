@@ -1,0 +1,51 @@
+[
+  {
+    "field": "state",
+    "expectedCode": "INVOCATION_RUN_INVALID_TRANSITION",
+    "observedCode": "INVOCATION_RUN_INVALID_TRANSITION",
+    "offset": "0000000000000003_aaaaaaaaaaaaaaaa",
+    "refused": true
+  },
+  {
+    "field": "sequence",
+    "expectedCode": "INVOCATION_RUN_INVALID_STATE",
+    "observedCode": "INVOCATION_RUN_INVALID_STATE",
+    "offset": "0000000000000007_aaaaaaaaaaaaaaaa",
+    "refused": true
+  },
+  {
+    "field": "runId",
+    "expectedCode": "INVOCATION_RUN_INVALID_TRANSITION",
+    "observedCode": "INVOCATION_RUN_INVALID_TRANSITION",
+    "offset": "0000000000000005_aaaaaaaaaaaaaaaa",
+    "refused": true
+  },
+  {
+    "field": "attemptId",
+    "expectedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+    "observedCode": "INVOCATION_RUN_BINDING_MISMATCH",
+    "offset": "0000000000000006_aaaaaaaaaaaaaaaa",
+    "refused": true
+  },
+  {
+    "field": "sourceRef",
+    "expectedCode": "INVOCATION_RUN_INVALID_SOURCE",
+    "observedCode": "INVOCATION_RUN_INVALID_SOURCE",
+    "offset": "0000000000000004_aaaaaaaaaaaaaaaa",
+    "refused": true
+  },
+  {
+    "field": "usage",
+    "expectedCode": "INVOCATION_RUN_INVALID_DATA",
+    "observedCode": "INVOCATION_RUN_INVALID_DATA",
+    "offset": "0000000000000007_aaaaaaaaaaaaaaaa",
+    "refused": true
+  },
+  {
+    "field": "terminal",
+    "expectedCode": "INVOCATION_RUN_INVALID_STATE",
+    "observedCode": "INVOCATION_RUN_INVALID_STATE",
+    "offset": "0000000000000014_aaaaaaaaaaaaaaaa",
+    "refused": true
+  }
+]

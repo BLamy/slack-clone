@@ -1,0 +1,544 @@
+{
+  "schemaVersion": 1,
+  "task": "E3-T06",
+  "runId": "e3-t06-repair-final-d8e34fe",
+  "implementationCommit": "d8e34fef90430ed5ac90a69c1f9a3be7c59e9506",
+  "replay": "Replay: N/A (headless run-control protocol) + mitigation: real process-tree probes, fake-clock schedules, usage manifests, terminal races, and replay",
+  "gates": [
+    {
+      "command": "pnpm format:check:e3-t06",
+      "durationMs": 2653,
+      "name": "format-e3-t06",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm format:check",
+      "durationMs": 8123,
+      "name": "format",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "durationMs": 8100,
+      "name": "lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "durationMs": 20001,
+      "name": "typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "durationMs": 30516,
+      "name": "tests",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm build",
+      "durationMs": 1149,
+      "name": "build",
+      "result": "PASS"
+    }
+  ],
+  "attempts": {
+    "attemptCount": 2,
+    "firstAttempt": {
+      "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+      "attemptId": "at_b4139a7758781413264d0ca673",
+      "attemptNumber": 1,
+      "capabilityDigest": "sha256:f355a0cc749a975072ec0c524870816f2d352890d1309962bbad1c90bbfa4cd2",
+      "endpoints": [
+        "run.events.write"
+      ],
+      "entryDigest": "sha256:7a6d602cfc2ec5c4df5adeb124ad24b9100c0d11a57ac20de9594299c2d8ee64",
+      "expiresAt": "2026-08-08T00:00:01.000Z",
+      "invocationId": "iv_eeeeeeeeeeeeeeeeeeeeeeeeee",
+      "leaseGeneration": 1,
+      "leaseId": "ls_1fbfdadd9a680ec50988863e7b",
+      "queueDigest": "sha256:120a86f8aab748465466516724bcf4e054e88eea18bc0cbd4a4a198d4cd6e765",
+      "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+      "workerId": "worker-e"
+    },
+    "secondAttempt": {
+      "attemptId": "at_22b604ba341ad3b9281e2ad363",
+      "attemptNumber": 2,
+      "leaseGeneration": 2,
+      "status": "leased"
+    },
+    "firstCapabilityDigest": "sha256:f355a0cc749a975072ec0c524870816f2d352890d1309962bbad1c90bbfa4cd2",
+    "secondCapabilityDigest": "sha256:0f5266229c571f4dd9cd204cdf7b8fb6cde98cbaba2e1eec3868b83435e4d4a8",
+    "freshIdentity": true,
+    "oldCapabilityRefused": true,
+    "staleCapabilityBudgetRefused": true
+  },
+  "fakeClockSchedules": {
+    "retry": {
+      "backoffMs": 10,
+      "firstFailureAtMs": 10,
+      "nextAttemptAtMs": 20,
+      "retryable": true,
+      "retryReadyAtMs": 20
+    },
+    "authorityAndProcess": {
+      "cancelAtMs": 12,
+      "deadlineAtMs": 100,
+      "deadlineObservedAtMs": 101,
+      "agentRevokedAtMs": 15,
+      "leaseLostAtMs": 14
+    },
+    "terminalRace": {
+      "racedAtMs": 20,
+      "deadlineAtMs": 100,
+      "timeoutCandidateAtMs": 101
+    }
+  },
+  "usageAccounting": {
+    "duplicateRefused": true,
+    "fractionalRefused": true,
+    "overflowRefused": true,
+    "concurrent": {
+      "accepted": 1,
+      "refused": 1
+    },
+    "aggregateBudget": {
+      "acceptedInputTokens": 9,
+      "attemptedInputTokens": 11,
+      "terminal": "budget-exhausted"
+    },
+    "dimensions": [
+      {
+        "actual": {
+          "costUsdCents": 2
+        },
+        "label": "cost",
+        "status": "budget-exhausted"
+      },
+      {
+        "actual": {
+          "wallTimeMs": 11
+        },
+        "label": "wall-time",
+        "status": "budget-exhausted"
+      },
+      {
+        "actual": {
+          "inputTokens": 1,
+          "outputTokens": 3,
+          "totalTokens": 4
+        },
+        "label": "output-tokens",
+        "status": "budget-exhausted"
+      },
+      {
+        "actual": {
+          "outputBytes": 3
+        },
+        "label": "output-bytes",
+        "status": "budget-exhausted"
+      }
+    ],
+    "attemptBudget": {
+      "attempts": 2,
+      "status": "failed",
+      "reason": "attempt-budget-exhausted"
+    },
+    "total": {
+      "costUsdCents": 2,
+      "inputTokens": 9,
+      "outputBytes": 10,
+      "outputTokens": 3,
+      "totalTokens": 12,
+      "wallTimeMs": 10
+    },
+    "result": "PASS"
+  },
+  "capabilityRevocations": [
+    {
+      "fencedBeforeNextAppend": true,
+      "reason": "operator-request",
+      "terminal": "cancelled"
+    },
+    {
+      "fencedBeforeNextAppend": true,
+      "reason": "attempt-deadline",
+      "terminal": "timed-out"
+    },
+    {
+      "fencedBeforeNextAppend": true,
+      "reason": "agent-revoked",
+      "terminal": "cancelled"
+    },
+    {
+      "fencedBeforeNextAppend": true,
+      "reason": "budget-exhausted",
+      "terminal": "budget-exhausted"
+    },
+    {
+      "fencedBeforeNextAppend": true,
+      "reason": "lease-lost",
+      "terminal": "cancelled"
+    }
+  ],
+  "clockGuards": {
+    "rollbackObservedAtMs": 10,
+    "rollbackRefused": true,
+    "deadlineObservedAtMs": 101,
+    "deadlineFenced": true,
+    "terminal": "timed-out",
+    "result": "PASS"
+  },
+  "processResources": {
+    "scripted": [
+      {
+        "finalActiveChildren": [
+          0
+        ],
+        "killEscalated": [
+          true
+        ],
+        "survivors": [
+          0
+        ]
+      },
+      {
+        "finalActiveChildren": [
+          0
+        ],
+        "killEscalated": [
+          true
+        ],
+        "survivors": [
+          0
+        ]
+      },
+      {
+        "finalActiveChildren": [
+          0
+        ],
+        "killEscalated": [
+          true
+        ],
+        "survivors": [
+          0
+        ]
+      },
+      {
+        "finalActiveChildren": [
+          0
+        ],
+        "killEscalated": [
+          true
+        ],
+        "survivors": [
+          0
+        ]
+      },
+      {
+        "finalActiveChildren": [
+          0
+        ],
+        "killEscalated": [
+          true
+        ],
+        "survivors": [
+          0
+        ]
+      }
+    ],
+    "real": {
+      "processGroupId": -35459,
+      "signals": [
+        "SIGTERM",
+        "SIGKILL"
+      ],
+      "outputExceeded": true,
+      "survivors": 0,
+      "durationMs": 57,
+      "withinBound": true,
+      "result": "PASS"
+    }
+  },
+  "terminalRaces": {
+    "terminalState": "completed",
+    "terminalCount": 1,
+    "terminalLifecycleCount": 1,
+    "lateMutationRefused": true,
+    "schedule": {
+      "racedAtMs": 20,
+      "deadlineAtMs": 100,
+      "timeoutCandidateAtMs": 101
+    },
+    "contenders": [
+      {
+        "contenders": [
+          {
+            "cause": "complete",
+            "result": "fulfilled"
+          },
+          {
+            "cause": "fail",
+            "result": "rejected"
+          },
+          {
+            "cause": "timeout",
+            "result": "fulfilled"
+          },
+          {
+            "cause": "budget",
+            "result": "rejected"
+          },
+          {
+            "cause": "cancel",
+            "result": "fulfilled"
+          }
+        ],
+        "terminalCount": 1,
+        "terminalLifecycleCount": 1,
+        "terminalState": "completed",
+        "winner": "complete"
+      },
+      {
+        "contenders": [
+          {
+            "cause": "fail",
+            "result": "fulfilled"
+          },
+          {
+            "cause": "complete",
+            "result": "rejected"
+          },
+          {
+            "cause": "timeout",
+            "result": "fulfilled"
+          },
+          {
+            "cause": "budget",
+            "result": "rejected"
+          },
+          {
+            "cause": "cancel",
+            "result": "fulfilled"
+          }
+        ],
+        "terminalCount": 1,
+        "terminalLifecycleCount": 1,
+        "terminalState": "failed",
+        "winner": "fail"
+      },
+      {
+        "contenders": [
+          {
+            "cause": "timeout",
+            "result": "fulfilled"
+          },
+          {
+            "cause": "complete",
+            "result": "rejected"
+          },
+          {
+            "cause": "fail",
+            "result": "rejected"
+          },
+          {
+            "cause": "budget",
+            "result": "rejected"
+          },
+          {
+            "cause": "cancel",
+            "result": "fulfilled"
+          }
+        ],
+        "terminalCount": 1,
+        "terminalLifecycleCount": 1,
+        "terminalState": "timed-out",
+        "winner": "timeout"
+      },
+      {
+        "contenders": [
+          {
+            "cause": "budget",
+            "result": "rejected"
+          },
+          {
+            "cause": "complete",
+            "result": "rejected"
+          },
+          {
+            "cause": "fail",
+            "result": "rejected"
+          },
+          {
+            "cause": "timeout",
+            "result": "fulfilled"
+          },
+          {
+            "cause": "cancel",
+            "result": "fulfilled"
+          }
+        ],
+        "terminalCount": 1,
+        "terminalLifecycleCount": 1,
+        "terminalState": "budget-exhausted",
+        "winner": "budget"
+      },
+      {
+        "contenders": [
+          {
+            "cause": "cancel",
+            "result": "fulfilled"
+          },
+          {
+            "cause": "complete",
+            "result": "rejected"
+          },
+          {
+            "cause": "fail",
+            "result": "rejected"
+          },
+          {
+            "cause": "timeout",
+            "result": "fulfilled"
+          },
+          {
+            "cause": "budget",
+            "result": "rejected"
+          }
+        ],
+        "terminalCount": 1,
+        "terminalLifecycleCount": 1,
+        "terminalState": "cancelled",
+        "winner": "cancel"
+      }
+    ],
+    "result": "PASS"
+  },
+  "crashRecovery": {
+    "actionKey": "durable-side-effect-1",
+    "sideEffectCalls": 1,
+    "restartStartedWithEmptyProcessMap": true,
+    "recoveredWithoutRepeat": true,
+    "usageReplayRefused": true,
+    "aggregateUsagePreserved": true,
+    "leaseWatermarkPreserved": true,
+    "recoveredControlRecorded": true,
+    "terminal": "completed",
+    "result": "PASS"
+  },
+  "replayDigests": {
+    "finalReducerDigest": "sha256:b4cd46283d1b20bea8d63405093c3a975bfff8a779dc0b09db14c53c90ce4f83",
+    "finalLeaseDigest": "sha256:2e73c4c5082a385793e40e51887d048b20f72c5e8b6fbbcbe63b1a2f1d773dd4",
+    "prefixCount": 23,
+    "leasePrefixCount": 4,
+    "terminalImmutable": true,
+    "bearerNotPersisted": true,
+    "result": "PASS"
+  },
+  "sensitivity": {
+    "result": "PASS",
+    "mutations": [
+      {
+        "detectorWentRed": true,
+        "label": "capability-fence",
+        "mutatedVerifierExitCode": 1
+      },
+      {
+        "detectorWentRed": true,
+        "label": "usage-replay-dedupe",
+        "mutatedVerifierExitCode": 1
+      },
+      {
+        "detectorWentRed": true,
+        "label": "lease-watermark",
+        "mutatedVerifierExitCode": 1
+      },
+      {
+        "detectorWentRed": true,
+        "label": "stale-capability-preflight",
+        "mutatedVerifierExitCode": 1
+      },
+      {
+        "detectorWentRed": true,
+        "label": "deadline-fence",
+        "mutatedVerifierExitCode": 1
+      }
+    ],
+    "detectorCount": 5,
+    "detectorWentRed": true
+  },
+  "canaryScan": {
+    "checked": true,
+    "evidenceFiles": [
+      "attempt-timelines.json",
+      "canary-scan.json",
+      "capability-revocations.json",
+      "clock-guards.json",
+      "cold-clone-transcript.json",
+      "crash-recovery.json",
+      "fake-clock-schedules.json",
+      "process-resource-counts.json",
+      "replay-digests.json",
+      "sensitivity.json",
+      "terminal-races.json",
+      "usage-accounting.json",
+      "verification-summary.json"
+    ],
+    "findings": [
+      {
+        "leaked": false,
+        "name": "attempt-timelines.json"
+      },
+      {
+        "leaked": false,
+        "name": "canary-scan.json"
+      },
+      {
+        "leaked": false,
+        "name": "capability-revocations.json"
+      },
+      {
+        "leaked": false,
+        "name": "clock-guards.json"
+      },
+      {
+        "leaked": false,
+        "name": "cold-clone-transcript.json"
+      },
+      {
+        "leaked": false,
+        "name": "crash-recovery.json"
+      },
+      {
+        "leaked": false,
+        "name": "fake-clock-schedules.json"
+      },
+      {
+        "leaked": false,
+        "name": "process-resource-counts.json"
+      },
+      {
+        "leaked": false,
+        "name": "replay-digests.json"
+      },
+      {
+        "leaked": false,
+        "name": "sensitivity.json"
+      },
+      {
+        "leaked": false,
+        "name": "terminal-races.json"
+      },
+      {
+        "leaked": false,
+        "name": "usage-accounting.json"
+      },
+      {
+        "leaked": false,
+        "name": "verification-summary.json"
+      }
+    ],
+    "leaked": false
+  },
+  "result": "PASS"
+}

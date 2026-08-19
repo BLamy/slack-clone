@@ -1,0 +1,2862 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T04",
+  "runId": "e0-t04-repair-fourth",
+  "implementationCommit": "b011b67326f052951965e0afa66e657e1a6ddab7",
+  "result": "PASS",
+  "replay": "N/A (server dispatch concurrency contract) + mitigation: real-HTTP race logs, lost-ack recovery, head dumps, and cold-clone verifier",
+  "requestDigestEvidence": {
+    "accepted": "sha256:3857bca050ff9862e19fcc7ec63467ac6ba3367f91682aea82a096b5aee50abd",
+    "conflictRefusals": [
+      "sha256:8fa2cbbf74479877d162a36a4e98d7d876da7e03429ec07e272a3e04d2fea3be",
+      "sha256:fdc3b9a505adca3f30a519cd9c5f4534251a898446234b8ca0386a85fb43227e",
+      "sha256:7c426c52041e4796d4179406c0d318f4fbd74383368ed775dd5c992bb9ab4296",
+      "sha256:4229388235a680f9f329761b9c485f724a4743f988aca8a3cdde8ee1a20332c7",
+      "sha256:baef898b9a37851362296e403361cba8533731b016ed9f9240dc79dee02f81c5"
+    ],
+    "staleFence": "sha256:004cdaa4707971a7b09a24c7f148b59cf3f9ef53508c20de19ee6e3e303b2dd3",
+    "lostAckRecovery": "sha256:a226a5ddfeb18053da1c74f35ed5da19ab2cdbd64275f42479f7e1db0f2ae5ee"
+  },
+  "concurrency": {
+    "requests": 100,
+    "logicalEvents": 1,
+    "receiptOffsets": [
+      "0000000000000000_0000000000000400"
+    ],
+    "receiptDigests": [
+      "sha256:91f057a0b8a04b5142411b711fc7075e4484a9eef13b1e50b52e67273797dcd6"
+    ]
+  },
+  "conflicts": {
+    "refusalCodes": [
+      "DISPATCH_IDEMPOTENCY_CONFLICT",
+      "DISPATCH_IDEMPOTENCY_CONFLICT",
+      "DISPATCH_IDEMPOTENCY_CONFLICT",
+      "DISPATCH_IDEMPOTENCY_CONFLICT",
+      "DISPATCH_IDEMPOTENCY_CONFLICT"
+    ],
+    "candidateStreamsUnchanged": true
+  },
+  "expectedHeadRace": {
+    "accepted": 1,
+    "staleFenceRefusals": 1,
+    "finalLogicalEvents": 1
+  },
+  "lostAcknowledgement": {
+    "firstRequestReturnedError": true,
+    "recovered": true,
+    "logicalEvents": 1
+  },
+  "authorization": {
+    "revokedActorRefused": "DISPATCH_UNAUTHORIZED",
+    "deletedWorkspaceRefused": "DISPATCH_UNAUTHORIZED",
+    "noCandidateMutation": true
+  },
+  "finalStreams": {
+    "e0-t04-repair-fourth-same-key": {
+      "records": [
+        {
+          "logical": "one-event",
+          "value": 7,
+          "dispatch": {
+            "actorId": "pr_ada",
+            "expectedHead": "0000000000000000_0000000000000000",
+            "idempotencyKey": "ik_00000000000000000000000001",
+            "operation": "chat.message.create",
+            "requestDigest": "sha256:3857bca050ff9862e19fcc7ec63467ac6ba3367f91682aea82a096b5aee50abd",
+            "schemaVersion": 1,
+            "stream": "e0-t04-repair-fourth-same-key",
+            "workspaceId": "ws_00000000000000000000000001"
+          }
+        }
+      ],
+      "nextOffset": "0000000000000000_0000000000000400",
+      "streamDigest": "sha256:c8fbbea0094430bbff3494462b91f7a82aead4abd6862166a6e7a0d1f47d4d0b"
+    },
+    "e0-t04-repair-fourth-conflicts": {
+      "records": [
+        {
+          "value": "original",
+          "dispatch": {
+            "actorId": "pr_ada",
+            "expectedHead": "0000000000000000_0000000000000000",
+            "idempotencyKey": "ik_00000000000000000000000002",
+            "operation": "chat.message.create",
+            "requestDigest": "sha256:a6e6eb00702711c46a7d9e5ff3ec27fc2466929bfcd616753ad0b270abe18b7b",
+            "schemaVersion": 1,
+            "stream": "e0-t04-repair-fourth-conflicts",
+            "workspaceId": "ws_00000000000000000000000001"
+          }
+        }
+      ],
+      "nextOffset": "0000000000000000_0000000000000388",
+      "streamDigest": "sha256:6bb5e52ea17e4494a95e44d4d09de2ba2d527059d342e4fe47bd4cc8ec164ce4"
+    },
+    "e0-t04-repair-fourth-conflict-candidate": {
+      "records": [],
+      "nextOffset": "0000000000000000_0000000000000000",
+      "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "e0-t04-repair-fourth-race": {
+      "records": [
+        {
+          "writer": "a",
+          "dispatch": {
+            "actorId": "pr_ada",
+            "expectedHead": "0000000000000000_0000000000000000",
+            "idempotencyKey": "ik_00000000000000000000000003",
+            "operation": "chat.message.create",
+            "requestDigest": "sha256:1120a7712e080d377cb9415053e581a81c3a6c2c0711f35386993ef88a372c2d",
+            "schemaVersion": 1,
+            "stream": "e0-t04-repair-fourth-race",
+            "workspaceId": "ws_00000000000000000000000001"
+          }
+        }
+      ],
+      "nextOffset": "0000000000000000_0000000000000377",
+      "streamDigest": "sha256:80a211cce6f223d60a3b1c4f18ab62c808de7b8287378e3bec68412329f2b7dc"
+    },
+    "e0-t04-repair-fourth-lost-ack": {
+      "records": [
+        {
+          "recovery": "durable",
+          "dispatch": {
+            "actorId": "pr_ada",
+            "expectedHead": "0000000000000000_0000000000000000",
+            "idempotencyKey": "ik_00000000000000000000000005",
+            "operation": "chat.message.create",
+            "requestDigest": "sha256:a226a5ddfeb18053da1c74f35ed5da19ab2cdbd64275f42479f7e1db0f2ae5ee",
+            "schemaVersion": 1,
+            "stream": "e0-t04-repair-fourth-lost-ack",
+            "workspaceId": "ws_00000000000000000000000001"
+          }
+        }
+      ],
+      "nextOffset": "0000000000000000_0000000000000389",
+      "streamDigest": "sha256:4845f51d1334c69761c641344af56364f1292fbf15e617fdb2dfa7045ed510df"
+    },
+    "e0-t04-repair-fourth-captured": {
+      "records": [
+        {
+          "advance": true,
+          "dispatch": {
+            "actorId": "pr_ada",
+            "expectedHead": "0000000000000000_0000000000000000",
+            "idempotencyKey": "ik_00000000000000000000000007",
+            "operation": "chat.message.create",
+            "requestDigest": "sha256:83c8a2aa3999b8bf0aeedd6df0622d84f713b34f1c116c2a9d2590dd03862a0b",
+            "schemaVersion": 1,
+            "stream": "e0-t04-repair-fourth-captured",
+            "workspaceId": "ws_00000000000000000000000001"
+          }
+        }
+      ],
+      "nextOffset": "0000000000000000_0000000000000383",
+      "streamDigest": "sha256:a82ac1806cd8b95adc1f1add3ac575e77b984e04d1255f74e11471a10e020833"
+    },
+    "e0-t04-repair-fourth-revoked": {
+      "records": [],
+      "nextOffset": "0000000000000000_0000000000000000",
+      "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "e0-t04-repair-fourth-deleted": {
+      "records": [],
+      "nextOffset": "0000000000000000_0000000000000000",
+      "streamDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "__stream_slack_dispatch_idempotency__": {
+      "records": [
+        {
+          "kind": "dispatch.accepted",
+          "receipt": {
+            "actorId": "pr_ada",
+            "eventDigest": "sha256:91f057a0b8a04b5142411b711fc7075e4484a9eef13b1e50b52e67273797dcd6",
+            "idempotencyKey": "ik_00000000000000000000000001",
+            "nextOffset": "0000000000000000_0000000000000400",
+            "operation": "chat.message.create",
+            "requestDigest": "sha256:3857bca050ff9862e19fcc7ec63467ac6ba3367f91682aea82a096b5aee50abd",
+            "status": "accepted",
+            "stream": "e0-t04-repair-fourth-same-key",
+            "workspaceId": "ws_00000000000000000000000001"
+          }
+        },
+        {
+          "kind": "dispatch.accepted",
+          "receipt": {
+            "actorId": "pr_ada",
+            "eventDigest": "sha256:fbb65f435a3821c5e5b3941c2ae4bb44aee5fb1ef174c5d69971b4d4ccebdd91",
+            "idempotencyKey": "ik_00000000000000000000000002",
+            "nextOffset": "0000000000000000_0000000000000388",
+            "operation": "chat.message.create",
+            "requestDigest": "sha256:a6e6eb00702711c46a7d9e5ff3ec27fc2466929bfcd616753ad0b270abe18b7b",
+            "status": "accepted",
+            "stream": "e0-t04-repair-fourth-conflicts",
+            "workspaceId": "ws_00000000000000000000000001"
+          }
+        },
+        {
+          "kind": "dispatch.accepted",
+          "receipt": {
+            "actorId": "pr_ada",
+            "eventDigest": "sha256:901497d5c60fb6ea33a0eacc18a2c7b8916c87c03b8fe00738455a0e41136407",
+            "idempotencyKey": "ik_00000000000000000000000003",
+            "nextOffset": "0000000000000000_0000000000000377",
+            "operation": "chat.message.create",
+            "requestDigest": "sha256:1120a7712e080d377cb9415053e581a81c3a6c2c0711f35386993ef88a372c2d",
+            "status": "accepted",
+            "stream": "e0-t04-repair-fourth-race",
+            "workspaceId": "ws_00000000000000000000000001"
+          }
+        },
+        {
+          "kind": "dispatch.accepted",
+          "receipt": {
+            "actorId": "pr_ada",
+            "eventDigest": "sha256:2b00e8b8e11da1df82802b9eea8136b347b36d6ad47d0dee2bfc4b95929544da",
+            "idempotencyKey": "ik_00000000000000000000000005",
+            "nextOffset": "0000000000000000_0000000000000389",
+            "operation": "chat.message.create",
+            "requestDigest": "sha256:a226a5ddfeb18053da1c74f35ed5da19ab2cdbd64275f42479f7e1db0f2ae5ee",
+            "status": "accepted",
+            "stream": "e0-t04-repair-fourth-lost-ack",
+            "workspaceId": "ws_00000000000000000000000001"
+          }
+        },
+        {
+          "kind": "dispatch.accepted",
+          "receipt": {
+            "actorId": "pr_ada",
+            "eventDigest": "sha256:3aad4e3e3b2f8593395701785c6b7cd5ac00c3c0af1e3f7faa774483c389509f",
+            "idempotencyKey": "ik_00000000000000000000000007",
+            "nextOffset": "0000000000000000_0000000000000383",
+            "operation": "chat.message.create",
+            "requestDigest": "sha256:83c8a2aa3999b8bf0aeedd6df0622d84f713b34f1c116c2a9d2590dd03862a0b",
+            "status": "accepted",
+            "stream": "e0-t04-repair-fourth-captured",
+            "workspaceId": "ws_00000000000000000000000001"
+          }
+        }
+      ],
+      "nextOffset": "0000000000000000_0000000000002407",
+      "streamDigest": "sha256:aaa2d6fc76639044285396621b7dcdf0e85d7f6cd568a039bd242f4e17349b98"
+    }
+  },
+  "providerCoordination": {
+    "coordinatedPostRequests": 12,
+    "producerHeadersPresent": true,
+    "expectedHeadHeaderPresent": true
+  },
+  "requestTranscript": [
+    {
+      "method": "HEAD",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 404,
+      "streamSeq": null
+    },
+    {
+      "method": "PUT",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 201,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "HEAD",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 404,
+      "streamSeq": null
+    },
+    {
+      "method": "PUT",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 201,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": "0",
+      "producerId": "e0-t04-door-a-e0-t04-repair-fourth",
+      "producerSeq": "0",
+      "status": 200,
+      "streamSeq": "0000000000000000_0000000000000000"
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": "0",
+      "producerId": "e0-t04-door-b-e0-t04-repair-fourth",
+      "producerSeq": "0",
+      "status": 409,
+      "streamSeq": "0000000000000000_0000000000000000"
+    },
+    {
+      "method": "POST",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": "0",
+      "producerId": "e0-t04-door-a-e0-t04-repair-fourth",
+      "producerSeq": "0",
+      "status": 200,
+      "streamSeq": "0000000000000000_0000000000000000"
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "HEAD",
+      "path": "/rooms/e0-t04-repair-fourth-conflicts/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 404,
+      "streamSeq": null
+    },
+    {
+      "method": "PUT",
+      "path": "/rooms/e0-t04-repair-fourth-conflicts/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 201,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-conflicts/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "HEAD",
+      "path": "/rooms/e0-t04-repair-fourth-conflict-candidate/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 404,
+      "streamSeq": null
+    },
+    {
+      "method": "PUT",
+      "path": "/rooms/e0-t04-repair-fourth-conflict-candidate/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 201,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-conflict-candidate/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-conflicts/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/rooms/e0-t04-repair-fourth-conflicts/messages",
+      "producerEpoch": "0",
+      "producerId": "e0-t04-door-a-e0-t04-repair-fourth",
+      "producerSeq": "0",
+      "status": 200,
+      "streamSeq": "0000000000000000_0000000000000000"
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": "0",
+      "producerId": "e0-t04-door-a-e0-t04-repair-fourth",
+      "producerSeq": "1",
+      "status": 200,
+      "streamSeq": "0000000000000000_0000000000000482"
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-conflicts/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-conflict-candidate/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-conflicts/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-conflict-candidate/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "HEAD",
+      "path": "/rooms/e0-t04-repair-fourth-race/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 404,
+      "streamSeq": null
+    },
+    {
+      "method": "PUT",
+      "path": "/rooms/e0-t04-repair-fourth-race/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 201,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-race/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-race/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-race/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/rooms/e0-t04-repair-fourth-race/messages",
+      "producerEpoch": "0",
+      "producerId": "e0-t04-door-a-e0-t04-repair-fourth",
+      "producerSeq": "0",
+      "status": 200,
+      "streamSeq": "0000000000000000_0000000000000000"
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/rooms/e0-t04-repair-fourth-race/messages",
+      "producerEpoch": "0",
+      "producerId": "e0-t04-door-b-e0-t04-repair-fourth",
+      "producerSeq": "0",
+      "status": 409,
+      "streamSeq": "0000000000000000_0000000000000000"
+    },
+    {
+      "method": "POST",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": "0",
+      "producerId": "e0-t04-door-a-e0-t04-repair-fourth",
+      "producerSeq": "2",
+      "status": 200,
+      "streamSeq": "0000000000000000_0000000000000965"
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-race/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-race/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-race/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "HEAD",
+      "path": "/rooms/e0-t04-repair-fourth-lost-ack/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 404,
+      "streamSeq": null
+    },
+    {
+      "method": "PUT",
+      "path": "/rooms/e0-t04-repair-fourth-lost-ack/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 201,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-lost-ack/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-lost-ack/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/rooms/e0-t04-repair-fourth-lost-ack/messages",
+      "producerEpoch": "0",
+      "producerId": "e0-t04-door-a-e0-t04-repair-fourth",
+      "producerSeq": "0",
+      "status": 200,
+      "streamSeq": "0000000000000000_0000000000000000"
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-lost-ack/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": "0",
+      "producerId": "e0-t04-door-a-e0-t04-repair-fourth",
+      "producerSeq": "3",
+      "status": 200,
+      "streamSeq": "0000000000000000_0000000000001443"
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-lost-ack/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "HEAD",
+      "path": "/rooms/e0-t04-repair-fourth-captured/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 404,
+      "streamSeq": null
+    },
+    {
+      "method": "PUT",
+      "path": "/rooms/e0-t04-repair-fourth-captured/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 201,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-captured/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-captured/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/rooms/e0-t04-repair-fourth-captured/messages",
+      "producerEpoch": "0",
+      "producerId": "e0-t04-door-a-e0-t04-repair-fourth",
+      "producerSeq": "0",
+      "status": 200,
+      "streamSeq": "0000000000000000_0000000000000000"
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "POST",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": "0",
+      "producerId": "e0-t04-door-a-e0-t04-repair-fourth",
+      "producerSeq": "4",
+      "status": 200,
+      "streamSeq": "0000000000000000_0000000000001925"
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-captured/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "HEAD",
+      "path": "/rooms/e0-t04-repair-fourth-revoked/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 404,
+      "streamSeq": null
+    },
+    {
+      "method": "PUT",
+      "path": "/rooms/e0-t04-repair-fourth-revoked/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 201,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-revoked/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-revoked/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "HEAD",
+      "path": "/rooms/e0-t04-repair-fourth-deleted/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 404,
+      "streamSeq": null
+    },
+    {
+      "method": "PUT",
+      "path": "/rooms/e0-t04-repair-fourth-deleted/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 201,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-deleted/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-deleted/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-same-key/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-conflicts/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-conflict-candidate/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-race/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-lost-ack/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-captured/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-revoked/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-deleted/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/__stream_slack_dispatch_idempotency__/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-race/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    },
+    {
+      "method": "GET",
+      "path": "/rooms/e0-t04-repair-fourth-lost-ack/messages",
+      "producerEpoch": null,
+      "producerId": null,
+      "producerSeq": null,
+      "status": 200,
+      "streamSeq": null
+    }
+  ],
+  "canary": "[REDACTED]"
+}

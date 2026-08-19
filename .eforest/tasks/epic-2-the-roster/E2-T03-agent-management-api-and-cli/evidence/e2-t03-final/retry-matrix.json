@@ -1,0 +1,15 @@
+{
+  "attemptedMutations": [
+    "agent create",
+    "config create",
+    "config revise",
+    "config disable",
+    "config revoke"
+  ],
+  "duplicateDirectoryEvents": 0,
+  "duplicateConfigEvents": 0,
+  "everyMutationReturnedOriginalReceipt": true,
+  "lostAcknowledgements": 5,
+  "noDuplicateLogicalEffects": true,
+  "result": "PASS"
+}

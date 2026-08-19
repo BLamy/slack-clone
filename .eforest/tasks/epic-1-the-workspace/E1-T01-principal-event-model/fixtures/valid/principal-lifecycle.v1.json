@@ -1,0 +1,92 @@
+{
+  "records": [
+    {
+      "offset": "0000000000000001_0000000000000001",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "data": {
+          "kind": "human",
+          "ownedBy": null,
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "profile": {
+            "displayName": "Ada",
+            "email": "ada@example.com",
+            "handle": "ada"
+          },
+          "subjectBinding": {
+            "audience": "stream-slack",
+            "issuer": "auth0",
+            "subject": "auth0-user-ada-lifecycle"
+          }
+        },
+        "eventId": "ev_kkkkkkkkkkkkkkkkkkkkkkkkkk",
+        "eventType": "principal.created",
+        "idempotencyKey": "ik_kkkkkkkkkkkkkkkkkkkkkkkkkk",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T01:00:00.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000001_0000000000000002",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "data": {
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "profile": {
+            "displayName": "Ada Lovelace",
+            "email": "ada@analytical.example",
+            "handle": "ada.lovelace"
+          },
+          "revision": 2
+        },
+        "eventId": "ev_pppppppppppppppppppppppppp",
+        "eventType": "principal.profile.updated",
+        "idempotencyKey": "ik_pppppppppppppppppppppppppp",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T01:00:01.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000001_0000000000000003",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "data": {
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "reason": "temporary access review"
+        },
+        "eventId": "ev_mmmmmmmmmmmmmmmmmmmmmmmmmm",
+        "eventType": "principal.suspended",
+        "idempotencyKey": "ik_mmmmmmmmmmmmmmmmmmmmmmmmmm",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T01:00:02.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000001_0000000000000004",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "data": {
+          "principalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "reason": "account retired"
+        },
+        "eventId": "ev_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "eventType": "principal.deactivated",
+        "idempotencyKey": "ik_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-08-02T01:00:03.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    }
+  ]
+}

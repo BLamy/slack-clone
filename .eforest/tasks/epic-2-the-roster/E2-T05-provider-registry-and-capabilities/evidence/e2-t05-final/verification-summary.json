@@ -1,0 +1,392 @@
+{
+  "schemaVersion": 1,
+  "task": "E2-T05",
+  "runId": "e2-t05-cold-final-v4",
+  "implementationCommit": "cc0e4cdc0e17ad9789264fd5c9e26da10166e063",
+  "result": "PASS",
+  "replayDescription": "Replay: N/A (server provider contract) + mitigation: conformance doubles, fail-closed compatibility matrix, registry manifests, and digest evidence",
+  "skips": [],
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "exitCode": 0,
+      "name": "format"
+    },
+    {
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "name": "lint"
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "name": "typecheck"
+    },
+    {
+      "command": "pnpm test",
+      "exitCode": 0,
+      "name": "test"
+    },
+    {
+      "command": "pnpm build",
+      "exitCode": 0,
+      "name": "build"
+    }
+  ],
+  "registry": {
+    "schemaVersion": 1,
+    "providerCount": 5,
+    "manifestDigest": "sha256:751764325d1387da9404895128892e5a1e95005fb0bd45e27bd9dde42d6ec8b5",
+    "availableProviderKeys": [
+      "harness:scripted@1.0.0",
+      "sandbox:scripted@1.0.0"
+    ],
+    "unavailableProviderKeys": [
+      "harness:claude-code@1.0.0",
+      "harness:codex@1.0.0",
+      "sandbox:fly-sprites@1.0.0"
+    ]
+  },
+  "sourceAudit": {
+    "scannedFiles": [
+      "src/auth0-client.mjs",
+      "src/http-server.mjs",
+      "src/ledger/agent-administration-auth.mjs",
+      "src/ledger/agent-config-stream.mjs",
+      "src/ledger/agent-management.mjs",
+      "src/ledger/append-boundary.mjs",
+      "src/ledger/canonical-json.mjs",
+      "src/ledger/channel-auth.mjs",
+      "src/ledger/conversation-auth.mjs",
+      "src/ledger/dispatch.mjs",
+      "src/ledger/e0-t07-protocol.mjs",
+      "src/ledger/envelope.mjs",
+      "src/ledger/errors.mjs",
+      "src/ledger/fault-harness.mjs",
+      "src/ledger/identifiers.mjs",
+      "src/ledger/mentions.mjs",
+      "src/ledger/multi-user-chat-api.mjs",
+      "src/ledger/replay.mjs",
+      "src/ledger/topology.mjs",
+      "src/ledger/workspace-auth.mjs",
+      "src/ledger/workspace-directory.mjs",
+      "src/projections.mjs",
+      "src/server.mjs",
+      "packages/services/src/index.mjs",
+      "packages/http/src/index.mjs",
+      "packages/durable-streams/src/index.mjs",
+      "packages/protocol/src/agent-administration.mjs",
+      "packages/protocol/src/agent-config-revisions.mjs",
+      "packages/protocol/src/agent-config.mjs",
+      "packages/protocol/src/channels.mjs",
+      "packages/protocol/src/index.mjs",
+      "packages/protocol/src/mentions.mjs",
+      "packages/protocol/src/messages.mjs",
+      "packages/protocol/src/principals.mjs",
+      "packages/protocol/src/sha256.mjs",
+      "packages/protocol/src/workspace.mjs",
+      "packages/reducers/src/canonical-state.mjs",
+      "packages/reducers/src/index.mjs"
+    ],
+    "offenses": [],
+    "result": "PASS"
+  },
+  "conformance": {
+    "interfaceVersion": 1,
+    "rows": [
+      {
+        "adapterInterfaceVersion": 1,
+        "descriptorDigest": "sha256:847eadb14caa74f2ca5fb1522eb95e3b71c9c82aec4e6e0b58bd076a81fbe512",
+        "kind": "harness",
+        "providerKey": "harness:scripted@1.0.0",
+        "result": "PASS"
+      },
+      {
+        "adapterInterfaceVersion": 1,
+        "descriptorDigest": "sha256:693a5264c3850844f3d7f337df063f7e561edea236762d208a15a13b84a82c1e",
+        "kind": "sandbox",
+        "providerKey": "sandbox:scripted@1.0.0",
+        "result": "PASS"
+      }
+    ],
+    "result": "PASS"
+  },
+  "compatibility": {
+    "rows": [
+      {
+        "harnessProviderKey": "harness:claude-code@1.0.0",
+        "sandboxProviderKey": "sandbox:fly-sprites@1.0.0",
+        "declaredByHarness": true,
+        "declaredBySandbox": true,
+        "harnessAvailable": false,
+        "sandboxAvailable": false,
+        "expectedRunnable": false,
+        "actual": {
+          "allowed": false,
+          "code": "PROVIDER_REGISTRY_PROVIDER_NOT_INSTALLED"
+        },
+        "result": "PASS"
+      },
+      {
+        "harnessProviderKey": "harness:claude-code@1.0.0",
+        "sandboxProviderKey": "sandbox:scripted@1.0.0",
+        "declaredByHarness": false,
+        "declaredBySandbox": false,
+        "harnessAvailable": false,
+        "sandboxAvailable": true,
+        "expectedRunnable": false,
+        "actual": {
+          "allowed": false,
+          "code": "PROVIDER_REGISTRY_PROVIDER_NOT_INSTALLED"
+        },
+        "result": "PASS"
+      },
+      {
+        "harnessProviderKey": "harness:codex@1.0.0",
+        "sandboxProviderKey": "sandbox:fly-sprites@1.0.0",
+        "declaredByHarness": true,
+        "declaredBySandbox": true,
+        "harnessAvailable": false,
+        "sandboxAvailable": false,
+        "expectedRunnable": false,
+        "actual": {
+          "allowed": false,
+          "code": "PROVIDER_REGISTRY_PROVIDER_NOT_INSTALLED"
+        },
+        "result": "PASS"
+      },
+      {
+        "harnessProviderKey": "harness:codex@1.0.0",
+        "sandboxProviderKey": "sandbox:scripted@1.0.0",
+        "declaredByHarness": false,
+        "declaredBySandbox": false,
+        "harnessAvailable": false,
+        "sandboxAvailable": true,
+        "expectedRunnable": false,
+        "actual": {
+          "allowed": false,
+          "code": "PROVIDER_REGISTRY_PROVIDER_NOT_INSTALLED"
+        },
+        "result": "PASS"
+      },
+      {
+        "harnessProviderKey": "harness:scripted@1.0.0",
+        "sandboxProviderKey": "sandbox:fly-sprites@1.0.0",
+        "declaredByHarness": false,
+        "declaredBySandbox": false,
+        "harnessAvailable": true,
+        "sandboxAvailable": false,
+        "expectedRunnable": false,
+        "actual": {
+          "allowed": false,
+          "code": "PROVIDER_REGISTRY_PROVIDER_NOT_INSTALLED"
+        },
+        "result": "PASS"
+      },
+      {
+        "harnessProviderKey": "harness:scripted@1.0.0",
+        "sandboxProviderKey": "sandbox:scripted@1.0.0",
+        "declaredByHarness": true,
+        "declaredBySandbox": true,
+        "harnessAvailable": true,
+        "sandboxAvailable": true,
+        "expectedRunnable": true,
+        "actual": {
+          "allowed": true,
+          "code": null
+        },
+        "result": "PASS"
+      },
+      {
+        "harnessProviderKey": "harness:codex@1.0.0",
+        "sandboxProviderKey": "sandbox:scripted@1.0.0",
+        "declaredByHarness": false,
+        "declaredBySandbox": false,
+        "harnessAvailable": true,
+        "sandboxAvailable": true,
+        "expectedRunnable": false,
+        "actual": {
+          "allowed": false,
+          "code": "PROVIDER_REGISTRY_INCOMPATIBLE_PROVIDERS"
+        },
+        "result": "PASS",
+        "scenario": "ready-but-incompatible"
+      }
+    ],
+    "runnableRows": 1,
+    "refusedRows": 6,
+    "result": "PASS"
+  },
+  "resolved": {
+    "result": "PASS",
+    "valid": {
+      "resolvedProviderDigest": "sha256:b9f170ade477472339a214b1a8ef85dd5a308ea9d4f341e02febe2ef70e5c800",
+      "harnessDescriptorDigest": "sha256:847eadb14caa74f2ca5fb1522eb95e3b71c9c82aec4e6e0b58bd076a81fbe512",
+      "sandboxDescriptorDigest": "sha256:693a5264c3850844f3d7f337df063f7e561edea236762d208a15a13b84a82c1e",
+      "harnessConfigurationDigest": "sha256:624c818a7aba79fe8c5a2adbfc11ea3e0977bbbad37a28e886d2cdffbad30342",
+      "sandboxConfigurationDigest": "sha256:fc558a03fbaf8cd822136a5049c1af348de02d726c26b4a4f542a44faa855823",
+      "requiredCapabilities": {
+        "harness": [
+          "structured-output",
+          "tool-calls"
+        ],
+        "sandbox": [
+          "ephemeral",
+          "persistent"
+        ]
+      }
+    },
+    "agentConfigResolution": {
+      "harnessProviderKey": "harness:scripted@1.0.0",
+      "sandboxProviderKey": "sandbox:scripted@1.0.0",
+      "resolvedProviderDigest": "sha256:541df036a887331550882cddc8f8fb4b27366f24f1d7d632f66813476ea63116"
+    },
+    "reorderedEquivalent": true,
+    "semanticMutationChangedDigest": true
+  },
+  "refusals": {
+    "rows": [
+      {
+        "name": "unknown AlmostNode provider",
+        "code": "PROVIDER_REGISTRY_UNKNOWN_PROVIDER",
+        "path": "$.selection.providerId",
+        "providerKey": "sandbox:almostnode-browser@1.0.0",
+        "result": "PASS"
+      },
+      {
+        "name": "downgraded provider version",
+        "code": "PROVIDER_REGISTRY_UNSUPPORTED_PROVIDER_VERSION",
+        "path": "$.selection.providerVersion",
+        "providerKey": "harness:scripted@0.9.0",
+        "result": "PASS"
+      },
+      {
+        "name": "missing exact selection field",
+        "code": "PROVIDER_REGISTRY_MISSING_SELECTION",
+        "path": "$.selection.requiredCapabilities",
+        "providerKey": null,
+        "result": "PASS"
+      },
+      {
+        "name": "unsupported capability",
+        "code": "PROVIDER_REGISTRY_UNSUPPORTED_CAPABILITY",
+        "path": "$.selection.requiredCapabilities[0]",
+        "providerKey": "harness:scripted@1.0.0",
+        "result": "PASS"
+      },
+      {
+        "name": "duplicate required capability",
+        "code": "PROVIDER_REGISTRY_DUPLICATE_CAPABILITY",
+        "path": "$.selection.requiredCapabilities",
+        "providerKey": null,
+        "result": "PASS"
+      },
+      {
+        "name": "missing provider-owned configuration",
+        "code": "PROVIDER_REGISTRY_MISSING_CONFIGURATION",
+        "path": "$.providerConfiguration",
+        "providerKey": "harness:scripted@1.0.0",
+        "result": "PASS"
+      },
+      {
+        "name": "altered provider-owned schema value",
+        "code": "PROVIDER_REGISTRY_INVALID_CONFIGURATION",
+        "path": "$.providerConfiguration.protocol",
+        "providerKey": null,
+        "result": "PASS"
+      },
+      {
+        "name": "unavailable unimplemented Codex provider",
+        "code": "PROVIDER_REGISTRY_PROVIDER_NOT_INSTALLED",
+        "path": "$.provider.installed",
+        "providerKey": "harness:codex@1.0.0",
+        "result": "PASS"
+      },
+      {
+        "name": "disabled provider",
+        "code": "PROVIDER_REGISTRY_PROVIDER_DISABLED",
+        "path": "$.provider.enabled",
+        "providerKey": "harness:scripted@1.0.0",
+        "result": "PASS"
+      },
+      {
+        "name": "unhealthy provider",
+        "code": "PROVIDER_REGISTRY_PROVIDER_UNHEALTHY",
+        "path": "$.provider.health",
+        "providerKey": "harness:scripted@1.0.0",
+        "result": "PASS"
+      },
+      {
+        "name": "stale provider readiness",
+        "code": "PROVIDER_REGISTRY_PROVIDER_STALE",
+        "path": "$.provider.expiresAt",
+        "providerKey": "harness:scripted@1.0.0",
+        "result": "PASS"
+      },
+      {
+        "name": "removed provider",
+        "code": "PROVIDER_REGISTRY_UNKNOWN_PROVIDER",
+        "path": "$.selection.providerId",
+        "providerKey": "harness:scripted@1.0.0",
+        "result": "PASS"
+      },
+      {
+        "name": "incompatible ready providers",
+        "code": "PROVIDER_REGISTRY_PROVIDER_NOT_IMPLEMENTED",
+        "path": "$.provider.implementationStatus",
+        "providerKey": "harness:codex@1.0.0",
+        "result": "PASS"
+      },
+      {
+        "name": "incompatible ready providers",
+        "code": "PROVIDER_REGISTRY_INCOMPATIBLE_PROVIDERS",
+        "path": "$.config",
+        "providerKey": "harness:codex@1.0.0+sandbox:scripted@1.0.0",
+        "result": "PASS"
+      },
+      {
+        "name": "duplicate descriptor",
+        "code": "PROVIDER_REGISTRY_DUPLICATE_PROVIDER",
+        "path": "$.registry.descriptors",
+        "providerKey": "harness:scripted@1.0.0",
+        "result": "PASS"
+      },
+      {
+        "name": "duplicate descriptor capability",
+        "code": "PROVIDER_REGISTRY_DUPLICATE_CAPABILITY",
+        "path": "$.registry.descriptors[0].capabilities",
+        "providerKey": null,
+        "result": "PASS"
+      }
+    ],
+    "result": "PASS"
+  },
+  "sensitivity": {
+    "mutationCount": 3,
+    "mutations": [
+      {
+        "mutation": "remove capability negotiation refusal",
+        "exitCode": 1,
+        "verifier": "scripts/verify-e2-t05.mjs",
+        "verifierDetectedMutant": true,
+        "result": "PASS"
+      },
+      {
+        "mutation": "remove reciprocal compatibility refusal",
+        "exitCode": 1,
+        "verifier": "scripts/verify-e2-t05.mjs",
+        "verifierDetectedMutant": true,
+        "result": "PASS"
+      },
+      {
+        "mutation": "inject provider-specific orchestration branch",
+        "exitCode": 1,
+        "verifier": "scripts/verify-e2-t05.mjs",
+        "verifierDetectedMutant": true,
+        "result": "PASS"
+      }
+    ],
+    "verifierDetectedMutant": true,
+    "result": "PASS"
+  }
+}

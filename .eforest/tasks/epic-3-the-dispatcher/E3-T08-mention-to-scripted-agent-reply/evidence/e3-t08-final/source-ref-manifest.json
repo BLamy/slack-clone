@@ -1,0 +1,117 @@
+{
+  "__stream_slack_dispatch_idempotency__": {
+    "head": "0000000000000002_0000000000000002",
+    "recordDigests": [
+      "sha256:1c13c0b70cf9096e3ad5f0c620ca21a8c50de618c5c3f3a64a2eeb37f39857e0",
+      "sha256:6e8246d78c8055e031ed5c406bbf6e223c2cdb859a090752f9514cd93f7cb9d0"
+    ],
+    "streamDigest": "sha256:8f61a85ff936c7b074b0cc4971efaf2f16c1bf1b57233d41ac525ff68813c46e"
+  },
+  "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config": {
+    "head": "0000000000000002_0000000000000002",
+    "recordDigests": [
+      "sha256:aacfb3391b1a9370e2fa8972da6c3acc88bb06e7b0551a4bb06bc3ac606d98f0",
+      "sha256:342cfdadca47c9ecef04e09638f98fbf875e5538343ef23168a43ce244ab1bf1"
+    ],
+    "streamDigest": "sha256:314c592b8a9e1373e860dc54978206b8a7cd2b2908dc1eff8208eac3bcd83ecf"
+  },
+  "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb": {
+    "head": "0000000000000002_0000000000000002",
+    "recordDigests": [
+      "sha256:cd3588400e88037bfa3717b3712d61e71b6f4dedfc6090f2cd2790a8f7584b83",
+      "sha256:a5654dbd6744c16db9b5b47be9f3ab866f12e629d9f8219af900a3409ee3f0c1"
+    ],
+    "streamDigest": "sha256:5336be0d0177ce2fae97b2dbe66ae9a2616af88530a6c25e9113b2cf874f955f"
+  },
+  "projection:px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb": {
+    "head": "0000000000000001_0000000000000001",
+    "recordDigests": [
+      "sha256:fbaabad7dc6e208f1a1ef6a802fd5082387f8a59a55499ddd819b773841011aa"
+    ],
+    "streamDigest": "sha256:8906c78376bc3fe20e30e4c054f12f41458c273ab0f7380b4fa656a51e1f6064"
+  },
+  "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff": {
+    "head": "0000000000000021_0000000000000015",
+    "recordDigests": [
+      "sha256:9bc852e744f81b90687db0a3624f4043f4675c7f8613d4fb9f59c7fd260df638",
+      "sha256:4e96f86d089983816105896ae8ed73bb1e7f0926fb470b82f30aa63dde01d766",
+      "sha256:52d99cc4cd460c5ff842f388fe9f6c46e268a1910ebf05f8952e87c7fd762dc7",
+      "sha256:258b51acb4dd1ab89e4dd2e23b1498693e4af5cb1d8ae28d10c1e453cbd29b07",
+      "sha256:be6021781303d0d099c88da7a174e46546f7aadd4620d332660b02496de68f03",
+      "sha256:14ff1bba99f44e72e7987ae234fb98eb3e86a074a5539a2ba6307cb5e1e1bafe",
+      "sha256:2471407dd988069bcbb4e28d8a80831d850515c866f87c10b7a33bd5eb91149b",
+      "sha256:5668805b3ff884b7e8816f9ad1165bc378bf2f0cf458b3d6869e7eb7443b2fe8",
+      "sha256:b6e889df27d2c2d3f336a86e1b93d1eecc04468ce338c396dba41d01c02e6eaf",
+      "sha256:6c65790cc495000ac10c55933163848371b878fb94ac77cb417c4cd86454f15e",
+      "sha256:78d4f97b67100696e49418baee38614b38092c55913a0b937fc5432f1f6f654c",
+      "sha256:6258271d438d7cdae9f61131b9e4f4be587947411b7c4f9b4de681ae9f722266",
+      "sha256:d3e0d17b6a7eb8329445afe76fa40d05900597e183df6631bded2055bf5c6099",
+      "sha256:6728d3dac3f04a792f260f29722375d12a5a2312be0fc44a1dbfe6dfc1ed85ed",
+      "sha256:bf1771f3c8860241708dd1c8557313b03507d69a95de4a0802f8001b05c95c46",
+      "sha256:268dab6093054ed0118cd73463360bb03e431bff78845c18604f8e2e3745f404",
+      "sha256:faec83f811312ccb1d811203d04bef293d029b29727d6a3bcf72b0ffed8e33cd",
+      "sha256:ce0ad051b17d80fa89526f484ba81cf84664e8b8cac66da248240052de329ee6",
+      "sha256:7e9e87c9fe663d1a8fbf36f32e54af3831210cb77975b1da2ae14512f90b787e",
+      "sha256:993e967545910923eee5a58d8e7f2738b3fd842ae9f20e9764f990ed02a753f3",
+      "sha256:c6d9b83980b39e7d6ac4e55771247436b70f893f4891f6c245fcce0916e783cb"
+    ],
+    "streamDigest": "sha256:a5db9de214489ac0bbf3dff3494bf802357091ccafcb637a3e1971f62d25c701"
+  },
+  "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_rrrrrrrrrrrrrrrrrrrrrrrrrr": {
+    "head": "0000000000000012_000000000000000c",
+    "recordDigests": [
+      "sha256:b50e76d161f43c90e7192703ff101464d10876e234bd4937d2dea396f52c1782",
+      "sha256:decc5939dd3a88521726ec55c3d97635ba1c093ea3fc611767ec4e7516faff21",
+      "sha256:a1ac2f8cbfd7ba839e49e17fe3e3e57c448bd2ebd1334210171d3b11533e7857",
+      "sha256:1c05b65aa015ad22dea348abbaae4be7db1c5be0692e9c0fa8c74627c600fb90",
+      "sha256:437e6cfa34fe98340af96b945778f7271c54127f7a678c44b781ea4ef4f5820d",
+      "sha256:93bfe5d8f8f6472a4030ad135359eafc994d5e423a29ea2e6bf53cb7df8bc12a",
+      "sha256:64d6d341d20d0c8a5af7421ea2e2d1b74908e539182628e7e02cfdf1faa98d2e",
+      "sha256:d7346e613a151ca2984450205665d501d6e14cad96c72e626ed6f6cbb8e9684a",
+      "sha256:cf9cf71a603c1f6590292fbaec12d549de942785ebe395b51e240dbe33d578f3",
+      "sha256:a1bc12afd584018027ae14077166d7ae266581b3905082df25025d3cd5465190",
+      "sha256:1760b8b3d9d60de84dd0b9620d07f06739a6f0e6bc5cf82e4db46fa6b4fc778e",
+      "sha256:3bf2b8697b20a4434aa14cbc99af1637cd6d85a02c6287da390d41e1f65a93db"
+    ],
+    "streamDigest": "sha256:681939ba2e3cccba208ceafc268db57e982e2402beb38700819013cd019529be"
+  },
+  "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_vvvvvvvvvvvvvvvvvvvvvvvvvv": {
+    "head": "0000000000000009_0000000000000009",
+    "recordDigests": [
+      "sha256:1abb51a5f8148a27d95f346e27e8cf66b78c39efb96a06cce6531c90b4f75977",
+      "sha256:2fcb6b2d83f6896f6d28934ae851baa26bc8bc39a2ea15d3f2cb95d7c19f205d",
+      "sha256:46f43653f171c6e0eafe20f04910c5d873f3977c9647a98113f0d37a813f48b6",
+      "sha256:b25511c2e51ffe526fb2a0ce42a312dc13a9521ee4bf52ce0db0341bc9bd82e3",
+      "sha256:fa8334057c4840272f4cc310243686264288901db47a53aa30c1c626d77bae95",
+      "sha256:4f75dbf30980c6506a3c6cd747b2837ed8d4312c6eb39e328deb9e3eb79feee3",
+      "sha256:4e189af8ee238805e9fd3f9acc568e2444c6348089b611dd427925f144eef538",
+      "sha256:7889ab26abd6ec109cd87f87bce03ca6d95ebb9bbb59e396ec0c1909bc9f0195",
+      "sha256:866e944da2da5d8c3d6f0320caaaee1f461d586db6c7dad2f8abf63691621f60"
+    ],
+    "streamDigest": "sha256:0d3c2ef0add411da68f71245215eaaefd96c057d170b16fdb84b3b480b2c4de3"
+  },
+  "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/audit": {
+    "head": "0000000000000002_0000000000000002",
+    "recordDigests": [
+      "sha256:eeee4b6b1e15c3cf75593dc866b25ddf56e5108522f8d44449990daf762eb0f5",
+      "sha256:dbf16d9663a8253750b375776ac8491ba378cae1e09426bb47b3f771e389318a"
+    ],
+    "streamDigest": "sha256:727e8599acf4fc2ca72d59934569db571d840854c20382a05356dd89f1312147"
+  },
+  "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations": {
+    "head": "0000000000000001_0000000000000001",
+    "recordDigests": [
+      "sha256:8e6b066713fe58178222372a9cd447301d19b16d2cd4e77d8bd83d2d6ce322cd"
+    ],
+    "streamDigest": "sha256:eb8e0003cf53b89cff5e962107cde9152bb526adc08a52274f91af38f37a9ef0"
+  },
+  "stateReferences": [
+    {
+      "offset": "0000000000000002_0000000000000002",
+      "stateDigest": "sha256:c8c1616c2bb0d96b440c0594ee50bf85b6ad051afdca2f8ab1bd7c9e4b167cb2",
+      "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config",
+      "head": "0000000000000002_0000000000000002",
+      "streamDigest": "sha256:314c592b8a9e1373e860dc54978206b8a7cd2b2908dc1eff8208eac3bcd83ecf"
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "afterCatchUp": {
+    "projectionId": "px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "reducerVersion": "stream-slack-reducer-v1",
+    "schemaVersion": 1,
+    "sequence": 38,
+    "sourceHeads": [
+      {
+        "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+        "offset": "0000000000000000_000000000000000a",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+      },
+      {
+        "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+        "offset": "0000000000000000_000000000000000b",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+      },
+      {
+        "digest": "sha256:0fbe4a9bd85b4b8c8b4a02e868d283a73367f2e59829667ce201126735dccab2",
+        "offset": "0000000000000000_0000000000000005",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+      },
+      {
+        "digest": "sha256:d1466e264f375af5006e98d146541b36d8957bf4ba45fe8f1ecf28c97b0ea544",
+        "offset": "0000000000000000_000000000000000c",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+      }
+    ],
+    "stateDigest": "sha256:d499dc70e57337bdcd429260738e7967061bd6e8cb00fa4f755be303dd8f5bd8",
+    "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2"
+  },
+  "afterRebuild": {
+    "projectionId": "px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "reducerVersion": "stream-slack-reducer-v1",
+    "schemaVersion": 1,
+    "sequence": 38,
+    "sourceHeads": [
+      {
+        "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+        "offset": "0000000000000000_000000000000000a",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+      },
+      {
+        "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+        "offset": "0000000000000000_000000000000000b",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+      },
+      {
+        "digest": "sha256:0fbe4a9bd85b4b8c8b4a02e868d283a73367f2e59829667ce201126735dccab2",
+        "offset": "0000000000000000_0000000000000005",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+      },
+      {
+        "digest": "sha256:d1466e264f375af5006e98d146541b36d8957bf4ba45fe8f1ecf28c97b0ea544",
+        "offset": "0000000000000000_000000000000000c",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+      }
+    ],
+    "stateDigest": "sha256:d499dc70e57337bdcd429260738e7967061bd6e8cb00fa4f755be303dd8f5bd8",
+    "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2"
+  },
+  "beforeDeletion": {
+    "projectionId": "px_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "reducerVersion": "stream-slack-reducer-v1",
+    "schemaVersion": 1,
+    "sequence": 38,
+    "sourceHeads": [
+      {
+        "digest": "sha256:395e68ba5583fe185b1dc4743b39d8f37e7d199bb262c8473ff94d5c6245efc2",
+        "offset": "0000000000000000_000000000000000a",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_11111111111111111111111111"
+      },
+      {
+        "digest": "sha256:b38a88db5eabc0aa19ad218c253a673940c3809b331ffda477cb6c6b9473557d",
+        "offset": "0000000000000000_000000000000000b",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_22222222222222222222222222"
+      },
+      {
+        "digest": "sha256:0fbe4a9bd85b4b8c8b4a02e868d283a73367f2e59829667ce201126735dccab2",
+        "offset": "0000000000000000_0000000000000005",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_b663e6d7z6v64tkx8d49m555wm"
+      },
+      {
+        "digest": "sha256:d1466e264f375af5006e98d146541b36d8957bf4ba45fe8f1ecf28c97b0ea544",
+        "offset": "0000000000000000_000000000000000c",
+        "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory"
+      }
+    ],
+    "stateDigest": "sha256:d499dc70e57337bdcd429260738e7967061bd6e8cb00fa4f755be303dd8f5bd8",
+    "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "checkpointDigest": "sha256:d9d640820624f928255145e4222488996f795fedcb73e95c5b5bbb8924da9eb2"
+  }
+}

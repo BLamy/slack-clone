@@ -1,0 +1,21 @@
+{
+  "mutationCount": 2,
+  "mutations": [
+    {
+      "mutation": "replace source-bound invocation ID with randomness",
+      "verifierCommand": "node --test test/unit/mention-reconciler.test.mjs",
+      "verifierExitCode": 1,
+      "verifierRejected": true,
+      "result": "PASS"
+    },
+    {
+      "mutation": "remove E2 snapshot binding validation",
+      "verifierCommand": "E3_T02_SKIP_GATES=1 E3_T02_SKIP_SENSITIVITY=1 node scripts/verify-e3-t02.mjs",
+      "verifierExitCode": 1,
+      "verifierRejected": true,
+      "result": "PASS"
+    }
+  ],
+  "result": "PASS",
+  "verifierDetectedMutant": true
+}

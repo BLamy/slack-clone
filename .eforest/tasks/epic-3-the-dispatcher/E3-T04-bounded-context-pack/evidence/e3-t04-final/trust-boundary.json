@@ -1,0 +1,26 @@
+{
+  "result": "PASS",
+  "instructionTrust": [
+    "trusted-instructions"
+  ],
+  "contentTrust": [
+    {
+      "id": "message:root",
+      "trust": "untrusted-content",
+      "contentKind": "conversation-message"
+    },
+    {
+      "id": "message:reply",
+      "trust": "untrusted-content",
+      "contentKind": "conversation-message"
+    },
+    {
+      "id": "workspace-file:docs/readme.md",
+      "trust": "untrusted-content",
+      "contentKind": "workspace-file"
+    }
+  ],
+  "authorizationOutsidePack": true,
+  "injectionCannotChangePolicy": true,
+  "structuralInstructionSeparation": true
+}

@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stream-slack.local/schemas/message-events.v1.schema.json",
+  "title": "Stream Slack conversation events v1",
+  "oneOf": [
+    {
+      "title": "Root message created",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorId",
+        "channelId",
+        "contentType",
+        "messageId",
+        "rootMessageId",
+        "text"
+      ],
+      "properties": {
+        "authorId": { "$ref": "#/$defs/principalId" },
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "contentType": { "const": "text/plain" },
+        "messageId": { "$ref": "#/$defs/messageId" },
+        "rootMessageId": { "type": "null" },
+        "mentions": { "$ref": "#/$defs/mentions" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 4000 }
+      }
+    },
+    {
+      "title": "Thread reply created",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorId",
+        "channelId",
+        "contentType",
+        "messageId",
+        "rootMessageId",
+        "text"
+      ],
+      "properties": {
+        "authorId": { "$ref": "#/$defs/principalId" },
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "contentType": { "const": "text/plain" },
+        "messageId": { "$ref": "#/$defs/messageId" },
+        "rootMessageId": { "$ref": "#/$defs/messageId" },
+        "agentReplyProvenance": { "$ref": "#/$defs/agentReplyProvenance" },
+        "mentions": { "$ref": "#/$defs/mentions" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 4000 }
+      }
+    },
+    {
+      "title": "Message edited",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "channelId",
+        "contentType",
+        "expectedRevision",
+        "messageId",
+        "text"
+      ],
+      "properties": {
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "contentType": { "const": "text/plain" },
+        "expectedRevision": { "type": "integer", "minimum": 1 },
+        "messageId": { "$ref": "#/$defs/messageId" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 4000 }
+      }
+    },
+    {
+      "title": "Message deleted",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channelId", "expectedRevision", "messageId"],
+      "properties": {
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "expectedRevision": { "type": "integer", "minimum": 1 },
+        "messageId": { "$ref": "#/$defs/messageId" }
+      }
+    },
+    {
+      "title": "Reaction added or removed",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channelId", "emoji", "messageId"],
+      "properties": {
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "emoji": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "messageId": { "$ref": "#/$defs/messageId" }
+      }
+    }
+  ],
+  "$defs": {
+    "channelId": {
+      "type": "string",
+      "pattern": "^ch_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "messageId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,200}$"
+    },
+    "principalId": {
+      "type": "string",
+      "pattern": "^pr_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+    },
+    "mentions": {
+      "type": "array",
+      "maxItems": 100,
+      "items": { "$ref": "#/$defs/mention" }
+    },
+    "agentReplyProvenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agentId",
+        "agentPrincipalId",
+        "attemptId",
+        "channelId",
+        "contextDigest",
+        "contextRef",
+        "invocationId",
+        "invocationRef",
+        "leaseGeneration",
+        "runId",
+        "schemaVersion",
+        "snapshotDigest",
+        "snapshotRef",
+        "sourceMention",
+        "threadRootMessageId"
+      ],
+      "properties": {
+        "agentId": {
+          "type": "string",
+          "pattern": "^ag_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+        },
+        "agentPrincipalId": { "$ref": "#/$defs/principalId" },
+        "attemptId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,200}$"
+        },
+        "channelId": { "$ref": "#/$defs/channelId" },
+        "contextDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "contextRef": { "$ref": "#/$defs/sourceReference" },
+        "invocationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,200}$"
+        },
+        "invocationRef": { "$ref": "#/$defs/sourceReference" },
+        "leaseGeneration": { "type": "integer", "minimum": 1 },
+        "runId": {
+          "type": "string",
+          "pattern": "^rn_[0-9a-hjkmnp-tv-z]{26}_[0-9a-hjkmnp-tv-z]{26}$"
+        },
+        "schemaVersion": { "const": 1 },
+        "snapshotDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "snapshotRef": { "$ref": "#/$defs/sourceReference" },
+        "sourceMention": { "$ref": "#/$defs/sourceReference" },
+        "threadRootMessageId": { "$ref": "#/$defs/messageId" }
+      }
+    },
+    "sourceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["digest", "offset", "stream"],
+      "properties": {
+        "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "offset": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{16}_[0-9a-f]{16}$"
+        },
+        "stream": { "type": "string", "minLength": 1, "maxLength": 400 }
+      }
+    },
+    "mention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["handle", "kind", "principalId", "span", "text"],
+      "properties": {
+        "handle": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+        },
+        "kind": { "enum": ["human", "agent"] },
+        "principalId": { "$ref": "#/$defs/principalId" },
+        "span": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["endByte", "startByte"],
+          "properties": {
+            "endByte": { "type": "integer", "minimum": 1 },
+            "startByte": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "text": {
+          "type": "string",
+          "pattern": "^@[a-z0-9][a-z0-9._-]{0,63}$"
+        }
+      }
+    }
+  }
+}

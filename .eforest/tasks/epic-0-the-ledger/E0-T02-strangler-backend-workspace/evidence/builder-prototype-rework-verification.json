@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T02",
+  "role": "builder-prototype-rework",
+  "recordedAt": "2026-08-01T23:38:04Z",
+  "implementationCommit": "dc9f273e22b8e7e4d8a2a711c4b86660c7addfc7",
+  "priorCriticCommit": "5316c6acf136d7ff1539a8885ba37181fe519ab6",
+  "findingAddressed": "A function literal's constructor property could recover dynamic-code authority without an unresolved ambient identifier, so a latent globalThis.fetch resolver passed the pure-package check.",
+  "policy": {
+    "model": "Pure package sources are checked as a capability-free JavaScript subset in addition to lexical ambient-global and import checks.",
+    "forbiddenPropertyPaths": [
+      "constructor",
+      "prototype",
+      "__proto__",
+      "caller",
+      "callee",
+      "arguments",
+      "stack",
+      "captureStackTrace",
+      "prepareStackTrace",
+      "stackTraceLimit"
+    ],
+    "forbiddenMetaprogrammingGlobals": [
+      "Object",
+      "Reflect",
+      "Proxy",
+      "Symbol"
+    ],
+    "computedPropertyRule": "Static string data properties and numeric literal indices are allowed. Non-static computed properties are rejected because they can synthesize a forbidden prototype key after parsing.",
+    "unchangedControls": "Locally bound and injected values remain allowed; the prior lexical/import/package fences remain in force."
+  },
+  "sourceHashes": {
+    "tools/import-analysis.mjs": "sha256:73b0307fa2de09b6dabb3f4ef69fd0ed441e2258f6421a77ab7c4675ccdfe1b9",
+    "test/unit/backend-packages.test.mjs": "sha256:46f414333c29b3cb64a4c230a22f8efbda64fcab695d9e7e9945517599983b3c",
+    "docs/backend-packages.md": "sha256:27dd01f1d5f1e8e2b5f3522c5bfe26d5cd4baef1c3b6780b1e5d735248ef2297"
+  },
+  "regressions": {
+    "command": "pnpm test:unit",
+    "result": "PASS",
+    "tests": 20,
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0,
+    "newCases": [
+      "the critic's exact (() => {}).constructor fixture is classified as dynamic code",
+      "a concatenated computed constructor key is classified as dynamic property access",
+      "Object and Reflect prototype reflection are rejected",
+      "Proxy metaprogramming and Symbol process-wide state are rejected",
+      "static record properties and numeric literal indices remain allowed"
+    ]
+  },
+  "detectorSensitivity": {
+    "fixture": [
+      "const capabilityFactory = (() => {}).constructor;",
+      "export function retainLatentFetchResolver() {",
+      "  return capabilityFactory(\"return globalThis.fetch\");",
+      "}"
+    ],
+    "called": false,
+    "externalRequestMade": false,
+    "localSequence": {
+      "format": "PASS",
+      "lint": "PASS",
+      "staticAnalysis": "FAIL as required: packages/protocol/src/critic-constructor-sensitivity.mjs reads forbidden dynamic code capability"
+    },
+    "coldCommand": "TEST_RUN_ID=cold-prototype-sensitivity pnpm verify",
+    "coldExitCode": 1,
+    "coldObservation": "Format and lint passed; the composed verifier stopped at static analysis with the forbidden dynamic-code capability before later gates.",
+    "restoredClean": true
+  },
+  "localVerification": {
+    "command": "TEST_RUN_ID=builder-prototype-rework-local pnpm verify",
+    "result": "PASS",
+    "gates": [
+      "format PASS",
+      "lint PASS",
+      "static analysis PASS: layers=5 violations=0; syntax files=36",
+      "unit PASS: 20/20; zero skipped",
+      "integration PASS: 5/5 browser tests",
+      "concurrency PASS: 1/1 forced-collision two-stack test",
+      "build PASS: 28 files"
+    ],
+    "summarySha256": "cf68ae0b813720f82e845eb1aa405372bd853937f51153b8809466e596b5a261",
+    "streamProofSha256": "9e3bcebb94a95c7b76b41f899b6d046ee2293762451dda9c5924c84b781741d6",
+    "buildManifestSha256": "aaa57601ec3b335140e0dfa0859b3844b68039a5a17423cda89ec0a9abf6a627",
+    "streamProof": {
+      "nextOffset": "0000000000000000_0000000000000563",
+      "streamDigest": "sha256:db4894f8c600a43fc6c69f32d4b3f80030a97ed815a878c8828ee4302f071855",
+      "messageCount": 1,
+      "domMatchedApi": true
+    }
+  },
+  "coldVerification": {
+    "clone": {
+      "kind": "git clone --no-hardlinks --no-checkout followed by detached checkout",
+      "relativePath": ".eforest/tasks/epic-0-the-ledger/E0-T02-strangler-backend-workspace/work/cold-prototype-dc9f273.XiFAYs/repo",
+      "head": "dc9f273e22b8e7e4d8a2a711c4b86660c7addfc7",
+      "alternatesPresent": false,
+      "trackedStatusAfterSensitivityRestore": "clean"
+    },
+    "preflightAbsent": [
+      "node_modules",
+      "emulate/node_modules",
+      "emulate/packages/emulate/dist",
+      ".env",
+      "recordings/latest.json",
+      ".artifacts"
+    ],
+    "command": "TEST_RUN_ID=cold-prototype-dc9f273 make verify-E0-T02",
+    "result": "PASS",
+    "runtime": {
+      "node": "v23.11.0",
+      "pnpm": "11.2.2",
+      "emulatorCommit": "8b88027535e4ea6a18c3ce92a13af706382a451f",
+      "emulatorNodeEngineWarning": "emulate declares Node >=24; frozen install, build, and runtime completed under Node 23.11.0"
+    },
+    "gates": [
+      "frozen root install PASS",
+      "pinned submodule checkout and frozen emulator install/build PASS",
+      "format PASS",
+      "lint PASS",
+      "static analysis PASS: layers=5 violations=0; syntax files=36",
+      "unit PASS: 20/20; zero skipped",
+      "integration PASS: 5/5 browser tests",
+      "concurrency PASS: 1/1; disjoint blocks 45418/45419/45420 and 37499/37500/37501",
+      "build PASS: 28 files"
+    ],
+    "summarySha256": "d6bb7cdc0997801b1425fc45757b236f645d2deb1c63fbb6fba4eb4f60f926b9",
+    "streamProofSha256": "d35748d4c1a95db64475a172d79151e227a84da98cdf51addda9462d9c0eaaf9",
+    "buildManifestSha256": "cc92554d9318b08ff49ae7cc534e857a963702a952d7555de13f6ad548374562",
+    "buildManifestEntries": 28,
+    "streamProof": {
+      "nextOffset": "0000000000000000_0000000000000547",
+      "streamDigest": "sha256:fe83ddc8ca3628ae425225109f59c62d4ab296270717260fabd5fd2322060e2c",
+      "messageCount": 1,
+      "domMatchedApi": true
+    },
+    "replayUploadAttempted": false,
+    "externalTunnelAttempted": false,
+    "recordingsUnchanged": true
+  },
+  "replay": "Replay: N/A (server/static-analysis rework with unchanged browser behavior) + mitigation: inherited Playwright compatibility, strict pure-source subset audit, exact-head cold clone, and cold constructor-sensitivity failure",
+  "redaction": {
+    "containsRawSecret": false,
+    "containsSessionCookie": false,
+    "containsProviderToken": false,
+    "containsCustomerContent": false,
+    "externalHostContactedByFixture": false
+  },
+  "claim": "At exact commit dc9f273e22b8e7e4d8a2a711c4b86660c7addfc7, pure packages reject lexical ambient authority plus prototype, dynamic-code, call-stack, metaprogramming, and non-static computed-property escape hatches. The critic's exact latent constructor fixture now makes the full verifier exit nonzero at static analysis, while static data access remains allowed and the unmutated exact-head cold clone passes every gate."
+}

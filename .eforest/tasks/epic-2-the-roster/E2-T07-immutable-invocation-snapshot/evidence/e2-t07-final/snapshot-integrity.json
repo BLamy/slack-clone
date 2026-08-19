@@ -1,0 +1,7 @@
+{
+  "checkUseCode": "INVOCATION_SNAPSHOT_DIGEST_MISMATCH",
+  "replayCode": "INVOCATION_SNAPSHOT_DIGEST_MISMATCH",
+  "result": "PASS",
+  "tamperedField": "sourceManifest.config.stateDigest",
+  "tamperDetected": true
+}

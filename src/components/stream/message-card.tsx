@@ -1,10 +1,10 @@
-import { Check, MoreHorizontal, Pencil, Trash2, X } from 'lucide-react';
+import { Check, MoreHorizontal, Pencil, Trash2, X } from "lucide-react";
 
-import { Avatar, AvatarBadge, AvatarFallback } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { cn } from '@/lib/utils';
+import { Avatar, AvatarBadge, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 
 export type MessageCardProps = {
   author: string;
@@ -19,7 +19,7 @@ export type MessageCardProps = {
   actionsVisible?: boolean;
   isEditing?: boolean;
   editValue?: string;
-  tone?: 'default' | 'agent';
+  tone?: "default" | "agent";
   onEdit?: () => void;
   onDelete?: () => void;
   onEditValueChange?: (value: string) => void;
@@ -40,7 +40,7 @@ export function MessageCard({
   actionsVisible = false,
   isEditing = false,
   editValue,
-  tone = 'default',
+  tone = "default",
   onEdit,
   onDelete,
   onEditValueChange,
@@ -50,23 +50,46 @@ export function MessageCard({
   return (
     <article
       className="group/message flex gap-3 rounded-2xl px-3 py-3 transition-colors hover:bg-message-hover"
+      tabIndex={canEdit ? 0 : undefined}
+      aria-label={canEdit ? "Edit message" : undefined}
       data-tone={tone}
       data-slot="message-card"
       data-testid="message"
       data-message-id={messageId}
+      onClick={(event) => {
+        if (!canEdit) return;
+        const target = event.target as HTMLElement;
+        if (target.closest("button, input, textarea, select, a, form")) return;
+        onEdit?.();
+      }}
+      onKeyDown={(event) => {
+        if (!canEdit || (event.key !== "Enter" && event.key !== " ")) return;
+        event.preventDefault();
+        onEdit?.();
+      }}
     >
       <Avatar size="default" className="mt-0.5 bg-avatar-surface">
         <AvatarFallback className="bg-avatar-surface font-semibold text-avatar-foreground">
           {initials}
         </AvatarFallback>
-        {online && <AvatarBadge role="img" aria-label="Online" className="bg-online" />}
+        {online && (
+          <AvatarBadge role="img" aria-label="Online" className="bg-online" />
+        )}
       </Avatar>
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
           <span className="font-semibold text-foreground">{author}</span>
-          {tone === 'agent' && <Badge variant="agent">agent</Badge>}
+          {tone === "agent" && <Badge variant="agent">agent</Badge>}
           <time className="text-xs text-muted-foreground">{timestamp}</time>
-          {edited && <span className="text-xs text-muted-foreground" data-testid="message-edited">(edited)</span>}
+          {edited && (
+            <span
+              className="text-xs"
+              data-testid="message-edited"
+              style={{ color: "rgb(75, 85, 99)" }}
+            >
+              (edited)
+            </span>
+          )}
         </div>
         {isEditing ? (
           <div className="mt-2 space-y-2">
@@ -89,15 +112,15 @@ export function MessageCard({
             </div>
           </div>
         ) : (
-          <p className="mt-1 whitespace-pre-wrap text-[0.95rem] leading-6 text-message-foreground">
+          <p className="message__text mt-1 whitespace-pre-wrap text-[0.95rem] leading-6 text-message-foreground">
             {body}
           </p>
         )}
       </div>
       <div
         className={cn(
-          'flex shrink-0 self-start transition-opacity group-hover/message:opacity-100 group-focus-within/message:opacity-100',
-          !actionsVisible && 'opacity-0',
+          "flex shrink-0 self-start transition-opacity group-hover/message:opacity-100 group-focus-within/message:opacity-100",
+          !actionsVisible && "opacity-0",
         )}
         data-slot="message-actions"
       >
@@ -124,8 +147,13 @@ export function MessageCard({
           </Button>
         )}
         {!isEditing && (
-          <Button aria-label="More message actions" className="text-muted-foreground" size="icon-sm" variant="ghost">
-          <MoreHorizontal aria-hidden="true" />
+          <Button
+            aria-label="More message actions"
+            className="text-muted-foreground"
+            size="icon-sm"
+            variant="ghost"
+          >
+            <MoreHorizontal aria-hidden="true" />
           </Button>
         )}
       </div>

@@ -1,0 +1,94 @@
+{
+  "finalStateDigest": "sha256:b89894bc917a4d355b9582cd40cce01cbcf81c519c405bbda83df4a5ae62432d",
+  "offsets": [
+    "0000000000000000_0000000000000001",
+    "0000000000000000_0000000000000002",
+    "0000000000000000_0000000000000003",
+    "0000000000000000_0000000000000004",
+    "0000000000000000_0000000000000005",
+    "0000000000000000_0000000000000006",
+    "0000000000000000_0000000000000007",
+    "0000000000000000_0000000000000008",
+    "0000000000000000_0000000000000009",
+    "0000000000000000_0000000000000010",
+    "0000000000000000_0000000000000011",
+    "0000000000000000_0000000000000012",
+    "0000000000000000_0000000000000013"
+  ],
+  "perPrefixDigests": [
+    {
+      "index": 1,
+      "offset": "0000000000000000_0000000000000001",
+      "stateDigest": "sha256:1f4c1aae1063eb438b699a4ee31259ba5858a533bec3817d8348a196b2d280c2"
+    },
+    {
+      "index": 2,
+      "offset": "0000000000000000_0000000000000002",
+      "stateDigest": "sha256:ed9bf2703be73bfc1aaea07a19658aebee0b9ba57a3d6e8e96b0252bcf3fb3ab"
+    },
+    {
+      "index": 3,
+      "offset": "0000000000000000_0000000000000003",
+      "stateDigest": "sha256:5c816ff104fa0c6c9b09207bd41b0cb8bc7e859a72dcf99b98795b6bf1fbce70"
+    },
+    {
+      "index": 4,
+      "offset": "0000000000000000_0000000000000004",
+      "stateDigest": "sha256:0485a5d05853febac7bc4ae28751cd5039fb7bd6dc8c63f898ff6abd6a7b3b8a"
+    },
+    {
+      "index": 5,
+      "offset": "0000000000000000_0000000000000005",
+      "stateDigest": "sha256:630ee1f6ccae343fecc7ad0d3f40167d6cd0b0dc5ade843967eb68a6afab861e"
+    },
+    {
+      "index": 6,
+      "offset": "0000000000000000_0000000000000006",
+      "stateDigest": "sha256:3eefeab49d4784d010b92e0d84ec4a31b860f93700b30bbf90111ba29f4e7e5c"
+    },
+    {
+      "index": 7,
+      "offset": "0000000000000000_0000000000000007",
+      "stateDigest": "sha256:7af45fbe9da4a761495a7f02a5d33ff07dff31352e668a5a86fe0c24c02c9beb"
+    },
+    {
+      "index": 8,
+      "offset": "0000000000000000_0000000000000008",
+      "stateDigest": "sha256:ab164836a664e7fd9067e746c8bd5e682ec30420565aeff76e61c3f6f049e918"
+    },
+    {
+      "index": 9,
+      "offset": "0000000000000000_0000000000000009",
+      "stateDigest": "sha256:c27e7718ab4710a7d75f920ae4ddfb16866edae65f51aff31d0ccc4668aa12bc"
+    },
+    {
+      "index": 10,
+      "offset": "0000000000000000_0000000000000010",
+      "stateDigest": "sha256:2991b02ff112079f78539df32f3e6acf0f5d35ee6337e97de0ae9dcdfdcdf3e6"
+    },
+    {
+      "index": 11,
+      "offset": "0000000000000000_0000000000000011",
+      "stateDigest": "sha256:cad64b8e5376d7349e584da23b8ba43ab85b4e0cbb4a844a01dfb7be6a39e9b6"
+    },
+    {
+      "index": 12,
+      "offset": "0000000000000000_0000000000000012",
+      "stateDigest": "sha256:f60ab1335aa8be2abe6b9a14b1f5642351930f8cec04b5a09dd7221b3ad67bfd"
+    },
+    {
+      "index": 13,
+      "offset": "0000000000000000_0000000000000013",
+      "stateDigest": "sha256:b89894bc917a4d355b9582cd40cce01cbcf81c519c405bbda83df4a5ae62432d"
+    }
+  ],
+  "records": 13,
+  "replayedTwiceWithIdenticalBytes": true,
+  "authorityRebuild": {
+    "membershipsRecovered": 4,
+    "projectionsDeletedBeforeAuthorization": true,
+    "authorizedFromReplayedMembershipsAfterProjectionDeletion": true,
+    "source": "fresh replay finalState.entities.memberships",
+    "result": "PASS"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "actionKey": "scripted-side-effect-capstone",
+  "attempts": [
+    {
+      "attemptId": "at_c8722a5ec004d63cf9e45fa53a",
+      "attemptNumber": 1,
+      "leaseGeneration": 1,
+      "status": "leased"
+    },
+    {
+      "attemptId": "at_8313d0aa0aecdae10e13ccce0b",
+      "attemptNumber": 2,
+      "leaseGeneration": 2,
+      "status": "leased"
+    }
+  ],
+  "budget": {
+    "aggregateMaxTotalTokens": 200,
+    "maxAttempts": 3,
+    "maxTotalTokens": 200
+  },
+  "crash": {
+    "code": "RUN_CONTROL_INVALID_STATE",
+    "detail": "simulated crash after side effect before acknowledgement"
+  },
+  "replayResult": {
+    "actionKey": "scripted-side-effect-capstone",
+    "performed": false,
+    "result": "replayed"
+  },
+  "retrySchedule": {
+    "attemptNumber": 2,
+    "backoffMs": 10,
+    "failureCode": "scripted-process-crash",
+    "nextAttemptAtMs": 1786320000013,
+    "reason": "retryable",
+    "retry": true,
+    "scheduleId": "rtry_e4f1520d0dfe9a301a7397eff1"
+  },
+  "sideEffects": 1,
+  "totalUsage": {
+    "costUsdCents": 1,
+    "inputTokens": 4,
+    "outputBytes": 16,
+    "outputTokens": 2,
+    "totalTokens": 6,
+    "wallTimeMs": 5
+  }
+}

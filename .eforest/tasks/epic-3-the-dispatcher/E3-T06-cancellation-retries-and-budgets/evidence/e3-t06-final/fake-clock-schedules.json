@@ -1,0 +1,21 @@
+{
+  "retry": {
+    "backoffMs": 10,
+    "firstFailureAtMs": 10,
+    "nextAttemptAtMs": 20,
+    "retryable": true,
+    "retryReadyAtMs": 20
+  },
+  "authorityAndProcess": {
+    "cancelAtMs": 12,
+    "deadlineAtMs": 100,
+    "deadlineObservedAtMs": 101,
+    "agentRevokedAtMs": 15,
+    "leaseLostAtMs": 14
+  },
+  "terminalRace": {
+    "racedAtMs": 20,
+    "deadlineAtMs": 100,
+    "timeoutCandidateAtMs": 101
+  }
+}

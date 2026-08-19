@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T05",
+  "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+  "records": [
+    {
+      "offset": "0000000000000000_0000000000000001",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "fixtureId": "fixture-alpha",
+          "value": "alpha"
+        },
+        "eventId": "ev_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventType": "ledger.fixture-recorded",
+        "idempotencyKey": "ik_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-01-01T00:00:00.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000002",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "entityType": "channel",
+          "id": "channel-alpha",
+          "revision": 1,
+          "value": {
+            "name": "general",
+            "private": false
+          }
+        },
+        "eventId": "ev_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "eventType": "workspace.directory.updated",
+        "idempotencyKey": "ik_ffffffffffffffffffffffffff",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-01-01T00:00:00.001Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000003",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "messageId": "message-alpha",
+          "text": "hello from the replay fixture"
+        },
+        "eventId": "ev_cccccccccccccccccccccccccc",
+        "eventType": "channel.message.created",
+        "idempotencyKey": "ik_gggggggggggggggggggggggggg",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-01-01T00:00:00.002Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000004",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "config": {
+            "harness": "codex",
+            "name": "Ada"
+          },
+          "revision": 1
+        },
+        "eventId": "ev_dddddddddddddddddddddddddd",
+        "eventType": "agent.config.revised",
+        "idempotencyKey": "ik_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-01-01T00:00:00.003Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000005",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "invocationId": "invocation-alpha",
+          "prompt": "summarize the fixture"
+        },
+        "eventId": "ev_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "eventType": "workspace.invocation.requested",
+        "idempotencyKey": "ik_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-01-01T00:00:00.004Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000006",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "from": null,
+          "invocationId": "invocation-alpha",
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "to": "queued"
+        },
+        "eventId": "ev_ffffffffffffffffffffffffff",
+        "eventType": "run.lifecycle.changed",
+        "idempotencyKey": "ik_mmmmmmmmmmmmmmmmmmmmmmmmmm",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-01-01T00:00:00.005Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000007",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "from": "queued",
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "to": "running"
+        },
+        "eventId": "ev_gggggggggggggggggggggggggg",
+        "eventType": "run.lifecycle.changed",
+        "idempotencyKey": "ik_nnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-01-01T00:00:00.006Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000008",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "connectionId": "cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff",
+          "metadata": {
+            "destination": "github",
+            "policyRevision": 1
+          },
+          "revision": 1
+        },
+        "eventId": "ev_hhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "eventType": "connection.config.revised",
+        "idempotencyKey": "ik_pppppppppppppppppppppppppp",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-01-01T00:00:00.007Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000009",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "action": "replay.completed",
+          "auditId": "audit-alpha",
+          "detail": {
+            "source": "golden-log"
+          },
+          "subjectId": "run-alpha"
+        },
+        "eventId": "ev_jjjjjjjjjjjjjjjjjjjjjjjjjj",
+        "eventType": "workspace.audit.recorded",
+        "idempotencyKey": "ik_qqqqqqqqqqqqqqqqqqqqqqqqqq",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-01-01T00:00:00.008Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000000_0000000000000010",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_dddddddddddddddddddddddddd",
+        "data": {
+          "projectionId": "px_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg",
+          "sequence": 1,
+          "sourceOffset": "0000000000000000_0000000000000009",
+          "sourceStream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+          "stateDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+        },
+        "eventId": "ev_mmmmmmmmmmmmmmmmmmmmmmmmmm",
+        "eventType": "projection.checkpointed",
+        "idempotencyKey": "ik_rrrrrrrrrrrrrrrrrrrrrrrrrr",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-01-01T00:00:00.009Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    }
+  ]
+}

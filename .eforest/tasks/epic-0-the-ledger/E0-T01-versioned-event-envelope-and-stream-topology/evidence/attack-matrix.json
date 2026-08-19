@@ -1,0 +1,142 @@
+[
+  {
+    "attack": "type-confusion:actorId",
+    "result": "refused",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_INVALID_ID",
+      "path": "$.actorId",
+      "detail": "principal id must be a string"
+    }
+  },
+  {
+    "attack": "type-confusion:causation",
+    "result": "refused",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_TYPE_MISMATCH",
+      "path": "$.causation",
+      "detail": "expected an object"
+    }
+  },
+  {
+    "attack": "type-confusion:correlationId",
+    "result": "refused",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_INVALID_ID",
+      "path": "$.correlationId",
+      "detail": "correlation id must be a string"
+    }
+  },
+  {
+    "attack": "type-confusion:data",
+    "result": "refused",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_TYPE_MISMATCH",
+      "path": "$.data",
+      "detail": "event data must be an object"
+    }
+  },
+  {
+    "attack": "type-confusion:eventId",
+    "result": "refused",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_INVALID_ID",
+      "path": "$.eventId",
+      "detail": "event id must be a string"
+    }
+  },
+  {
+    "attack": "type-confusion:eventType",
+    "result": "refused",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_INVALID_EVENT_TYPE",
+      "path": "$.eventType",
+      "detail": "event type is not registered for v1"
+    }
+  },
+  {
+    "attack": "type-confusion:idempotencyKey",
+    "result": "refused",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_INVALID_ID",
+      "path": "$.idempotencyKey",
+      "detail": "idempotency id must be a string"
+    }
+  },
+  {
+    "attack": "type-confusion:schemaVersion",
+    "result": "refused",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_INVALID_SCHEMA_VERSION",
+      "path": "$.schemaVersion",
+      "detail": "supported version is 1"
+    }
+  },
+  {
+    "attack": "type-confusion:serverTimestamp",
+    "result": "refused",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_INVALID_TIMESTAMP",
+      "path": "$.serverTimestamp",
+      "detail": "timestamp must be canonical UTC with millisecond precision"
+    }
+  },
+  {
+    "attack": "type-confusion:workspaceId",
+    "result": "refused",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_INVALID_ID",
+      "path": "$.workspaceId",
+      "detail": "invalid workspace id"
+    }
+  },
+  {
+    "attack": "extra-envelope-key",
+    "result": "refused",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_EXTRA_KEY",
+      "path": "$.unexpected",
+      "detail": "field is not allowed"
+    }
+  },
+  {
+    "attack": "unsafe-integer",
+    "result": "refused",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_INVALID_JSON_VALUE",
+      "path": "$.data.unsafe",
+      "detail": "integer exceeds the safe JSON range"
+    }
+  },
+  {
+    "attack": "invalid-unicode",
+    "result": "refused",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_INVALID_JSON_VALUE",
+      "path": "$.data.invalidUnicode",
+      "detail": "string contains an unpaired high surrogate"
+    }
+  },
+  {
+    "attack": "invalid-utf8",
+    "result": "refused",
+    "error": {
+      "name": "LedgerValidationError",
+      "code": "LEDGER_INVALID_JSON",
+      "path": "$",
+      "detail": "encoded envelope is not valid UTF-8"
+    }
+  }
+]

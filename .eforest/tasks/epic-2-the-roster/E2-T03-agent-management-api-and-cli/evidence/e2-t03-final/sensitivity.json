@@ -1,0 +1,13 @@
+{
+  "mutation": "replace agent-management dispatch door with direct stream append",
+  "verifierDetectedMutant": true,
+  "directTargetAppendAbsent": true,
+  "experiment": {
+    "command": "E2_T03_SKIP_GATES=1 node scripts/verify-e2-t03.mjs",
+    "isolatedMutantModule": true,
+    "exitCode": 1,
+    "signal": null,
+    "observedNonZeroExit": true
+  },
+  "result": "PASS"
+}

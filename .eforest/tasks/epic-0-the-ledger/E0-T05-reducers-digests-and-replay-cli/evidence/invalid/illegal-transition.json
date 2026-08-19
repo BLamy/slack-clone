@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "task": "E0-T05",
+  "records": [
+    {
+      "offset": "0000000000000002_0000000000000003",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_cccccccccccccccccccccccccc",
+        "data": {
+          "from": null,
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "to": "queued"
+        },
+        "eventId": "ev_wwwwwwwwwwwwwwwwwwwwwwwwww",
+        "eventType": "run.lifecycle.changed",
+        "idempotencyKey": "ik_cccccccccccccccccccccccccc",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-03-01T00:00:00.000Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "offset": "0000000000000002_0000000000000004",
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "causation": null,
+        "correlationId": "cr_cccccccccccccccccccccccccc",
+        "data": {
+          "from": null,
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+          "to": "running"
+        },
+        "eventId": "ev_xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "eventType": "run.lifecycle.changed",
+        "idempotencyKey": "ik_dddddddddddddddddddddddddd",
+        "schemaVersion": 1,
+        "serverTimestamp": "2026-03-01T00:00:00.001Z",
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    }
+  ]
+}

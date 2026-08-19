@@ -1,0 +1,47 @@
+{
+  "attacks": [
+    {
+      "attack": "snapshot-foreign-workspace",
+      "invocationCount": 0,
+      "observedCode": "MENTION_RECONCILER_SNAPSHOT_REFUSED",
+      "refused": true
+    },
+    {
+      "attack": "snapshot-foreign-agent",
+      "invocationCount": 0,
+      "observedCode": "MENTION_RECONCILER_SNAPSHOT_REFUSED",
+      "refused": true
+    },
+    {
+      "attack": "snapshot-foreign-channel",
+      "invocationCount": 0,
+      "observedCode": "MENTION_RECONCILER_SNAPSHOT_REFUSED",
+      "refused": true
+    },
+    {
+      "attack": "snapshot-wrong-config-stream",
+      "invocationCount": 0,
+      "observedCode": "MENTION_RECONCILER_SNAPSHOT_REFUSED",
+      "refused": true
+    },
+    {
+      "attack": "snapshot-config-source-digest-mismatch",
+      "invocationCount": 0,
+      "observedCode": "MENTION_RECONCILER_SNAPSHOT_REFUSED",
+      "refused": true
+    },
+    {
+      "attack": "snapshot-missing-directory-source",
+      "invocationCount": 0,
+      "observedCode": "MENTION_RECONCILER_SNAPSHOT_REFUSED",
+      "refused": true
+    },
+    {
+      "attack": "snapshot-forged-digest",
+      "invocationCount": 0,
+      "observedCode": "INVOCATION_SNAPSHOT_DIGEST_MISMATCH",
+      "refused": true
+    }
+  ],
+  "result": "PASS"
+}

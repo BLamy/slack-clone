@@ -1,0 +1,20 @@
+{
+  "checked": true,
+  "files": [
+    "accepted-events.json",
+    "canary-scan.json",
+    "cold-clone-transcript.json",
+    "message-digests.json",
+    "provenance.json",
+    "redaction.json",
+    "refusal-heads.json",
+    "replay-digests.json",
+    "reply-receipts.json",
+    "sensitivity.json",
+    "stale-authority.json",
+    "verification-summary.json"
+  ],
+  "findings": [],
+  "leaked": false,
+  "transcriptChecked": true
+}

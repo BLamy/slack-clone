@@ -1,0 +1,1142 @@
+{
+  "canaryScan": {
+    "checked": true,
+    "files": [
+      "accepted-events.json",
+      "canary-scan.json",
+      "cold-clone-transcript.json",
+      "message-digests.json",
+      "provenance.json",
+      "redaction.json",
+      "refusal-heads.json",
+      "replay-digests.json",
+      "reply-receipts.json",
+      "sensitivity.json",
+      "stale-authority.json",
+      "verification-summary.json"
+    ],
+    "findings": [],
+    "leaked": false
+  },
+  "gates": [
+    {
+      "command": "pnpm format:check",
+      "durationMs": 11654,
+      "name": "format",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "durationMs": 9796,
+      "name": "lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "durationMs": 26467,
+      "name": "typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "durationMs": 35198,
+      "name": "tests",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm build",
+      "durationMs": 1731,
+      "name": "build",
+      "result": "PASS"
+    }
+  ],
+  "implementationCommit": "8bd740a611a6d671265cdfc90556e2c227b1bd2f",
+  "replay": "Replay: N/A (server reply dispatch contract) + mitigation: provenance manifests, lost-ack replay, stale-authority matrix, canary scan, and digests",
+  "result": "PASS",
+  "runId": "e3-t07-final-8bd740a",
+  "acceptedEvents": [
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "causation": {
+          "digest": "sha256:e291de58f4097100f8a87b6d6230de8253441c2441f9f7c378b07394d453cb39",
+          "offset": "0000000000000001_0000000000000000",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+        },
+        "correlationId": "cr_bbd101a330a62fe52d45e3ff63",
+        "data": {
+          "agentReplyProvenance": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+            "agentPrincipalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+            "attemptId": "at_1bbe05045d79d17710e1b57b16",
+            "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+            "contextDigest": "sha256:b13089b970e71db4c6aa3709cb56d1fbaa7714be9b6b2792874429a80440b9c3",
+            "contextRef": {
+              "digest": "sha256:b13089b970e71db4c6aa3709cb56d1fbaa7714be9b6b2792874429a80440b9c3",
+              "offset": "0000000000000009_0000000000000000",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+            },
+            "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "invocationRef": {
+              "digest": "sha256:3304655f0fa1e6b2520a74a9fc3399ea72b84ae3d033856116ac3b3c1570676a",
+              "offset": "0000000000000001_0000000000000000",
+              "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+            },
+            "leaseGeneration": 1,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "schemaVersion": 1,
+            "snapshotDigest": "sha256:05c4af1476719ef83f9e04c1017c0df35640f5aa070715d3c6c61e4abf2fab2d",
+            "snapshotRef": {
+              "digest": "sha256:3323a023aae1777006d5262dfaa26594f6f1123e0599cdc19760ad92f3ca937a",
+              "offset": "0000000000000001_0000000000000000",
+              "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+            },
+            "sourceMention": {
+              "digest": "sha256:e291de58f4097100f8a87b6d6230de8253441c2441f9f7c378b07394d453cb39",
+              "offset": "0000000000000001_0000000000000000",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+            },
+            "threadRootMessageId": "root-message"
+          },
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "contentType": "text/plain",
+          "messageId": "msg_71b25efa669642ad71c7d7bd93",
+          "rootMessageId": "root-message",
+          "text": "A bounded answer from the agent.",
+          "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
+        },
+        "eventType": "channel.message.replied",
+        "idempotencyKey": "ik_de186944218a74df3fd2092c8f",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_bbd101a330a62fe52d45e3ff63",
+        "serverTimestamp": "2026-08-08T00:00:00.001Z"
+      },
+      "name": "happy"
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "causation": {
+          "digest": "sha256:e291de58f4097100f8a87b6d6230de8253441c2441f9f7c378b07394d453cb39",
+          "offset": "0000000000000001_0000000000000000",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+        },
+        "correlationId": "cr_bbd101a330a62fe52d45e3ff63",
+        "data": {
+          "agentReplyProvenance": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+            "agentPrincipalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+            "attemptId": "at_1bbe05045d79d17710e1b57b16",
+            "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+            "contextDigest": "sha256:b13089b970e71db4c6aa3709cb56d1fbaa7714be9b6b2792874429a80440b9c3",
+            "contextRef": {
+              "digest": "sha256:b13089b970e71db4c6aa3709cb56d1fbaa7714be9b6b2792874429a80440b9c3",
+              "offset": "0000000000000009_0000000000000000",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+            },
+            "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "invocationRef": {
+              "digest": "sha256:3304655f0fa1e6b2520a74a9fc3399ea72b84ae3d033856116ac3b3c1570676a",
+              "offset": "0000000000000001_0000000000000000",
+              "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+            },
+            "leaseGeneration": 1,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "schemaVersion": 1,
+            "snapshotDigest": "sha256:05c4af1476719ef83f9e04c1017c0df35640f5aa070715d3c6c61e4abf2fab2d",
+            "snapshotRef": {
+              "digest": "sha256:3323a023aae1777006d5262dfaa26594f6f1123e0599cdc19760ad92f3ca937a",
+              "offset": "0000000000000001_0000000000000000",
+              "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+            },
+            "sourceMention": {
+              "digest": "sha256:e291de58f4097100f8a87b6d6230de8253441c2441f9f7c378b07394d453cb39",
+              "offset": "0000000000000001_0000000000000000",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+            },
+            "threadRootMessageId": "root-message"
+          },
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "contentType": "text/plain",
+          "messageId": "msg_71b25efa669642ad71c7d7bd93",
+          "rootMessageId": "root-message",
+          "text": "one durable reply",
+          "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
+        },
+        "eventType": "channel.message.replied",
+        "idempotencyKey": "ik_de186944218a74df3fd2092c8f",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_bbd101a330a62fe52d45e3ff63",
+        "serverTimestamp": "2026-08-08T00:00:00.001Z"
+      },
+      "name": "lost-ack-replay"
+    },
+    {
+      "event": {
+        "actorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "causation": {
+          "digest": "sha256:e291de58f4097100f8a87b6d6230de8253441c2441f9f7c378b07394d453cb39",
+          "offset": "0000000000000001_0000000000000000",
+          "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+        },
+        "correlationId": "cr_bbd101a330a62fe52d45e3ff63",
+        "data": {
+          "agentReplyProvenance": {
+            "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+            "agentPrincipalId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+            "attemptId": "at_1bbe05045d79d17710e1b57b16",
+            "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+            "contextDigest": "sha256:b13089b970e71db4c6aa3709cb56d1fbaa7714be9b6b2792874429a80440b9c3",
+            "contextRef": {
+              "digest": "sha256:b13089b970e71db4c6aa3709cb56d1fbaa7714be9b6b2792874429a80440b9c3",
+              "offset": "0000000000000009_0000000000000000",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+            },
+            "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "invocationRef": {
+              "digest": "sha256:3304655f0fa1e6b2520a74a9fc3399ea72b84ae3d033856116ac3b3c1570676a",
+              "offset": "0000000000000001_0000000000000000",
+              "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+            },
+            "leaseGeneration": 1,
+            "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "schemaVersion": 1,
+            "snapshotDigest": "sha256:05c4af1476719ef83f9e04c1017c0df35640f5aa070715d3c6c61e4abf2fab2d",
+            "snapshotRef": {
+              "digest": "sha256:3323a023aae1777006d5262dfaa26594f6f1123e0599cdc19760ad92f3ca937a",
+              "offset": "0000000000000001_0000000000000000",
+              "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+            },
+            "sourceMention": {
+              "digest": "sha256:e291de58f4097100f8a87b6d6230de8253441c2441f9f7c378b07394d453cb39",
+              "offset": "0000000000000001_0000000000000000",
+              "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+            },
+            "threadRootMessageId": "root-message"
+          },
+          "channelId": "ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+          "contentType": "text/plain",
+          "messageId": "msg_71b25efa669642ad71c7d7bd93",
+          "rootMessageId": "root-message",
+          "text": "&lt;script&gt;send([REDACTED_API_KEY])&lt;/script&gt;",
+          "authorId": "pr_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd"
+        },
+        "eventType": "channel.message.replied",
+        "idempotencyKey": "ik_de186944218a74df3fd2092c8f",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "eventId": "ev_bbd101a330a62fe52d45e3ff63",
+        "serverTimestamp": "2026-08-08T00:00:00.001Z"
+      },
+      "name": "redacted"
+    }
+  ],
+  "messageDigests": {
+    "acceptedEventSetDigest": "sha256:47628fa727835247780c06d233a281bad9414d826883707941b33754b9ba553f",
+    "acceptedScenarioCount": 3,
+    "scenarios": [
+      {
+        "eventDigest": "sha256:97514704f9bd6240d67d9dd547940aca9ea2ebdc6914264cacc19dc6e18bf29d",
+        "messageStateDigest": "sha256:2e8e542d0f04fd74f19622fbc3ce2a81f4d5298a4eb960d042f10e496716954d",
+        "name": "happy",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+      },
+      {
+        "eventDigest": "sha256:c939eb0003aa7ce0c1be3c37b45f6572983219e71810c93400e2089625b17c40",
+        "messageStateDigest": "sha256:0f8973d15587fbc6556e48ee60510ae60bbba3d1b159217a77e552fad4a297b2",
+        "name": "lost-ack-replay",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+      },
+      {
+        "eventDigest": "sha256:6d0265e5fecde969802118e9724aa1ad2f06fd4e1764f7532b95e6dd2707168d",
+        "messageStateDigest": "sha256:62b8a1190f7d7142d7fa061958472d275679915f8b38533322cf859fad4e0ec6",
+        "name": "redacted",
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+      }
+    ]
+  },
+  "provenance": {
+    "actorKind": "agent",
+    "derivedFields": [
+      "agentId",
+      "agentPrincipalId",
+      "attemptId",
+      "channelId",
+      "contextDigest",
+      "contextRef",
+      "invocationId",
+      "invocationRef",
+      "leaseGeneration",
+      "runId",
+      "schemaVersion",
+      "snapshotDigest",
+      "snapshotRef",
+      "sourceMention",
+      "threadRootMessageId"
+    ],
+    "rejectedOverrideFields": [
+      "actorId",
+      "attemptId",
+      "channelId",
+      "contextDigest",
+      "contextRef",
+      "invocationId",
+      "leaseGeneration",
+      "ownerId",
+      "snapshotDigest",
+      "snapshotRef",
+      "sourceMention",
+      "stream",
+      "threadRootMessageId"
+    ],
+    "invocationRef": {
+      "digest": "sha256:3304655f0fa1e6b2520a74a9fc3399ea72b84ae3d033856116ac3b3c1570676a",
+      "offset": "0000000000000001_0000000000000000",
+      "stream": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations"
+    },
+    "sourceMention": {
+      "digest": "sha256:e291de58f4097100f8a87b6d6230de8253441c2441f9f7c378b07394d453cb39",
+      "offset": "0000000000000001_0000000000000000",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+    },
+    "snapshotRef": {
+      "digest": "sha256:3323a023aae1777006d5262dfaa26594f6f1123e0599cdc19760ad92f3ca937a",
+      "offset": "0000000000000001_0000000000000000",
+      "stream": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config"
+    },
+    "contextRef": {
+      "digest": "sha256:b13089b970e71db4c6aa3709cb56d1fbaa7714be9b6b2792874429a80440b9c3",
+      "offset": "0000000000000009_0000000000000000",
+      "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+    },
+    "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "attemptId": "at_1bbe05045d79d17710e1b57b16",
+    "leaseGeneration": 1
+  },
+  "redaction": {
+    "canaryAbsentFromAcceptedChannel": true,
+    "escapedMarkup": true,
+    "rawSizeBounded": true,
+    "redacted": true,
+    "errorCanaryAbsent": true,
+    "refusalArtifactKeys": [
+      "agentId",
+      "agentPrincipalId",
+      "artifactId",
+      "attemptId",
+      "byteLength",
+      "channelId",
+      "contextRef",
+      "idempotencyKey",
+      "invocationId",
+      "kind",
+      "leaseGeneration",
+      "mediaType",
+      "outputDigest",
+      "outputRedacted",
+      "provenance",
+      "refusalCode",
+      "runId",
+      "schemaVersion",
+      "workspaceId"
+    ]
+  },
+  "refusalHeads": {
+    "refusalCount": 18,
+    "artifacts": [
+      {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "agentPrincipalId": null,
+        "artifactId": "art_d86d659849fca51d5af848e8ca",
+        "attemptId": "at_1bbe05045d79d17710e1b57b16",
+        "byteLength": 19,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": 1,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:1eca4068fe4b8c2f83a22dff7180ab7ac5eb04d0f7fa30f9707f8d982b6e63ef",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_DISPATCH_REFUSED",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_8664aef9473b2fef7cd4082e89"
+      },
+      {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "agentPrincipalId": null,
+        "artifactId": "art_86045b08de841982fc7ed36a2a",
+        "attemptId": "at_1bbe05045d79d17710e1b57b16",
+        "byteLength": 26,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": 1,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:858c8a1e58196c71025a5447f33766f952c7559327637aee0a81fae041b81860",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_DISPATCH_REFUSED",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_d16a4a291a3908562769ce1aee"
+      },
+      {
+        "agentId": null,
+        "agentPrincipalId": null,
+        "artifactId": "art_4cbb5c20518ff68ead86046c85",
+        "attemptId": null,
+        "byteLength": 9,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": null,
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": null,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:c9667237dbf23f939a7979cedb3513111d7449fc32e9a851a54c185f43507487",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_LEASE_INVALID",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_cdbc2eb7865b90b9e501c2d26d"
+      },
+      {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "agentPrincipalId": null,
+        "artifactId": "art_a0ee0877997c2717ec9ca36303",
+        "attemptId": "at_1bbe05045d79d17710e1b57b16",
+        "byteLength": 18,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": 1,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:d5a5dd3a87c77b4e915e200ef20345b46c4cd9c80a44fd6a6259dc0c142cebe9",
+        "outputRedacted": true,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_BUDGET_EXCEEDED",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_0779ec379b9d7889899ac2f4ed"
+      },
+      {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "agentPrincipalId": null,
+        "artifactId": "art_af130617630de7fc899a4ba112",
+        "attemptId": "at_1bbe05045d79d17710e1b57b16",
+        "byteLength": 11,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": 1,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:bcaebf5f64d81f1f42688daf57fe7b84c1ddb7de24e3614edfe3b5a71596357a",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_DISPATCH_REFUSED",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_1a26540eae08a46ae7bb4e1687"
+      },
+      {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "agentPrincipalId": null,
+        "artifactId": "art_25de0e69d979504c089faecad5",
+        "attemptId": "at_1bbe05045d79d17710e1b57b16",
+        "byteLength": 25,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": 1,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:3efb4cc751387ea3bc2eba23bd01f332fa3c0992375c40254b1d361c0c6ecb3d",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_DISPATCH_REFUSED",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_3a3a563367bb5d8f78526a9f32"
+      },
+      {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "agentPrincipalId": null,
+        "artifactId": "art_55cea711b49f90fd2db8731eb9",
+        "attemptId": "at_1bbe05045d79d17710e1b57b16",
+        "byteLength": 23,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": 1,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:36b0ebf8bc542dad7884baecf157885d00a50912e144193f965c6a2b84bf6949",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_MEMBERSHIP_INACTIVE",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_45bcdbeee3dd8489de960a2d84"
+      },
+      {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "agentPrincipalId": null,
+        "artifactId": "art_6b5769933a38dda58039b9688e",
+        "attemptId": "at_1bbe05045d79d17710e1b57b16",
+        "byteLength": 21,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": 1,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:fbeaea05ce31cc650f67ecdeb8fa124b7a3ca37ac98b3e46977524bc9e6fd0aa",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_CHANNEL_INACTIVE",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_a259611f5dc5ef225cf1bc6086"
+      },
+      {
+        "agentId": null,
+        "agentPrincipalId": null,
+        "artifactId": "art_f1d7312ed244ac102ec29f306f",
+        "attemptId": null,
+        "byteLength": 19,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": null,
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": null,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:271c58c321c4207c67dbe164240bb0f8886a606d17749334577739d73839896c",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_LEASE_INVALID",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_904dbb5768f91f9f74f2505cec"
+      },
+      {
+        "agentId": null,
+        "agentPrincipalId": null,
+        "artifactId": "art_06214111670cb33e0ad02b98c1",
+        "attemptId": null,
+        "byteLength": 24,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": null,
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": null,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:ed7943d100be42afd6723cecf3b8b7574387553bc2d2b61333575f794cbaca7d",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_LEASE_INVALID",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_ceb3fae48c2cac3289a8e645ce"
+      },
+      {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "agentPrincipalId": null,
+        "artifactId": "art_5890d20574d0c7d9963bc40ea4",
+        "attemptId": "at_1bbe05045d79d17710e1b57b16",
+        "byteLength": 29,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": 1,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:30c60f0691a9c855604ccd46b91603cba25583f539eab2757abe5c9add4e04d0",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_AUTHORITY_REVOKED",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_beb5a2690ac540f197f0321c80"
+      },
+      {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "agentPrincipalId": null,
+        "artifactId": "art_669c199183fe7f4e5b3b7c3d30",
+        "attemptId": "at_1bbe05045d79d17710e1b57b16",
+        "byteLength": 25,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": 1,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:10ee3a3ccc9b49e95d884024595bfc8d2e2a33d38a687d1f54947bcc4a1eb3b7",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_AGENT_INACTIVE",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_1358f44157751caf877ac4d8c5"
+      },
+      {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "agentPrincipalId": null,
+        "artifactId": "art_745397bce0f766d00c3cec5cef",
+        "attemptId": "at_1bbe05045d79d17710e1b57b16",
+        "byteLength": 35,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": 1,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:b5e6c0add793040393ffdfb7d484dd99f34024c515ee13156bb19eac28e18c40",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_SOURCE_INVALID",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_0f83e75e130c4e44bc3406b723"
+      },
+      {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "agentPrincipalId": null,
+        "artifactId": "art_f1ad678d22a1d95570e08e513d",
+        "attemptId": "at_1bbe05045d79d17710e1b57b16",
+        "byteLength": 28,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": 1,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:0b657bac049518312984b92661bfdb3fc6b0879d79b36bf3ae0131bbe1490f13",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_DISPATCH_REFUSED",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_46800c5f1a92ff7add904900ee"
+      },
+      {
+        "agentId": null,
+        "agentPrincipalId": null,
+        "artifactId": "art_91ac4ef95d115df3a7048b210d",
+        "attemptId": null,
+        "byteLength": 19,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": null,
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": null,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:df544e1d06b9e3689eabb789d4d95d6d16feea9981afe3659d5c64c0b8202de5",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_LEASE_INVALID",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_825232f7ad7406190148dc99b6"
+      },
+      {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "agentPrincipalId": null,
+        "artifactId": "art_4440cce6a70b375ddd7c7c1307",
+        "attemptId": "at_1bbe05045d79d17710e1b57b16",
+        "byteLength": 20,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": 1,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:fe9d75d23de5f135fc05cf9d718f59026016d33df8cbe8373279b72558fb04e3",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_RUN_TERMINAL",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_db8aa5b61da3efd48a43864696"
+      },
+      {
+        "agentId": null,
+        "agentPrincipalId": null,
+        "artifactId": "art_b109ce514de940f9cd799cbbb6",
+        "attemptId": null,
+        "byteLength": 19,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": null,
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": null,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:0e8a44cb26555b99e3f03fdc5d77d4c10b03a6e57c56009b305850e9e0782f6c",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_LEASE_INVALID",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_b55ba66c0397fa1ed30fe08913"
+      },
+      {
+        "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+        "agentPrincipalId": null,
+        "artifactId": "art_a5c5756c523baa9af282e6ac80",
+        "attemptId": "at_1bbe05045d79d17710e1b57b16",
+        "byteLength": 19,
+        "channelId": null,
+        "contextRef": null,
+        "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "agent-reply.refusal",
+        "leaseGeneration": 1,
+        "mediaType": "application/json",
+        "outputDigest": "sha256:7541abf88306208ab3b104d19f2e34576446a584f68dc068204ac7ad2c4dfbff",
+        "outputRedacted": false,
+        "provenance": null,
+        "refusalCode": "AGENT_REPLY_SOURCE_INVALID",
+        "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schemaVersion": 1,
+        "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "idempotencyKey": "ik_3398d64ca123d0d840e4398035"
+      }
+    ],
+    "allBoundToRuns": true
+  },
+  "replayDigests": {
+    "acceptedEventSet": "sha256:47628fa727835247780c06d233a281bad9414d826883707941b33754b9ba553f",
+    "refusalHeads": "sha256:37854b766bb7ef4d15e25a73e67ee81d8ec48064d0561a81897806f8dcff0310",
+    "provenance": "sha256:c70331bbcd8f05dfc5bfa0b9615336478945e734396be911a079012b70604a70"
+  },
+  "replyReceipts": {
+    "acceptedCount": 3,
+    "lostAck": {
+      "first": "AGENT_REPLY_ACK_UNKNOWN",
+      "retry": "replayed",
+      "logicalChannelMessages": 1
+    },
+    "receipts": [
+      {
+        "eventDigest": "sha256:97514704f9bd6240d67d9dd547940aca9ea2ebdc6914264cacc19dc6e18bf29d",
+        "idempotencyKey": "ik_de186944218a74df3fd2092c8f",
+        "nextOffset": "0000000000000002_0000000000000000",
+        "replayed": false,
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+      },
+      {
+        "eventDigest": "sha256:c939eb0003aa7ce0c1be3c37b45f6572983219e71810c93400e2089625b17c40",
+        "idempotencyKey": "ik_de186944218a74df3fd2092c8f",
+        "nextOffset": "0000000000000002_0000000000000000",
+        "replayed": true,
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+      },
+      {
+        "eventDigest": "sha256:6d0265e5fecde969802118e9724aa1ad2f06fd4e1764f7532b95e6dd2707168d",
+        "idempotencyKey": "ik_de186944218a74df3fd2092c8f",
+        "nextOffset": "0000000000000002_0000000000000000",
+        "replayed": false,
+        "stream": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc"
+      }
+    ]
+  },
+  "staleAuthority": {
+    "cases": [
+      {
+        "artifact": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "agentPrincipalId": null,
+          "artifactId": "art_55cea711b49f90fd2db8731eb9",
+          "attemptId": "at_1bbe05045d79d17710e1b57b16",
+          "byteLength": 23,
+          "channelId": null,
+          "contextRef": null,
+          "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "kind": "agent-reply.refusal",
+          "leaseGeneration": 1,
+          "mediaType": "application/json",
+          "outputDigest": "sha256:36b0ebf8bc542dad7884baecf157885d00a50912e144193f965c6a2b84bf6949",
+          "outputRedacted": false,
+          "provenance": null,
+          "refusalCode": "AGENT_REPLY_MEMBERSHIP_INACTIVE",
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "idempotencyKey": "ik_45bcdbeee3dd8489de960a2d84"
+        },
+        "code": "AGENT_REPLY_MEMBERSHIP_INACTIVE",
+        "name": "membership-removed",
+        "channelAppends": 0
+      },
+      {
+        "artifact": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "agentPrincipalId": null,
+          "artifactId": "art_6b5769933a38dda58039b9688e",
+          "attemptId": "at_1bbe05045d79d17710e1b57b16",
+          "byteLength": 21,
+          "channelId": null,
+          "contextRef": null,
+          "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "kind": "agent-reply.refusal",
+          "leaseGeneration": 1,
+          "mediaType": "application/json",
+          "outputDigest": "sha256:fbeaea05ce31cc650f67ecdeb8fa124b7a3ca37ac98b3e46977524bc9e6fd0aa",
+          "outputRedacted": false,
+          "provenance": null,
+          "refusalCode": "AGENT_REPLY_CHANNEL_INACTIVE",
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "idempotencyKey": "ik_a259611f5dc5ef225cf1bc6086"
+        },
+        "code": "AGENT_REPLY_CHANNEL_INACTIVE",
+        "name": "channel-archived",
+        "channelAppends": 0
+      },
+      {
+        "artifact": {
+          "agentId": null,
+          "agentPrincipalId": null,
+          "artifactId": "art_f1d7312ed244ac102ec29f306f",
+          "attemptId": null,
+          "byteLength": 19,
+          "channelId": null,
+          "contextRef": null,
+          "invocationId": null,
+          "kind": "agent-reply.refusal",
+          "leaseGeneration": null,
+          "mediaType": "application/json",
+          "outputDigest": "sha256:271c58c321c4207c67dbe164240bb0f8886a606d17749334577739d73839896c",
+          "outputRedacted": false,
+          "provenance": null,
+          "refusalCode": "AGENT_REPLY_LEASE_INVALID",
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "idempotencyKey": "ik_904dbb5768f91f9f74f2505cec"
+        },
+        "code": "AGENT_REPLY_LEASE_INVALID",
+        "name": "agent-disabled",
+        "channelAppends": 0
+      },
+      {
+        "artifact": {
+          "agentId": null,
+          "agentPrincipalId": null,
+          "artifactId": "art_06214111670cb33e0ad02b98c1",
+          "attemptId": null,
+          "byteLength": 24,
+          "channelId": null,
+          "contextRef": null,
+          "invocationId": null,
+          "kind": "agent-reply.refusal",
+          "leaseGeneration": null,
+          "mediaType": "application/json",
+          "outputDigest": "sha256:ed7943d100be42afd6723cecf3b8b7574387553bc2d2b61333575f794cbaca7d",
+          "outputRedacted": false,
+          "provenance": null,
+          "refusalCode": "AGENT_REPLY_LEASE_INVALID",
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "idempotencyKey": "ik_ceb3fae48c2cac3289a8e645ce"
+        },
+        "code": "AGENT_REPLY_LEASE_INVALID",
+        "name": "workspace-suspended",
+        "channelAppends": 0
+      },
+      {
+        "artifact": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "agentPrincipalId": null,
+          "artifactId": "art_5890d20574d0c7d9963bc40ea4",
+          "attemptId": "at_1bbe05045d79d17710e1b57b16",
+          "byteLength": 29,
+          "channelId": null,
+          "contextRef": null,
+          "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "kind": "agent-reply.refusal",
+          "leaseGeneration": 1,
+          "mediaType": "application/json",
+          "outputDigest": "sha256:30c60f0691a9c855604ccd46b91603cba25583f539eab2757abe5c9add4e04d0",
+          "outputRedacted": false,
+          "provenance": null,
+          "refusalCode": "AGENT_REPLY_AUTHORITY_REVOKED",
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "idempotencyKey": "ik_beb5a2690ac540f197f0321c80"
+        },
+        "channelAppends": 0,
+        "code": "AGENT_REPLY_AUTHORITY_REVOKED",
+        "name": "workspace-status-omitted"
+      },
+      {
+        "artifact": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "agentPrincipalId": null,
+          "artifactId": "art_669c199183fe7f4e5b3b7c3d30",
+          "attemptId": "at_1bbe05045d79d17710e1b57b16",
+          "byteLength": 25,
+          "channelId": null,
+          "contextRef": null,
+          "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "kind": "agent-reply.refusal",
+          "leaseGeneration": 1,
+          "mediaType": "application/json",
+          "outputDigest": "sha256:10ee3a3ccc9b49e95d884024595bfc8d2e2a33d38a687d1f54947bcc4a1eb3b7",
+          "outputRedacted": false,
+          "provenance": null,
+          "refusalCode": "AGENT_REPLY_AGENT_INACTIVE",
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "idempotencyKey": "ik_1358f44157751caf877ac4d8c5"
+        },
+        "channelAppends": 0,
+        "code": "AGENT_REPLY_AGENT_INACTIVE",
+        "name": "agent-status-omitted"
+      },
+      {
+        "artifact": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "agentPrincipalId": null,
+          "artifactId": "art_745397bce0f766d00c3cec5cef",
+          "attemptId": "at_1bbe05045d79d17710e1b57b16",
+          "byteLength": 35,
+          "channelId": null,
+          "contextRef": null,
+          "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "kind": "agent-reply.refusal",
+          "leaseGeneration": 1,
+          "mediaType": "application/json",
+          "outputDigest": "sha256:b5e6c0add793040393ffdfb7d484dd99f34024c515ee13156bb19eac28e18c40",
+          "outputRedacted": false,
+          "provenance": null,
+          "refusalCode": "AGENT_REPLY_SOURCE_INVALID",
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "idempotencyKey": "ik_0f83e75e130c4e44bc3406b723"
+        },
+        "channelAppends": 0,
+        "code": "AGENT_REPLY_SOURCE_INVALID",
+        "name": "source-stream-channel-mismatch"
+      },
+      {
+        "artifact": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "agentPrincipalId": null,
+          "artifactId": "art_f1ad678d22a1d95570e08e513d",
+          "attemptId": "at_1bbe05045d79d17710e1b57b16",
+          "byteLength": 28,
+          "channelId": null,
+          "contextRef": null,
+          "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "kind": "agent-reply.refusal",
+          "leaseGeneration": 1,
+          "mediaType": "application/json",
+          "outputDigest": "sha256:0b657bac049518312984b92661bfdb3fc6b0879d79b36bf3ae0131bbe1490f13",
+          "outputRedacted": false,
+          "provenance": null,
+          "refusalCode": "AGENT_REPLY_DISPATCH_REFUSED",
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "idempotencyKey": "ik_46800c5f1a92ff7add904900ee"
+        },
+        "code": "AGENT_REPLY_DISPATCH_REFUSED",
+        "name": "membership-removed-at-message-door",
+        "channelAppends": 0
+      },
+      {
+        "artifact": {
+          "agentId": null,
+          "agentPrincipalId": null,
+          "artifactId": "art_91ac4ef95d115df3a7048b210d",
+          "attemptId": null,
+          "byteLength": 19,
+          "channelId": null,
+          "contextRef": null,
+          "invocationId": null,
+          "kind": "agent-reply.refusal",
+          "leaseGeneration": null,
+          "mediaType": "application/json",
+          "outputDigest": "sha256:df544e1d06b9e3689eabb789d4d95d6d16feea9981afe3659d5c64c0b8202de5",
+          "outputRedacted": false,
+          "provenance": null,
+          "refusalCode": "AGENT_REPLY_LEASE_INVALID",
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "idempotencyKey": "ik_825232f7ad7406190148dc99b6"
+        },
+        "code": "AGENT_REPLY_LEASE_INVALID",
+        "name": "capability-expired",
+        "channelAppends": 0
+      },
+      {
+        "artifact": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "agentPrincipalId": null,
+          "artifactId": "art_4440cce6a70b375ddd7c7c1307",
+          "attemptId": "at_1bbe05045d79d17710e1b57b16",
+          "byteLength": 20,
+          "channelId": null,
+          "contextRef": null,
+          "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "kind": "agent-reply.refusal",
+          "leaseGeneration": 1,
+          "mediaType": "application/json",
+          "outputDigest": "sha256:fe9d75d23de5f135fc05cf9d718f59026016d33df8cbe8373279b72558fb04e3",
+          "outputRedacted": false,
+          "provenance": null,
+          "refusalCode": "AGENT_REPLY_RUN_TERMINAL",
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "idempotencyKey": "ik_db8aa5b61da3efd48a43864696"
+        },
+        "code": "AGENT_REPLY_RUN_TERMINAL",
+        "name": "terminal-run",
+        "channelAppends": 0
+      },
+      {
+        "artifact": {
+          "agentId": null,
+          "agentPrincipalId": null,
+          "artifactId": "art_b109ce514de940f9cd799cbbb6",
+          "attemptId": null,
+          "byteLength": 19,
+          "channelId": null,
+          "contextRef": null,
+          "invocationId": null,
+          "kind": "agent-reply.refusal",
+          "leaseGeneration": null,
+          "mediaType": "application/json",
+          "outputDigest": "sha256:0e8a44cb26555b99e3f03fdc5d77d4c10b03a6e57c56009b305850e9e0782f6c",
+          "outputRedacted": false,
+          "provenance": null,
+          "refusalCode": "AGENT_REPLY_LEASE_INVALID",
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "idempotencyKey": "ik_b55ba66c0397fa1ed30fe08913"
+        },
+        "code": "AGENT_REPLY_LEASE_INVALID",
+        "name": "lease-revoked",
+        "channelAppends": 0
+      },
+      {
+        "artifact": {
+          "agentId": "ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd",
+          "agentPrincipalId": null,
+          "artifactId": "art_a5c5756c523baa9af282e6ac80",
+          "attemptId": "at_1bbe05045d79d17710e1b57b16",
+          "byteLength": 19,
+          "channelId": null,
+          "contextRef": null,
+          "invocationId": "iv_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "kind": "agent-reply.refusal",
+          "leaseGeneration": 1,
+          "mediaType": "application/json",
+          "outputDigest": "sha256:7541abf88306208ab3b104d19f2e34576446a584f68dc068204ac7ad2c4dfbff",
+          "outputRedacted": false,
+          "provenance": null,
+          "refusalCode": "AGENT_REPLY_SOURCE_INVALID",
+          "runId": "rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_bbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "schemaVersion": 1,
+          "workspaceId": "ws_aaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "idempotencyKey": "ik_3398d64ca123d0d840e4398035"
+        },
+        "code": "AGENT_REPLY_SOURCE_INVALID",
+        "name": "cross-agent-source",
+        "channelAppends": 0
+      }
+    ],
+    "refusalCount": 12
+  },
+  "sensitivity": {
+    "controlExitCode": 0,
+    "controlPassed": true,
+    "mutationCount": 10,
+    "result": "PASS",
+    "results": [
+      {
+        "detected": true,
+        "label": "request-override-allowlist",
+        "verifierExitCode": 1
+      },
+      {
+        "detected": true,
+        "label": "current-membership-fence",
+        "verifierExitCode": 1
+      },
+      {
+        "detected": true,
+        "label": "terminal-run-fence",
+        "verifierExitCode": 1
+      },
+      {
+        "detected": true,
+        "label": "source-mention-fence",
+        "verifierExitCode": 1
+      },
+      {
+        "detected": true,
+        "label": "raw-output-budget",
+        "verifierExitCode": 1
+      },
+      {
+        "detected": true,
+        "label": "reducer-agent-kind",
+        "verifierExitCode": 1
+      },
+      {
+        "detected": true,
+        "label": "lost-ack-trusted-replay",
+        "verifierExitCode": 1
+      },
+      {
+        "detected": true,
+        "label": "reply-idempotency-provenance-drift",
+        "verifierExitCode": 1
+      },
+      {
+        "detected": true,
+        "label": "accepted-event-contract",
+        "verifierExitCode": 1
+      },
+      {
+        "detected": true,
+        "label": "message-door-membership-fence",
+        "verifierExitCode": 1
+      }
+    ],
+    "verifierDetectedMutant": true
+  }
+}

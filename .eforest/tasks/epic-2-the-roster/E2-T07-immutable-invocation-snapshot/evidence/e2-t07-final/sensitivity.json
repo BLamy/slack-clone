@@ -1,0 +1,37 @@
+{
+  "mutationCount": 5,
+  "mutations": [
+    {
+      "exitCode": 1,
+      "mutation": "bind config source digest to the wrong stream",
+      "result": "PASS",
+      "verifierDetectedMutant": true
+    },
+    {
+      "exitCode": 1,
+      "mutation": "remove connection grant source references",
+      "result": "PASS",
+      "verifierDetectedMutant": true
+    },
+    {
+      "exitCode": 1,
+      "mutation": "bind source manifest config to directory source",
+      "result": "PASS",
+      "verifierDetectedMutant": true
+    },
+    {
+      "exitCode": 1,
+      "mutation": "bind workspace input source to config source",
+      "result": "PASS",
+      "verifierDetectedMutant": true
+    },
+    {
+      "exitCode": 1,
+      "mutation": "disable snapshot digest verification",
+      "result": "PASS",
+      "verifierDetectedMutant": true
+    }
+  ],
+  "result": "PASS",
+  "verifierDetectedMutant": true
+}

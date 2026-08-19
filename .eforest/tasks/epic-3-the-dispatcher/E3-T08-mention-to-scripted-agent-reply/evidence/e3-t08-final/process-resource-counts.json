@@ -1,0 +1,37 @@
+{
+  "cancellation": [
+    {
+      "activeChildren": 0,
+      "groupId": -70000,
+      "outputBytes": 32,
+      "pid": 70000,
+      "signals": [
+        "SIGTERM",
+        "SIGKILL"
+      ]
+    },
+    {
+      "activeChildren": 0,
+      "groupId": -70004,
+      "outputBytes": 16,
+      "pid": 70004,
+      "signals": [
+        "SIGTERM"
+      ]
+    }
+  ],
+  "revocation": [
+    {
+      "activeChildren": 0,
+      "groupId": -70000,
+      "outputBytes": 8,
+      "pid": 70000,
+      "signals": [
+        "SIGTERM",
+        "SIGKILL"
+      ]
+    }
+  ],
+  "survivorsAfterCancellation": 0,
+  "survivorsAfterRevocation": 0
+}

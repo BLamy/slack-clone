@@ -1,0 +1,124 @@
+{
+  "proofType": "single interrogable Replay Chromium session with same-session MP4",
+  "evidenceCommit": "2d40835e62f0e5663f7a9720a63637c2f8ffa3b7",
+  "applicationCommit": "d6abddc8908275931b73fcdd9c8b084353aad3b4",
+  "flowScript": "scripts/e0-t01-replay-flow.js",
+  "metadataFile": "scripts/e0-t01-replay-metadata.json",
+  "metadataSentinel": {
+    "contents": {},
+    "environmentVariable": "RECORD_REPLAY_METADATA_FILE",
+    "purpose": "The Replay runtime watches the initialized file path. The pinned @replayio/playwright@5.0.3 initializer likewise creates a literal {} file before exporting this path to Replay Chromium; the empty object is the sentinel state, not descriptive test metadata.",
+    "descriptiveMetadataEnvironmentVariable": "PLAYWRIGHT_REPLAY_METADATA"
+  },
+  "mode": "repository-mandated local Auth0 and Durable Streams emulators",
+  "commands": [
+    "pnpm dev",
+    "RECORD_REPLAY_METADATA_FILE=<repo>/scripts/e0-t01-replay-metadata.json PLAYWRIGHT_REPLAY_METADATA='<redacted title>' node <replayio-plugin>/scripts/browser-open.js http://127.0.0.1:5175/ --output <repo>/recordings/e0-t01-2d40835-final.mp4",
+    "npx --yes --package @playwright/cli playwright-cli -s=replayio-1785617243215 run-code --filename scripts/e0-t01-replay-flow.js",
+    "npx --yes --package @playwright/cli playwright-cli -s=replayio-1785617243215 console error",
+    "npx --yes --package @playwright/cli playwright-cli -s=replayio-1785617243215 requests",
+    "node <replayio-plugin>/scripts/browser-close.js --output <repo>/recordings/e0-t01-2d40835-final.mp4"
+  ],
+  "browser": {
+    "name": "Replay Chromium",
+    "buildId": "macOS-chromium-20260626-9aa456976e8d-bbef03887da6",
+    "playwrightSession": "replayio-1785617243215",
+    "startedAt": "2026-08-01T20:47:38.559Z"
+  },
+  "replay": {
+    "recordingId": "368a3b30-c22d-4dcd-b010-fb8803bd9406",
+    "url": "https://app.replay.io/recording/368a3b30-c22d-4dcd-b010-fb8803bd9406",
+    "recordingStatus": "finished",
+    "uploadStatus": "uploaded",
+    "listDurationMs": 49079,
+    "interrogationDurationMs": 49356,
+    "interrogable": true
+  },
+  "mp4": {
+    "path": "/Users/brettlamy/Dev/slack-clone/recordings/e0-t01-2d40835-final.mp4",
+    "mime": "video/mp4",
+    "codec": "h264",
+    "profile": "High",
+    "width": 1280,
+    "height": 720,
+    "frames": 588,
+    "bytes": 284018,
+    "durationSeconds": 19.6,
+    "sha256": "33fb975ea66928e5179a787ccb147af2d2506a29180266f8ba6d54fc373b4c9f",
+    "encoder": "ffmpeg",
+    "staleFrameCompression": {
+      "enabled": true,
+      "filter": "mpdecimate,setpts=(3*N)/(30*TB),fps=30",
+      "staleTimeScale": 3
+    }
+  },
+  "assertions": {
+    "publicLandingUrl": "http://127.0.0.1:5175/",
+    "protectedChatRedirectedToLogin": true,
+    "handledLoginError": "Wrong email or password.",
+    "authenticatedAs": "ada@example.test",
+    "runId": "msauf1ry",
+    "messageId": "bd39d94e-dc5b-4b12-a471-85ba7fc9bd57",
+    "cancelledDraftPersisted": false,
+    "handledEditError": {
+      "message": "simulated edit failure",
+      "transportStatus": 200,
+      "draftPreserved": "Failed Replay draft msauf1ry"
+    },
+    "recoveredConnectionState": "live",
+    "editedMessagePersisted": "Replay proof msauf1ry after durable edit",
+    "legacyIdentityAttack": {
+      "recordId": "legacy-msauf1ry",
+      "displayName": "Ada Lovelace",
+      "stableIdentityFields": "absent",
+      "editButtons": 0,
+      "patchStatus": 403
+    },
+    "flowConsoleErrors": 0,
+    "flowConsoleWarnings": 0,
+    "flowRequestFailures": 0,
+    "flowNonSuccessResponses": 0,
+    "playwrightCliConsoleErrors": 0,
+    "replayConsoleErrors": 0,
+    "replayConsoleWarnings": 0,
+    "replayUncaughtExceptions": 0,
+    "replayFailedNetworkRequests": 0
+  },
+  "streamComparisons": [
+    {
+      "phase": "after append",
+      "domOffset": "0000000000000000_0000000000000218",
+      "apiOffset": "0000000000000000_0000000000000218",
+      "domDigest": "sha256:fda0634eb6ecf36dfee27f1e3ae863767851b7f444f9ef76752e21681a7902ae",
+      "apiDigest": "sha256:fda0634eb6ecf36dfee27f1e3ae863767851b7f444f9ef76752e21681a7902ae",
+      "equal": true
+    },
+    {
+      "phase": "after durable edit",
+      "domOffset": "0000000000000000_0000000000000481",
+      "apiOffset": "0000000000000000_0000000000000481",
+      "domDigest": "sha256:836b98752916628eb5786f50ec5b1090e5dbee289af5fb94c578ff46108315f1",
+      "apiDigest": "sha256:836b98752916628eb5786f50ec5b1090e5dbee289af5fb94c578ff46108315f1",
+      "equal": true
+    },
+    {
+      "phase": "after legacy spoof refusal",
+      "domOffset": "0000000000000000_0000000000000659",
+      "apiOffset": "0000000000000000_0000000000000659",
+      "domDigest": "sha256:3298644cf0a115db55630fec88dca13ed18a6eeb33fb567c299e894e58885ba8",
+      "apiDigest": "sha256:3298644cf0a115db55630fec88dca13ed18a6eeb33fb567c299e894e58885ba8",
+      "equal": true
+    }
+  ],
+  "playwrightPageResponses": {
+    "failed": 0,
+    "observedStatuses": [200, 201, 302],
+    "redirectNote": "The Playwright page response listener saw the expected intermediate 302 protected-route authentication redirect; no page response was 400 or greater. Replay's request table reports terminal request entries and did not enumerate that intermediate redirect response."
+  },
+  "offPageApiContextChecks": {
+    "includedInPageOrReplayNetworkCounts": false,
+    "legacyIdentitySpoofPatchStatus": 403,
+    "reason": "The hostile PATCH was deliberately issued through Playwright APIRequestContext so the authenticated server authorization boundary could be asserted without creating a page resource error. Its expected 403 is asserted separately and is outside the zero-failed-page-request claim."
+  },
+  "replayInterrogation": "evidence/replay-interrogation.json"
+}

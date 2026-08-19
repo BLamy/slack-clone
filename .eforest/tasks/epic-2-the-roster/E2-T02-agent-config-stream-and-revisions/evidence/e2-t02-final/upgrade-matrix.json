@@ -1,0 +1,9 @@
+{
+  "from": 0,
+  "to": 1,
+  "deterministic": true,
+  "securityDefaultsInvented": false,
+  "configDigest": "sha256:985cb3cc8e3ddfb848768e8f058afad174135e97253eed9376953c0a820973c7",
+  "revisionId": "acr_71a1f33a701c17ce44c8446511f0f0445159919c9117c8e5144d5819d63819d3",
+  "result": "PASS"
+}

@@ -1,0 +1,29 @@
+{
+  "layers": {
+    "protocol": {
+      "path": "packages/protocol",
+      "mayImport": [],
+      "pure": true
+    },
+    "reducers": {
+      "path": "packages/reducers",
+      "mayImport": ["protocol"],
+      "pure": true
+    },
+    "durable-streams": {
+      "path": "packages/durable-streams",
+      "mayImport": ["protocol", "reducers"],
+      "pure": false
+    },
+    "services": {
+      "path": "packages/services",
+      "mayImport": ["protocol"],
+      "pure": false
+    },
+    "http": {
+      "path": "packages/http",
+      "mayImport": ["protocol"],
+      "pure": false
+    }
+  }
+}

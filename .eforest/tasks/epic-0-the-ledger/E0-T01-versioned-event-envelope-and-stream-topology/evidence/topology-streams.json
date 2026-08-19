@@ -1,0 +1,85 @@
+{
+  "topologyVersion": 1,
+  "streams": {
+    "workspaceDirectory": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/directory",
+    "channel": "channel:ch_aaaaaaaaaaaaaaaaaaaaaaaaaa_cccccccccccccccccccccccccc",
+    "agentConfig": "agent:ag_aaaaaaaaaaaaaaaaaaaaaaaaaa_dddddddddddddddddddddddddd/config",
+    "workspaceInvocations": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/invocations",
+    "run": "run:rn_aaaaaaaaaaaaaaaaaaaaaaaaaa_eeeeeeeeeeeeeeeeeeeeeeeeee",
+    "connectionConfig": "connection:cn_aaaaaaaaaaaaaaaaaaaaaaaaaa_ffffffffffffffffffffffffff/config",
+    "workspaceAudit": "workspace:ws_aaaaaaaaaaaaaaaaaaaaaaaaaa/audit",
+    "projection": "projection:px_aaaaaaaaaaaaaaaaaaaaaaaaaa_gggggggggggggggggggggggggg"
+  },
+  "attacks": [
+    {
+      "attack": "case",
+      "result": "refused",
+      "error": {
+        "name": "LedgerValidationError",
+        "code": "LEDGER_INVALID_ID",
+        "path": "$.workspaceId",
+        "detail": "invalid workspace id"
+      }
+    },
+    {
+      "attack": "traversal",
+      "result": "refused",
+      "error": {
+        "name": "LedgerValidationError",
+        "code": "LEDGER_INVALID_ID",
+        "path": "$.workspaceId",
+        "detail": "invalid workspace id"
+      }
+    },
+    {
+      "attack": "separator",
+      "result": "refused",
+      "error": {
+        "name": "LedgerValidationError",
+        "code": "LEDGER_INVALID_ID",
+        "path": "$.workspaceId",
+        "detail": "invalid workspace id"
+      }
+    },
+    {
+      "attack": "unicode-confusable",
+      "result": "refused",
+      "error": {
+        "name": "LedgerValidationError",
+        "code": "LEDGER_INVALID_ID",
+        "path": "$.workspaceId",
+        "detail": "invalid workspace id"
+      }
+    },
+    {
+      "attack": "percent-encoding",
+      "result": "refused",
+      "error": {
+        "name": "LedgerValidationError",
+        "code": "LEDGER_INVALID_ID",
+        "path": "$.workspaceId",
+        "detail": "invalid workspace id"
+      }
+    },
+    {
+      "attack": "sibling-resource",
+      "result": "refused",
+      "error": {
+        "name": "LedgerValidationError",
+        "code": "LEDGER_WORKSPACE_SCOPE_MISMATCH",
+        "path": "$.channelId",
+        "detail": "channel id belongs to a different workspace"
+      }
+    },
+    {
+      "attack": "sibling-source",
+      "result": "refused",
+      "error": {
+        "name": "LedgerValidationError",
+        "code": "LEDGER_WORKSPACE_SCOPE_MISMATCH",
+        "path": "$.stream",
+        "detail": "stream belongs to a different workspace"
+      }
+    }
+  ]
+}

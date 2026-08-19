@@ -370,8 +370,16 @@ export function materializeMessages(records) {
     if (record.dispatch !== undefined) {
       const projected = { ...record };
       delete projected.dispatch;
+      if (projected.deletedAt) {
+        messages.delete(record.id);
+        continue;
+      }
       messages.set(record.id, projected);
     } else {
+      if (record.deletedAt) {
+        messages.delete(record.id);
+        continue;
+      }
       messages.set(record.id, record);
     }
   }

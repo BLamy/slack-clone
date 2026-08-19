@@ -1,4 +1,5 @@
 import {
+  createDeletedMessage,
   createEditedMessage,
   createMessageRecord,
   httpError,
@@ -193,6 +194,75 @@ export function createChatService({
     }
   }
 
+  async function deleteMessage(
+    roomId,
+    rawMessageId,
+    user,
+    { idempotencyKey } = {},
+  ) {
+    const messageId = normalizeMessageId(rawMessageId);
+    const stream = normalizeRoomId(roomId);
+    const actorId = String(user.sub ?? "");
+    const snapshot = await streamStore.read(roomId, "-1");
+    assertRoomActive(snapshot.records);
+    const existing = idempotencyKey
+      ? findExistingMessage(snapshot.records, {
+          actorId,
+          idempotencyKey,
+          messageId,
+          operation: "chat.message.delete",
+          room: stream,
+        })
+      : null;
+    const current = snapshot.records.findLast(
+      (record) => record?.id === messageId,
+    );
+    if (!current) throw httpError(404, "Message not found");
+    if (!messageOwnedBy(current, user)) {
+      throw httpError(403, "You can only delete your own messages");
+    }
+    if (current.deletedAt && !existing) {
+      throw httpError(409, "Message is already deleted");
+    }
+    const requestKey = idempotencyKey ?? toIdempotencyKey(randomId());
+    const seedKey = requestSeedKey({
+      actorId,
+      idempotencyKey: requestKey,
+      messageId,
+      operation: "chat.message.delete",
+      stream,
+      workspaceId,
+    });
+    const deleted =
+      existing ??
+      requestSeeds.get(seedKey) ??
+      createDeletedMessage({
+        current: withoutDispatch(current),
+        messageId,
+        timestamp: now(),
+      });
+    if (idempotencyKey && !existing) requestSeeds.set(seedKey, deleted);
+
+    try {
+      const result = await dispatch({
+        actorId,
+        expectedHead: snapshot.nextOffset,
+        idempotencyKey: requestKey,
+        operation: "chat.message.delete",
+        payload: deleted,
+        stream,
+        workspaceId,
+      });
+      return {
+        message: projectMessage(result.event ?? deleted),
+        nextOffset: result.receipt.nextOffset,
+        receipt: result.receipt,
+      };
+    } finally {
+      if (requestSeeds.get(seedKey) === deleted) requestSeeds.delete(seedKey);
+    }
+  }
+
   async function resetRoom(roomId, user, { idempotencyKey } = {}) {
     const stream = normalizeRoomId(roomId);
     const snapshot = await streamStore.read(stream, "-1");
@@ -219,6 +289,7 @@ export function createChatService({
     appendMessage,
     archiveRoom,
     closeStreams: streamStore.close,
+    deleteMessage,
     ensureStream: streamStore.ensure,
     followMessages: streamStore.follow,
     normalizeRoomId,
@@ -265,7 +336,7 @@ function findExistingMessage(records, expected) {
     !record ||
     record.room !== expected.room ||
     record.actorId !== expected.actorId ||
-    record.text !== expected.text ||
+    (expected.text !== undefined && record.text !== expected.text) ||
     (expected.messageId !== undefined && record.id !== expected.messageId)
   ) {
     return null;

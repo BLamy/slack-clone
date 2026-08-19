@@ -845,6 +845,30 @@ export function createChatHttpDelivery({
       return true;
     }
 
+    if (resource === "messages" && messageId && request.method === "DELETE") {
+      const remove = () =>
+        chatService.deleteMessage(room, messageId, user, {
+          idempotencyKey: idempotencyKey(request),
+        });
+      const result = workspaceAuthorization
+        ? await workspaceAuthorization.authorizeDispatch(
+            requestMetadata(request, url, { messageId, room }),
+            workspaceContext,
+            {
+              capability: "workspace.message.mutate",
+              dispatch: remove,
+            },
+          )
+        : await remove();
+      sendJson(response, 200, {
+        message: result.message,
+        nextOffset: result.nextOffset,
+        ok: true,
+        room,
+      });
+      return true;
+    }
+
     if (resource === "messages" && request.method === "DELETE") {
       const resetRoom = async () => {
         const reset = await chatService.resetRoom(room, user, {

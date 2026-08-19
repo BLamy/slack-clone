@@ -54,6 +54,7 @@ test("live HTTP handlers recheck membership before every chat capability", async
 
   assert.deepEqual(calls, {
     append: 0,
+    delete: 0,
     follow: 0,
     normalize: 5,
     read: 0,
@@ -108,6 +109,7 @@ test("live HTTP binding refuses sibling IDs, headers, streams, and body fields",
 
   assert.deepEqual(calls, {
     append: 0,
+    delete: 0,
     follow: 0,
     normalize: 2,
     read: 0,
@@ -162,6 +164,29 @@ test("a current member reaches the read and mutation handlers after the fence", 
   delivery.close();
 });
 
+test("a message-specific DELETE uses the owner-checked tombstone mutation", async () => {
+  const { delivery, calls } = createDelivery({ principalId: OWNER_A });
+  const response = createFakeResponse();
+  const path = "/api/rooms/demo/messages/message-1";
+
+  await delivery.handleApi(
+    createRequest({ method: "DELETE", path }),
+    response,
+    new URL(`http://app.test${path}`),
+  );
+
+  assert.equal(response.status, 200);
+  assert.deepEqual(JSON.parse(response.output.at(-1)), {
+    message: { deletedAt: "2026-08-01T00:00:00.000Z", id: "message-1" },
+    nextOffset: "offset-delete",
+    ok: true,
+    room: "demo",
+  });
+  assert.equal(calls.delete, 1);
+  assert.equal(calls.reset, 0);
+  delivery.close();
+});
+
 test("a non-draining SSE client cannot hold the workspace authorization fence", async () => {
   const { delivery } = createDelivery({ principalId: OWNER_A });
   let unblockSnapshot;
@@ -208,6 +233,7 @@ test("a non-draining SSE client cannot hold the workspace authorization fence", 
 function createDelivery({ principalId }) {
   const calls = {
     append: 0,
+    delete: 0,
     follow: 0,
     normalize: 0,
     read: 0,
@@ -253,6 +279,13 @@ function createDelivery({ principalId }) {
         return {
           message: { id: "message-1", text: "authorized" },
           nextOffset: "offset-1",
+        };
+      },
+      deleteMessage: async () => {
+        calls.delete += 1;
+        return {
+          message: { deletedAt: "2026-08-01T00:00:00.000Z", id: "message-1" },
+          nextOffset: "offset-delete",
         };
       },
       followMessages: async () => {

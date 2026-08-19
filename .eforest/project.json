@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "name": "stream-slack",
+  "description": "A Slack-shaped human and agent workspace whose source of truth is Durable Streams",
+  "status": "building",
+  "statusValues": ["building", "complete", "paused", "invalid_loop"],
+  "loop": "loop.md",
+  "tasks": "tasks",
+  "mainStream": null,
+  "statusReason": "Initial server-first E0-E11 backlog planned; no task has started.",
+  "updatedAt": "2026-07-31T00:00:00Z"
+}

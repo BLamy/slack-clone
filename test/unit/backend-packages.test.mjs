@@ -370,7 +370,11 @@ test("chat service preserves append and owner-only edit behavior", async () => {
       return { message: record, nextOffset: `offset-${appended.length}` };
     },
   };
-  const timestamps = ["2026-08-01T00:00:00.000Z", "2026-08-01T00:01:00.000Z"];
+  const timestamps = [
+    "2026-08-01T00:00:00.000Z",
+    "2026-08-01T00:01:00.000Z",
+    "2026-08-01T00:02:00.000Z",
+  ];
   const service = createChatService({
     dispatch: async ({ payload, stream }) => {
       const result = await streamStore.append(stream, payload);
@@ -404,6 +408,14 @@ test("chat service preserves append and owner-only edit behavior", async () => {
   );
   assert.equal(edited.message.text, "after");
   assert.equal(edited.message.editedAt, "2026-08-01T00:01:00.000Z");
+  await assert.rejects(
+    service.deleteMessage("demo", "message-1", { ...ada, sub: "auth0|linus" }),
+    (error) => error.statusCode === 403,
+  );
+  const deleted = await service.deleteMessage("demo", "message-1", ada);
+  assert.equal(deleted.message.text, "");
+  assert.equal(deleted.message.deletedAt, "2026-08-01T00:02:00.000Z");
+  assert.equal(materializeMessages(records).length, 0);
 });
 
 test("chat service reuses explicit idempotency payloads and dispatches room resets", async () => {
@@ -469,6 +481,20 @@ test("chat service reuses explicit idempotency payloads and dispatches room rese
   assert.deepEqual(retry.message, first.message);
   assert.equal(records.filter((record) => record.id).length, 1);
   assert.equal(timestampSequence, 1);
+
+  const deleteKey = "ik_00000000000000000000000004";
+  const deleted = await service.deleteMessage("demo", first.message.id, ada, {
+    idempotencyKey: deleteKey,
+  });
+  const deleteRetry = await service.deleteMessage(
+    "demo",
+    first.message.id,
+    ada,
+    { idempotencyKey: deleteKey },
+  );
+  assert.deepEqual(deleteRetry.message, deleted.message);
+  assert.equal(materializeMessages(records).length, 0);
+  assert.equal(records.filter((record) => record.deletedAt).length, 1);
 
   const reset = await service.resetRoom("demo", ada, {
     idempotencyKey: "ik_00000000000000000000000002",

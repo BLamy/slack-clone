@@ -70,6 +70,15 @@ export function createEditedMessage({ current, messageId, input, timestamp }) {
   };
 }
 
+export function createDeletedMessage({ current, messageId, timestamp }) {
+  return {
+    ...current,
+    id: messageId,
+    text: "",
+    deletedAt: timestamp,
+  };
+}
+
 export function httpError(statusCode, message) {
   const error = new Error(message);
   error.statusCode = statusCode;

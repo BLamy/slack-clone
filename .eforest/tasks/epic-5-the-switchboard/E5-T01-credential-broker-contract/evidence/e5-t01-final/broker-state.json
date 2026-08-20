@@ -25,6 +25,7 @@
       "secretRefDigest": "sha256:e78f69047244ef23be624c590ef03574e27c83489d7e9ebbe296971054edae0a",
       "issuedAt": "2026-08-19T17:00:00.000Z",
       "expiresAt": "2026-08-19T17:01:00.000Z",
+      "usedAt": "2026-08-19T17:00:00.000Z",
       "status": "revoked"
     }
   ],
@@ -79,8 +80,30 @@
     },
     {
       "schemaVersion": 1,
-      "eventId": "audit-00000000000000000000000000000009",
+      "eventId": "audit-00000000000000000000000000000008",
       "sequence": 3,
+      "timestamp": "2026-08-19T17:00:00.000Z",
+      "providerId": "infisical-agent-vault",
+      "providerMode": "local",
+      "type": "credential.capability.use.denied",
+      "capabilityId": "capability-00000000000000000000000000000001",
+      "binding": {
+        "schemaVersion": 1,
+        "tenantId": "tenant-alpha",
+        "workspaceId": "workspace-alpha",
+        "agentId": "agent-ada",
+        "runId": "run-e5-t01-0000000000000000000000000001",
+        "connectionId": "connection-github",
+        "operation": "github.issue.read",
+        "requestDigest": "sha256:4e23a0ea9d71f76f51f70f07503546534758f4b3ecabf6779d3c069fea4fd669"
+      },
+      "secretRefDigest": "sha256:e78f69047244ef23be624c590ef03574e27c83489d7e9ebbe296971054edae0a",
+      "reasonCode": "CREDENTIAL_BROKER_CAPABILITY_REPLAYED"
+    },
+    {
+      "schemaVersion": 1,
+      "eventId": "audit-00000000000000000000000000000010",
+      "sequence": 4,
       "timestamp": "2026-08-19T17:00:00.000Z",
       "providerId": "infisical-agent-vault",
       "providerMode": "local",
@@ -97,13 +120,13 @@
         "requestDigest": "sha256:4e23a0ea9d71f76f51f70f07503546534758f4b3ecabf6779d3c069fea4fd669"
       },
       "secretRefDigest": "sha256:e78f69047244ef23be624c590ef03574e27c83489d7e9ebbe296971054edae0a",
-      "providerOperationId": "vault-revoke-00000000000000000000000000000008",
+      "providerOperationId": "vault-revoke-00000000000000000000000000000009",
       "reason": "run-finished"
     },
     {
       "schemaVersion": 1,
-      "eventId": "audit-00000000000000000000000000000010",
-      "sequence": 4,
+      "eventId": "audit-00000000000000000000000000000011",
+      "sequence": 5,
       "timestamp": "2026-08-19T17:00:00.000Z",
       "providerId": "infisical-agent-vault",
       "providerMode": "local",

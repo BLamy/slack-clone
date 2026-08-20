@@ -8,7 +8,7 @@ Legend: `[ ]` pending · `[~]` in-progress · `[?]` implemented (awaiting advers
 
 ## Current gate
 
-1. **E5-T01** — Credential broker contract: Infisical Agent Proxy in production, Agent Vault locally, and no raw-secret orchestration path *(builder working)*
+1. **E5-T01** — Credential broker contract: Infisical Agent Proxy in production, Agent Vault locally, and no raw-secret orchestration path *(awaiting independent critic)*
 
 ## Next up (dependencies satisfied)
 
@@ -74,7 +74,7 @@ No new task may start until **E5-T01** clears the gate.
 
 ## Epic 5 — `epic-5-the-switchboard`
 
-- [~] ` 501` [E5-T01](epic-5-the-switchboard/E5-T01-credential-broker-contract/readme.md) — Credential broker contract: Infisical Agent Proxy in production, Agent Vault locally, and no raw-secret orchestration path *(deps: E3)*
+- [?] ` 501` [E5-T01](epic-5-the-switchboard/E5-T01-credential-broker-contract/readme.md) — Credential broker contract: Infisical Agent Proxy in production, Agent Vault locally, and no raw-secret orchestration path *(deps: E3)*
 - [ ] ` 502` [E5-T02](epic-5-the-switchboard/E5-T02-service-connection-secretref-model/readme.md) — Service connections and SecretRefs: replayable metadata without credential values *(deps: E5-T01)*
 - [ ] ` 503` [E5-T03](epic-5-the-switchboard/E5-T03-run-scoped-proxy-identities/readme.md) — Run-scoped proxy identities: least-privilege issuance, rotation, revocation, and replay resistance *(deps: E5-T02)*
 - [ ] ` 504` [E5-T04](epic-5-the-switchboard/E5-T04-cloudflare-os-proxy-bootstrap/readme.md) — Cloudflare OS credential-proxy bootstrap: attested Gatekeeper endpoint, no secret environment, and default-deny egress *(deps: E4-T05, E5-T03)*

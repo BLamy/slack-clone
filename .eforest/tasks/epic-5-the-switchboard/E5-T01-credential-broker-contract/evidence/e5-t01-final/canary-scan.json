@@ -3,11 +3,14 @@
   "filesChecked": [
     "audit-events.json",
     "broker-state.json",
+    "canary-scan.json",
     "cold-clone-transcript.json",
     "provider-mode-refusals.json",
     "replay-digests.json",
-    "sensitivity.json"
+    "sensitivity.json",
+    "verification-summary.json"
   ],
+  "environmentKeyCount": 59,
   "findings": [],
   "leaked": false
 }

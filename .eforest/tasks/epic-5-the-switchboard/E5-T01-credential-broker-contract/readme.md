@@ -3,7 +3,7 @@ id: E5-T01
 epic: 5
 title: "Credential broker contract: Infisical Agent Proxy in production, Agent Vault locally, and no raw-secret orchestration path"
 priority: 501
-status: in-progress
+status: implemented
 depends_on: [E3]
 estimate: L
 capstone: false
@@ -97,3 +97,32 @@ opaque, single-use, run-scoped handles to callers.
   permission-blocked. Rework addresses its actionable findings before a new verdict:
   live capability replay, production-like environment aliases, signed endpoint-bound
   attestation, complete literal private-IP coverage, and evidence scanning beyond JSON.
+
+### Builder — rework complete — 2026-08-19
+
+- Commit: `ea12807d9c7c2de34573f6339c3f7230fb7efb98`.
+- Commands: `pnpm format:check`; `pnpm lint`; `pnpm typecheck`; `pnpm test:unit`
+  (195 passed); `pnpm build`; `pnpm test:integration` (15 passed); and a detached cold
+  worktree replay with `make verify-E5-T01 TEST_RUN_ID=e5-t01-cold-final-rework`.
+- Local verifier: `make verify-E5-T01 TEST_RUN_ID=e5-t01-final-rework` passed twice-replay
+  parity with state digest
+  `sha256:285cb6db0df9df65fdbffbdb0a5cf38260802e2fb289cfe43e354682760bb013`, audit
+  digest `sha256:5b5a5b5e8f6c3872e12554f00c03da8cbb2936532cc3160a301621695a0a8e42`,
+  provider-mode refusals, cross-binding/request/live-replay sensitivity, and
+  `leaked: false` across all evidence files plus environment values.
+- Production hardening: local providers are rejected for production-like environments;
+  live capabilities are single-use and revoke remains idempotent after use; proxy
+  endpoints reject literal private, loopback, link-local, multicast, mapped, and
+  reserved IP forms; and signed attestations bind the provider key and endpoint digest.
+- Real gate: `make verify-E5-T01-real` exited 2 with `SKIPPED:` for missing explicit
+  Infisical Agent Proxy configuration, including its out-of-band attestation public key;
+  no Agent Vault or other fallback was used.
+- Evidence: `evidence/e5-t01-final/` and `evidence/e5-t01-real-skip/skipped.json`.
+  The committed evidence contains no canary plaintext.
+- Replay: N/A (headless credential broker) + mitigation: cold-clone state replay,
+  canary scans, provider-mode refusal fixtures, and gated real Infisical Agent Proxy
+  transcript.
+- Claim: E5-T01 rework is implemented and ready for a fresh critic. The public broker
+  exposes only opaque, tenant/workspace/agent/run/connection/operation/request-bound
+  capabilities; provider authentication and handles remain internal; and production
+  requires an explicitly injected transport plus a verified endpoint-bound attestation.

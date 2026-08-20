@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "task": "E5-T01",
-  "runId": "e5-t01-final-commit",
-  "implementationCommit": "6d8da0c7b20755cfb7adbc5b85641e6b98de16f7",
+  "runId": "e5-t01-final-rework",
+  "implementationCommit": "ea12807d9c7c2de34573f6339c3f7230fb7efb98",
   "result": "PASS",
-  "stateDigest": "sha256:cf6eebbae78c7dbf3447b060ec2d355a018d990628789a7e2e71955e521bb5ef",
-  "auditDigest": "sha256:1e69f64bb7b1939a41b9e900d81b2368df1eb2df953e9e1fde004412651ef043",
+  "stateDigest": "sha256:285cb6db0df9df65fdbffbdb0a5cf38260802e2fb289cfe43e354682760bb013",
+  "auditDigest": "sha256:5b5a5b5e8f6c3872e12554f00c03da8cbb2936532cc3160a301621695a0a8e42",
   "replayParity": {
     "stateDigestEqual": true,
     "auditDigestEqual": true,
@@ -36,6 +36,10 @@
       {
         "attack": "changed-request",
         "code": "CREDENTIAL_BROKER_CAPABILITY_REQUEST_MISMATCH"
+      },
+      {
+        "attack": "live-replay",
+        "code": "CREDENTIAL_BROKER_CAPABILITY_REPLAYED"
       }
     ]
   },
@@ -44,11 +48,14 @@
     "filesChecked": [
       "audit-events.json",
       "broker-state.json",
+      "canary-scan.json",
       "cold-clone-transcript.json",
       "provider-mode-refusals.json",
       "replay-digests.json",
-      "sensitivity.json"
-    ]
+      "sensitivity.json",
+      "verification-summary.json"
+    ],
+    "environmentKeyCount": 59
   },
   "replay": "Replay: N/A (headless credential broker) + mitigation: cold-clone state replay, canary scans, provider-mode refusal fixtures, and gated real Infisical Agent Proxy transcript"
 }

@@ -1,12 +1,13 @@
 {
   "schemaVersion": 1,
   "task": "E5-T01",
-  "runId": "e5-t01-real-missing-final",
+  "runId": "e5-t01-real-missing-final-rework",
   "result": "SKIPPED",
   "missing": [
     "INFISICAL_AGENT_PROXY_URL",
     "INFISICAL_AGENT_PROXY_AUTH_TOKEN",
     "INFISICAL_AGENT_PROXY_ATTESTATION_JSON",
+    "INFISICAL_AGENT_PROXY_ATTESTATION_PUBLIC_KEY",
     "E5_T01_TENANT_ID",
     "E5_T01_WORKSPACE_ID",
     "E5_T01_AGENT_ID",

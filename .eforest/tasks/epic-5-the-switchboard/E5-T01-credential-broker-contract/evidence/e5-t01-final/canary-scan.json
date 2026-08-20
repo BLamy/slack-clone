@@ -10,7 +10,7 @@
     "sensitivity.json",
     "verification-summary.json"
   ],
-  "environmentKeyCount": 59,
+  "environmentKeyCount": 58,
   "findings": [],
   "leaked": false
 }

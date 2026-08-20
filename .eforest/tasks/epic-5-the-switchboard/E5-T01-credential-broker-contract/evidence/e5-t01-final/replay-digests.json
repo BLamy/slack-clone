@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E5-T01",
-  "runId": "e5-t01-final-race",
-  "implementationCommit": "fd1128476f812a7144590a4203fa61b1e1d42403",
+  "runId": "e5-t01-final-redaction",
+  "implementationCommit": "ee86ef2bd5ffbb9e9373cd7e11e2a1e1ef057914",
   "replays": [
     {
       "label": "first",

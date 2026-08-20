@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: refuted
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -152,3 +152,56 @@ material and version policy; it is not a URI that clients can dereference themse
   negative-path probes.
 - Claim: the two critic findings are addressed and E5-T02 is ready for a fresh
   independent verdict.
+
+### Critic — second independent review — 2026-08-19
+
+- VERDICT: refuted.
+- Exact head: `31627f41ebe83b577fb82d13e61d651193f31719`; rework implementation commit:
+  `a0974dbc743870d4256aa89642fbf732567ce57d`. The checkout was clean before this
+  verification metadata change.
+- Commands: `pnpm format:check`; `pnpm format:check:e5-t02`; `pnpm lint`;
+  `pnpm typecheck`; `pnpm test` (204 unit and 15 integration/Playwright tests
+  passed); `pnpm build`; `git diff --check`; and
+  `make verify-E5-T02 TEST_RUN_ID=e5-t02-second-critic-20260819
+  TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/work/critic-second-20260819`.
+  All gates passed. The verifier reported state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`
+  and replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`.
+- Evidence: `evidence/e5-t02-critic-20260819-second/critic-summary.json` records
+  the independent probes, exact source locations, gate results, and sensitivity
+  mutation. Replay: N/A (server connection model) + mitigation: cold-clone reducer
+  replay, secret-shaped input corpus, authz matrix, exact lifecycle digests, and
+  independent negative-path probes.
+- Finding E5-T02-CRITIC-SECOND-001: using one `runId`, an independent probe captured
+  revision 1, rotated the connection, and captured the same run again at revision 2.
+  `captureForRun` constructs and freezes a new snapshot on each call but keeps no
+  run-to-revision binding ledger (`packages/connections/src/store.mjs:165-210`).
+  This refutes the exactly-one committed revision/TOCTOU race criterion even though
+  distinct run IDs and stale rotation attempts pass.
+- Finding E5-T02-CRITIC-SECOND-002: `normalizeConnectionEvent` accepted a synthetic
+  provider-token-shaped `eventId`, and `replayConnectionEvents` applied it. The event
+  normalizer validates opaque-id syntax but does not run the credential detector over
+  top-level event identifiers (`packages/connections/src/schema.mjs:286-364,727-735`),
+  leaving a raw credential-shaped value accepted at the event boundary.
+- Finding E5-T02-CRITIC-SECOND-003: an independent Ajv 2020 validation of the public
+  JSON Schema accepted nested uppercase token/authorization keys and values, an
+  uppercase URL, a JSON value with an uppercase secret key, an uppercase provider
+  token prefix, and a provider-token-shaped label. The schema patterns are
+  case-sensitive and `label` has no secret-shape constraint
+  (`packages/connections/src/schemas/connection-events.v1.schema.json:103-167,170-220`).
+  Lowercase provider-token/base64 controls, Unicode-confusable keys, and extra event,
+  created-data, and SecretRef fields were rejected.
+- Finding E5-T02-CRITIC-SECOND-004: in a detached exact-head worktree, removing the
+  provider-token regex from `CREDENTIAL_VALUE_PATTERNS` left
+  `make verify-E5-T02` green. The verifier's new provider-token fixture uses the
+  metadata key `encodedProviderToken`, so the key detector catches it and masks the
+  removed value-detector branch (`packages/connections/src/schema.mjs:34-43` and
+  `scripts/verify-e5-t02.mjs:290-341`). The targeted detector sensitivity claim is
+  therefore false for the reworked branch.
+- Independent requested attacks that survived: standard base64 generic and
+  provider-token-prefix values were rejected before append; JSON, URL, multiline key,
+  Unicode-confusable key, nested values, SecretRef/extra-field runtime checks, stale
+  rotation, disable/delete fencing, foreign-versus-unknown typed-error equality, and
+  duplicate/reordered replay parity all passed. These do not close the four findings
+  above. Status remains `refuted` pending rework and another fresh critic.

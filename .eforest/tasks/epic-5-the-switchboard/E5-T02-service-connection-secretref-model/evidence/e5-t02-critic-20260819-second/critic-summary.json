@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "verdict": "refuted",
+  "criticHead": "31627f41ebe83b577fb82d13e61d651193f31719",
+  "reworkImplementationCommit": "a0974dbc743870d4256aa89642fbf732567ce57d",
+  "evidenceHead": "31627f41ebe83b577fb82d13e61d651193f31719",
+  "worktree": "/tmp/slack-e5-t02.b2vnOc",
+  "verifier": {
+    "command": "make verify-E5-T02 TEST_RUN_ID=e5-t02-second-critic-20260819 TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/work/critic-second-20260819",
+    "result": "PASS",
+    "implementationCommitReportedByVerifier": "31627f41ebe83b577fb82d13e61d651193f31719",
+    "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f"
+  },
+  "gates": {
+    "format": "PASS",
+    "formatE5T02": "PASS",
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "unitTests": "204 passed",
+    "integrationTests": "15 passed",
+    "build": "PASS",
+    "gitDiffCheck": "PASS",
+    "browserReplay": "N/A (server connection model)"
+  },
+  "attacks": {
+    "standardBase64Generic": {
+      "result": "PASS",
+      "errorCode": "CONNECTION_CREDENTIAL_MATERIAL",
+      "appendedEvents": 0
+    },
+    "standardBase64ProviderTokenPrefix": {
+      "result": "PASS",
+      "errorCode": "CONNECTION_CREDENTIAL_MATERIAL",
+      "appendedEvents": 0
+    },
+    "jsonUrlMultilineUnicodeConfusableNested": {
+      "result": "PASS",
+      "errorCode": "CONNECTION_CREDENTIAL_MATERIAL",
+      "appendedEvents": 0
+    },
+    "schemaExtraFieldsRuntime": {
+      "result": "PASS",
+      "secretRefExtraCode": "CONNECTION_INVALID_SECRET_REF",
+      "connectionExtraCode": "CONNECTION_INVALID_REQUEST"
+    },
+    "rotationCaptureDisableDelete": {
+      "result": "PARTIAL",
+      "staleRotationCode": "CONNECTION_REVISION_CONFLICT",
+      "postDisableCaptureCode": "CONNECTION_NOT_ACTIVE",
+      "tombstoneRecorded": true,
+      "sameRunRevisionsAcrossRotation": [1, 2],
+      "sameRunBindingDigestsDistinct": true,
+      "source": [
+        "packages/connections/src/store.mjs:165-210"
+      ]
+    },
+    "foreignUnknownReadGrantRotateDisableDelete": {
+      "result": "PASS",
+      "typedError": "CONNECTION_NOT_FOUND",
+      "equalJson": true,
+      "stateDigestUnchanged": true,
+      "source": [
+        "packages/connections/src/store.mjs:347-367"
+      ]
+    },
+    "duplicateReorderedReplay": {
+      "result": "PASS",
+      "inputEvents": 4,
+      "uniqueEvents": 2,
+      "digestEqual": true,
+      "viewEqual": true,
+      "source": [
+        "packages/connections/src/reducer.mjs:55-92"
+      ]
+    },
+    "schemaOnly": {
+      "validator": "Ajv 2020 compiled packages/connections/src/schemas/connection-events.v1.schema.json",
+      "acceptedUnsafe": [
+        "nested-uppercase-token-key",
+        "nested-uppercase-authorization-value",
+        "uppercase-url-value",
+        "json-uppercase-confusable-value",
+        "uppercase-provider-token-value",
+        "provider-token-shaped-label"
+      ],
+      "rejectedControls": [
+        "lowercase-provider-token-control",
+        "generic-base64-control",
+        "unicode-confusable-key-control",
+        "extra-created-data-field-control",
+        "extra-secretref-field-control",
+        "extra-event-field-control"
+      ],
+      "source": [
+        "packages/connections/src/schemas/connection-events.v1.schema.json:103-167",
+        "packages/connections/src/schemas/connection-events.v1.schema.json:170-220"
+      ]
+    },
+    "eventBoundaryProviderTokenShapedId": {
+      "result": "REFUTED",
+      "accepted": true,
+      "replayAppliedEventIds": 1,
+      "shape": "lowercase ghp- prefix plus 32-character synthetic body",
+      "source": [
+        "packages/connections/src/schema.mjs:286-364",
+        "packages/connections/src/schema.mjs:727-735"
+      ]
+    }
+  },
+  "sensitivity": {
+    "mutation": "Removed the provider-token-prefix regex from CREDENTIAL_VALUE_PATTERNS in a detached exact-head worktree.",
+    "worktree": "/tmp/slack-e5-t02-sensitivity-2nd",
+    "install": "pnpm install --frozen-lockfile PASS",
+    "mutatedNormalizerControl": "A safe-key metadata value with the provider-token shape was accepted.",
+    "mutatedVerifierCommand": "make verify-E5-T02 TEST_RUN_ID=e5-t02-second-critic-sensitivity-provider-token TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/work/critic-second-20260819/sensitivity-provider-token",
+    "mutatedVerifierResult": "PASS (false negative)",
+    "reason": "The verifier's provider-token fixture uses metadata key encodedProviderToken, so the key detector rejects it even after the provider-token value detector branch is removed.",
+    "source": [
+      "packages/connections/src/schema.mjs:34-43",
+      "scripts/verify-e5-t02.mjs:290-341"
+    ]
+  },
+  "findings": [
+    {
+      "id": "E5-T02-CRITIC-SECOND-001",
+      "severity": "high",
+      "criterion": "Existing in-flight runs retain their captured revision and every run binds exactly one committed ref revision.",
+      "outcome": "The same runId captured revision 1 before rotation and revision 2 after rotation; captureForRun has no run binding ledger or idempotent same-run return.",
+      "source": [
+        "packages/connections/src/store.mjs:165-210"
+      ]
+    },
+    {
+      "id": "E5-T02-CRITIC-SECOND-002",
+      "severity": "high",
+      "criterion": "Raw credential values are rejected at every event boundary.",
+      "outcome": "normalizeConnectionEvent accepted a synthetic provider-token-shaped eventId and replay applied the event. The event normalizer validates identifier shape but does not call assertNoCredentialMaterial for top-level event identifiers.",
+      "source": [
+        "packages/connections/src/schema.mjs:286-364",
+        "packages/connections/src/schema.mjs:727-735"
+      ]
+    },
+    {
+      "id": "E5-T02-CRITIC-SECOND-003",
+      "severity": "high",
+      "criterion": "The public schema permits only non-secret metadata and labels.",
+      "outcome": "Schema-only Ajv validation accepted case-sensitive variants and a provider-token-shaped label because the JSON Schema patterns are case-sensitive and label has no secret-shape not constraint. Runtime normalization rejects the corresponding metadata cases, so this is a public schema boundary gap.",
+      "source": [
+        "packages/connections/src/schemas/connection-events.v1.schema.json:103-167",
+        "packages/connections/src/schemas/connection-events.v1.schema.json:170-220"
+      ]
+    },
+    {
+      "id": "E5-T02-CRITIC-SECOND-004",
+      "severity": "medium",
+      "criterion": "Removing one secret-shape detector branch makes verify-E5-T02 red.",
+      "outcome": "Removing the reworked provider-token detector branch left make verify-E5-T02 green; its provider-token fixture is caught by the metadata key detector instead.",
+      "source": [
+        "packages/connections/src/schema.mjs:34-43",
+        "scripts/verify-e5-t02.mjs:290-341"
+      ]
+    }
+  ],
+  "replayEvidence": "Replay: N/A (server connection model) + mitigation: cold-clone reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle digests, and independent negative-path probes"
+}

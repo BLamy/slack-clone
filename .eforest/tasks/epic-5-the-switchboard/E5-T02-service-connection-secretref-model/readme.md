@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: refuted
+status: implemented
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -1146,3 +1146,29 @@ material and version policy; it is not a URI that clients can dereference themse
 - Replay: N/A (server connection model) + mitigation: detached exact-head cold-clone
   reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle digests,
   independent runtime/store/public probes, and detector-sensitivity mutation.
+
+### Builder — layered percent-encoding rework — 2026-08-20
+
+- Commit: `c6b1297d219c4d5b0478ba96dae62e5df6202b5a`.
+- Rework: credential candidates now receive two bounded percent-decoding passes;
+  public-schema patterns cover mixed encoded prefixes/separators, encoded equals,
+  double-encoded assignments and JSON keys, percent-encoded URLs, and provider-token
+  prefixes. Ordinary percent text remains a positive control. Unit and verifier
+  fixtures cover the complete twelfth-critic attack set.
+- Commands: `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`; `pnpm test`
+  (209 unit and 15 integration/Playwright tests passed); and `pnpm build`.
+- Local verifier: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e5-t02-final-c6b1297-20260820
+  make verify-E5-T02` passed duplicate/reordered replay parity with state/replay
+  digest `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`, and
+  `leaked: false`.
+- Evidence: `evidence/e5-t02-final/` was regenerated against this exact commit; the
+  secret corpus includes layered percent encodings, percent URL/provider controls,
+  and the canary scan remains clean.
+- Replay: N/A (server connection model) + mitigation: cold-clone reducer replay,
+  secret-shaped input corpus, authz matrix, exact lifecycle digests, independent
+  schema/runtime boundary checks, Unicode-control matrix, positive percent control,
+  and detector-sensitivity mutation.
+- Claim: the twelfth critic's four layered percent-encoding findings are addressed.
+  E5-T02 is implemented and ready for another fresh critic.

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E5-T02",
-  "runId": "e5-t02-final-5ab7562-20260820",
-  "implementationCommit": "5ab7562c1a336ce33a92b9c0e70f543ce12ac640",
+  "runId": "e5-t02-final-c6b1297-20260820",
+  "implementationCommit": "c6b1297d219c4d5b0478ba96dae62e5df6202b5a",
   "result": "PASS",
   "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
   "replay": {
@@ -58,6 +58,11 @@
         "path": "$.connection.metadata.payload"
       },
       {
+        "name": "double-percent-json-key",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.payload"
+      },
+      {
         "name": "escaped-json",
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
         "path": "$.connection.metadata.payload"
@@ -76,6 +81,21 @@
         "name": "percent-client-secret-assignment",
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
         "path": "$.connection.metadata.assignment"
+      },
+      {
+        "name": "double-percent-client-secret-assignment",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      {
+        "name": "percent-url",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.endpoint"
+      },
+      {
+        "name": "percent-provider-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
       },
       {
         "name": "client-secret-prefixed-hyphen",

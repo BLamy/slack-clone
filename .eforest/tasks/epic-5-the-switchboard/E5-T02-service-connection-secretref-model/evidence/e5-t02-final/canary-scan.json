@@ -8,7 +8,8 @@
     "lifecycle-events.json",
     "replay-digests.json",
     "secret-corpus.json",
-    "sensitivity.json"
+    "sensitivity.json",
+    "verification-summary.json"
   ],
   "environmentKeyCount": 58,
   "findings": [],

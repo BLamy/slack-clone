@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: refuted
+status: implemented
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -125,3 +125,30 @@ material and version policy; it is not a URI that clients can dereference themse
   secret-shaped input corpus, authz matrix, exact lifecycle digests, and independent
   negative-path probes. Status remains `refuted` pending builder rework and a fresh
   critic.
+
+### Builder — rework complete — 2026-08-19
+
+- Commit: `a0974dbc743870d4256aa89642fbf732567ce57d`.
+- Rework: decoded standard-base64 values are checked against the complete provider-token
+  and private-key detector corpus before any append; the unit and verifier corpora now
+  include an independently generated base64 `ghp_`-shaped token. The public JSON schema
+  now recursively bounds metadata keys, values, arrays, integers, printable strings,
+  URLs, credential assignments, provider-token prefixes, private keys, and generic
+  base64-shaped strings.
+- Commands: `pnpm format:check`; `pnpm format:check:e5-t02`; `pnpm lint`;
+  `pnpm typecheck`; `pnpm test` (204 unit and 15 integration tests passed); and
+  `pnpm build`.
+- Local verifier: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e5-t02-rework-a0974db make
+  verify-E5-T02` passed with state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`, and
+  `leaked: false`.
+- Evidence: `evidence/e5-t02-final/` was regenerated against the rework commit;
+  `secret-corpus.json` records the new base64 provider-token case and zero appended
+  events.
+- Replay: N/A (server connection model) + mitigation: cold-clone reducer replay,
+  secret-shaped input corpus, authz matrix, exact lifecycle digests, and independent
+  negative-path probes.
+- Claim: the two critic findings are addressed and E5-T02 is ready for a fresh
+  independent verdict.

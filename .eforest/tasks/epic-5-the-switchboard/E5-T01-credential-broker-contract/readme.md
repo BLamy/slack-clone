@@ -3,7 +3,7 @@ id: E5-T01
 epic: 5
 title: "Credential broker contract: Infisical Agent Proxy in production, Agent Vault locally, and no raw-secret orchestration path"
 priority: 501
-status: implemented
+status: in-progress
 depends_on: [E3]
 estimate: L
 capstone: false
@@ -51,8 +51,8 @@ opaque, single-use, run-scoped handles to callers.
       and proves a second use fails. Missing real-provider configuration exits nonzero
       with `SKIPPED:` and never falls back.
 - [ ] Browser evidence is recorded exactly as `Replay: N/A (headless credential broker)
-      + mitigation: cold-clone state replay, canary scans, provider-mode refusal fixtures,
-      and gated real Infisical Agent Proxy transcript`.
+    + mitigation: cold-clone state replay, canary scans, provider-mode refusal fixtures,
+    and gated real Infisical Agent Proxy transcript`.
 
 ## Adversarial verification
 

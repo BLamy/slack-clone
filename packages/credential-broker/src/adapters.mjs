@@ -341,7 +341,7 @@ function isDisallowedIpv4(value) {
   if (octets.length !== 4 || octets.some((octet) => !Number.isInteger(octet))) {
     return true;
   }
-  const [first, second] = octets;
+  const [first, second, third] = octets;
   return (
     first === 0 ||
     first === 10 ||
@@ -350,8 +350,11 @@ function isDisallowedIpv4(value) {
     (first === 169 && second === 254) ||
     (first === 172 && second >= 16 && second <= 31) ||
     (first === 192 && second === 0) ||
+    (first === 192 && second === 88 && third === 99) ||
     (first === 192 && second === 168) ||
+    (first === 198 && second === 51) ||
     (first === 198 && second >= 18 && second <= 19) ||
+    (first === 203 && second === 0) ||
     first >= 224
   );
 }

@@ -19,6 +19,7 @@ export {
   normalizeDurationMs,
   normalizeOperation,
   normalizeProviderHandshake,
+  normalizeProviderOutcome,
   normalizeSecretRef,
   sha256,
   summarizeCapability,

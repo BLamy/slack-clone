@@ -8,6 +8,7 @@ import {
   createAgentVaultAdapter,
   createCredentialBroker,
   createInfisicalAgentProxyAdapter,
+  normalizeProviderOutcome,
   normalizeSecretRef,
   sha256,
 } from "@stream-slack/credential-broker";
@@ -233,6 +234,10 @@ test("production refuses Agent Vault and accepts only an attested Agent Proxy", 
     "https://[64:ff9b::169.254.169.254]",
     "https://100.64.0.1",
     "https://[fd00::1]",
+    "https://192.0.2.1",
+    "https://192.88.99.1",
+    "https://198.51.100.1",
+    "https://203.0.113.1",
   ]) {
     assert.throws(
       () =>
@@ -247,6 +252,25 @@ test("production refuses Agent Vault and accepts only an attested Agent Proxy", 
         CREDENTIAL_BROKER_ERROR_CODES.PROVIDER_ATTESTATION_INVALID,
     );
   }
+});
+
+test("provider request identifiers are digests, never plaintext metadata", () => {
+  assert.throws(
+    () =>
+      normalizeProviderOutcome({
+        accepted: true,
+        requestId: "synthetic-canary-value",
+      }),
+    (error) =>
+      error.code === CREDENTIAL_BROKER_ERROR_CODES.PROVIDER_RESPONSE_INVALID,
+  );
+  assert.deepEqual(
+    normalizeProviderOutcome({
+      accepted: true,
+      requestId: sha256("provider-request"),
+    }),
+    { accepted: true, requestId: sha256("provider-request") },
+  );
 });
 
 test("the production Agent Proxy adapter keeps provider auth and session handles internal", async () => {

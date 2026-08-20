@@ -440,7 +440,7 @@ export function normalizeProviderOutcome(value, context = "provider outcome") {
   for (const field of ["responseDigest", "requestId", "operationId"]) {
     if (value[field] !== undefined) {
       output[field] =
-        field === "responseDigest"
+        field === "responseDigest" || field === "requestId"
           ? normalizeDigest(
               value[field],
               field,

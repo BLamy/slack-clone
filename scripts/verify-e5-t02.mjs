@@ -290,6 +290,14 @@ function lifecycleFixture(label) {
 function secretCorpusFixture() {
   const attacks = [
     ["base64", { encoded: "c3VwZXItc2VjcmV0LXRva2VuLXZhbHVl" }],
+    [
+      "base64-provider-token",
+      {
+        encodedProviderToken: Buffer.from("ghp_" + "A".repeat(32)).toString(
+          "base64",
+        ),
+      },
+    ],
     ["json", { payload: '{"token":"e5-t02-connection-canary-value"}' }],
     ["url", { endpoint: "https://user:password@example.invalid/service" }],
     [

@@ -55,6 +55,13 @@ test("SecretRefs accept opaque broker identifiers and reject secret-shaped input
 test("connection metadata rejects encoded, URL, JSON, nested, and confusable secrets", () => {
   const attacks = [
     { metadata: { encoded: "c3VwZXItc2VjcmV0LXRva2VuLXZhbHVl" } },
+    {
+      metadata: {
+        encodedProviderToken: Buffer.from("ghp_" + "A".repeat(32)).toString(
+          "base64",
+        ),
+      },
+    },
     { metadata: { endpoint: "https://user:password@example.invalid" } },
     { metadata: { payload: '{"token":"raw-token-value"}' } },
     { metadata: { nested: { password: "raw-password" } } },

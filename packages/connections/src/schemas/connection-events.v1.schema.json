@@ -108,7 +108,64 @@
     },
     "metadata": {
       "type": "object",
-      "additionalProperties": true
+      "maxProperties": 64,
+      "propertyNames": {
+        "allOf": [
+          { "pattern": "^[A-Za-z][A-Za-z0-9._-]{0,63}$" },
+          {
+            "not": {
+              "pattern": "(?:password|secret|credential|authorization|cookie|bearer|token|private.?key|connection.?string|api[-_]?key)"
+            }
+          }
+        ]
+      },
+      "additionalProperties": { "$ref": "#/$defs/metadataValue" }
+    },
+    "metadataValue": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "boolean" },
+        {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "string",
+          "maxLength": 512,
+          "pattern": "^[^\\u0000-\\u001f\\u007f]*$",
+          "not": {
+            "anyOf": [
+              {
+                "pattern": "-----BEGIN [^-]*PRIVATE KEY-----"
+              },
+              { "pattern": "\\b(?:bearer|basic)\\s+[A-Za-z0-9._~+/=-]{8,}" },
+              {
+                "pattern": "\\b(?:sk|rk|pk|ghp|github_pat|xox[baprs])[-_][A-Za-z0-9._~+/=-]{8,}\\b"
+              },
+              {
+                "pattern": "(?:password|token|secret|api[-_]?key|private[-_ ]?key|cookie|authorization)\\s*[:=]"
+              },
+              {
+                "pattern": "\\b(?:https?|ssh|postgres(?:ql)?|mysql|redis|mongodb(?:\\+srv)?|amqp):\\/\\/\\S+"
+              },
+              {
+                "pattern": "(?:^|[\\s;])(?:host|user|username|password|port)\\s*=\\s*[^;]+"
+              },
+              { "pattern": "^[A-Za-z0-9+/]{24,}={0,2}$" },
+              {
+                "pattern": "[\\[{]\\s*[\"']?(?:password|token|secret|cookie|authorization)[\"']?\\s*[:=]"
+              }
+            ]
+          }
+        },
+        {
+          "type": "array",
+          "maxItems": 32,
+          "items": { "$ref": "#/$defs/metadataValue" }
+        },
+        { "$ref": "#/$defs/metadata" }
+      ]
     },
     "createdData": {
       "type": "object",

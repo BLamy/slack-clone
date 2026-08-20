@@ -665,9 +665,10 @@ function looksLikeCredentialValue(value) {
       const decoded = atob(value);
       if (
         /^[\x20-\x7e\r\n]+$/u.test(decoded) &&
-        /(?:secret|token|password|credential|cookie|authorization|https?:\/\/)/iu.test(
-          decoded,
-        )
+        (CREDENTIAL_VALUE_PATTERNS.some((pattern) => pattern.test(decoded)) ||
+          /(?:secret|token|password|credential|cookie|authorization|https?:\/\/)/iu.test(
+            decoded,
+          ))
       ) {
         return true;
       }

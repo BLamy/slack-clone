@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E5-T02",
-  "runId": "e5-t02-schema-parity-sensitive-20260820",
-  "implementationCommit": "9faf35526a5c9cdba0bff32c4359b365599e37b6",
+  "runId": "e5-t02-layered-provider-tokens-20260820",
+  "implementationCommit": "1ff772e2b6fc7380740cf6b17d1f3f0959a5365f",
   "entrypoint": "make verify-E5-T02",
   "result": "PASS",
   "fixture": "fresh in-memory connection stream with deterministic clock",

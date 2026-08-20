@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: refuted
+status: implemented
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -1442,3 +1442,32 @@ VERDICT: refuted
 - Status remains `refuted`; E5-T03 must not start until the public schema covers
   the independently found encoded token forms and another fresh critic reviews
   the exact rework.
+
+### Builder — layered provider-token parity rework — 2026-08-20
+
+- Commit: `1ff772e2b6fc7380740cf6b17d1f3f0959a5365f`.
+- Rework: the public schema now rejects the independently generated recursive
+  percent encoding for all `ghp`, `sk`, `rk`, `pk`, `github_pat`, and
+  `xox[baprs]` provider-token families, including mixed and double encoded
+  prefixes. Unit and verifier fixtures cover all ten families, while ordinary
+  percent text remains an accepted positive control.
+- Commands: `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`;
+  `pnpm test` (209 unit and 15 integration/Playwright tests passed);
+  `pnpm build`; `git diff --check`; and the independent 78-case
+  runtime/store/Ajv probe (zero findings) all passed.
+- Local verifier: `PROMOTE_EVIDENCE=1
+  TEST_RUN_ID=e5-t02-layered-provider-tokens-20260820 make verify-E5-T02`
+  passed at this exact commit with state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`,
+  duplicate/reordered parity, 51 public-schema/runtime/store rejected corpus
+  cases, one accepted ordinary percent-text case, and `leaked: false`.
+- Evidence: `evidence/e5-t02-final/` was regenerated against this exact commit,
+  including the public-schema parity, cold-clone, lifecycle, authorization,
+  sensitivity, and canary artifacts.
+- Replay: N/A (server connection model) + mitigation: promoted exact-head cold
+  reducer replay, runtime/store/Ajv parity corpus, lifecycle and authorization
+  matrix, canary scan, and disposable detector/schema sensitivity coverage.
+- Claim: the latest critic's 13 encoded provider-token parity findings are
+  addressed. E5-T02 is implemented and ready for a fresh independent critic.

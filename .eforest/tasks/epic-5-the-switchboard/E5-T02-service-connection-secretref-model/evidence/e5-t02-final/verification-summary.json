@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E5-T02",
-  "runId": "e5-t02-schema-parity-sensitive-20260820",
-  "implementationCommit": "9faf35526a5c9cdba0bff32c4359b365599e37b6",
+  "runId": "e5-t02-layered-provider-tokens-20260820",
+  "implementationCommit": "1ff772e2b6fc7380740cf6b17d1f3f0959a5365f",
   "result": "PASS",
   "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
   "replay": {
@@ -216,6 +216,56 @@
         "name": "authorization-field",
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
         "path": "$.connection.metadata.authorization"
+      },
+      {
+        "name": "double-percent-ghp-provider-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "double-percent-sk-provider-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "double-percent-rk-provider-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "double-percent-pk-provider-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "double-percent-github-pat-provider-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "double-percent-xoxb-provider-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "double-percent-xoxa-provider-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "double-percent-xoxp-provider-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "double-percent-xoxr-provider-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "double-percent-xoxs-provider-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
       }
     ],
     "appendedEvents": 0
@@ -262,9 +312,19 @@
       "nested-cookie",
       "connection-string",
       "private-key-field",
-      "authorization-field"
+      "authorization-field",
+      "double-percent-ghp-provider-token",
+      "double-percent-sk-provider-token",
+      "double-percent-rk-provider-token",
+      "double-percent-pk-provider-token",
+      "double-percent-github-pat-provider-token",
+      "double-percent-xoxb-provider-token",
+      "double-percent-xoxa-provider-token",
+      "double-percent-xoxp-provider-token",
+      "double-percent-xoxr-provider-token",
+      "double-percent-xoxs-provider-token"
     ],
-    "rejectedCount": 41,
+    "rejectedCount": 51,
     "ordinaryPercentText": {
       "runtimeAccepted": true,
       "publicSchemaAccepted": true,

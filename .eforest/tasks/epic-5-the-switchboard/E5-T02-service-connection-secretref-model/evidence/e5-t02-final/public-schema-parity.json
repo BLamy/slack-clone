@@ -40,9 +40,19 @@
     "nested-cookie",
     "connection-string",
     "private-key-field",
-    "authorization-field"
+    "authorization-field",
+    "double-percent-ghp-provider-token",
+    "double-percent-sk-provider-token",
+    "double-percent-rk-provider-token",
+    "double-percent-pk-provider-token",
+    "double-percent-github-pat-provider-token",
+    "double-percent-xoxb-provider-token",
+    "double-percent-xoxa-provider-token",
+    "double-percent-xoxp-provider-token",
+    "double-percent-xoxr-provider-token",
+    "double-percent-xoxs-provider-token"
   ],
-  "rejectedCount": 41,
+  "rejectedCount": 51,
   "ordinaryPercentText": {
     "runtimeAccepted": true,
     "publicSchemaAccepted": true,

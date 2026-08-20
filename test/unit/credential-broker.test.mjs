@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
+import { generateKeyPairSync, sign } from "node:crypto";
 import test from "node:test";
 
 import {
   CREDENTIAL_BROKER_ERROR_CODES,
+  canonicalJson,
   createAgentVaultAdapter,
   createCredentialBroker,
   createInfisicalAgentProxyAdapter,
@@ -31,6 +33,10 @@ const BINDING = {
     url: "https://api.github.com/issues",
   }),
 };
+const ATTESTATION_KEYS = generateKeyPairSync("rsa", { modulusLength: 2048 });
+const ATTESTATION_PUBLIC_KEY = ATTESTATION_KEYS.publicKey
+  .export({ type: "spki", format: "pem" })
+  .toString();
 
 test("local Agent Vault issues a run-bound capability without exposing the secret", async () => {
   const { broker, secretRef, idFactory } = makeLocalBroker();
@@ -80,6 +86,17 @@ test("revoke fences replay and changed request or binding", async () => {
       error.code === CREDENTIAL_BROKER_ERROR_CODES.CAPABILITY_REQUEST_MISMATCH,
   );
 
+  await broker.use(issued.capability, {
+    requestDigest: BINDING.requestDigest,
+    consumer: () => ({ accepted: true }),
+  });
+  await assert.rejects(
+    broker.use(issued.capability, {
+      requestDigest: BINDING.requestDigest,
+      consumer: () => ({ accepted: true }),
+    }),
+    (error) => error.code === CREDENTIAL_BROKER_ERROR_CODES.CAPABILITY_REPLAYED,
+  );
   const revoked = await broker.revoke(issued.capability, {
     reason: "run-finished",
   });
@@ -103,6 +120,14 @@ test("production refuses Agent Vault and accepts only an attested Agent Proxy", 
     (error) =>
       error.code === CREDENTIAL_BROKER_ERROR_CODES.LOCAL_PROVIDER_IN_PRODUCTION,
   );
+  for (const environment of ["prod", "production-eu", "staging"]) {
+    assert.throws(
+      () => createCredentialBroker({ provider, environment }),
+      (error) =>
+        error.code ===
+        CREDENTIAL_BROKER_ERROR_CODES.LOCAL_PROVIDER_IN_PRODUCTION,
+    );
+  }
 
   assert.throws(
     () =>
@@ -143,6 +168,42 @@ test("production refuses Agent Vault and accepts only an attested Agent Proxy", 
     (error) =>
       error.code === CREDENTIAL_BROKER_ERROR_CODES.PROVIDER_REQUEST_FAILED,
   );
+
+  const forgedKeys = generateKeyPairSync("rsa", { modulusLength: 2048 });
+  assert.throws(
+    () =>
+      createInfisicalAgentProxyAdapter({
+        endpoint: "https://proxy.example.test",
+        fetchFn: async () => {},
+        attestation: signAttestation(validAttestation(), forgedKeys.privateKey),
+        attestationPublicKey: ATTESTATION_PUBLIC_KEY,
+      }),
+    (error) =>
+      error.code === CREDENTIAL_BROKER_ERROR_CODES.PROVIDER_ATTESTATION_INVALID,
+  );
+
+  for (const endpoint of [
+    "https://127.0.0.2",
+    "https://127.1",
+    "https://0.0.0.0",
+    "https://[::1]",
+    "https://[::ffff:169.254.169.254]",
+    "https://100.64.0.1",
+    "https://[fd00::1]",
+  ]) {
+    assert.throws(
+      () =>
+        createInfisicalAgentProxyAdapter({
+          endpoint,
+          fetchFn: async () => {},
+          attestation: validAttestation(endpoint),
+          attestationPublicKey: ATTESTATION_PUBLIC_KEY,
+        }),
+      (error) =>
+        error.code ===
+        CREDENTIAL_BROKER_ERROR_CODES.PROVIDER_ATTESTATION_INVALID,
+    );
+  }
 });
 
 test("the production Agent Proxy adapter keeps provider auth and session handles internal", async () => {
@@ -167,6 +228,7 @@ test("the production Agent Proxy adapter keeps provider auth and session handles
   const provider = createInfisicalAgentProxyAdapter({
     endpoint: "https://proxy.example.test",
     attestation: validAttestation(),
+    attestationPublicKey: ATTESTATION_PUBLIC_KEY,
     authToken: "provider-auth-token-not-an-output",
     requestTimeoutMs: 1_000,
     fetchFn: async (url, init) => {
@@ -254,8 +316,8 @@ function sequentialIdFactory() {
   };
 }
 
-function validAttestation() {
-  return {
+function validAttestation(endpoint = "https://proxy.example.test") {
+  const unsigned = {
     schemaVersion: 1,
     providerId: "infisical-agent-proxy",
     mode: "production",
@@ -263,5 +325,27 @@ function validAttestation() {
     attested: true,
     nonProduction: false,
     attestationId: "attestation-0000000000000000000000000001",
+    keyId: "stream-slack-test-key",
+    endpointDigest: sha256(new URL(endpoint).toString().replace(/\/$/u, "")),
+  };
+  return {
+    ...unsigned,
+    signature: signAttestation(unsigned, ATTESTATION_KEYS.privateKey).signature,
+  };
+}
+
+function signAttestation(unsigned, privateKey) {
+  const payload = unsigned.signature
+    ? Object.fromEntries(
+        Object.entries(unsigned).filter(([key]) => key !== "signature"),
+      )
+    : unsigned;
+  return {
+    ...payload,
+    signature: sign(
+      "sha256",
+      Buffer.from(canonicalJson(payload)),
+      privateKey,
+    ).toString("base64"),
   };
 }

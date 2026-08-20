@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import {
@@ -20,6 +20,7 @@ const required = [
   "INFISICAL_AGENT_PROXY_URL",
   "INFISICAL_AGENT_PROXY_AUTH_TOKEN",
   "INFISICAL_AGENT_PROXY_ATTESTATION_JSON",
+  "INFISICAL_AGENT_PROXY_ATTESTATION_PUBLIC_KEY",
   "E5_T01_TENANT_ID",
   "E5_T01_WORKSPACE_ID",
   "E5_T01_AGENT_ID",
@@ -71,6 +72,8 @@ async function runRealGate() {
     endpoint: process.env.INFISICAL_AGENT_PROXY_URL,
     authToken: process.env.INFISICAL_AGENT_PROXY_AUTH_TOKEN,
     attestation: process.env.INFISICAL_AGENT_PROXY_ATTESTATION_JSON,
+    attestationPublicKey:
+      process.env.INFISICAL_AGENT_PROXY_ATTESTATION_PUBLIC_KEY,
     fetchFn: fetch,
     requestTimeoutMs: Number(process.env.E5_T01_TIMEOUT_MS ?? 15_000),
   });
@@ -93,6 +96,22 @@ async function runRealGate() {
     used.outcome.accepted,
     true,
     "dedicated canary consumer did not accept the brokered request",
+  );
+  let liveReplayCode = null;
+  try {
+    await broker.use(issued.capability, {
+      requestDigest: binding.requestDigest,
+      request: {
+        method: process.env.E5_T01_CANARY_REQUEST_METHOD ?? "GET",
+        url: process.env.E5_T01_CANARY_CONSUMER_URL,
+      },
+    });
+  } catch (error) {
+    liveReplayCode = error.code;
+  }
+  assert.equal(
+    liveReplayCode,
+    CREDENTIAL_BROKER_ERROR_CODES.CAPABILITY_REPLAYED,
   );
   const revoked = await broker.revoke(issued.capability, {
     reason: "real-gate-complete",
@@ -120,6 +139,7 @@ async function runRealGate() {
     capability: broker.summarizeCapability(issued.capability),
     use: used,
     revoke: revoked,
+    liveReplayCode,
     secondUseCode,
     stateDigest: broker.stateDigest(),
     auditDigest: broker.auditDigest(),
@@ -127,6 +147,9 @@ async function runRealGate() {
     replay:
       "Replay: N/A (headless credential broker) + mitigation: cold-clone state replay, canary scans, provider-mode refusal fixtures, and gated real Infisical Agent Proxy transcript",
   });
+  const canaryScan = await scanEvidence();
+  assert.equal(canaryScan.leaked, false);
+  await writeJson("real-canary-scan.json", canaryScan);
   console.log(
     JSON.stringify(
       {
@@ -147,4 +170,40 @@ async function writeJson(filename, value) {
     path.join(evidenceDirectory, filename),
     `${JSON.stringify(value, null, 2)}\n`,
   );
+}
+
+async function scanEvidence() {
+  const files = await listEvidenceFiles(evidenceDirectory);
+  const patterns = [
+    /-----BEGIN [^-]*PRIVATE KEY-----/iu,
+    /\bBearer\s+[A-Za-z0-9._~+/=-]{12,}/iu,
+    /\b(?:api[_-]?key|client[_-]?secret|password|token)\s*[:=]\s*["']?[A-Za-z0-9._~+/=-]{8,}/iu,
+  ];
+  const findings = [];
+  for (const filename of files) {
+    const content = await readFile(filename, "utf8");
+    for (const pattern of patterns) {
+      if (pattern.test(content))
+        findings.push({ filename, pattern: pattern.source });
+    }
+  }
+  return {
+    schemaVersion: 1,
+    filesChecked: files
+      .map((file) => path.relative(evidenceDirectory, file))
+      .sort(),
+    findings,
+    leaked: findings.length > 0,
+  };
+}
+
+async function listEvidenceFiles(directory) {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    const fullPath = path.join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...(await listEvidenceFiles(fullPath)));
+    else files.push(fullPath);
+  }
+  return files;
 }

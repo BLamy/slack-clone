@@ -92,7 +92,30 @@ await writeJson("verification-summary.json", {
   replayParity: replayEvidence.parity,
   providerModeRefusals: modeRefusals,
   sensitivity,
-  canaryScan: { leaked: scan.leaked, filesChecked: scan.filesChecked },
+  canaryScan: { leaked: false, filesChecked: [] },
+  replay:
+    "Replay: N/A (headless credential broker) + mitigation: cold-clone state replay, canary scans, provider-mode refusal fixtures, and gated real Infisical Agent Proxy transcript",
+});
+
+const finalScan = await scanEvidence();
+await writeJson("canary-scan.json", finalScan);
+assert.equal(finalScan.leaked, false);
+await writeJson("verification-summary.json", {
+  schemaVersion: 1,
+  task: "E5-T01",
+  runId,
+  implementationCommit,
+  result: "PASS",
+  stateDigest: first.stateDigest,
+  auditDigest: first.auditDigest,
+  replayParity: replayEvidence.parity,
+  providerModeRefusals: modeRefusals,
+  sensitivity,
+  canaryScan: {
+    leaked: finalScan.leaked,
+    filesChecked: finalScan.filesChecked,
+    environmentKeyCount: finalScan.environmentKeyCount,
+  },
   replay:
     "Replay: N/A (headless credential broker) + mitigation: cold-clone state replay, canary scans, provider-mode refusal fixtures, and gated real Infisical Agent Proxy transcript",
 });
@@ -157,6 +180,15 @@ async function replayFixture(label) {
       return { accepted: consumerObserved };
     },
   });
+  let liveReplayCode = null;
+  try {
+    await broker.use(issued.capability, {
+      requestDigest: binding.requestDigest,
+      consumer: () => ({ accepted: true }),
+    });
+  } catch (error) {
+    liveReplayCode = error.code;
+  }
   const revoked = await broker.revoke(issued.capability, {
     reason: "run-finished",
   });
@@ -171,6 +203,10 @@ async function replayFixture(label) {
   }
   assert.equal(consumerObserved, true);
   assert.equal(used.outcome.accepted, true);
+  assert.equal(
+    liveReplayCode,
+    CREDENTIAL_BROKER_ERROR_CODES.CAPABILITY_REPLAYED,
+  );
   assert.equal(revoked.revoked, true);
   assert.equal(secondUseCode, CREDENTIAL_BROKER_ERROR_CODES.CAPABILITY_REVOKED);
 
@@ -181,6 +217,7 @@ async function replayFixture(label) {
     provider: broker.providerHandshake(),
     capability: broker.summarizeCapability(issued.capability),
     useAccepted: used.outcome.accepted,
+    liveReplayCode,
     revokeConfirmed: revoked.revoked,
     secondUseCode,
     consumerObserved,
@@ -310,6 +347,22 @@ async function runSensitivityFixture() {
       CREDENTIAL_BROKER_ERROR_CODES.CAPABILITY_REQUEST_MISMATCH,
     ],
   );
+  await broker.use(issued.capability, {
+    requestDigest: binding.requestDigest,
+    consumer: () => ({ accepted: true }),
+  });
+  try {
+    await broker.use(issued.capability, {
+      requestDigest: binding.requestDigest,
+      consumer: () => ({ accepted: true }),
+    });
+  } catch (error) {
+    findings.push({ attack: "live-replay", code: error.code });
+  }
+  assert.equal(
+    findings.at(-1)?.code,
+    CREDENTIAL_BROKER_ERROR_CODES.CAPABILITY_REPLAYED,
+  );
   return { findings };
 }
 
@@ -321,7 +374,7 @@ async function writeJson(filename, value) {
 }
 
 async function scanEvidence() {
-  const files = await listJsonFiles(evidenceDirectory);
+  const files = await listEvidenceFiles(evidenceDirectory);
   const patterns = [
     /-----BEGIN [^-]*PRIVATE KEY-----/iu,
     /\bBearer\s+[A-Za-z0-9._~+/=-]{12,}/iu,
@@ -336,23 +389,31 @@ async function scanEvidence() {
         findings.push({ filename, pattern: pattern.source });
     }
   }
+  const environmentKeyCount = Object.keys(process.env).length;
+  for (const [key, value] of Object.entries(process.env)) {
+    for (const pattern of patterns) {
+      if (pattern.test(value ?? ""))
+        findings.push({ environmentKey: key, pattern: pattern.source });
+    }
+  }
   return {
     schemaVersion: 1,
     filesChecked: files
       .map((file) => path.relative(evidenceDirectory, file))
       .sort(),
+    environmentKeyCount,
     findings,
     leaked: findings.length > 0,
   };
 }
 
-async function listJsonFiles(directory) {
+async function listEvidenceFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
   const files = [];
   for (const entry of entries) {
     const fullPath = path.join(directory, entry.name);
-    if (entry.isDirectory()) files.push(...(await listJsonFiles(fullPath)));
-    else if (entry.name.endsWith(".json")) files.push(fullPath);
+    if (entry.isDirectory()) files.push(...(await listEvidenceFiles(fullPath)));
+    else files.push(fullPath);
   }
   return files;
 }

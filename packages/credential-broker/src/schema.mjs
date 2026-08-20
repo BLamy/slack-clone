@@ -235,6 +235,8 @@ export function normalizeProviderHandshake(input) {
       "attested",
       "nonProduction",
       "attestationId",
+      "keyId",
+      "signature",
       "endpointDigest",
       "providerMarker",
     ],
@@ -306,6 +308,22 @@ export function normalizeProviderHandshake(input) {
       "endpointDigest",
       CREDENTIAL_BROKER_ERROR_CODES.PROVIDER_ATTESTATION_INVALID,
     );
+    normalizeIdentifier(
+      value.keyId,
+      "keyId",
+      CREDENTIAL_BROKER_ERROR_CODES.PROVIDER_ATTESTATION_INVALID,
+    );
+    if (
+      typeof value.signature !== "string" ||
+      value.signature.length < 32 ||
+      value.signature.length > 8_192 ||
+      !/^[A-Za-z0-9+/=_-]+$/u.test(value.signature)
+    ) {
+      throw credentialBrokerError(
+        CREDENTIAL_BROKER_ERROR_CODES.PROVIDER_ATTESTATION_INVALID,
+        "Production Agent Proxy attestation signature is invalid",
+      );
+    }
   } else {
     if (value.mode !== CREDENTIAL_BROKER_MODES.LOCAL || !value.nonProduction) {
       throw credentialBrokerError(

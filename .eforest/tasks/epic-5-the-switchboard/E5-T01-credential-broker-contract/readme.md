@@ -3,7 +3,7 @@ id: E5-T01
 epic: 5
 title: "Credential broker contract: Infisical Agent Proxy in production, Agent Vault locally, and no raw-secret orchestration path"
 priority: 501
-status: implemented
+status: in-progress
 depends_on: [E3]
 estimate: L
 capstone: false
@@ -23,14 +23,15 @@ satisfy the capability handshake or production gate.
 Agents need real service credentials without making chat configuration a secret store.
 Similar product names create a dangerous substitution risk: the target is Infisical's
 agent-oriented proxy boundary, not the general caching Proxy. The adapter must fail closed
-on provider/mode ambiguity and expose only opaque, run-scoped handles to callers.
+on provider/mode ambiguity, verify an endpoint-bound production attestation, and expose only
+opaque, single-use, run-scoped handles to callers.
 
 ## Deliverables
 
 - `SecretRef`, `CredentialBroker`, injection-capability, audit-event, and typed-error
   schemas in `packages/credential-broker`.
 - Infisical Agent Proxy adapter, local Agent Vault adapter, and a strict provider/mode
-  capability handshake.
+  capability handshake with an out-of-band signature verifier.
 - `make verify-E5-T01` and opt-in `make verify-E5-T01-real` with canary-secret evidence.
 
 ## Acceptance criteria
@@ -89,3 +90,10 @@ on provider/mode ambiguity and expose only opaque, run-scoped handles to callers
   only run-bound opaque capabilities and redacted receipts; Agent Vault is local-only,
   ordinary caching Proxy and generic token clients fail closed, and production transport
   must be explicitly injected into the attested Agent Proxy adapter.
+
+### Rework — 2026-08-19
+
+- The first critic returned `VERDICT: refuted` after static review; command execution was
+  permission-blocked. Rework addresses its actionable findings before a new verdict:
+  live capability replay, production-like environment aliases, signed endpoint-bound
+  attestation, complete literal private-IP coverage, and evidence scanning beyond JSON.

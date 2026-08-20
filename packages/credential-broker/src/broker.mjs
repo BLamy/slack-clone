@@ -27,7 +27,7 @@ const OPAQUE_HANDLE_PATTERN = /^[A-Za-z0-9._:-]{16,256}$/u;
 
 export function createCredentialBroker({
   provider,
-  environment = process.env.NODE_ENV ?? "development",
+  environment = process.env.NODE_ENV ?? "production",
   clock = () => new Date(),
   idFactory = defaultIdFactory,
 } = {}) {
@@ -49,7 +49,13 @@ export function createCredentialBroker({
     );
   }
   const handshake = normalizeProviderHandshake(provider.handshake());
-  const normalizedEnvironment = normalizeEnvironment(environment);
+  const requestedEnvironment = normalizeEnvironment(environment);
+  const processEnvironment = process.env.NODE_ENV?.trim().toLowerCase();
+  const normalizedEnvironment =
+    processEnvironment &&
+    !["development", "test", "local"].includes(processEnvironment)
+      ? "production"
+      : requestedEnvironment;
   if (
     normalizedEnvironment === "production" &&
     handshake.providerId !== CREDENTIAL_BROKER_PROVIDER_IDS.AGENT_PROXY
@@ -153,6 +159,7 @@ export function createCredentialBroker({
         issuedAt,
         expiresAt: providerExpiresAt,
         status: "active",
+        usedAt: null,
       };
       capabilities.set(capabilityId, record);
       const capability = freezeDeep({
@@ -263,6 +270,8 @@ export function createCredentialBroker({
         providerOperationId,
         outcome,
       });
+      record.status = "used";
+      record.usedAt = nowIso(clock);
       return freezeDeep({
         schemaVersion: CREDENTIAL_BROKER_SCHEMA_VERSION,
         capabilityId: record.capabilityId,
@@ -286,7 +295,6 @@ export function createCredentialBroker({
           providerId: handshake.providerId,
         });
       }
-      assertLive(record);
       let providerResult;
       try {
         providerResult = await adapter.revoke({
@@ -353,6 +361,7 @@ export function createCredentialBroker({
             secretRefDigest: record.secretRefDigest,
             issuedAt: record.issuedAt,
             expiresAt: record.expiresAt,
+            usedAt: record.usedAt,
             status: record.status,
           })),
         auditEvents: broker.auditEvents(),
@@ -425,6 +434,13 @@ export function createCredentialBroker({
         "Credential capability has been revoked",
       );
     }
+    if (record.status === "used") {
+      return denyUse(
+        record,
+        CREDENTIAL_BROKER_ERROR_CODES.CAPABILITY_REPLAYED,
+        "Credential capability has already been used",
+      );
+    }
     if (Date.parse(record.expiresAt) <= Date.parse(nowIso(clock))) {
       record.status = "expired";
       return denyUse(
@@ -482,8 +498,10 @@ function normalizeEnvironment(value) {
   const environment = String(value ?? "development")
     .trim()
     .toLowerCase();
-  if (!environment) return "development";
-  return environment;
+  if (["development", "test", "local"].includes(environment)) {
+    return environment;
+  }
+  return "production";
 }
 
 function normalizeOpaque(value, label) {

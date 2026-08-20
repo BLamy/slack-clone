@@ -1,3 +1,6 @@
+import { verify as verifySignature } from "node:crypto";
+import { isIP } from "node:net";
+
 import {
   CREDENTIAL_BROKER_ERROR_CODES,
   credentialBrokerError,
@@ -132,6 +135,7 @@ export function createInfisicalAgentProxyAdapter({
   attestation,
   authToken,
   fetchFn,
+  attestationPublicKey,
   requestTimeoutMs = 10_000,
   protocolBasePath = "/v1/stream-slack/credential-sessions",
 } = {}) {
@@ -142,10 +146,9 @@ export function createInfisicalAgentProxyAdapter({
       "Infisical Agent Proxy requires an injected fetch function",
     );
   }
-  const normalizedAttestation = normalizeProviderHandshake({
-    ...parseAttestation(attestation),
-    endpointDigest: sha256(normalizedEndpoint),
-  });
+  const normalizedAttestation = normalizeProviderHandshake(
+    parseAttestation(attestation),
+  );
   if (
     normalizedAttestation.providerId !==
     CREDENTIAL_BROKER_PROVIDER_IDS.AGENT_PROXY
@@ -155,6 +158,13 @@ export function createInfisicalAgentProxyAdapter({
       "Only the Infisical Agent Proxy provider is accepted in production",
     );
   }
+  if (normalizedAttestation.endpointDigest !== sha256(normalizedEndpoint)) {
+    throw credentialBrokerError(
+      CREDENTIAL_BROKER_ERROR_CODES.PROVIDER_ATTESTATION_INVALID,
+      "Infisical Agent Proxy attestation is not bound to its endpoint",
+    );
+  }
+  verifyProviderAttestation(normalizedAttestation, attestationPublicKey);
   if (
     authToken !== undefined &&
     (typeof authToken !== "string" || authToken.length < 1)
@@ -306,23 +316,135 @@ function normalizeProductionEndpoint(endpoint) {
 }
 
 function isDisallowedProductionHost(hostname) {
-  const normalized = hostname.toLowerCase();
-  return (
+  const normalized = hostname
+    .toLowerCase()
+    .replace(/^\[|\]$/gu, "")
+    .replace(/\.$/u, "");
+  if (
     normalized === "localhost" ||
     normalized.endsWith(".localhost") ||
-    normalized.endsWith(".local") ||
-    normalized === "127.0.0.1" ||
-    normalized === "::1" ||
-    normalized.startsWith("10.") ||
-    normalized.startsWith("192.168.") ||
-    normalized.startsWith("172.16.") ||
-    normalized.startsWith("172.17.") ||
-    normalized.startsWith("172.18.") ||
-    normalized.startsWith("172.19.") ||
-    normalized.startsWith("172.2") ||
-    normalized.startsWith("172.3") ||
-    normalized.startsWith("169.254.")
+    normalized.endsWith(".local")
+  ) {
+    return true;
+  }
+  const ipVersion = isIP(normalized);
+  if (ipVersion === 4) return isDisallowedIpv4(normalized);
+  if (ipVersion === 6) return isDisallowedIpv6(normalized);
+  return false;
+}
+
+function isDisallowedIpv4(value) {
+  const octets = value.split(".").map(Number);
+  if (octets.length !== 4 || octets.some((octet) => !Number.isInteger(octet))) {
+    return true;
+  }
+  const [first, second] = octets;
+  return (
+    first === 0 ||
+    first === 10 ||
+    first === 127 ||
+    (first === 100 && second >= 64 && second <= 127) ||
+    (first === 169 && second === 254) ||
+    (first === 172 && second >= 16 && second <= 31) ||
+    (first === 192 && second === 0) ||
+    (first === 192 && second === 168) ||
+    (first === 198 && second >= 18 && second <= 19) ||
+    first >= 224
   );
+}
+
+function isDisallowedIpv6(value) {
+  const bytes = parseIpv6(value);
+  if (!bytes) return true;
+  const first = bytes[0];
+  const isUnspecified = bytes.every((byte) => byte === 0);
+  const isLoopback =
+    bytes.slice(0, 15).every((byte) => byte === 0) && bytes[15] === 1;
+  const isUniqueLocal = first === 0xfc || first === 0xfd;
+  const isLinkLocal = first === 0xfe && (bytes[1] & 0xc0) === 0x80;
+  const isMulticast = first === 0xff;
+  const isIpv4Mapped =
+    bytes.slice(0, 10).every((byte) => byte === 0) &&
+    bytes[10] === 0xff &&
+    bytes[11] === 0xff;
+  return (
+    isUnspecified ||
+    isLoopback ||
+    isUniqueLocal ||
+    isLinkLocal ||
+    isMulticast ||
+    (isIpv4Mapped && isDisallowedIpv4(bytes.slice(12).join(".")))
+  );
+}
+
+function parseIpv6(value) {
+  let normalized = value.toLowerCase();
+  if (normalized.includes(".")) {
+    const separator = normalized.lastIndexOf(":");
+    const ipv4 = normalized.slice(separator + 1);
+    const octets = ipv4.split(".").map(Number);
+    if (
+      separator < 0 ||
+      octets.length !== 4 ||
+      octets.some(
+        (octet) => !Number.isInteger(octet) || octet < 0 || octet > 255,
+      )
+    ) {
+      return null;
+    }
+    const high = ((octets[0] << 8) | octets[1]).toString(16);
+    const low = ((octets[2] << 8) | octets[3]).toString(16);
+    normalized = `${normalized.slice(0, separator)}:${high}:${low}`;
+  }
+  const halves = normalized.split("::");
+  if (halves.length > 2) return null;
+  const left = halves[0] ? halves[0].split(":") : [];
+  const right = halves.length === 2 && halves[1] ? halves[1].split(":") : [];
+  if (halves.length === 1 && left.length !== 8) return null;
+  const zeroCount = 8 - left.length - right.length;
+  if (halves.length === 2 && zeroCount < 1) return null;
+  const groups = [
+    ...left,
+    ...(halves.length === 2
+      ? Array.from({ length: zeroCount }, () => "0")
+      : []),
+    ...right,
+  ];
+  if (groups.length !== 8) return null;
+  const bytes = [];
+  for (const group of groups) {
+    if (!/^[0-9a-f]{1,4}$/u.test(group)) return null;
+    const number = Number.parseInt(group, 16);
+    bytes.push(number >> 8, number & 0xff);
+  }
+  return bytes;
+}
+
+function verifyProviderAttestation(attestation, publicKey) {
+  if (typeof publicKey !== "string" || publicKey.length < 1) {
+    throw credentialBrokerError(
+      CREDENTIAL_BROKER_ERROR_CODES.PROVIDER_ATTESTATION_INVALID,
+      "Infisical Agent Proxy requires an out-of-band attestation public key",
+    );
+  }
+  const { signature, ...unsignedAttestation } = attestation;
+  let verified = false;
+  try {
+    verified = verifySignature(
+      "sha256",
+      Buffer.from(canonicalJson(unsignedAttestation)),
+      publicKey,
+      Buffer.from(signature, "base64"),
+    );
+  } catch {
+    verified = false;
+  }
+  if (!verified) {
+    throw credentialBrokerError(
+      CREDENTIAL_BROKER_ERROR_CODES.PROVIDER_ATTESTATION_INVALID,
+      "Infisical Agent Proxy attestation signature is invalid",
+    );
+  }
 }
 
 function parseAttestation(value) {

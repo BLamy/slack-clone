@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "baseHead": "c7ad1ceaf8b2a746e6382b1e20e06e6d6e00b467",
+  "scratchWorktree": "/tmp/slack-e5-t02-fifth-sensitivity",
+  "mutation": {
+    "file": "packages/connections/src/schema.mjs",
+    "removedBranch": "provider-token value detector",
+    "sourceLine": 39,
+    "productCodeOnly": true
+  },
+  "command": "TEST_RUN_ID=e5-t02-fifth-sensitivity TEST_ARTIFACT_DIR=/tmp/e5-t02-fifth-sensitivity-artifacts make verify-E5-T02",
+  "exitCode": 2,
+  "result": "RED",
+  "failure": {
+    "type": "AssertionError",
+    "file": "scripts/verify-e5-t02.mjs",
+    "line": 361,
+    "fixture": "secretCorpusFixture",
+    "assertion": "expected CONNECTION_CREDENTIAL_MATERIAL for the provider-token corpus entry"
+  },
+  "detectorSensitivityProven": true
+}

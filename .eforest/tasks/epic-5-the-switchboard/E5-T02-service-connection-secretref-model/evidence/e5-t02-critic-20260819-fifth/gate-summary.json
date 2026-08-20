@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "exactHead": "c7ad1ceaf8b2a746e6382b1e20e06e6d6e00b467",
+  "productRework": "eef62d259c0a7f72b3d7cd5cfd175a8dc3bfc7f7",
+  "commands": [
+    { "command": "pnpm install --frozen-lockfile", "exitCode": 0 },
+    { "command": "pnpm format:check", "exitCode": 0 },
+    { "command": "pnpm format:check:e5-t02", "exitCode": 0 },
+    { "command": "pnpm lint", "exitCode": 0 },
+    { "command": "pnpm typecheck", "exitCode": 0 },
+    {
+      "command": "pnpm test",
+      "exitCode": 0,
+      "unitTests": 207,
+      "integrationTests": 15
+    },
+    { "command": "pnpm build", "exitCode": 0 },
+    { "command": "git diff --check HEAD^ HEAD", "exitCode": 0 },
+    {
+      "command": "TEST_RUN_ID=e5-t02-critic-fifth-20260819 TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/evidence/e5-t02-critic-20260819-fifth make verify-E5-T02",
+      "exitCode": 0,
+      "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+      "replayDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+      "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f",
+      "appendedEvents": 0,
+      "leaked": false,
+      "canaryDetectedAndCleaned": true
+    },
+    {
+      "command": "node .eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/evidence/e5-t02-critic-20260819-fifth/independent-probes.mjs",
+      "exitCode": 0,
+      "freshIds": true,
+      "findings": [
+        "E5-T02-CRITIC-FIFTH-001",
+        "E5-T02-CRITIC-FIFTH-002"
+      ]
+    }
+  ],
+  "replay": "Replay: N/A (server connection model) + mitigation: cold-clone reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle digests, independent boundary probes, and detector-sensitivity mutation",
+  "verdict": "refuted"
+}

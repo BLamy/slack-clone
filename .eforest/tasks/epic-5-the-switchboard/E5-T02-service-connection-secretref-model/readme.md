@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: refuted
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -404,3 +404,67 @@ material and version policy; it is not a URI that clients can dereference themse
   cold-clone reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle
   digests, independent schema/runtime probes, capture-race probes, and detector-sensitivity
   mutation. Status remains `refuted` pending builder rework and another fresh critic.
+
+### Critic — fifth independent review — 2026-08-19
+
+- VERDICT: refuted.
+- Exact head: `c7ad1ceaf8b2a746e6382b1e20e06e6d6e00b467`; product rework under review:
+  `eef62d259c0a7f72b3d7cd5cfd175a8dc3bfc7f7`. The target worktree was clean before
+  the new critic evidence directory was created. Only metadata/evidence changes were
+  made during this review.
+- Commands: `pnpm install --frozen-lockfile`; `pnpm format:check`;
+  `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`; `pnpm test` (207 unit and
+  15 integration/Playwright tests passed); `pnpm build`; and
+  `git diff --check HEAD^ HEAD`. All passed.
+- Exact verifier: `TEST_RUN_ID=e5-t02-critic-fifth-final-20260819
+  TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/evidence/e5-t02-critic-20260819-fifth
+  make verify-E5-T02` passed at the exact head with state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb` and
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`.
+  The verifier corpus appended zero events, its final scan covered all 16 critic
+  evidence files with `leaked: false`, and its transient canary sensitivity probe
+  detected and cleaned the marker.
+- Independent probe: `node
+  .eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/evidence/e5-t02-critic-20260819-fifth/independent-probes.mjs`.
+  Durable details are in `evidence/e5-t02-critic-20260819-fifth/critic-summary.json`,
+  `independent-probes.json`, `gate-summary.json`, and `sensitivity-mutation.json`.
+- Independent requested attacks that passed: neutral valid base64, direct and encoded
+  provider-token values, event `eventId`/`actorId`/`workspaceId`/`idempotencyKey`/
+  `connectionId`, runtime tenant/workspace/principal/owner/authorization/run IDs,
+  SecretRef and connection labels, runtime reasons, role fields, nested case-variant
+  keys and values, URLs, JSON, recursive metadata, extra fields, collision-free
+  capture tuples, revision stability across rotate/disable/delete, duplicate/reordered
+  replay, stale rotation with exact event-count stability, foreign-versus-unknown
+  typed `CONNECTION_NOT_FOUND` parity for read/grant/rotate/disable/delete, ownership
+  authorization, canary detection/cleanup, and detector sensitivity.
+- Finding `E5-T02-CRITIC-FIFTH-001` (high): the exported `normalizePrincipal` API
+  accepts a provider-token-shaped capability and returns it unchanged. The independent
+  probe passed `capabilities: ["ghp_" + "a".repeat(32)]`; the normalized principal
+  retained the raw value, and `store.create` accepted the same actor capability.
+  `packages/connections/src/schema.mjs:242-283` validates capability syntax but never
+  calls `assertNoCredentialMaterial` for each capability. The normalizer is public via
+  `packages/connections/src/index.mjs:21-30`, and store actors reach it through
+  `packages/connections/src/store.mjs:378-393`. This is a remaining API boundary that
+  accepts raw provider-token-shaped material, refuting the every-boundary requirement.
+- Finding `E5-T02-CRITIC-FIFTH-002` (high): the public event schema accepts both a
+  provider-token-shaped terminal `reason` and a neutral valid base64 terminal `reason`.
+  An independent Draft-2020-12-compatible Ajv probe accepted both cases, while the
+  runtime `normalizeReason` path rejects them at `packages/connections/src/schema.mjs:438-452`.
+  `packages/connections/src/schemas/connection-events.v1.schema.json:221-229` gives
+  `terminalData.reason` only type, length, and printable-character constraints; it has
+  no `not: {"$ref":"#/$defs/credentialValueShape"}`. A schema-only consumer can
+  therefore cross the public event boundary with raw credential-shaped reason material.
+  The same probe confirmed identifier/opaque-id/label/SecretRef-label, nested
+  case-variant URL/JSON/recursive metadata, and extra-field schema controls reject.
+- Sensitivity: in detached scratch worktree `/tmp/slack-e5-t02-fifth-sensitivity`,
+  removing only `packages/connections/src/schema.mjs:39` (the provider-token detector
+  branch) and running `TEST_RUN_ID=e5-t02-fifth-sensitivity
+  TEST_ARTIFACT_DIR=/tmp/e5-t02-fifth-sensitivity-artifacts make verify-E5-T02` exited
+  `2` at `scripts/verify-e5-t02.mjs:361`, where the provider-token corpus expected
+  `CONNECTION_CREDENTIAL_MATERIAL`. Durable result: `sensitivity-mutation.json`.
+- Replay: N/A (server connection model) + mitigation: cold-clone reducer replay,
+  secret-shaped input corpus, authz matrix, exact lifecycle digests, independent
+  envelope/schema/runtime probes, capture-race probes, canary detection, and
+  detector-sensitivity mutation. Status remains `refuted` pending builder rework and
+  another fresh critic.

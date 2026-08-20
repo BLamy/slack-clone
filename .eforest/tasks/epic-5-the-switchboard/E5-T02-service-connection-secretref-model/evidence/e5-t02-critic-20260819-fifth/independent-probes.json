@@ -1,0 +1,492 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "exactHead": "c7ad1ceaf8b2a746e6382b1e20e06e6d6e00b467",
+  "neutralBase64Length": 68,
+  "runtimeBoundary": {
+    "direct": {
+      "principal-id": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.principal.id",
+        "statusCode": 400
+      },
+      "principal-tenant-id": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.principal.tenantId",
+        "statusCode": 400
+      },
+      "principal-workspace-id": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.principal.workspaceId",
+        "statusCode": 400
+      },
+      "principal-role": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.principal.role",
+        "statusCode": 400
+      },
+      "principal-capability": {
+        "accepted": true,
+        "rawReturned": true,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      },
+      "owner-id": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.owner.id",
+        "statusCode": 400
+      },
+      "opaque-id": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.id",
+        "statusCode": 400
+      },
+      "reason": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "secretref-label": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.secretRef.label",
+        "statusCode": 400
+      },
+      "metadata-value": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safeLabel",
+        "statusCode": 400
+      },
+      "definition-label": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "statusCode": 400
+      },
+      "definition-neutral-base64": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue",
+        "statusCode": 400
+      },
+      "definition-provider-token": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue",
+        "statusCode": 400
+      }
+    },
+    "storeAttempts": {
+      "connectionId": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.connectionId",
+        "statusCode": 400
+      },
+      "neutralBase64": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue",
+        "statusCode": 400
+      },
+      "providerToken": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue",
+        "statusCode": 400
+      },
+      "actorCapability": {
+        "accepted": true,
+        "rawReturned": false,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      },
+      "authorizationActorId": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.actor.id",
+        "statusCode": 400
+      },
+      "runId": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.runId",
+        "statusCode": 400
+      },
+      "disableReason": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      }
+    },
+    "appendedEventsAfterBoundaryAttempts": 2,
+    "createdEventActorId": "user-fifth-admin",
+    "scopeAttempts": {
+      "tenantId": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.tenantId",
+        "statusCode": 400
+      },
+      "workspaceId": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.workspaceId",
+        "statusCode": 400
+      }
+    }
+  },
+  "eventBoundary": {
+    "eventId": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.event.eventId",
+      "statusCode": 400
+    },
+    "workspaceId": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.event.workspaceId",
+      "statusCode": 400
+    },
+    "actorId": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.event.actorId",
+      "statusCode": 400
+    },
+    "idempotencyKey": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.event.idempotencyKey",
+      "statusCode": 400
+    },
+    "connectionId": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.event.connectionId",
+      "statusCode": 400
+    },
+    "tenantId": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.event.data.tenantId",
+      "statusCode": 400
+    },
+    "ownerId": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.event.data.owner.id",
+      "statusCode": 400
+    },
+    "label": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.event.data.label",
+      "statusCode": 400
+    },
+    "secretRefLabel": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.event.data.secretRef.label",
+      "statusCode": 400
+    },
+    "metadataValue": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.event.data.metadata.safeLabel",
+      "statusCode": 400
+    }
+  },
+  "lifecycle": {
+    "revisionStability": {
+      "beforeRotate": 1,
+      "afterRotateSameRun": 1,
+      "afterRotateNewRun": 2,
+      "afterDisableSameRun": 1,
+      "afterDeleteSameRun": 1,
+      "disabledNewRun": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_NOT_ACTIVE",
+        "path": null,
+        "statusCode": 409
+      },
+      "deletedNewRun": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_NOT_ACTIVE",
+        "path": null,
+        "statusCode": 409
+      }
+    },
+    "terminalEventCounts": {
+      "beforeDisable": 2,
+      "beforeDelete": 3
+    },
+    "replay": {
+      "stateDigest": "sha256:be33d20ea5564def2d0573648d567188f986dcd350187b9e9a30043e2233b89b",
+      "replayAgainDigest": "sha256:be33d20ea5564def2d0573648d567188f986dcd350187b9e9a30043e2233b89b",
+      "viewDigest": "sha256:b76b7cbb841452e1f4499677d0e25495320a96861d3ebaa8698e49b44f9b7a80",
+      "duplicateAndReorderedParity": true
+    },
+    "staleRotation": {
+      "beforeTerminal": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_REVISION_CONFLICT",
+        "path": "$.event.data.expectedRevision",
+        "statusCode": 409
+      },
+      "afterDisable": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_NOT_ACTIVE",
+        "path": null,
+        "statusCode": 409
+      },
+      "afterDelete": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_NOT_ACTIVE",
+        "path": null,
+        "statusCode": 409
+      },
+      "eventCounts": {
+        "beforeStaleAttempt": 2,
+        "afterStaleBefore": 2,
+        "beforeStaleAfterDisable": 3,
+        "afterStaleAfterDisable": 3,
+        "beforeStaleAfterDelete": 4,
+        "afterStaleAfterDelete": 4
+      },
+      "noAppend": {
+        "beforeTerminal": true,
+        "afterDisable": true,
+        "afterDelete": true
+      }
+    },
+    "collisionFreeCapture": {
+      "first": {
+        "connectionId": "connection-fifth-a:b",
+        "runId": "run-fifth-c",
+        "revision": 1
+      },
+      "second": {
+        "connectionId": "connection-fifth-a",
+        "runId": "b:run-fifth-c",
+        "revision": 1
+      },
+      "bindingDigestsDiffer": true
+    }
+  },
+  "authz": {
+    "ownership": {
+      "workspaceMemberRead": true,
+      "workspaceMemberGrant": true,
+      "workspaceMemberDelete": false,
+      "agentOwnerGrant": true,
+      "memberAgentGrant": false,
+      "userOwnerGrant": true
+    },
+    "foreignErrors": {
+      "read": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "grant": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "rotate": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "disable": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "delete": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      }
+    },
+    "unknownErrors": {
+      "read": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "grant": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "rotate": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "disable": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "delete": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      }
+    },
+    "foreignUnknownEqual": true,
+    "stateDigestUnchanged": true
+  },
+  "publicSchema": {
+    "validator": "Ajv 6 compatibility adapter with $defs mapped to definitions",
+    "outcomes": {
+      "safe": {
+        "accepted": true
+      },
+      "identifierActorToken": {
+        "accepted": false
+      },
+      "identifierWorkspaceToken": {
+        "accepted": false
+      },
+      "opaqueEventToken": {
+        "accepted": false
+      },
+      "opaqueIdempotencyToken": {
+        "accepted": false
+      },
+      "opaqueConnectionToken": {
+        "accepted": false
+      },
+      "labelToken": {
+        "accepted": false
+      },
+      "secretRefLabelToken": {
+        "accepted": false
+      },
+      "metadataNestedCaseVariant": {
+        "accepted": false
+      },
+      "metadataUpperUrl": {
+        "accepted": false
+      },
+      "metadataUpperJson": {
+        "accepted": false
+      },
+      "metadataRecursiveToken": {
+        "accepted": false
+      },
+      "metadataNeutralBase64": {
+        "accepted": false
+      },
+      "terminalReasonToken": {
+        "accepted": true
+      },
+      "terminalReasonNeutralBase64": {
+        "accepted": true
+      },
+      "extraTop": {
+        "accepted": false
+      },
+      "extraData": {
+        "accepted": false
+      },
+      "extraSecretRef": {
+        "accepted": false
+      },
+      "extraOwner": {
+        "accepted": false
+      }
+    },
+    "finding": {
+      "terminalReasonTokenAccepted": true,
+      "terminalReasonNeutralBase64Accepted": true
+    }
+  },
+  "verifierCanary": {
+    "transientCanaryDetected": true,
+    "finalEvidenceClean": true,
+    "filesChecked": [
+      "api-identifier-boundary.json",
+      "authz-matrix.json",
+      "canary-scan.json",
+      "capture-key-binding.json",
+      "cold-clone-transcript.json",
+      "connection-state.json",
+      "critic-summary.json",
+      "gate-summary.json",
+      "independent-probes.json",
+      "independent-probes.mjs",
+      "lifecycle-events.json",
+      "replay-digests.json",
+      "secret-corpus.json",
+      "sensitivity-mutation.json",
+      "sensitivity.json",
+      "verification-summary.json"
+    ]
+  },
+  "findings": [
+    {
+      "id": "E5-T02-CRITIC-FIFTH-001",
+      "severity": "high",
+      "summary": "normalizePrincipal accepts a provider-token-shaped capability and returns it unchanged",
+      "source": "packages/connections/src/schema.mjs:242-283"
+    },
+    {
+      "id": "E5-T02-CRITIC-FIFTH-002",
+      "severity": "high",
+      "summary": "The public event schema accepts provider-token and neutral-base64 terminal reasons",
+      "source": "packages/connections/src/schemas/connection-events.v1.schema.json:221-229"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "collisionAvoided": true,
+  "firstBinding": {
+    "connectionId": "connection-critic-a:b",
+    "runId": "run-critic-c",
+    "revision": 1
+  },
+  "secondBinding": {
+    "connectionId": "connection-critic-a",
+    "runId": "b:run-critic-c",
+    "revision": 1
+  }
+}

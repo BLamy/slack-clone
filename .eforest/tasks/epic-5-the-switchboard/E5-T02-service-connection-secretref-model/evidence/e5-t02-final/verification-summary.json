@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E5-T02",
-  "runId": "e5-t02-final-084019c",
-  "implementationCommit": "084019c957a42beb3c8ceee429108e19e6f0704a",
+  "runId": "e5-t02-final-4e68d2f",
+  "implementationCommit": "4e68d2f85fcbdcf0434d5e8c7b911e2daf691ae3",
   "result": "PASS",
   "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
   "replay": {
@@ -24,6 +24,11 @@
       },
       {
         "name": "base64url",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedUrlSafe"
+      },
+      {
+        "name": "base64url-short",
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
         "path": "$.connection.metadata.encodedUrlSafe"
       },
@@ -99,10 +104,6 @@
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
         "path": "$.runId"
       },
-      "opaque-store-url-safe-base64": {
-        "code": "CONNECTION_CREDENTIAL_MATERIAL",
-        "path": "$.runId"
-      },
       "principal-id": {
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
         "path": "$.principal.id"
@@ -115,14 +116,14 @@
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
         "path": "$.principal.capabilities[0]"
       },
-      "principal-url-safe-base64-capability": {
-        "code": "CONNECTION_CREDENTIAL_MATERIAL",
-        "path": "$.principal.capabilities[0]"
-      },
       "owner-id": {
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
         "path": "$.owner.id"
       }
+    },
+    "identifierCompatibility": {
+      "opaqueId": "connection-final-lifecycle",
+      "principalWorkspaceId": "connection-final-lifecycle"
     },
     "capture": {
       "code": "CONNECTION_CREDENTIAL_MATERIAL",

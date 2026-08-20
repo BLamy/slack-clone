@@ -4,10 +4,6 @@
       "code": "CONNECTION_CREDENTIAL_MATERIAL",
       "path": "$.runId"
     },
-    "opaque-store-url-safe-base64": {
-      "code": "CONNECTION_CREDENTIAL_MATERIAL",
-      "path": "$.runId"
-    },
     "principal-id": {
       "code": "CONNECTION_CREDENTIAL_MATERIAL",
       "path": "$.principal.id"
@@ -20,14 +16,14 @@
       "code": "CONNECTION_CREDENTIAL_MATERIAL",
       "path": "$.principal.capabilities[0]"
     },
-    "principal-url-safe-base64-capability": {
-      "code": "CONNECTION_CREDENTIAL_MATERIAL",
-      "path": "$.principal.capabilities[0]"
-    },
     "owner-id": {
       "code": "CONNECTION_CREDENTIAL_MATERIAL",
       "path": "$.owner.id"
     }
+  },
+  "identifierCompatibility": {
+    "opaqueId": "connection-final-lifecycle",
+    "principalWorkspaceId": "connection-final-lifecycle"
   },
   "capture": {
     "code": "CONNECTION_CREDENTIAL_MATERIAL",

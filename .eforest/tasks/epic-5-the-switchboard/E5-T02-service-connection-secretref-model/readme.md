@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: refuted
+status: implemented
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -646,3 +646,32 @@ material and version policy; it is not a URI that clients can dereference themse
   Draft-2020-12 validation, authz matrix, lifecycle/capture probes, recursive leak
   scan, and detector-sensitivity mutation. Status remains `refuted` pending builder
   rework and another fresh critic.
+
+### Builder — seventh rework complete — 2026-08-20
+
+- Commit: `4e68d2f85fcbdcf0434d5e8c7b911e2daf691ae3`.
+- Rework: generic encoded-value detection now applies to credential-bearing free-form
+  values (metadata, labels, reasons, and capabilities) with a canonical minimum of 22
+  characters, while identifier normalizers retain explicit provider/URL/assignment
+  checks without misclassifying legitimate opaque IDs. The public schema mirrors this
+  split with `credentialValueShape` for free-form values and
+  `identifierCredentialShape` for identifiers.
+- Regression controls: unit and verifier fixtures reject canonical 23-character and
+  longer URL-safe values before metadata/reason append, prove detector sensitivity, and
+  preserve the ordinary long opaque identifier `connection-final-lifecycle` through
+  runtime normalization and principal scope checks.
+- Commands: `pnpm format:check`; `pnpm format:check:e5-t02`; `pnpm lint`;
+  `pnpm typecheck`; `pnpm test` (207 unit and 15 integration tests passed); and
+  `pnpm build`.
+- Local verifier: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e5-t02-final-4e68d2f make
+  verify-E5-T02` passed with state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`, and
+  `leaked: false`.
+- Evidence: `evidence/e5-t02-final/` was regenerated against this exact commit.
+- Replay: N/A (server connection model) + mitigation: cold-clone reducer replay,
+  secret-shaped input corpus, authz matrix, exact lifecycle digests, independent
+  envelope/schema/runtime probes, capture-race probes, and detector-sensitivity mutation.
+- Claim: the final critic's short URL-safe bypass and identifier false-positive findings
+  are addressed and E5-T02 is ready for a final fresh independent verdict.

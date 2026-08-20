@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: refuted
+status: implemented
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -999,3 +999,29 @@ material and version policy; it is not a URI that clients can dereference themse
   detector branch in a disposable exact-head worktree; `make verify-E5-T02` exited 2
   at the event-boundary assertion, proving the detector is sensitive.
 - Status remains `refuted` pending product rework and another fresh critic.
+
+### Builder — resource-boundary rework — 2026-08-20
+
+- Commit: `3d7f2e8466562958ba8e039f7020a22d231588ea`.
+- Rework: assignment detection now rejects client-secret forms embedded after
+  hyphen/underscore prefixes; runtime metadata enforces the public 64-property cap;
+  and metadata/reason string limits count Unicode code points to match JSON Schema.
+  Unit and verifier controls cover prefixed assignments, width 65, and astral 512/513
+  boundaries.
+- Commands: `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`; `pnpm test`
+  (209 unit and 15 integration/Playwright tests passed); and `pnpm build`.
+- Local verifier: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e5-t02-final-3d7f2e8-20260820
+  make verify-E5-T02` passed duplicate/reordered replay parity with state/replay
+  digest `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`, and
+  `leaked: false`.
+- Evidence: `evidence/e5-t02-final/` was regenerated against this exact commit; the
+  secret corpus records prefixed assignments and resource bounds, and the canary scan
+  remains clean.
+- Replay: N/A (server connection model) + mitigation: cold-clone reducer replay,
+  secret-shaped input corpus, authz matrix, exact lifecycle digests, independent
+  schema/runtime boundary checks, Unicode-control matrix, and detector-sensitivity
+  mutation.
+- Claim: the tenth critic's assignment-boundary, metadata-width, and astral-length
+  findings are addressed. E5-T02 is implemented and ready for another fresh critic.

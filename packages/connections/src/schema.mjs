@@ -449,11 +449,12 @@ export function isCredentialMaterial(value) {
 
 export function normalizeReason(value, path = "$.reason") {
   if (value === undefined || value === null) return null;
-  assertNoCredentialMaterial(value, path);
+  const normalized = typeof value === "string" ? value.trim() : value;
+  assertNoCredentialMaterial(normalized, path);
   if (
-    typeof value !== "string" ||
-    value.trim().length > 160 ||
-    hasControlCharacter(value)
+    typeof normalized !== "string" ||
+    normalized.length > 160 ||
+    hasControlCharacter(normalized)
   ) {
     throw connectionError(
       CONNECTION_ERROR_CODES.INVALID_REQUEST,
@@ -461,7 +462,7 @@ export function normalizeReason(value, path = "$.reason") {
       { path },
     );
   }
-  return value.trim() || null;
+  return normalized || null;
 }
 
 function normalizeEventData(eventType, input, path) {
@@ -687,8 +688,10 @@ function looksLikeCredentialValue(value, { allowGenericBase64 = false } = {}) {
 }
 
 function isBase64EncodedValue(value) {
-  if (value.length < 22 || !BASE64_VALUE_PATTERN.test(value)) return false;
-  const unpadded = value.replace(/=+$/u, "");
+  const candidate = value.trim();
+  if (candidate.length < 22 || !BASE64_VALUE_PATTERN.test(candidate))
+    return false;
+  const unpadded = candidate.replace(/=+$/u, "");
   if (unpadded.length % 4 === 1) return false;
   const normalized = unpadded.replace(/-/gu, "+").replace(/_/gu, "/");
   const padding = "=".repeat((4 - (normalized.length % 4)) % 4);
@@ -758,11 +761,12 @@ export function normalizeOpaqueIdForStore(value, path = "$.id") {
 }
 
 function normalizeLabel(value, path, code) {
-  assertNoCredentialMaterial(value, path);
-  if (typeof value !== "string" || !LABEL_PATTERN.test(value.trim())) {
+  const normalized = typeof value === "string" ? value.trim() : value;
+  assertNoCredentialMaterial(normalized, path);
+  if (typeof normalized !== "string" || !LABEL_PATTERN.test(normalized)) {
     throw connectionError(code, "label is invalid", { path });
   }
-  return value.trim();
+  return normalized;
 }
 
 function normalizePositiveRevision(value, path, code) {

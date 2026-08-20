@@ -330,6 +330,10 @@ function secretCorpusFixture() {
       },
     ],
     ["base64url-short", { encodedUrlSafe: "a".repeat(21) + "-a" }],
+    [
+      "base64url-whitespace",
+      { encodedUrlSafe: "  " + "a".repeat(21) + "-a  " },
+    ],
     ["provider-token", { encodedValue: "ghp_" + "A".repeat(32) }],
     ["json", { payload: '{"token":"e5-t02-connection-canary-value"}' }],
     ["url", { endpoint: "https://user:password@example.invalid/service" }],

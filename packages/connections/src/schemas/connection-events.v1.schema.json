@@ -117,7 +117,7 @@
         {
           "pattern": "(?:^|[\\s;])(?:[Hh][Oo][Ss][Tt]|[Uu][Ss][Ee][Rr](?:[Nn][Aa][Mm][Ee])?|[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Pp][Oo][Rr][Tt])\\s*=\\s*[^;]+"
         },
-        { "pattern": "^[A-Za-z0-9+/_-]{22,}={0,2}$" },
+        { "pattern": "^\\s*[A-Za-z0-9+/_-]{22,}={0,2}\\s*$" },
         {
           "pattern": "[\\[{]\\s*[\"']?(?:[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Tt][Oo][Kk][Ee][Nn]|[Ss][Ee][Cc][Rr][Ee][Tt]|[Cc][Oo][Oo][Kk][Ii][Ee]|[Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn])[\"']?\\s*[:=]"
         }

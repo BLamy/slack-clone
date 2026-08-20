@@ -75,6 +75,11 @@ test("connection metadata rejects encoded, URL, JSON, nested, and confusable sec
       },
     },
     { metadata: { encodedUrlSafeShort: shortUrlSafeBase64 } },
+    {
+      metadata: {
+        encodedUrlSafeWhitespace: "  " + shortUrlSafeBase64 + "  ",
+      },
+    },
     { metadata: { encodedValue: "ghp_" + "A".repeat(32) } },
     { metadata: { endpoint: "https://user:password@example.invalid" } },
     { metadata: { payload: '{"token":"raw-token-value"}' } },
@@ -138,6 +143,14 @@ test("runtime identifier APIs reject provider-token-shaped values", () => {
   );
   assert.throws(
     () => normalizeReason("a".repeat(21) + "-a"),
+    (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
+  );
+  assert.throws(
+    () => normalizeReason("  " + "a".repeat(21) + "-a  "),
+    (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
+  );
+  assert.throws(
+    () => definition({ label: "  " + "a".repeat(21) + "-a  " }),
     (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
   );
   assert.throws(

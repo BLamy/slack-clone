@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "reviewedHead": "a3572bf964fda394cadeb5c50368c8426356685d",
+  "reviewedProductFix": "e0cba219821a43db91da91252f9c28d7f370f8d8",
+  "productCodeModifiedByCritic": false,
+  "exactTargetBeforeUnownedEdits": {
+    "path": "/tmp/slack-e5-t02.b2vnOc",
+    "initialCheckout": "clean at exact reviewed head",
+    "commands": [
+      {
+        "command": "pnpm install --frozen-lockfile",
+        "result": "PASS"
+      },
+      {
+        "command": "pnpm format:check",
+        "result": "PASS"
+      },
+      {
+        "command": "pnpm format:check:e5-t02",
+        "result": "PASS"
+      },
+      {
+        "command": "pnpm lint",
+        "result": "PASS"
+      },
+      {
+        "command": "pnpm typecheck",
+        "result": "PASS",
+        "details": "static analysis layers=7 violations=0; adapter access violations=0; syntax files=241"
+      },
+      {
+        "command": "pnpm test",
+        "result": "PASS",
+        "details": "207 unit tests and 15 integration/Playwright tests"
+      },
+      {
+        "command": "pnpm build",
+        "result": "PASS",
+        "details": "build files=154"
+      }
+    ],
+    "unownedChangesObservedAfterRun": [
+      "packages/connections/src/schema.mjs",
+      "packages/connections/src/schemas/connection-events.v1.schema.json",
+      "scripts/verify-e5-t02.mjs",
+      "test/unit/connections.test.mjs"
+    ],
+    "criticAction": "left all unowned product and test changes untouched"
+  },
+  "detachedCold": {
+    "path": "/tmp/slack-e5-t02-ninth-cold",
+    "checkout": "detached clean exact head",
+    "commands": [
+      {
+        "command": "pnpm install --frozen-lockfile",
+        "result": "PASS"
+      },
+      {
+        "command": "pnpm format:check",
+        "result": "PASS"
+      },
+      {
+        "command": "pnpm format:check:e5-t02",
+        "result": "PASS"
+      },
+      {
+        "command": "pnpm lint",
+        "result": "PASS"
+      },
+      {
+        "command": "pnpm typecheck",
+        "result": "PASS"
+      },
+      {
+        "command": "pnpm test:unit",
+        "result": "PASS",
+        "details": "207 tests"
+      },
+      {
+        "command": "pnpm test",
+        "result": "BLOCKED",
+        "exitCode": 1,
+        "details": "integration startup could not find the pre-existing pinned submodule artifact emulate/packages/emulate/dist/index.js; the pinned submodule was not modified"
+      },
+      {
+        "command": "pnpm build",
+        "result": "PASS",
+        "details": "build files=154"
+      },
+      {
+        "command": "git diff --check",
+        "result": "PASS"
+      },
+      {
+        "command": "git diff --check a3572bf^ a3572bf",
+        "result": "PASS"
+      }
+    ]
+  },
+  "exactVerifier": {
+    "command": "TEST_RUN_ID=e5-t02-critic-20260820-ninth-cold-json-store TEST_ARTIFACT_DIR=<critic-evidence-dir> E5_T02_ENTRYPOINT='make verify-E5-T02 (clean detached cold JSON store matrix)' make verify-E5-T02",
+    "result": "PASS",
+    "runId": "e5-t02-critic-20260820-ninth-cold-json-store",
+    "evidenceDirectory": "evidence/e5-t02-critic-20260820-ninth/",
+    "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f"
+  },
+  "replay": "Replay: N/A (server connection model) + mitigation: detached cold replay and independent runtime/store/public probes"
+}

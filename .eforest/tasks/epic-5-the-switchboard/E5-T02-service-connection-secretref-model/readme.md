@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: refuted
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -857,3 +857,64 @@ material and version policy; it is not a URI that clients can dereference themse
   schema/runtime probes, capture-race probes, and detector-sensitivity mutation.
 - Claim: the eighth critic's hidden-format and escaped-JSON findings are addressed,
   and E5-T02 is ready for another fresh final critic.
+
+### Critic — ninth independent review — 2026-08-20
+
+- VERDICT: refuted.
+- Exact head: `a3572bf964fda394cadeb5c50368c8426356685d`; reviewed product fix:
+  `e0cba219821a43db91da91252f9c28d7f370f8d8`. The review ran the product from a
+  clean detached checkout at `/tmp/slack-e5-t02-ninth-cold`. The target checkout
+  later contained unrelated unowned edits in the connection schema, public schema,
+  verifier, and unit test; the critic did not modify, stage, or revert them.
+- Fresh critic evidence is committed only under
+  `evidence/e5-t02-critic-20260820-ninth/`, with this readme entry and regenerated
+  queue metadata. Product source was not changed by the critic.
+- Exact-head gates: the initially clean target passed
+  `pnpm install --frozen-lockfile`, `pnpm format:check`,
+  `pnpm format:check:e5-t02`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (207 unit
+  and 15 integration/Playwright tests), and `pnpm build` before the unrelated edits
+  appeared. The detached cold checkout independently passed install, formatting,
+  lint, typecheck, 207 unit tests, build, and `git diff --check`; its full
+  `pnpm test` was blocked only because the pinned `emulate` submodule lacked its
+  pre-existing generated `packages/emulate/dist/index.js`, and the submodule was
+  intentionally not modified. See `evidence/e5-t02-critic-20260820-ninth/gate-summary.json`.
+- `make verify-E5-T02` passed in the detached cold checkout with run ID
+  `e5-t02-critic-20260820-ninth-cold-json-store`, state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`,
+  duplicate/reordered parity, lifecycle/capture, authorization parity, and clean
+  verifier leak scan. Evidence is in `evidence/e5-t02-critic-20260820-ninth/cold-replay/`.
+- The independent redacted probe intentionally exited 1 with 49 findings and zero
+  probe failures. It generated canonical URL-safe values of lengths 23 and 24,
+  standard base64, space/tab/NBSP wrappers, and eight Unicode format controls
+  (U+200B, U+200D, U+FEFF, U+202E, U+2060, U+2066, U+180E, U+061C) across the
+  required free-form paths. It also ran a 60-row Unicode-escaped/case/control JSON
+  matrix across runtime, store, and public schema boundaries. Full results are in
+  `evidence/e5-t02-critic-20260820-ninth/independent-probes.json`.
+- Finding `E5-T02-CRITIC-NINTH-FREEFORM-ASSIGNMENT-001` (high): a
+  client-secret assignment-shaped value was accepted by runtime and store in
+  metadata, reasons, connection-definition metadata, and terminal data, while the
+  public schema rejected it. This crosses the intended credential-bearing free-form
+  policy and can append the value to the authoritative store.
+- Finding `E5-T02-CRITIC-NINTH-SCHEMA-UNICODE-CF-URL-001` (high): the public
+  `credentialValueShape` accepted a URL-shaped value with each tested invisible
+  format control inserted into the scheme across metadata, label, reason,
+  connection-definition metadata, and terminal data. Runtime and store rejected the
+  same inputs, so the public/runtime policy remains inconsistent.
+- Finding `E5-T02-CRITIC-NINTH-SCHEMA-DEPTH-001` (medium): the public schema
+  accepted depth-9 metadata while runtime/store rejected beyond the depth limit,
+  leaving a recursive resource/policy mismatch.
+- Controls that passed independently: canonical 23+ and standard base64 rejection,
+  whitespace-wrapper rejection, format-control insertion/wrapping rejection in
+  runtime/store, Unicode-escaped JSON-key rejection in all required runtime/store/
+  public free-form paths, ordinary long opaque identifiers in runtime/public schema,
+  explicit provider-shaped identifiers, event identity fields, recursive/cyclic,
+  case-variant, extra-field, and parsed prototype-key attacks, lifecycle/capture,
+  duplicate/reordered replay, authorization parity, leak scans, and detector
+  sensitivity. These do not cure the three findings.
+- Replay: N/A (server connection model) + mitigation: detached exact-head cold
+  replay, full gate transcript, independent runtime/store/Ajv probes, lifecycle and
+  capture checks, authorization matrix, recursive adversarial corpus, leak scans,
+  and detector-sensitivity mutations. Status remains `refuted` pending product rework
+  and another fresh critic.

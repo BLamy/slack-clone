@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: in-progress
+status: implemented
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -60,3 +60,26 @@ material and version policy; it is not a URI that clients can dereference themse
    turn `verify-E5-T02` red.
 
 ## Verification log
+
+### Builder — 2026-08-19
+
+- Commit: `380bdd2047711f683c89535060b36fd0678d3920`.
+- Commands: `pnpm install --frozen-lockfile`; `pnpm setup:emulate`;
+  `pnpm format:check`; `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`;
+  `pnpm test:unit` (204 passed); `pnpm test:integration` (15 emulator/Auth0 tests
+  passed); and `pnpm build`.
+- Local verifier: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e5-t02-final-380bdd2 make
+  verify-E5-T02` passed duplicate/reordered replay parity with state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb` and
+  replay view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`.
+- Evidence: `evidence/e5-t02-final/` contains the lifecycle state/events, replay
+  digests, secret corpus, authorization matrix, detector sensitivity, cold transcript,
+  and final canary scan. The secret corpus appended zero events and the final scan
+  reported `leaked: false`.
+- Replay: N/A (server connection model) + mitigation: cold-clone reducer replay,
+  secret-shaped input corpus, authz matrix, and exact lifecycle digests.
+- Claim: E5-T02 is implemented and ready for a fresh critic. Connections persist only
+  opaque provider/mount SecretRef metadata, rotation advances immutable revisions while
+  preserving captured run bindings, disable/delete fence new grants with tombstones,
+  and foreign/unknown identifiers share the same typed not-found response.

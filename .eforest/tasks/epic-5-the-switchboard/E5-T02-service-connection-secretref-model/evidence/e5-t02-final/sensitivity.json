@@ -1,0 +1,5 @@
+{
+  "branchRemoved": "URL and connection-string value detector",
+  "mutatedFixtureAccepted": true,
+  "verifierWouldTurnRed": true
+}

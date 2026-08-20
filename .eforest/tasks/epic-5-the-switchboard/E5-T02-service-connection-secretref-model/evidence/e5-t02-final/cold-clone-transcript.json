@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "runId": "e5-t02-final-380bdd2",
+  "implementationCommit": "380bdd2047711f683c89535060b36fd0678d3920",
+  "entrypoint": "make verify-E5-T02",
+  "result": "PASS",
+  "fixture": "fresh in-memory connection stream with deterministic clock",
+  "replay": "Replay: N/A (server connection model) + mitigation: cold-clone reducer replay, secret-shaped input corpus, authz matrix, and exact lifecycle digests"
+}

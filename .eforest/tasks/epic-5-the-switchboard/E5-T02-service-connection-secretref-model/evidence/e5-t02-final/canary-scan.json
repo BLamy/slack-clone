@@ -3,6 +3,7 @@
   "filesChecked": [
     "authz-matrix.json",
     "canary-scan.json",
+    "capture-key-binding.json",
     "cold-clone-transcript.json",
     "connection-state.json",
     "lifecycle-events.json",

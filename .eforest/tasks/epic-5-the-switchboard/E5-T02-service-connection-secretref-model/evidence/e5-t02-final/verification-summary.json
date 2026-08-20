@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E5-T02",
-  "runId": "e5-t02-final-5f248f7",
-  "implementationCommit": "5f248f71b9ef073d866abf7e13302320e50387bb",
+  "runId": "e5-t02-final-74bc151",
+  "implementationCommit": "74bc1519379258de95a90a1868774e8139cd7b40",
   "result": "PASS",
   "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
   "replay": {
@@ -19,6 +19,11 @@
       },
       {
         "name": "base64-provider-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "provider-token",
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
         "path": "$.connection.metadata.encodedValue"
       },
@@ -70,6 +75,19 @@
     "foreignAndUnknownErrorsEqual": true,
     "stateDigestUnchanged": true
   },
+  "captureKeyCollision": {
+    "collisionAvoided": true,
+    "firstBinding": {
+      "connectionId": "connection-critic-a:b",
+      "runId": "run-critic-c",
+      "revision": 1
+    },
+    "secondBinding": {
+      "connectionId": "connection-critic-a",
+      "runId": "b:run-critic-c",
+      "revision": 1
+    }
+  },
   "sensitivity": {
     "url": {
       "branchRemoved": "URL and connection-string value detector",
@@ -88,6 +106,7 @@
     "filesChecked": [
       "authz-matrix.json",
       "canary-scan.json",
+      "capture-key-binding.json",
       "cold-clone-transcript.json",
       "connection-state.json",
       "lifecycle-events.json",

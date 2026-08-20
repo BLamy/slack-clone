@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: refuted
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -675,3 +675,71 @@ material and version policy; it is not a URI that clients can dereference themse
   envelope/schema/runtime probes, capture-race probes, and detector-sensitivity mutation.
 - Claim: the final critic's short URL-safe bypass and identifier false-positive findings
   are addressed and E5-T02 is ready for a final fresh independent verdict.
+
+### Critic — seventh independent review — 2026-08-20
+
+- VERDICT: refuted.
+- Exact head: `6677c51700bde89c027492153081775bf8b171ff`; reviewed product fix:
+  `4e68d2f85fcbdcf0434d5e8c7b911e2daf691ae3`. The exact-head checkout was clean
+  before this review's critic evidence was created. No product source was changed;
+  this review owns only the evidence directory, this readme entry, and regenerated
+  queue metadata.
+- Frozen install and full gates passed at the exact head: `pnpm install
+  --frozen-lockfile`; `pnpm format:check`; `pnpm format:check:e5-t02`; `pnpm lint`;
+  `pnpm typecheck`; `pnpm test` (207 unit and 15 integration/Playwright tests);
+  `pnpm build`; and `git diff --check`. The durable command/result record is
+  `evidence/e5-t02-critic-20260820-independent/gate-summary.json`.
+- Exact verifier passed in the fresh critic evidence directory with run ID
+  `e5-t02-critic-20260820-independent-final`, state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`,
+  duplicate/reordered replay parity, sensitivity red-state proofs, and
+  `leaked: false`. Evidence: `evidence/e5-t02-critic-20260820-independent/`.
+- Detached cold replay also passed from a new worktree at
+  `/tmp/slack-e5-t02-independent-cold`, after its own `pnpm install
+  --frozen-lockfile`, with matching state/replay/replay-view digests. Its durable
+  output is `evidence/e5-t02-critic-20260820-independent/cold-replay/`.
+- Independent probe: `node
+  evidence/e5-t02-critic-20260820-independent/independent-probe.mjs` exited 1
+  as expected because it recorded seven findings; the exact verifier then passed.
+  The probe generated round-trip-valid canonical 23-character and longer URL-safe
+  fixtures without storing raw fixture material. All unwrapped credential-bearing
+  free-form runtime paths rejected both lengths, including metadata, labels,
+  reasons, terminal data, capabilities, and connection-definition metadata. It
+  also rejected provider-shaped inputs. However, one plausible boundary attack—
+  surrounding the same canonical URL-safe material with whitespace—passed
+  `normalizeLabel`, `normalizeReason`, and `normalizeMetadata`: label/reason
+  returned trimmed values, while metadata retained the wrapped value. Store create
+  accepted and persisted the wrapped metadata event, and the public schema accepted
+  the wrapped label, reason, and metadata values. Durable results and redacted
+  observations are in `evidence/e5-t02-critic-20260820-independent/independent-probes.json`.
+- Finding `E5-T02-CRITIC-INDEPENDENT-FREEFORM-001` (high): runtime free-form
+  credential detection runs before label/reason trimming and metadata preserves
+  surrounding whitespace. The relevant paths are
+  `packages/connections/src/schema.mjs:450-465`, `:570-578`, `:672-701`, and
+  `:760-765`, with store append through
+  `packages/connections/src/store.mjs:45-85` and `:237-279`. This permits a
+  credential-bearing encoded value to cross the runtime free-form boundary and be
+  appended to the authoritative stream, despite the unwrapped canonical 23-character
+  and longer cases being rejected.
+- Finding `E5-T02-CRITIC-INDEPENDENT-SCHEMA-001` (high): the public
+  `credentialValueShape` generic base64 pattern is anchored to the untrimmed JSON
+  string, so whitespace-wrapped encoded material is accepted in public label,
+  metadata, and terminal-reason validation. The relevant schema ranges are
+  `packages/connections/src/schemas/connection-events.v1.schema.json:99-124`,
+  `:162-207`, and `:247-256`. This creates a runtime/public-schema policy mismatch
+  at the same free-form boundary.
+- Controls that passed: long ordinary opaque IDs remain accepted at runtime and in
+  the public identifier schema; URL-safe opaque compatibility remains valid; explicit
+  provider-token, private-key, URL, connection-string, assignment, and JSON shapes
+  reject in identifier fields; event identity fields follow that identifier policy;
+  recursive, case-variant, extra-field, Unicode-escaped, and parsed prototype-key
+  inputs reject; lifecycle/rotation/disable/delete and capture revision binding hold;
+  duplicate/reordered replay parity, authz parity, canary/leak scans, and detector
+  sensitivity all pass. These controls do not cure the two free-form findings.
+- Replay: N/A (server connection model) + mitigation: detached exact-head cold
+  replay, full gate transcript, independent runtime/store/Ajv probes, lifecycle and
+  capture checks, authz matrix, recursive adversarial corpus, leak scans, and
+  detector-sensitivity mutation. Status remains `refuted` pending builder rework
+  and another fresh critic.

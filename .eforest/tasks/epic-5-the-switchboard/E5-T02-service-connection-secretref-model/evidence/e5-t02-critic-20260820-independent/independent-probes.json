@@ -1,0 +1,2469 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "exactHead": "6677c51700bde89c027492153081775bf8b171ff",
+  "inputs": {
+    "canonicalUrlSafeLength": 23,
+    "canonicalUrlSafeRoundTrip": true,
+    "longerUrlSafeLength": 32,
+    "longerUrlSafeRoundTrip": true,
+    "longerOpaqueIdentifierLength": 35,
+    "opaqueUrlSafeIsCompatibilityInput": true
+  },
+  "runtime": {
+    "requiredFreeFormRejections": {
+      "metadata23": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "metadataLong": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "definitionMetadata23": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.safe",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "definitionMetadataLong": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.safe",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "label23": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "labelLong": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "reason23": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "reasonLong": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "terminalReason23": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.reason",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "terminalReasonLong": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.reason",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "capability23": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.principal.capabilities[0]",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "capabilityLong": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.principal.capabilities[0]",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "standardBase64": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "providerShape": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      }
+    },
+    "paddedFreeFormAttack": {
+      "label": {
+        "accepted": true,
+        "outputDigest": "sha256:f8b3ed83b1a6030f90f8c35883787e8ee7a81379f668fb85c0f7591be3d1b3c1"
+      },
+      "reason": {
+        "accepted": true,
+        "outputDigest": "sha256:85c43c5d38ae39f2adffd5603ae9ca281061b3d6b20bfa0faf6d6a3eff364a1d"
+      },
+      "metadata": {
+        "accepted": true,
+        "outputDigest": "sha256:827dd01ea2065156ce0082f3a11396b49ba0590fa1f9e8f627519ac3e6c03882"
+      }
+    },
+    "paddedCanonicalization": {
+      "labelReturnedCanonical": true,
+      "reasonReturnedCanonical": true,
+      "metadataRetainedWrapped": true
+    },
+    "detector": {
+      "canonicalUrlSafe": true,
+      "longerUrlSafe": true,
+      "standardBase64": true,
+      "providerShape": true
+    },
+    "findings": [
+      {
+        "id": "E5-T02-CRITIC-INDEPENDENT-001",
+        "severity": "high",
+        "summary": "Whitespace-wrapped URL-safe material is trimmed after detection and accepted as a label",
+        "observation": {
+          "boundary": "runtime.label",
+          "outcome": {
+            "accepted": true,
+            "outputDigest": "sha256:f8b3ed83b1a6030f90f8c35883787e8ee7a81379f668fb85c0f7591be3d1b3c1"
+          }
+        }
+      },
+      {
+        "id": "E5-T02-CRITIC-INDEPENDENT-002",
+        "severity": "high",
+        "summary": "Whitespace-wrapped URL-safe material is trimmed after detection and accepted as a reason",
+        "observation": {
+          "boundary": "runtime.reason",
+          "outcome": {
+            "accepted": true,
+            "outputDigest": "sha256:85c43c5d38ae39f2adffd5603ae9ca281061b3d6b20bfa0faf6d6a3eff364a1d"
+          }
+        }
+      },
+      {
+        "id": "E5-T02-CRITIC-INDEPENDENT-003",
+        "severity": "high",
+        "summary": "Whitespace-wrapped URL-safe material crossed the metadata normalizer",
+        "observation": {
+          "boundary": "runtime.metadata",
+          "outcome": {
+            "accepted": true,
+            "outputDigest": "sha256:827dd01ea2065156ce0082f3a11396b49ba0590fa1f9e8f627519ac3e6c03882"
+          }
+        }
+      }
+    ]
+  },
+  "store": {
+    "create": {
+      "metadata23": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.safe",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "metadataLong": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.safe",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "label23": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "capability23": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.actor.capabilities[0]",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "metadataPadded": {
+        "accepted": true,
+        "outputDigest": "sha256:8286fec01ed90798f26494ba8cf2c3e5774665c417536988666b39ca0c670a58"
+      },
+      "connectionIdUrlSafeCompatibility": {
+        "accepted": true,
+        "outputDigest": "sha256:7e01d8a464e61eeaf3a1eb5ccca0fcf5ae12142e05d54a61240ebf2b6cca735b"
+      }
+    },
+    "createEventCounts": {
+      "before": 0,
+      "afterCreate": 2,
+      "opaqueCompatibilityAppended": 1
+    },
+    "paddedMetadataPersisted": true,
+    "terminal": {
+      "canonical23": {
+        "outcome": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason",
+          "statusCode": 400,
+          "errorType": "ConnectionError"
+        },
+        "before": 1,
+        "after": 1
+      },
+      "longer": {
+        "outcome": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason",
+          "statusCode": 400,
+          "errorType": "ConnectionError"
+        },
+        "before": 1,
+        "after": 1
+      },
+      "padded": {
+        "outcome": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason",
+          "statusCode": 400,
+          "errorType": "ConnectionError"
+        },
+        "before": 1,
+        "after": 1
+      }
+    },
+    "capture": {
+      "urlSafeOpaque": {
+        "accepted": true,
+        "outputDigest": "sha256:7df70f06be2fbf9bd6a6f35767917fb703c7c6877f07ffa95a5cdbf92249f7a3"
+      },
+      "longOpaque": {
+        "accepted": true,
+        "outputDigest": "sha256:945f63dd46c9532478631a45802a54f2a23b7bc8b00b9df477b53682abf94cc8"
+      },
+      "providerShape": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.runId",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "capability": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.actor.capabilities[0]",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      }
+    },
+    "captureEventCountUnchanged": true,
+    "findings": [
+      {
+        "id": "E5-T02-CRITIC-INDEPENDENT-005",
+        "severity": "high",
+        "summary": "Whitespace-wrapped URL-safe material crossed store metadata append",
+        "observation": {
+          "boundary": "store.create.metadata",
+          "outcome": {
+            "accepted": true,
+            "outputDigest": "sha256:8286fec01ed90798f26494ba8cf2c3e5774665c417536988666b39ca0c670a58"
+          },
+          "eventCountAfter": 2,
+          "persistedAsWrapped": true
+        }
+      }
+    ]
+  },
+  "compatibility": {
+    "runtime": {
+      "opaqueUrlSafe": {
+        "accepted": true,
+        "outputDigest": "sha256:85c43c5d38ae39f2adffd5603ae9ca281061b3d6b20bfa0faf6d6a3eff364a1d"
+      },
+      "opaqueLong": {
+        "accepted": true,
+        "outputDigest": "sha256:bb57cdaa89d3449e168ad6cacabb715f5af6b403595efe6a656f455af75e2745"
+      },
+      "principalWorkspace": {
+        "accepted": true,
+        "outputDigest": "sha256:16b3c582237afddc87b95837663a9bea936456949a5a096f16ea21c9626ca11b"
+      },
+      "principalId": {
+        "accepted": true,
+        "outputDigest": "sha256:03a43212b3d8342e589ffd98132b66dd9934d66a4bfcf63296b9ae8a8c076593"
+      },
+      "ownerId": {
+        "accepted": true,
+        "outputDigest": "sha256:edb7c0bda10bf61c249d7122d1836cf54f445bdcd47199aeec39a4fb30ad1a46"
+      },
+      "runId": {
+        "accepted": true,
+        "outputDigest": "sha256:ecc61f24144587d1e4bb2250ac5e5ba858ed65aabd49b1e3a66fa65b3300e5c6"
+      }
+    },
+    "lifecycle": {
+      "accepted": true,
+      "outputDigest": "sha256:622e7a0b6653a2449a987aa1395ea1d5e74a7ace4b07d33ac54f8ef9722a6016"
+    },
+    "findings": []
+  },
+  "eventIdentity": {
+    "runtime": {
+      "urlSafeAccepted": {
+        "eventId": {
+          "accepted": true,
+          "outputDigest": "sha256:ab0e27998b5955429e93199c1cdc8f6014e58d9d282d0f6b0c687c273d8573f0"
+        },
+        "workspaceId": {
+          "accepted": true,
+          "outputDigest": "sha256:f33551e79c12b280f0bd22b3312dc64dc4f02c3d4bdaeb080c7baf9242212364"
+        },
+        "actorId": {
+          "accepted": true,
+          "outputDigest": "sha256:feb0b6a77f487e989c4ad6e8d18eabf9c52d3a087cd3c430ea6bcf789d9b183d"
+        },
+        "idempotencyKey": {
+          "accepted": true,
+          "outputDigest": "sha256:fe0378000aafd121c258ba403e73e7c63375efa3b3e5f6b103aec857aa8f8a7e"
+        },
+        "connectionId": {
+          "accepted": true,
+          "outputDigest": "sha256:dccba3e9eda3c471237ea9ad77ab4e6803a94f99f25fdb9589ab94156c719bdc"
+        }
+      },
+      "providerRejected": {
+        "eventId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.eventId",
+          "statusCode": 400,
+          "errorType": "ConnectionError"
+        },
+        "workspaceId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.workspaceId",
+          "statusCode": 400,
+          "errorType": "ConnectionError"
+        },
+        "actorId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.actorId",
+          "statusCode": 400,
+          "errorType": "ConnectionError"
+        },
+        "idempotencyKey": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.idempotencyKey",
+          "statusCode": 400,
+          "errorType": "ConnectionError"
+        },
+        "connectionId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.connectionId",
+          "statusCode": 400,
+          "errorType": "ConnectionError"
+        }
+      }
+    },
+    "findings": []
+  },
+  "adversarialInputs": {
+    "runtime": {
+      "recursive": {
+        "accepted": false,
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.connection.metadata.self",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "caseVariantKey": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.ToKeN",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "unicodeEscapedKey": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.token",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "parsedPrototypeKey": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.__proto__.ToKeN",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "extraDefinitionField": {
+        "accepted": false,
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.connection.unexpectedField",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "extraSecretRefField": {
+        "accepted": false,
+        "code": "CONNECTION_INVALID_SECRET_REF",
+        "path": "$.secretRef.unexpectedField",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      },
+      "extraEventField": {
+        "accepted": false,
+        "code": "CONNECTION_INVALID_EVENT",
+        "path": "$.event.unexpectedField",
+        "statusCode": 400,
+        "errorType": "ConnectionError"
+      }
+    },
+    "findings": []
+  },
+  "lifecycle": {
+    "revisionStability": {
+      "beforeRotate": 1,
+      "sameRunAfterRotate": 1,
+      "newRunAfterRotate": 2,
+      "existingAfterDisable": 1,
+      "existingAfterDelete": 1
+    },
+    "disabledNewRun": {
+      "accepted": false,
+      "code": "CONNECTION_NOT_ACTIVE",
+      "path": null,
+      "statusCode": 409,
+      "errorType": "ConnectionError"
+    },
+    "deletedNewRun": {
+      "accepted": false,
+      "code": "CONNECTION_NOT_ACTIVE",
+      "path": null,
+      "statusCode": 409,
+      "errorType": "ConnectionError"
+    },
+    "replay": {
+      "stateDigest": "sha256:bc24ea1dcaae95a0278e98db8d20727de13a503fee0b45d6a81ee7a1a4f38997",
+      "replayAgainDigest": "sha256:bc24ea1dcaae95a0278e98db8d20727de13a503fee0b45d6a81ee7a1a4f38997",
+      "viewDigest": "sha256:f37edb9c467ac9dd4cc0395e8756ebe53ecf0dfd82c8f243d7c5d0d4c38b8d6e",
+      "duplicateAndReorderedParity": true
+    }
+  },
+  "authz": {
+    "ownership": {
+      "memberRead": true,
+      "memberGrant": true,
+      "memberDelete": false
+    },
+    "foreignErrors": {
+      "read": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "detail": "connection was not found",
+        "path": null,
+        "statusCode": 404
+      },
+      "grant": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "detail": "connection was not found",
+        "path": null,
+        "statusCode": 404
+      },
+      "rotate": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "detail": "connection was not found",
+        "path": null,
+        "statusCode": 404
+      },
+      "disable": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "detail": "connection was not found",
+        "path": null,
+        "statusCode": 404
+      },
+      "delete": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "detail": "connection was not found",
+        "path": null,
+        "statusCode": 404
+      }
+    },
+    "unknownErrors": {
+      "read": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "detail": "connection was not found",
+        "path": null,
+        "statusCode": 404
+      },
+      "grant": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "detail": "connection was not found",
+        "path": null,
+        "statusCode": 404
+      },
+      "rotate": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "detail": "connection was not found",
+        "path": null,
+        "statusCode": 404
+      },
+      "disable": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "detail": "connection was not found",
+        "path": null,
+        "statusCode": 404
+      },
+      "delete": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "detail": "connection was not found",
+        "path": null,
+        "statusCode": 404
+      }
+    },
+    "foreignAuthorization": {
+      "allowed": false,
+      "code": "CONNECTION_NOT_FOUND"
+    },
+    "unknownAuthorization": {
+      "allowed": false,
+      "code": "CONNECTION_NOT_FOUND"
+    },
+    "foreignUnknownEqual": true,
+    "stateDigestUnchanged": true
+  },
+  "publicSchema": {
+    "freeFormAndAdversarial": {
+      "metadata23": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "oneOf"
+          },
+          {
+            "instancePath": "",
+            "keyword": "if"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "oneOf"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "oneOf"
+          }
+        ]
+      },
+      "metadataLong": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "oneOf"
+          },
+          {
+            "instancePath": "",
+            "keyword": "if"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "oneOf"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "oneOf"
+          }
+        ]
+      },
+      "label23": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/label",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "",
+            "keyword": "if"
+          },
+          {
+            "instancePath": "/data/label",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "oneOf"
+          }
+        ]
+      },
+      "labelLong": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/label",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "",
+            "keyword": "if"
+          },
+          {
+            "instancePath": "/data/label",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "oneOf"
+          }
+        ]
+      },
+      "reason23": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/reason",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "",
+            "keyword": "if"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data/reason",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "oneOf"
+          }
+        ]
+      },
+      "reasonLong": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/reason",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "",
+            "keyword": "if"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data/reason",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "oneOf"
+          }
+        ]
+      },
+      "paddedLabel": {
+        "accepted": true,
+        "errors": []
+      },
+      "paddedReason": {
+        "accepted": true,
+        "errors": []
+      },
+      "paddedMetadata": {
+        "accepted": true,
+        "errors": []
+      },
+      "standardBase64": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "oneOf"
+          },
+          {
+            "instancePath": "",
+            "keyword": "if"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "oneOf"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "oneOf"
+          }
+        ]
+      },
+      "providerShape": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "oneOf"
+          },
+          {
+            "instancePath": "",
+            "keyword": "if"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "type"
+          },
+          {
+            "instancePath": "/data/metadata/safe",
+            "keyword": "oneOf"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "oneOf"
+          }
+        ]
+      },
+      "caseVariantKey": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/metadata",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data/metadata",
+            "keyword": "propertyNames"
+          },
+          {
+            "instancePath": "",
+            "keyword": "if"
+          },
+          {
+            "instancePath": "/data/metadata",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data/metadata",
+            "keyword": "propertyNames"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "oneOf"
+          }
+        ]
+      },
+      "unicodeEscapedKey": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/metadata",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data/metadata",
+            "keyword": "propertyNames"
+          },
+          {
+            "instancePath": "",
+            "keyword": "if"
+          },
+          {
+            "instancePath": "/data/metadata",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data/metadata",
+            "keyword": "propertyNames"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "oneOf"
+          }
+        ]
+      },
+      "parsedPrototypeKey": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/metadata",
+            "keyword": "pattern"
+          },
+          {
+            "instancePath": "/data/metadata",
+            "keyword": "propertyNames"
+          },
+          {
+            "instancePath": "",
+            "keyword": "if"
+          },
+          {
+            "instancePath": "/data/metadata",
+            "keyword": "pattern"
+          },
+          {
+            "instancePath": "/data/metadata",
+            "keyword": "propertyNames"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "oneOf"
+          }
+        ]
+      },
+      "extraEventField": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "",
+            "keyword": "additionalProperties"
+          }
+        ]
+      },
+      "extraDataField": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "",
+            "keyword": "if"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "oneOf"
+          }
+        ]
+      },
+      "longIdentifiers": {
+        "accepted": true,
+        "errors": []
+      }
+    },
+    "urlSafeIdentity": {
+      "eventId": {
+        "accepted": true,
+        "errors": []
+      },
+      "workspaceId": {
+        "accepted": true,
+        "errors": []
+      },
+      "actorId": {
+        "accepted": true,
+        "errors": []
+      },
+      "idempotencyKey": {
+        "accepted": true,
+        "errors": []
+      },
+      "connectionId": {
+        "accepted": true,
+        "errors": []
+      }
+    },
+    "providerIdentity": {
+      "eventId": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/eventId",
+            "keyword": "not"
+          }
+        ]
+      },
+      "workspaceId": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/workspaceId",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data/owner/id",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "",
+            "keyword": "if"
+          },
+          {
+            "instancePath": "/workspaceId",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data/workspaceId",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data/owner/id",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "oneOf"
+          }
+        ]
+      },
+      "actorId": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/actorId",
+            "keyword": "not"
+          }
+        ]
+      },
+      "idempotencyKey": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/idempotencyKey",
+            "keyword": "not"
+          }
+        ]
+      },
+      "connectionId": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/connectionId",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "",
+            "keyword": "if"
+          },
+          {
+            "instancePath": "/connectionId",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data/connectionId",
+            "keyword": "not"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "required"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "additionalProperties"
+          },
+          {
+            "instancePath": "/data",
+            "keyword": "oneOf"
+          }
+        ]
+      }
+    },
+    "findings": [
+      {
+        "id": "E5-T02-CRITIC-INDEPENDENT-SCHEMA-PADDED-PADDEDLABEL",
+        "severity": "high",
+        "summary": "Public schema accepted whitespace-wrapped encoded material",
+        "observation": {
+          "case": "paddedLabel",
+          "outcome": {
+            "accepted": true,
+            "errors": []
+          }
+        }
+      },
+      {
+        "id": "E5-T02-CRITIC-INDEPENDENT-SCHEMA-PADDED-PADDEDREASON",
+        "severity": "high",
+        "summary": "Public schema accepted whitespace-wrapped encoded material",
+        "observation": {
+          "case": "paddedReason",
+          "outcome": {
+            "accepted": true,
+            "errors": []
+          }
+        }
+      },
+      {
+        "id": "E5-T02-CRITIC-INDEPENDENT-SCHEMA-PADDED-PADDEDMETADATA",
+        "severity": "high",
+        "summary": "Public schema accepted whitespace-wrapped encoded material",
+        "observation": {
+          "case": "paddedMetadata",
+          "outcome": {
+            "accepted": true,
+            "errors": []
+          }
+        }
+      }
+    ]
+  },
+  "sensitivity": {
+    "branchFound": true,
+    "branchRemoved": "generic base64 value detector",
+    "fixture": "canonical URL-safe free-form value",
+    "mutatedAccepted": true,
+    "verifierWouldTurnRed": true
+  },
+  "findings": [
+    {
+      "id": "E5-T02-CRITIC-INDEPENDENT-001",
+      "severity": "high",
+      "summary": "Whitespace-wrapped URL-safe material is trimmed after detection and accepted as a label",
+      "observation": {
+        "boundary": "runtime.label",
+        "outcome": {
+          "accepted": true,
+          "outputDigest": "sha256:f8b3ed83b1a6030f90f8c35883787e8ee7a81379f668fb85c0f7591be3d1b3c1"
+        }
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-INDEPENDENT-002",
+      "severity": "high",
+      "summary": "Whitespace-wrapped URL-safe material is trimmed after detection and accepted as a reason",
+      "observation": {
+        "boundary": "runtime.reason",
+        "outcome": {
+          "accepted": true,
+          "outputDigest": "sha256:85c43c5d38ae39f2adffd5603ae9ca281061b3d6b20bfa0faf6d6a3eff364a1d"
+        }
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-INDEPENDENT-003",
+      "severity": "high",
+      "summary": "Whitespace-wrapped URL-safe material crossed the metadata normalizer",
+      "observation": {
+        "boundary": "runtime.metadata",
+        "outcome": {
+          "accepted": true,
+          "outputDigest": "sha256:827dd01ea2065156ce0082f3a11396b49ba0590fa1f9e8f627519ac3e6c03882"
+        }
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-INDEPENDENT-005",
+      "severity": "high",
+      "summary": "Whitespace-wrapped URL-safe material crossed store metadata append",
+      "observation": {
+        "boundary": "store.create.metadata",
+        "outcome": {
+          "accepted": true,
+          "outputDigest": "sha256:8286fec01ed90798f26494ba8cf2c3e5774665c417536988666b39ca0c670a58"
+        },
+        "eventCountAfter": 2,
+        "persistedAsWrapped": true
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-INDEPENDENT-SCHEMA-PADDED-PADDEDLABEL",
+      "severity": "high",
+      "summary": "Public schema accepted whitespace-wrapped encoded material",
+      "observation": {
+        "case": "paddedLabel",
+        "outcome": {
+          "accepted": true,
+          "errors": []
+        }
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-INDEPENDENT-SCHEMA-PADDED-PADDEDREASON",
+      "severity": "high",
+      "summary": "Public schema accepted whitespace-wrapped encoded material",
+      "observation": {
+        "case": "paddedReason",
+        "outcome": {
+          "accepted": true,
+          "errors": []
+        }
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-INDEPENDENT-SCHEMA-PADDED-PADDEDMETADATA",
+      "severity": "high",
+      "summary": "Public schema accepted whitespace-wrapped encoded material",
+      "observation": {
+        "case": "paddedMetadata",
+        "outcome": {
+          "accepted": true,
+          "errors": []
+        }
+      }
+    }
+  ],
+  "leakScan": {
+    "filesChecked": [
+      "api-identifier-boundary.json",
+      "authz-matrix.json",
+      "canary-scan.json",
+      "capture-key-binding.json",
+      "cold-clone-transcript.json",
+      "cold-replay/api-identifier-boundary.json",
+      "cold-replay/authz-matrix.json",
+      "cold-replay/canary-scan.json",
+      "cold-replay/capture-key-binding.json",
+      "cold-replay/cold-clone-transcript.json",
+      "cold-replay/connection-state.json",
+      "cold-replay/lifecycle-events.json",
+      "cold-replay/replay-digests.json",
+      "cold-replay/secret-corpus.json",
+      "cold-replay/sensitivity.json",
+      "cold-replay/verification-summary.json",
+      "connection-state.json",
+      "critic-summary.json",
+      "gate-summary.json",
+      "independent-probes.json",
+      "lifecycle-events.json",
+      "replay-digests.json",
+      "secret-corpus.json",
+      "sensitivity.json",
+      "verification-summary.json"
+    ],
+    "findings": [],
+    "leaked": false
+  }
+}

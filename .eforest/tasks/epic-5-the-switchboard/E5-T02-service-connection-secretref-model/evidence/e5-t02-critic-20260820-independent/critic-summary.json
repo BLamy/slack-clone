@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "verdict": "refuted",
+  "exactHead": "6677c51700bde89c027492153081775bf8b171ff",
+  "reviewedProductFix": "4e68d2f85fcbdcf0434d5e8c7b911e2daf691ae3",
+  "productFilesModified": false,
+  "findings": [
+    {
+      "id": "E5-T02-CRITIC-INDEPENDENT-FREEFORM-001",
+      "severity": "high",
+      "summary": "Whitespace-wrapped canonical URL-safe material bypasses runtime free-form detection after normalization",
+      "locations": [
+        "packages/connections/src/schema.mjs:450-465",
+        "packages/connections/src/schema.mjs:672-701",
+        "packages/connections/src/schema.mjs:760-765",
+        "packages/connections/src/store.mjs:45-85",
+        "packages/connections/src/store.mjs:237-279"
+      ],
+      "observation": {
+        "fixtureLengths": [23, 32],
+        "roundTripValid": true,
+        "directLabelAcceptedAndTrimmed": true,
+        "directReasonAcceptedAndTrimmed": true,
+        "directMetadataAccepted": true,
+        "storeMetadataEventAppended": true,
+        "storeMetadataPersistedWrapped": true,
+        "canonicalAndLongUnwrappedFreeFormInputsStillRejected": true,
+        "evidence": "independent-probes.json"
+      },
+      "cause": "looksLikeCredentialValue sees the surrounding spaces and misses the generic encoded shape; normalizeLabel and normalizeReason then trim and return the encoded value, while metadata retains and appends the wrapped value."
+    },
+    {
+      "id": "E5-T02-CRITIC-INDEPENDENT-SCHEMA-001",
+      "severity": "high",
+      "summary": "The public free-form schema accepts whitespace-wrapped encoded material",
+      "locations": [
+        "packages/connections/src/schemas/connection-events.v1.schema.json:99-124",
+        "packages/connections/src/schemas/connection-events.v1.schema.json:162-207",
+        "packages/connections/src/schemas/connection-events.v1.schema.json:247-256"
+      ],
+      "observation": {
+        "fixtureLengths": [23, 32],
+        "roundTripValid": true,
+        "paddedLabelAccepted": true,
+        "paddedReasonAccepted": true,
+        "paddedMetadataAccepted": true,
+        "unwrappedCanonicalAndLongFreeFormInputsRejected": true,
+        "evidence": "independent-probes.json"
+      },
+      "cause": "credentialValueShape uses an anchored generic alphabet pattern, and the label, metadataValue, and terminal reason schemas apply it to the untrimmed input without a canonicalized-value constraint."
+    }
+  ],
+  "controlsPassed": [
+    "provider-shaped runtime values and event identity fields reject before append",
+    "lower-case opaque URL-safe identifiers remain accepted as intended",
+    "long ordinary opaque identifiers pass runtime and public identifier schema",
+    "event identity fields follow identifierCredentialShape policy",
+    "recursive, case-variant, Unicode-escaped, parsed prototype-key, and extra-field attacks reject",
+    "rotation capture stability, disable/delete fencing, duplicate/reordered replay, and authz parity pass",
+    "warm and detached cold verifier digests match",
+    "detector sensitivity turns red when the generic base64 branch is removed",
+    "durable evidence leak scans are clean"
+  ],
+  "replay": "Replay: N/A (server connection model) + mitigation: full gates, exact verifier, detached cold replay, independent schema/runtime/store probe, authz matrix, lifecycle digests, detector sensitivity, and leak scans",
+  "evidence": {
+    "gateSummary": "gate-summary.json",
+    "independentProbe": "independent-probe.mjs",
+    "independentResults": "independent-probes.json",
+    "warmVerifier": "verification-summary.json",
+    "coldReplay": "cold-replay/verification-summary.json",
+    "coldTranscript": "cold-replay/cold-clone-transcript.json"
+  }
+}

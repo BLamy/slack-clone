@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "runId": "e5-t02-critic-20260820-independent-final",
+  "implementationCommit": "6677c51700bde89c027492153081775bf8b171ff",
+  "first": {
+    "storeDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f"
+  },
+  "second": {
+    "storeDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f"
+  },
+  "parity": {
+    "storeDigestEqual": true,
+    "replayDigestEqual": true,
+    "replayViewDigestEqual": true,
+    "viewEqual": true,
+    "duplicateAndReorderedInput": true
+  }
+}

@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: refuted
+status: implemented
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -918,3 +918,28 @@ material and version policy; it is not a URI that clients can dereference themse
   capture checks, authorization matrix, recursive adversarial corpus, leak scans,
   and detector-sensitivity mutations. Status remains `refuted` pending product rework
   and another fresh critic.
+
+### Builder — final public-boundary rework — 2026-08-20
+
+- Commit: `a0ec965684fd0461c684e5acce37110a9d9c3475`.
+- Rework: client-secret assignment forms are rejected consistently across runtime and
+  public-schema credential detectors; any Unicode format control is rejected before
+  free-form credential classification; and the public metadata schema now mirrors the
+  runtime's bounded nesting policy, including the maximum empty-container boundary.
+  Unit and verifier controls cover the client-secret assignment and depth boundary.
+- Commands: `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`; `pnpm test`
+  (208 unit and 15 integration/Playwright tests passed); and `pnpm build`.
+- Local verifier: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e5-t02-final-a0ec965-20260820
+  make verify-E5-T02` passed duplicate/reordered replay parity with state/replay
+  digest `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`, and
+  `leaked: false`.
+- Evidence: `evidence/e5-t02-final/` was regenerated against this exact commit; the
+  secret corpus records the client-secret assignment and metadata-depth boundary,
+  and the canary scan remains clean.
+- Replay: N/A (server connection model) + mitigation: cold-clone reducer replay,
+  secret-shaped input corpus, authz matrix, exact lifecycle digests, independent
+  schema/runtime boundary checks, and detector-sensitivity mutation.
+- Claim: the ninth critic's assignment, Unicode format-control, and schema-depth
+  findings are addressed. E5-T02 is implemented and ready for a fresh final critic.

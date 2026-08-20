@@ -13,6 +13,8 @@ import {
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
+import Ajv2020 from "ajv/dist/2020.js";
+
 import {
   CONNECTION_ERROR_CODES,
   canonicalSha256,
@@ -46,6 +48,19 @@ const implementationCommit = execFileSync("git", ["rev-parse", "HEAD"], {
   cwd: root,
   encoding: "utf8",
 }).trim();
+const publicConnectionSchema = JSON.parse(
+  await readFile(
+    path.join(
+      root,
+      "packages/connections/src/schemas/connection-events.v1.schema.json",
+    ),
+    "utf8",
+  ),
+);
+const validatePublicConnectionEvent = new Ajv2020({
+  allErrors: true,
+  strict: false,
+}).compile(publicConnectionSchema);
 
 const SCOPE = Object.freeze({
   tenantId: "tenant-alpha",
@@ -113,6 +128,7 @@ await writeJson("replay-digests.json", {
   },
 });
 await writeJson("secret-corpus.json", corpus);
+await writeJson("public-schema-parity.json", corpus.publicSchemaParity);
 await writeJson("authz-matrix.json", authz);
 await writeJson("capture-key-binding.json", captureKeyCollision);
 await writeJson("api-identifier-boundary.json", apiIdentifierBoundary);
@@ -158,6 +174,7 @@ await writeJson("verification-summary.json", {
     rejected: corpus.rejected,
     appendedEvents: corpus.appendedEvents,
   },
+  publicSchemaParity: corpus.publicSchemaParity,
   authorization: authz.summary,
   captureKeyCollision,
   apiIdentifierBoundary,
@@ -451,8 +468,18 @@ function secretCorpusFixture() {
     ["authorization-field", { authorization: "Bearer redacted-token-value" }],
   ];
   const rejected = [];
+  const publicSchemaRejected = [];
   let store = makeStore();
-  for (const [name, metadata] of attacks) {
+  for (const [index, [name, metadata]] of attacks.entries()) {
+    const publicAccepted = validatePublicConnectionEvent(
+      makeConnectionCreatedEvent(metadata, index),
+    );
+    assert.equal(
+      publicAccepted,
+      false,
+      `${name}: public connection schema accepted credential material`,
+    );
+    publicSchemaRejected.push(name);
     const before = store.events().length;
     let error;
     try {
@@ -474,6 +501,30 @@ function secretCorpusFixture() {
     assert.equal(store.events().length, before);
     rejected.push({ name, code: error.code, path: error.path });
   }
+
+  const ordinaryPercentMetadata = {
+    note: "release%20candidate%3A%20green",
+  };
+  assert.doesNotThrow(() => normalizeMetadata(ordinaryPercentMetadata));
+  assert.equal(
+    validatePublicConnectionEvent(
+      makeConnectionCreatedEvent(ordinaryPercentMetadata, "ordinary"),
+    ),
+    true,
+  );
+  const ordinaryStore = makeStore();
+  ordinaryStore.create({
+    actor: ADMIN,
+    connectionId: "c-ordinary-percent",
+    owner: { kind: "workspace", id: SCOPE.workspaceId },
+    provider: "github",
+    integration: "issues",
+    label: "Ordinary percent text",
+    metadata: ordinaryPercentMetadata,
+    secretRef: secretRef(1),
+    idempotencyKey: "a-ordinary-percent",
+  });
+  assert.equal(ordinaryStore.events().length, 1);
 
   const tooDeep = {
     level1: {
@@ -583,6 +634,42 @@ function secretCorpusFixture() {
     },
     appendedEvents: store.events().length,
     rawValuesPersisted: false,
+    publicSchemaParity: {
+      rejected: publicSchemaRejected,
+      rejectedCount: publicSchemaRejected.length,
+      ordinaryPercentText: {
+        runtimeAccepted: true,
+        publicSchemaAccepted: true,
+        storeAppendedEvents: ordinaryStore.events().length,
+      },
+    },
+  };
+}
+
+function makeConnectionCreatedEvent(metadata, index) {
+  const suffix = String(index);
+  return {
+    schemaVersion: 1,
+    eventId: "event-e5-t02-" + suffix,
+    eventType: "connection.created",
+    workspaceId: SCOPE.workspaceId,
+    actorId: ADMIN.id,
+    idempotencyKey: "idempotency-e5-t02-" + suffix,
+    sequence: 1,
+    serverTimestamp: "2026-08-19T17:00:00.000Z",
+    connectionId: "connection-e5-t02-" + suffix,
+    data: {
+      connectionId: "connection-e5-t02-" + suffix,
+      tenantId: SCOPE.tenantId,
+      workspaceId: SCOPE.workspaceId,
+      owner: { kind: "workspace", id: SCOPE.workspaceId },
+      provider: "github",
+      integration: "issues",
+      label: "Schema boundary fixture",
+      metadata,
+      secretRef: secretRef(1),
+      revision: 1,
+    },
   };
 }
 

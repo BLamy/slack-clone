@@ -3,7 +3,7 @@ id: E5-T01
 epic: 5
 title: "Credential broker contract: Infisical Agent Proxy in production, Agent Vault locally, and no raw-secret orchestration path"
 priority: 501
-status: implemented
+status: verified
 depends_on: [E3]
 estimate: L
 capstone: false
@@ -243,3 +243,24 @@ opaque, single-use, run-scoped handles to callers.
   transcript.
 - Claim: the two additional critic findings are closed and E5-T01 is implemented for
   another fresh independent verdict.
+
+### Critic — 2026-08-19
+
+- Verdict: VERIFIED.
+- Exact head: ce1c55637dad507971743df077aa2f18d0a3090f; the critic confirmed the
+  worktree was clean and the committed evidence was unchanged.
+- Commands: full format, lint, typecheck, pnpm test (197 unit and 15 integration),
+  build, and focused credential-broker tests (7/7) all passed. The local verifier
+  passed with matching state digest sha256:b98ce75f... and audit digest
+  sha256:5b5a5b5e....
+- Independent attacks passed for plaintext requestId rejection, all requested reserved
+  and embedded-IP forms, concurrency/revoke fencing, replay and binding/request
+  tamper, provider substitution, signed attestation, and injected transport.
+- Evidence scanning detected independent environment and compound-artifact canaries,
+  the verifier rejected the injected leak, and the temporary sensitivity artifact was
+  absent afterward. The real-provider gate remained SKIPPED, exit 2, for all 12
+  missing inputs with fallbackUsed: false; this is not real-provider acceptance.
+- Replay: N/A (headless credential broker) + mitigation: cold-clone state replay,
+  canary scans, provider-mode refusal fixtures, and gated real Infisical Agent Proxy
+  transcript.
+- Claim: E5-T01 is verified and may advance the queue.

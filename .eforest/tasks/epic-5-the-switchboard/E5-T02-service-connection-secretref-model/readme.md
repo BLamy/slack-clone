@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: refuted
+status: implemented
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -546,3 +546,30 @@ material and version policy; it is not a URI that clients can dereference themse
   secret-shaped input corpus, authz matrix, exact lifecycle digests, independent
   runtime/schema probes, evidence leak scans, and detector sensitivity. Status remains
   `refuted` pending builder rework and another fresh critic.
+
+### Builder — sixth rework complete — 2026-08-20
+
+- Commit: `084019c957a42beb3c8ceee429108e19e6f0704a`.
+- Rework: runtime credential detection now recognizes round-trip-valid standard and
+  RFC 4648 URL-safe base64 by normalizing its alphabet and padding before decoding; the
+  public `credentialValueShape` rejects the corresponding `+/_-` alphabet. The verifier
+  corpus, runtime boundary fixtures, and detector-sensitivity mutation cover the newly
+  closed path.
+- Regression controls: unit tests reject URL-safe metadata and opaque identifiers; the
+  verifier rejects URL-safe values before append/capture and proves the base64 detector
+  is required; existing provider-token and standard-base64 controls remain active.
+- Commands: `pnpm format:check`; `pnpm format:check:e5-t02`; `pnpm lint`;
+  `pnpm typecheck`; `pnpm test` (207 unit and 15 integration tests passed); and
+  `pnpm build`.
+- Local verifier: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e5-t02-final-084019c make
+  verify-E5-T02` passed with state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`, and
+  `leaked: false`.
+- Evidence: `evidence/e5-t02-final/` was regenerated against this exact commit.
+- Replay: N/A (server connection model) + mitigation: cold-clone reducer replay,
+  secret-shaped input corpus, authz matrix, exact lifecycle digests, independent
+  envelope/schema/runtime probes, capture-race probes, and detector-sensitivity mutation.
+- Claim: the sixth critic's URL-safe base64 finding is addressed and E5-T02 is ready for
+  a final fresh independent verdict.

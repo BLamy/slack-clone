@@ -40,7 +40,7 @@
       "runtime": "normalizeMetadata accepted the value",
       "store": "create appended one event and persisted the synthetic value in event.data.metadata.candidate",
       "source": "packages/connections/src/schema.mjs:681-699; securityNormalize is applied to keys at :669-679 but not credential values",
-      "evidence": "independent-probes.json and critic execution transcript"
+      "evidence": "confusable-store.json"
     }
   ],
   "matrix": {
@@ -65,6 +65,7 @@
     "cold-clone-transcript.json",
     "independent-probes.mjs",
     "independent-probes.json",
+    "confusable-store.json",
     "lifecycle-authz.json",
     "sensitivity.json",
     "canary-scan.json"

@@ -1286,6 +1286,9 @@ material and version policy; it is not a URI that clients can dereference themse
   `normalizeMetadata` and persisted by `createConnectionStore`. Key normalization
   covers confusables at `packages/connections/src/schema.mjs:669-679`, but value
   detection at `:681-699` does not apply the same normalization.
+- The direct persistence result is recorded in
+  `evidence/e5-t02-critic-20260820-f273604/confusable-store.json`; it used no real
+  secret, appended one synthetic event, and redacted the stored value.
 - Independent controls passed: ordinary percent text; escaped/case/whitespace/
   zero-width/base64/token/URL/client-secret cases; metadata depth, array and
   property-count limits; astral code-point and reason bounds; lifecycle/rotation/

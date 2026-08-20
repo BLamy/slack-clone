@@ -63,7 +63,9 @@ const CONFUSABLES = new Map([
 ]);
 
 export function normalizeSecretRef(input, path = "$.secretRef") {
-  assertNoCredentialMaterial(input, path);
+  assertNoCredentialMaterial(input, path, new Set(), {
+    allowGenericBase64: true,
+  });
   const value = requireRecord(
     input,
     CONNECTION_ERROR_CODES.INVALID_SECRET_REF,
@@ -118,7 +120,9 @@ export function normalizeSecretRef(input, path = "$.secretRef") {
 }
 
 export function normalizeConnectionDefinition(input, path = "$.connection") {
-  assertNoCredentialMaterial(input, path);
+  assertNoCredentialMaterial(input, path, new Set(), {
+    allowGenericBase64: true,
+  });
   const value = requireRecord(
     input,
     CONNECTION_ERROR_CODES.INVALID_REQUEST,
@@ -291,7 +295,9 @@ export function normalizeConnectionEvent(input, path = "$.event") {
     CONNECTION_ERROR_CODES.INVALID_EVENT,
     path,
   );
-  assertNoCredentialMaterial(value, path);
+  assertNoCredentialMaterial(value, path, new Set(), {
+    allowGenericBase64: true,
+  });
   assertAllowedKeys(
     value,
     [
@@ -380,10 +386,11 @@ export function assertNoCredentialMaterial(
   value,
   path = "$",
   seen = new Set(),
+  { allowGenericBase64 = false } = {},
 ) {
   if (value === null || value === undefined) return;
   if (typeof value === "string") {
-    if (looksLikeCredentialValue(value)) {
+    if (looksLikeCredentialValue(value, { allowGenericBase64 })) {
       throw connectionError(
         CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
         "credential-shaped material is not accepted",
@@ -408,6 +415,7 @@ export function assertNoCredentialMaterial(
           value[index],
           path + "[" + index + "]",
           seen,
+          { allowGenericBase64 },
         );
       }
       return;
@@ -420,7 +428,9 @@ export function assertNoCredentialMaterial(
           { path: path + "." + key },
         );
       }
-      assertNoCredentialMaterial(nested, path + "." + key, seen);
+      assertNoCredentialMaterial(nested, path + "." + key, seen, {
+        allowGenericBase64,
+      });
     }
   } finally {
     seen.delete(value);
@@ -659,11 +669,11 @@ function isCredentialKey(key, { allowSecretRef = true } = {}) {
   );
 }
 
-function looksLikeCredentialValue(value) {
+function looksLikeCredentialValue(value, { allowGenericBase64 = false } = {}) {
   if (CREDENTIAL_VALUE_PATTERNS.some((pattern) => pattern.test(value))) {
     return true;
   }
-  if (isBase64EncodedValue(value)) return true;
+  if (!allowGenericBase64 && isBase64EncodedValue(value)) return true;
   if (/^\s*(?:\[|\{)/u.test(value)) {
     try {
       const parsed = JSON.parse(value);
@@ -677,7 +687,7 @@ function looksLikeCredentialValue(value) {
 }
 
 function isBase64EncodedValue(value) {
-  if (value.length < 24 || !BASE64_VALUE_PATTERN.test(value)) return false;
+  if (value.length < 22 || !BASE64_VALUE_PATTERN.test(value)) return false;
   const unpadded = value.replace(/=+$/u, "");
   if (unpadded.length % 4 === 1) return false;
   const normalized = unpadded.replace(/-/gu, "+").replace(/_/gu, "/");
@@ -720,7 +730,9 @@ function assertSchemaVersion(value, path, codeName) {
 }
 
 function normalizeIdentifier(value, path, code) {
-  assertNoCredentialMaterial(value, path);
+  assertNoCredentialMaterial(value, path, new Set(), {
+    allowGenericBase64: true,
+  });
   if (typeof value !== "string" || !IDENTIFIER_PATTERN.test(value)) {
     throw connectionError(code, "identifier is invalid", { path });
   }
@@ -728,7 +740,9 @@ function normalizeIdentifier(value, path, code) {
 }
 
 function normalizeOpaqueId(value, path, code) {
-  assertNoCredentialMaterial(value, path);
+  assertNoCredentialMaterial(value, path, new Set(), {
+    allowGenericBase64: true,
+  });
   if (
     typeof value !== "string" ||
     !OPAQUE_ID_PATTERN.test(value) ||
@@ -744,6 +758,7 @@ export function normalizeOpaqueIdForStore(value, path = "$.id") {
 }
 
 function normalizeLabel(value, path, code) {
+  assertNoCredentialMaterial(value, path);
   if (typeof value !== "string" || !LABEL_PATTERN.test(value.trim())) {
     throw connectionError(code, "label is invalid", { path });
   }

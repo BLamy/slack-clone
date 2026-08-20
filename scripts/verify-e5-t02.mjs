@@ -329,6 +329,7 @@ function secretCorpusFixture() {
         ]).toString("base64url"),
       },
     ],
+    ["base64url-short", { encodedUrlSafe: "a".repeat(21) + "-a" }],
     ["provider-token", { encodedValue: "ghp_" + "A".repeat(32) }],
     ["json", { payload: '{"token":"e5-t02-connection-canary-value"}' }],
     ["url", { endpoint: "https://user:password@example.invalid/service" }],
@@ -495,19 +496,11 @@ function captureKeyCollisionFixture() {
 
 function apiIdentifierBoundaryFixture() {
   const providerToken = "ghp_" + "a".repeat(32);
-  const urlSafeBase64 = Buffer.from([
-    251, 255, 239, 250, 222, 173, 190, 239, 251, 255, 239, 250, 222, 173, 190,
-    239, 251, 255, 239,
-  ]).toString("base64url");
   const rejected = {};
   const assertions = [
     [
       "opaque-store-id",
       () => normalizeOpaqueIdForStore(providerToken, "$.runId"),
-    ],
-    [
-      "opaque-store-url-safe-base64",
-      () => normalizeOpaqueIdForStore(urlSafeBase64, "$.runId"),
     ],
     [
       "principal-id",
@@ -533,14 +526,6 @@ function apiIdentifierBoundaryFixture() {
         normalizePrincipal({
           ...ADMIN,
           capabilities: [providerToken],
-        }),
-    ],
-    [
-      "principal-url-safe-base64-capability",
-      () =>
-        normalizePrincipal({
-          ...ADMIN,
-          capabilities: [urlSafeBase64],
         }),
     ],
     [
@@ -602,8 +587,17 @@ function apiIdentifierBoundaryFixture() {
     code: authorizationError.code,
     path: authorizationError.path,
   };
+  const ordinaryLongId = "connection-final-lifecycle";
+  const ordinaryPrincipal = normalizePrincipal({
+    ...MEMBER,
+    workspaceId: ordinaryLongId,
+  });
   return {
     rejected,
+    identifierCompatibility: {
+      opaqueId: normalizeOpaqueIdForStore(ordinaryLongId, "$.connectionId"),
+      principalWorkspaceId: ordinaryPrincipal.workspaceId,
+    },
     capture: {
       code: captureError.code,
       path: captureError.path,
@@ -1012,7 +1006,9 @@ async function detectorBase64SensitivityFixture() {
     const source = await readFile(schemaPath, "utf8");
     const lines = source.split("\n");
     const detectorLine = lines.findIndex((line) =>
-      line.includes("if (isBase64EncodedValue(value)) return true;"),
+      line.includes(
+        "if (!allowGenericBase64 && isBase64EncodedValue(value)) return true;",
+      ),
     );
     assert.notEqual(detectorLine, -1);
     lines.splice(detectorLine, 1);
@@ -1026,10 +1022,7 @@ async function detectorBase64SensitivityFixture() {
       integration: "issues",
       label: "Base64 sensitivity",
       metadata: {
-        encodedUrlSafe: Buffer.from([
-          251, 255, 239, 250, 222, 173, 190, 239, 251, 255, 239, 250, 222, 173,
-          190, 239, 251, 255, 239,
-        ]).toString("base64url"),
+        encodedUrlSafe: "a".repeat(21) + "-a",
       },
       secretRef: secretRef(1),
     };

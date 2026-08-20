@@ -11,6 +11,7 @@ import {
   normalizeOpaqueIdForStore,
   normalizeOwner,
   normalizePrincipal,
+  normalizeReason,
   normalizeSecretRef,
   replayConnectionEvents,
 } from "@stream-slack/connections";
@@ -57,6 +58,7 @@ test("SecretRefs accept opaque broker identifiers and reject secret-shaped input
 });
 
 test("connection metadata rejects encoded, URL, JSON, nested, and confusable secrets", () => {
+  const shortUrlSafeBase64 = "a".repeat(21) + "-a";
   const attacks = [
     { metadata: { encoded: "c3VwZXItc2VjcmV0LXRva2VuLXZhbHVl" } },
     {
@@ -72,6 +74,7 @@ test("connection metadata rejects encoded, URL, JSON, nested, and confusable sec
         ]).toString("base64url"),
       },
     },
+    { metadata: { encodedUrlSafeShort: shortUrlSafeBase64 } },
     { metadata: { encodedValue: "ghp_" + "A".repeat(32) } },
     { metadata: { endpoint: "https://user:password@example.invalid" } },
     { metadata: { payload: '{"token":"raw-token-value"}' } },
@@ -125,16 +128,16 @@ test("event boundaries reject credential-shaped opaque identifiers", () => {
 
 test("runtime identifier APIs reject provider-token-shaped values", () => {
   const providerToken = "ghp_" + "a".repeat(32);
-  const urlSafeBase64 = Buffer.from([
-    251, 255, 239, 250, 222, 173, 190, 239, 251, 255, 239, 250, 222, 173, 190,
-    239, 251, 255, 239,
-  ]).toString("base64url");
   assert.throws(
     () => normalizeOpaqueIdForStore(providerToken, "$.runId"),
     (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
   );
+  assert.equal(
+    normalizeOpaqueIdForStore("connection-final-lifecycle", "$.runId"),
+    "connection-final-lifecycle",
+  );
   assert.throws(
-    () => normalizeOpaqueIdForStore(urlSafeBase64, "$.runId"),
+    () => normalizeReason("a".repeat(21) + "-a"),
     (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
   );
   assert.throws(

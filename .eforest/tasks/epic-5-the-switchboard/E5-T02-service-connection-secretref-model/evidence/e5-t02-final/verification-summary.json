@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E5-T02",
-  "runId": "e5-t02-final-c6b1297-20260820",
-  "implementationCommit": "c6b1297d219c4d5b0478ba96dae62e5df6202b5a",
+  "runId": "e5-t02-layered-schema-20260820",
+  "implementationCommit": "9127aa6eb28dc7f4dc68d84f52c4dd47a67060d6",
   "result": "PASS",
   "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
   "replay": {
@@ -63,6 +63,26 @@
         "path": "$.connection.metadata.payload"
       },
       {
+        "name": "fully-percent-json",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.payload"
+      },
+      {
+        "name": "double-fully-percent-json",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.payload"
+      },
+      {
+        "name": "mixed-fully-percent-json",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.payload"
+      },
+      {
+        "name": "double-mixed-client-secret-json",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.payload"
+      },
+      {
         "name": "escaped-json",
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
         "path": "$.connection.metadata.payload"
@@ -88,7 +108,22 @@
         "path": "$.connection.metadata.assignment"
       },
       {
+        "name": "double-mixed-client-secret-assignment",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      {
+        "name": "double-mixed-prefixed-client-secret-assignment",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      {
         "name": "percent-url",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.endpoint"
+      },
+      {
+        "name": "double-mixed-url",
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
         "path": "$.connection.metadata.endpoint"
       },
@@ -96,6 +131,16 @@
         "name": "percent-provider-token",
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
         "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "double-mixed-provider-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "percent-private-key",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.material"
       },
       {
         "name": "client-secret-prefixed-hyphen",

@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: refuted
+status: implemented
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -1223,3 +1223,26 @@ material and version policy; it is not a URI that clients can dereference themse
   and capture checks, authorization matrix, leakage scan, and detector sensitivity
   mutation. Status remains `refuted`; do not start E5-T03 until the public schema
   is reworked and another fresh critic reviews it.
+
+### Builder — layered schema boundary rework — 2026-08-20
+
+- Commit: `9127aa6eb28dc7f4dc68d84f52c4dd47a67060d6`.
+- Rework: the public credential-value schema now mirrors the runtime's two bounded
+  percent-decoding passes for structured JSON, assignments, URLs, provider prefixes,
+  and percent-encoded PEM markers. Unit and verifier corpora include the nine fresh
+  independent cases and retain the ordinary percent-text positive control.
+- Commands: `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`; `pnpm test`
+  (209 unit and 15 integration/Playwright tests passed); `pnpm build`; and
+  `git diff --check` all passed. The independent runtime/store/Ajv probe now reports
+  zero findings and preserves the positive control.
+- Local verifier: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e5-t02-layered-schema-20260820
+  make verify-E5-T02` passed at this exact commit with state/replay digest
+  `sha256:f40a785341af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`, and
+  `leaked: false`. Evidence is in `evidence/e5-t02-final/`.
+- Replay: N/A (server connection model) + mitigation: promoted exact-head cold
+  reducer replay, layered secret corpus, public-schema/runtime parity probes,
+  lifecycle and authorization matrix, canary scan, and detector-sensitivity mutation.
+- Claim: the final independent public-schema finding is addressed. E5-T02 is
+  implemented and ready for another fresh critic.

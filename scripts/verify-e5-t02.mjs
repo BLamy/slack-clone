@@ -17,6 +17,7 @@ import {
   CONNECTION_ERROR_CODES,
   canonicalSha256,
   createConnectionStore,
+  normalizeConnectionEvent,
   normalizeSecretRef,
   replayConnectionEvents,
 } from "@stream-slack/connections";
@@ -74,7 +75,10 @@ assert.equal(first.replayViewDigest, second.replayViewDigest);
 
 const corpus = secretCorpusFixture();
 const authz = authorizationFixture();
-const sensitivity = await detectorSensitivityFixture();
+const sensitivity = {
+  url: await detectorSensitivityFixture(),
+  providerToken: await detectorProviderTokenSensitivityFixture(),
+};
 
 await writeJson("connection-state.json", first.view);
 await writeJson("lifecycle-events.json", first.redactedEvents);
@@ -212,11 +216,21 @@ function lifecycleFixture(label) {
     connectionId: "connection-github",
     runId: "run-second",
   });
+  const capturedSameRunAfterRotate = store.captureForRun({
+    actor: MEMBER,
+    connectionId: "connection-github",
+    runId: "run-first",
+  });
   assert.equal(created.connection.activeRevision, 1);
   assert.equal(rotated.connection.activeRevision, 2);
   assert.equal(capturedBeforeRotate.revision, 1);
   assert.equal(capturedBeforeRotate.secretRef.revision, 1);
   assert.equal(capturedAfterRotate.revision, 2);
+  assert.equal(capturedSameRunAfterRotate.revision, 1);
+  assert.equal(
+    capturedSameRunAfterRotate.bindingDigest,
+    capturedBeforeRotate.bindingDigest,
+  );
   assert.notEqual(
     capturedBeforeRotate.bindingDigest,
     capturedAfterRotate.bindingDigest,
@@ -293,9 +307,7 @@ function secretCorpusFixture() {
     [
       "base64-provider-token",
       {
-        encodedProviderToken: Buffer.from("ghp_" + "A".repeat(32)).toString(
-          "base64",
-        ),
+        encodedValue: Buffer.from("ghp_" + "A".repeat(32)).toString("base64"),
       },
     ],
     ["json", { payload: '{"token":"e5-t02-connection-canary-value"}' }],
@@ -364,12 +376,52 @@ function secretCorpusFixture() {
     assert.equal(store.events().length, before);
   }
 
+  const eventBoundary = eventBoundaryFixture();
+
   return {
     corpus: attacks.map(([name]) => name),
     secretRefCorpus: refAttacks.map(([name]) => name),
     rejected,
+    eventBoundary,
     appendedEvents: store.events().length,
     rawValuesPersisted: false,
+  };
+}
+
+function eventBoundaryFixture() {
+  let error;
+  try {
+    normalizeConnectionEvent({
+      schemaVersion: 1,
+      eventId: "ghp-" + "a".repeat(32),
+      eventType: "connection.created",
+      workspaceId: SCOPE.workspaceId,
+      actorId: ADMIN.id,
+      idempotencyKey: "event-boundary-create",
+      sequence: 1,
+      serverTimestamp: "2026-08-19T17:00:00.000Z",
+      connectionId: "connection-event-boundary",
+      data: {
+        connectionId: "connection-event-boundary",
+        tenantId: SCOPE.tenantId,
+        workspaceId: SCOPE.workspaceId,
+        owner: { kind: "workspace", id: SCOPE.workspaceId },
+        provider: "github",
+        integration: "issues",
+        label: "Event boundary",
+        metadata: {},
+        secretRef: secretRef(1),
+        revision: 1,
+      },
+    });
+  } catch (caught) {
+    error = caught;
+  }
+  assert.equal(error?.code, CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL);
+  return {
+    rejected: true,
+    code: error.code,
+    path: error.path,
   };
 }
 
@@ -662,6 +714,80 @@ async function detectorSensitivityFixture() {
     assert.equal(mutatedAccepted, true);
     return {
       branchRemoved: "URL and connection-string value detector",
+      mutatedFixtureAccepted: true,
+      verifierWouldTurnRed: true,
+    };
+  } finally {
+    await rm(scratchDirectory, { recursive: true, force: true });
+  }
+}
+
+async function detectorProviderTokenSensitivityFixture() {
+  const workDirectory = path.join(taskDirectory, "work");
+  await mkdir(workDirectory, { recursive: true });
+  const scratchDirectory = await mkdtemp(
+    path.join(workDirectory, "detector-provider-token-sensitivity-"),
+  );
+  try {
+    const sourceDirectory = path.join(scratchDirectory, "src");
+    await mkdir(sourceDirectory, { recursive: true });
+    const schemaPath = path.join(sourceDirectory, "schema.mjs");
+    const errorsPath = path.join(sourceDirectory, "errors.mjs");
+    const canonicalPath = path.join(sourceDirectory, "canonical.mjs");
+    await copyFile(
+      path.join(root, "packages/connections/src/schema.mjs"),
+      schemaPath,
+    );
+    await copyFile(
+      path.join(root, "packages/connections/src/errors.mjs"),
+      errorsPath,
+    );
+    await copyFile(
+      path.join(root, "packages/connections/src/canonical.mjs"),
+      canonicalPath,
+    );
+    const source = await readFile(schemaPath, "utf8");
+    const lines = source.split("\n");
+    const detectorLine = lines.findIndex((line) =>
+      line.includes("sk|rk|pk|ghp|github_pat|xox"),
+    );
+    assert.notEqual(detectorLine, -1);
+    lines.splice(detectorLine, 1);
+    await writeFile(schemaPath, lines.join("\n"));
+    const fixture = {
+      connectionId: "connection-provider-sensitivity",
+      tenantId: SCOPE.tenantId,
+      workspaceId: SCOPE.workspaceId,
+      owner: { kind: "workspace", id: SCOPE.workspaceId },
+      provider: "github",
+      integration: "issues",
+      label: "Provider sensitivity",
+      metadata: {
+        encodedValue: Buffer.from("ghp_" + "A".repeat(32)).toString("base64"),
+      },
+      secretRef: secretRef(1),
+    };
+    const probe =
+      "import { normalizeConnectionDefinition } from " +
+      JSON.stringify(pathToFileURL(schemaPath).href) +
+      ";\nnormalizeConnectionDefinition(" +
+      JSON.stringify(fixture) +
+      ");\n";
+    let mutatedAccepted = false;
+    try {
+      execFileSync(process.execPath, ["--input-type=module", "-e", probe], {
+        cwd: root,
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "pipe"],
+      });
+      mutatedAccepted = true;
+    } catch {
+      mutatedAccepted = false;
+    }
+    assert.equal(mutatedAccepted, true);
+    return {
+      branchRemoved: "provider-token value detector",
+      fixtureKey: "encodedValue",
       mutatedFixtureAccepted: true,
       verifierWouldTurnRed: true,
     };

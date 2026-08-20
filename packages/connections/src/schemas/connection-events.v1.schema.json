@@ -66,13 +66,45 @@
     }
   ],
   "$defs": {
+    "credentialFieldName": {
+      "type": "string",
+      "pattern": "(?:[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Ss][Ee][Cc][Rr][Ee][Tt]|[Cc][Rr][Ee][Dd][Ee][Nn][Tt][Ii][Aa][Ll]|[Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn]|[Cc][Oo][Oo][Kk][Ii][Ee]|[Bb][Ee][Aa][Rr][Ee][Rr]|[Tt][Oo][Kk][Ee][Nn]|[Pp][Rr][Ii][Vv][Aa][Tt][Ee][-_ ]?[Kk][Ee][Yy]|[Cc][Oo][Nn][Nn][Ee][Cc][Tt][Ii][Oo][Nn][-_ ]?[Ss][Tt][Rr][Ii][Nn][Gg]|[Aa][Pp][Ii][-_]?[Kk][Ee][Yy])"
+    },
+    "credentialValueShape": {
+      "type": "string",
+      "anyOf": [
+        {
+          "pattern": "-----[Bb][Ee][Gg][Ii][Nn] [^-]*[Pp][Rr][Ii][Vv][Aa][Tt][Ee] [Kk][Ee][Yy]-----"
+        },
+        {
+          "pattern": "\\b(?:[Bb][Ee][Aa][Rr][Ee][Rr]|[Bb][Aa][Ss][Ii][Cc])\\s+[A-Za-z0-9._~+/=-]{8,}"
+        },
+        {
+          "pattern": "\\b(?:[Ss][Kk]|[Rr][Kk]|[Pp][Kk]|[Gg][Hh][Pp]|[Gg][Ii][Tt][Hh][Uu][Bb]_[Pp][Aa][Tt]|[Xx][Oo][Xx][Bb][AaPpRrSs])[-_][A-Za-z0-9._~+/=-]{8,}\\b"
+        },
+        {
+          "pattern": "(?:[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Tt][Oo][Kk][Ee][Nn]|[Ss][Ee][Cc][Rr][Ee][Tt]|[Aa][Pp][Ii][-_]?[Kk][Ee][Yy]|[Pp][Rr][Ii][Vv][Aa][Tt][Ee][-_ ]?[Kk][Ee][Yy]|[Cc][Oo][Oo][Kk][Ii][Ee]|[Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn])\\s*[:=]"
+        },
+        {
+          "pattern": "\\b(?:[Hh][Tt][Tt][Pp][Ss]?|[Ss][Ss][Hh]|[Pp][Oo][Ss][Tt][Gg][Rr][Ee][Ss](?:[Qq][Ll])?|[Mm][Yy][Ss][Qq][Ll]|[Rr][Ee][Dd][Ii][Ss]|[Mm][Oo][Nn][Gg][Oo][Dd][Bb](?:\\+[Ss][Rr][Vv])?|[Aa][Mm][Qq][Pp]):\\/\\/\\S+"
+        },
+        {
+          "pattern": "(?:^|[\\s;])(?:[Hh][Oo][Ss][Tt]|[Uu][Ss][Ee][Rr](?:[Nn][Aa][Mm][Ee])?|[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Pp][Oo][Rr][Tt])\\s*=\\s*[^;]+"
+        },
+        { "pattern": "^[A-Za-z0-9+/]{24,}={0,2}$" },
+        {
+          "pattern": "[\\[{]\\s*[\"']?(?:[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Tt][Oo][Kk][Ee][Nn]|[Ss][Ee][Cc][Rr][Ee][Tt]|[Cc][Oo][Oo][Kk][Ii][Ee]|[Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn])[\"']?\\s*[:=]"
+        }
+      ]
+    },
     "identifier": {
       "type": "string",
       "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
     },
     "opaqueId": {
       "type": "string",
-      "pattern": "^[a-z][a-z0-9._:-]{2,127}$"
+      "pattern": "^[a-z][a-z0-9._:-]{2,127}$",
+      "not": { "$ref": "#/$defs/credentialValueShape" }
     },
     "timestamp": {
       "type": "string",
@@ -104,7 +136,8 @@
       "type": "string",
       "minLength": 1,
       "maxLength": 128,
-      "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+      "pattern": "^[^\\u0000-\\u001f\\u007f]+$",
+      "not": { "$ref": "#/$defs/credentialValueShape" }
     },
     "metadata": {
       "type": "object",
@@ -114,7 +147,7 @@
           { "pattern": "^[A-Za-z][A-Za-z0-9._-]{0,63}$" },
           {
             "not": {
-              "pattern": "(?:password|secret|credential|authorization|cookie|bearer|token|private.?key|connection.?string|api[-_]?key)"
+              "$ref": "#/$defs/credentialFieldName"
             }
           }
         ]
@@ -135,28 +168,7 @@
           "maxLength": 512,
           "pattern": "^[^\\u0000-\\u001f\\u007f]*$",
           "not": {
-            "anyOf": [
-              {
-                "pattern": "-----BEGIN [^-]*PRIVATE KEY-----"
-              },
-              { "pattern": "\\b(?:bearer|basic)\\s+[A-Za-z0-9._~+/=-]{8,}" },
-              {
-                "pattern": "\\b(?:sk|rk|pk|ghp|github_pat|xox[baprs])[-_][A-Za-z0-9._~+/=-]{8,}\\b"
-              },
-              {
-                "pattern": "(?:password|token|secret|api[-_]?key|private[-_ ]?key|cookie|authorization)\\s*[:=]"
-              },
-              {
-                "pattern": "\\b(?:https?|ssh|postgres(?:ql)?|mysql|redis|mongodb(?:\\+srv)?|amqp):\\/\\/\\S+"
-              },
-              {
-                "pattern": "(?:^|[\\s;])(?:host|user|username|password|port)\\s*=\\s*[^;]+"
-              },
-              { "pattern": "^[A-Za-z0-9+/]{24,}={0,2}$" },
-              {
-                "pattern": "[\\[{]\\s*[\"']?(?:password|token|secret|cookie|authorization)[\"']?\\s*[:=]"
-              }
-            ]
+            "$ref": "#/$defs/credentialValueShape"
           }
         },
         {

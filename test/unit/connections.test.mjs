@@ -7,6 +7,7 @@ import {
   canonicalSha256,
   createConnectionStore,
   normalizeConnectionDefinition,
+  normalizeConnectionEvent,
   normalizeSecretRef,
   replayConnectionEvents,
 } from "@stream-slack/connections";
@@ -57,9 +58,7 @@ test("connection metadata rejects encoded, URL, JSON, nested, and confusable sec
     { metadata: { encoded: "c3VwZXItc2VjcmV0LXRva2VuLXZhbHVl" } },
     {
       metadata: {
-        encodedProviderToken: Buffer.from("ghp_" + "A".repeat(32)).toString(
-          "base64",
-        ),
+        encodedValue: Buffer.from("ghp_" + "A".repeat(32)).toString("base64"),
       },
     },
     { metadata: { endpoint: "https://user:password@example.invalid" } },
@@ -79,6 +78,36 @@ test("connection metadata rejects encoded, URL, JSON, nested, and confusable sec
       metadata: { team: "platform", retries: 2, tags: ["issues", "read"] },
     }).metadata,
     { team: "platform", retries: 2, tags: ["issues", "read"] },
+  );
+});
+
+test("event boundaries reject credential-shaped opaque identifiers", () => {
+  assert.throws(
+    () =>
+      normalizeConnectionEvent({
+        schemaVersion: 1,
+        eventId: "ghp-" + "a".repeat(32),
+        eventType: "connection.created",
+        workspaceId: SCOPE.workspaceId,
+        actorId: ADMIN.id,
+        idempotencyKey: "event-boundary-create",
+        sequence: 1,
+        serverTimestamp: "2026-08-19T17:00:00.000Z",
+        connectionId: "connection-event-boundary",
+        data: {
+          connectionId: "connection-event-boundary",
+          tenantId: SCOPE.tenantId,
+          workspaceId: SCOPE.workspaceId,
+          owner: { kind: "workspace", id: SCOPE.workspaceId },
+          provider: "github",
+          integration: "issues",
+          label: "Event boundary",
+          metadata: {},
+          secretRef: ref(1),
+          revision: 1,
+        },
+      }),
+    (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
   );
 });
 
@@ -112,11 +141,21 @@ test("create, rotate, disable, and delete produce immutable replayable lifecycle
     connectionId: "connection-github",
     runId: "run-second",
   });
+  const capturedSameRunAfterRotate = store.captureForRun({
+    actor: MEMBER,
+    connectionId: "connection-github",
+    runId: "run-first",
+  });
   assert.equal(created.connection.activeRevision, 1);
   assert.equal(rotated.connection.activeRevision, 2);
   assert.equal(capturedBeforeRotate.revision, 1);
   assert.equal(capturedBeforeRotate.secretRef.revision, 1);
   assert.equal(capturedAfterRotate.revision, 2);
+  assert.equal(capturedSameRunAfterRotate.revision, 1);
+  assert.equal(
+    capturedSameRunAfterRotate.bindingDigest,
+    capturedBeforeRotate.bindingDigest,
+  );
   assert.notEqual(
     capturedBeforeRotate.bindingDigest,
     capturedAfterRotate.bindingDigest,

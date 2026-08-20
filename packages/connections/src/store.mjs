@@ -40,6 +40,7 @@ export function createConnectionStore({
   let state = createInitialConnectionState();
   const events = [];
   const idempotency = new Map();
+  const runCaptures = new Map();
 
   function create(input = {}) {
     const actor = actorFromInput(input, scope);
@@ -170,6 +171,10 @@ export function createConnectionStore({
       "grant",
       state,
     );
+    const runId = normalizeStoreIdentifier(input.runId, "$.runId");
+    const captureKey = connection.connectionId + ":" + runId;
+    const previousCapture = runCaptures.get(captureKey);
+    if (previousCapture) return previousCapture;
     if (connection.status !== "active") {
       throw connectionError(
         CONNECTION_ERROR_CODES.NOT_ACTIVE,
@@ -177,7 +182,6 @@ export function createConnectionStore({
         { statusCode: 409 },
       );
     }
-    const runId = normalizeStoreIdentifier(input.runId, "$.runId");
     const revision = connection.revisions.find(
       (candidate) => candidate.revision === connection.activeRevision,
     );
@@ -207,7 +211,9 @@ export function createConnectionStore({
         workspaceId: connection.workspaceId,
       }),
     };
-    return deepFreeze(capture);
+    const frozenCapture = deepFreeze(capture);
+    runCaptures.set(captureKey, frozenCapture);
+    return frozenCapture;
   }
 
   function authorization(input = {}) {

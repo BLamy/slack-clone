@@ -289,6 +289,7 @@ export function normalizeConnectionEvent(input, path = "$.event") {
     CONNECTION_ERROR_CODES.INVALID_EVENT,
     path,
   );
+  assertNoCredentialMaterial(value, path);
   assertAllowedKeys(
     value,
     [

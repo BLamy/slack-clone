@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "critic": "a23ffed-independent",
+  "verdict": "refuted",
+  "exactHead": "a23ffeda1dfcba1232a4263840065e9311248a40",
+  "builderProductCommit": "c6b1297d219c4d5b0478ba96dae62e5df6202b5a",
+  "finding": {
+    "id": "E5-T02-CRITIC-A23FFED-001",
+    "severity": "high",
+    "summary": "The public JSON Schema accepts raw credential material after two-pass percent decoding that the runtime and authoritative store reject before append.",
+    "scope": "Nine independently generated cases cover fully encoded JSON, mixed/double encoded JSON keys, mixed/double encoded client-secret assignments, a mixed/double encoded URL, a mixed/double encoded provider prefix, and a percent-encoded private-key marker.",
+    "runtimeResult": "All nine normalizeMetadata and createConnectionStore probes returned CONNECTION_CREDENTIAL_MATERIAL; every store probe appended zero events.",
+    "publicSchemaResult": "Ajv 2020 validation of the same event shape returned true for all nine cases.",
+    "source": "Runtime decodes two bounded passes at packages/connections/src/schema.mjs:681-699,722-733; the public percent helper is limited to patterns at packages/connections/src/schemas/connection-events.v1.schema.json:73-97 and credential values at :132-150.",
+    "evidence": "independent-probes.json"
+  },
+  "controls": {
+    "ordinaryPercentText": "PASS",
+    "escapedCaseWhitespaceZeroWidthConfusableBase64TokenUrlClientSecret": "PASS",
+    "metadataDepthArrayPropertyCountAstralBounds": "PASS",
+    "reasonBounds": "PASS",
+    "lifecycleReplayAuthzLeakage": "PASS",
+    "sensitivity": "PASS: disposable mutation made verifier exit 2"
+  },
+  "status": "refuted",
+  "replay": "Replay: N/A (server connection model) + mitigation: detached exact-head cold replay, full gate transcript, independent runtime/store/public probes, lifecycle and capture checks, authorization matrix, leakage scan, and detector sensitivity mutation",
+  "productCodeModifiedByCritic": false,
+  "emulateModifiedByCritic": false,
+  "evidenceFiles": [
+    "critic-summary.json",
+    "gate-summary.json",
+    "cold-clone-transcript.json",
+    "independent-probes.mjs",
+    "independent-probes.json",
+    "lifecycle-authz.json",
+    "sensitivity-mutation.json"
+  ]
+}

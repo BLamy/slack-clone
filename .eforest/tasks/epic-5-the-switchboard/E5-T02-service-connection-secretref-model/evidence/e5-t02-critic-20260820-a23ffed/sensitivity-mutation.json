@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "critic": "a23ffed-independent",
+  "mutation": "In a disposable detached a23ffed worktree, replaced `const decodedCandidate = decodeCredentialCandidate(value);` with `const decodedCandidate = value;` in packages/connections/src/schema.mjs.",
+  "command": "TEST_RUN_ID=e5-t02-critic-a23ffed-sensitivity TEST_ARTIFACT_DIR=<disposable-worktree>/.../work/sensitivity make -C <disposable-worktree> verify-E5-T02",
+  "result": "RED",
+  "exitCode": 2,
+  "failure": "AssertionError at scripts/verify-e5-t02.mjs:414:12: expected CONNECTION_CREDENTIAL_MATERIAL, received undefined",
+  "verifierWouldTurnRed": true,
+  "targetWorktreeProductChanged": false,
+  "targetWorktreeEmulateChanged": false,
+  "disposableWorktreeRemoved": true
+}

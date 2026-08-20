@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: refuted
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -1172,3 +1172,54 @@ material and version policy; it is not a URI that clients can dereference themse
   and detector-sensitivity mutation.
 - Claim: the twelfth critic's four layered percent-encoding findings are addressed.
   E5-T02 is implemented and ready for another fresh critic.
+
+### Critic — final independent public-boundary review — 2026-08-20
+
+- VERDICT: refuted.
+- Exact head: `a23ffeda1dfcba1232a4263840065e9311248a40`; builder product commit:
+  `c6b1297d219c4d5b0478ba96dae62e5df6202b5a`. The checkout was clean at
+  orientation, `emulate` remained pinned at `9a62e23a55dd01d3086e7e0aaa5bb755c7814fe7`,
+  and the critic did not modify product code or the submodule.
+- Gates: `pnpm install --frozen-lockfile`; `pnpm format:check`;
+  `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`; `pnpm test` (209 unit
+  and 15 integration/Playwright tests); `pnpm build`; and `git diff --check` all
+  passed. The manifest is in
+  `evidence/e5-t02-critic-20260820-a23ffed/gate-summary.json`.
+- Cold exact verifier: `TEST_RUN_ID=e5-t02-critic-a23ffed-cold-20260820
+  TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/work/critic-a23ffed-cold
+  make verify-E5-T02` passed at the exact head with state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`,
+  duplicate/reordered parity, and `leaked: false`. Transcript:
+  `evidence/e5-t02-critic-20260820-a23ffed/cold-clone-transcript.json`.
+- Finding `E5-T02-CRITIC-A23FFED-001` (high): nine fresh runtime/store/Ajv
+  cases were rejected by `normalizeMetadata` and `createConnectionStore` with
+  `CONNECTION_CREDENTIAL_MATERIAL` and zero appended events, while the public JSON
+  Schema accepted the same event shape. Cases include fully percent-encoded JSON,
+  mixed/double percent-encoded JSON keys and delimiters, mixed/double encoded
+  client-secret assignments, a mixed/double encoded URL, a mixed/double encoded
+  provider prefix, and a percent-encoded private-key marker. Exact redacted-safe
+  inputs and results are in
+  `evidence/e5-t02-critic-20260820-a23ffed/independent-probes.json`, with the
+  runnable probe beside it. The schema helper's missing representations are at
+  `packages/connections/src/schemas/connection-events.v1.schema.json:73-97`,
+  while runtime two-pass decoding is at
+  `packages/connections/src/schema.mjs:681-699,722-733`.
+- Independent controls passed: ordinary percent text remained accepted by runtime,
+  store, and Ajv; escaped/case/whitespace/zero-width/confusable/base64/token/URL/
+  client-secret cases rejected consistently; metadata depth, array/property-count,
+  astral-code-point and reason bounds matched; fresh lifecycle/capture, terminal
+  fencing, duplicate/reordered replay, foreign-vs-unknown authorization, and canary
+  leakage checks passed. Details are in
+  `evidence/e5-t02-critic-20260820-a23ffed/lifecycle-authz.json` and the probe JSON.
+- Sensitivity: a disposable detached `a23ffed` worktree with only the
+  `decodeCredentialCandidate` call removed made `make verify-E5-T02` exit `2` at
+  `scripts/verify-e5-t02.mjs:414`, proving the detector check goes red. The target
+  worktree and `emulate` were unchanged; details are in
+  `evidence/e5-t02-critic-20260820-a23ffed/sensitivity-mutation.json`.
+- Replay: N/A (server connection model) + mitigation: detached exact-head cold
+  replay, full gate transcript, independent runtime/store/public probes, lifecycle
+  and capture checks, authorization matrix, leakage scan, and detector sensitivity
+  mutation. Status remains `refuted`; do not start E5-T03 until the public schema
+  is reworked and another fresh critic reviews it.

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "critic": "a23ffed-independent",
+  "command": "independent lifecycle/replay/authz/leakage Node probe with fresh a23ffed IDs",
+  "lifecycle": {
+    "firstCaptureRevision": 1,
+    "sameRunAfterRotationRevision": 1,
+    "sameRunBindingStable": true,
+    "newRunAfterRotationRevision": 2,
+    "disabledCaptureCode": "CONNECTION_NOT_ACTIVE",
+    "terminalStatus": "deleted",
+    "eventCount": 4
+  },
+  "replay": {
+    "duplicateAndReorderedInput": true,
+    "stateDigest": "sha256:b92974dc29633b2f107c47ca09907eca096576926cc6cea32e747a12c8a583c2",
+    "storeDigest": "sha256:b92974dc29633b2f107c47ca09907eca32e747a12c8a583c2",
+    "equal": true
+  },
+  "authorization": {
+    "actions": ["read", "grant", "rotate", "disable", "delete"],
+    "foreignAndUnknownCode": "CONNECTION_NOT_FOUND",
+    "foreignAndUnknownJsonEqual": true,
+    "stateUnchanged": true
+  },
+  "leakage": {
+    "rawCanaryPersisted": false
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "critic": "a23ffed-independent",
+  "exactHead": "a23ffeda1dfcba1232a4263840065e9311248a40",
+  "builderProductCommit": "c6b1297d219c4d5b0478ba96dae62e5df6202b5a",
+  "command": "node .eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/evidence/e5-t02-critic-20260820-a23ffed/independent-probes.mjs",
+  "result": "REFUTED",
+  "findingCount": 9,
+  "findings": [
+    {
+      "name": "percent-json-encoded-braces",
+      "input": "%7B%22token%22%3A%22redacted%22%7D",
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate"
+      },
+      "store": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "appended": 0
+      },
+      "publicSchemaAccepted": true
+    },
+    {
+      "name": "double-percent-json-encoded-braces",
+      "input": "%257B%2522token%2522%253A%2522redacted%2522%257D",
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate"
+      },
+      "store": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "appended": 0
+      },
+      "publicSchemaAccepted": true
+    },
+    {
+      "name": "mixed-percent-json-all-delimiters",
+      "input": "%7B%22%74oken%22%3A%22redacted%22%7D",
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate"
+      },
+      "store": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "appended": 0
+      },
+      "publicSchemaAccepted": true
+    },
+    {
+      "name": "double-mixed-json-key-and-delimiters",
+      "input": "%7B%2522%2563lient%255Fsecre%2574%2522%253A%2522redacted%2522%257D",
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate"
+      },
+      "store": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "appended": 0
+      },
+      "publicSchemaAccepted": true
+    },
+    {
+      "name": "double-mixed-assignment",
+      "input": "cl%2569ent-%2573ecre%2574%253Dredacted",
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate"
+      },
+      "store": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "appended": 0
+      },
+      "publicSchemaAccepted": true
+    },
+    {
+      "name": "double-mixed-prefixed-assignment",
+      "input": "prefix-%2563lient%255Fsecre%2574%253Dredacted",
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate"
+      },
+      "store": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "appended": 0
+      },
+      "publicSchemaAccepted": true
+    },
+    {
+      "name": "double-mixed-url",
+      "input": "%2568%2574tps%253A%252F%252Fexample.invalid%252Fservice",
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate"
+      },
+      "store": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "appended": 0
+      },
+      "publicSchemaAccepted": true
+    },
+    {
+      "name": "double-mixed-provider",
+      "input": "%2567%2568p%255FAAAAAAAAAAAAAAAA",
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate"
+      },
+      "store": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "appended": 0
+      },
+      "publicSchemaAccepted": true
+    },
+    {
+      "name": "percent-private-key",
+      "input": "%2D%2D%2D%2D%2DBEGIN%20PRIVATE%20KEY%2D%2D%2D%2D%2D",
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate"
+      },
+      "store": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "appended": 0
+      },
+      "publicSchemaAccepted": true
+    }
+  ],
+  "positiveControl": {
+    "name": "ordinary-percent-text",
+    "input": "release%2F2026%20notes",
+    "runtimeAccepted": true,
+    "storeAccepted": true,
+    "storeAppended": 1,
+    "publicSchemaAccepted": true
+  },
+  "otherControls": {
+    "command": "independent inline Ajv/runtime matrix; 25 cases",
+    "escapedCaseWhitespaceZeroWidthConfusableBase64TokenUrlClientSecret": "PASS",
+    "metadataDepthArrayPropertyCountAstralBounds": "PASS",
+    "reasonBounds": "PASS"
+  },
+  "sourceLocations": {
+    "runtimeDecodeAndJsonDetection": "packages/connections/src/schema.mjs:681-699,722-733",
+    "publicPercentShape": "packages/connections/src/schemas/connection-events.v1.schema.json:73-97",
+    "publicCredentialValueShape": "packages/connections/src/schemas/connection-events.v1.schema.json:132-150"
+  }
+}

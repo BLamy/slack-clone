@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "critic": "a23ffed-independent",
+  "exactHead": "a23ffeda1dfcba1232a4263840065e9311248a40",
+  "commands": [
+    { "command": "pnpm install --frozen-lockfile", "result": "PASS" },
+    { "command": "pnpm format:check", "result": "PASS" },
+    { "command": "pnpm format:check:e5-t02", "result": "PASS" },
+    { "command": "pnpm lint", "result": "PASS" },
+    { "command": "pnpm typecheck", "result": "PASS" },
+    {
+      "command": "pnpm test",
+      "result": "PASS",
+      "unit": 209,
+      "integration": 15
+    },
+    { "command": "pnpm build", "result": "PASS" },
+    { "command": "git diff --check", "result": "PASS" },
+    {
+      "command": "cold clone make verify-E5-T02",
+      "result": "PASS",
+      "evidence": "cold-clone-transcript.json"
+    },
+    {
+      "command": "independent Ajv/runtime/store matrix",
+      "result": "REFUTED",
+      "evidence": "independent-probes.json"
+    },
+    {
+      "command": "independent lifecycle/replay/authz/leakage probe",
+      "result": "PASS",
+      "evidence": "lifecycle-authz.json"
+    },
+    {
+      "command": "disposable targeted sensitivity mutation",
+      "result": "RED",
+      "evidence": "sensitivity-mutation.json"
+    }
+  ],
+  "productCodeModifiedByCritic": false,
+  "emulateModifiedByCritic": false
+}

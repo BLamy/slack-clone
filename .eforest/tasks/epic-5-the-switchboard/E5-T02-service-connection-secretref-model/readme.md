@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: refuted
+status: implemented
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -743,3 +743,29 @@ material and version policy; it is not a URI that clients can dereference themse
   capture checks, authz matrix, recursive adversarial corpus, leak scans, and
   detector-sensitivity mutation. Status remains `refuted` pending builder rework
   and another fresh critic.
+
+### Builder — whitespace boundary rework — 2026-08-20
+
+- Commit: `22fa4673d8e7b910fcc0b9da3e262f85ccbcf36a`.
+- Rework: base64 and base64url classification trims only for detection, so
+  surrounding whitespace cannot bypass the free-form credential boundary. Label and
+  reason normalizers classify their canonical trimmed values, and the public
+  `credentialValueShape` rejects the same whitespace-wrapped encoded form. The
+  verifier corpus and unit tests cover whitespace-wrapped metadata, labels, and
+  reasons.
+- Commands: `pnpm format:check`; `pnpm format:check:e5-t02`; `pnpm lint`;
+  `pnpm typecheck`; `pnpm test` (207 unit and 15 integration/Playwright tests
+  passed); and `pnpm build`.
+- Local verifier: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e5-t02-final-22fa467 make
+  verify-E5-T02` passed with state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`,
+  and `leaked: false`.
+- Evidence: `evidence/e5-t02-final/` was regenerated against this exact commit;
+  the updated secret corpus includes the whitespace-wrapped URL-safe case.
+- Replay: N/A (server connection model) + mitigation: cold-clone reducer replay,
+  secret-shaped input corpus, authz matrix, exact lifecycle digests, independent
+  schema/runtime probes, capture-race probes, and detector-sensitivity mutation.
+- Claim: the independent critic's whitespace findings are addressed and E5-T02 is
+  ready for a fresh final critic.

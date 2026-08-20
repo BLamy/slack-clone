@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "verdict": "refuted",
+  "exactHead": "f108463e85fc0d8a39060ec0040079c597b31b8d",
+  "builderProductCommit": "3d7f2e8466562958ba8e039f7020a22d231588ea",
+  "finding": {
+    "id": "E5-T02-CRITIC-ELEVENTH-001",
+    "severity": "high",
+    "title": "Percent-encoded credential markers cross every free-form boundary",
+    "description": "The independently generated percent-encoded assignment and JSON-key forms were accepted by normalizeMetadata, normalizeReason, normalizeConnectionDefinition metadata, normalizeConnectionEvent metadata, and the public schema; createConnectionStore appended one authoritative event for each form. A downstream form/query decoder would recover the credential marker, but the detector checks the literal candidate without URL/form decoding.",
+    "probeCases": ["percent-encoded-assignment", "percent-encoded-json-key"],
+    "boundaries": [
+      "runtime-metadata-and-reason",
+      "runtime-definition-metadata-and-label",
+      "runtime-event-metadata-and-label-and-reason",
+      "store-metadata-and-label-and-reason",
+      "public-metadata-and-label-and-reason"
+    ],
+    "observedAppendCount": 1,
+    "sourceRefs": [
+      "packages/connections/src/schema.mjs:681-697",
+      "packages/connections/src/schemas/connection-events.v1.schema.json:106-139",
+      "packages/connections/src/store.mjs:45-85",
+      "packages/connections/src/store.mjs:259-278"
+    ],
+    "evidenceRef": "independent-probes.json"
+  },
+  "controlsPassed": [
+    "all seven client-secret, client_secret, client secret, prefixed, and case-variant assignments",
+    "all eight Unicode format controls in URL-shaped values",
+    "all eight Unicode format controls in URL-safe/base64-shaped values",
+    "lowercase, uppercase, escaped lowercase, escaped uppercase, and client-secret JSON keys",
+    "metadata nesting, array depth, 32/33 item, 64/65 property, and Unicode code-point boundaries",
+    "reason 160/161 Unicode code-point boundary",
+    "detector sensitivity after removing the assignment branch",
+    "cold lifecycle/replay parity, authorization, capture binding, and canary scan"
+  ],
+  "replay": "Replay: N/A (server connection model) + mitigation: cold-clone reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle digests, and independent runtime/store/public boundary probes"
+}

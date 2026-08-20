@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: refuted
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -1025,3 +1025,41 @@ material and version policy; it is not a URI that clients can dereference themse
   mutation.
 - Claim: the tenth critic's assignment-boundary, metadata-width, and astral-length
   findings are addressed. E5-T02 is implemented and ready for another fresh critic.
+
+### Critic — eleventh independent review — 2026-08-20
+
+- VERDICT: refuted.
+- Exact head: `f108463e85fc0d8a39060ec0040079c597b31b8d`; builder product commit:
+  `3d7f2e8466562958ba8e039f7020a22d231588ea`. The checkout was clean at
+  orientation. Product source and the pinned `emulate` submodule were not changed by
+  the critic.
+- Gates: `pnpm install --frozen-lockfile`, `pnpm format:check`,
+  `pnpm format:check:e5-t02`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (209 unit
+  and 15 integration/Playwright tests), `pnpm build`, and `git diff --check` all
+  passed. The command manifest is in
+  `evidence/e5-t02-critic-20260820-eleventh/gate-summary.json`.
+- Cold exact verifier: a detached worktree at the exact head passed
+  `make verify-E5-T02` with state digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`, and
+  `leaked: false`. Replay: N/A (server connection model) + mitigation: cold-clone
+  reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle
+  digests, and independent runtime/store/public boundary probes.
+- Independent probe: `evidence/e5-t02-critic-20260820-eleventh/independent-probes.mjs`
+  exercised every requested assignment form, all eight Unicode format controls in
+  URL and URL-safe/base64 values, escaped/case-variant JSON keys, metadata depth,
+  array, width, and code-point boundaries, reason limits, plus percent-encoded
+  credential markers. The redacted results are in
+  `evidence/e5-t02-critic-20260820-eleventh/independent-probes.json`.
+- Finding `E5-T02-CRITIC-ELEVENTH-001` (high): percent-encoded assignment and JSON
+  key forms were accepted by runtime metadata/reason, connection-definition and
+  event metadata/reason, store metadata/reason, and public metadata/label/reason;
+  `createConnectionStore` appended one authoritative event for each. The detector
+  checks literal candidates and does not decode URL/form escapes
+  (`packages/connections/src/schema.mjs:681-697`;
+  `packages/connections/src/schemas/connection-events.v1.schema.json:106-139`).
+- Controls passed independently: all requested prior findings, lifecycle/capture,
+  duplicate/reordered replay, authorization parity, canary scanning, and detector
+  sensitivity. Status remains `refuted` pending product rework and another fresh
+  critic.

@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: refuted
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -83,3 +83,45 @@ material and version policy; it is not a URI that clients can dereference themse
   opaque provider/mount SecretRef metadata, rotation advances immutable revisions while
   preserving captured run bindings, disable/delete fence new grants with tombstones,
   and foreign/unknown identifiers share the same typed not-found response.
+
+### Critic — 2026-08-19
+
+- VERDICT: refuted.
+- Exact head: `b3eb419a7769e452c5580c96cdd5ae13f1ca33a7`; implementation commit:
+  `380bdd2047711f683c89535060b36fd0678d3920`. The worktree was clean before the
+  critic metadata change.
+- Commands: `pnpm install --frozen-lockfile`; `make verify-E5-T02
+  TEST_RUN_ID=e5-t02-critic-20260819
+  TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/work/critic-run`;
+  `pnpm format:check`; `pnpm lint`; `pnpm typecheck`; `pnpm test` (204 unit and
+  15 integration tests passed); `pnpm build`; and `git diff --check`. All commands
+  passed. The verifier independently reproduced state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb` and
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`.
+- Finding E5-T02-CRITIC-001: a standard-base64 encoding of a synthetic
+  provider-token-prefix-shaped value was accepted by the exported normalizer and by
+  `store.create` at `$.connection.metadata.encoded`; the independent append probe
+  observed events changing from `0` to `1`. `looksLikeCredentialValue` only decodes
+  base64 when the decoded bytes are printable and then checks a limited keyword set;
+  provider token prefixes are absent from that decoded check. This directly refutes
+  the base64/token-shaped rejection criterion and the raw-value-before-append goal.
+- Finding E5-T02-CRITIC-002: the committed public event schema defines metadata only as
+  an object with `additionalProperties: true` (`src/schemas/connection-events.v1.schema.json:109-112`),
+  with no non-secret key/value or recursive constraints. A schema-only API consumer can
+  therefore accept token-shaped metadata even though the runtime normalizer rejects the
+  builder's fixed corpus.
+- Independent adversarial results: JSON, URL, multiline private-key, Unicode-confusable
+  and zero-width-confusable keys, nested cookie metadata, and SecretRef extra fields
+  were rejected before append; the race matrix preserved captured revisions, fenced
+  stale/concurrent rotation, blocked capture after disable/delete, and retained a
+  tombstone; all read/grant/rotate/disable/delete foreign-vs-unknown comparisons
+  returned identical typed `CONNECTION_NOT_FOUND` JSON with no state-digest movement.
+- Sensitivity: removing the URL/connection-string detector branch in a scratch schema
+  copy accepted the corpus URL fixture, and the corresponding corpus assertion turned
+  red. Durable critic details are in
+  `evidence/e5-t02-critic-20260819/critic-summary.json`.
+- Replay: N/A (server connection model) + mitigation: cold-clone reducer replay,
+  secret-shaped input corpus, authz matrix, exact lifecycle digests, and independent
+  negative-path probes. Status remains `refuted` pending builder rework and a fresh
+  critic.

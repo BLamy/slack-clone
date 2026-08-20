@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "exactHead": "ba08576b0a9b97fed72bfe7804708d4f34bb11e4",
+  "mutations": [
+    {
+      "name": "runtime-value-normalization",
+      "disposableWorktree": "/tmp/slack-e5-t02-sensitivity-value",
+      "mutation": "Changed decodeCredentialCandidate to perform zero percent-decoding passes.",
+      "command": "TEST_RUN_ID=e5-t02-critic-ba08576-mut-value2 TEST_ARTIFACT_DIR=/tmp/slack-e5-t02-sensitivity-value-artifacts2 make verify-E5-T02",
+      "exitCode": 2,
+      "detectorTurnedRedAt": "scripts/verify-e5-t02.mjs:473",
+      "result": "PASS sensitivity: the percent-encoded secret corpus assertion failed"
+    },
+    {
+      "name": "runtime-provider-token",
+      "disposableWorktree": "/tmp/slack-e5-t02-sensitivity-provider",
+      "mutation": "Removed the provider-token branch from CREDENTIAL_VALUE_PATTERNS.",
+      "command": "TEST_RUN_ID=e5-t02-critic-ba08576-mut-provider TEST_ARTIFACT_DIR=/tmp/slack-e5-t02-sensitivity-provider-artifacts make verify-E5-T02",
+      "exitCode": 2,
+      "detectorTurnedRedAt": "scripts/verify-e5-t02.mjs:473",
+      "result": "PASS sensitivity: the provider-token corpus assertion failed"
+    },
+    {
+      "name": "public-schema-percent-branch",
+      "disposableWorktree": "/tmp/slack-e5-t02-sensitivity-schema",
+      "mutation": "Removed the percentEncodedCredentialShape reference from packages/connections/src/schemas/connection-events.v1.schema.json:179.",
+      "exactVerifierCommand": "TEST_RUN_ID=e5-t02-critic-ba08576-mut-schema TEST_ARTIFACT_DIR=/tmp/slack-e5-t02-sensitivity-schema-artifacts make verify-E5-T02",
+      "exactVerifierExitCode": 0,
+      "independentAjvMatrix": {
+        "caseCount": 73,
+        "publicSchemaRuntimeFindings": 15,
+        "runtimeFindings": 0,
+        "appendFindings": 0,
+        "ordinaryPercentTextPositiveControl": true
+      },
+      "result": "FAIL sensitivity: make verify-E5-T02 does not exercise the public JSON Schema branch"
+    }
+  ],
+  "verifierSensitivityConclusion": "Runtime detector mutations turn the exact verifier red; a public-schema branch mutation does not, despite independent Ajv/runtime/store mismatches."
+}

@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: refuted
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -1330,3 +1330,45 @@ material and version policy; it is not a URI that clients can dereference themse
   mutation.
 - Claim: the latest independent critic's three public-boundary/runtime findings are
   addressed. E5-T02 is implemented and ready for another fresh critic.
+
+### Critic — fresh exact-head sensitivity review — 2026-08-20
+
+VERDICT: refuted
+
+- Exact head: `ba08576b0a9b97fed72bfe7804708d4f34bb11e4`; product commit under review:
+  `139669a2fd72180d49d237819a65fab40e97e50b`. The checkout was clean at orientation,
+  product source was not changed, and `emulate` remained pinned at
+  `9a62e23a55dd01d3086e7e0aaa5bb755c7814fe7`.
+- Gates: the promoted cold verifier passed with state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`,
+  duplicate/reordered parity, and `leaked: false`. `pnpm format:check`,
+  `pnpm format:check:e5-t02`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (209 unit
+  and 15 integration/Playwright tests), `pnpm build`, and `git diff --check` passed.
+  Gate evidence is in `evidence/e5-t02-critic-20260820-ba08576/gate-summary.json`.
+- Independent Ajv 2020/runtime/store parity: 73 cases passed with zero findings.
+  The matrix covered one/two-pass fully and mixed percent-encoded JSON, raw/mixed/
+  double password/secret/client-secret/private-key assignments and prefixes, URLs,
+  all `ghp`, `sk`, `rk`, `pk`, `github_pat`, and `xox[baprs]` token families,
+  confusables, all eight format controls, base64/base64url, and the ordinary percent
+  positive control. Lifecycle, replay, authorization, resource bounds, reason bounds,
+  and leak checks also passed.
+- Finding `E5-T02-CRITIC-BA08576-001` (high): removing only the public
+  `percentEncodedCredentialShape` reference at
+  `packages/connections/src/schemas/connection-events.v1.schema.json:179` in a
+  disposable exact-head checkout left `make verify-E5-T02` green (exit 0), while the
+  independent Ajv matrix found 15 cases accepted by that mutated public schema and
+  rejected by runtime/store with `CONNECTION_CREDENTIAL_MATERIAL`; no case appended.
+  The exact verifier therefore cannot detect a regression in this required public
+  schema branch. Evidence is in
+  `evidence/e5-t02-critic-20260820-ba08576/critic-summary.md`,
+  `sensitivity-mutation.json`, and `schema-branch-mutated-probes.json`.
+- Runtime sensitivity controls passed: removing percent decoding or the provider-token
+  detector made the exact verifier exit 2 on the secret corpus. The public-schema
+  sensitivity failure remains unresolved, so status is `refuted`; do not start E5-T03
+  until the verifier covers the public schema mutation and a fresh critic reviews the
+  new exact head.
+- Replay: N/A (server connection model) + mitigation: detached exact-head cold replay,
+  full gates, independent Ajv/runtime/store parity, lifecycle/authz/resource checks,
+  leakage scan, and disposable detector/schema mutations.

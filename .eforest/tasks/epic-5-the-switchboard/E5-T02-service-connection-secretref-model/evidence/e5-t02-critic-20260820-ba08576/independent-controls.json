@@ -1,0 +1,270 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "exactHead": "ba08576",
+  "metadataChecks": [
+    {
+      "name": "depth-five-rejected",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "runtimeError": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.metadata.level1.level2.level3.level4.level5"
+      }
+    },
+    {
+      "name": "array-33-rejected",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "runtimeError": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.metadata.values"
+      }
+    },
+    {
+      "name": "properties-65-rejected",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "runtimeError": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.metadata"
+      }
+    },
+    {
+      "name": "astral-512-accepted",
+      "expected": "accept",
+      "publicSchemaAccepted": true,
+      "runtimeError": null
+    },
+    {
+      "name": "astral-513-rejected",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "runtimeError": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.metadata.label"
+      }
+    }
+  ],
+  "reasonChecks": [
+    {
+      "name": "reason-160-accepted",
+      "expected": "accept",
+      "publicSchemaAccepted": true,
+      "runtimeError": null
+    },
+    {
+      "name": "reason-161-rejected",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "runtimeError": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.reason"
+      }
+    }
+  ],
+  "lifecycle": {
+    "eventCount": 4,
+    "activeRevisionAfterRotate": 2,
+    "capturedRevisions": {
+      "firstRun": 1,
+      "sameRunAfterRotate": 1,
+      "secondRun": 2
+    },
+    "disabledCaptureError": {
+      "code": "CONNECTION_NOT_ACTIVE",
+      "path": null
+    },
+    "terminalStatus": "deleted",
+    "tombstoneReason": "retired",
+    "originalStateDigest": "sha256:581133f75c98250d8ee4bffbdbbff61acd0cf5d9ee38e55fd259eec364dbbe39",
+    "duplicateReorderedReplayDigest": "sha256:581133f75c98250d8ee4bffbdbbff61acd0cf5d9ee38e55fd259eec364dbbe39",
+    "replayParity": true,
+    "replayViewDigest": "sha256:55769d9d9a87c12bfe025162f07c238f23af2e525f7fb255f5bce223f7ccaacd",
+    "events": [
+      {
+        "schemaVersion": 1,
+        "eventId": "connection-event-controls-001",
+        "eventType": "connection.created",
+        "workspaceId": "workspace-alpha",
+        "actorId": "user-admin",
+        "idempotencyKey": "create-controls",
+        "sequence": 1,
+        "serverTimestamp": "2026-08-20T12:00:01.000Z",
+        "connectionId": "connection-controls",
+        "data": {
+          "connectionId": "connection-controls",
+          "tenantId": "tenant-alpha",
+          "workspaceId": "workspace-alpha",
+          "owner": {
+            "kind": "workspace",
+            "id": "workspace-alpha"
+          },
+          "provider": "github",
+          "integration": "issues",
+          "label": "Controls",
+          "metadata": {
+            "account": "stream-slack",
+            "purpose": "read-issues"
+          },
+          "secretRef": {
+            "schemaVersion": 1,
+            "id": "secretref-controls-001",
+            "provider": "infisical",
+            "mount": "production",
+            "revision": 1,
+            "label": "controls"
+          },
+          "revision": 1
+        }
+      },
+      {
+        "schemaVersion": 1,
+        "eventId": "connection-event-controls-002",
+        "eventType": "connection.rotated",
+        "workspaceId": "workspace-alpha",
+        "actorId": "user-admin",
+        "idempotencyKey": "rotate-controls",
+        "sequence": 2,
+        "serverTimestamp": "2026-08-20T12:00:03.000Z",
+        "connectionId": "connection-controls",
+        "data": {
+          "expectedRevision": 1,
+          "revision": 2,
+          "secretRef": {
+            "schemaVersion": 1,
+            "id": "secretref-controls-002",
+            "provider": "infisical",
+            "mount": "production",
+            "revision": 2,
+            "label": "controls"
+          }
+        }
+      },
+      {
+        "schemaVersion": 1,
+        "eventId": "connection-event-controls-003",
+        "eventType": "connection.disabled",
+        "workspaceId": "workspace-alpha",
+        "actorId": "user-admin",
+        "idempotencyKey": "disable-controls",
+        "sequence": 3,
+        "serverTimestamp": "2026-08-20T12:00:05.000Z",
+        "connectionId": "connection-controls",
+        "data": {
+          "reason": "maintenance"
+        }
+      },
+      {
+        "schemaVersion": 1,
+        "eventId": "connection-event-controls-004",
+        "eventType": "connection.deleted",
+        "workspaceId": "workspace-alpha",
+        "actorId": "user-admin",
+        "idempotencyKey": "delete-controls",
+        "sequence": 4,
+        "serverTimestamp": "2026-08-20T12:00:06.000Z",
+        "connectionId": "connection-controls",
+        "data": {
+          "reason": "retired"
+        }
+      }
+    ]
+  },
+  "authorization": {
+    "rows": [
+      {
+        "name": "workspace-member-read",
+        "allowed": true,
+        "code": null
+      },
+      {
+        "name": "workspace-member-grant",
+        "allowed": true,
+        "code": null
+      },
+      {
+        "name": "user-owner-read",
+        "allowed": true,
+        "code": null
+      },
+      {
+        "name": "agent-member-read",
+        "allowed": false,
+        "code": "CONNECTION_FORBIDDEN"
+      },
+      {
+        "name": "foreign-read",
+        "allowed": false,
+        "code": "CONNECTION_NOT_FOUND"
+      }
+    ],
+    "comparisons": [
+      {
+        "operation": "read",
+        "known": {
+          "code": "CONNECTION_NOT_FOUND",
+          "path": null
+        },
+        "unknown": {
+          "code": "CONNECTION_NOT_FOUND",
+          "path": null
+        },
+        "equal": true
+      },
+      {
+        "operation": "grant",
+        "known": {
+          "code": "CONNECTION_NOT_FOUND",
+          "path": null
+        },
+        "unknown": {
+          "code": "CONNECTION_NOT_FOUND",
+          "path": null
+        },
+        "equal": true
+      },
+      {
+        "operation": "rotate",
+        "known": {
+          "code": "CONNECTION_NOT_FOUND",
+          "path": null
+        },
+        "unknown": {
+          "code": "CONNECTION_NOT_FOUND",
+          "path": null
+        },
+        "equal": true
+      },
+      {
+        "operation": "disable",
+        "known": {
+          "code": "CONNECTION_NOT_FOUND",
+          "path": null
+        },
+        "unknown": {
+          "code": "CONNECTION_NOT_FOUND",
+          "path": null
+        },
+        "equal": true
+      },
+      {
+        "operation": "delete",
+        "known": {
+          "code": "CONNECTION_NOT_FOUND",
+          "path": null
+        },
+        "unknown": {
+          "code": "CONNECTION_NOT_FOUND",
+          "path": null
+        },
+        "equal": true
+      }
+    ],
+    "stateDigestUnchanged": true
+  },
+  "leakScan": {
+    "leaked": false,
+    "forbiddenCanaryMatches": []
+  }
+}

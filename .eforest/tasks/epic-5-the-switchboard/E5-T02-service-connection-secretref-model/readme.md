@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: refuted
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -233,3 +233,78 @@ material and version policy; it is not a URI that clients can dereference themse
   negative-path probes.
 - Claim: the second critic's four findings are addressed and E5-T02 is ready for a
   fresh independent verdict.
+
+### Critic — third independent review — 2026-08-19
+
+- VERDICT: refuted.
+- Exact head: `7b0c8700904fb96d6b7688f130d2143216a7c9d0`; product rework under review:
+  `5f248f71b9ef073d866abf7e13302320e50387bb`. The checkout was clean before this
+  critic wrote its new evidence directory.
+- Gates: `pnpm install --frozen-lockfile`; `pnpm format:check`;
+  `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`; `pnpm test`
+  (205 unit and 15 integration/Playwright tests passed); `pnpm build`; and
+  `git diff --check 7b0c870^ 7b0c870` all passed.
+- Exact verifier: `TEST_RUN_ID=e5-t02-critic-third-final-20260819
+  TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/evidence/e5-t02-critic-20260819-third
+  make verify-E5-T02` passed at the exact head. It reported state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`, zero
+  appended events for the verifier corpus, and `leaked: false` across all 12 critic
+  evidence files.
+- Independent probe: `node
+  .eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/evidence/e5-t02-critic-20260819-third/independent-probes.mjs`.
+  Durable details are in
+  `evidence/e5-t02-critic-20260819-third/independent-probes.json` and the exact
+  verifier artifacts in the same directory.
+- Finding `E5-T02-CRITIC-THIRD-001` (high): a neutral standard-base64 value under
+  the safe metadata key `encodedValue` was accepted by `createConnectionStore` and
+  appended as one event; the independent probe records `appendedBefore: 0`,
+  `appendedAfter: 1`, and `markerPersisted: true`. The public schema rejects this
+  generic base64 shape, but runtime `looksLikeCredentialValue` only rejects decoded
+  base64 when the decoded text also matches a credential pattern/keyword
+  (`packages/connections/src/schema.mjs:660-689`), and the store appends the
+  normalized event at `packages/connections/src/store.mjs:234-277`. This refutes the
+  base64/raw-value rejection requirement at the API boundary.
+- Finding `E5-T02-CRITIC-THIRD-002` (high): the public JSON Schema accepts a
+  provider-token-shaped `actorId` and `workspaceId` (`accepted: true` for both in
+  the independent Ajv probe), because the public event properties use the
+  unconstrained `identifier` definition at
+  `packages/connections/src/schemas/connection-events.v1.schema.json:30-35` and
+  `identifier` has no credential-shape exclusion at lines 100-103. The neighboring
+  opaque-ID definition does exclude `credentialValueShape` at lines 104-107, so
+  eventId, idempotencyKey, and connectionId controls reject the same shape. Runtime
+  normalization rejects all four requested envelope fields, but a schema-only API
+  consumer can accept the actor/workspace cases; this leaves the public event
+  boundary inconsistent with the raw-material rejection contract.
+- Finding `E5-T02-CRITIC-THIRD-003` (high): capture binding keys are formed by string
+  concatenation as `connection.connectionId + ":" + runId`
+  (`packages/connections/src/store.mjs:174-177`). With independently valid IDs
+  `connection-critic-a:b` + `run-critic-c` and `connection-critic-a` +
+  `b:run-critic-c`, the second capture returned the first connection/run binding
+  (revision 1) rather than binding the requested connection/run tuple. This can
+  cross-bind a run to the wrong connection and refutes the exactly-one committed
+  revision/connection binding guarantee for the accepted opaque-ID grammar.
+- Passing requested attacks: a same-run capture stayed at revision 1 across
+  rotation while a new run received revision 2; existing captures remained usable
+  after disable/delete; new grants returned `CONNECTION_NOT_ACTIVE`; stale rotation
+  returned `CONNECTION_REVISION_CONFLICT` before terminal fencing and
+  `CONNECTION_NOT_ACTIVE` after disable/delete, with no event append and a tombstone.
+  Provider-token-shaped runtime eventId, actorId, idempotencyKey, and connectionId
+  all returned `CONNECTION_CREDENTIAL_MATERIAL` before append. Case-variant nested
+  keys/values, URLs, JSON secrets, provider-token values, labels, opaque IDs, extra
+  fields, recursive arrays/objects, and the remaining secret corpus were rejected;
+  duplicate/reordered replay converged to equal independent digests; foreign and
+  unknown read/grant/rotate/disable/delete errors were byte-equal typed
+  `CONNECTION_NOT_FOUND` with an unchanged state digest. The evidence canary probe
+  detected a transient marker and found no persistent marker/provider-shape leak.
+- Sensitivity: in disposable exact-head worktree
+  `/tmp/slack-e5-t02-third-sensitivity.ocE1eq`, removing only the provider-token
+  branch at `packages/connections/src/schema.mjs:39` made the full verifier exit 2
+  at `scripts/verify-e5-t02.mjs:351` because neutral `encodedValue` was accepted.
+  The command and result are recorded in
+  `evidence/e5-t02-critic-20260819-third/sensitivity-mutation.json`.
+- Replay: N/A (server connection model) + mitigation: cold-clone reducer replay,
+  secret-shaped input corpus, authz matrix, exact lifecycle digests, independent
+  envelope/schema/runtime probes, capture-race probes, and detector-sensitivity
+  mutation. Status remains `refuted` pending rework and another fresh critic.

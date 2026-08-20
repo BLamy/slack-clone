@@ -1,0 +1,118 @@
+{
+  "rows": [
+    {
+      "name": "workspace-member-read",
+      "allowed": true,
+      "code": null
+    },
+    {
+      "name": "workspace-member-grant",
+      "allowed": true,
+      "code": null
+    },
+    {
+      "name": "workspace-member-delete",
+      "allowed": false,
+      "code": "CONNECTION_FORBIDDEN"
+    },
+    {
+      "name": "agent-owner-grant",
+      "allowed": true,
+      "code": null
+    },
+    {
+      "name": "member-agent-grant",
+      "allowed": false,
+      "code": "CONNECTION_FORBIDDEN"
+    },
+    {
+      "name": "user-owner-grant",
+      "allowed": true,
+      "code": null
+    },
+    {
+      "name": "admin-delete-agent",
+      "allowed": true,
+      "code": null
+    }
+  ],
+  "foreignErrors": [
+    {
+      "operation": "read",
+      "code": "CONNECTION_NOT_FOUND",
+      "detail": "connection was not found",
+      "path": null,
+      "statusCode": 404
+    },
+    {
+      "operation": "grant",
+      "code": "CONNECTION_NOT_FOUND",
+      "detail": "connection was not found",
+      "path": null,
+      "statusCode": 404
+    },
+    {
+      "operation": "rotate",
+      "code": "CONNECTION_NOT_FOUND",
+      "detail": "connection was not found",
+      "path": null,
+      "statusCode": 404
+    },
+    {
+      "operation": "disable",
+      "code": "CONNECTION_NOT_FOUND",
+      "detail": "connection was not found",
+      "path": null,
+      "statusCode": 404
+    },
+    {
+      "operation": "delete",
+      "code": "CONNECTION_NOT_FOUND",
+      "detail": "connection was not found",
+      "path": null,
+      "statusCode": 404
+    }
+  ],
+  "unknownErrors": [
+    {
+      "operation": "read",
+      "code": "CONNECTION_NOT_FOUND",
+      "detail": "connection was not found",
+      "path": null,
+      "statusCode": 404
+    },
+    {
+      "operation": "grant",
+      "code": "CONNECTION_NOT_FOUND",
+      "detail": "connection was not found",
+      "path": null,
+      "statusCode": 404
+    },
+    {
+      "operation": "rotate",
+      "code": "CONNECTION_NOT_FOUND",
+      "detail": "connection was not found",
+      "path": null,
+      "statusCode": 404
+    },
+    {
+      "operation": "disable",
+      "code": "CONNECTION_NOT_FOUND",
+      "detail": "connection was not found",
+      "path": null,
+      "statusCode": 404
+    },
+    {
+      "operation": "delete",
+      "code": "CONNECTION_NOT_FOUND",
+      "detail": "connection was not found",
+      "path": null,
+      "statusCode": 404
+    }
+  ],
+  "summary": {
+    "ownershipMatrixPassed": true,
+    "foreignAndUnknownErrorsEqual": true,
+    "stateDigestUnchanged": true
+  }
+}

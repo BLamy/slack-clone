@@ -12,6 +12,10 @@
       "code": "CONNECTION_CREDENTIAL_MATERIAL",
       "path": "$.principal.workspaceId"
     },
+    "principal-capability": {
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.principal.capabilities[0]"
+    },
     "owner-id": {
       "code": "CONNECTION_CREDENTIAL_MATERIAL",
       "path": "$.owner.id"

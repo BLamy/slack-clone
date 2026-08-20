@@ -3,7 +3,7 @@ id: E5-T01
 epic: 5
 title: "Credential broker contract: Infisical Agent Proxy in production, Agent Vault locally, and no raw-secret orchestration path"
 priority: 501
-status: in-progress
+status: implemented
 depends_on: [E3]
 estimate: L
 capstone: false
@@ -133,3 +133,31 @@ opaque, single-use, run-scoped handles to callers.
   static race finding was actionable. Follow-up rework reserves a capability before
   provider I/O, rejects concurrent use/revoke races, brands adapters in a private trust
   registry, and covers IPv4-compatible and NAT64 literal forms.
+
+### Builder — race follow-up complete — 2026-08-19
+
+- Commit: `fd1128476f812a7144590a4203fa61b1e1d42403`.
+- Commands: `pnpm format:check`; `pnpm lint`; `pnpm typecheck`; `pnpm test:unit`
+  (196 passed); `pnpm build`; `pnpm test:integration` (15 passed); and a detached cold
+  worktree with `pnpm install --frozen-lockfile` followed by `make verify-E5-T01`.
+- Local verifier: `PROMOTE_EVIDENCE=1 make verify-E5-T01 TEST_RUN_ID=e5-t01-final-race`
+  passed twice-replay parity with state digest
+  `sha256:b98ce75f188640e564a80b5ad27f3df9d424bbbfd094dd51aec117727d8e6b13`, audit
+  digest `sha256:5b5a5b5e8f6c3872e12554f00c03da8cbb2936532cc3160a301621695a0a8e42`,
+  provider-mode refusals, cross-binding/request/live-replay sensitivity, and
+  `leaked: false` across every evidence file and environment value.
+- Concurrency hardening: a capability is reserved before provider I/O, so concurrent
+  calls produce one provider invocation and one typed `CAPABILITY_IN_FLIGHT` refusal;
+  revoke is fenced while use is in flight and remains idempotent after use.
+- Real gate: `TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T01-credential-broker-contract/evidence/e5-t01-real-skip make verify-E5-T01-real`
+  exited 2 with `SKIPPED:` for missing explicit Infisical Agent Proxy configuration;
+  no Agent Vault or other fallback was used.
+- Evidence: `evidence/e5-t01-final/` and `evidence/e5-t01-real-skip/skipped.json`;
+  the committed evidence contains no canary plaintext.
+- Replay: N/A (headless credential broker) + mitigation: cold-clone state replay,
+  canary scans, provider-mode refusal fixtures, and gated real Infisical Agent Proxy
+  transcript.
+- Claim: E5-T01 is implemented and ready for a fresh critic. Trusted adapters are
+  factory-branded, production requires an out-of-band signed endpoint-bound attestation
+  and injected transport, and capabilities are opaque, run-bound, single-use, and
+  revocable without exposing provider handles or credential bytes.

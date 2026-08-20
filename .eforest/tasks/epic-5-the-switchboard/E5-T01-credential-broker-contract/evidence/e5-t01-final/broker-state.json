@@ -25,6 +25,7 @@
       "secretRefDigest": "sha256:e78f69047244ef23be624c590ef03574e27c83489d7e9ebbe296971054edae0a",
       "issuedAt": "2026-08-19T17:00:00.000Z",
       "expiresAt": "2026-08-19T17:01:00.000Z",
+      "usingAt": null,
       "usedAt": "2026-08-19T17:00:00.000Z",
       "status": "revoked"
     }

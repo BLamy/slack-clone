@@ -344,11 +344,19 @@ function secretCorpusFixture() {
     ["provider-token", { encodedValue: "ghp_" + "A".repeat(32) }],
     ["json", { payload: '{"token":"e5-t02-connection-canary-value"}' }],
     [
+      "percent-json-key",
+      { payload: '{"%74oken":"e5-t02-connection-canary-value"}' },
+    ],
+    [
       "escaped-json",
       { payload: '{"\\u0074oken":"e5-t02-connection-canary-value"}' },
     ],
     ["url", { endpoint: "https://user:password@example.invalid/service" }],
     ["client-secret-assignment", { assignment: "client-secret=redacted" }],
+    [
+      "percent-client-secret-assignment",
+      { assignment: "client%2Dsecret=redacted" },
+    ],
     [
       "client-secret-prefixed-hyphen",
       { assignment: "prefix-client-secret=redacted" },

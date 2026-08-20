@@ -680,7 +680,9 @@ function isCredentialKey(key, { allowSecretRef = true } = {}) {
 
 function looksLikeCredentialValue(value, { allowGenericBase64 = false } = {}) {
   if (/\p{Cf}/u.test(value)) return true;
-  const candidate = normalizeCredentialCandidate(value);
+  const decodedCandidate = decodeCredentialCandidate(value);
+  if (/\p{Cf}/u.test(decodedCandidate)) return true;
+  const candidate = decodedCandidate.replace(/\p{Cf}/gu, "");
   if (CREDENTIAL_VALUE_PATTERNS.some((pattern) => pattern.test(candidate))) {
     return true;
   }
@@ -714,7 +716,16 @@ function isBase64EncodedValue(value) {
 }
 
 function normalizeCredentialCandidate(value) {
-  return value.normalize("NFKC").replace(/\p{Cf}/gu, "");
+  return decodeCredentialCandidate(value).replace(/\p{Cf}/gu, "");
+}
+
+function decodeCredentialCandidate(value) {
+  const normalized = value.normalize("NFKC");
+  try {
+    return decodeURIComponent(normalized).normalize("NFKC");
+  } catch {
+    return normalized;
+  }
 }
 
 function securityNormalize(value) {

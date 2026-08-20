@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stream-slack.invalid/schemas/connection-events.v1.schema.json",
+  "title": "Stream Slack connection events v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "eventId",
+    "eventType",
+    "workspaceId",
+    "actorId",
+    "idempotencyKey",
+    "sequence",
+    "serverTimestamp",
+    "connectionId",
+    "data"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "eventId": { "$ref": "#/$defs/opaqueId" },
+    "eventType": {
+      "enum": [
+        "connection.created",
+        "connection.rotated",
+        "connection.disabled",
+        "connection.deleted"
+      ]
+    },
+    "workspaceId": { "$ref": "#/$defs/identifier" },
+    "actorId": { "$ref": "#/$defs/identifier" },
+    "idempotencyKey": { "$ref": "#/$defs/opaqueId" },
+    "sequence": { "type": "integer", "minimum": 1 },
+    "serverTimestamp": { "$ref": "#/$defs/timestamp" },
+    "connectionId": { "$ref": "#/$defs/opaqueId" },
+    "data": {
+      "oneOf": [
+        { "$ref": "#/$defs/createdData" },
+        { "$ref": "#/$defs/rotatedData" },
+        { "$ref": "#/$defs/terminalData" }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "eventType": { "const": "connection.created" } }
+      },
+      "then": { "properties": { "data": { "$ref": "#/$defs/createdData" } } }
+    },
+    {
+      "if": {
+        "properties": { "eventType": { "const": "connection.rotated" } }
+      },
+      "then": { "properties": { "data": { "$ref": "#/$defs/rotatedData" } } }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "enum": ["connection.disabled", "connection.deleted"]
+          }
+        }
+      },
+      "then": { "properties": { "data": { "$ref": "#/$defs/terminalData" } } }
+    }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "opaqueId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9._:-]{2,127}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+    },
+    "secretRef": {
+      "type": "object",
+      "required": ["id", "provider", "mount", "revision"],
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "id": { "$ref": "#/$defs/opaqueId" },
+        "provider": { "$ref": "#/$defs/identifier" },
+        "mount": { "$ref": "#/$defs/identifier" },
+        "revision": { "type": "integer", "minimum": 1 },
+        "label": { "$ref": "#/$defs/label" }
+      }
+    },
+    "owner": {
+      "type": "object",
+      "required": ["kind", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "enum": ["workspace", "agent", "user"] },
+        "id": { "$ref": "#/$defs/identifier" }
+      }
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "createdData": {
+      "type": "object",
+      "required": [
+        "connectionId",
+        "tenantId",
+        "workspaceId",
+        "owner",
+        "provider",
+        "integration",
+        "label",
+        "metadata",
+        "secretRef"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "connectionId": { "$ref": "#/$defs/opaqueId" },
+        "tenantId": { "$ref": "#/$defs/identifier" },
+        "workspaceId": { "$ref": "#/$defs/identifier" },
+        "owner": { "$ref": "#/$defs/owner" },
+        "provider": { "$ref": "#/$defs/identifier" },
+        "integration": { "$ref": "#/$defs/identifier" },
+        "label": { "$ref": "#/$defs/label" },
+        "metadata": { "$ref": "#/$defs/metadata" },
+        "secretRef": { "$ref": "#/$defs/secretRef" },
+        "revision": { "const": 1 }
+      }
+    },
+    "rotatedData": {
+      "type": "object",
+      "required": ["expectedRevision", "revision", "secretRef"],
+      "additionalProperties": false,
+      "properties": {
+        "expectedRevision": { "type": "integer", "minimum": 1 },
+        "revision": { "type": "integer", "minimum": 1 },
+        "secretRef": { "$ref": "#/$defs/secretRef" }
+      }
+    },
+    "terminalData": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "reason": {
+          "type": ["string", "null"],
+          "maxLength": 160,
+          "pattern": "^[^\\u0000-\\u001f\\u007f]*$"
+        }
+      }
+    }
+  }
+}

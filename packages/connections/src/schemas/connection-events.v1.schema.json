@@ -225,7 +225,8 @@
         "reason": {
           "type": ["string", "null"],
           "maxLength": 160,
-          "pattern": "^[^\\u0000-\\u001f\\u007f]*$"
+          "pattern": "^[^\\u0000-\\u001f\\u007f]*$",
+          "not": { "$ref": "#/$defs/credentialValueShape" }
         }
       }
     }

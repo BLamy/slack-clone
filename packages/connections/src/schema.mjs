@@ -240,6 +240,7 @@ export function normalizePrincipal(input, path = "$.principal") {
     );
   }
   const capabilities = value.capabilities ?? [];
+  assertNoCredentialMaterial(capabilities, path + ".capabilities");
   if (
     !Array.isArray(capabilities) ||
     capabilities.some(

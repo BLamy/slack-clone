@@ -510,6 +510,14 @@ function apiIdentifierBoundaryFixture() {
         }),
     ],
     [
+      "principal-capability",
+      () =>
+        normalizePrincipal({
+          ...ADMIN,
+          capabilities: [providerToken],
+        }),
+    ],
+    [
       "owner-id",
       () => normalizeOwner({ kind: "workspace", id: providerToken }),
     ],

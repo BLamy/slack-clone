@@ -132,6 +132,14 @@ test("runtime identifier APIs reject provider-token-shaped values", () => {
     (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
   );
   assert.throws(
+    () =>
+      normalizePrincipal({
+        ...ADMIN,
+        capabilities: [providerToken],
+      }),
+    (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
+  );
+  assert.throws(
     () => normalizeOwner({ kind: "workspace", id: providerToken }),
     (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
   );

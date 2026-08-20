@@ -82,6 +82,13 @@ const CANARY_VALUES = Object.freeze([
   "e5-t02-connection-canary-value",
   "critic-independent-e5-t02-canary-value",
 ]);
+const percentEncodeEveryCharacter = (value) =>
+  [...value]
+    .map(
+      (character) =>
+        `%${character.codePointAt(0).toString(16).toUpperCase().padStart(2, "0")}`,
+    )
+    .join("");
 
 await mkdir(evidenceDirectory, { recursive: true });
 
@@ -467,6 +474,27 @@ function secretCorpusFixture() {
     ["private-key-field", { privateKey: "redacted-key-value" }],
     ["authorization-field", { authorization: "Bearer redacted-token-value" }],
   ];
+  for (const [name, prefix] of [
+    ["ghp", "ghp_"],
+    ["sk", "sk-"],
+    ["rk", "rk-"],
+    ["pk", "pk-"],
+    ["github-pat", "github_pat_"],
+    ["xoxb", "xoxb-"],
+    ["xoxa", "xoxa-"],
+    ["xoxp", "xoxp-"],
+    ["xoxr", "xoxr-"],
+    ["xoxs", "xoxs-"],
+  ]) {
+    attacks.push([
+      `double-percent-${name}-provider-token`,
+      {
+        encodedValue:
+          percentEncodeEveryCharacter(percentEncodeEveryCharacter(prefix)) +
+          "A".repeat(16),
+      },
+    ]);
+  }
   const rejected = [];
   const publicSchemaRejected = [];
   let store = makeStore();

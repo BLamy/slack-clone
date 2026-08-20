@@ -32,6 +32,25 @@ const MEMBER = {
   kind: "user",
   role: "member",
 };
+const LAYERED_PROVIDER_PREFIXES = Object.freeze([
+  "ghp_",
+  "sk-",
+  "rk-",
+  "pk-",
+  "github_pat_",
+  "xoxb-",
+  "xoxa-",
+  "xoxp-",
+  "xoxr-",
+  "xoxs-",
+]);
+const percentEncodeEveryCharacter = (value) =>
+  [...value]
+    .map(
+      (character) =>
+        `%${character.codePointAt(0).toString(16).toUpperCase().padStart(2, "0")}`,
+    )
+    .join("");
 
 test("SecretRefs accept opaque broker identifiers and reject secret-shaped input", () => {
   assert.deepEqual(normalizeSecretRef(ref(1)), {
@@ -89,6 +108,13 @@ test("connection metadata rejects encoded, URL, JSON, nested, and confusable sec
     { metadata: { encodedValue: "xoxp-" + "A".repeat(16) } },
     { metadata: { encodedValue: "xoxr-" + "A".repeat(16) } },
     { metadata: { encodedValue: "xoxs-" + "A".repeat(16) } },
+    ...LAYERED_PROVIDER_PREFIXES.map((prefix) => ({
+      metadata: {
+        encodedValue:
+          percentEncodeEveryCharacter(percentEncodeEveryCharacter(prefix)) +
+          "A".repeat(16),
+      },
+    })),
     { metadata: { endpoint: "https://user:password@example.invalid" } },
     { metadata: { assignment: "client-secret=raw-client-secret" } },
     { metadata: { assignment: "prefix-client-secret=raw-client-secret" } },

@@ -347,6 +347,7 @@ function secretCorpusFixture() {
       { payload: '{"\\u0074oken":"e5-t02-connection-canary-value"}' },
     ],
     ["url", { endpoint: "https://user:password@example.invalid/service" }],
+    ["client-secret-assignment", { assignment: "client-secret=redacted" }],
     [
       "multiline-private-key",
       {
@@ -388,6 +389,36 @@ function secretCorpusFixture() {
     rejected.push({ name, code: error.code, path: error.path });
   }
 
+  const tooDeep = {
+    level1: {
+      level2: {
+        level3: {
+          level4: {
+            level5: "value",
+          },
+        },
+      },
+    },
+  };
+  let depthError;
+  try {
+    store.create({
+      actor: ADMIN,
+      connectionId: "c-metadata-depth",
+      owner: { kind: "workspace", id: SCOPE.workspaceId },
+      provider: "github",
+      integration: "issues",
+      label: "Rejected metadata depth",
+      metadata: tooDeep,
+      secretRef: secretRef(1),
+      idempotencyKey: "a-metadata-depth",
+    });
+  } catch (caught) {
+    depthError = caught;
+  }
+  assert.equal(depthError?.code, CONNECTION_ERROR_CODES.INVALID_REQUEST);
+  assert.equal(store.events().length, 0);
+
   const refAttacks = [
     ["token-field", { token: "redacted-token-value" }],
     ["password-field", { password: "redacted-password-value" }],
@@ -418,6 +449,11 @@ function secretCorpusFixture() {
     secretRefCorpus: refAttacks.map(([name]) => name),
     rejected,
     eventBoundary,
+    metadataDepthBoundary: {
+      rejected: true,
+      code: depthError.code,
+      path: depthError.path,
+    },
     appendedEvents: store.events().length,
     rawValuesPersisted: false,
   };

@@ -32,12 +32,12 @@ const LABEL_PATTERN = /^[\p{L}\p{N}][\p{L}\p{N} ._:/-]{0,127}$/u;
 const METADATA_KEY_PATTERN = /^[A-Za-z][A-Za-z0-9._-]{0,63}$/u;
 const TIMESTAMP_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/u;
 const CREDENTIAL_KEY_PATTERN =
-  /(?:password|secret|credential|authorization|cookie|bearer|token|private.?key|connection.?string|api[_-]?key)/iu;
+  /(?:password|secret|client[\s_-]?secret|credential|authorization|cookie|bearer|token|private.?key|connection.?string|api[_-]?key)/iu;
 const CREDENTIAL_VALUE_PATTERNS = [
   /-----BEGIN [^-]*PRIVATE KEY-----/iu,
   /\b(?:bearer|basic)\s+[A-Za-z0-9._~+/=-]{8,}/iu,
   /\b(?:sk|rk|pk|ghp|github_pat|xox[baprs])[-_][A-Za-z0-9._~+/=-]{8,}\b/iu,
-  /(?:^|[\s{[,;])(?:password|token|secret|api[_-]?key|private[_-]?key|cookie|authorization)\s*[:=]/iu,
+  /(?:^|[\s{[,;])(?:password|token|secret|client[\s_-]?secret|api[_-]?key|private[_-]?key|cookie|authorization)\s*[:=]/iu,
   /\b(?:https?|ssh|postgres(?:ql)?|mysql|redis|mongodb(?:\+srv)?|amqp):\/\/\S+/iu,
   /(?:^|[\s;])(?:host|user|username|password|port)\s*=\s*[^;]+/iu,
 ];
@@ -671,6 +671,7 @@ function isCredentialKey(key, { allowSecretRef = true } = {}) {
 }
 
 function looksLikeCredentialValue(value, { allowGenericBase64 = false } = {}) {
+  if (/\p{Cf}/u.test(value)) return true;
   const candidate = normalizeCredentialCandidate(value);
   if (CREDENTIAL_VALUE_PATTERNS.some((pattern) => pattern.test(candidate))) {
     return true;

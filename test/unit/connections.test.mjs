@@ -85,6 +85,7 @@ test("connection metadata rejects encoded, URL, JSON, nested, and confusable sec
     { metadata: { encodedUrlSafeZeroWidth: zeroWidthUrlSafeBase64 } },
     { metadata: { encodedValue: "ghp_" + "A".repeat(32) } },
     { metadata: { endpoint: "https://user:password@example.invalid" } },
+    { metadata: { assignment: "client-secret=raw-client-secret" } },
     { metadata: { payload: '{"token":"raw-token-value"}' } },
     { metadata: { escapedPayload: '{"\\u0074oken":"raw-token-value"}' } },
     { metadata: { nested: { password: "raw-password" } } },
@@ -102,6 +103,46 @@ test("connection metadata rejects encoded, URL, JSON, nested, and confusable sec
       metadata: { team: "platform", retries: 2, tags: ["issues", "read"] },
     }).metadata,
     { team: "platform", retries: 2, tags: ["issues", "read"] },
+  );
+});
+
+test("connection metadata enforces the public nesting boundary", () => {
+  const tooDeep = {
+    level1: {
+      level2: {
+        level3: {
+          level4: {
+            level5: "value",
+          },
+        },
+      },
+    },
+  };
+  assert.throws(
+    () => definition({ metadata: tooDeep }),
+    (error) => error.code === CONNECTION_ERROR_CODES.INVALID_REQUEST,
+  );
+  assert.deepEqual(
+    definition({
+      metadata: {
+        level1: {
+          level2: {
+            level3: {
+              level4: {},
+            },
+          },
+        },
+      },
+    }).metadata,
+    {
+      level1: {
+        level2: {
+          level3: {
+            level4: {},
+          },
+        },
+      },
+    },
   );
 });
 

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "critic": "twelfth-independent",
+  "exactHead": "cbb09a07aed3039414acea43e63c033484f50267",
+  "worktree": "/tmp/slack-e5-t02-twelfth-sensitivity",
+  "mutation": {
+    "file": "packages/connections/src/schema.mjs",
+    "removed": "const decodedCandidate = decodeCredentialCandidate(value);",
+    "replacement": "const decodedCandidate = value;"
+  },
+  "command": "TEST_RUN_ID=e5-t02-critic-20260820-twelfth-percent-branch-removed TEST_ARTIFACT_DIR=evidence/e5-t02-critic-20260820-twelfth/sensitivity-mutation make verify-E5-T02",
+  "result": "FAIL_AS_EXPECTED",
+  "exitCode": 2,
+  "failure": "secretCorpusFixture assertion expected CONNECTION_CREDENTIAL_MATERIAL but received no credential error",
+  "detectorSensitive": true
+}

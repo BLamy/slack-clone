@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "critic": "twelfth-independent",
+  "verdict": "refuted",
+  "exactHead": "cbb09a07aed3039414acea43e63c033484f50267",
+  "builderProductCommit": "5ab7562c1a336ce33a92b9c0e70f543ce12ac640",
+  "productSourceModifiedByCritic": false,
+  "emulateSubmoduleModifiedByCritic": false,
+  "evidence": {
+    "independentProbe": "independent-probes.json",
+    "gateSummary": "gate-summary.json",
+    "coldReplay": "cold-replay/",
+    "sensitivityMutation": "sensitivity-mutation/"
+  },
+  "findings": [
+    {
+      "id": "E5-T02-CRITIC-TWELFTH-001",
+      "severity": "high",
+      "title": "Public schema misses mixed percent-encoded prefixed and encoded-equals assignments",
+      "observation": "The public event schema accepted mixed percent-encoded client-secret assignments in free-form metadata, labels, and terminal reasons. The accepted forms included a percent-encoded prefix separator with percent-encoded letters and assignments whose equals separator was percent-encoded. Runtime and store paths rejected the same values, so the schema-only boundary is inconsistent with the authoritative detector.",
+      "source": [
+        "packages/connections/src/schemas/connection-events.v1.schema.json:73-82",
+        "packages/connections/src/schemas/connection-events.v1.schema.json:117-150"
+      ],
+      "proof": "independent-probes.json findings named assignment-percent-prefixed-mixed, assignment-percent-equals, and assignment-percent-prefixed-equals"
+    },
+    {
+      "id": "E5-T02-CRITIC-TWELFTH-002",
+      "severity": "high",
+      "title": "One-pass decoding permits double-encoded assignments and JSON credential keys",
+      "observation": "Double-encoded assignment and JSON-key forms survived the runtime detector, crossed normalizeMetadata, normalizeConnectionDefinition, normalizeConnectionEvent, and normalizeReason, and reached createConnectionStore. The store appended one event for each double-encoded form. A single decodeURIComponent pass leaves the second escape layer for the literal regex/JSON checks.",
+      "source": [
+        "packages/connections/src/schema.mjs:681-699",
+        "packages/connections/src/schema.mjs:722-729"
+      ],
+      "proof": "independent-probes.json findings named percent-json-key-encoded-brace and percent-double-assignment; both store cases report appended: 1"
+    },
+    {
+      "id": "E5-T02-CRITIC-TWELFTH-003",
+      "severity": "high",
+      "title": "Public schema does not mirror percent-encoded URL credential shapes",
+      "observation": "A percent-encoded URL scheme and delimiters were accepted by public metadata, label, and terminal-reason validation while runtime and store detection rejected the decoded URL form. The public URL pattern only recognizes literal URL schemes and the percent-encoded shape helper contains no URL alternative.",
+      "source": [
+        "packages/connections/src/schemas/connection-events.v1.schema.json:73-82",
+        "packages/connections/src/schemas/connection-events.v1.schema.json:132-134"
+      ],
+      "proof": "independent-probes.json findings named percent-url-scheme"
+    },
+    {
+      "id": "E5-T02-CRITIC-TWELFTH-004",
+      "severity": "high",
+      "title": "Public schema does not mirror percent-encoded provider-token prefixes",
+      "observation": "A provider-token prefix with percent-encoded letters and separator was accepted by public metadata, label, and terminal-reason validation while runtime and store detection rejected the decoded provider-token form. The public provider-token pattern and percent-encoded helper do not cover this representation.",
+      "source": [
+        "packages/connections/src/schemas/connection-events.v1.schema.json:73-82",
+        "packages/connections/src/schemas/connection-events.v1.schema.json:127-140"
+      ],
+      "proof": "independent-probes.json findings named percent-provider-prefix"
+    }
+  ],
+  "passedControls": [
+    "all eight requested Unicode format controls inserted into URL, URL-safe base64, and standard-base64 values",
+    "one-level percent-encoded assignment and mixed-case JSON-key forms",
+    "escaped and case-variant JSON credential keys",
+    "metadata depth, array length, 64-property, astral code-point, and reason-length boundaries",
+    "ordinary non-secret percent text positive control",
+    "lifecycle, duplicate/reordered replay, authorization, and canary controls from the cold verifier"
+  ],
+  "sensitivity": {
+    "result": "PASS",
+    "mutation": "removed only decodeCredentialCandidate call in a disposable exact-head worktree",
+    "verifierExitCode": 2,
+    "evidence": "sensitivity-mutation/"
+  },
+  "coldReplay": {
+    "result": "PASS",
+    "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f"
+  },
+  "replay": "Replay: N/A (server connection model) + mitigation: detached exact-head cold-clone reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle digests, independent runtime/store/public probes, and detector-sensitivity mutation",
+  "status": "refuted; product rework is required before verification"
+}

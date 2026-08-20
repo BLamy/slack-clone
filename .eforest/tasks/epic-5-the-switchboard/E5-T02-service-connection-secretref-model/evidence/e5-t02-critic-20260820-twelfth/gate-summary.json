@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "critic": "twelfth-independent",
+  "exactHead": "cbb09a07aed3039414acea43e63c033484f50267",
+  "builderProductCommit": "5ab7562c1a336ce33a92b9c0e70f543ce12ac640",
+  "orientation": {
+    "trackedWorktreeClean": true,
+    "productSourceModifiedByCritic": false,
+    "emulateSubmodule": {
+      "path": "emulate",
+      "pinnedCommit": "9a62e23a55dd01d3086e7e0aaa5bb755c7814fe7",
+      "modifiedByCritic": false
+    }
+  },
+  "gates": [
+    { "command": "pnpm install --frozen-lockfile", "result": "PASS" },
+    { "command": "pnpm format:check", "result": "PASS" },
+    { "command": "pnpm format:check:e5-t02", "result": "PASS" },
+    { "command": "pnpm lint", "result": "PASS" },
+    { "command": "pnpm typecheck", "result": "PASS" },
+    {
+      "command": "pnpm test",
+      "result": "PASS",
+      "unitTests": 209,
+      "integrationTests": 15
+    },
+    { "command": "pnpm build", "result": "PASS" },
+    { "command": "git diff --check cbb09a0^ cbb09a0", "result": "PASS" },
+    {
+      "command": "pnpm exec prettier --check evidence/.../twelfth/independent-probe.mjs",
+      "result": "PASS"
+    }
+  ],
+  "independentProbe": {
+    "command": "node evidence/e5-t02-critic-20260820-twelfth/independent-probe.mjs",
+    "result": "REFUTED_AS_EXPECTED",
+    "findingCount": 35,
+    "requiredAssignmentForms": 14,
+    "unicodeFormatControls": 8,
+    "jsonForms": 7,
+    "percentForms": 7,
+    "resourceBoundaryFindings": 0,
+    "ordinaryPercentPositiveControl": "PASS"
+  },
+  "coldVerifier": {
+    "worktree": "/tmp/slack-e5-t02-twelfth-cold",
+    "command": "TEST_RUN_ID=e5-t02-critic-20260820-twelfth-cold TEST_ARTIFACT_DIR=evidence/e5-t02-critic-20260820-twelfth/cold-replay make verify-E5-T02",
+    "result": "PASS",
+    "implementationCommit": "cbb09a07aed3039414acea43e63c033484f50267",
+    "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f",
+    "duplicateAndReorderedParity": true,
+    "leaked": false
+  },
+  "sensitivityMutation": {
+    "worktree": "/tmp/slack-e5-t02-twelfth-sensitivity",
+    "removedBranch": "decodeCredentialCandidate call in looksLikeCredentialValue",
+    "command": "TEST_RUN_ID=e5-t02-critic-20260820-twelfth-percent-branch-removed TEST_ARTIFACT_DIR=evidence/e5-t02-critic-20260820-twelfth/sensitivity-mutation make verify-E5-T02",
+    "result": "FAIL_AS_EXPECTED",
+    "exitCode": 2,
+    "failure": "secretCorpusFixture assertion expected CONNECTION_CREDENTIAL_MATERIAL but received no credential error"
+  }
+}

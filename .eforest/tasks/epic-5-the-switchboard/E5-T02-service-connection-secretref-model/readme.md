@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: refuted
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -1089,3 +1089,60 @@ material and version policy; it is not a URI that clients can dereference themse
   mutation.
 - Claim: the eleventh critic's percent-encoded credential findings are addressed.
   E5-T02 is implemented and ready for another fresh critic.
+
+### Critic — twelfth independent review — 2026-08-20
+
+- VERDICT: refuted.
+- Exact head: `cbb09a07aed3039414acea43e63c033484f50267`; builder product commit:
+  `5ab7562c1a336ce33a92b9c0e70f543ce12ac640`. The tracked worktree was clean at
+  orientation. Product source and the pinned `emulate` submodule were not changed by
+  this critic; only the new critic evidence, this log entry, and queue metadata are
+  owned by the review.
+- Gates: `pnpm install --frozen-lockfile`, `pnpm format:check`,
+  `pnpm format:check:e5-t02`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (209 unit
+  and 15 integration/Playwright tests), `pnpm build`, exact-head `git diff --check`,
+  and the formatted independent probe all passed. The manifest is in
+  `evidence/e5-t02-critic-20260820-twelfth/gate-summary.json`.
+- Cold exact verifier: a detached worktree at `cbb09a0` passed
+  `make verify-E5-T02` with state/replay digest
+  `sha256:f40a785341af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`,
+  duplicate/reordered parity, and `leaked: false`. Evidence is under
+  `evidence/e5-t02-critic-20260820-twelfth/cold-replay/`.
+- Independent probe: `evidence/e5-t02-critic-20260820-twelfth/independent-probe.mjs`
+  exercised 14 assignment forms including prefixed and mixed percent-encoded
+  separators/letters, all eight Unicode format controls in URL, URL-safe/base64,
+  and standard-base64 values, escaped/case-variant JSON keys, percent-encoded JSON
+  keys, metadata depth/array/64-property/code-point limits, reason limits, an
+  ordinary non-secret percent-text positive control, and double-encoded plus
+  percent-encoded URL/provider additional attacks. The redacted result has 35
+  findings in `independent-probes.json`.
+- Finding `E5-T02-CRITIC-TWELFTH-001` (high): the public schema accepts mixed
+  percent-encoded prefixed client-secret assignments and assignments with a
+  percent-encoded equals separator in metadata, labels, and terminal reasons. The
+  percent helper's boundary and separator patterns do not cover these forms
+  (`packages/connections/src/schemas/connection-events.v1.schema.json:73-82,117-150`).
+- Finding `E5-T02-CRITIC-TWELFTH-002` (high): double-encoded assignment and JSON-key
+  values cross runtime and store boundaries; each store probe appended one event.
+  The runtime performs only one `decodeURIComponent` pass before literal/JSON checks
+  (`packages/connections/src/schema.mjs:681-699,722-729`).
+- Finding `E5-T02-CRITIC-TWELFTH-003` (high): percent-encoded URL values are accepted
+  by the public schema while runtime/store reject the decoded URL form; the public
+  URL pattern only covers literal schemes
+  (`packages/connections/src/schemas/connection-events.v1.schema.json:73-82,132-134`).
+- Finding `E5-T02-CRITIC-TWELFTH-004` (high): percent-encoded provider-token prefixes
+  are accepted by the public schema while runtime/store reject them; the provider
+  and percent-shape patterns do not mirror that representation
+  (`packages/connections/src/schemas/connection-events.v1.schema.json:73-82,127-140`).
+- Sensitivity: removing only the `decodeCredentialCandidate` call in a disposable
+  exact-head worktree made `make verify-E5-T02` exit 2 at the secret-corpus
+  assertion. Evidence: `sensitivity-mutation.json`.
+- Controls that passed independently: one-level percent assignment/JSON-key forms,
+  all eight format controls, escaped/case-variant JSON, metadata and reason resource
+  boundaries, ordinary percent text, lifecycle/capture/replay/authz, leak scanning,
+  and detector sensitivity. Status remains `refuted` pending product rework and a
+  further fresh critic.
+- Replay: N/A (server connection model) + mitigation: detached exact-head cold-clone
+  reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle digests,
+  independent runtime/store/public probes, and detector-sensitivity mutation.

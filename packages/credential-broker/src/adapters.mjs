@@ -381,14 +381,14 @@ function isDisallowedIpv6(value) {
     bytes[2] === 0xff &&
     bytes[3] === 0x9b &&
     bytes.slice(4, 12).every((byte) => byte === 0);
-  const embeddedIpv4IsDisallowed = isDisallowedIpv4(bytes.slice(12).join("."));
+  const hasEmbeddedIpv4 = isIpv4Mapped || isIpv4Compatible || isNat64;
   return (
     isUnspecified ||
     isLoopback ||
     isUniqueLocal ||
     isLinkLocal ||
     isMulticast ||
-    ((isIpv4Mapped || isIpv4Compatible || isNat64) && embeddedIpv4IsDisallowed)
+    hasEmbeddedIpv4
   );
 }
 

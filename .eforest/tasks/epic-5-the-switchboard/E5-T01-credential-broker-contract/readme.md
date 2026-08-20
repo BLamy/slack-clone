@@ -3,7 +3,7 @@ id: E5-T01
 epic: 5
 title: "Credential broker contract: Infisical Agent Proxy in production, Agent Vault locally, and no raw-secret orchestration path"
 priority: 501
-status: implemented
+status: in-progress
 depends_on: [E3]
 estimate: L
 capstone: false
@@ -200,3 +200,16 @@ opaque, single-use, run-scoped handles to callers.
   transcript.
 - Claim: the two critic findings are closed and E5-T01 is implemented for a fresh
   independent verdict.
+
+### Critic follow-up — 2026-08-19
+
+- The next fresh critic executed the exact 0b650778de0849c9343967539136a9e41e9b66d2
+  head and returned VERDICT: refuted.
+- Findings: public IPv4 values embedded in IPv4-mapped, IPv4-compatible, and NAT64
+  IPv6 literals were accepted; and the evidence scanner's fixed credential patterns
+  did not detect a newly chosen arbitrary canary in an artifact. The requestId fix,
+  required reserved IPv4 fixtures, concurrency/replay/revoke fencing, provider
+  substitution, signed attestation, and full gates all passed. The real gate remained
+  an explicit SKIPPED with no fallback.
+
+### Builder — IPv6 representation and scanner sensitivity follow-up — 2026-08-19

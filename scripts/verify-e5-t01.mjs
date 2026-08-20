@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import {
@@ -41,6 +41,11 @@ assert.deepEqual(first.publicSnapshot, second.publicSnapshot);
 
 const modeRefusals = runProviderModeRefusals();
 const sensitivity = await runSensitivityFixture();
+const evidenceSensitivity = await runEvidenceSensitivityFixture();
+const sensitivityEvidence = {
+  ...sensitivity,
+  evidenceCanary: evidenceSensitivity,
+};
 const replayEvidence = {
   schemaVersion: 1,
   task: "E5-T01",
@@ -60,7 +65,7 @@ await writeJson("broker-state.json", first.publicSnapshot);
 await writeJson("audit-events.json", first.auditEvents);
 await writeJson("replay-digests.json", replayEvidence);
 await writeJson("provider-mode-refusals.json", modeRefusals);
-await writeJson("sensitivity.json", sensitivity);
+await writeJson("sensitivity.json", sensitivityEvidence);
 await writeJson("cold-clone-transcript.json", {
   schemaVersion: 1,
   task: "E5-T01",
@@ -91,7 +96,7 @@ await writeJson("verification-summary.json", {
   auditDigest: first.auditDigest,
   replayParity: replayEvidence.parity,
   providerModeRefusals: modeRefusals,
-  sensitivity,
+  sensitivity: sensitivityEvidence,
   canaryScan: { leaked: false, filesChecked: [] },
   replay:
     "Replay: N/A (headless credential broker) + mitigation: cold-clone state replay, canary scans, provider-mode refusal fixtures, and gated real Infisical Agent Proxy transcript",
@@ -110,7 +115,7 @@ await writeJson("verification-summary.json", {
   auditDigest: first.auditDigest,
   replayParity: replayEvidence.parity,
   providerModeRefusals: modeRefusals,
-  sensitivity,
+  sensitivity: sensitivityEvidence,
   canaryScan: {
     leaked: finalScan.leaked,
     filesChecked: finalScan.filesChecked,
@@ -380,6 +385,7 @@ async function scanEvidence() {
     /\bBearer\s+[A-Za-z0-9._~+/=-]{12,}/iu,
     /\b(?:api[_-]?key|client[_-]?secret|password|token)\s*[:=]\s*["']?[A-Za-z0-9._~+/=-]{8,}/iu,
     /(?:e5-local-canary-value|sensitivity-canary|e5-t01-local-canary)/u,
+    /\b(?:[A-Za-z0-9][A-Za-z0-9._-]{2,}[-_]canary(?:[-_][A-Za-z0-9._-]+)*|canary[-_][A-Za-z0-9._-]{2,})\b/iu,
   ];
   const findings = [];
   for (const filename of files) {
@@ -405,6 +411,23 @@ async function scanEvidence() {
     findings,
     leaked: findings.length > 0,
   };
+}
+
+async function runEvidenceSensitivityFixture() {
+  const filename = ".e5-t01-independent-canary.txt";
+  const file = path.join(evidenceDirectory, filename);
+  await writeFile(file, "critic-independent-canary-value\n");
+  try {
+    const scan = await scanEvidence();
+    assert.equal(scan.leaked, true);
+    assert.equal(
+      scan.findings.some((finding) => finding.filename === file),
+      true,
+    );
+    return { detected: true, findingCount: scan.findings.length };
+  } finally {
+    await unlink(file);
+  }
 }
 
 async function listEvidenceFiles(directory) {

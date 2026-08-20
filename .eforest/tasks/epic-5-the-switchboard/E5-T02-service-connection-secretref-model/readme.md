@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: refuted
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -573,3 +573,76 @@ material and version policy; it is not a URI that clients can dereference themse
   envelope/schema/runtime probes, capture-race probes, and detector-sensitivity mutation.
 - Claim: the sixth critic's URL-safe base64 finding is addressed and E5-T02 is ready for
   a final fresh independent verdict.
+
+### Critic — final independent review — 2026-08-20
+
+- VERDICT: refuted.
+- Exact head: `90b3805ad806c36e109f12debad09f3fb2e420e2`; reviewed product fix:
+  `084019c957a42beb3c8ceee429108e19e6f0704a`. The checkout was clean before this
+  critic's evidence directory was created. No product source was changed by this
+  review; the critic-owned changes are the evidence directory, this readme entry, and
+  the regenerated queue metadata.
+- Gates: `pnpm install --frozen-lockfile`; `pnpm format:check`;
+  `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`; `pnpm test` (207 unit
+  and 15 emulator/Auth0 Playwright tests passed); and `pnpm build` all passed at the
+  exact head.
+- Exact verifier: `TEST_RUN_ID=e5-t02-critic-final-20260820
+  TEST_ARTIFACT_DIR=evidence/e5-t02-critic-20260820-final
+  E5_T02_ENTRYPOINT='make verify-E5-T02 (fresh critic exact-head run)'
+  make verify-E5-T02` passed. It reproduced state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`,
+  duplicate/reordered parity, base64 detector sensitivity, and final
+  `leaked: false`. The complete command/result record is
+  `evidence/e5-t02-critic-20260820-final/gate-summary.json`.
+- Cold replay: a new detached worktree at `/tmp/slack-e5-t02-final-cold` checked out
+  the exact head, ran `pnpm install --frozen-lockfile`, and passed the same verifier
+  into `evidence/e5-t02-critic-20260820-final/cold-replay/` with the matching state and
+  replay-view digests.
+- Required URL-safe attack: the probe constructed a 24-character neutral RFC 4648
+  base64url value as 22 repeated lowercase `a` characters plus `-a`, without writing
+  the raw value to evidence. Runtime rejection passed for principal capabilities,
+  opaque ids, metadata, reasons, terminal reasons, connection-definition metadata,
+  and all `normalizeConnectionEvent` envelope identifiers. Store create,
+  authorization, capture, and disable/delete terminal paths rejected it with
+  `CONNECTION_CREDENTIAL_MATERIAL` and no attack-induced append. Ajv 8 Draft-2020-12
+  rejected the corresponding metadata, terminal-reason, event-id, workspace-id,
+  actor-id, idempotency-key, and connection-id cases. Standard base64, dynamic
+  provider-shaped, padded URL-safe, underscore, mixed-alphabet, recursive, case,
+  extra-field, Unicode-escaped JSON-key, and parsed `__proto__` attacks also produced
+  the expected refusals. Durable details are in
+  `evidence/e5-t02-critic-20260820-final/independent-probes.json` and the probe
+  source in the same directory.
+- Finding `E5-T02-CRITIC-FINAL-001` (high): a canonical 23-character RFC 4648
+  base64url value, independently generated from neutral bytes and round-trip checked,
+  passed `normalizeMetadata`, `normalizeOpaqueIdForStore`, `normalizeReason`, and
+  `normalizePrincipal` capabilities. The same value passed store create metadata,
+  capture run-id, and terminal disable paths; the terminal path advanced the event
+  count. Ajv accepted it in metadata, terminal reason, and event id. The bypass is
+  directly explained by `packages/connections/src/schema.mjs:679-690`, where
+  `isBase64EncodedValue` returns false below 24 characters, and by the public
+  schema's `{24,}` generic base64 shape at
+  `packages/connections/src/schemas/connection-events.v1.schema.json:73-94`.
+  This is a raw encoded-value boundary bypass and refutes the every-boundary
+  rejection criterion despite the required 24-character case passing.
+- Finding `E5-T02-CRITIC-FINAL-002` (medium): valid opaque/identifier grammar values
+  that are longer than the heuristic and happen to use only the base64url alphabet
+  were classified as credential material. `connection-normal-identifier-000001` and
+  `run-20260820-normal-identifier` were rejected by
+  `normalizeOpaqueIdForStore`; a valid long workspace identifier was rejected by
+  `normalizeConnectionEvent`, and the store lifecycle create plus public schema
+  `normalLongIdentifier` compatibility control failed. Short/common connection,
+  SecretRef, workspace, event, and principal controls still passed. This is the
+  compatibility consequence of applying the generic detector in
+  `packages/connections/src/schema.mjs:722-743` and the schema-level `not` constraint
+  in `packages/connections/src/schemas/connection-events.v1.schema.json:100-108`
+  without distinguishing an opaque identifier from encoded credential material.
+- Lifecycle/capture stability, immutable revision binding, duplicate/reordered replay,
+  authz ownership and foreign/unknown not-found parity, leak scans, and detector
+  sensitivity all passed independently. They do not cure the two findings above.
+- Replay: N/A (server connection model) + mitigation: detached exact-head cold-clone
+  replay, secret-shaped input corpus, direct runtime/store boundary probes, Ajv 8
+  Draft-2020-12 validation, authz matrix, lifecycle/capture probes, recursive leak
+  scan, and detector-sensitivity mutation. Status remains `refuted` pending builder
+  rework and another fresh critic.

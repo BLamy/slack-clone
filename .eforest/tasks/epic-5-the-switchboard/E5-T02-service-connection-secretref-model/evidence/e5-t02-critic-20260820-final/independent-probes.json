@@ -1,0 +1,856 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "exactHead": "90b3805ad806c36e109f12debad09f3fb2e420e2",
+  "inputs": {
+    "neutralUrlSafeLength": 24,
+    "neutralUrlSafeUsesUrlSafeAlphabet": true,
+    "neutralUrlSafeConstructedAs": "22 repeated lowercase a characters plus -a",
+    "standardBase64Length": 56,
+    "variantLengths": {
+      "paddedUrlSafe": 25,
+      "shortUrlSafe": 23,
+      "malformedPadding": 27,
+      "mixedAlphabet": 24
+    }
+  },
+  "runtime": {
+    "rejected": {
+      "event-id-eventId": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.eventId",
+        "statusCode": 400
+      },
+      "event-id-workspaceId": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.workspaceId",
+        "statusCode": 400
+      },
+      "event-id-actorId": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.actorId",
+        "statusCode": 400
+      },
+      "event-id-idempotencyKey": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.idempotencyKey",
+        "statusCode": 400
+      },
+      "event-id-connectionId": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.connectionId",
+        "statusCode": 400
+      },
+      "principalCapability": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.principal.capabilities[0]",
+        "statusCode": 400
+      },
+      "opaqueId": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.runId",
+        "statusCode": 400
+      },
+      "metadata": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400
+      },
+      "reason": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "eventTerminalReason": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.reason",
+        "statusCode": 400
+      },
+      "connectionDefinitionMetadata": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.safe",
+        "statusCode": 400
+      },
+      "providerValue": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400
+      },
+      "standardBase64": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400
+      },
+      "paddedUrlSafe": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400
+      },
+      "underscoreUrlSafe": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400
+      },
+      "mixedAlphabetBase64": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400
+      }
+    },
+    "variants": {
+      "length": {
+        "shortUrlSafe": {
+          "accepted": true,
+          "rawReturned": false,
+          "code": null,
+          "path": null,
+          "statusCode": null
+        },
+        "shortUrlSafeOpaqueId": {
+          "accepted": true,
+          "rawReturned": false,
+          "code": null,
+          "path": null,
+          "statusCode": null
+        },
+        "shortUrlSafeReason": {
+          "accepted": true,
+          "rawReturned": false,
+          "code": null,
+          "path": null,
+          "statusCode": null
+        },
+        "shortUrlSafeCapability": {
+          "accepted": true,
+          "rawReturned": false,
+          "code": null,
+          "path": null,
+          "statusCode": null
+        },
+        "malformedPadding": {
+          "accepted": true,
+          "rawReturned": true,
+          "code": null,
+          "path": null,
+          "statusCode": null
+        }
+      }
+    },
+    "detector": {
+      "neutralUrlSafe": true,
+      "standardBase64": true,
+      "providerValue": true,
+      "shortUrlSafe": false,
+      "malformedPadding": false
+    },
+    "findings": [
+      {
+        "id": "E5-T02-CRITIC-FINAL-SHORT-SHORTURLSAFE",
+        "severity": "high",
+        "summary": "A canonical short URL-safe base64 value crossed a runtime boundary",
+        "observation": {
+          "accepted": true,
+          "rawReturned": false
+        }
+      },
+      {
+        "id": "E5-T02-CRITIC-FINAL-SHORT-SHORTURLSAFEOPAQUEID",
+        "severity": "high",
+        "summary": "A canonical short URL-safe base64 value crossed a runtime boundary",
+        "observation": {
+          "accepted": true,
+          "rawReturned": false
+        }
+      },
+      {
+        "id": "E5-T02-CRITIC-FINAL-SHORT-SHORTURLSAFEREASON",
+        "severity": "high",
+        "summary": "A canonical short URL-safe base64 value crossed a runtime boundary",
+        "observation": {
+          "accepted": true,
+          "rawReturned": false
+        }
+      },
+      {
+        "id": "E5-T02-CRITIC-FINAL-SHORT-SHORTURLSAFECAPABILITY",
+        "severity": "high",
+        "summary": "A canonical short URL-safe base64 value crossed a runtime boundary",
+        "observation": {
+          "accepted": true,
+          "rawReturned": false
+        }
+      }
+    ]
+  },
+  "store": {
+    "create": {
+      "createMetadata": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.safe",
+        "statusCode": 400
+      },
+      "createCapability": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.actor.capabilities[0]",
+        "statusCode": 400
+      },
+      "createConnectionId": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.connectionId",
+        "statusCode": 400
+      },
+      "createShortMetadata": {
+        "accepted": true,
+        "rawReturned": false,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      }
+    },
+    "authorization": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.actor.capabilities[0]",
+      "statusCode": 400
+    },
+    "capture": {
+      "actor": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.actor.capabilities[0]",
+        "statusCode": 400
+      },
+      "runId": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.runId",
+        "statusCode": 400
+      },
+      "shortRunId": {
+        "accepted": true,
+        "rawReturned": false,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      }
+    },
+    "terminal": {
+      "disable": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "delete": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "shortReason": {
+        "accepted": true,
+        "rawReturned": false,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      }
+    },
+    "eventCounts": {
+      "before": 0,
+      "afterCreateAttacks": 1,
+      "beforeActorAttacks": 2,
+      "afterActorAttacks": 2,
+      "beforeTerminal": 1,
+      "afterTerminal": 2
+    },
+    "findings": [
+      {
+        "id": "E5-T02-CRITIC-FINAL-CREATESHORTMETADATA",
+        "severity": "high",
+        "summary": "URL-safe encoded material crossed the store boundary",
+        "observation": {
+          "accepted": true,
+          "rawReturned": false,
+          "eventCount": 1
+        }
+      },
+      {
+        "id": "E5-T02-CRITIC-FINAL-CAPTURESHORTRUNID",
+        "severity": "high",
+        "summary": "URL-safe encoded material crossed the store boundary",
+        "observation": {
+          "accepted": true,
+          "rawReturned": false,
+          "eventCount": 2
+        }
+      },
+      {
+        "id": "E5-T02-CRITIC-FINAL-DISABLESHORT",
+        "severity": "high",
+        "summary": "URL-safe encoded material crossed the store boundary",
+        "observation": {
+          "accepted": true,
+          "rawReturned": false,
+          "eventCount": 2
+        }
+      }
+    ]
+  },
+  "compatibility": {
+    "opaque": {
+      "connection-github": {
+        "accepted": true,
+        "rawReturned": false,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      },
+      "secretref-github-001": {
+        "accepted": true,
+        "rawReturned": false,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      },
+      "workspace-alpha": {
+        "accepted": true,
+        "rawReturned": false,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      },
+      "connection-event-00000001": {
+        "accepted": true,
+        "rawReturned": false,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      },
+      "connection-normal-identifier-000001": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.id",
+        "statusCode": 400
+      },
+      "run-20260820-normal-identifier": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.id",
+        "statusCode": 400
+      }
+    },
+    "principal": {
+      "accepted": true,
+      "rawReturned": false,
+      "code": null,
+      "path": null,
+      "statusCode": null
+    },
+    "lifecycle": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.connection.connectionId",
+      "statusCode": 400
+    },
+    "identifierEvents": {
+      "workspaceId": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.workspaceId",
+        "statusCode": 400
+      },
+      "actorId": {
+        "accepted": true,
+        "rawReturned": false,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      }
+    },
+    "findings": [
+      {
+        "id": "E5-T02-CRITIC-FINAL-COMPATIBILITY",
+        "severity": "medium",
+        "summary": "A valid opaque identifier was rejected as credential material",
+        "identifier": "connection-normal-identifier-000001",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.id"
+      },
+      {
+        "id": "E5-T02-CRITIC-FINAL-COMPATIBILITY",
+        "severity": "medium",
+        "summary": "A valid opaque identifier was rejected as credential material",
+        "identifier": "run-20260820-normal-identifier",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.id"
+      },
+      {
+        "id": "E5-T02-CRITIC-FINAL-COMPATIBILITY-PRINCIPAL",
+        "severity": "medium",
+        "summary": "Normal principal or lifecycle compatibility failed",
+        "principal": {
+          "accepted": true,
+          "rawReturned": false,
+          "code": null,
+          "path": null,
+          "statusCode": null
+        },
+        "lifecycle": {
+          "accepted": false,
+          "rawReturned": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.connectionId",
+          "statusCode": 400
+        }
+      },
+      {
+        "id": "E5-T02-CRITIC-FINAL-COMPATIBILITY-EVENT-WORKSPACEID",
+        "severity": "medium",
+        "summary": "A valid normal event identifier was rejected as credential material",
+        "field": "workspaceId",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.workspaceId"
+      }
+    ]
+  },
+  "lifecycle": {
+    "revisionStability": {
+      "beforeRotate": 1,
+      "sameRunAfterRotate": 1,
+      "newRunAfterRotate": 2,
+      "existingAfterDisable": 1,
+      "existingAfterDelete": 1
+    },
+    "disabledNewRun": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_NOT_ACTIVE",
+      "path": null,
+      "statusCode": 409
+    },
+    "deletedNewRun": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_NOT_ACTIVE",
+      "path": null,
+      "statusCode": 409
+    },
+    "replay": {
+      "stateDigest": "sha256:a0341429bb7483ed1a645cbdff02f530be6de552cef98e24d5f62c000212513d",
+      "replayAgainDigest": "sha256:a0341429bb7483ed1a645cbdff02f530be6de552cef98e24d5f62c000212513d",
+      "viewDigest": "sha256:eadd6851abe58443a3e762a3596eff6df9a466ea330b29e1a25cc8dca2300f31",
+      "duplicateAndReorderedParity": true
+    }
+  },
+  "authz": {
+    "ownership": {
+      "memberRead": true,
+      "memberGrant": true,
+      "memberDelete": false
+    },
+    "foreignErrors": {
+      "read": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "grant": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "rotate": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "disable": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "delete": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      }
+    },
+    "unknownErrors": {
+      "read": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "grant": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "rotate": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "disable": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "delete": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      }
+    },
+    "foreignAuthorization": {
+      "allowed": false,
+      "code": "CONNECTION_NOT_FOUND"
+    },
+    "unknownAuthorization": {
+      "allowed": false,
+      "code": "CONNECTION_NOT_FOUND"
+    },
+    "foreignUnknownEqual": true,
+    "stateDigestUnchanged": true
+  },
+  "publicSchema": {
+    "validator": "Ajv 8 Draft 2020-12",
+    "module": "/opt/homebrew/lib/node_modules/verdaccio/node_modules/ajv/dist/2020.js",
+    "outcomes": {
+      "safe": {
+        "accepted": true,
+        "errorCount": 0
+      },
+      "terminalSafe": {
+        "accepted": true,
+        "errorCount": 0
+      },
+      "metadataUrlSafe": {
+        "accepted": false,
+        "errorCount": 35
+      },
+      "terminalUrlSafe": {
+        "accepted": false,
+        "errorCount": 18
+      },
+      "eventIdUrlSafe": {
+        "accepted": false,
+        "errorCount": 1
+      },
+      "workspaceIdUrlSafe": {
+        "accepted": false,
+        "errorCount": 1
+      },
+      "actorIdUrlSafe": {
+        "accepted": false,
+        "errorCount": 1
+      },
+      "idempotencyKeyUrlSafe": {
+        "accepted": false,
+        "errorCount": 1
+      },
+      "connectionIdUrlSafe": {
+        "accepted": false,
+        "errorCount": 24
+      },
+      "metadataStandard": {
+        "accepted": false,
+        "errorCount": 35
+      },
+      "terminalStandard": {
+        "accepted": false,
+        "errorCount": 18
+      },
+      "metadataProviderValue": {
+        "accepted": false,
+        "errorCount": 35
+      },
+      "metadataPaddedUrlSafe": {
+        "accepted": false,
+        "errorCount": 35
+      },
+      "metadataMixedAlphabet": {
+        "accepted": false,
+        "errorCount": 35
+      },
+      "metadataShortUrlSafe": {
+        "accepted": true,
+        "errorCount": 0
+      },
+      "terminalShortUrlSafe": {
+        "accepted": true,
+        "errorCount": 0
+      },
+      "eventIdShortUrlSafe": {
+        "accepted": true,
+        "errorCount": 0
+      },
+      "metadataMalformedPadding": {
+        "accepted": true,
+        "errorCount": 0
+      },
+      "metadataNestedCase": {
+        "accepted": false,
+        "errorCount": 49
+      },
+      "metadataRecursiveProvider": {
+        "accepted": false,
+        "errorCount": 83
+      },
+      "extraTop": {
+        "accepted": false,
+        "errorCount": 1
+      },
+      "extraCreated": {
+        "accepted": false,
+        "errorCount": 25
+      },
+      "extraSecretRef": {
+        "accepted": false,
+        "errorCount": 24
+      },
+      "extraOwner": {
+        "accepted": false,
+        "errorCount": 23
+      },
+      "normalLongIdentifier": {
+        "accepted": false,
+        "errorCount": 24
+      },
+      "escapedJsonCredential": {
+        "accepted": false,
+        "errorCount": 35
+      },
+      "prototypePollutionMetadata": {
+        "accepted": false,
+        "errorCount": 55
+      }
+    },
+    "findings": [
+      {
+        "id": "E5-T02-CRITIC-FINAL-SCHEMA-METADATASHORTURLSAFE",
+        "severity": "high",
+        "summary": "Public Draft-2020-12 schema accepted a required secret-shaped case",
+        "case": "metadataShortUrlSafe"
+      },
+      {
+        "id": "E5-T02-CRITIC-FINAL-SCHEMA-TERMINALSHORTURLSAFE",
+        "severity": "high",
+        "summary": "Public Draft-2020-12 schema accepted a required secret-shaped case",
+        "case": "terminalShortUrlSafe"
+      },
+      {
+        "id": "E5-T02-CRITIC-FINAL-SCHEMA-EVENTIDSHORTURLSAFE",
+        "severity": "high",
+        "summary": "Public Draft-2020-12 schema accepted a required secret-shaped case",
+        "case": "eventIdShortUrlSafe"
+      },
+      {
+        "id": "E5-T02-CRITIC-FINAL-SCHEMA-NORMAL-ID",
+        "severity": "medium",
+        "summary": "Public schema rejected a valid opaque identifier as base64-shaped",
+        "case": "normalLongIdentifier"
+      }
+    ]
+  },
+  "newAttack": {
+    "attack": "Unicode-escaped JSON credential key and parsed __proto__ metadata",
+    "runtimeEscaped": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.metadata.safe",
+      "statusCode": 400
+    },
+    "runtimePrototype": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.metadata.__proto__.TOKEN",
+      "statusCode": 400
+    },
+    "findings": []
+  },
+  "findings": [
+    {
+      "id": "E5-T02-CRITIC-FINAL-SHORT-SHORTURLSAFE",
+      "severity": "high",
+      "summary": "A canonical short URL-safe base64 value crossed a runtime boundary",
+      "observation": {
+        "accepted": true,
+        "rawReturned": false
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FINAL-SHORT-SHORTURLSAFEOPAQUEID",
+      "severity": "high",
+      "summary": "A canonical short URL-safe base64 value crossed a runtime boundary",
+      "observation": {
+        "accepted": true,
+        "rawReturned": false
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FINAL-SHORT-SHORTURLSAFEREASON",
+      "severity": "high",
+      "summary": "A canonical short URL-safe base64 value crossed a runtime boundary",
+      "observation": {
+        "accepted": true,
+        "rawReturned": false
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FINAL-SHORT-SHORTURLSAFECAPABILITY",
+      "severity": "high",
+      "summary": "A canonical short URL-safe base64 value crossed a runtime boundary",
+      "observation": {
+        "accepted": true,
+        "rawReturned": false
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FINAL-CREATESHORTMETADATA",
+      "severity": "high",
+      "summary": "URL-safe encoded material crossed the store boundary",
+      "observation": {
+        "accepted": true,
+        "rawReturned": false,
+        "eventCount": 1
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FINAL-CAPTURESHORTRUNID",
+      "severity": "high",
+      "summary": "URL-safe encoded material crossed the store boundary",
+      "observation": {
+        "accepted": true,
+        "rawReturned": false,
+        "eventCount": 2
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FINAL-DISABLESHORT",
+      "severity": "high",
+      "summary": "URL-safe encoded material crossed the store boundary",
+      "observation": {
+        "accepted": true,
+        "rawReturned": false,
+        "eventCount": 2
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FINAL-COMPATIBILITY",
+      "severity": "medium",
+      "summary": "A valid opaque identifier was rejected as credential material",
+      "identifier": "connection-normal-identifier-000001",
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.id"
+    },
+    {
+      "id": "E5-T02-CRITIC-FINAL-COMPATIBILITY",
+      "severity": "medium",
+      "summary": "A valid opaque identifier was rejected as credential material",
+      "identifier": "run-20260820-normal-identifier",
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.id"
+    },
+    {
+      "id": "E5-T02-CRITIC-FINAL-COMPATIBILITY-PRINCIPAL",
+      "severity": "medium",
+      "summary": "Normal principal or lifecycle compatibility failed",
+      "principal": {
+        "accepted": true,
+        "rawReturned": false,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      },
+      "lifecycle": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.connectionId",
+        "statusCode": 400
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FINAL-COMPATIBILITY-EVENT-WORKSPACEID",
+      "severity": "medium",
+      "summary": "A valid normal event identifier was rejected as credential material",
+      "field": "workspaceId",
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.event.workspaceId"
+    },
+    {
+      "id": "E5-T02-CRITIC-FINAL-SCHEMA-METADATASHORTURLSAFE",
+      "severity": "high",
+      "summary": "Public Draft-2020-12 schema accepted a required secret-shaped case",
+      "case": "metadataShortUrlSafe"
+    },
+    {
+      "id": "E5-T02-CRITIC-FINAL-SCHEMA-TERMINALSHORTURLSAFE",
+      "severity": "high",
+      "summary": "Public Draft-2020-12 schema accepted a required secret-shaped case",
+      "case": "terminalShortUrlSafe"
+    },
+    {
+      "id": "E5-T02-CRITIC-FINAL-SCHEMA-EVENTIDSHORTURLSAFE",
+      "severity": "high",
+      "summary": "Public Draft-2020-12 schema accepted a required secret-shaped case",
+      "case": "eventIdShortUrlSafe"
+    },
+    {
+      "id": "E5-T02-CRITIC-FINAL-SCHEMA-NORMAL-ID",
+      "severity": "medium",
+      "summary": "Public schema rejected a valid opaque identifier as base64-shaped",
+      "case": "normalLongIdentifier"
+    }
+  ]
+}

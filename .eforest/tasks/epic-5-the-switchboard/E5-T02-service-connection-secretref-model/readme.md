@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: refuted
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -337,3 +337,43 @@ material and version policy; it is not a URI that clients can dereference themse
   envelope/schema/runtime probes, capture-race probes, and detector-sensitivity mutation.
 - Claim: all findings from the third critic are addressed and E5-T02 is ready for another
   fresh independent verdict.
+
+### Critic — fourth independent review — 2026-08-19
+
+- VERDICT: refuted.
+- Exact head: `89a9bb08a822342cc3c2ce112b1bb15cf833c8c1`; product rework under review:
+  `74bc1519379258de95a90a1868774e8139cd7b40`. The checkout was clean before the
+  critic evidence directory was created.
+- Commands: `pnpm install --frozen-lockfile`; `pnpm format:check`;
+  `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`; `pnpm test` (206 unit and
+  15 integration/Playwright tests passed); `pnpm build`; and `git diff --check HEAD^ HEAD`.
+  All gates passed. The independent probe was formatted and reran successfully.
+- Exact verifier: `TEST_RUN_ID=e5-t02-critic-fourth-20260819
+  TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/evidence/e5-t02-critic-20260819-fourth
+  make verify-E5-T02` passed with state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb` and
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`.
+- Independent requested attacks passed: neutral valid base64, direct and encoded
+  provider-token values, public-schema actor/workspace and opaque identifiers, labels,
+  nested case variants, URLs, JSON/recursive metadata, extra fields, delimiter-containing
+  capture tuples, capture stability through rotate/disable/delete, duplicate/reordered
+  replay, stale rotation with no append, foreign-versus-unknown typed not-found parity,
+  and evidence-canary detection/cleanup. The full verifier also turned red after only
+  the provider-token detector branch was removed in a detached scratch worktree; details
+  are in `evidence/e5-t02-critic-20260819-fourth/sensitivity-mutation.json`.
+- Finding `E5-T02-CRITIC-FOURTH-001` (high): the exported runtime API accepts a valid
+  lowercase provider-token-shaped opaque identifier. Fresh input was accepted by
+  `normalizeOpaqueIdForStore`, `normalizePrincipal`, `normalizeOwner`, and the store's
+  authorization path; `captureForRun` accepted the same value as `runId` and returned it
+  in the captured binding. The capture call did not move the event count, but it still
+  crossed the API boundary with credential-shaped material. The gap is at
+  `packages/connections/src/schema.mjs:190-283,720-733` and
+  `packages/connections/src/store.mjs:166-219,378-393`; durable details are in
+  `evidence/e5-t02-critic-20260819-fourth/critic-summary.json` and
+  `independent-probes.json`.
+- Evidence canary scan: transient marker detection passed and final persistent marker
+  and provider-shape scans were clean. Replay: N/A (server connection model) + mitigation:
+  cold-clone reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle
+  digests, independent schema/runtime probes, capture-race probes, and detector-sensitivity
+  mutation. Status remains `refuted` pending builder rework and another fresh critic.

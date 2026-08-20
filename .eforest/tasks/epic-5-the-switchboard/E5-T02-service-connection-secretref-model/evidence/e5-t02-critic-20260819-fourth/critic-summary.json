@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "verdict": "refuted",
+  "criticHead": "89a9bb08a822342cc3c2ce112b1bb15cf833c8c1",
+  "productRework": "74bc1519379258de95a90a1868774e8139cd7b40",
+  "exactVerifier": {
+    "command": "TEST_RUN_ID=e5-t02-critic-fourth-20260819 TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/evidence/e5-t02-critic-20260819-fourth make verify-E5-T02",
+    "result": "PASS",
+    "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f"
+  },
+  "gates": {
+    "pnpmInstallFrozen": "PASS",
+    "formatCheck": "PASS",
+    "formatCheckE5T02": "PASS",
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "test": "PASS: 206 unit and 15 integration/Playwright tests",
+    "build": "PASS",
+    "gitDiffCheck": "PASS: git diff --check HEAD^ HEAD",
+    "criticProbeFormatting": "PASS"
+  },
+  "requestedAttacks": {
+    "neutralBase64RejectedBeforeAppend": true,
+    "directProviderTokenRejectedBeforeAppend": true,
+    "encodedProviderTokenRejectedBeforeAppend": true,
+    "publicSchemaIdentifierLabelNestedUrlJsonRecursiveAndExtraCasesRejected": true,
+    "captureDelimiterCollisionAvoided": true,
+    "captureStableAcrossRotateDisableDelete": true,
+    "duplicateReorderedReplayParity": true,
+    "staleRotationAndNoAppend": true,
+    "foreignUnknownTypedNotFoundParity": true,
+    "evidenceCanaryScan": true,
+    "providerTokenDetectorMutationTurnsFullVerifierRed": true
+  },
+  "finding": {
+    "id": "E5-T02-CRITIC-FOURTH-001",
+    "severity": "high",
+    "criterion": "Raw credential-shaped values must be rejected at every API and event boundary; opaque identifier inputs must not carry provider-token material.",
+    "outcome": "A valid lowercase provider-token-shaped opaque ID was accepted by normalizeOpaqueIdForStore, normalizePrincipal, normalizeOwner, store.authorization, and captureForRun. captureForRun returned the submitted shape in the captured run binding, while its event count stayed unchanged across the capture call.",
+    "evidence": "independent-probes.json:apiIdentifierBoundary",
+    "source": [
+      "packages/connections/src/schema.mjs:190-283",
+      "packages/connections/src/schema.mjs:720-733",
+      "packages/connections/src/store.mjs:166-219",
+      "packages/connections/src/store.mjs:378-393"
+    ]
+  },
+  "sensitivity": "sensitivity-mutation.json",
+  "replay": "Replay: N/A (server connection model) + mitigation: cold-clone reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle digests, independent schema/runtime probes, capture-race probes, and detector-sensitivity mutation.",
+  "conclusion": "The requested third-rework regressions are closed, but the independent API identifier probe refutes the broader every-API-boundary raw-material requirement. Status remains refuted pending builder rework."
+}

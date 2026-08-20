@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "filesChecked": [
+    "authz-matrix.json",
+    "canary-scan.json",
+    "capture-key-binding.json",
+    "cold-clone-transcript.json",
+    "connection-state.json",
+    "lifecycle-events.json",
+    "replay-digests.json",
+    "secret-corpus.json",
+    "sensitivity.json"
+  ],
+  "environmentKeyCount": 57,
+  "findings": [],
+  "leaked": false,
+  "sensitivity": {
+    "detected": true,
+    "findingCount": 2
+  }
+}

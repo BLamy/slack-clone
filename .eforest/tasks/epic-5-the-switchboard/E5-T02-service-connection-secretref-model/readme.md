@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: verified
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -1471,3 +1471,43 @@ VERDICT: refuted
   matrix, canary scan, and disposable detector/schema sensitivity coverage.
 - Claim: the latest critic's 13 encoded provider-token parity findings are
   addressed. E5-T02 is implemented and ready for a fresh independent critic.
+
+### Critic — final independent public-boundary review — 2026-08-20
+
+- VERDICT: verified.
+- Exact head: `68dee73e288d411ee68095eae50dd4dbc9cb29f5`; product implementation under
+  review: `1ff772e2b6fc7380740cf6b17d1f3f0959a5365f`. The target checkout was clean at
+  orientation and `emulate` remained pinned at
+  `9a62e23a55dd01d3086e7e0aaa5bb755c7814fe7`.
+- Independent 78-case runtime/store/Ajv matrix: zero findings. All ten recursively
+  percent-encoded provider families (`ghp`, `sk`, `rk`, `pk`, `github_pat`, and
+  `xox[baprs]`) were rejected at all three boundaries with zero appended events;
+  ordinary single- and double-percent text was accepted and appended one event.
+  Evidence: `evidence/e5-t02-critic-20260820-68dee73/independent-probes.json` and
+  `.mjs`.
+- Cold verifier: `TEST_RUN_ID=e5-t02-critic-68dee73-cold-20260820
+  TEST_ARTIFACT_DIR=.../work/critic-68dee73-cold make verify-E5-T02` passed with state
+  digest `sha256:f40a785341af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`, duplicate/
+  reordered parity, 51 rejected secret corpus cases, zero appended secret events,
+  and `leaked: false`.
+- Lifecycle/authz/bounds/identifier checks passed: captured revisions were `[1, 2, 1]`,
+  replay matched the store digest, disable/delete fenced new captures, ownership rules
+  held, foreign and unknown ids returned identical `CONNECTION_NOT_FOUND` results with
+  no state movement, documented bounds held, and credential-shaped event/API
+  identifiers were rejected before append. Evidence is in the new critic directory's
+  `lifecycle-authz.json` and `cold-*.json` artifacts.
+- Sensitivity: removing only the public `percentEncodedCredentialShape` reference made
+  the verifier exit 2 on `percent-json-key`; removing only the runtime provider-token
+  detector made it exit 2 when `CONNECTION_CREDENTIAL_MATERIAL` disappeared. See
+  `schema-sensitivity.json` and `runtime-sensitivity.json`.
+- Gates: `pnpm install --frozen-lockfile`; `pnpm format:check`;
+  `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`; `pnpm test` (209 unit and
+  15 integration/Playwright tests); `pnpm build`; and `git diff --check` all passed.
+- Replay: N/A (server connection model) + mitigation: exact-head cold-clone reducer
+  replay, independent runtime/store/Ajv matrix, lifecycle/authz/bounds/identifier/
+  leakage checks, and disposable schema/runtime sensitivity mutations.
+- Claim: every E5-T02 acceptance criterion and adversarial verification requirement is
+  satisfied at this exact head. E5-T02 is verified; E5-T03 is now eligible and was not
+  started by this critic.

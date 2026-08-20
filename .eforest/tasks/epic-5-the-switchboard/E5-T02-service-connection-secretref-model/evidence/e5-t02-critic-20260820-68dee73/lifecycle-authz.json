@@ -1,0 +1,112 @@
+{
+  "exactHead": "68dee73",
+  "lifecycle": {
+    "eventCount": 4,
+    "replayDigest": "sha256:8f68d98fefaff9b3ea03ee4a879f8ca83cb8babfad5e09c7994e4b96a0122333",
+    "storeDigest": "sha256:8f68d98fefaff9b3ea03ee4a879f8ca83cb8babfad5e09c7994e4b96a0122333",
+    "equal": true,
+    "capturedRevisions": [1, 2, 1],
+    "terminalStatus": "deleted"
+  },
+  "authorization": {
+    "rows": {
+      "workspace-member-read": {
+        "allowed": true,
+        "code": null
+      },
+      "workspace-member-grant": {
+        "allowed": true,
+        "code": null
+      },
+      "workspace-member-delete": {
+        "allowed": false,
+        "code": "CONNECTION_FORBIDDEN"
+      },
+      "agent-owner-grant": {
+        "allowed": true,
+        "code": null
+      },
+      "member-agent-grant": {
+        "allowed": false,
+        "code": "CONNECTION_FORBIDDEN"
+      },
+      "user-owner-grant": {
+        "allowed": true,
+        "code": null
+      },
+      "admin-delete-agent": {
+        "allowed": true,
+        "code": null
+      }
+    },
+    "foreignUnknown": {
+      "read": {
+        "foreign": {
+          "allowed": false,
+          "code": "CONNECTION_NOT_FOUND"
+        },
+        "unknown": {
+          "allowed": false,
+          "code": "CONNECTION_NOT_FOUND"
+        }
+      },
+      "grant": {
+        "foreign": {
+          "allowed": false,
+          "code": "CONNECTION_NOT_FOUND"
+        },
+        "unknown": {
+          "allowed": false,
+          "code": "CONNECTION_NOT_FOUND"
+        }
+      },
+      "rotate": {
+        "foreign": {
+          "allowed": false,
+          "code": "CONNECTION_NOT_FOUND"
+        },
+        "unknown": {
+          "allowed": false,
+          "code": "CONNECTION_NOT_FOUND"
+        }
+      },
+      "disable": {
+        "foreign": {
+          "allowed": false,
+          "code": "CONNECTION_NOT_FOUND"
+        },
+        "unknown": {
+          "allowed": false,
+          "code": "CONNECTION_NOT_FOUND"
+        }
+      },
+      "delete": {
+        "foreign": {
+          "allowed": false,
+          "code": "CONNECTION_NOT_FOUND"
+        },
+        "unknown": {
+          "allowed": false,
+          "code": "CONNECTION_NOT_FOUND"
+        }
+      }
+    }
+  },
+  "bounds": {
+    "depth": "rejected",
+    "objectWidth65": "rejected",
+    "arrayWidth33": "rejected",
+    "astral512CodePoints": "accepted",
+    "astral513CodePoints": "rejected",
+    "reason161CodePoints": "rejected"
+  },
+  "leakage": {
+    "canaryPersisted": false,
+    "appendedEventsBefore": 3,
+    "appendedEventsAfter": 3
+  },
+  "digests": {
+    "lifecycle": "sha256:7edb78046ab1038386fd33d165f42911f6205d71ce8af4cf0825dcb073a0dc2f",
+    "authz": "sha256:e208c9d1ec6041d7e5515219740e3dd2c56a062ee19df7dbc3a973730aeed7bd"
+  }
+}

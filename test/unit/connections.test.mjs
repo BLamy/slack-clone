@@ -61,6 +61,7 @@ test("connection metadata rejects encoded, URL, JSON, nested, and confusable sec
         encodedValue: Buffer.from("ghp_" + "A".repeat(32)).toString("base64"),
       },
     },
+    { metadata: { encodedValue: "ghp_" + "A".repeat(32) } },
     { metadata: { endpoint: "https://user:password@example.invalid" } },
     { metadata: { payload: '{"token":"raw-token-value"}' } },
     { metadata: { nested: { password: "raw-password" } } },
@@ -192,6 +193,41 @@ test("create, rotate, disable, and delete produce immutable replayable lifecycle
   assert.equal(replayed.stateDigest, store.stateDigest());
   assert.deepEqual(replayed.connections, store.snapshot().connections);
   assert.equal(replayed.appliedEventIds.length, events.length);
+});
+
+test("capture bindings distinguish delimiter-containing connection and run ids", () => {
+  const store = makeStore();
+  for (const [connectionId, idempotencyKey] of [
+    ["connection-critic-a:b", "create-critic-a-b"],
+    ["connection-critic-a", "create-critic-a"],
+  ]) {
+    store.create({
+      actor: ADMIN,
+      connectionId,
+      owner: { kind: "workspace", id: SCOPE.workspaceId },
+      provider: "github",
+      integration: "issues",
+      label: "Collision test",
+      metadata: {},
+      secretRef: ref(1),
+      idempotencyKey,
+    });
+  }
+  const first = store.captureForRun({
+    actor: MEMBER,
+    connectionId: "connection-critic-a:b",
+    runId: "run-critic-c",
+  });
+  const second = store.captureForRun({
+    actor: MEMBER,
+    connectionId: "connection-critic-a",
+    runId: "b:run-critic-c",
+  });
+  assert.equal(first.connectionId, "connection-critic-a:b");
+  assert.equal(first.runId, "run-critic-c");
+  assert.equal(second.connectionId, "connection-critic-a");
+  assert.equal(second.runId, "b:run-critic-c");
+  assert.notEqual(first.bindingDigest, second.bindingDigest);
 });
 
 test("rotation is revision-fenced and idempotency does not append duplicates", () => {

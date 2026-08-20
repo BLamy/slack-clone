@@ -75,6 +75,7 @@ assert.equal(first.replayViewDigest, second.replayViewDigest);
 
 const corpus = secretCorpusFixture();
 const authz = authorizationFixture();
+const captureKeyCollision = captureKeyCollisionFixture();
 const sensitivity = {
   url: await detectorSensitivityFixture(),
   providerToken: await detectorProviderTokenSensitivityFixture(),
@@ -107,6 +108,7 @@ await writeJson("replay-digests.json", {
 });
 await writeJson("secret-corpus.json", corpus);
 await writeJson("authz-matrix.json", authz);
+await writeJson("capture-key-binding.json", captureKeyCollision);
 await writeJson("sensitivity.json", sensitivity);
 await writeJson("cold-clone-transcript.json", {
   schemaVersion: 1,
@@ -150,6 +152,7 @@ await writeJson("verification-summary.json", {
     appendedEvents: corpus.appendedEvents,
   },
   authorization: authz.summary,
+  captureKeyCollision,
   sensitivity,
   canaryScan: {
     leaked: finalScan.leaked,
@@ -310,6 +313,7 @@ function secretCorpusFixture() {
         encodedValue: Buffer.from("ghp_" + "A".repeat(32)).toString("base64"),
       },
     ],
+    ["provider-token", { encodedValue: "ghp_" + "A".repeat(32) }],
     ["json", { payload: '{"token":"e5-t02-connection-canary-value"}' }],
     ["url", { endpoint: "https://user:password@example.invalid/service" }],
     [
@@ -422,6 +426,54 @@ function eventBoundaryFixture() {
     rejected: true,
     code: error.code,
     path: error.path,
+  };
+}
+
+function captureKeyCollisionFixture() {
+  const store = makeStore();
+  for (const [connectionId, idempotencyKey] of [
+    ["connection-critic-a:b", "create-critic-a-b"],
+    ["connection-critic-a", "create-critic-a"],
+  ]) {
+    store.create({
+      actor: ADMIN,
+      connectionId,
+      owner: { kind: "workspace", id: SCOPE.workspaceId },
+      provider: "github",
+      integration: "issues",
+      label: "Collision test",
+      metadata: {},
+      secretRef: secretRef(1),
+      idempotencyKey,
+    });
+  }
+  const first = store.captureForRun({
+    actor: MEMBER,
+    connectionId: "connection-critic-a:b",
+    runId: "run-critic-c",
+  });
+  const second = store.captureForRun({
+    actor: MEMBER,
+    connectionId: "connection-critic-a",
+    runId: "b:run-critic-c",
+  });
+  assert.equal(first.connectionId, "connection-critic-a:b");
+  assert.equal(first.runId, "run-critic-c");
+  assert.equal(second.connectionId, "connection-critic-a");
+  assert.equal(second.runId, "b:run-critic-c");
+  assert.notEqual(first.bindingDigest, second.bindingDigest);
+  return {
+    collisionAvoided: true,
+    firstBinding: {
+      connectionId: first.connectionId,
+      runId: first.runId,
+      revision: first.revision,
+    },
+    secondBinding: {
+      connectionId: second.connectionId,
+      runId: second.runId,
+      revision: second.revision,
+    },
   };
 }
 
@@ -763,7 +815,7 @@ async function detectorProviderTokenSensitivityFixture() {
       integration: "issues",
       label: "Provider sensitivity",
       metadata: {
-        encodedValue: Buffer.from("ghp_" + "A".repeat(32)).toString("base64"),
+        encodedValue: "ghp_" + "A".repeat(32),
       },
       secretRef: secretRef(1),
     };

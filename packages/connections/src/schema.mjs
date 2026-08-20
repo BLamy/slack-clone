@@ -663,16 +663,8 @@ function looksLikeCredentialValue(value) {
   }
   if (value.length >= 24 && /^[A-Za-z0-9+/]+={0,2}$/u.test(value)) {
     try {
-      const decoded = atob(value);
-      if (
-        /^[\x20-\x7e\r\n]+$/u.test(decoded) &&
-        (CREDENTIAL_VALUE_PATTERNS.some((pattern) => pattern.test(decoded)) ||
-          /(?:secret|token|password|credential|cookie|authorization|https?:\/\/)/iu.test(
-            decoded,
-          ))
-      ) {
-        return true;
-      }
+      atob(value);
+      return true;
     } catch {
       return false;
     }

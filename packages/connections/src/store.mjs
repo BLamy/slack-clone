@@ -172,7 +172,10 @@ export function createConnectionStore({
       state,
     );
     const runId = normalizeStoreIdentifier(input.runId, "$.runId");
-    const captureKey = connection.connectionId + ":" + runId;
+    const captureKey = canonicalSha256({
+      connectionId: connection.connectionId,
+      runId,
+    });
     const previousCapture = runCaptures.get(captureKey);
     if (previousCapture) return previousCapture;
     if (connection.status !== "active") {

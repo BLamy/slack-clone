@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: pending
+status: in-progress
 depends_on: [E5-T01]
 estimate: M
 capstone: false

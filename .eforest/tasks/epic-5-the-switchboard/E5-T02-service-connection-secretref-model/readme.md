@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: refuted
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -769,3 +769,62 @@ material and version policy; it is not a URI that clients can dereference themse
   schema/runtime probes, capture-race probes, and detector-sensitivity mutation.
 - Claim: the independent critic's whitespace findings are addressed and E5-T02 is
   ready for a fresh final critic.
+
+### Critic — eighth independent review — 2026-08-20
+
+- VERDICT: refuted.
+- Exact head: `7f8674818c6b2e9df5b5ba0fbcbf8b1840d4f471`; reviewed product fix:
+  `22fa4673d8e7b910fcc0b9da3e262f85ccbcf36a`. The checkout was clean before this
+  critic evidence was created. No product source was changed; this review owns only
+  `evidence/e5-t02-critic-20260820-fresh/` and this task/queue metadata.
+- Frozen install and full gates passed: `pnpm install --frozen-lockfile`,
+  `pnpm format:check`, `pnpm format:check:e5-t02`, `pnpm lint`, `pnpm typecheck`,
+  `pnpm test` (207 unit and 15 integration/Playwright tests), and `pnpm build`.
+  The durable command record is
+  `evidence/e5-t02-critic-20260820-fresh/gate-summary.json`.
+- Exact verifier passed in the fresh critic evidence directory with run ID
+  `e5-t02-critic-20260820-fresh-final`, state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`,
+  duplicate/reordered parity, and detector-sensitivity proofs. The verifier's
+  canary scan reported `leaked: false`.
+- Detached cold replay passed in `/tmp/slack-e5-t02-critic-fresh-cold` at the same
+  exact head after its own `pnpm install --frozen-lockfile`; the copied cold evidence
+  in `evidence/e5-t02-critic-20260820-fresh/cold-replay/` matches the warm state,
+  replay, and view digests. Durable checkout/command details are in
+  `cold-replay/critic-cold-run.json`.
+- Independent probe: `node
+  evidence/e5-t02-critic-20260820-fresh/independent-probe.mjs` exited 1 as expected
+  with 11 red observations. The probe generated independent round-trip-valid
+  canonical 23-character and longer URL-safe fixtures and tested all required
+  runtime/store/public free-form paths, whitespace wrappers, ordinary long opaque
+  identifiers, explicit provider-shaped identifiers, event identity fields,
+  recursive/case/extra/Unicode-escaped/parsed-prototype inputs, lifecycle/capture,
+  replay parity, authorization parity, recursive leak scans, and sensitivity.
+  Results are redacted and durable in
+  `evidence/e5-t02-critic-20260820-fresh/independent-probes.json`.
+- Finding `E5-T02-CRITIC-FRESH-ZERO-WIDTH-001` (high): inserting U+200B into a
+  canonical 23-character URL-safe value made the detector return false. The value
+  was accepted by runtime metadata, connection-definition metadata, reason, and
+  terminal-data paths; store create appended it (`eventCount: 1`); and the public
+  schema accepted it in metadata, label, and terminal reason. This is a plausible
+  invisible-format-character evasion of the generic free-form encoded-value boundary.
+- Finding `E5-T02-CRITIC-FRESH-SCHEMA-ESCAPED-JSON-001` (high): runtime parsing
+  rejected JSON text with a Unicode-escaped credential key, but the public schema
+  accepted the same shape in metadata, label, and terminal reason. The schema's
+  regex-only `credentialValueShape` does not mirror the runtime JSON parsing rule.
+  Root finding details and source locations are in
+  `evidence/e5-t02-critic-20260820-fresh/critic-summary.json`.
+- Controls that passed independently: canonical 23+ and whitespace-wrapped values
+  were rejected in the tested free-form runtime/store/public paths; ordinary long
+  opaque IDs remained accepted; explicit provider-token/private-key/URL/connection-
+  string/assignment/JSON identifiers rejected; event identity fields followed the
+  identifier policy; recursive, case-variant, extra-field, and parsed prototype-key
+  attacks rejected; lifecycle/capture fencing, duplicate/reordered replay, authz
+  parity, leak scans, and detector sensitivity passed. These do not cure the two
+  high-severity findings.
+- Replay: N/A (server connection model) + mitigation: detached exact-head cold
+  replay, full gate transcript, independent runtime/store/Ajv probes, lifecycle and
+  capture checks, authz matrix, recursive leak scan, and detector-sensitivity mutation.
+  Status remains `refuted` pending builder rework and another fresh critic.

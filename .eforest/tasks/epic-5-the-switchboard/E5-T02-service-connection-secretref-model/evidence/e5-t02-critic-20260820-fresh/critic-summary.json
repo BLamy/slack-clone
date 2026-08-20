@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "verdict": "refuted",
+  "exactHead": "7f8674818c6b2e9df5b5ba0fbcbf8b1840d4f471",
+  "reviewedProductFix": "22fa4673d8e7b910fcc0b9da3e262f85ccbcf36a",
+  "productCodeChangedByCritic": false,
+  "independentProbe": "independent-probe.mjs",
+  "independentProbeExit": 1,
+  "findingCount": 11,
+  "rootFindings": [
+    {
+      "id": "E5-T02-CRITIC-FRESH-ZERO-WIDTH-001",
+      "severity": "high",
+      "summary": "An invisible Unicode format character bypasses generic encoded-value detection in required free-form runtime, store, and public-schema paths.",
+      "attack": {
+        "source": "canonical RFC4648 URL-safe value generated from 17 bytes",
+        "canonicalLength": 23,
+        "longerCanonicalLength": 32,
+        "insertedCodePoint": "U+200B",
+        "detectorResult": false,
+        "rawFixturePersisted": false
+      },
+      "observedBoundaries": [
+        "normalizeMetadata",
+        "normalizeConnectionDefinition.metadata",
+        "normalizeReason",
+        "normalizeConnectionEvent terminal data",
+        "store.create metadata append",
+        "public metadata",
+        "public label",
+        "public terminal reason"
+      ],
+      "storeObservation": {
+        "eventCountAfterCreate": 1,
+        "persistedMetadataKeys": ["safe"]
+      },
+      "sourceLocations": [
+        "packages/connections/src/schema.mjs:380-383",
+        "packages/connections/src/schema.mjs:450-465",
+        "packages/connections/src/schema.mjs:673-704",
+        "packages/connections/src/schema.mjs:763-770",
+        "packages/connections/src/store.mjs:45-85",
+        "packages/connections/src/store.mjs:115-149",
+        "packages/connections/src/schemas/connection-events.v1.schema.json:99-124",
+        "packages/connections/src/schemas/connection-events.v1.schema.json:162-207",
+        "packages/connections/src/schemas/connection-events.v1.schema.json:247-256"
+      ],
+      "evidence": "independent-probes.json findings E5-T02-CRITIC-FRESH-ZERO-WIDTH-*"
+    },
+    {
+      "id": "E5-T02-CRITIC-FRESH-SCHEMA-ESCAPED-JSON-001",
+      "severity": "high",
+      "summary": "The public Draft-2020-12 schema accepts JSON text whose credential key is Unicode-escaped, despite runtime rejection.",
+      "attack": {
+        "shape": "JSON object with a Unicode-escaped credential key",
+        "runtimeResult": "CONNECTION_CREDENTIAL_MATERIAL",
+        "publicSchemaResult": "accepted",
+        "rawFixturePersisted": false
+      },
+      "observedBoundaries": [
+        "public metadata",
+        "public label",
+        "public terminal reason"
+      ],
+      "sourceLocations": [
+        "packages/connections/src/schema.mjs:678-685",
+        "packages/connections/src/schemas/connection-events.v1.schema.json:99-124",
+        "packages/connections/src/schemas/connection-events.v1.schema.json:162-207",
+        "packages/connections/src/schemas/connection-events.v1.schema.json:247-256"
+      ],
+      "evidence": "independent-probes.json findings E5-T02-CRITIC-FRESH-SCHEMA-ESCAPED-JSON-*"
+    }
+  ],
+  "controlsPassed": [
+    "canonical 23+ and whitespace-wrapped URL-safe values rejected in tested runtime/store/public free-form paths",
+    "ordinary long opaque identifiers accepted at runtime, store, and public schema",
+    "explicit provider-token/private-key/URL/connection-string/assignment/JSON identifiers rejected",
+    "event identity fields follow identifier policy",
+    "recursive, case-variant, extra-field, parsed prototype-key, and runtime Unicode-escaped attacks rejected",
+    "lifecycle and captured revision stability",
+    "duplicate/reordered replay parity",
+    "authorization ownership and foreign/unknown not-found parity",
+    "detector sensitivity",
+    "recursive leak scan"
+  ],
+  "replayEvidence": "Replay: N/A (server connection model) + mitigation: detached exact-head cold replay, full gates, independent runtime/store/Ajv probes, lifecycle/capture checks, authz matrix, leak scan, and sensitivity mutation"
+}

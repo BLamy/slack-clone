@@ -1,0 +1,2226 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "exactHead": "7f8674818c6b2e9df5b5ba0fbcbf8b1840d4f471",
+  "inputs": {
+    "canonicalUrlSafe": [
+      {
+        "name": "url-safe-23",
+        "length": 23,
+        "roundTrip": true
+      },
+      {
+        "name": "url-safe-long",
+        "length": 32,
+        "roundTrip": true
+      }
+    ],
+    "whitespaceWrappers": [
+      "spaces",
+      "tabs",
+      "unicode-space"
+    ],
+    "hiddenFormatCharacter": {
+      "name": "zero-width-space-inside-canonical-url-safe",
+      "canonicalLength": 23,
+      "attackedLength": 24
+    },
+    "explicitIdentifierShapes": [
+      "provider-token",
+      "private-key",
+      "url",
+      "connection-string",
+      "assignment",
+      "json"
+    ]
+  },
+  "runtime": {
+    "canonicalAndWhitespace": {
+      "url-safe-23": {
+        "metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.safe",
+          "statusCode": 400
+        },
+        "definitionMetadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.safe",
+          "statusCode": 400
+        },
+        "label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label",
+          "statusCode": 400
+        },
+        "secretRefLabel": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.secretRef.label",
+          "statusCode": 400
+        },
+        "reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason",
+          "statusCode": 400
+        },
+        "terminalData": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason",
+          "statusCode": 400
+        },
+        "capability": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.capabilities[0]",
+          "statusCode": 400
+        }
+      },
+      "url-safe-long": {
+        "metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.safe",
+          "statusCode": 400
+        },
+        "definitionMetadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.safe",
+          "statusCode": 400
+        },
+        "label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label",
+          "statusCode": 400
+        },
+        "secretRefLabel": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.secretRef.label",
+          "statusCode": 400
+        },
+        "reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason",
+          "statusCode": 400
+        },
+        "terminalData": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason",
+          "statusCode": 400
+        },
+        "capability": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.capabilities[0]",
+          "statusCode": 400
+        }
+      },
+      "url-safe-23-spaces": {
+        "metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.safe",
+          "statusCode": 400
+        },
+        "definitionMetadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.safe",
+          "statusCode": 400
+        },
+        "label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label",
+          "statusCode": 400
+        },
+        "secretRefLabel": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.secretRef.label",
+          "statusCode": 400
+        },
+        "reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason",
+          "statusCode": 400
+        },
+        "terminalData": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason",
+          "statusCode": 400
+        },
+        "capability": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.capabilities[0]",
+          "statusCode": 400
+        }
+      },
+      "url-safe-23-tabs": {
+        "metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.safe",
+          "statusCode": 400
+        },
+        "definitionMetadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.safe",
+          "statusCode": 400
+        },
+        "label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label",
+          "statusCode": 400
+        },
+        "secretRefLabel": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.secretRef.label",
+          "statusCode": 400
+        },
+        "reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason",
+          "statusCode": 400
+        },
+        "terminalData": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason",
+          "statusCode": 400
+        },
+        "capability": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.capabilities[0]",
+          "statusCode": 400
+        }
+      },
+      "url-safe-23-unicode-space": {
+        "metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.safe",
+          "statusCode": 400
+        },
+        "definitionMetadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.safe",
+          "statusCode": 400
+        },
+        "label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label",
+          "statusCode": 400
+        },
+        "secretRefLabel": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.secretRef.label",
+          "statusCode": 400
+        },
+        "reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason",
+          "statusCode": 400
+        },
+        "terminalData": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason",
+          "statusCode": 400
+        },
+        "capability": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.capabilities[0]",
+          "statusCode": 400
+        }
+      },
+      "url-safe-long-spaces": {
+        "metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.safe",
+          "statusCode": 400
+        },
+        "definitionMetadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.safe",
+          "statusCode": 400
+        },
+        "label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label",
+          "statusCode": 400
+        },
+        "secretRefLabel": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.secretRef.label",
+          "statusCode": 400
+        },
+        "reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason",
+          "statusCode": 400
+        },
+        "terminalData": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason",
+          "statusCode": 400
+        },
+        "capability": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.capabilities[0]",
+          "statusCode": 400
+        }
+      },
+      "url-safe-long-tabs": {
+        "metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.safe",
+          "statusCode": 400
+        },
+        "definitionMetadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.safe",
+          "statusCode": 400
+        },
+        "label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label",
+          "statusCode": 400
+        },
+        "secretRefLabel": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.secretRef.label",
+          "statusCode": 400
+        },
+        "reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason",
+          "statusCode": 400
+        },
+        "terminalData": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason",
+          "statusCode": 400
+        },
+        "capability": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.capabilities[0]",
+          "statusCode": 400
+        }
+      },
+      "url-safe-long-unicode-space": {
+        "metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.safe",
+          "statusCode": 400
+        },
+        "definitionMetadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.safe",
+          "statusCode": 400
+        },
+        "label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label",
+          "statusCode": 400
+        },
+        "secretRefLabel": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.secretRef.label",
+          "statusCode": 400
+        },
+        "reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason",
+          "statusCode": 400
+        },
+        "terminalData": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason",
+          "statusCode": 400
+        },
+        "capability": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.capabilities[0]",
+          "statusCode": 400
+        }
+      },
+      "explicit-standardBase64": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400
+      },
+      "explicit-providerToken": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400
+      },
+      "explicit-url": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400
+      },
+      "explicit-connectionString": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400
+      },
+      "explicit-assignment": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400
+      },
+      "explicit-json": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400
+      },
+      "explicit-privateKey": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400
+      },
+      "explicit-escapedJson": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400
+      },
+      "zeroWidthInternal": {
+        "detector": false,
+        "metadata": {
+          "accepted": true,
+          "summary": {
+            "type": "object",
+            "keys": [
+              "safe"
+            ],
+            "digest": "sha256:dba479a87803d91372d1b2d8b8aa2d12876bb0d159e2955c150c4b8b33f3d1ae"
+          }
+        },
+        "definitionMetadata": {
+          "accepted": true,
+          "summary": {
+            "type": "object",
+            "keys": [
+              "connectionId",
+              "integration",
+              "label",
+              "metadata",
+              "owner",
+              "provider",
+              "schemaVersion",
+              "secretRef",
+              "tenantId",
+              "workspaceId"
+            ],
+            "digest": "sha256:6abde0b1ec52dd64355221e3cfc1bb5421d84245b2317debe014014936a74665"
+          }
+        },
+        "label": {
+          "accepted": false,
+          "code": "CONNECTION_INVALID_REQUEST",
+          "path": "$.connection.label",
+          "statusCode": 400
+        },
+        "reason": {
+          "accepted": true,
+          "summary": {
+            "type": "string",
+            "length": 24
+          }
+        },
+        "terminalData": {
+          "accepted": true,
+          "summary": {
+            "type": "object",
+            "keys": [
+              "actorId",
+              "connectionId",
+              "data",
+              "eventId",
+              "eventType",
+              "idempotencyKey",
+              "schemaVersion",
+              "sequence",
+              "serverTimestamp",
+              "workspaceId"
+            ],
+            "digest": "sha256:0a74e4c8666aed1c5e9c2bc0da195ffc68d734e1177d5a5e33c0d2b08fceeed6"
+          }
+        },
+        "capability": {
+          "accepted": false,
+          "code": "CONNECTION_INVALID_REQUEST",
+          "path": "$.principal.capabilities",
+          "statusCode": 400
+        }
+      }
+    },
+    "explicitShapes": true
+  },
+  "store": {
+    "url-safe-23": {
+      "create": {
+        "metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.safe",
+          "statusCode": 400
+        },
+        "label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label",
+          "statusCode": 400
+        },
+        "capability": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.actor.capabilities[0]",
+          "statusCode": 400
+        }
+      },
+      "disable": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "delete": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "eventCounts": {
+        "createBefore": 0,
+        "createAfter": 0,
+        "disableBefore": 1,
+        "disableAfter": 1,
+        "deleteBefore": 1,
+        "deleteAfter": 1
+      }
+    },
+    "url-safe-long": {
+      "create": {
+        "metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.safe",
+          "statusCode": 400
+        },
+        "label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label",
+          "statusCode": 400
+        },
+        "capability": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.actor.capabilities[0]",
+          "statusCode": 400
+        }
+      },
+      "disable": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "delete": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "eventCounts": {
+        "createBefore": 0,
+        "createAfter": 0,
+        "disableBefore": 1,
+        "disableAfter": 1,
+        "deleteBefore": 1,
+        "deleteAfter": 1
+      }
+    },
+    "url-safe-23-spaces": {
+      "create": {
+        "metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.safe",
+          "statusCode": 400
+        },
+        "label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label",
+          "statusCode": 400
+        },
+        "capability": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.actor.capabilities[0]",
+          "statusCode": 400
+        }
+      },
+      "disable": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "delete": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "eventCounts": {
+        "createBefore": 0,
+        "createAfter": 0,
+        "disableBefore": 1,
+        "disableAfter": 1,
+        "deleteBefore": 1,
+        "deleteAfter": 1
+      }
+    },
+    "url-safe-23-tabs": {
+      "create": {
+        "metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.safe",
+          "statusCode": 400
+        },
+        "label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label",
+          "statusCode": 400
+        },
+        "capability": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.actor.capabilities[0]",
+          "statusCode": 400
+        }
+      },
+      "disable": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "delete": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "eventCounts": {
+        "createBefore": 0,
+        "createAfter": 0,
+        "disableBefore": 1,
+        "disableAfter": 1,
+        "deleteBefore": 1,
+        "deleteAfter": 1
+      }
+    },
+    "url-safe-23-unicode-space": {
+      "create": {
+        "metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.safe",
+          "statusCode": 400
+        },
+        "label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label",
+          "statusCode": 400
+        },
+        "capability": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.actor.capabilities[0]",
+          "statusCode": 400
+        }
+      },
+      "disable": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "delete": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "eventCounts": {
+        "createBefore": 0,
+        "createAfter": 0,
+        "disableBefore": 1,
+        "disableAfter": 1,
+        "deleteBefore": 1,
+        "deleteAfter": 1
+      }
+    },
+    "url-safe-long-spaces": {
+      "create": {
+        "metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.safe",
+          "statusCode": 400
+        },
+        "label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label",
+          "statusCode": 400
+        },
+        "capability": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.actor.capabilities[0]",
+          "statusCode": 400
+        }
+      },
+      "disable": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "delete": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "eventCounts": {
+        "createBefore": 0,
+        "createAfter": 0,
+        "disableBefore": 1,
+        "disableAfter": 1,
+        "deleteBefore": 1,
+        "deleteAfter": 1
+      }
+    },
+    "url-safe-long-tabs": {
+      "create": {
+        "metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.safe",
+          "statusCode": 400
+        },
+        "label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label",
+          "statusCode": 400
+        },
+        "capability": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.actor.capabilities[0]",
+          "statusCode": 400
+        }
+      },
+      "disable": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "delete": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "eventCounts": {
+        "createBefore": 0,
+        "createAfter": 0,
+        "disableBefore": 1,
+        "disableAfter": 1,
+        "deleteBefore": 1,
+        "deleteAfter": 1
+      }
+    },
+    "url-safe-long-unicode-space": {
+      "create": {
+        "metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.safe",
+          "statusCode": 400
+        },
+        "label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label",
+          "statusCode": 400
+        },
+        "capability": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.actor.capabilities[0]",
+          "statusCode": 400
+        }
+      },
+      "disable": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "delete": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "eventCounts": {
+        "createBefore": 0,
+        "createAfter": 0,
+        "disableBefore": 1,
+        "disableAfter": 1,
+        "deleteBefore": 1,
+        "deleteAfter": 1
+      }
+    },
+    "identifierCompatibility": {
+      "ordinaryCreate": {
+        "accepted": true,
+        "summary": {
+          "type": "object",
+          "keys": [
+            "connection",
+            "event",
+            "replayed",
+            "stateDigest"
+          ],
+          "digest": "sha256:9cf7af9226e449c54e2d528f5d6af5fcb36f1d0771b327408ebb0d2fb1962c75"
+        }
+      },
+      "capture": {
+        "accepted": true,
+        "summary": {
+          "type": "object",
+          "keys": [
+            "bindingDigest",
+            "capturedAt",
+            "connectionId",
+            "revision",
+            "runId",
+            "schemaVersion",
+            "secretRef",
+            "tenantId",
+            "workspaceId"
+          ],
+          "digest": "sha256:b1e1ffd564ad729fa4e6dec9226e6f4d52039d8db91b5094adeb3f3c08224bda"
+        }
+      },
+      "providerConnection": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.connectionId",
+        "statusCode": 400
+      },
+      "providerCapture": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.runId",
+        "statusCode": 400
+      },
+      "eventCountAfterIdentifierChecks": 1
+    }
+  },
+  "identifierPolicy": {
+    "explicitRejected": {
+      "providerToken": {
+        "opaqueId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.id",
+          "statusCode": 400
+        },
+        "principalId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.id",
+          "statusCode": 400
+        },
+        "principalWorkspace": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.workspaceId",
+          "statusCode": 400
+        },
+        "ownerId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.owner.id",
+          "statusCode": 400
+        }
+      },
+      "privateKey": {
+        "opaqueId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.id",
+          "statusCode": 400
+        },
+        "principalId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.id",
+          "statusCode": 400
+        },
+        "principalWorkspace": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.workspaceId",
+          "statusCode": 400
+        },
+        "ownerId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.owner.id",
+          "statusCode": 400
+        }
+      },
+      "url": {
+        "opaqueId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.id",
+          "statusCode": 400
+        },
+        "principalId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.id",
+          "statusCode": 400
+        },
+        "principalWorkspace": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.workspaceId",
+          "statusCode": 400
+        },
+        "ownerId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.owner.id",
+          "statusCode": 400
+        }
+      },
+      "connectionString": {
+        "opaqueId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.id",
+          "statusCode": 400
+        },
+        "principalId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.id",
+          "statusCode": 400
+        },
+        "principalWorkspace": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.workspaceId",
+          "statusCode": 400
+        },
+        "ownerId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.owner.id",
+          "statusCode": 400
+        }
+      },
+      "assignment": {
+        "opaqueId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.id",
+          "statusCode": 400
+        },
+        "principalId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.id",
+          "statusCode": 400
+        },
+        "principalWorkspace": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.workspaceId",
+          "statusCode": 400
+        },
+        "ownerId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.owner.id",
+          "statusCode": 400
+        }
+      },
+      "json": {
+        "opaqueId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.id",
+          "statusCode": 400
+        },
+        "principalId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.id",
+          "statusCode": 400
+        },
+        "principalWorkspace": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.principal.workspaceId",
+          "statusCode": 400
+        },
+        "ownerId": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.owner.id",
+          "statusCode": 400
+        }
+      }
+    },
+    "ordinaryAccepted": {
+      "opaqueId": {
+        "accepted": true,
+        "summary": {
+          "type": "string",
+          "length": 41
+        }
+      },
+      "principalId": {
+        "accepted": true,
+        "summary": {
+          "type": "object",
+          "keys": [
+            "capabilities",
+            "id",
+            "kind",
+            "role",
+            "tenantId",
+            "workspaceId"
+          ],
+          "digest": "sha256:0df3bc252d609578588799a2ae7d7e7dba8e7a181c459404f5cb2e9ab7153639"
+        }
+      },
+      "principalWorkspace": {
+        "accepted": true,
+        "summary": {
+          "type": "object",
+          "keys": [
+            "capabilities",
+            "id",
+            "kind",
+            "role",
+            "tenantId",
+            "workspaceId"
+          ],
+          "digest": "sha256:bb2db67e11bfc133bfc127362004238e7b94a10be96fbb0651ae55e5d9217a52"
+        }
+      },
+      "ownerId": {
+        "accepted": true,
+        "summary": {
+          "type": "object",
+          "keys": [
+            "id",
+            "kind"
+          ],
+          "digest": "sha256:2e568c4f7ed68f4a99f0f136ea5b63c41ea8c7044163f1cde3efcedf55b62cc7"
+        }
+      },
+      "runId": {
+        "accepted": true,
+        "summary": {
+          "type": "string",
+          "length": 34
+        }
+      }
+    }
+  },
+  "eventIdentity": {
+    "ordinaryAccepted": {
+      "eventId": {
+        "accepted": true,
+        "summary": {
+          "type": "object",
+          "keys": [
+            "actorId",
+            "connectionId",
+            "data",
+            "eventId",
+            "eventType",
+            "idempotencyKey",
+            "schemaVersion",
+            "sequence",
+            "serverTimestamp",
+            "workspaceId"
+          ],
+          "digest": "sha256:612bfc8d13e94f46453ec2c85b9ce3be729f0b345d3b9f12776b829831af55c2"
+        }
+      },
+      "workspaceId": {
+        "accepted": true,
+        "summary": {
+          "type": "object",
+          "keys": [
+            "actorId",
+            "connectionId",
+            "data",
+            "eventId",
+            "eventType",
+            "idempotencyKey",
+            "schemaVersion",
+            "sequence",
+            "serverTimestamp",
+            "workspaceId"
+          ],
+          "digest": "sha256:2fac3c9e8da8dba9e9dec43353585cc2663b01a3486a3211846de4814943a2ac"
+        }
+      },
+      "actorId": {
+        "accepted": true,
+        "summary": {
+          "type": "object",
+          "keys": [
+            "actorId",
+            "connectionId",
+            "data",
+            "eventId",
+            "eventType",
+            "idempotencyKey",
+            "schemaVersion",
+            "sequence",
+            "serverTimestamp",
+            "workspaceId"
+          ],
+          "digest": "sha256:23efce776cc36d81e7984e70ddc4429f328f220b4e4de44647bdc881ef9f6f70"
+        }
+      },
+      "idempotencyKey": {
+        "accepted": true,
+        "summary": {
+          "type": "object",
+          "keys": [
+            "actorId",
+            "connectionId",
+            "data",
+            "eventId",
+            "eventType",
+            "idempotencyKey",
+            "schemaVersion",
+            "sequence",
+            "serverTimestamp",
+            "workspaceId"
+          ],
+          "digest": "sha256:6871a8412b1ddfef7101f36a9aa0ebb46665a49f30895b087e565d1589f1ccb7"
+        }
+      },
+      "connectionId": {
+        "accepted": true,
+        "summary": {
+          "type": "object",
+          "keys": [
+            "actorId",
+            "connectionId",
+            "data",
+            "eventId",
+            "eventType",
+            "idempotencyKey",
+            "schemaVersion",
+            "sequence",
+            "serverTimestamp",
+            "workspaceId"
+          ],
+          "digest": "sha256:5af83ef8a873c57a83b52480d03b567ab27a9e983055a927bdeba3e712c854a0"
+        }
+      }
+    },
+    "explicitRejected": {
+      "eventId": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.eventId",
+        "statusCode": 400
+      },
+      "workspaceId": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.workspaceId",
+        "statusCode": 400
+      },
+      "actorId": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.actorId",
+        "statusCode": 400
+      },
+      "idempotencyKey": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.idempotencyKey",
+        "statusCode": 400
+      },
+      "connectionId": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.connectionId",
+        "statusCode": 400
+      }
+    }
+  },
+  "adversarialInputs": {
+    "recursive": {
+      "accepted": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.metadata.nested.safe",
+      "statusCode": 400
+    },
+    "caseVariantKey": {
+      "accepted": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.metadata.ToKeN",
+      "statusCode": 400
+    },
+    "unicodeEscapedKey": {
+      "accepted": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.metadata.token",
+      "statusCode": 400
+    },
+    "parsedPrototypeKey": {
+      "accepted": false,
+      "code": "CONNECTION_INVALID_REQUEST",
+      "path": "$.metadata.__proto__",
+      "statusCode": 400
+    },
+    "escapedJsonCredential": {
+      "accepted": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.metadata.safe",
+      "statusCode": 400
+    },
+    "extraDefinitionField": {
+      "accepted": false,
+      "code": "CONNECTION_INVALID_REQUEST",
+      "path": "$.connection.unexpectedField",
+      "statusCode": 400
+    },
+    "extraSecretRefField": {
+      "accepted": false,
+      "code": "CONNECTION_INVALID_SECRET_REF",
+      "path": "$.secretRef.unexpectedField",
+      "statusCode": 400
+    },
+    "extraEventField": {
+      "accepted": false,
+      "code": "CONNECTION_INVALID_EVENT",
+      "path": "$.event.unexpectedField",
+      "statusCode": 400
+    }
+  },
+  "lifecycle": {
+    "passed": true,
+    "revisions": {
+      "beforeRotate": 1,
+      "sameRunAfterRotate": 1,
+      "newRunAfterRotate": 2,
+      "existingAfterDisable": 1,
+      "existingAfterDelete": 1
+    },
+    "disabledNewRun": {
+      "accepted": false,
+      "code": "CONNECTION_NOT_ACTIVE",
+      "path": null,
+      "statusCode": 409
+    },
+    "deletedNewRun": {
+      "accepted": false,
+      "code": "CONNECTION_NOT_ACTIVE",
+      "path": null,
+      "statusCode": 409
+    },
+    "replay": {
+      "stateDigest": "sha256:96776b6bb8f5bb075e18b05e139109e4d44615a1c8c53bb5888c64b1ebf64751",
+      "replayAgainDigest": "sha256:96776b6bb8f5bb075e18b05e139109e4d44615a1c8c53bb5888c64b1ebf64751",
+      "viewDigest": "sha256:0ef201a8c0e432e0de6bc66ae2ac26bfb9beefb20e0657714cf76d870fefd50b",
+      "duplicateAndReorderedParity": true
+    }
+  },
+  "authorization": {
+    "ownership": {
+      "memberRead": {
+        "allowed": true,
+        "code": null
+      },
+      "memberGrant": {
+        "allowed": true,
+        "code": null
+      },
+      "memberDelete": {
+        "allowed": false,
+        "code": "CONNECTION_FORBIDDEN"
+      }
+    },
+    "foreignErrors": {
+      "read": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "grant": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "rotate": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "disable": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "delete": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      }
+    },
+    "unknownErrors": {
+      "read": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "grant": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "rotate": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "disable": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "delete": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      }
+    },
+    "foreignAuthorization": {
+      "allowed": false,
+      "code": "CONNECTION_NOT_FOUND"
+    },
+    "unknownAuthorization": {
+      "allowed": false,
+      "code": "CONNECTION_NOT_FOUND"
+    },
+    "foreignUnknownParity": true,
+    "stateDigestUnchanged": true
+  },
+  "publicSchema": {
+    "outcomes": {
+      "url-safe-23.metadata": {
+        "accepted": false,
+        "errorCount": 35,
+        "firstError": {
+          "keyword": "type",
+          "instancePath": "/data/metadata/safe",
+          "schemaPath": "#/oneOf/0/type"
+        }
+      },
+      "url-safe-23.label": {
+        "accepted": false,
+        "errorCount": 23,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/label",
+          "schemaPath": "#/not"
+        }
+      },
+      "url-safe-23.reason": {
+        "accepted": false,
+        "errorCount": 18,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/reason",
+          "schemaPath": "#/properties/reason/not"
+        }
+      },
+      "url-safe-long.metadata": {
+        "accepted": false,
+        "errorCount": 35,
+        "firstError": {
+          "keyword": "type",
+          "instancePath": "/data/metadata/safe",
+          "schemaPath": "#/oneOf/0/type"
+        }
+      },
+      "url-safe-long.label": {
+        "accepted": false,
+        "errorCount": 23,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/label",
+          "schemaPath": "#/not"
+        }
+      },
+      "url-safe-long.reason": {
+        "accepted": false,
+        "errorCount": 18,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/reason",
+          "schemaPath": "#/properties/reason/not"
+        }
+      },
+      "url-safe-23-spaces.metadata": {
+        "accepted": false,
+        "errorCount": 35,
+        "firstError": {
+          "keyword": "type",
+          "instancePath": "/data/metadata/safe",
+          "schemaPath": "#/oneOf/0/type"
+        }
+      },
+      "url-safe-23-spaces.label": {
+        "accepted": false,
+        "errorCount": 23,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/label",
+          "schemaPath": "#/not"
+        }
+      },
+      "url-safe-23-spaces.reason": {
+        "accepted": false,
+        "errorCount": 18,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/reason",
+          "schemaPath": "#/properties/reason/not"
+        }
+      },
+      "url-safe-23-tabs.metadata": {
+        "accepted": false,
+        "errorCount": 37,
+        "firstError": {
+          "keyword": "type",
+          "instancePath": "/data/metadata/safe",
+          "schemaPath": "#/oneOf/0/type"
+        }
+      },
+      "url-safe-23-tabs.label": {
+        "accepted": false,
+        "errorCount": 25,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/label",
+          "schemaPath": "#/not"
+        }
+      },
+      "url-safe-23-tabs.reason": {
+        "accepted": false,
+        "errorCount": 20,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/reason",
+          "schemaPath": "#/properties/reason/not"
+        }
+      },
+      "url-safe-23-unicode-space.metadata": {
+        "accepted": false,
+        "errorCount": 35,
+        "firstError": {
+          "keyword": "type",
+          "instancePath": "/data/metadata/safe",
+          "schemaPath": "#/oneOf/0/type"
+        }
+      },
+      "url-safe-23-unicode-space.label": {
+        "accepted": false,
+        "errorCount": 23,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/label",
+          "schemaPath": "#/not"
+        }
+      },
+      "url-safe-23-unicode-space.reason": {
+        "accepted": false,
+        "errorCount": 18,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/reason",
+          "schemaPath": "#/properties/reason/not"
+        }
+      },
+      "url-safe-long-spaces.metadata": {
+        "accepted": false,
+        "errorCount": 35,
+        "firstError": {
+          "keyword": "type",
+          "instancePath": "/data/metadata/safe",
+          "schemaPath": "#/oneOf/0/type"
+        }
+      },
+      "url-safe-long-spaces.label": {
+        "accepted": false,
+        "errorCount": 23,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/label",
+          "schemaPath": "#/not"
+        }
+      },
+      "url-safe-long-spaces.reason": {
+        "accepted": false,
+        "errorCount": 18,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/reason",
+          "schemaPath": "#/properties/reason/not"
+        }
+      },
+      "url-safe-long-tabs.metadata": {
+        "accepted": false,
+        "errorCount": 37,
+        "firstError": {
+          "keyword": "type",
+          "instancePath": "/data/metadata/safe",
+          "schemaPath": "#/oneOf/0/type"
+        }
+      },
+      "url-safe-long-tabs.label": {
+        "accepted": false,
+        "errorCount": 25,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/label",
+          "schemaPath": "#/not"
+        }
+      },
+      "url-safe-long-tabs.reason": {
+        "accepted": false,
+        "errorCount": 20,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/reason",
+          "schemaPath": "#/properties/reason/not"
+        }
+      },
+      "url-safe-long-unicode-space.metadata": {
+        "accepted": false,
+        "errorCount": 35,
+        "firstError": {
+          "keyword": "type",
+          "instancePath": "/data/metadata/safe",
+          "schemaPath": "#/oneOf/0/type"
+        }
+      },
+      "url-safe-long-unicode-space.label": {
+        "accepted": false,
+        "errorCount": 23,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/label",
+          "schemaPath": "#/not"
+        }
+      },
+      "url-safe-long-unicode-space.reason": {
+        "accepted": false,
+        "errorCount": 18,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/reason",
+          "schemaPath": "#/properties/reason/not"
+        }
+      },
+      "standard-base64.metadata": {
+        "accepted": false,
+        "errorCount": 35,
+        "firstError": {
+          "keyword": "type",
+          "instancePath": "/data/metadata/safe",
+          "schemaPath": "#/oneOf/0/type"
+        }
+      },
+      "standard-base64.label": {
+        "accepted": false,
+        "errorCount": 23,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/label",
+          "schemaPath": "#/not"
+        }
+      },
+      "standard-base64.reason": {
+        "accepted": false,
+        "errorCount": 18,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/reason",
+          "schemaPath": "#/properties/reason/not"
+        }
+      },
+      "provider-token.metadata": {
+        "accepted": false,
+        "errorCount": 35,
+        "firstError": {
+          "keyword": "type",
+          "instancePath": "/data/metadata/safe",
+          "schemaPath": "#/oneOf/0/type"
+        }
+      },
+      "provider-token.label": {
+        "accepted": false,
+        "errorCount": 23,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/label",
+          "schemaPath": "#/not"
+        }
+      },
+      "provider-token.reason": {
+        "accepted": false,
+        "errorCount": 18,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/reason",
+          "schemaPath": "#/properties/reason/not"
+        }
+      },
+      "private-key.metadata": {
+        "accepted": false,
+        "errorCount": 35,
+        "firstError": {
+          "keyword": "type",
+          "instancePath": "/data/metadata/safe",
+          "schemaPath": "#/oneOf/0/type"
+        }
+      },
+      "private-key.label": {
+        "accepted": false,
+        "errorCount": 23,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/label",
+          "schemaPath": "#/not"
+        }
+      },
+      "private-key.reason": {
+        "accepted": false,
+        "errorCount": 18,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/reason",
+          "schemaPath": "#/properties/reason/not"
+        }
+      },
+      "url.metadata": {
+        "accepted": false,
+        "errorCount": 35,
+        "firstError": {
+          "keyword": "type",
+          "instancePath": "/data/metadata/safe",
+          "schemaPath": "#/oneOf/0/type"
+        }
+      },
+      "url.label": {
+        "accepted": false,
+        "errorCount": 23,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/label",
+          "schemaPath": "#/not"
+        }
+      },
+      "url.reason": {
+        "accepted": false,
+        "errorCount": 18,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/reason",
+          "schemaPath": "#/properties/reason/not"
+        }
+      },
+      "connection-string.metadata": {
+        "accepted": false,
+        "errorCount": 35,
+        "firstError": {
+          "keyword": "type",
+          "instancePath": "/data/metadata/safe",
+          "schemaPath": "#/oneOf/0/type"
+        }
+      },
+      "connection-string.label": {
+        "accepted": false,
+        "errorCount": 23,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/label",
+          "schemaPath": "#/not"
+        }
+      },
+      "connection-string.reason": {
+        "accepted": false,
+        "errorCount": 18,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/reason",
+          "schemaPath": "#/properties/reason/not"
+        }
+      },
+      "assignment.metadata": {
+        "accepted": false,
+        "errorCount": 35,
+        "firstError": {
+          "keyword": "type",
+          "instancePath": "/data/metadata/safe",
+          "schemaPath": "#/oneOf/0/type"
+        }
+      },
+      "assignment.label": {
+        "accepted": false,
+        "errorCount": 23,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/label",
+          "schemaPath": "#/not"
+        }
+      },
+      "assignment.reason": {
+        "accepted": false,
+        "errorCount": 18,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/reason",
+          "schemaPath": "#/properties/reason/not"
+        }
+      },
+      "json.metadata": {
+        "accepted": false,
+        "errorCount": 35,
+        "firstError": {
+          "keyword": "type",
+          "instancePath": "/data/metadata/safe",
+          "schemaPath": "#/oneOf/0/type"
+        }
+      },
+      "json.label": {
+        "accepted": false,
+        "errorCount": 23,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/label",
+          "schemaPath": "#/not"
+        }
+      },
+      "json.reason": {
+        "accepted": false,
+        "errorCount": 18,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/reason",
+          "schemaPath": "#/properties/reason/not"
+        }
+      },
+      "escaped-json.metadata": {
+        "accepted": true,
+        "errorCount": 0,
+        "firstError": null
+      },
+      "escaped-json.label": {
+        "accepted": true,
+        "errorCount": 0,
+        "firstError": null
+      },
+      "escaped-json.reason": {
+        "accepted": true,
+        "errorCount": 0,
+        "firstError": null
+      },
+      "zero-width.metadata": {
+        "accepted": true,
+        "errorCount": 0,
+        "firstError": null
+      },
+      "zero-width.label": {
+        "accepted": true,
+        "errorCount": 0,
+        "firstError": null
+      },
+      "zero-width.reason": {
+        "accepted": true,
+        "errorCount": 0,
+        "firstError": null
+      },
+      "adversarial.recursive": {
+        "accepted": false,
+        "errorCount": 59,
+        "firstError": {
+          "keyword": "type",
+          "instancePath": "/data/metadata/outer",
+          "schemaPath": "#/oneOf/0/type"
+        }
+      },
+      "adversarial.caseVariantKey": {
+        "accepted": false,
+        "errorCount": 25,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/metadata",
+          "schemaPath": "#/propertyNames/allOf/1/not"
+        }
+      },
+      "adversarial.unicodeEscapedKey": {
+        "accepted": false,
+        "errorCount": 25,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/metadata",
+          "schemaPath": "#/propertyNames/allOf/1/not"
+        }
+      },
+      "adversarial.parsedPrototypeKey": {
+        "accepted": false,
+        "errorCount": 25,
+        "firstError": {
+          "keyword": "pattern",
+          "instancePath": "/data/metadata",
+          "schemaPath": "#/propertyNames/allOf/0/pattern"
+        }
+      },
+      "adversarial.extraEvent": {
+        "accepted": false,
+        "errorCount": 1,
+        "firstError": {
+          "keyword": "additionalProperties",
+          "instancePath": "",
+          "schemaPath": "#/additionalProperties"
+        }
+      },
+      "adversarial.extraData": {
+        "accepted": false,
+        "errorCount": 25,
+        "firstError": {
+          "keyword": "additionalProperties",
+          "instancePath": "/data",
+          "schemaPath": "#/additionalProperties"
+        }
+      },
+      "adversarial.extraSecretRef": {
+        "accepted": false,
+        "errorCount": 24,
+        "firstError": {
+          "keyword": "additionalProperties",
+          "instancePath": "/data/secretRef",
+          "schemaPath": "#/additionalProperties"
+        }
+      },
+      "adversarial.extraOwner": {
+        "accepted": false,
+        "errorCount": 23,
+        "firstError": {
+          "keyword": "additionalProperties",
+          "instancePath": "/data/owner",
+          "schemaPath": "#/additionalProperties"
+        }
+      },
+      "longOrdinaryIdentifiers": {
+        "accepted": true,
+        "errorCount": 0,
+        "firstError": null
+      }
+    },
+    "providerIdentity": {
+      "eventId": {
+        "accepted": false,
+        "errorCount": 1,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/eventId",
+          "schemaPath": "#/not"
+        }
+      },
+      "workspaceId": {
+        "accepted": false,
+        "errorCount": 26,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/workspaceId",
+          "schemaPath": "#/not"
+        }
+      },
+      "actorId": {
+        "accepted": false,
+        "errorCount": 1,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/actorId",
+          "schemaPath": "#/not"
+        }
+      },
+      "idempotencyKey": {
+        "accepted": false,
+        "errorCount": 1,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/idempotencyKey",
+          "schemaPath": "#/not"
+        }
+      },
+      "connectionId": {
+        "accepted": false,
+        "errorCount": 24,
+        "firstError": {
+          "keyword": "not",
+          "instancePath": "/data/connectionId",
+          "schemaPath": "#/not"
+        }
+      }
+    },
+    "staticShape": {
+      "labelRef": "#/$defs/credentialValueShape",
+      "metadataStringRef": "#/$defs/credentialValueShape",
+      "terminalReasonRef": "#/$defs/credentialValueShape",
+      "identifierRef": "#/$defs/identifierCredentialShape",
+      "opaqueIdRef": "#/$defs/identifierCredentialShape"
+    },
+    "expectedStaticShape": {
+      "labelRef": "#/$defs/credentialValueShape",
+      "metadataStringRef": "#/$defs/credentialValueShape",
+      "terminalReasonRef": "#/$defs/credentialValueShape",
+      "identifierRef": "#/$defs/identifierCredentialShape",
+      "opaqueIdRef": "#/$defs/identifierCredentialShape"
+    }
+  },
+  "sensitivity": {
+    "mutationTargetFound": true,
+    "branchRemoved": "generic standard and URL-safe base64 detector",
+    "mutatedFixtureAccepted": true,
+    "verifierWouldTurnRed": true
+  },
+  "findings": [
+    {
+      "id": "E5-T02-CRITIC-FRESH-ZERO-WIDTH-METADATA",
+      "severity": "high",
+      "summary": "An invisible Unicode format character bypassed generic encoded-value detection in a free-form path",
+      "observation": {
+        "boundary": "runtime.metadata",
+        "canonicalLength": 23,
+        "attackedLength": 24,
+        "detectorClassifiedAsCredential": false,
+        "outcome": {
+          "accepted": true,
+          "summary": {
+            "type": "object",
+            "keys": [
+              "safe"
+            ],
+            "digest": "sha256:dba479a87803d91372d1b2d8b8aa2d12876bb0d159e2955c150c4b8b33f3d1ae"
+          }
+        }
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FRESH-ZERO-WIDTH-DEFINITIONMETADATA",
+      "severity": "high",
+      "summary": "An invisible Unicode format character bypassed generic encoded-value detection in a free-form path",
+      "observation": {
+        "boundary": "runtime.definitionMetadata",
+        "canonicalLength": 23,
+        "attackedLength": 24,
+        "detectorClassifiedAsCredential": false,
+        "outcome": {
+          "accepted": true,
+          "summary": {
+            "type": "object",
+            "keys": [
+              "connectionId",
+              "integration",
+              "label",
+              "metadata",
+              "owner",
+              "provider",
+              "schemaVersion",
+              "secretRef",
+              "tenantId",
+              "workspaceId"
+            ],
+            "digest": "sha256:6abde0b1ec52dd64355221e3cfc1bb5421d84245b2317debe014014936a74665"
+          }
+        }
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FRESH-ZERO-WIDTH-REASON",
+      "severity": "high",
+      "summary": "An invisible Unicode format character bypassed generic encoded-value detection in a free-form path",
+      "observation": {
+        "boundary": "runtime.reason",
+        "canonicalLength": 23,
+        "attackedLength": 24,
+        "detectorClassifiedAsCredential": false,
+        "outcome": {
+          "accepted": true,
+          "summary": {
+            "type": "string",
+            "length": 24
+          }
+        }
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FRESH-ZERO-WIDTH-TERMINALDATA",
+      "severity": "high",
+      "summary": "An invisible Unicode format character bypassed generic encoded-value detection in a free-form path",
+      "observation": {
+        "boundary": "runtime.terminalData",
+        "canonicalLength": 23,
+        "attackedLength": 24,
+        "detectorClassifiedAsCredential": false,
+        "outcome": {
+          "accepted": true,
+          "summary": {
+            "type": "object",
+            "keys": [
+              "actorId",
+              "connectionId",
+              "data",
+              "eventId",
+              "eventType",
+              "idempotencyKey",
+              "schemaVersion",
+              "sequence",
+              "serverTimestamp",
+              "workspaceId"
+            ],
+            "digest": "sha256:0a74e4c8666aed1c5e9c2bc0da195ffc68d734e1177d5a5e33c0d2b08fceeed6"
+          }
+        }
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FRESH-ZERO-WIDTH-STORE",
+      "severity": "high",
+      "summary": "An invisible Unicode format character bypassed the store free-form boundary and was appendable",
+      "observation": {
+        "boundary": "store.create.metadata",
+        "eventCount": 1,
+        "canonicalLength": 23,
+        "attackedLength": 24,
+        "persistedMetadataKeys": [
+          "safe"
+        ]
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FRESH-SCHEMA-ESCAPED-JSON-METADATA",
+      "severity": "high",
+      "summary": "The public schema accepted credential-shaped material in a free-form path",
+      "observation": {
+        "boundary": "escaped-json.metadata",
+        "outcome": {
+          "accepted": true,
+          "errorCount": 0,
+          "firstError": null
+        }
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FRESH-SCHEMA-ESCAPED-JSON-LABEL",
+      "severity": "high",
+      "summary": "The public schema accepted credential-shaped material in a free-form path",
+      "observation": {
+        "boundary": "escaped-json.label",
+        "outcome": {
+          "accepted": true,
+          "errorCount": 0,
+          "firstError": null
+        }
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FRESH-SCHEMA-ESCAPED-JSON-REASON",
+      "severity": "high",
+      "summary": "The public schema accepted credential-shaped material in a free-form path",
+      "observation": {
+        "boundary": "escaped-json.reason",
+        "outcome": {
+          "accepted": true,
+          "errorCount": 0,
+          "firstError": null
+        }
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FRESH-SCHEMA-ZERO-WIDTH-METADATA",
+      "severity": "high",
+      "summary": "The public schema accepted an invisible Unicode format character around encoded material",
+      "observation": {
+        "boundary": "schema.metadata",
+        "canonicalLength": 23,
+        "attackedLength": 24,
+        "outcome": {
+          "accepted": true,
+          "errorCount": 0,
+          "firstError": null
+        }
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FRESH-SCHEMA-ZERO-WIDTH-LABEL",
+      "severity": "high",
+      "summary": "The public schema accepted an invisible Unicode format character around encoded material",
+      "observation": {
+        "boundary": "schema.label",
+        "canonicalLength": 23,
+        "attackedLength": 24,
+        "outcome": {
+          "accepted": true,
+          "errorCount": 0,
+          "firstError": null
+        }
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-FRESH-SCHEMA-ZERO-WIDTH-REASON",
+      "severity": "high",
+      "summary": "The public schema accepted an invisible Unicode format character around encoded material",
+      "observation": {
+        "boundary": "schema.reason",
+        "canonicalLength": 23,
+        "attackedLength": 24,
+        "outcome": {
+          "accepted": true,
+          "errorCount": 0,
+          "firstError": null
+        }
+      }
+    }
+  ],
+  "leakScan": {
+    "leaked": false,
+    "filesChecked": [
+      "api-identifier-boundary.json",
+      "authz-matrix.json",
+      "canary-scan.json",
+      "capture-key-binding.json",
+      "cold-clone-transcript.json",
+      "cold-replay/api-identifier-boundary.json",
+      "cold-replay/authz-matrix.json",
+      "cold-replay/canary-scan.json",
+      "cold-replay/capture-key-binding.json",
+      "cold-replay/cold-clone-transcript.json",
+      "cold-replay/connection-state.json",
+      "cold-replay/critic-cold-run.json",
+      "cold-replay/lifecycle-events.json",
+      "cold-replay/replay-digests.json",
+      "cold-replay/secret-corpus.json",
+      "cold-replay/sensitivity.json",
+      "cold-replay/verification-summary.json",
+      "connection-state.json",
+      "critic-summary.json",
+      "gate-summary.json",
+      "independent-probes.json",
+      "lifecycle-events.json",
+      "replay-digests.json",
+      "secret-corpus.json",
+      "sensitivity.json",
+      "verification-summary.json"
+    ],
+    "findings": []
+  }
+}

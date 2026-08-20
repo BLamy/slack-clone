@@ -1,0 +1,54 @@
+[
+  {
+    "eventId": "connection-event-00000001",
+    "eventType": "connection.created",
+    "workspaceId": "workspace-alpha",
+    "actorId": "user-admin",
+    "idempotencyKey": "create-github",
+    "sequence": 1,
+    "serverTimestamp": "2026-08-19T17:00:01.000Z",
+    "connectionId": "connection-github",
+    "secretRefRevision": 1,
+    "secretRefId": "secretref-github-001",
+    "statusChange": "connection.created"
+  },
+  {
+    "eventId": "connection-event-00000002",
+    "eventType": "connection.rotated",
+    "workspaceId": "workspace-alpha",
+    "actorId": "user-admin",
+    "idempotencyKey": "rotate-github",
+    "sequence": 2,
+    "serverTimestamp": "2026-08-19T17:00:03.000Z",
+    "connectionId": "connection-github",
+    "secretRefRevision": 2,
+    "secretRefId": "secretref-github-002",
+    "statusChange": "connection.rotated"
+  },
+  {
+    "eventId": "connection-event-00000003",
+    "eventType": "connection.disabled",
+    "workspaceId": "workspace-alpha",
+    "actorId": "user-admin",
+    "idempotencyKey": "disable-github",
+    "sequence": 3,
+    "serverTimestamp": "2026-08-19T17:00:05.000Z",
+    "connectionId": "connection-github",
+    "secretRefRevision": null,
+    "secretRefId": null,
+    "statusChange": "connection.disabled"
+  },
+  {
+    "eventId": "connection-event-00000004",
+    "eventType": "connection.deleted",
+    "workspaceId": "workspace-alpha",
+    "actorId": "user-admin",
+    "idempotencyKey": "delete-github",
+    "sequence": 4,
+    "serverTimestamp": "2026-08-19T17:00:06.000Z",
+    "connectionId": "connection-github",
+    "secretRefRevision": null,
+    "secretRefId": null,
+    "statusChange": "connection.deleted"
+  }
+]

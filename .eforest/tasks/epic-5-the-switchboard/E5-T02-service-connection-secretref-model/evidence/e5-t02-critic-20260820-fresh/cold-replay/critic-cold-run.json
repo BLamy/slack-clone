@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "verdictForColdVerifier": "PASS",
+  "checkout": "/tmp/slack-e5-t02-critic-fresh-cold",
+  "detached": true,
+  "exactHead": "7f8674818c6b2e9df5b5ba0fbcbf8b1840d4f471",
+  "trackedTreeCleanBeforeRun": true,
+  "commands": [
+    "git worktree add --detach /tmp/slack-e5-t02-critic-fresh-cold 7f8674818c6b2e9df5b5ba0fbcbf8b1840d4f471",
+    "pnpm install --frozen-lockfile",
+    "TEST_RUN_ID=e5-t02-critic-20260820-fresh-cold-final TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/evidence/e5-t02-critic-20260820-fresh-cold make verify-E5-T02"
+  ],
+  "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+  "replayDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+  "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f",
+  "parityWithWarmCriticRun": true,
+  "evidence": "cold-replay/replay-digests.json and cold-replay/verification-summary.json"
+}

@@ -3,7 +3,7 @@ id: E5-T01
 epic: 5
 title: "Credential broker contract: Infisical Agent Proxy in production, Agent Vault locally, and no raw-secret orchestration path"
 priority: 501
-status: in-progress
+status: implemented
 depends_on: [E3]
 estimate: L
 capstone: false
@@ -213,3 +213,33 @@ opaque, single-use, run-scoped handles to callers.
   an explicit SKIPPED with no fallback.
 
 ### Builder — IPv6 representation and scanner sensitivity follow-up — 2026-08-19
+
+- Commits: `4976fe1e659acdbb2f908accfdd83a471eca6cff` for the IPv6 representation
+  guard and `bddc23d7285e55537cdb0a359eaa8185e6c3cbc6` for scanner hardening.
+- Fixes: all IPv4-mapped, IPv4-compatible, and NAT64 IPv6 literals are rejected even
+  when their embedded IPv4 is public; endpoint fixtures cover public and private
+  embedded forms. Local and real evidence scanners now scan environment values,
+  detect compound canary values chosen independently, avoid self-report false positives,
+  and prove sensitivity by injecting a temporary artifact canary that the verifier
+  detects before cleanup.
+- Commands: `pnpm format:check`; `pnpm lint`; `pnpm typecheck`; `pnpm test` (197 unit
+  tests and 15 emulator/Auth0 integration tests passed); `pnpm build`; and a detached
+  cold worktree with `pnpm install --frozen-lockfile` followed by
+  `TEST_RUN_ID=e5-t01-cold-final-sensitivity make verify-E5-T01`.
+- Local verifier: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e5-t01-final-sensitivity make verify-E5-T01`
+  passed twice-replay parity at implementation commit
+  `bddc23d7285e55537cdb0a359eaa8185e6c3cbc6`, with state digest
+  `sha256:b98ce75f188640e564a80b5ad27f3df9d424bbbfd094dd51aec117727d8e6b13`, audit
+  digest `sha256:5b5a5b5e8f6c3872e12554f00c03da8cbb2936532cc3160a301621695a0a8e42`,
+  `evidenceCanary.detected: true`, and final `leaked: false` across eight files and
+  58 environment-key values.
+- Real gate: `TEST_RUN_ID=e5-t01-real-missing-final-sensitivity TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T01-credential-broker-contract/evidence/e5-t01-real-skip make verify-E5-T01-real`
+  exited 2 with `SKIPPED:` for all 12 missing explicit Infisical Agent Proxy inputs;
+  `fallbackUsed: false` and no Agent Vault fallback.
+- Evidence: `evidence/e5-t01-final/` and `evidence/e5-t01-real-skip/skipped.json`,
+  tied to the exact code commit and containing no canary plaintext.
+- Replay: N/A (headless credential broker) + mitigation: cold-clone state replay,
+  canary scans, provider-mode refusal fixtures, and gated real Infisical Agent Proxy
+  transcript.
+- Claim: the two additional critic findings are closed and E5-T01 is implemented for
+  another fresh independent verdict.

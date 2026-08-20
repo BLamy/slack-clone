@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E5-T01",
-  "runId": "e5-t01-final-redaction",
-  "implementationCommit": "ee86ef2bd5ffbb9e9373cd7e11e2a1e1ef057914",
+  "runId": "e5-t01-final-sensitivity",
+  "implementationCommit": "bddc23d7285e55537cdb0a359eaa8185e6c3cbc6",
   "result": "PASS",
   "stateDigest": "sha256:b98ce75f188640e564a80b5ad27f3df9d424bbbfd094dd51aec117727d8e6b13",
   "auditDigest": "sha256:5b5a5b5e8f6c3872e12554f00c03da8cbb2936532cc3160a301621695a0a8e42",
@@ -41,7 +41,11 @@
         "attack": "live-replay",
         "code": "CREDENTIAL_BROKER_CAPABILITY_REPLAYED"
       }
-    ]
+    ],
+    "evidenceCanary": {
+      "detected": true,
+      "findingCount": 1
+    }
   },
   "canaryScan": {
     "leaked": false,

@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: refuted
+status: implemented
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -1063,3 +1063,29 @@ material and version policy; it is not a URI that clients can dereference themse
   duplicate/reordered replay, authorization parity, canary scanning, and detector
   sensitivity. Status remains `refuted` pending product rework and another fresh
   critic.
+
+### Builder — percent-encoding boundary rework — 2026-08-20
+
+- Commit: `5ab7562c1a336ce33a92b9c0e70f543ce12ac640`.
+- Rework: credential candidates are normalized through one bounded percent-decoding
+  pass before assignment, JSON, URL, format-control, and base64 detection. The public
+  schema mirrors the sensitive percent-encoded assignment and JSON-key forms without
+  rejecting ordinary percent text. Unit and verifier fixtures cover `%2D` assignments,
+  `%74` JSON keys, and mixed encoded forms.
+- Commands: `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`; `pnpm test`
+  (209 unit and 15 integration/Playwright tests passed); and `pnpm build`.
+- Local verifier: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e5-t02-final-5ab7562-20260820
+  make verify-E5-T02` passed duplicate/reordered replay parity with state/replay
+  digest `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`, and
+  `leaked: false`.
+- Evidence: `evidence/e5-t02-final/` was regenerated against this exact commit; the
+  secret corpus includes percent-encoded assignment and JSON-key controls, and the
+  canary scan remains clean.
+- Replay: N/A (server connection model) + mitigation: cold-clone reducer replay,
+  secret-shaped input corpus, authz matrix, exact lifecycle digests, independent
+  schema/runtime boundary checks, Unicode-control matrix, and detector-sensitivity
+  mutation.
+- Claim: the eleventh critic's percent-encoded credential findings are addressed.
+  E5-T02 is implemented and ready for another fresh critic.

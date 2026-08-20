@@ -41,6 +41,7 @@ const CREDENTIAL_VALUE_PATTERNS = [
   /\b(?:https?|ssh|postgres(?:ql)?|mysql|redis|mongodb(?:\+srv)?|amqp):\/\/\S+/iu,
   /(?:^|[\s;])(?:host|user|username|password|port)\s*=\s*[^;]+/iu,
 ];
+const BASE64_VALUE_PATTERN = /^[A-Za-z0-9+/_-]+={0,2}$/u;
 const CONFUSABLES = new Map([
   ["а", "a"],
   ["с", "c"],
@@ -662,14 +663,7 @@ function looksLikeCredentialValue(value) {
   if (CREDENTIAL_VALUE_PATTERNS.some((pattern) => pattern.test(value))) {
     return true;
   }
-  if (value.length >= 24 && /^[A-Za-z0-9+/]+={0,2}$/u.test(value)) {
-    try {
-      atob(value);
-      return true;
-    } catch {
-      return false;
-    }
-  }
+  if (isBase64EncodedValue(value)) return true;
   if (/^\s*(?:\[|\{)/u.test(value)) {
     try {
       const parsed = JSON.parse(value);
@@ -680,6 +674,20 @@ function looksLikeCredentialValue(value) {
     }
   }
   return false;
+}
+
+function isBase64EncodedValue(value) {
+  if (value.length < 24 || !BASE64_VALUE_PATTERN.test(value)) return false;
+  const unpadded = value.replace(/=+$/u, "");
+  if (unpadded.length % 4 === 1) return false;
+  const normalized = unpadded.replace(/-/gu, "+").replace(/_/gu, "/");
+  const padding = "=".repeat((4 - (normalized.length % 4)) % 4);
+  try {
+    atob(normalized + padding);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function securityNormalize(value) {

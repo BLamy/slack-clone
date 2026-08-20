@@ -64,6 +64,14 @@ test("connection metadata rejects encoded, URL, JSON, nested, and confusable sec
         encodedValue: Buffer.from("ghp_" + "A".repeat(32)).toString("base64"),
       },
     },
+    {
+      metadata: {
+        encodedUrlSafe: Buffer.from([
+          251, 255, 239, 250, 222, 173, 190, 239, 251, 255, 239, 250, 222, 173,
+          190, 239, 251, 255, 239,
+        ]).toString("base64url"),
+      },
+    },
     { metadata: { encodedValue: "ghp_" + "A".repeat(32) } },
     { metadata: { endpoint: "https://user:password@example.invalid" } },
     { metadata: { payload: '{"token":"raw-token-value"}' } },
@@ -117,8 +125,16 @@ test("event boundaries reject credential-shaped opaque identifiers", () => {
 
 test("runtime identifier APIs reject provider-token-shaped values", () => {
   const providerToken = "ghp_" + "a".repeat(32);
+  const urlSafeBase64 = Buffer.from([
+    251, 255, 239, 250, 222, 173, 190, 239, 251, 255, 239, 250, 222, 173, 190,
+    239, 251, 255, 239,
+  ]).toString("base64url");
   assert.throws(
     () => normalizeOpaqueIdForStore(providerToken, "$.runId"),
+    (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
+  );
+  assert.throws(
+    () => normalizeOpaqueIdForStore(urlSafeBase64, "$.runId"),
     (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
   );
   assert.throws(

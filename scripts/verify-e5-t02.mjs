@@ -83,6 +83,7 @@ const apiIdentifierBoundary = apiIdentifierBoundaryFixture();
 const sensitivity = {
   url: await detectorSensitivityFixture(),
   providerToken: await detectorProviderTokenSensitivityFixture(),
+  base64: await detectorBase64SensitivityFixture(),
 };
 
 await writeJson("connection-state.json", first.view);
@@ -319,6 +320,15 @@ function secretCorpusFixture() {
         encodedValue: Buffer.from("ghp_" + "A".repeat(32)).toString("base64"),
       },
     ],
+    [
+      "base64url",
+      {
+        encodedUrlSafe: Buffer.from([
+          251, 255, 239, 250, 222, 173, 190, 239, 251, 255, 239, 250, 222, 173,
+          190, 239, 251, 255, 239,
+        ]).toString("base64url"),
+      },
+    ],
     ["provider-token", { encodedValue: "ghp_" + "A".repeat(32) }],
     ["json", { payload: '{"token":"e5-t02-connection-canary-value"}' }],
     ["url", { endpoint: "https://user:password@example.invalid/service" }],
@@ -346,14 +356,14 @@ function secretCorpusFixture() {
     try {
       store.create({
         actor: ADMIN,
-        connectionId: "connection-attack-" + name,
+        connectionId: "c-" + name.slice(0, 18),
         owner: { kind: "workspace", id: SCOPE.workspaceId },
         provider: "github",
         integration: "issues",
         label: "Rejected attack",
         metadata,
         secretRef: secretRef(1),
-        idempotencyKey: "attack-" + name,
+        idempotencyKey: "a-" + name.slice(0, 18),
       });
     } catch (caught) {
       error = caught;
@@ -485,11 +495,19 @@ function captureKeyCollisionFixture() {
 
 function apiIdentifierBoundaryFixture() {
   const providerToken = "ghp_" + "a".repeat(32);
+  const urlSafeBase64 = Buffer.from([
+    251, 255, 239, 250, 222, 173, 190, 239, 251, 255, 239, 250, 222, 173, 190,
+    239, 251, 255, 239,
+  ]).toString("base64url");
   const rejected = {};
   const assertions = [
     [
       "opaque-store-id",
       () => normalizeOpaqueIdForStore(providerToken, "$.runId"),
+    ],
+    [
+      "opaque-store-url-safe-base64",
+      () => normalizeOpaqueIdForStore(urlSafeBase64, "$.runId"),
     ],
     [
       "principal-id",
@@ -515,6 +533,14 @@ function apiIdentifierBoundaryFixture() {
         normalizePrincipal({
           ...ADMIN,
           capabilities: [providerToken],
+        }),
+    ],
+    [
+      "principal-url-safe-base64-capability",
+      () =>
+        normalizePrincipal({
+          ...ADMIN,
+          capabilities: [urlSafeBase64],
         }),
     ],
     [
@@ -918,7 +944,7 @@ async function detectorProviderTokenSensitivityFixture() {
     lines.splice(detectorLine, 1);
     await writeFile(schemaPath, lines.join("\n"));
     const fixture = {
-      connectionId: "connection-provider-sensitivity",
+      connectionId: "conn-provider-sense",
       tenantId: SCOPE.tenantId,
       workspaceId: SCOPE.workspaceId,
       owner: { kind: "workspace", id: SCOPE.workspaceId },
@@ -926,7 +952,7 @@ async function detectorProviderTokenSensitivityFixture() {
       integration: "issues",
       label: "Provider sensitivity",
       metadata: {
-        encodedValue: "ghp_" + "A".repeat(32),
+        encodedValue: "ghp_" + "A".repeat(12) + "." + "A".repeat(20),
       },
       secretRef: secretRef(1),
     };
@@ -951,6 +977,83 @@ async function detectorProviderTokenSensitivityFixture() {
     return {
       branchRemoved: "provider-token value detector",
       fixtureKey: "encodedValue",
+      mutatedFixtureAccepted: true,
+      verifierWouldTurnRed: true,
+    };
+  } finally {
+    await rm(scratchDirectory, { recursive: true, force: true });
+  }
+}
+
+async function detectorBase64SensitivityFixture() {
+  const workDirectory = path.join(taskDirectory, "work");
+  await mkdir(workDirectory, { recursive: true });
+  const scratchDirectory = await mkdtemp(
+    path.join(workDirectory, "detector-base64-sensitivity-"),
+  );
+  try {
+    const sourceDirectory = path.join(scratchDirectory, "src");
+    await mkdir(sourceDirectory, { recursive: true });
+    const schemaPath = path.join(sourceDirectory, "schema.mjs");
+    const errorsPath = path.join(sourceDirectory, "errors.mjs");
+    const canonicalPath = path.join(sourceDirectory, "canonical.mjs");
+    await copyFile(
+      path.join(root, "packages/connections/src/schema.mjs"),
+      schemaPath,
+    );
+    await copyFile(
+      path.join(root, "packages/connections/src/errors.mjs"),
+      errorsPath,
+    );
+    await copyFile(
+      path.join(root, "packages/connections/src/canonical.mjs"),
+      canonicalPath,
+    );
+    const source = await readFile(schemaPath, "utf8");
+    const lines = source.split("\n");
+    const detectorLine = lines.findIndex((line) =>
+      line.includes("if (isBase64EncodedValue(value)) return true;"),
+    );
+    assert.notEqual(detectorLine, -1);
+    lines.splice(detectorLine, 1);
+    await writeFile(schemaPath, lines.join("\n"));
+    const fixture = {
+      connectionId: "connection-base64-sensitivity",
+      tenantId: SCOPE.tenantId,
+      workspaceId: SCOPE.workspaceId,
+      owner: { kind: "workspace", id: SCOPE.workspaceId },
+      provider: "github",
+      integration: "issues",
+      label: "Base64 sensitivity",
+      metadata: {
+        encodedUrlSafe: Buffer.from([
+          251, 255, 239, 250, 222, 173, 190, 239, 251, 255, 239, 250, 222, 173,
+          190, 239, 251, 255, 239,
+        ]).toString("base64url"),
+      },
+      secretRef: secretRef(1),
+    };
+    const probe =
+      "import { normalizeConnectionDefinition } from " +
+      JSON.stringify(pathToFileURL(schemaPath).href) +
+      ";\nnormalizeConnectionDefinition(" +
+      JSON.stringify(fixture) +
+      ");\n";
+    let mutatedAccepted = false;
+    try {
+      execFileSync(process.execPath, ["--input-type=module", "-e", probe], {
+        cwd: root,
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "pipe"],
+      });
+      mutatedAccepted = true;
+    } catch {
+      mutatedAccepted = false;
+    }
+    assert.equal(mutatedAccepted, true);
+    return {
+      branchRemoved: "standard and URL-safe base64 value detector",
+      fixtureKey: "encodedUrlSafe",
       mutatedFixtureAccepted: true,
       verifierWouldTurnRed: true,
     };

@@ -1,0 +1,419 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "exactHead": "80e8296b8ba57300eae98b8f57863d8cd87cb5eb",
+  "inputs": {
+    "neutralStandardBase64Length": 64,
+    "neutralBase64UrlLength": 24,
+    "neutralBase64UrlUsesUrlSafeAlphabet": true
+  },
+  "runtimeBoundaries": {
+    "rejected": {
+      "principal-capability-provider-token": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.principal.capabilities[0]",
+        "statusCode": 400
+      },
+      "principal-capability-standard-base64": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.principal.capabilities[0]",
+        "statusCode": 400
+      },
+      "principal-capability-case-variant": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.principal.capabilities[0]",
+        "statusCode": 400
+      },
+      "principal-capability-recursive-case-key": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.principal.capabilities[0].safe.AUTHORIZATION",
+        "statusCode": 400
+      },
+      "principal-extra-field": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.principal.extraField",
+        "statusCode": 400
+      },
+      "reason-provider-token": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "reason-standard-base64": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "statusCode": 400
+      },
+      "metadata-case-variant-url": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400
+      },
+      "metadata-case-variant-json": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.safe",
+        "statusCode": 400
+      },
+      "metadata-recursive-provider-token": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.one.two.three.four.five",
+        "statusCode": 400
+      },
+      "metadata-extra-field": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.connection.extraField",
+        "statusCode": 400
+      },
+      "secretref-extra-field": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_INVALID_SECRET_REF",
+        "path": "$.secretRef.extraField",
+        "statusCode": 400
+      },
+      "owner-provider-token": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.owner.id",
+        "statusCode": 400
+      },
+      "opaque-id-provider-token": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.id",
+        "statusCode": 400
+      }
+    },
+    "accepted": {
+      "principal-capability-url-safe-base64": {
+        "accepted": true,
+        "rawReturned": true,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      },
+      "opaque-id-url-safe-base64": {
+        "accepted": true,
+        "rawReturned": true,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      },
+      "metadata-url-safe-base64": {
+        "accepted": true,
+        "rawReturned": true,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      },
+      "reason-url-safe-base64": {
+        "accepted": true,
+        "rawReturned": true,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      },
+      "event-terminal-reason-url-safe-base64": {
+        "accepted": true,
+        "rawReturned": true,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      },
+      "event-opaque-id-url-safe-base64": {
+        "accepted": true,
+        "rawReturned": true,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      }
+    },
+    "detector": {
+      "standardBase64": true,
+      "urlSafeBase64": false
+    }
+  },
+  "storeBoundaries": {
+    "capabilityCreate": {
+      "accepted": true,
+      "rawReturned": false,
+      "code": null,
+      "path": null,
+      "statusCode": null
+    },
+    "providerCreate": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.actor.capabilities[0]",
+      "statusCode": 400
+    },
+    "rejectedCreate": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.actor.capabilities[0]",
+      "statusCode": 400
+    },
+    "authorization": {
+      "urlSafe": {
+        "accepted": true,
+        "rawReturned": false,
+        "code": null,
+        "path": null,
+        "statusCode": null
+      },
+      "standard": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.actor.capabilities[0]",
+        "statusCode": 400
+      },
+      "provider": {
+        "accepted": false,
+        "rawReturned": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.actor.capabilities[0]",
+        "statusCode": 400
+      }
+    },
+    "captureActorUrlSafe": {
+      "accepted": true,
+      "rawReturned": false,
+      "code": null,
+      "path": null,
+      "statusCode": null
+    },
+    "captureActorProvider": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.actor.capabilities[0]",
+      "statusCode": 400
+    },
+    "captureRunIdUrlSafe": {
+      "accepted": true,
+      "rawReturned": true,
+      "code": null,
+      "path": null,
+      "statusCode": null
+    },
+    "captureStandard": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.runId",
+      "statusCode": 400
+    },
+    "terminalReasonUrlSafe": {
+      "accepted": true,
+      "rawReturned": true,
+      "code": null,
+      "path": null,
+      "statusCode": null
+    },
+    "eventCounts": {
+      "afterCapabilityCreate": 1,
+      "afterRejectedCreate": 2,
+      "terminalAfterUrlSafeReason": 2
+    }
+  },
+  "lifecycle": {
+    "revisionStability": {
+      "beforeRotate": 1,
+      "afterRotateSameRun": 1,
+      "afterRotateNewRun": 2
+    },
+    "disabledNewRun": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_NOT_ACTIVE",
+      "path": null,
+      "statusCode": 409
+    },
+    "deletedNewRun": {
+      "accepted": false,
+      "rawReturned": false,
+      "code": "CONNECTION_NOT_ACTIVE",
+      "path": null,
+      "statusCode": 409
+    },
+    "replay": {
+      "stateDigest": "sha256:01f1882a20c4a70d9687eb115e5d43e56b0666b2d9bfaec5786cfa02de37dc0c",
+      "replayAgainDigest": "sha256:01f1882a20c4a70d9687eb115e5d43e56b0666b2d9bfaec5786cfa02de37dc0c",
+      "viewDigest": "sha256:f3ed7157645bb7916b326d50144a47cbf2f537a330332e4d7a01521a49eee987",
+      "duplicateAndReorderedParity": true
+    }
+  },
+  "authz": {
+    "ownership": {
+      "memberRead": true,
+      "memberGrant": true,
+      "memberDelete": false
+    },
+    "foreignErrors": {
+      "read": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "grant": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "rotate": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "disable": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "delete": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      }
+    },
+    "unknownErrors": {
+      "read": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "grant": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "rotate": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "disable": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "delete": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      }
+    },
+    "foreignUnknownEqual": true,
+    "stateDigestUnchanged": true
+  },
+  "publicSchema": {
+    "validator": "Ajv 8 Draft 2020-12",
+    "module": "/opt/homebrew/lib/node_modules/verdaccio/node_modules/ajv/dist/2020.js",
+    "outcomes": {
+      "safe": {
+        "accepted": true,
+        "errorCount": 0
+      },
+      "terminalSafe": {
+        "accepted": true,
+        "errorCount": 0
+      },
+      "terminalProviderToken": {
+        "accepted": false,
+        "errorCount": 18
+      },
+      "terminalStandardBase64": {
+        "accepted": false,
+        "errorCount": 18
+      },
+      "terminalUrlSafeBase64": {
+        "accepted": true,
+        "errorCount": 0
+      },
+      "terminalUpperUrl": {
+        "accepted": false,
+        "errorCount": 18
+      },
+      "terminalUpperJson": {
+        "accepted": false,
+        "errorCount": 18
+      },
+      "metadataUrlSafeBase64": {
+        "accepted": true,
+        "errorCount": 0
+      },
+      "metadataNestedCaseVariant": {
+        "accepted": false,
+        "errorCount": 37
+      },
+      "metadataRecursiveProviderToken": {
+        "accepted": false,
+        "errorCount": 83
+      },
+      "metadataExtraCreated": {
+        "accepted": false,
+        "errorCount": 25
+      },
+      "opaqueEventUrlSafeBase64": {
+        "accepted": true,
+        "errorCount": 0
+      },
+      "extraTop": {
+        "accepted": false,
+        "errorCount": 1
+      },
+      "extraTerminal": {
+        "accepted": false,
+        "errorCount": 20
+      },
+      "extraSecretRef": {
+        "accepted": false,
+        "errorCount": 24
+      },
+      "extraOwner": {
+        "accepted": false,
+        "errorCount": 23
+      }
+    },
+    "finding": {
+      "terminalUrlSafeBase64Accepted": true,
+      "metadataUrlSafeBase64Accepted": true,
+      "opaqueEventUrlSafeBase64Accepted": true
+    }
+  },
+  "findings": [
+    {
+      "id": "E5-T02-CRITIC-SIXTH-001",
+      "severity": "high",
+      "summary": "RFC 4648 URL-safe base64 values bypass the runtime credential detector and are accepted by metadata, reason, opaque-id, capability, capture, and terminal-event paths",
+      "source": "packages/connections/src/schema.mjs:661-672,714-731; packages/connections/src/store.mjs:166-219,237-277; packages/connections/src/schemas/connection-events.v1.schema.json:73-98,225-230"
+    }
+  ]
+}

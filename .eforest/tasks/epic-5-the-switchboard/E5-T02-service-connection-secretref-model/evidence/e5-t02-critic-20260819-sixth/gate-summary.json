@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "verdict": "refuted",
+  "exactHead": "80e8296b8ba57300eae98b8f57863d8cd87cb5eb",
+  "reviewedProductFix": "dd20209fda6f5a5314d4a0a916aa038f52806a3c",
+  "targetWorktree": "/tmp/slack-e5-t02.b2vnOc",
+  "worktreeWasCleanBeforeCriticEvidence": true,
+  "commands": [
+    { "command": "pnpm install --frozen-lockfile", "result": "PASS" },
+    { "command": "pnpm format:check", "result": "PASS" },
+    { "command": "pnpm format:check:e5-t02", "result": "PASS" },
+    { "command": "pnpm lint", "result": "PASS" },
+    { "command": "pnpm typecheck", "result": "PASS" },
+    {
+      "command": "pnpm test",
+      "result": "PASS",
+      "detail": "207 unit tests and 15 emulator/Auth0 Playwright tests"
+    },
+    { "command": "pnpm build", "result": "PASS" },
+    {
+      "command": "TEST_RUN_ID=e5-t02-critic-sixth-final-20260819 TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/evidence/e5-t02-critic-20260819-sixth make verify-E5-T02",
+      "result": "PASS",
+      "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+      "replayDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+      "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f"
+    },
+    {
+      "command": "node evidence/e5-t02-critic-20260819-sixth/independent-probes.mjs",
+      "result": "PASS_WITH_FINDING",
+      "detail": "Requested negative cases rejected; RFC 4648 URL-safe-base64 boundary accepted"
+    },
+    {
+      "command": "git worktree add --detach /tmp/slack-e5-t02-sixth-cold 80e8296b8ba57300eae98b8f57863d8cd87cb5eb",
+      "result": "PASS"
+    },
+    {
+      "command": "cold worktree: pnpm install --frozen-lockfile",
+      "result": "PASS"
+    },
+    {
+      "command": "cold worktree: TEST_RUN_ID=e5-t02-critic-sixth-cold-20260819 TEST_ARTIFACT_DIR=/tmp/slack-e5-t02.b2vnOc/.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/evidence/e5-t02-critic-20260819-sixth/cold-replay make verify-E5-T02",
+      "result": "PASS",
+      "implementationCommit": "80e8296b8ba57300eae98b8f57863d8cd87cb5eb",
+      "stateDigest": "sha256:f40a785341af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+      "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f"
+    },
+    {
+      "command": "final evidence leak scan and transient sensitivity fixture via make verify-E5-T02",
+      "result": "PASS",
+      "detail": "leaked=false; filesChecked includes independent probe and cold-replay evidence; sensitivity detected=true"
+    }
+  ],
+  "replayEvidence": "Replay: N/A (server connection model) + mitigation: cold-clone reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle digests, independent runtime/schema probes, and detector sensitivity"
+}

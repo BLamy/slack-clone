@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "runId": "e5-t02-critic-sixth-final-20260819",
+  "implementationCommit": "80e8296b8ba57300eae98b8f57863d8cd87cb5eb",
+  "result": "PASS",
+  "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+  "replay": {
+    "digest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "viewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f",
+    "duplicateAndReorderedParity": true
+  },
+  "secretCorpus": {
+    "rejected": [
+      {
+        "name": "base64",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encoded"
+      },
+      {
+        "name": "base64-provider-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "provider-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "json",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.payload"
+      },
+      {
+        "name": "url",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.endpoint"
+      },
+      {
+        "name": "multiline-private-key",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.material"
+      },
+      {
+        "name": "unicode-confusable-key",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.tοken"
+      },
+      {
+        "name": "nested-cookie",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.nested.headers.cookie"
+      },
+      {
+        "name": "connection-string",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.dsn"
+      },
+      {
+        "name": "private-key-field",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.privateKey"
+      },
+      {
+        "name": "authorization-field",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.authorization"
+      }
+    ],
+    "appendedEvents": 0
+  },
+  "authorization": {
+    "ownershipMatrixPassed": true,
+    "foreignAndUnknownErrorsEqual": true,
+    "stateDigestUnchanged": true
+  },
+  "captureKeyCollision": {
+    "collisionAvoided": true,
+    "firstBinding": {
+      "connectionId": "connection-critic-a:b",
+      "runId": "run-critic-c",
+      "revision": 1
+    },
+    "secondBinding": {
+      "connectionId": "connection-critic-a",
+      "runId": "b:run-critic-c",
+      "revision": 1
+    }
+  },
+  "apiIdentifierBoundary": {
+    "rejected": {
+      "opaque-store-id": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.runId"
+      },
+      "principal-id": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.principal.id"
+      },
+      "principal-workspace-id": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.principal.workspaceId"
+      },
+      "principal-capability": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.principal.capabilities[0]"
+      },
+      "owner-id": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.owner.id"
+      }
+    },
+    "capture": {
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.runId",
+      "appendedBefore": 1,
+      "appendedAfter": 1
+    },
+    "authorization": {
+      "allowed": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.actor.id"
+    }
+  },
+  "sensitivity": {
+    "url": {
+      "branchRemoved": "URL and connection-string value detector",
+      "mutatedFixtureAccepted": true,
+      "verifierWouldTurnRed": true
+    },
+    "providerToken": {
+      "branchRemoved": "provider-token value detector",
+      "fixtureKey": "encodedValue",
+      "mutatedFixtureAccepted": true,
+      "verifierWouldTurnRed": true
+    }
+  },
+  "canaryScan": {
+    "leaked": false,
+    "filesChecked": [
+      "api-identifier-boundary.json",
+      "authz-matrix.json",
+      "canary-scan.json",
+      "capture-key-binding.json",
+      "cold-clone-transcript.json",
+      "cold-replay/api-identifier-boundary.json",
+      "cold-replay/authz-matrix.json",
+      "cold-replay/canary-scan.json",
+      "cold-replay/capture-key-binding.json",
+      "cold-replay/cold-clone-transcript.json",
+      "cold-replay/connection-state.json",
+      "cold-replay/lifecycle-events.json",
+      "cold-replay/replay-digests.json",
+      "cold-replay/secret-corpus.json",
+      "cold-replay/sensitivity.json",
+      "cold-replay/verification-summary.json",
+      "connection-state.json",
+      "critic-summary.json",
+      "gate-summary.json",
+      "independent-probes.json",
+      "independent-probes.mjs",
+      "lifecycle-events.json",
+      "replay-digests.json",
+      "secret-corpus.json",
+      "sensitivity.json",
+      "verification-summary.json"
+    ],
+    "environmentKeyCount": 57
+  },
+  "replayEvidence": "Replay: N/A (server connection model) + mitigation: cold-clone reducer replay, secret-shaped input corpus, authz matrix, and exact lifecycle digests"
+}

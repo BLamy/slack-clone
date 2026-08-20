@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: refuted
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -493,3 +493,56 @@ material and version policy; it is not a URI that clients can dereference themse
   envelope/schema/runtime probes, capture-race probes, and detector-sensitivity mutation.
 - Claim: the fifth critic's capability and terminal-reason findings are addressed and
   E5-T02 is ready for a final fresh independent verdict.
+
+### Critic — sixth independent review — 2026-08-19
+
+- VERDICT: refuted.
+- Exact head: `80e8296b8ba57300eae98b8f57863d8cd87cb5eb`; reviewed product fix:
+  `dd20209fda6f5a5314d4a0a916aa038f52806a3c`. The target worktree was clean before
+  this critic's evidence directory was created. Only critic evidence, metadata, this
+  readme entry, and the regenerated queue are in the final critic commit.
+- Gates: `pnpm install --frozen-lockfile`; `pnpm format:check`;
+  `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`; `pnpm test`
+  (207 unit and 15 emulator/Auth0 Playwright tests passed); `pnpm build`; and the
+  final E5-T02 evidence scan all passed.
+- Exact verifier:
+  `TEST_RUN_ID=e5-t02-critic-sixth-final-20260819
+  TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/evidence/e5-t02-critic-20260819-sixth
+  make verify-E5-T02` passed at the exact head with state/replay digest
+  `sha256:f40a785341af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb` and
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`.
+  Its final scan included the independent probe and nested cold-replay evidence,
+  reported `leaked: false`, and detected the transient canary sensitivity fixture.
+- Cold replay: a detached exact-head worktree at `/tmp/slack-e5-t02-sixth-cold` ran
+  `pnpm install --frozen-lockfile` and the same verifier. It produced matching state and
+  replay-view digests under `evidence/e5-t02-critic-20260819-sixth/cold-replay/`.
+- Independent probe: `node
+  evidence/e5-t02-critic-20260819-sixth/independent-probes.mjs` exercised direct
+  exported runtime APIs, provider-token and neutral standard-base64 capabilities and
+  reasons, case-variant and recursive inputs, extra event/SecretRef/owner fields, store
+  authorization/capture, lifecycle/capture stability, duplicate/reordered replay,
+  ownership and foreign-vs-unknown authz parity, and Ajv 8 Draft 2020-12 schema-only
+  validation. Durable details are in
+  `evidence/e5-t02-critic-20260819-sixth/independent-probes.json`.
+- Finding `E5-T02-CRITIC-SIXTH-001` (high): a neutral RFC 4648 URL-safe base64 value
+  (round-trip-valid, URL-safe alphabet, opaque-id-compatible spelling) bypasses
+  `looksLikeCredentialValue`'s standard-base64 test at
+  `packages/connections/src/schema.mjs:661-672`. The direct exported APIs accepted it
+  as a principal capability, opaque id, metadata value, terminal reason, and event id.
+  Store probes then accepted it through create, authorization, and capture; a capture
+  echoed the value in its frozen run binding, and disable appended it as a terminal
+  reason. An independent Ajv 8 Draft 2020-12 validation also accepted the same class in
+  `terminalData.reason`, metadata, and `eventId`; the public schema's
+  `credentialValueShape` only matches the standard `+/` alphabet at
+  `packages/connections/src/schemas/connection-events.v1.schema.json:73-98` and
+  `225-230`. This refutes the raw-material rejection requirement and the final
+  terminal-reason schema boundary despite the provider-token and standard-base64
+  controls passing.
+- Detector sensitivity: the verifier's existing provider-token and URL detector
+  mutations turned its corpus red; the independent URL-safe-base64 observation shows
+  the missing URL-safe branch is not covered. Evidence: `evidence/e5-t02-critic-20260819-sixth/`.
+- Replay: N/A (server connection model) + mitigation: cold-clone reducer replay,
+  secret-shaped input corpus, authz matrix, exact lifecycle digests, independent
+  runtime/schema probes, evidence leak scans, and detector sensitivity. Status remains
+  `refuted` pending builder rework and another fresh critic.

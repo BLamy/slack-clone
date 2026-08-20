@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: refuted
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -943,3 +943,59 @@ material and version policy; it is not a URI that clients can dereference themse
   schema/runtime boundary checks, and detector-sensitivity mutation.
 - Claim: the ninth critic's assignment, Unicode format-control, and schema-depth
   findings are addressed. E5-T02 is implemented and ready for a fresh final critic.
+
+### Critic — tenth independent review — 2026-08-20
+
+- VERDICT: refuted.
+- Exact head: `b2523f50d5b9f047a05fe62fcf9d1c915540dfb9`; builder product commit:
+  `a0ec965684fd0461c684e5acce37110a9d9c3475`. The target checkout was clean at
+  orientation. Product source and the pinned `emulate` submodule were not changed by
+  the critic.
+- Gates: `pnpm install --frozen-lockfile`; `pnpm format:check`;
+  `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`; `pnpm test` (208 unit
+  and 15 integration/Playwright tests passed); `pnpm build`; and `git diff --check`.
+  All passed before critic-owned evidence was added. The gate manifest is in
+  `evidence/e5-t02-critic-20260820-tenth/gate-summary.json`.
+- Cold verifier: `TEST_RUN_ID=e5-t02-critic-20260820-tenth-cold2
+  TEST_ARTIFACT_DIR=evidence/e5-t02-critic-20260820-tenth/cold-replay
+  make verify-E5-T02` passed duplicate/reordered replay parity with state/replay
+  digest `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`, and
+  `leaked: false`. Replay: N/A (server connection model) + mitigation: cold-clone
+  reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle digests,
+  independent Ajv/runtime/store probes, Unicode-control matrix, and detector mutation.
+- Independent probe: `evidence/e5-t02-critic-20260820-tenth/independent-probes.json`
+  records 266 runtime/store/public-schema cases. The exact `client-secret`,
+  `client_secret`, and `client secret` forms, all eight requested Unicode format
+  controls inserted into URL-shaped and URL-safe/base64-shaped values, escaped and
+  case-variant JSON credential keys, and the metadata nesting boundary all rejected
+  consistently.
+- Finding `E5-T02-CRITIC-TENTH-ASSIGNMENT-BOUNDARY-001` (high):
+  `prefix-client-secret=redacted` and `prefix_client_secret=redacted` were accepted
+  by `normalizeMetadata`, `normalizeReason`, `normalizeConnectionDefinition`,
+  `normalizeConnectionEvent`, and `createConnectionStore`; each store case appended
+  one event. The runtime assignment detector at
+  `packages/connections/src/schema.mjs:40` requires a preceding boundary that does
+  not include `-` or `_`, while the public `credentialValueShape` at
+  `packages/connections/src/schemas/connection-events.v1.schema.json:119` rejects
+  the same values. This leaves raw assignment-shaped material accepted at the
+  authoritative append boundary.
+- Finding `E5-T02-CRITIC-TENTH-METADATA-WIDTH-002` (medium): a 65-property safe
+  metadata object was accepted and appended by runtime/store, while the public schema
+  rejects `maxProperties: 64`. The runtime object loop at
+  `packages/connections/src/schema.mjs:632-649` has no matching property cap;
+  evidence is in `independent-probes.json:140-158`.
+- Finding `E5-T02-CRITIC-TENTH-METADATA-LENGTH-003` (medium): Ajv accepts 512 astral
+  Unicode code points under the public `maxLength: 512`, while runtime/store reject
+  the same value because `value.length` counts 1024 UTF-16 code units at
+  `packages/connections/src/schema.mjs:571-579`. Evidence is in
+  `independent-probes.json:161-168` and the critic summary.
+- Independent lifecycle evidence in
+  `evidence/e5-t02-critic-20260820-tenth/independent-lifecycle.json` passed revision
+  capture, rotate fencing, disable/delete grant fencing, tombstones, duplicate and
+  reordered replay, and foreign/unknown authorization parity with new IDs and zero
+  findings. Sensitivity evidence in `sensitivity.json` removed the provider-token
+  detector branch in a disposable exact-head worktree; `make verify-E5-T02` exited 2
+  at the event-boundary assertion, proving the detector is sensitive.
+- Status remains `refuted` pending product rework and another fresh critic.

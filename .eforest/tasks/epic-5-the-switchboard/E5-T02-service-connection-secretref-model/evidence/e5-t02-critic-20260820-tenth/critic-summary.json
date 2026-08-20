@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "verdict": "refuted",
+  "auditedHead": "b2523f50d5b9f047a05fe62fcf9d1c915540dfb9",
+  "builderProductCommit": "a0ec965684fd0461c684e5acce37110a9d9c3475",
+  "findings": [
+    {
+      "id": "E5-T02-CRITIC-TENTH-ASSIGNMENT-BOUNDARY-001",
+      "severity": "high",
+      "title": "Embedded client-secret assignment values cross runtime/store boundaries",
+      "prediction": "client-secret, client_secret, and client secret assignment-shaped values are rejected in every free-form runtime and store path before append",
+      "observation": "prefix-client-secret=redacted and prefix_client_secret=redacted were accepted by normalizeMetadata, normalizeReason, normalizeConnectionDefinition, normalizeConnectionEvent, and createConnectionStore; each store probe appended one event. The exact unprefixed, case-variant, and whitespace-separated forms were rejected.",
+      "source": {
+        "runtime": "packages/connections/src/schema.mjs:40",
+        "publicSchema": "packages/connections/src/schemas/connection-events.v1.schema.json:119",
+        "evidence": "independent-probes.json:18-156"
+      },
+      "impact": "The runtime assignment detector requires a boundary before client-secret; a hyphen or underscore prefix bypasses it, while the public schema rejects the same value. A raw assignment-shaped value can therefore be appended by the authoritative store.",
+      "reproducible": true
+    },
+    {
+      "id": "E5-T02-CRITIC-TENTH-METADATA-WIDTH-002",
+      "severity": "medium",
+      "title": "Runtime metadata width is unbounded relative to the public schema",
+      "prediction": "The runtime/store and public schema agree at the 64-property metadata boundary",
+      "observation": "A 65-property safe metadata object was accepted by normalizeMetadata and createConnectionStore, with one event appended; Ajv rejected it at metadata maxProperties 64.",
+      "source": {
+        "runtime": "packages/connections/src/schema.mjs:632-649",
+        "publicSchema": "packages/connections/src/schemas/connection-events.v1.schema.json:189-193",
+        "evidence": "independent-probes.json:140-158"
+      },
+      "impact": "The canonical runtime/store boundary does not enforce the public resource bound, so schema-only and runtime callers have different accepted metadata policies.",
+      "reproducible": true
+    },
+    {
+      "id": "E5-T02-CRITIC-TENTH-METADATA-LENGTH-003",
+      "severity": "medium",
+      "title": "Astral metadata strings have different runtime and public length semantics",
+      "prediction": "A 512-character metadata string has the same result in runtime/store and Ajv",
+      "observation": "A string containing 512 astral Unicode code points was accepted by the public schema but rejected by runtime normalization because JavaScript value.length counts 1024 UTF-16 code units; the store therefore rejects it as well.",
+      "source": {
+        "runtime": "packages/connections/src/schema.mjs:571-579",
+        "publicSchema": "packages/connections/src/schemas/connection-events.v1.schema.json:205-208",
+        "evidence": "independent-probes.json:161-168,15739-15762"
+      },
+      "impact": "The published schema and canonical runtime disagree on the documented metadata string limit, creating a non-deterministic API boundary for valid Unicode labels.",
+      "reproducible": true
+    }
+  ],
+  "passedControls": [
+    "exact client-secret, client_secret, and client secret assignment forms across runtime/store/public schema",
+    "eight Unicode format controls inserted into URL-shaped and URL-safe/base64-shaped values",
+    "Unicode-escaped and case-variant JSON credential keys",
+    "metadata nesting boundary including accepted and rejected object/array boundaries",
+    "new-ID lifecycle capture, immutable run revision, rotate fence, disable/delete grant fence, tombstone, duplicate/reordered replay, and authz parity",
+    "provider-token detector sensitivity mutation",
+    "cold verifier replay parity and leak scan"
+  ],
+  "replay": "Replay: N/A (server connection model) + mitigation: cold-clone reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle digests, independent Ajv/runtime/store probes, Unicode-control matrix, and detector-sensitivity mutation",
+  "canaryValuesPersisted": false,
+  "productSourceChangedByCritic": false,
+  "pinnedEmulateSubmoduleChanged": false
+}

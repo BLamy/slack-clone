@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E5-T02",
-  "runId": "e5-t02-rework-a0974db",
-  "implementationCommit": "a0974dbc743870d4256aa89642fbf732567ce57d",
+  "runId": "e5-t02-final-5f248f7",
+  "implementationCommit": "5f248f71b9ef073d866abf7e13302320e50387bb",
   "result": "PASS",
   "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
   "replay": {
@@ -20,7 +20,7 @@
       {
         "name": "base64-provider-token",
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
-        "path": "$.connection.metadata.encodedProviderToken"
+        "path": "$.connection.metadata.encodedValue"
       },
       {
         "name": "json",
@@ -71,9 +71,17 @@
     "stateDigestUnchanged": true
   },
   "sensitivity": {
-    "branchRemoved": "URL and connection-string value detector",
-    "mutatedFixtureAccepted": true,
-    "verifierWouldTurnRed": true
+    "url": {
+      "branchRemoved": "URL and connection-string value detector",
+      "mutatedFixtureAccepted": true,
+      "verifierWouldTurnRed": true
+    },
+    "providerToken": {
+      "branchRemoved": "provider-token value detector",
+      "fixtureKey": "encodedValue",
+      "mutatedFixtureAccepted": true,
+      "verifierWouldTurnRed": true
+    }
   },
   "canaryScan": {
     "leaked": false,

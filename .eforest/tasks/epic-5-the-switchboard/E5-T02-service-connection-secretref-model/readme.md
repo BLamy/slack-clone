@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: refuted
+status: implemented
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -205,3 +205,31 @@ material and version policy; it is not a URI that clients can dereference themse
   rotation, disable/delete fencing, foreign-versus-unknown typed-error equality, and
   duplicate/reordered replay parity all passed. These do not close the four findings
   above. Status remains `refuted` pending rework and another fresh critic.
+
+### Builder — second rework complete — 2026-08-19
+
+- Commit: `5f248f71b9ef073d866abf7e13302320e50387bb`.
+- Rework: run captures now bind one immutable revision per connection/run key before
+  rotation or terminal fencing; event normalization scans the complete envelope before
+  append; and the public JSON Schema recursively rejects case-variant credential keys,
+  values, URLs, provider-token shapes, and secret-shaped labels/opaque ids.
+- Independent verifier controls now include a provider-token event-id boundary probe and
+  a provider-token detector mutation with the neutral `encodedValue` fixture key, so
+  removing that detector branch makes the verifier red instead of being masked by a
+  credential-shaped metadata key.
+- Commands: `pnpm format:check`; `pnpm format:check:e5-t02`; `pnpm lint`;
+  `pnpm typecheck`; `pnpm test` (205 unit and 15 integration tests passed); and
+  `pnpm build`.
+- Local verifier: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e5-t02-final-5f248f7 make
+  verify-E5-T02` passed with state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`, and
+  `leaked: false`.
+- Evidence: `evidence/e5-t02-final/` was regenerated against this exact commit and
+  records the new event-boundary and detector-sensitivity controls.
+- Replay: N/A (server connection model) + mitigation: cold-clone reducer replay,
+  secret-shaped input corpus, authz matrix, exact lifecycle digests, and independent
+  negative-path probes.
+- Claim: the second critic's four findings are addressed and E5-T02 is ready for a
+  fresh independent verdict.

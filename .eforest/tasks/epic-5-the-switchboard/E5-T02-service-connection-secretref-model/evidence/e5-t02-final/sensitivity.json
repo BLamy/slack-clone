@@ -1,5 +1,13 @@
 {
-  "branchRemoved": "URL and connection-string value detector",
-  "mutatedFixtureAccepted": true,
-  "verifierWouldTurnRed": true
+  "url": {
+    "branchRemoved": "URL and connection-string value detector",
+    "mutatedFixtureAccepted": true,
+    "verifierWouldTurnRed": true
+  },
+  "providerToken": {
+    "branchRemoved": "provider-token value detector",
+    "fixtureKey": "encodedValue",
+    "mutatedFixtureAccepted": true,
+    "verifierWouldTurnRed": true
+  }
 }

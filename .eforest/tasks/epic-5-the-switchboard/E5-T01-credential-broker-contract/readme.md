@@ -3,7 +3,7 @@ id: E5-T01
 epic: 5
 title: "Credential broker contract: Infisical Agent Proxy in production, Agent Vault locally, and no raw-secret orchestration path"
 priority: 501
-status: pending
+status: in-progress
 depends_on: [E3]
 estimate: L
 capstone: false

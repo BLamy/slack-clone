@@ -84,7 +84,7 @@
           "pattern": "\\b(?:[Ss][Kk]|[Rr][Kk]|[Pp][Kk]|[Gg][Hh][Pp]|[Gg][Ii][Tt][Hh][Uu][Bb]_[Pp][Aa][Tt]|[Xx][Oo][Xx][Bb][AaPpRrSs])[-_][A-Za-z0-9._~+/=-]{8,}\\b"
         },
         {
-          "pattern": "(?:[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Tt][Oo][Kk][Ee][Nn]|[Ss][Ee][Cc][Rr][Ee][Tt]|[Cc][Ll][Ii][Ee][Nn][Tt][\\s_-]?[Ss][Ee][Cc][Rr][Ee][Tt]|[Aa][Pp][Ii][-_]?[Kk][Ee][Yy]|[Pp][Rr][Ii][Vv][Aa][Tt][Ee][-_ ]?[Kk][Ee][Yy]|[Cc][Oo][Oo][Kk][Ii][Ee]|[Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn])\\s*[:=]"
+          "pattern": "(?:^|[^A-Za-z0-9])(?:[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Tt][Oo][Kk][Ee][Nn]|[Ss][Ee][Cc][Rr][Ee][Tt]|[Cc][Ll][Ii][Ee][Nn][Tt][\\s_-]?[Ss][Ee][Cc][Rr][Ee][Tt]|[Aa][Pp][Ii][-_]?[Kk][Ee][Yy]|[Pp][Rr][Ii][Vv][Aa][Tt][Ee][-_ ]?[Kk][Ee][Yy]|[Cc][Oo][Oo][Kk][Ii][Ee]|[Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn])\\s*[:=]"
         },
         {
           "pattern": "\\b(?:[Hh][Tt][Tt][Pp][Ss]?|[Ss][Ss][Hh]|[Pp][Oo][Ss][Tt][Gg][Rr][Ee][Ss](?:[Qq][Ll])?|[Mm][Yy][Ss][Qq][Ll]|[Rr][Ee][Dd][Ii][Ss]|[Mm][Oo][Nn][Gg][Oo][Dd][Bb](?:\\+[Ss][Rr][Vv])?|[Aa][Mm][Qq][Pp]):\\/\\/\\S+"
@@ -116,7 +116,7 @@
           "pattern": "\\b(?:[Ss][Kk]|[Rr][Kk]|[Pp][Kk]|[Gg][Hh][Pp]|[Gg][Ii][Tt][Hh][Uu][Bb]_[Pp][Aa][Tt]|[Xx][Oo][Xx][Bb][AaPpRrSs])[-_][A-Za-z0-9._~+/=-]{8,}\\b"
         },
         {
-          "pattern": "(?:[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Tt][Oo][Kk][Ee][Nn]|[Ss][Ee][Cc][Rr][Ee][Tt]|[Cc][Ll][Ii][Ee][Nn][Tt][\\s_-]?[Ss][Ee][Cc][Rr][Ee][Tt]|[Aa][Pp][Ii][-_]?[Kk][Ee][Yy]|[Pp][Rr][Ii][Vv][Aa][Tt][Ee][-_ ]?[Kk][Ee][Yy]|[Cc][Oo][Oo][Kk][Ii][Ee]|[Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn])\\s*[:=]"
+          "pattern": "(?:^|[^A-Za-z0-9])(?:[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Tt][Oo][Kk][Ee][Nn]|[Ss][Ee][Cc][Rr][Ee][Tt]|[Cc][Ll][Ii][Ee][Nn][Tt][\\s_-]?[Ss][Ee][Cc][Rr][Ee][Tt]|[Aa][Pp][Ii][-_]?[Kk][Ee][Yy]|[Pp][Rr][Ii][Vv][Aa][Tt][Ee][-_ ]?[Kk][Ee][Yy]|[Cc][Oo][Oo][Kk][Ii][Ee]|[Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn])\\s*[:=]"
         },
         {
           "pattern": "\\b(?:[Hh][Tt][Tt][Pp][Ss]?|[Ss][Ss][Hh]|[Pp][Oo][Ss][Tt][Gg][Rr][Ee][Ss](?:[Qq][Ll])?|[Mm][Yy][Ss][Qq][Ll]|[Rr][Ee][Dd][Ii][Ss]|[Mm][Oo][Nn][Gg][Oo][Dd][Bb](?:\\+[Ss][Rr][Vv])?|[Aa][Mm][Qq][Pp]):\\/\\/\\S+"

@@ -37,7 +37,7 @@ const CREDENTIAL_VALUE_PATTERNS = [
   /-----BEGIN [^-]*PRIVATE KEY-----/iu,
   /\b(?:bearer|basic)\s+[A-Za-z0-9._~+/=-]{8,}/iu,
   /\b(?:sk|rk|pk|ghp|github_pat|xox[baprs])[-_][A-Za-z0-9._~+/=-]{8,}\b/iu,
-  /(?:^|[\s{[,;])(?:password|token|secret|client[\s_-]?secret|api[_-]?key|private[_-]?key|cookie|authorization)\s*[:=]/iu,
+  /(?:^|[^A-Za-z0-9])(?:password|token|secret|client[\s_-]?secret|api[_-]?key|private[_-]?key|cookie|authorization)\s*[:=]/iu,
   /\b(?:https?|ssh|postgres(?:ql)?|mysql|redis|mongodb(?:\+srv)?|amqp):\/\/\S+/iu,
   /(?:^|[\s;])(?:host|user|username|password|port)\s*=\s*[^;]+/iu,
 ];
@@ -453,7 +453,7 @@ export function normalizeReason(value, path = "$.reason") {
   assertNoCredentialMaterial(normalized, path);
   if (
     typeof normalized !== "string" ||
-    normalized.length > 160 ||
+    [...normalized].length > 160 ||
     hasControlCharacter(normalized)
   ) {
     throw connectionError(
@@ -569,7 +569,7 @@ function normalizeMetadataValue(value, path, depth, seen) {
   }
   if (value === null) return null;
   if (typeof value === "string") {
-    if (value.length > 512 || hasControlCharacter(value)) {
+    if ([...value].length > 512 || hasControlCharacter(value)) {
       throw connectionError(
         CONNECTION_ERROR_CODES.INVALID_REQUEST,
         "metadata strings must be bounded printable labels",
@@ -629,8 +629,16 @@ function normalizeMetadataValue(value, path, depth, seen) {
   }
   seen.add(value);
   try {
+    const entries = Object.entries(value);
+    if (entries.length > 64) {
+      throw connectionError(
+        CONNECTION_ERROR_CODES.INVALID_REQUEST,
+        "metadata objects are too large",
+        { path },
+      );
+    }
     const output = {};
-    for (const [key, nested] of Object.entries(value)) {
+    for (const [key, nested] of entries) {
       if (isCredentialKey(key, { allowSecretRef: false })) {
         throw connectionError(
           CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,

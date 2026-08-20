@@ -17,6 +17,7 @@ import {
   CONNECTION_ERROR_CODES,
   canonicalSha256,
   createConnectionStore,
+  normalizeMetadata,
   normalizeConnectionEvent,
   normalizeOpaqueIdForStore,
   normalizeOwner,
@@ -349,6 +350,14 @@ function secretCorpusFixture() {
     ["url", { endpoint: "https://user:password@example.invalid/service" }],
     ["client-secret-assignment", { assignment: "client-secret=redacted" }],
     [
+      "client-secret-prefixed-hyphen",
+      { assignment: "prefix-client-secret=redacted" },
+    ],
+    [
+      "client-secret-prefixed-underscore",
+      { assignment: "prefix_client_secret=redacted" },
+    ],
+    [
       "multiline-private-key",
       {
         material:
@@ -419,6 +428,38 @@ function secretCorpusFixture() {
   assert.equal(depthError?.code, CONNECTION_ERROR_CODES.INVALID_REQUEST);
   assert.equal(store.events().length, 0);
 
+  const tooWide = Object.fromEntries(
+    Array.from({ length: 65 }, (_, index) => ["key" + index, index]),
+  );
+  let widthError;
+  try {
+    store.create({
+      actor: ADMIN,
+      connectionId: "c-metadata-width",
+      owner: { kind: "workspace", id: SCOPE.workspaceId },
+      provider: "github",
+      integration: "issues",
+      label: "Rejected metadata width",
+      metadata: tooWide,
+      secretRef: secretRef(1),
+      idempotencyKey: "a-metadata-width",
+    });
+  } catch (caught) {
+    widthError = caught;
+  }
+  assert.equal(widthError?.code, CONNECTION_ERROR_CODES.INVALID_REQUEST);
+  assert.equal(store.events().length, 0);
+
+  const astral512 = { label: "🧪".repeat(512) };
+  assert.deepEqual(normalizeMetadata(astral512), astral512);
+  let astralError;
+  try {
+    normalizeMetadata({ label: "🧪".repeat(513) });
+  } catch (caught) {
+    astralError = caught;
+  }
+  assert.equal(astralError?.code, CONNECTION_ERROR_CODES.INVALID_REQUEST);
+
   const refAttacks = [
     ["token-field", { token: "redacted-token-value" }],
     ["password-field", { password: "redacted-password-value" }],
@@ -453,6 +494,15 @@ function secretCorpusFixture() {
       rejected: true,
       code: depthError.code,
       path: depthError.path,
+    },
+    metadataResourceBounds: {
+      width65: { rejected: true, code: widthError.code, path: widthError.path },
+      astral512CodePoints: { accepted: true },
+      astral513CodePoints: {
+        rejected: true,
+        code: astralError.code,
+        path: astralError.path,
+      },
     },
     appendedEvents: store.events().length,
     rawValuesPersisted: false,

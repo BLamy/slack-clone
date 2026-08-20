@@ -86,6 +86,8 @@ test("connection metadata rejects encoded, URL, JSON, nested, and confusable sec
     { metadata: { encodedValue: "ghp_" + "A".repeat(32) } },
     { metadata: { endpoint: "https://user:password@example.invalid" } },
     { metadata: { assignment: "client-secret=raw-client-secret" } },
+    { metadata: { assignment: "prefix-client-secret=raw-client-secret" } },
+    { metadata: { assignment: "prefix_client_secret=raw-client-secret" } },
     { metadata: { payload: '{"token":"raw-token-value"}' } },
     { metadata: { escapedPayload: '{"\\u0074oken":"raw-token-value"}' } },
     { metadata: { nested: { password: "raw-password" } } },
@@ -143,6 +145,31 @@ test("connection metadata enforces the public nesting boundary", () => {
         },
       },
     },
+  );
+});
+
+test("connection metadata resource bounds match Unicode schema semantics", () => {
+  const tooWide = Object.fromEntries(
+    Array.from({ length: 65 }, (_, index) => ["key" + index, index]),
+  );
+  assert.throws(
+    () => definition({ metadata: tooWide }),
+    (error) => error.code === CONNECTION_ERROR_CODES.INVALID_REQUEST,
+  );
+
+  const astralMetadata = { label: "🧪".repeat(512) };
+  assert.deepEqual(
+    definition({ metadata: astralMetadata }).metadata,
+    astralMetadata,
+  );
+  assert.throws(
+    () => definition({ metadata: { label: "🧪".repeat(513) } }),
+    (error) => error.code === CONNECTION_ERROR_CODES.INVALID_REQUEST,
+  );
+  assert.equal(normalizeReason("🧪".repeat(160)), "🧪".repeat(160));
+  assert.throws(
+    () => normalizeReason("🧪".repeat(161)),
+    (error) => error.code === CONNECTION_ERROR_CODES.INVALID_REQUEST,
   );
 });
 

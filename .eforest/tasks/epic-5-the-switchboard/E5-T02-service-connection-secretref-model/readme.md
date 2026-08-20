@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: refuted
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -1396,3 +1396,49 @@ VERDICT: refuted
   canary scan, and disposable detector/schema sensitivity coverage.
 - Claim: the latest critic's verifier-sensitivity finding is addressed. E5-T02 is
   implemented and ready for another fresh critic.
+
+### Critic — fresh exact-head public-token parity review — 2026-08-20
+
+- VERDICT: refuted.
+- Exact head: `5d35c6631978583de5d68822ddceb23c8a0ab2cb`; product and verifier
+  ancestor: `9faf35526a5c9cdba0bff32c4359b365599e37b6`. The target checkout was
+  clean at orientation and `emulate` remained pinned at
+  `9a62e23a55dd01d3086e7e0aaa5bb755c7814fe7`.
+- Gates: `pnpm install --frozen-lockfile`; `pnpm format:check`;
+  `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`; `pnpm test`
+  (209 unit and 15 integration/Playwright tests); `pnpm build`; and
+  `git diff --check` all passed. See
+  `evidence/e5-t02-critic-20260820-5d35c66/gate-summary.json`.
+- Cold exact verifier: `TEST_RUN_ID=e5-t02-critic-5d35c66-cold-20260820
+  TEST_ARTIFACT_DIR=.../work/critic-5d35c66-cold make verify-E5-T02` passed
+  with state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`,
+  duplicate/reordered parity, and `leaked: false`.
+- Finding `E5-T02-CRITIC-5D35C66-001` (high): an independent 78-case
+  runtime/store/Ajv matrix found 13 public-schema mismatches. Ajv accepted
+  mixed and double percent-encoded `sk`, `rk`, `pk`, `github_pat`, and
+  `xox[baprs]` prefixes plus a double percent-encoded `ghp` prefix, while
+  runtime/store rejected each with `CONNECTION_CREDENTIAL_MATERIAL` and
+  appended zero events. This violates the public schema parity and
+  pre-append credential rejection criteria. Redacted results and the runnable
+  probe are in
+  `evidence/e5-t02-critic-20260820-5d35c66/independent-probes.json` and
+  `.mjs`.
+- Independent lifecycle/replay/authz/bounds/leakage checks passed: captured
+  revisions were `[1, 2, 1]`, duplicate/reordered replay matched the store
+  digest, foreign and unknown ids returned `CONNECTION_NOT_FOUND`, bounds
+  rejected as specified, and the synthetic canary was not persisted. See
+  `evidence/e5-t02-critic-20260820-5d35c66/lifecycle-authz.json`.
+- Sensitivity passed: removing only the public
+  `percentEncodedCredentialShape` reference made the exact verifier exit 2
+  on `percent-json-key`; removing only the runtime provider-token detector
+  made it exit 2 on the expected credential-material assertion. See
+  `schema-sensitivity.json` and `runtime-sensitivity.json`.
+- Replay: N/A (server connection model) + mitigation: detached exact-head cold
+  replay, full gates, independent public-schema/runtime/store probes, lifecycle,
+  authz, bounds, leakage, and disposable schema/runtime mutations.
+- Status remains `refuted`; E5-T03 must not start until the public schema covers
+  the independently found encoded token forms and another fresh critic reviews
+  the exact rework.

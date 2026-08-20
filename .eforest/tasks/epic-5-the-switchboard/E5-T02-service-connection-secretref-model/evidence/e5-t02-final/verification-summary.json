@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E5-T02",
-  "runId": "e5-t02-final-22fa467",
-  "implementationCommit": "22fa4673d8e7b910fcc0b9da3e262f85ccbcf36a",
+  "runId": "e5-t02-final-e0cba21",
+  "implementationCommit": "e0cba219821a43db91da91252f9c28d7f370f8d8",
   "result": "PASS",
   "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
   "replay": {
@@ -38,12 +38,22 @@
         "path": "$.connection.metadata.encodedUrlSafe"
       },
       {
+        "name": "base64url-zero-width",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedUrlSafe"
+      },
+      {
         "name": "provider-token",
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
         "path": "$.connection.metadata.encodedValue"
       },
       {
         "name": "json",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.payload"
+      },
+      {
+        "name": "escaped-json",
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
         "path": "$.connection.metadata.payload"
       },

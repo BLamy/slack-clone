@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: refuted
+status: implemented
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -828,3 +828,32 @@ material and version policy; it is not a URI that clients can dereference themse
   replay, full gate transcript, independent runtime/store/Ajv probes, lifecycle and
   capture checks, authz matrix, recursive leak scan, and detector-sensitivity mutation.
   Status remains `refuted` pending builder rework and another fresh critic.
+
+### Builder — hidden format and escaped JSON boundary rework — 2026-08-20
+
+- Commit: `e0cba219821a43db91da91252f9c28d7f370f8d8`.
+- Rework: credential classification now compares an NFKC-normalized candidate with
+  Unicode format controls removed, catching invisible characters inserted into
+  encoded values and credential-shaped JSON while preserving the identifier
+  generic-base64 compatibility policy. The public schema mirrors the runtime with
+  format-control-aware encoded-value and JSON-key patterns for both free-form values
+  and explicit identifier credential shapes.
+- Regression controls: unit and verifier fixtures cover zero-width URL-safe values
+  and Unicode-escaped JSON credential keys, alongside the previous whitespace,
+  canonical 23-character, and long opaque-ID cases.
+- Commands: `pnpm format:check`; `pnpm format:check:e5-t02`; `pnpm lint`;
+  `pnpm typecheck`; `pnpm test` (207 unit and 15 integration/Playwright tests
+  passed); and `pnpm build`.
+- Local verifier: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e5-t02-final-e0cba21 make
+  verify-E5-T02` passed with state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`,
+  and `leaked: false`.
+- Evidence: `evidence/e5-t02-final/` was regenerated against this exact commit;
+  the updated secret corpus includes zero-width and escaped-JSON cases.
+- Replay: N/A (server connection model) + mitigation: cold-clone reducer replay,
+  secret-shaped input corpus, authz matrix, exact lifecycle digests, independent
+  schema/runtime probes, capture-race probes, and detector-sensitivity mutation.
+- Claim: the eighth critic's hidden-format and escaped-JSON findings are addressed,
+  and E5-T02 is ready for another fresh final critic.

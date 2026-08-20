@@ -8,6 +8,9 @@ import {
   createConnectionStore,
   normalizeConnectionDefinition,
   normalizeConnectionEvent,
+  normalizeOpaqueIdForStore,
+  normalizeOwner,
+  normalizePrincipal,
   normalizeSecretRef,
   replayConnectionEvents,
 } from "@stream-slack/connections";
@@ -107,6 +110,49 @@ test("event boundaries reject credential-shaped opaque identifiers", () => {
           secretRef: ref(1),
           revision: 1,
         },
+      }),
+    (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
+  );
+});
+
+test("runtime identifier APIs reject provider-token-shaped values", () => {
+  const providerToken = "ghp_" + "a".repeat(32);
+  assert.throws(
+    () => normalizeOpaqueIdForStore(providerToken, "$.runId"),
+    (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
+  );
+  assert.throws(
+    () =>
+      normalizePrincipal({
+        ...SCOPE,
+        id: providerToken,
+        kind: "user",
+        role: "admin",
+      }),
+    (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
+  );
+  assert.throws(
+    () => normalizeOwner({ kind: "workspace", id: providerToken }),
+    (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
+  );
+  const store = makeStore();
+  store.create({
+    actor: ADMIN,
+    connectionId: "connection-api-identifier",
+    owner: { kind: "workspace", id: SCOPE.workspaceId },
+    provider: "github",
+    integration: "issues",
+    label: "API identifier",
+    metadata: {},
+    secretRef: ref(1),
+    idempotencyKey: "create-api-identifier",
+  });
+  assert.throws(
+    () =>
+      store.captureForRun({
+        actor: ADMIN,
+        connectionId: "connection-api-identifier",
+        runId: providerToken,
       }),
     (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
   );

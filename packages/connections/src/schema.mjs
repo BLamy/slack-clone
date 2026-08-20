@@ -711,6 +711,7 @@ function assertSchemaVersion(value, path, codeName) {
 }
 
 function normalizeIdentifier(value, path, code) {
+  assertNoCredentialMaterial(value, path);
   if (typeof value !== "string" || !IDENTIFIER_PATTERN.test(value)) {
     throw connectionError(code, "identifier is invalid", { path });
   }
@@ -718,6 +719,7 @@ function normalizeIdentifier(value, path, code) {
 }
 
 function normalizeOpaqueId(value, path, code) {
+  assertNoCredentialMaterial(value, path);
   if (
     typeof value !== "string" ||
     !OPAQUE_ID_PATTERN.test(value) ||

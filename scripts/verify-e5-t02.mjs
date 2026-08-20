@@ -18,6 +18,9 @@ import {
   canonicalSha256,
   createConnectionStore,
   normalizeConnectionEvent,
+  normalizeOpaqueIdForStore,
+  normalizeOwner,
+  normalizePrincipal,
   normalizeSecretRef,
   replayConnectionEvents,
 } from "@stream-slack/connections";
@@ -76,6 +79,7 @@ assert.equal(first.replayViewDigest, second.replayViewDigest);
 const corpus = secretCorpusFixture();
 const authz = authorizationFixture();
 const captureKeyCollision = captureKeyCollisionFixture();
+const apiIdentifierBoundary = apiIdentifierBoundaryFixture();
 const sensitivity = {
   url: await detectorSensitivityFixture(),
   providerToken: await detectorProviderTokenSensitivityFixture(),
@@ -109,6 +113,7 @@ await writeJson("replay-digests.json", {
 await writeJson("secret-corpus.json", corpus);
 await writeJson("authz-matrix.json", authz);
 await writeJson("capture-key-binding.json", captureKeyCollision);
+await writeJson("api-identifier-boundary.json", apiIdentifierBoundary);
 await writeJson("sensitivity.json", sensitivity);
 await writeJson("cold-clone-transcript.json", {
   schemaVersion: 1,
@@ -153,6 +158,7 @@ await writeJson("verification-summary.json", {
   },
   authorization: authz.summary,
   captureKeyCollision,
+  apiIdentifierBoundary,
   sensitivity,
   canaryScan: {
     leaked: finalScan.leaked,
@@ -474,6 +480,103 @@ function captureKeyCollisionFixture() {
       runId: second.runId,
       revision: second.revision,
     },
+  };
+}
+
+function apiIdentifierBoundaryFixture() {
+  const providerToken = "ghp_" + "a".repeat(32);
+  const rejected = {};
+  const assertions = [
+    [
+      "opaque-store-id",
+      () => normalizeOpaqueIdForStore(providerToken, "$.runId"),
+    ],
+    [
+      "principal-id",
+      () =>
+        normalizePrincipal({
+          ...SCOPE,
+          id: providerToken,
+          kind: "user",
+          role: "admin",
+        }),
+    ],
+    [
+      "principal-workspace-id",
+      () =>
+        normalizePrincipal({
+          ...MEMBER,
+          workspaceId: providerToken,
+        }),
+    ],
+    [
+      "owner-id",
+      () => normalizeOwner({ kind: "workspace", id: providerToken }),
+    ],
+  ];
+  for (const [name, action] of assertions) {
+    let error;
+    try {
+      action();
+    } catch (caught) {
+      error = caught;
+    }
+    assert.equal(error?.code, CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL);
+    rejected[name] = { code: error.code, path: error.path };
+  }
+
+  const store = makeStore();
+  store.create({
+    actor: ADMIN,
+    connectionId: "connection-api-identifier",
+    owner: { kind: "workspace", id: SCOPE.workspaceId },
+    provider: "github",
+    integration: "issues",
+    label: "API identifier",
+    metadata: {},
+    secretRef: secretRef(1),
+    idempotencyKey: "create-api-identifier",
+  });
+  const before = store.events().length;
+  let captureError;
+  try {
+    store.captureForRun({
+      actor: ADMIN,
+      connectionId: "connection-api-identifier",
+      runId: providerToken,
+    });
+  } catch (caught) {
+    captureError = caught;
+  }
+  assert.equal(captureError?.code, CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL);
+  assert.equal(store.events().length, before);
+  let authorizationError;
+  try {
+    store.authorization({
+      actor: { ...ADMIN, id: providerToken },
+      connectionId: "connection-api-identifier",
+    });
+  } catch (caught) {
+    authorizationError = caught;
+  }
+  assert.equal(
+    authorizationError?.code,
+    CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
+  );
+  const authorization = {
+    allowed: false,
+    code: authorizationError.code,
+    path: authorizationError.path,
+  };
+  return {
+    rejected,
+    capture: {
+      code: captureError.code,
+      path: captureError.path,
+      appendedBefore: before,
+      appendedAfter: store.events().length,
+    },
+    authorization,
   };
 }
 

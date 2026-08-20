@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T01",
+  "runId": "e5-t01-final-commit",
+  "implementationCommit": "6d8da0c7b20755cfb7adbc5b85641e6b98de16f7",
+  "result": "PASS",
+  "stateDigest": "sha256:cf6eebbae78c7dbf3447b060ec2d355a018d990628789a7e2e71955e521bb5ef",
+  "auditDigest": "sha256:1e69f64bb7b1939a41b9e900d81b2368df1eb2df953e9e1fde004412651ef043",
+  "replayParity": {
+    "stateDigestEqual": true,
+    "auditDigestEqual": true,
+    "publicSnapshotEqual": true
+  },
+  "providerModeRefusals": {
+    "refusals": [
+      {
+        "attack": "agent-vault-in-production",
+        "code": "CREDENTIAL_BROKER_LOCAL_PROVIDER_IN_PRODUCTION"
+      },
+      {
+        "attack": "ordinary-caching-proxy",
+        "code": "CREDENTIAL_BROKER_PROVIDER_UNSUPPORTED"
+      },
+      {
+        "attack": "generic-token-client-without-handshake",
+        "code": "CREDENTIAL_BROKER_PROVIDER_HANDSHAKE_REQUIRED"
+      }
+    ]
+  },
+  "sensitivity": {
+    "findings": [
+      {
+        "attack": "changed-binding",
+        "code": "CREDENTIAL_BROKER_CAPABILITY_BINDING_MISMATCH"
+      },
+      {
+        "attack": "changed-request",
+        "code": "CREDENTIAL_BROKER_CAPABILITY_REQUEST_MISMATCH"
+      }
+    ]
+  },
+  "canaryScan": {
+    "leaked": false,
+    "filesChecked": [
+      "audit-events.json",
+      "broker-state.json",
+      "cold-clone-transcript.json",
+      "provider-mode-refusals.json",
+      "replay-digests.json",
+      "sensitivity.json"
+    ]
+  },
+  "replay": "Replay: N/A (headless credential broker) + mitigation: cold-clone state replay, canary scans, provider-mode refusal fixtures, and gated real Infisical Agent Proxy transcript"
+}

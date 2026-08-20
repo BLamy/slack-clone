@@ -1,0 +1,12 @@
+{
+  "findings": [
+    {
+      "attack": "changed-binding",
+      "code": "CREDENTIAL_BROKER_CAPABILITY_BINDING_MISMATCH"
+    },
+    {
+      "attack": "changed-request",
+      "code": "CREDENTIAL_BROKER_CAPABILITY_REQUEST_MISMATCH"
+    }
+  ]
+}

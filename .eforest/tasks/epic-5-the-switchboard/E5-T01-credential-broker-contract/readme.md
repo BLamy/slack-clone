@@ -3,7 +3,7 @@ id: E5-T01
 epic: 5
 title: "Credential broker contract: Infisical Agent Proxy in production, Agent Vault locally, and no raw-secret orchestration path"
 priority: 501
-status: in-progress
+status: implemented
 depends_on: [E3]
 estimate: L
 capstone: false
@@ -65,3 +65,27 @@ on provider/mode ambiguity and expose only opaque, run-scoped handles to callers
    refutes provider attestation.
 
 ## Verification log
+
+### Builder — 2026-08-19
+
+- Commit: `6d8da0c7b20755cfb7adbc5b85641e6b98de16f7`.
+- Commands: `pnpm install --frozen-lockfile`; `pnpm format:check`; `pnpm lint`;
+  `pnpm typecheck`; `pnpm test:unit` (195 passed); `pnpm build`; `pnpm setup:emulate`;
+  `pnpm test:integration` (15 passed); and a detached cold worktree replay with
+  `make verify-E5-T01 TEST_RUN_ID=e5-t01-cold-final`.
+- Local verifier: `make verify-E5-T01 TEST_RUN_ID=e5-t01-final-commit` passed twice-
+  replay parity with state digest
+  `sha256:cf6eebbae78c7dbf3447b060ec2d355a018d990628789a7e2e71955e521bb5ef`, audit
+  digest `sha256:1e69f64bb7b1939a41b9e900d81b2368df1eb2df953e9e1fde004412651ef043`,
+  provider-mode refusals, binding/request sensitivity, and `leaked: false`.
+- Real gate: `make verify-E5-T01-real` exited 2 with `SKIPPED:` for missing explicit
+  Infisical Agent Proxy configuration; no Agent Vault or other fallback was used.
+- Evidence: `evidence/e5-t01-final/` and `evidence/e5-t01-real-skip/skipped.json`.
+  The committed evidence contains no canary plaintext.
+- Replay: N/A (headless credential broker) + mitigation: cold-clone state replay,
+  canary scans, provider-mode refusal fixtures, and gated real Infisical Agent Proxy
+  transcript.
+- Claim: E5-T01 is implemented and ready for a fresh critic. The public broker exposes
+  only run-bound opaque capabilities and redacted receipts; Agent Vault is local-only,
+  ordinary caching Proxy and generic token clients fail closed, and production transport
+  must be explicitly injected into the attested Agent Proxy adapter.

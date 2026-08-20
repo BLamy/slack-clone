@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "filesChecked": [
+    "audit-events.json",
+    "broker-state.json",
+    "cold-clone-transcript.json",
+    "provider-mode-refusals.json",
+    "replay-digests.json",
+    "sensitivity.json"
+  ],
+  "findings": [],
+  "leaked": false
+}

@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: refuted
+status: implemented
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -337,6 +337,33 @@ material and version policy; it is not a URI that clients can dereference themse
   envelope/schema/runtime probes, capture-race probes, and detector-sensitivity mutation.
 - Claim: all findings from the third critic are addressed and E5-T02 is ready for another
   fresh independent verdict.
+
+### Builder — fourth rework complete — 2026-08-19
+
+- Commit: `eef62d259c0a7f72b3d7cd5cfd175a8dc3bfc7f7`.
+- Rework: `normalizeIdentifier` and `normalizeOpaqueId` now run the credential detector
+  before accepting any identifier. This fences provider-token-shaped values used as
+  principal IDs, workspace/tenant IDs, owner IDs, authorization actors, or run IDs, not
+  just event metadata and opaque event IDs.
+- Regression controls: the unit suite and verifier now exercise each runtime identifier
+  API, verify rejection before capture/event movement, and record the typed error paths in
+  `api-identifier-boundary.json`.
+- Commands: `pnpm format:check`; `pnpm format:check:e5-t02`; `pnpm lint`;
+  `pnpm typecheck`; `pnpm test` (207 unit and 15 integration tests passed); and
+  `pnpm build`.
+- Local verifier: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e5-t02-final-eef62d2 make
+  verify-E5-T02` passed with state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`, and
+  `leaked: false`.
+- Evidence: `evidence/e5-t02-final/` was regenerated against this exact commit and now
+  includes `api-identifier-boundary.json`.
+- Replay: N/A (server connection model) + mitigation: cold-clone reducer replay,
+  secret-shaped input corpus, authz matrix, exact lifecycle digests, independent
+  envelope/schema/runtime probes, capture-race probes, and detector-sensitivity mutation.
+- Claim: the fourth critic's API identifier finding is addressed and E5-T02 is ready for
+  another fresh independent verdict.
 
 ### Critic — fourth independent review — 2026-08-19
 

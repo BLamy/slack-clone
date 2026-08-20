@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "filesChecked": [
+    "api-identifier-boundary.json",
     "authz-matrix.json",
     "canary-scan.json",
     "capture-key-binding.json",

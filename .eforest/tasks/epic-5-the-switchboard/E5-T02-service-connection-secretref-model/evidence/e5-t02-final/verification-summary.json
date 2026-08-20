@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E5-T02",
-  "runId": "e5-t02-final-74bc151",
-  "implementationCommit": "74bc1519379258de95a90a1868774e8139cd7b40",
+  "runId": "e5-t02-final-eef62d2",
+  "implementationCommit": "eef62d259c0a7f72b3d7cd5cfd175a8dc3bfc7f7",
   "result": "PASS",
   "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
   "replay": {
@@ -88,6 +88,37 @@
       "revision": 1
     }
   },
+  "apiIdentifierBoundary": {
+    "rejected": {
+      "opaque-store-id": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.runId"
+      },
+      "principal-id": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.principal.id"
+      },
+      "principal-workspace-id": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.principal.workspaceId"
+      },
+      "owner-id": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.owner.id"
+      }
+    },
+    "capture": {
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.runId",
+      "appendedBefore": 1,
+      "appendedAfter": 1
+    },
+    "authorization": {
+      "allowed": false,
+      "code": "CONNECTION_CREDENTIAL_MATERIAL",
+      "path": "$.actor.id"
+    }
+  },
   "sensitivity": {
     "url": {
       "branchRemoved": "URL and connection-string value detector",
@@ -104,6 +135,7 @@
   "canaryScan": {
     "leaked": false,
     "filesChecked": [
+      "api-identifier-boundary.json",
       "authz-matrix.json",
       "canary-scan.json",
       "capture-key-binding.json",

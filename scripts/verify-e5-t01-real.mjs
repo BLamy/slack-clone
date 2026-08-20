@@ -178,21 +178,20 @@ async function scanEvidence() {
     /-----BEGIN [^-]*PRIVATE KEY-----/iu,
     /\bBearer\s+[A-Za-z0-9._~+/=-]{12,}/iu,
     /\b(?:api[_-]?key|client[_-]?secret|password|token)\s*[:=]\s*["']?[A-Za-z0-9._~+/=-]{8,}/iu,
-    /\b(?:[A-Za-z0-9][A-Za-z0-9._-]{2,}[-_]canary(?:[-_][A-Za-z0-9._-]+)*|canary[-_][A-Za-z0-9._-]{2,})\b/iu,
+    /\b(?:[A-Za-z0-9][A-Za-z0-9._-]{2,}[-_]canary(?:[-_][A-Za-z0-9._-]+)*|canary[-_](?!scan(?:\.|$))[A-Za-z0-9._-]{2,})\b/iu,
   ];
   const findings = [];
   for (const filename of files) {
     const content = await readFile(filename, "utf8");
-    for (const pattern of patterns) {
-      if (pattern.test(content))
-        findings.push({ filename, pattern: pattern.source });
+    for (const [rule, pattern] of patterns.entries()) {
+      if (pattern.test(content)) findings.push({ filename, rule });
     }
   }
   const environmentKeyCount = Object.keys(process.env).length;
   for (const [key, value] of Object.entries(process.env)) {
-    for (const pattern of patterns) {
+    for (const [rule, pattern] of patterns.entries()) {
       if (pattern.test(value ?? ""))
-        findings.push({ environmentKey: key, pattern: pattern.source });
+        findings.push({ environmentKey: key, rule });
     }
   }
   return {

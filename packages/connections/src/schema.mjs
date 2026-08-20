@@ -720,12 +720,17 @@ function normalizeCredentialCandidate(value) {
 }
 
 function decodeCredentialCandidate(value) {
-  const normalized = value.normalize("NFKC");
-  try {
-    return decodeURIComponent(normalized).normalize("NFKC");
-  } catch {
-    return normalized;
+  let candidate = value.normalize("NFKC");
+  for (let pass = 0; pass < 2; pass += 1) {
+    try {
+      const decoded = decodeURIComponent(candidate).normalize("NFKC");
+      if (decoded === candidate) break;
+      candidate = decoded;
+    } catch {
+      break;
+    }
   }
+  return candidate;
 }
 
 function securityNormalize(value) {

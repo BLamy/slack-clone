@@ -348,6 +348,10 @@ function secretCorpusFixture() {
       { payload: '{"%74oken":"e5-t02-connection-canary-value"}' },
     ],
     [
+      "double-percent-json-key",
+      { payload: '{"%2574oken":"e5-t02-connection-canary-value"}' },
+    ],
+    [
       "escaped-json",
       { payload: '{"\\u0074oken":"e5-t02-connection-canary-value"}' },
     ],
@@ -357,6 +361,12 @@ function secretCorpusFixture() {
       "percent-client-secret-assignment",
       { assignment: "client%2Dsecret=redacted" },
     ],
+    [
+      "double-percent-client-secret-assignment",
+      { assignment: "client%252Dsecret%253Dredacted" },
+    ],
+    ["percent-url", { endpoint: "h%74tps%3A%2F%2Fexample.invalid" }],
+    ["percent-provider-token", { encodedValue: "g%68p%5F" + "A".repeat(16) }],
     [
       "client-secret-prefixed-hyphen",
       { assignment: "prefix-client-secret=redacted" },

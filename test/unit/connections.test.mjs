@@ -89,9 +89,13 @@ test("connection metadata rejects encoded, URL, JSON, nested, and confusable sec
     { metadata: { assignment: "prefix-client-secret=raw-client-secret" } },
     { metadata: { assignment: "prefix_client_secret=raw-client-secret" } },
     { metadata: { assignment: "client%2Dsecret=raw-client-secret" } },
+    { metadata: { assignment: "client%252Dsecret%253Draw-client-secret" } },
     { metadata: { payload: '{"token":"raw-token-value"}' } },
     { metadata: { escapedPayload: '{"\\u0074oken":"raw-token-value"}' } },
     { metadata: { percentPayload: '{"%74oken":"raw-token-value"}' } },
+    { metadata: { doublePercentPayload: '{"%2574oken":"raw-token-value"}' } },
+    { metadata: { endpoint: "h%74tps%3A%2F%2Fexample.invalid" } },
+    { metadata: { encodedProvider: "g%68p%5F" + "A".repeat(16) } },
     { metadata: { nested: { password: "raw-password" } } },
     { metadata: { tοken: "raw-token-value" } },
   ];

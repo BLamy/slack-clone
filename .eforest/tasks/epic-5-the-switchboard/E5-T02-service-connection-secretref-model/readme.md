@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: implemented
+status: refuted
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -1246,3 +1246,59 @@ material and version policy; it is not a URI that clients can dereference themse
   lifecycle and authorization matrix, canary scan, and detector-sensitivity mutation.
 - Claim: the final independent public-schema finding is addressed. E5-T02 is
   implemented and ready for another fresh critic.
+
+### Critic — fresh independent public-boundary review — 2026-08-20
+
+- VERDICT: refuted.
+- Exact head: `f273604e4b01bc2c5c5e86b1b7b80d6ad282d50e`; builder product commit:
+  `9127aa6eb28dc7f4dc68d84f52c4dd47a67060d6`. The checkout was clean at
+  orientation. Product source and the pinned `emulate` submodule were not changed
+  by this critic; only this review's evidence, log entry, and regenerated queue are
+  owned by the critic.
+- Gates: `pnpm format:check`, `pnpm format:check:e5-t02`, `pnpm lint`,
+  `pnpm typecheck`, `pnpm test` (209 unit and 15 integration/Playwright tests),
+  `pnpm build`, and `git diff --check` all passed. The manifest is in
+  `evidence/e5-t02-critic-20260820-f273604/gate-summary.json`.
+- Cold exact verifier: `TEST_RUN_ID=e5-t02-critic-fresh-f273604
+  TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/work/critic-fresh-f273604
+  make verify-E5-T02` passed at this exact head with state/replay digest
+  `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`,
+  duplicate/reordered parity, and `leaked: false`. Transcript:
+  `evidence/e5-t02-critic-20260820-f273604/cold-clone-transcript.json`.
+- Finding `E5-T02-CRITIC-F273604-001` (high): an independently generated mixed
+  percent-encoded JSON credential (`payload`) was rejected by `normalizeMetadata`
+  and `createConnectionStore` with `CONNECTION_CREDENTIAL_MATERIAL`, while Ajv
+  2020 accepted the same valid created-event shape. The full matrix covers fully,
+  mixed, and double percent-encoded JSON braces, quotes, keys, and delimiters;
+  assignments; URLs; provider prefixes; PEM markers; and the ordinary percent
+  positive control. Results are in
+  `evidence/e5-t02-critic-20260820-f273604/independent-probes.json`.
+- Finding `E5-T02-CRITIC-F273604-002` (high): Ajv accepts valid Slack
+  `xox[baprs]-...` provider-token values, while runtime/store reject them before
+  append. The public pattern at
+  `packages/connections/src/schemas/connection-events.v1.schema.json:153-155`
+  requires an extra character after `xoxb`, whereas runtime rejects the correct
+  `xox[baprs]-...` forms at `packages/connections/src/schema.mjs:36-43`.
+- Finding `E5-T02-CRITIC-F273604-003` (high): a Unicode-confusable token
+  assignment (`tοken=<synthetic-redacted>`, Greek omicron) was accepted by
+  `normalizeMetadata` and persisted by `createConnectionStore`. Key normalization
+  covers confusables at `packages/connections/src/schema.mjs:669-679`, but value
+  detection at `:681-699` does not apply the same normalization.
+- Independent controls passed: ordinary percent text; escaped/case/whitespace/
+  zero-width/base64/token/URL/client-secret cases; metadata depth, array and
+  property-count limits; astral code-point and reason bounds; lifecycle/rotation/
+  disable/delete fencing; duplicate/reordered replay; foreign-versus-unknown
+  authorization; and no-secret leakage on the clean verifier fixture. The
+  confusable assignment finding above is the exception to the broad confusable
+  control set. Details are in `lifecycle-authz.json` and the probe JSON.
+- Sensitivity: the exact verifier's disposable URL, provider-token, and base64
+  detector mutations each accepted their targeted synthetic fixture and turned
+  the verifier red; scratch mutation directories were removed. Evidence is in
+  `evidence/e5-t02-critic-20260820-f273604/sensitivity.json`.
+- Replay: N/A (server connection model) + mitigation: detached exact-head cold
+  replay, full gate transcript, independent runtime/store/public Ajv probes,
+  lifecycle and capture checks, authorization matrix, leakage scan, and detector
+  sensitivity mutation. Status remains `refuted`; do not start E5-T03 until these
+  findings are reworked and another fresh critic reviews the exact new head.

@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "critic": "f273604-independent",
+  "exactHead": "f273604e4b01bc2c5c5e86b1b7b80d6ad282d50e",
+  "commands": [
+    { "command": "pnpm format:check", "result": "PASS" },
+    { "command": "pnpm format:check:e5-t02", "result": "PASS" },
+    { "command": "pnpm lint", "result": "PASS" },
+    { "command": "pnpm typecheck", "result": "PASS" },
+    {
+      "command": "pnpm test",
+      "result": "PASS",
+      "unit": 209,
+      "integration": 15
+    },
+    { "command": "pnpm build", "result": "PASS" },
+    { "command": "git diff --check", "result": "PASS" },
+    {
+      "command": "TEST_RUN_ID=e5-t02-critic-fresh-f273604 TEST_ARTIFACT_DIR=work/critic-fresh-f273604 make verify-E5-T02",
+      "result": "PASS",
+      "evidence": "cold-clone-transcript.json"
+    },
+    {
+      "command": "independent Ajv 2020/runtime/store matrix",
+      "result": "REFUTED",
+      "evidence": "independent-probes.json"
+    },
+    {
+      "command": "independent lifecycle/replay/authz/leakage probe",
+      "result": "PASS",
+      "evidence": "lifecycle-authz.json"
+    },
+    {
+      "command": "exact verifier disposable detector mutations",
+      "result": "RED",
+      "evidence": "sensitivity.json"
+    }
+  ],
+  "productCodeModifiedByCritic": false,
+  "emulateModifiedByCritic": false
+}

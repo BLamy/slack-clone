@@ -1,0 +1,356 @@
+{
+  "schemaVersion": 1,
+  "generated": "independent-critic-f273604",
+  "total": 58,
+  "runtimeRejected": 55,
+  "schemaRejected": 49,
+  "parityMismatches": [
+    {
+      "name": "mixed-percent-json",
+      "metadata": {
+        "payload": "%7B\"%74o%6Be%6E\"%3A\"%72a%77-%74o%6Be%6E-%76a%6Cu%65\"%7D"
+      },
+      "expectedAccepted": false,
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.payload"
+      },
+      "publicSchema": {
+        "accepted": true,
+        "errors": []
+      },
+      "parity": false
+    },
+    {
+      "name": "raw-xoxb",
+      "metadata": {
+        "encodedValue": "xoxb-AAAAAAAAAAAAAAAA"
+      },
+      "expectedAccepted": false,
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "publicSchema": {
+        "accepted": true,
+        "errors": []
+      },
+      "parity": false
+    },
+    {
+      "name": "raw-xoxa",
+      "metadata": {
+        "encodedValue": "xoxa-AAAAAAAAAAAAAAAA"
+      },
+      "expectedAccepted": false,
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "publicSchema": {
+        "accepted": true,
+        "errors": []
+      },
+      "parity": false
+    },
+    {
+      "name": "raw-xoxp",
+      "metadata": {
+        "encodedValue": "xoxp-AAAAAAAAAAAAAAAA"
+      },
+      "expectedAccepted": false,
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "publicSchema": {
+        "accepted": true,
+        "errors": []
+      },
+      "parity": false
+    },
+    {
+      "name": "raw-xoxr",
+      "metadata": {
+        "encodedValue": "xoxr-AAAAAAAAAAAAAAAA"
+      },
+      "expectedAccepted": false,
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "publicSchema": {
+        "accepted": true,
+        "errors": []
+      },
+      "parity": false
+    },
+    {
+      "name": "raw-xoxs",
+      "metadata": {
+        "encodedValue": "xoxs-AAAAAAAAAAAAAAAA"
+      },
+      "expectedAccepted": false,
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "publicSchema": {
+        "accepted": true,
+        "errors": []
+      },
+      "parity": false
+    }
+  ],
+  "unexpectedRuntimeResults": [
+    {
+      "name": "confusable-value",
+      "metadata": {
+        "value": "tοken=raw-token-value"
+      },
+      "expectedAccepted": false,
+      "runtime": {
+        "accepted": true
+      },
+      "publicSchema": {
+        "accepted": true,
+        "errors": []
+      },
+      "parity": true
+    }
+  ],
+  "bounds": {
+    "depth-five": {
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.connection.metadata.l1.l2.l3.l4.l5"
+      },
+      "publicSchema": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/metadata/l1",
+            "schemaPath": "#/oneOf/0/type",
+            "keyword": "type",
+            "params": {
+              "type": "null"
+            },
+            "message": "must be null"
+          },
+          {
+            "instancePath": "/data/metadata/l1",
+            "schemaPath": "#/oneOf/1/type",
+            "keyword": "type",
+            "params": {
+              "type": "boolean"
+            },
+            "message": "must be boolean"
+          }
+        ]
+      }
+    },
+    "array-33": {
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.connection.metadata.values"
+      },
+      "publicSchema": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/metadata/values",
+            "schemaPath": "#/oneOf/0/type",
+            "keyword": "type",
+            "params": {
+              "type": "null"
+            },
+            "message": "must be null"
+          },
+          {
+            "instancePath": "/data/metadata/values",
+            "schemaPath": "#/oneOf/1/type",
+            "keyword": "type",
+            "params": {
+              "type": "boolean"
+            },
+            "message": "must be boolean"
+          }
+        ]
+      }
+    },
+    "properties-65": {
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.connection.metadata"
+      },
+      "publicSchema": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/metadata",
+            "schemaPath": "#/maxProperties",
+            "keyword": "maxProperties",
+            "params": {
+              "limit": 64
+            },
+            "message": "must NOT have more than 64 properties"
+          },
+          {
+            "instancePath": "",
+            "schemaPath": "#/allOf/0/if",
+            "keyword": "if",
+            "params": {
+              "failingKeyword": "then"
+            },
+            "message": "must match \"then\" schema"
+          }
+        ]
+      }
+    },
+    "astral-512": {
+      "runtime": {
+        "accepted": true
+      },
+      "publicSchema": {
+        "accepted": true,
+        "errors": []
+      }
+    },
+    "astral-513": {
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.connection.metadata.label"
+      },
+      "publicSchema": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/metadata/label",
+            "schemaPath": "#/oneOf/0/type",
+            "keyword": "type",
+            "params": {
+              "type": "null"
+            },
+            "message": "must be null"
+          },
+          {
+            "instancePath": "/data/metadata/label",
+            "schemaPath": "#/oneOf/1/type",
+            "keyword": "type",
+            "params": {
+              "type": "boolean"
+            },
+            "message": "must be boolean"
+          }
+        ]
+      }
+    }
+  },
+  "reasonResults": {
+    "reason-160-astral": {
+      "runtime": {
+        "accepted": true
+      },
+      "publicSchema": {
+        "accepted": true,
+        "errors": []
+      }
+    },
+    "reason-161-astral": {
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.reason"
+      },
+      "publicSchema": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/reason",
+            "schemaPath": "#/properties/reason/maxLength",
+            "keyword": "maxLength",
+            "params": {
+              "limit": 160
+            },
+            "message": "must NOT have more than 160 characters"
+          },
+          {
+            "instancePath": "",
+            "schemaPath": "#/allOf/2/if",
+            "keyword": "if",
+            "params": {
+              "failingKeyword": "then"
+            },
+            "message": "must match \"then\" schema"
+          }
+        ]
+      }
+    },
+    "reason-token": {
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason"
+      },
+      "publicSchema": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/reason",
+            "schemaPath": "#/properties/reason/not",
+            "keyword": "not",
+            "params": {},
+            "message": "must NOT be valid"
+          },
+          {
+            "instancePath": "",
+            "schemaPath": "#/allOf/2/if",
+            "keyword": "if",
+            "params": {
+              "failingKeyword": "then"
+            },
+            "message": "must match \"then\" schema"
+          }
+        ]
+      }
+    },
+    "reason-percent-url": {
+      "runtime": {
+        "accepted": false,
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason"
+      },
+      "publicSchema": {
+        "accepted": false,
+        "errors": [
+          {
+            "instancePath": "/data/reason",
+            "schemaPath": "#/properties/reason/not",
+            "keyword": "not",
+            "params": {},
+            "message": "must NOT be valid"
+          },
+          {
+            "instancePath": "",
+            "schemaPath": "#/allOf/2/if",
+            "keyword": "if",
+            "params": {
+              "failingKeyword": "then"
+            },
+            "message": "must match \"then\" schema"
+          }
+        ]
+      }
+    }
+  }
+}

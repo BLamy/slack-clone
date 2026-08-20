@@ -94,8 +94,59 @@ test("connection metadata rejects encoded, URL, JSON, nested, and confusable sec
     { metadata: { escapedPayload: '{"\\u0074oken":"raw-token-value"}' } },
     { metadata: { percentPayload: '{"%74oken":"raw-token-value"}' } },
     { metadata: { doublePercentPayload: '{"%2574oken":"raw-token-value"}' } },
+    {
+      metadata: {
+        fullyPercentPayload: "%7B%22token%22%3A%22raw-token-value%22%7D",
+      },
+    },
+    {
+      metadata: {
+        doubleFullyPercentPayload:
+          "%257B%2522token%2522%253A%2522raw-token-value%2522%257D",
+      },
+    },
+    {
+      metadata: {
+        mixedFullyPercentPayload: "%7B%22%74oken%22%3A%22raw-token-value%22%7D",
+      },
+    },
+    {
+      metadata: {
+        doubleMixedClientSecretPayload:
+          "%7B%2522%2563lient%255Fsecre%2574%2522%253A%2522raw%2522%257D",
+      },
+    },
+    {
+      metadata: {
+        doubleMixedAssignment:
+          "cl%2569ent-%2573ecre%2574%253Draw-client-secret",
+      },
+    },
+    {
+      metadata: {
+        doubleMixedPrefixedAssignment:
+          "prefix-%2563lient%255Fsecre%2574%253Draw-client-secret",
+      },
+    },
     { metadata: { endpoint: "h%74tps%3A%2F%2Fexample.invalid" } },
+    {
+      metadata: {
+        doubleMixedEndpoint:
+          "%2568%2574tps%253A%252F%252Fexample.invalid%252Fservice",
+      },
+    },
     { metadata: { encodedProvider: "g%68p%5F" + "A".repeat(16) } },
+    {
+      metadata: {
+        doubleMixedProvider: "%2567%2568p%255FAAAAAAAAAAAAAAAA",
+      },
+    },
+    {
+      metadata: {
+        percentPrivateKey:
+          "%2D%2D%2D%2D%2DBEGIN%20PRIVATE%20KEY%2D%2D%2D%2D%2D",
+      },
+    },
     { metadata: { nested: { password: "raw-password" } } },
     { metadata: { tοken: "raw-token-value" } },
   ];

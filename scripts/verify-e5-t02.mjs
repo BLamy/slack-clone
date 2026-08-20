@@ -352,6 +352,28 @@ function secretCorpusFixture() {
       { payload: '{"%2574oken":"e5-t02-connection-canary-value"}' },
     ],
     [
+      "fully-percent-json",
+      { payload: "%7B%22token%22%3A%22e5-t02-connection-canary-value%22%7D" },
+    ],
+    [
+      "double-fully-percent-json",
+      {
+        payload:
+          "%257B%2522token%2522%253A%2522e5-t02-connection-canary-value%2522%257D",
+      },
+    ],
+    [
+      "mixed-fully-percent-json",
+      { payload: "%7B%22%74oken%22%3A%22e5-t02-connection-canary-value%22%7D" },
+    ],
+    [
+      "double-mixed-client-secret-json",
+      {
+        payload:
+          "%7B%2522%2563lient%255Fsecre%2574%2522%253A%2522e5-t02-connection-canary-value%2522%257D",
+      },
+    ],
+    [
       "escaped-json",
       { payload: '{"\\u0074oken":"e5-t02-connection-canary-value"}' },
     ],
@@ -365,8 +387,30 @@ function secretCorpusFixture() {
       "double-percent-client-secret-assignment",
       { assignment: "client%252Dsecret%253Dredacted" },
     ],
+    [
+      "double-mixed-client-secret-assignment",
+      { assignment: "cl%2569ent-%2573ecre%2574%253Dredacted" },
+    ],
+    [
+      "double-mixed-prefixed-client-secret-assignment",
+      { assignment: "prefix-%2563lient%255Fsecre%2574%253Dredacted" },
+    ],
     ["percent-url", { endpoint: "h%74tps%3A%2F%2Fexample.invalid" }],
+    [
+      "double-mixed-url",
+      { endpoint: "%2568%2574tps%253A%252F%252Fexample.invalid%252Fservice" },
+    ],
     ["percent-provider-token", { encodedValue: "g%68p%5F" + "A".repeat(16) }],
+    [
+      "double-mixed-provider-token",
+      { encodedValue: "%2567%2568p%255F" + "A".repeat(16) },
+    ],
+    [
+      "percent-private-key",
+      {
+        material: "%2D%2D%2D%2D%2DBEGIN%20PRIVATE%20KEY%2D%2D%2D%2D%2D",
+      },
+    ],
     [
       "client-secret-prefixed-hyphen",
       { assignment: "prefix-client-secret=redacted" },

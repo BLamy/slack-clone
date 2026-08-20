@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E5-T02",
-  "runId": "e5-t02-confusable-slack-20260820",
-  "implementationCommit": "139669a2fd72180d49d237819a65fab40e97e50b",
+  "runId": "e5-t02-schema-parity-sensitive-20260820",
+  "implementationCommit": "9faf35526a5c9cdba0bff32c4359b365599e37b6",
   "first": {
     "storeDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
     "replayDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",

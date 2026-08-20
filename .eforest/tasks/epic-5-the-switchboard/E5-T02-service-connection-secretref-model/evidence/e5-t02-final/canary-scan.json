@@ -8,6 +8,7 @@
     "cold-clone-transcript.json",
     "connection-state.json",
     "lifecycle-events.json",
+    "public-schema-parity.json",
     "replay-digests.json",
     "secret-corpus.json",
     "sensitivity.json",

@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: refuted
+status: implemented
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -1372,3 +1372,27 @@ VERDICT: refuted
 - Replay: N/A (server connection model) + mitigation: detached exact-head cold replay,
   full gates, independent Ajv/runtime/store parity, lifecycle/authz/resource checks,
   leakage scan, and disposable detector/schema mutations.
+
+### Builder — public-schema parity verifier hardening — 2026-08-20
+
+- Commit: `9faf35526a5c9cdba0bff32c4359b365599e37b6`.
+- Rework: `verify-E5-T02` now uses an explicit Ajv 2020 development dependency and
+  validates every secret corpus event against the public connection schema, runtime
+  normalization, and store append behavior. The ordinary percent-text positive control
+  must remain accepted by all three paths; the promoted evidence includes
+  `public-schema-parity.json`.
+- Commands: `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`; `pnpm test`
+  (209 unit and 15 integration/Playwright tests passed); `pnpm build`; and
+  `git diff --check` all passed.
+- Local verifier: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e5-t02-schema-parity-sensitive-20260820
+  make verify-E5-T02` passed at this exact commit with state/replay digest
+  `sha256:f40a785341af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`, and
+  `leaked: false`. The public parity fixture records 41 rejected secret cases and
+  one accepted ordinary percent-text case.
+- Replay: N/A (server connection model) + mitigation: promoted exact-head cold
+  reducer replay, runtime/store/Ajv parity corpus, lifecycle and authorization matrix,
+  canary scan, and disposable detector/schema sensitivity coverage.
+- Claim: the latest critic's verifier-sensitivity finding is addressed. E5-T02 is
+  implemented and ready for another fresh critic.

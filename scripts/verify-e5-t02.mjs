@@ -342,6 +342,11 @@ function secretCorpusFixture() {
       },
     ],
     ["provider-token", { encodedValue: "ghp_" + "A".repeat(32) }],
+    ["slack-xoxb-token", { encodedValue: "xoxb-" + "A".repeat(16) }],
+    ["slack-xoxa-token", { encodedValue: "xoxa-" + "A".repeat(16) }],
+    ["slack-xoxp-token", { encodedValue: "xoxp-" + "A".repeat(16) }],
+    ["slack-xoxr-token", { encodedValue: "xoxr-" + "A".repeat(16) }],
+    ["slack-xoxs-token", { encodedValue: "xoxs-" + "A".repeat(16) }],
     ["json", { payload: '{"token":"e5-t02-connection-canary-value"}' }],
     [
       "percent-json-key",
@@ -365,6 +370,12 @@ function secretCorpusFixture() {
     [
       "mixed-fully-percent-json",
       { payload: "%7B%22%74oken%22%3A%22e5-t02-connection-canary-value%22%7D" },
+    ],
+    [
+      "mixed-percent-json-value",
+      {
+        payload: '%7B"%74o%6Be%6E"%3A"%72a%77-%74o%6Be%6E-%76a%6Cu%65"%7D',
+      },
     ],
     [
       "double-mixed-client-secret-json",
@@ -427,6 +438,10 @@ function secretCorpusFixture() {
       },
     ],
     ["unicode-confusable-key", { tοken: "redacted-token-value" }],
+    [
+      "unicode-confusable-assignment",
+      { assignment: "tοken=redacted-token-value" },
+    ],
     ["nested-cookie", { nested: { headers: { cookie: "session=redacted" } } }],
     [
       "connection-string",

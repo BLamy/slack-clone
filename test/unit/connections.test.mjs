@@ -84,6 +84,11 @@ test("connection metadata rejects encoded, URL, JSON, nested, and confusable sec
     },
     { metadata: { encodedUrlSafeZeroWidth: zeroWidthUrlSafeBase64 } },
     { metadata: { encodedValue: "ghp_" + "A".repeat(32) } },
+    { metadata: { encodedValue: "xoxb-" + "A".repeat(16) } },
+    { metadata: { encodedValue: "xoxa-" + "A".repeat(16) } },
+    { metadata: { encodedValue: "xoxp-" + "A".repeat(16) } },
+    { metadata: { encodedValue: "xoxr-" + "A".repeat(16) } },
+    { metadata: { encodedValue: "xoxs-" + "A".repeat(16) } },
     { metadata: { endpoint: "https://user:password@example.invalid" } },
     { metadata: { assignment: "client-secret=raw-client-secret" } },
     { metadata: { assignment: "prefix-client-secret=raw-client-secret" } },
@@ -108,6 +113,12 @@ test("connection metadata rejects encoded, URL, JSON, nested, and confusable sec
     {
       metadata: {
         mixedFullyPercentPayload: "%7B%22%74oken%22%3A%22raw-token-value%22%7D",
+      },
+    },
+    {
+      metadata: {
+        mixedPercentValuePayload:
+          '%7B"%74o%6Be%6E"%3A"%72a%77-%74o%6Be%6E-%76a%6Cu%65"%7D',
       },
     },
     {
@@ -149,6 +160,7 @@ test("connection metadata rejects encoded, URL, JSON, nested, and confusable sec
     },
     { metadata: { nested: { password: "raw-password" } } },
     { metadata: { tοken: "raw-token-value" } },
+    { metadata: { confusableAssignment: "tοken=raw-token-value" } },
   ];
   for (const attack of attacks) {
     assert.throws(

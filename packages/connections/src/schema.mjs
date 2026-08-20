@@ -683,7 +683,12 @@ function looksLikeCredentialValue(value, { allowGenericBase64 = false } = {}) {
   const decodedCandidate = decodeCredentialCandidate(value);
   if (/\p{Cf}/u.test(decodedCandidate)) return true;
   const candidate = decodedCandidate.replace(/\p{Cf}/gu, "");
-  if (CREDENTIAL_VALUE_PATTERNS.some((pattern) => pattern.test(candidate))) {
+  const normalizedCandidate = securityNormalize(candidate);
+  if (
+    CREDENTIAL_VALUE_PATTERNS.some(
+      (pattern) => pattern.test(candidate) || pattern.test(normalizedCandidate),
+    )
+  ) {
     return true;
   }
   if (!allowGenericBase64 && isBase64EncodedValue(value)) return true;

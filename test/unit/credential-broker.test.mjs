@@ -111,6 +111,36 @@ test("revoke fences replay and changed request or binding", async () => {
   );
 });
 
+test("a concurrent use reserves the capability before provider I/O", async () => {
+  const { broker, secretRef } = makeLocalBroker();
+  const issued = await broker.issue({ secretRef, binding: BINDING });
+  let consumerCalls = 0;
+  const use = () =>
+    broker.use(issued.capability, {
+      requestDigest: BINDING.requestDigest,
+      consumer: async () => {
+        consumerCalls += 1;
+        await new Promise((resolve) => {
+          setTimeout(resolve, 10);
+        });
+        return { accepted: true };
+      },
+    });
+
+  const results = await Promise.allSettled([use(), use()]);
+  assert.equal(consumerCalls, 1);
+  assert.equal(
+    results.filter(({ status }) => status === "fulfilled").length,
+    1,
+  );
+  const rejected = results.find(({ status }) => status === "rejected");
+  assert.equal(
+    rejected?.reason.code,
+    CREDENTIAL_BROKER_ERROR_CODES.CAPABILITY_IN_FLIGHT,
+  );
+  await broker.revoke(issued.capability);
+});
+
 test("production refuses Agent Vault and accepts only an attested Agent Proxy", () => {
   const provider = createAgentVaultAdapter({
     secrets: [{ secretRef: SECRET_REF, value: SECRET }],
@@ -119,6 +149,17 @@ test("production refuses Agent Vault and accepts only an attested Agent Proxy", 
     () => createCredentialBroker({ provider, environment: "production" }),
     (error) =>
       error.code === CREDENTIAL_BROKER_ERROR_CODES.LOCAL_PROVIDER_IN_PRODUCTION,
+  );
+  const adapterSymbol = Object.getOwnPropertySymbols(provider)[0];
+  const forgedProvider = { handshake: provider.handshake };
+  Object.defineProperty(forgedProvider, adapterSymbol, {
+    value: provider[adapterSymbol],
+  });
+  assert.throws(
+    () =>
+      createCredentialBroker({ provider: forgedProvider, environment: "test" }),
+    (error) =>
+      error.code === CREDENTIAL_BROKER_ERROR_CODES.PROVIDER_HANDSHAKE_REQUIRED,
   );
   for (const environment of ["prod", "production-eu", "staging"]) {
     assert.throws(
@@ -188,6 +229,8 @@ test("production refuses Agent Vault and accepts only an attested Agent Proxy", 
     "https://0.0.0.0",
     "https://[::1]",
     "https://[::ffff:169.254.169.254]",
+    "https://[::127.0.0.1]",
+    "https://[64:ff9b::169.254.169.254]",
     "https://100.64.0.1",
     "https://[fd00::1]",
   ]) {

@@ -3,7 +3,7 @@ import {
   CredentialBrokerError,
   credentialBrokerError,
 } from "./errors.mjs";
-import { CREDENTIAL_BROKER_ADAPTER } from "./internal.mjs";
+import { CREDENTIAL_BROKER_ADAPTER, isTrustedAdapter } from "./internal.mjs";
 import {
   CREDENTIAL_BROKER_MODES,
   CREDENTIAL_BROKER_PROVIDER_IDS,
@@ -39,6 +39,7 @@ export function createCredentialBroker({
   }
   const adapter = provider[CREDENTIAL_BROKER_ADAPTER];
   if (
+    !isTrustedAdapter(provider) ||
     !adapter ||
     typeof adapter.issue !== "function" ||
     typeof adapter.use !== "function"
@@ -159,6 +160,7 @@ export function createCredentialBroker({
         issuedAt,
         expiresAt: providerExpiresAt,
         status: "active",
+        usingAt: null,
         usedAt: null,
       };
       capabilities.set(capabilityId, record);
@@ -232,7 +234,11 @@ export function createCredentialBroker({
       assertLive(record);
       if (request !== undefined)
         assertNoCredentialMaterial(request, "broker request");
+      record.status = "using";
+      record.usingAt = nowIso(clock);
       let providerResult;
+      let outcome;
+      let providerOperationId;
       try {
         providerResult = await adapter.use({
           providerHandle: record.providerHandle,
@@ -240,7 +246,18 @@ export function createCredentialBroker({
           request: request ?? {},
           consumer,
         });
+        outcome = normalizeProviderOutcome(
+          providerResult?.outcome ?? providerResult,
+          "provider outcome",
+        );
+        providerOperationId = normalizeIdentifier(
+          providerResult?.providerOperationId,
+          "providerOperationId",
+          CREDENTIAL_BROKER_ERROR_CODES.PROVIDER_RESPONSE_INVALID,
+        );
       } catch (error) {
+        record.status = "active";
+        record.usingAt = null;
         appendAudit({
           type: "credential.capability.use.denied",
           capabilityId: record.capabilityId,
@@ -253,15 +270,9 @@ export function createCredentialBroker({
         });
         throw brokerError(error, "Credential capability use was refused");
       }
-      const outcome = normalizeProviderOutcome(
-        providerResult?.outcome ?? providerResult,
-        "provider outcome",
-      );
-      const providerOperationId = normalizeIdentifier(
-        providerResult?.providerOperationId,
-        "providerOperationId",
-        CREDENTIAL_BROKER_ERROR_CODES.PROVIDER_RESPONSE_INVALID,
-      );
+      record.status = "used";
+      record.usingAt = null;
+      record.usedAt = nowIso(clock);
       const auditEvent = appendAudit({
         type: "credential.capability.used",
         capabilityId: record.capabilityId,
@@ -270,8 +281,6 @@ export function createCredentialBroker({
         providerOperationId,
         outcome,
       });
-      record.status = "used";
-      record.usedAt = nowIso(clock);
       return freezeDeep({
         schemaVersion: CREDENTIAL_BROKER_SCHEMA_VERSION,
         capabilityId: record.capabilityId,
@@ -294,6 +303,19 @@ export function createCredentialBroker({
           idempotent: true,
           providerId: handshake.providerId,
         });
+      }
+      if (record.status === "using") {
+        appendAudit({
+          type: "credential.capability.revoke.denied",
+          capabilityId: record.capabilityId,
+          binding: record.binding,
+          secretRefDigest: record.secretRefDigest,
+          reasonCode: CREDENTIAL_BROKER_ERROR_CODES.CAPABILITY_IN_FLIGHT,
+        });
+        throw credentialBrokerError(
+          CREDENTIAL_BROKER_ERROR_CODES.CAPABILITY_IN_FLIGHT,
+          "Credential capability use is still in flight",
+        );
       }
       let providerResult;
       try {
@@ -361,6 +383,7 @@ export function createCredentialBroker({
             secretRefDigest: record.secretRefDigest,
             issuedAt: record.issuedAt,
             expiresAt: record.expiresAt,
+            usingAt: record.usingAt,
             usedAt: record.usedAt,
             status: record.status,
           })),
@@ -439,6 +462,13 @@ export function createCredentialBroker({
         record,
         CREDENTIAL_BROKER_ERROR_CODES.CAPABILITY_REPLAYED,
         "Credential capability has already been used",
+      );
+    }
+    if (record.status === "using") {
+      return denyUse(
+        record,
+        CREDENTIAL_BROKER_ERROR_CODES.CAPABILITY_IN_FLIGHT,
+        "Credential capability use is already in flight",
       );
     }
     if (Date.parse(record.expiresAt) <= Date.parse(nowIso(clock))) {

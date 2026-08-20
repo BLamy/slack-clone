@@ -3,7 +3,7 @@ id: E5-T01
 epic: 5
 title: "Credential broker contract: Infisical Agent Proxy in production, Agent Vault locally, and no raw-secret orchestration path"
 priority: 501
-status: implemented
+status: in-progress
 depends_on: [E3]
 estimate: L
 capstone: false
@@ -126,3 +126,10 @@ opaque, single-use, run-scoped handles to callers.
   exposes only opaque, tenant/workspace/agent/run/connection/operation/request-bound
   capabilities; provider authentication and handles remain internal; and production
   requires an explicitly injected transport plus a verified endpoint-bound attestation.
+
+### Critic follow-up — 2026-08-19
+
+- The next critic was execution-blocked and returned `VERDICT: needs-evidence`; its
+  static race finding was actionable. Follow-up rework reserves a capability before
+  provider I/O, rejects concurrent use/revoke races, brands adapters in a private trust
+  registry, and covers IPv4-compatible and NAT64 literal forms.

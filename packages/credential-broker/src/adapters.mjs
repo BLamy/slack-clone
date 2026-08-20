@@ -5,7 +5,10 @@ import {
   CREDENTIAL_BROKER_ERROR_CODES,
   credentialBrokerError,
 } from "./errors.mjs";
-import { CREDENTIAL_BROKER_ADAPTER } from "./internal.mjs";
+import {
+  CREDENTIAL_BROKER_ADAPTER,
+  registerTrustedAdapter,
+} from "./internal.mjs";
 import {
   CREDENTIAL_BROKER_MODES,
   CREDENTIAL_BROKER_PROVIDER_IDS,
@@ -127,7 +130,7 @@ export function createAgentVaultAdapter({
       },
     }),
   });
-  return Object.freeze(adapter);
+  return registerTrustedAdapter(Object.freeze(adapter));
 }
 
 export function createInfisicalAgentProxyAdapter({
@@ -251,7 +254,7 @@ export function createInfisicalAgentProxyAdapter({
       },
     }),
   });
-  return Object.freeze(adapter);
+  return registerTrustedAdapter(Object.freeze(adapter));
 }
 
 function normalizeSecretEntries(secrets) {
@@ -367,13 +370,22 @@ function isDisallowedIpv6(value) {
     bytes.slice(0, 10).every((byte) => byte === 0) &&
     bytes[10] === 0xff &&
     bytes[11] === 0xff;
+  const isIpv4Compatible =
+    bytes.slice(0, 12).every((byte) => byte === 0) && !isIpv4Mapped;
+  const isNat64 =
+    bytes[0] === 0 &&
+    bytes[1] === 0x64 &&
+    bytes[2] === 0xff &&
+    bytes[3] === 0x9b &&
+    bytes.slice(4, 12).every((byte) => byte === 0);
+  const embeddedIpv4IsDisallowed = isDisallowedIpv4(bytes.slice(12).join("."));
   return (
     isUnspecified ||
     isLoopback ||
     isUniqueLocal ||
     isLinkLocal ||
     isMulticast ||
-    (isIpv4Mapped && isDisallowedIpv4(bytes.slice(12).join(".")))
+    ((isIpv4Mapped || isIpv4Compatible || isNat64) && embeddedIpv4IsDisallowed)
   );
 }
 

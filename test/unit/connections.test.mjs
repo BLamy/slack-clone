@@ -59,6 +59,8 @@ test("SecretRefs accept opaque broker identifiers and reject secret-shaped input
 
 test("connection metadata rejects encoded, URL, JSON, nested, and confusable secrets", () => {
   const shortUrlSafeBase64 = "a".repeat(21) + "-a";
+  const zeroWidthUrlSafeBase64 =
+    "a".repeat(10) + "\u200b" + "a".repeat(11) + "-a";
   const attacks = [
     { metadata: { encoded: "c3VwZXItc2VjcmV0LXRva2VuLXZhbHVl" } },
     {
@@ -80,9 +82,11 @@ test("connection metadata rejects encoded, URL, JSON, nested, and confusable sec
         encodedUrlSafeWhitespace: "  " + shortUrlSafeBase64 + "  ",
       },
     },
+    { metadata: { encodedUrlSafeZeroWidth: zeroWidthUrlSafeBase64 } },
     { metadata: { encodedValue: "ghp_" + "A".repeat(32) } },
     { metadata: { endpoint: "https://user:password@example.invalid" } },
     { metadata: { payload: '{"token":"raw-token-value"}' } },
+    { metadata: { escapedPayload: '{"\\u0074oken":"raw-token-value"}' } },
     { metadata: { nested: { password: "raw-password" } } },
     { metadata: { tοken: "raw-token-value" } },
   ];
@@ -150,7 +154,18 @@ test("runtime identifier APIs reject provider-token-shaped values", () => {
     (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
   );
   assert.throws(
+    () => normalizeReason("a".repeat(10) + "\u200b" + "a".repeat(11) + "-a"),
+    (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
+  );
+  assert.throws(
     () => definition({ label: "  " + "a".repeat(21) + "-a  " }),
+    (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
+  );
+  assert.throws(
+    () =>
+      definition({
+        label: "a".repeat(10) + "\u200b" + "a".repeat(11) + "-a",
+      }),
     (error) => error.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL,
   );
   assert.throws(

@@ -671,13 +671,14 @@ function isCredentialKey(key, { allowSecretRef = true } = {}) {
 }
 
 function looksLikeCredentialValue(value, { allowGenericBase64 = false } = {}) {
-  if (CREDENTIAL_VALUE_PATTERNS.some((pattern) => pattern.test(value))) {
+  const candidate = normalizeCredentialCandidate(value);
+  if (CREDENTIAL_VALUE_PATTERNS.some((pattern) => pattern.test(candidate))) {
     return true;
   }
   if (!allowGenericBase64 && isBase64EncodedValue(value)) return true;
-  if (/^\s*(?:\[|\{)/u.test(value)) {
+  if (/^\s*(?:\[|\{)/u.test(candidate)) {
     try {
-      const parsed = JSON.parse(value);
+      const parsed = JSON.parse(candidate);
       assertNoCredentialMaterial(parsed);
     } catch (error) {
       if (error?.code === CONNECTION_ERROR_CODES.CREDENTIAL_MATERIAL)
@@ -688,7 +689,7 @@ function looksLikeCredentialValue(value, { allowGenericBase64 = false } = {}) {
 }
 
 function isBase64EncodedValue(value) {
-  const candidate = value.trim();
+  const candidate = normalizeCredentialCandidate(value).trim();
   if (candidate.length < 22 || !BASE64_VALUE_PATTERN.test(candidate))
     return false;
   const unpadded = candidate.replace(/=+$/u, "");
@@ -701,6 +702,10 @@ function isBase64EncodedValue(value) {
   } catch {
     return false;
   }
+}
+
+function normalizeCredentialCandidate(value) {
+  return value.normalize("NFKC").replace(/\p{Cf}/gu, "");
 }
 
 function securityNormalize(value) {

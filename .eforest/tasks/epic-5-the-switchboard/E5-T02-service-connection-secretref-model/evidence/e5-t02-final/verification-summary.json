@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "task": "E5-T02",
-  "runId": "e5-t02-layered-schema-20260820",
-  "implementationCommit": "9127aa6eb28dc7f4dc68d84f52c4dd47a67060d6",
+  "runId": "e5-t02-confusable-slack-20260820",
+  "implementationCommit": "139669a2fd72180d49d237819a65fab40e97e50b",
   "result": "PASS",
   "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
   "replay": {
@@ -48,6 +48,31 @@
         "path": "$.connection.metadata.encodedValue"
       },
       {
+        "name": "slack-xoxb-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "slack-xoxa-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "slack-xoxp-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "slack-xoxr-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
+        "name": "slack-xoxs-token",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      {
         "name": "json",
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
         "path": "$.connection.metadata.payload"
@@ -74,6 +99,11 @@
       },
       {
         "name": "mixed-fully-percent-json",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.payload"
+      },
+      {
+        "name": "mixed-percent-json-value",
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
         "path": "$.connection.metadata.payload"
       },
@@ -161,6 +191,11 @@
         "name": "unicode-confusable-key",
         "code": "CONNECTION_CREDENTIAL_MATERIAL",
         "path": "$.connection.metadata.tοken"
+      },
+      {
+        "name": "unicode-confusable-assignment",
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
       },
       {
         "name": "nested-cookie",

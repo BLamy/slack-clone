@@ -3,7 +3,7 @@ id: E5-T02
 epic: 5
 title: "Service connections and SecretRefs: replayable metadata without credential values"
 priority: 502
-status: refuted
+status: implemented
 depends_on: [E5-T01]
 estimate: M
 capstone: false
@@ -1305,3 +1305,28 @@ material and version policy; it is not a URI that clients can dereference themse
   lifecycle and capture checks, authorization matrix, leakage scan, and detector
   sensitivity mutation. Status remains `refuted`; do not start E5-T03 until these
   findings are reworked and another fresh critic reviews the exact new head.
+
+### Builder — confusable and Slack-token boundary rework — 2026-08-20
+
+- Commit: `139669a2fd72180d49d237819a65fab40e97e50b`.
+- Rework: credential-value detection now applies the same NFKC/confusable
+  normalization used for keys before assignment and token checks. The public schema
+  now rejects all `xox[baprs]-...` Slack token variants, confusable token assignments,
+  and mixed-case percent-encoded JSON keys; runtime and Ajv parity now holds across
+  the fresh matrix.
+- Commands: `pnpm format:check:e5-t02`; `pnpm lint`; `pnpm typecheck`;
+  `pnpm test:unit` (209 tests); `pnpm build`; and `git diff --check` all passed.
+  The independent runtime/store/Ajv probe reports no parity mismatches or unexpected
+  runtime accepts.
+- Local verifier: `PROMOTE_EVIDENCE=1 TEST_RUN_ID=e5-t02-confusable-slack-20260820
+  make verify-E5-T02` passed at this exact commit with state/replay digest
+  `sha256:f40a785341af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`,
+  replay-view digest
+  `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`, and
+  `leaked: false`. Evidence is in `evidence/e5-t02-final/`.
+- Replay: N/A (server connection model) + mitigation: promoted exact-head cold
+  replay, layered/Unicode secret corpus, public-schema/runtime parity probes,
+  lifecycle and authorization matrix, canary scan, and detector-sensitivity
+  mutation.
+- Claim: the latest independent critic's three public-boundary/runtime findings are
+  addressed. E5-T02 is implemented and ready for another fresh critic.

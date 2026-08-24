@@ -1,0 +1,29 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "e4t08-sandbox-20260824",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-05-06",
+  "compatibility_flags": ["nodejs_compat", "enable_ctx_exports"],
+  "observability": { "enabled": true },
+  "containers": [
+    {
+      "class_name": "Sandbox",
+      "image": "./Dockerfile",
+      "instance_type": "lite",
+      "max_instances": 8,
+    },
+  ],
+  "durable_objects": {
+    "bindings": [
+      { "class_name": "Sandbox", "name": "Sandbox" },
+      { "class_name": "EgressLog", "name": "EgressLog" },
+    ],
+  },
+  "migrations": [
+    { "new_sqlite_classes": ["Sandbox"], "tag": "v1" },
+    { "new_sqlite_classes": ["EgressLog"], "tag": "v2" },
+  ],
+  "vars": {
+    "E4_T08_GATEKEEPER_HOST": "e4t08-gatekeeper-20260824.brett-lamy.workers.dev",
+  },
+}

@@ -236,3 +236,39 @@ Cloudflare OS inventory.
 - Claim: the capstone now has reproducible real-provider acceptance at the exact commit;
   fresh critic must independently replay the committed evidence and prove the verifier
   detects a targeted mutation before status can advance to `verified`.
+
+### Builder — 2026-08-24 (Sandbox-backed real-provider repair)
+
+- Commit: `2c4bdeba0f2e3d19969a7a753127ef45b0d67599`
+- Repair: the official Gadget now calls a real Cloudflare Sandbox/Containers Worker through
+  the `E4_RUNNER` service binding. Workspace files are written into the provider container,
+  `startProcess`/`getProcess`/`killProcess` supply process ids, logs, exit codes, survivor
+  counts, and cancellation observations, and the Gatekeeper origin records the allowlisted
+  request remotely. The client no longer synthesizes shell transcripts, network outcomes,
+  storage inventory, or usage counters.
+- Deployment: official OS Worker
+  `https://e4t08-os-20260824.brett-lamy.workers.dev`; Sandbox runner
+  `https://e4t08-sandbox-20260824.brett-lamy.workers.dev`; dedicated Gatekeeper
+  `https://e4t08-gatekeeper-20260824.brett-lamy.workers.dev`. Checked-in deployment sources
+  and the official OS loader/service-binding overlay are under `deploy/e4-t08/`.
+- Cold run: `E4_T08_IMPLEMENTATION_COMMIT=2c4bdeba0f2e3d19969a7a753127ef45b0d67599 TEST_RUN_ID=e4-t08-cold-real-hybrid-20260824 TEST_ARTIFACT_DIR=/tmp/e4-t08-cold-real-hybrid-20260824 CF_OS_PROTOCOL=official-cloudflare-os ... tools/verify/cold_clone.sh verify-E4-T08-real`; detached checkout, HTTPS `emulate` submodule initialization, frozen install, and the real provider runner exited 0.
+- Evidence: `evidence/e4-t08-cold-real-hybrid-20260824/verification-summary.json`,
+  `provider-inventory.json`, `execution-transcripts.json`, `network-probes.json`,
+  `quota-cost.json`, `manifest.json`, and `cold-verification-transcript.json`.
+- Evidence summary: provider type `cloudflare-os`; workspace digest
+  `sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766`;
+  deterministic transcript digest
+  `sha256:132e0e509857f1212fc396ed5f608682bc995f0d85479e11ac86284e953f3368`;
+  remote allowlisted Gatekeeper observation plus provider-denied direct, private,
+  link-local, metadata, inbound, DNS-rebinding, and public-listener probes; measured
+  provider usage and cost; accepted-timeout destroy retry used the same idempotency key;
+  final workspace/Gadget and nested storage inventory was zero.
+- Gates: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (209 unit tests
+  and 15 Playwright integration tests), `pnpm build`, deployment-runner `npm run typecheck`,
+  and the exact cold-clone real-provider run all passed.
+- Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone
+  real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger,
+  and before/after Cloudflare OS inventory.
+- Claim: the provider truth gate is now exercised against the official Cloudflare OS
+  Gadget plus the official Sandbox container execution substrate; fresh critic review and
+  sensitivity proof remain required before changing the lifecycle status to `verified`.

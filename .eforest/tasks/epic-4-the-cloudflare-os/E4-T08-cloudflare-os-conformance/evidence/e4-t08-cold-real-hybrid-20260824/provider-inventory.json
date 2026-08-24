@@ -1,0 +1,1163 @@
+{
+  "schemaVersion": 1,
+  "task": "E4-T08",
+  "runId": "e4-t08-cold-real-hybrid-20260824",
+  "prefix": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov",
+  "providerResourceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698:0",
+  "providerAttestation": {
+    "providerType": "cloudflare-os",
+    "providerResourceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698:0",
+    "testProfile": "e4-t08-accepted-timeout-once"
+  },
+  "resourceBindings": [
+    {
+      "phase": "create",
+      "providerResourceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698:0"
+    },
+    {
+      "phase": "workspace-materialize",
+      "providerResourceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698:0"
+    },
+    {
+      "phase": "usage",
+      "providerResourceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698:0"
+    }
+  ],
+  "beforeCreate": [],
+  "beforeCreateStorage": [],
+  "afterCreate": [
+    {
+      "workspaceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698",
+      "gadgetId": "0",
+      "labels": {
+        "stream-slack/tenant": "tenant-e4-t08",
+        "stream-slack/workspace": "workspace-e4-t08",
+        "stream-slack/agent": "agent-e4-t08",
+        "stream-slack/invocation": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_invocation",
+        "stream-slack/idempotency": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_create"
+      },
+      "fence": 1,
+      "state": "ready",
+      "workspaceDigest": null,
+      "provider": {
+        "type": "cloudflare-os",
+        "kind": "cloudflare-os",
+        "resourceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698:0",
+        "testProfile": "e4-t08-accepted-timeout-once",
+        "executionProvider": "cloudflare-sandbox"
+      },
+      "storage": [
+        {
+          "storageId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698:0:storage:e4t08",
+          "workspaceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698",
+          "gadgetId": "0",
+          "labels": {
+            "stream-slack/tenant": "tenant-e4-t08",
+            "stream-slack/workspace": "workspace-e4-t08",
+            "stream-slack/agent": "agent-e4-t08",
+            "stream-slack/invocation": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_invocation",
+            "stream-slack/idempotency": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_create"
+          },
+          "fence": 1,
+          "state": "ready"
+        }
+      ]
+    }
+  ],
+  "afterCreateStorage": [
+    {
+      "storageId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698:0:storage:e4t08",
+      "workspaceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698",
+      "gadgetId": "0",
+      "labels": {
+        "stream-slack/tenant": "tenant-e4-t08",
+        "stream-slack/workspace": "workspace-e4-t08",
+        "stream-slack/agent": "agent-e4-t08",
+        "stream-slack/invocation": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_invocation",
+        "stream-slack/idempotency": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_create"
+      },
+      "fence": 1,
+      "state": "ready"
+    },
+    {
+      "storageId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698:0:storage:e4t08",
+      "workspaceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698",
+      "gadgetId": "0",
+      "labels": {
+        "stream-slack/tenant": "tenant-e4-t08",
+        "stream-slack/workspace": "workspace-e4-t08",
+        "stream-slack/agent": "agent-e4-t08",
+        "stream-slack/invocation": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_invocation",
+        "stream-slack/idempotency": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_create"
+      },
+      "fence": 1,
+      "state": "ready"
+    }
+  ],
+  "afterPublish": [
+    {
+      "workspaceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698",
+      "gadgetId": "0",
+      "labels": {
+        "stream-slack/tenant": "tenant-e4-t08",
+        "stream-slack/workspace": "workspace-e4-t08",
+        "stream-slack/agent": "agent-e4-t08",
+        "stream-slack/invocation": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_invocation",
+        "stream-slack/idempotency": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_create"
+      },
+      "fence": 3,
+      "state": "ready",
+      "workspaceDigest": "sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766",
+      "provider": {
+        "type": "cloudflare-os",
+        "kind": "cloudflare-os",
+        "resourceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698:0",
+        "testProfile": "e4-t08-accepted-timeout-once",
+        "executionProvider": "cloudflare-sandbox"
+      },
+      "storage": [
+        {
+          "storageId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698:0:storage:e4t08",
+          "workspaceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698",
+          "gadgetId": "0",
+          "labels": {
+            "stream-slack/tenant": "tenant-e4-t08",
+            "stream-slack/workspace": "workspace-e4-t08",
+            "stream-slack/agent": "agent-e4-t08",
+            "stream-slack/invocation": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_invocation",
+            "stream-slack/idempotency": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_create"
+          },
+          "fence": 3,
+          "state": "ready"
+        }
+      ]
+    }
+  ],
+  "afterPublishStorage": [
+    {
+      "storageId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698:0:storage:e4t08",
+      "workspaceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698",
+      "gadgetId": "0",
+      "labels": {
+        "stream-slack/tenant": "tenant-e4-t08",
+        "stream-slack/workspace": "workspace-e4-t08",
+        "stream-slack/agent": "agent-e4-t08",
+        "stream-slack/invocation": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_invocation",
+        "stream-slack/idempotency": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_create"
+      },
+      "fence": 3,
+      "state": "ready"
+    },
+    {
+      "storageId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698:0:storage:e4t08",
+      "workspaceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698",
+      "gadgetId": "0",
+      "labels": {
+        "stream-slack/tenant": "tenant-e4-t08",
+        "stream-slack/workspace": "workspace-e4-t08",
+        "stream-slack/agent": "agent-e4-t08",
+        "stream-slack/invocation": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_invocation",
+        "stream-slack/idempotency": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_create"
+      },
+      "fence": 3,
+      "state": "ready"
+    }
+  ],
+  "beforeDestroy": [
+    {
+      "workspaceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698",
+      "gadgetId": "0",
+      "labels": {
+        "stream-slack/tenant": "tenant-e4-t08",
+        "stream-slack/workspace": "workspace-e4-t08",
+        "stream-slack/agent": "agent-e4-t08",
+        "stream-slack/invocation": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_invocation",
+        "stream-slack/idempotency": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_create"
+      },
+      "fence": 5,
+      "state": "ready",
+      "workspaceDigest": "sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766",
+      "provider": {
+        "type": "cloudflare-os",
+        "kind": "cloudflare-os",
+        "resourceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698:0",
+        "testProfile": "e4-t08-accepted-timeout-once",
+        "executionProvider": "cloudflare-sandbox"
+      },
+      "storage": [
+        {
+          "storageId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698:0:storage:e4t08",
+          "workspaceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698",
+          "gadgetId": "0",
+          "labels": {
+            "stream-slack/tenant": "tenant-e4-t08",
+            "stream-slack/workspace": "workspace-e4-t08",
+            "stream-slack/agent": "agent-e4-t08",
+            "stream-slack/invocation": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_invocation",
+            "stream-slack/idempotency": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_create"
+          },
+          "fence": 5,
+          "state": "ready"
+        }
+      ]
+    }
+  ],
+  "beforeDestroyStorage": [
+    {
+      "storageId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698:0:storage:e4t08",
+      "workspaceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698",
+      "gadgetId": "0",
+      "labels": {
+        "stream-slack/tenant": "tenant-e4-t08",
+        "stream-slack/workspace": "workspace-e4-t08",
+        "stream-slack/agent": "agent-e4-t08",
+        "stream-slack/invocation": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_invocation",
+        "stream-slack/idempotency": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_create"
+      },
+      "fence": 5,
+      "state": "ready"
+    },
+    {
+      "storageId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698:0:storage:e4t08",
+      "workspaceId": "f6068a2035650f1e5db308b8599a88c6bebb2e653fe485a328de885cdafbb698",
+      "gadgetId": "0",
+      "labels": {
+        "stream-slack/tenant": "tenant-e4-t08",
+        "stream-slack/workspace": "workspace-e4-t08",
+        "stream-slack/agent": "agent-e4-t08",
+        "stream-slack/invocation": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_invocation",
+        "stream-slack/idempotency": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_create"
+      },
+      "fence": 5,
+      "state": "ready"
+    }
+  ],
+  "afterCleanup": [],
+  "afterCleanupStorage": [],
+  "cleanup": {
+    "rounds": 1,
+    "attempts": [],
+    "remaining": 0
+  },
+  "audit": [
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "create",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "create",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "create",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "create",
+      "path": "/api",
+      "status": 200,
+      "idempotencyKey": "e4-t08-cold-real-hybrid-20260824_mt7t8ds3_eemajvov_create"
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "network-policy",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "network-policy",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "workspace-materialize",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "workspace-materialize",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "network-policy",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "network-policy",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-cancel",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-cancel",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "exec-stream",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "destroy",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "inspect",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "destroy",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "destroy",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "destroy",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    },
+    {
+      "method": "RPC",
+      "operation": "reconcile",
+      "path": "/api",
+      "status": 200
+    }
+  ]
+}

@@ -239,9 +239,7 @@ export default {
         sandboxId,
         probeId,
         events,
-        observationId:
-          events[0]?.providerObservationId ??
-          `sandbox-egress:${sandboxId}:${probeId}`,
+        observationId: events[0]?.providerObservationId ?? null,
       });
     }
     if (request.method === "POST" && url.pathname === "/sandbox/exec/cancel") {

@@ -393,10 +393,11 @@ export class Gadget extends DurableObject {
           throw new Error("Cloudflare Sandbox network observation was bound to the wrong destination");
         if (!["allow", "deny"].includes(observation.outcome))
           throw new Error("Cloudflare Sandbox network observation has an invalid outcome");
-        const providerObservationId = String(
-          observation.providerObservationId ?? egress.observationId ?? "",
-        );
-        if (!/^[A-Za-z0-9._:-]{1,160}$/u.test(providerObservationId))
+        const providerObservationId = observation.providerObservationId;
+        if (
+          typeof providerObservationId !== "string" ||
+          !/^[A-Za-z0-9._:-]{1,160}$/u.test(providerObservationId)
+        )
           throw new Error("Cloudflare Sandbox network observation lacks an id");
         const decision = {
           type: "network-decision",

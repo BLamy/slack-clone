@@ -1052,16 +1052,18 @@ async function destroyWithAcceptedTimeoutRetry({
   scopeLabels,
   prefix,
 }) {
-  const destroyKey = prefix + "_destroy";
+  const firstIdempotencyKey = prefix + "_destroy";
+  let retryIdempotencyKey = null;
   let firstError = null;
   let destroyed = null;
   let retryAttempted = false;
+  let cleanupObservation = null;
   try {
     destroyed = await provider.destroy({
       ...base,
       sandboxId: sandbox.sandboxId,
       expectedFence: sandbox.fence,
-      idempotencyKey: destroyKey,
+      idempotencyKey: firstIdempotencyKey,
     });
   } catch (error) {
     firstError = error;
@@ -1071,6 +1073,33 @@ async function destroyWithAcceptedTimeoutRetry({
       throw new Error(
         "destroy timed out but reconciliation found no retryable provider resource",
       );
+    cleanupObservation = pending.cleanupObservation;
+    assert.ok(
+      cleanupObservation && typeof cleanupObservation === "object",
+      "destroy timed out without a provider cleanup observation",
+    );
+    assert.equal(
+      cleanupObservation.source,
+      "cloudflare-sandbox",
+      "cleanup observation was not sourced from the Cloudflare Sandbox provider",
+    );
+    assert.equal(
+      cleanupObservation.destroyed,
+      true,
+      "provider cleanup observation did not attest destruction",
+    );
+    assertProviderObservationId(
+      cleanupObservation.sandboxId,
+      "cleanupObservation.sandboxId",
+    );
+    assertProviderObservationId(
+      cleanupObservation.providerObservationId,
+      "cleanupObservation.providerObservationId",
+    );
+    assert.ok(
+      Number.isSafeInteger(cleanupObservation.observedAtMs),
+      "cleanup observation did not include a bounded observation timestamp",
+    );
     const refreshed = await provider.inspect({
       ...base,
       sandboxId: sandbox.sandboxId,
@@ -1082,7 +1111,7 @@ async function destroyWithAcceptedTimeoutRetry({
       ...base,
       sandboxId: refreshed.sandboxId,
       expectedFence: refreshed.fence,
-      idempotencyKey: destroyKey,
+      idempotencyKey: (retryIdempotencyKey = firstIdempotencyKey),
     });
   }
   assert.ok(destroyed);
@@ -1104,10 +1133,17 @@ async function destroyWithAcceptedTimeoutRetry({
   const timeoutObserved =
     firstError?.code === CLOUDFLARE_OS_ERROR_CODES.TIMEOUT &&
     firstError?.operation === "destroy";
+  const sameIdempotencyKey =
+    retryAttempted && firstIdempotencyKey === retryIdempotencyKey;
   assert.equal(
     timeoutObserved && retryAttempted,
     true,
     "real provider did not exercise the accepted-then-timeout retry",
+  );
+  assert.equal(
+    sameIdempotencyKey,
+    true,
+    "accepted-timeout retry did not reuse the first destroy idempotency key",
   );
   assert.ok(
     remainingResources.length + remainingStorage.length > 0,
@@ -1119,7 +1155,11 @@ async function destroyWithAcceptedTimeoutRetry({
     evidence: {
       timeoutObserved,
       retryAttempted,
-      sameIdempotencyKey: retryAttempted,
+      firstIdempotencyKey,
+      retryIdempotencyKey,
+      sameIdempotencyKey,
+      cleanupCommitted: true,
+      cleanupObservation,
       resourceGone: primaryResources.length === 0,
       storageGone: primaryStorage.length === 0,
       orphanPresentBeforeSweep:
@@ -1358,6 +1398,7 @@ function resourceDetails(raw) {
     gadgetId,
     fence,
     state: record.state ?? record.status ?? record.lifecycle ?? null,
+    cleanupObservation: record.cleanupObservation ?? null,
   };
 }
 
@@ -1880,6 +1921,7 @@ function summarizeInventory(resources) {
       labels: resource.labels,
       fence: resource.fence,
       state: resource.state,
+      cleanupObservation: resource.cleanupObservation,
       workspaceDigest: extractWorkspaceDigest(raw),
       provider:
         record?.provider ??

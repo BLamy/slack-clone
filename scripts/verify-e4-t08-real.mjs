@@ -12,6 +12,7 @@ import {
   WorkspaceMaterializer,
   labelsEqual,
   normalizeManifest,
+  resourceLabels,
   workspaceDigest,
 } from "@stream-slack/sandbox-cloudflare-os";
 import {
@@ -27,6 +28,7 @@ import {
 const REQUIRED = [
   "CF_OS_BASE_URL",
   "CF_OS_TOKEN",
+  "CF_OS_PROTOCOL",
   "CF_OS_TENANT_ID",
   "CF_OS_WORKSPACE_ID",
   "CF_OS_AGENT_ID",
@@ -142,6 +144,7 @@ async function runRealConformance() {
   const client = new CloudflareOsClient({
     baseUrl: config.baseUrl,
     token: config.token,
+    protocol: config.protocol,
     fetchImpl: globalThis.fetch,
     timeoutMs: config.timeoutMs,
     maxAttempts: 3,
@@ -1126,12 +1129,13 @@ async function refreshSandbox(
 }
 
 async function inventoryAll(client, labels) {
+  const queryLabels = labelsForIdentity(labels);
   const resources = [];
   const storage = [];
   const pages = [];
   let cursor = null;
   for (let page = 0; page < 1024; page += 1) {
-    const response = await client.inventory(labels, { cursor });
+    const response = await client.inventory(queryLabels, { cursor });
     const values = response?.resources ?? response?.items ?? response;
     if (!Array.isArray(values))
       throw new Error("real provider inventory response was not an array");
@@ -1170,9 +1174,12 @@ async function inventoryAll(client, labels) {
 }
 
 function exactResources(resources, labels) {
+  const expectedLabels = labelsForIdentity(labels);
   return resources
     .map((raw) => resourceDetails(raw))
-    .filter((resource) => resource && labelsEqual(resource.labels, labels));
+    .filter(
+      (resource) => resource && labelsEqual(resource.labels, expectedLabels),
+    );
 }
 
 function prefixedResources(resources, prefix) {
@@ -1227,6 +1234,16 @@ function requireOneResource(resources, labels) {
     "expected exactly one uniquely owned provider resource",
   );
   return matches[0];
+}
+
+function labelsForIdentity(value) {
+  if (
+    value &&
+    typeof value === "object" &&
+    typeof value["stream-slack/tenant"] === "string"
+  )
+    return value;
+  return resourceLabels({ resourceIdentity: value });
 }
 
 function resourceDetails(raw) {
@@ -1749,6 +1766,9 @@ function readConfig() {
   const testProfile = process.env.CF_OS_TEST_PROFILE;
   if (testProfile !== "e4-t08-accepted-timeout-once")
     throw new Error("CF_OS_TEST_PROFILE must be e4-t08-accepted-timeout-once");
+  const protocol = process.env.CF_OS_PROTOCOL;
+  if (protocol !== "official-cloudflare-os")
+    throw new Error("CF_OS_PROTOCOL must be official-cloudflare-os");
   const dnsRebindingProbeUrl = conformanceProbeUrl(
     process.env.CF_OS_DNS_REBIND_PROBE_URL,
     "CF_OS_DNS_REBIND_PROBE_URL",
@@ -1780,6 +1800,7 @@ function readConfig() {
   return {
     baseUrl,
     token: process.env.CF_OS_TOKEN,
+    protocol: process.env.CF_OS_PROTOCOL,
     tenantId: boundedId(process.env.CF_OS_TENANT_ID, "CF_OS_TENANT_ID"),
     workspaceId: boundedId(
       process.env.CF_OS_WORKSPACE_ID,

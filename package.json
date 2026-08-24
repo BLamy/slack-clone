@@ -63,7 +63,7 @@
     "replay:ledger": "node scripts/replay-ledger.mjs",
     "audit:durable-streams": "node tools/audit-durable-streams-access.mjs",
     "format:check:e4-t07": "prettier --check packages/sandbox/src/quota.mjs packages/sandbox/src/schemas/quota-policy.v1.schema.json packages/sandbox-cloudflare-os/src/gc.mjs packages/sandbox-cloudflare-os/src/client.mjs packages/sandbox-cloudflare-os/src/errors.mjs packages/sandbox-cloudflare-os/src/index.mjs scripts/verify-e4-t07.mjs scripts/cold-verify-e4-t07.mjs",
-    "format:check:e4-t08-real": "prettier --check packages/sandbox-cloudflare-os/src/client.mjs packages/sandbox-cloudflare-os/src/provider.mjs scripts/verify-e4-t08-real.mjs",
+    "format:check:e4-t08-real": "prettier --check packages/sandbox-cloudflare-os/src/client.mjs packages/sandbox-cloudflare-os/src/official-client.mjs packages/sandbox-cloudflare-os/src/provider.mjs scripts/verify-e4-t08-real.mjs",
     "format:check:e5-t02": "prettier --check packages/connections/src/*.mjs packages/connections/src/schemas/*.json scripts/verify-e5-t02.mjs test/unit/connections.test.mjs",
     "record:replay": "node scripts/record-two-replays.mjs",
     "storybook": "storybook dev -p 6006",

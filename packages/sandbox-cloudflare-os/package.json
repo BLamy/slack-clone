@@ -5,6 +5,8 @@
   "type": "module",
   "exports": "./src/index.mjs",
   "dependencies": {
-    "@stream-slack/sandbox": "workspace:*"
+    "@stream-slack/sandbox": "workspace:*",
+    "capnweb": "^0.11.1",
+    "yjs": "^13.6.31"
   }
 }

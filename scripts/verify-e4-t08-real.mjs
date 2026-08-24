@@ -294,6 +294,7 @@ async function runRealConformance() {
       [
         "set -eu",
         "printf 'parent:start\\n'",
+        "./bin/scenario.sh",
         "sh -c 'printf \"child:one\\\\n\"'",
         "sh -c 'printf \"child:two\\\\n\"'",
         "printf 'parent:end\\n'",
@@ -314,6 +315,11 @@ async function runRealConformance() {
     assert.match(deterministicFirst.stdout, /child:one/u);
     assert.match(deterministicFirst.stdout, /child:two/u);
     assert.match(deterministicFirst.stdout, /parent:end/u);
+    assert.match(
+      deterministicFirst.stdout,
+      /pinned-workspace-ok/u,
+      "deterministic execution did not invoke the provider-materialized workspace",
+    );
     state.executions.push(executionEvidence(deterministicFirst));
     sandbox = await refreshSandbox(
       provider,
@@ -1450,6 +1456,19 @@ function extractProviderUsage(raw, expectedResourceId) {
   assert.ok(Number.isSafeInteger(meteringWindow.endMs));
   assert.ok(meteringWindow.endMs > meteringWindow.startMs);
   assert.ok(measured && typeof measured === "object");
+  assert.ok(
+    Number.isSafeInteger(measured.executions) && measured.executions > 0,
+    "provider usage did not measure any executions",
+  );
+  assert.ok(
+    Number.isSafeInteger(measured.outputBytes) && measured.outputBytes > 0,
+    "provider usage did not measure execution output",
+  );
+  assert.ok(
+    Number.isSafeInteger(measured.networkDecisions) &&
+      measured.networkDecisions > 0,
+    "provider usage did not measure network decisions",
+  );
   assertProviderObservationId(
     source.sourceObservationId,
     "sourceObservationId",
@@ -1530,8 +1549,10 @@ function probeCommand(id, url) {
   const body = [
     "set -eu",
     "url=" + shellQuote(url),
-    "code=$(curl --silent --output /dev/null --max-time 3 --max-redirs 0 --write-out '%{http_code}' \"$url\" 2>/dev/null || printf '000')",
-    "if [ \"$code\" = '000' ]; then result=denied; else result=allowed; fi",
+    "if response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0 -H " +
+      shellQuote("X-E4-T08-Probe: " + id) +
+      ' "$url" 2>&1); then result=allowed; else result=denied; fi',
+    "printf '%s\\n' \"$response\"",
     "printf 'probe:" + id + ':%s\\n\' "$result"',
   ].join("\n");
   return shellCommand(body);

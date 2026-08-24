@@ -274,3 +274,44 @@ Cloudflare OS inventory.
 - Claim: the provider truth gate is now exercised against the official Cloudflare OS
   Gadget plus the official Sandbox container execution substrate; fresh critic review and
   sensitivity proof remain required before changing the lifecycle status to `verified`.
+
+### Builder — 2026-08-24 (provider-observation and cleanup repair)
+
+- Commit: `896054b53c85d7b2659a69d6de682875c02a9d79`
+- Repair: destroy now uses an aborted Cap'n Web request after the Gadget has durably
+  committed provider cleanup, network decisions and execution cursors are sourced only
+  from the Sandbox worker's EgressLog/process observations, and the Gadget waits for
+  provider output before finalizing a race where egress is observed first. The cold gate
+  creates a second prefixed real Gadget/Sandbox resource so the cleanup sweep is exercised,
+  and records manifest file bytes for independent digest verification. Private and loopback
+  probes use the provider's HTTPS proxy path because the official SDK does not intercept
+  literal IP connections directly; the provider handler still records the exact intercepted
+  destination and deny rule.
+- Deployment: official OS Worker
+  `https://e4t08-os-20260824.brett-lamy.workers.dev`; Sandbox runner
+  `https://e4t08-sandbox-20260824.brett-lamy.workers.dev`; dedicated Gatekeeper
+  `https://e4t08-gatekeeper-20260824.brett-lamy.workers.dev`.
+- Cold run: `E4_T08_IMPLEMENTATION_COMMIT=896054b53c85d7b2659a69d6de682875c02a9d79 TEST_RUN_ID=e4-t08-cold-repair-final-20260824 TEST_ARTIFACT_DIR=/tmp/e4-t08-cold-repair-final-20260824 CF_OS_PROTOCOL=official-cloudflare-os ... tools/verify/cold_clone.sh verify-E4-T08-real`; detached checkout, HTTPS `emulate` submodule initialization, frozen install, and the real provider runner exited 0 at the exact implementation commit.
+- Evidence: `evidence/e4-t08-cold-repair-final-20260824/verification-summary.json`,
+  `provider-inventory.json`, `execution-transcripts.json`, `network-probes.json`,
+  `quota-cost.json`, `manifest.json`, and `cold-verification-transcript.json`.
+- Evidence summary: provider type `cloudflare-os`; workspace digest
+  `sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766`;
+  deterministic transcript digest
+  `sha256:985879e8a12e782370b9ad6c50a663e5e26579d8be0699578bbbeb688f989d23`;
+  eight provider-observed network decisions matched the exact allow/deny matrix, including
+  private and inbound targets; accepted-timeout retry used the same idempotency key after
+  provider cleanup; one orphan resource and two orphan storage records were swept; final
+  uniquely prefixed workspace/Gadget and storage inventory was zero. Network decision
+  digest: `sha256:2070079c1feca26fb8fa8e5a56dee3988f4c84dd3cd6e83de0e98aa0f95cc93f`;
+  quota event digest: `sha256:9c5fbd1b973a122f49a47facc5a45c250528bb3ff8746b7ccf773784cffc8793`.
+- Gates: `pnpm format:check:e4-t08-real`, `pnpm lint`, `pnpm typecheck`, `pnpm test`
+  (209 unit tests and 15 Playwright integration tests), deployment-runner
+  `npm run typecheck`, and the exact cold-clone real-provider run all passed.
+- Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone
+  real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger,
+  and before/after Cloudflare OS inventory.
+- Claim: the critic's previously identified provider-evidence, reconnect, accepted-timeout,
+  orphan-cleanup, and manifest-provenance gaps are repaired at this exact commit; a fresh
+  critic must still independently replay the evidence and run sensitivity checks before
+  changing the lifecycle status to `verified`.

@@ -3,7 +3,7 @@ id: E4-T08
 epic: 4
 title: "Capstone: a real Cloudflare OS workspace executes a pinned run under deny-by-default policy, survives reconnect, and leaves no orphan"
 priority: 408
-status: refuted
+status: implemented
 depends_on: [E4-T05, E4-T07]
 estimate: L
 capstone: true
@@ -195,3 +195,44 @@ and `/private/tmp/slack-clone-e4-t08-gates-95800/gates.log`. Replay: N/A (real h
 Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript,
 exact stream/tree digests, network probe evidence, cost ledger, and before/after
 Cloudflare OS inventory.
+
+### Builder — 2026-08-24 (official Cloudflare OS repair)
+
+- Commit: `28c06e06241acb74a00a19d83dffc3b924244d2f`
+- Implementation: `@stream-slack/sandbox-cloudflare-os` now has an explicit
+  `official-cloudflare-os` protocol. It authenticates through the official Cloudflare OS
+  Cap'n Web `/api`, creates a real workspace/Gadget, uploads the Yjs `server.js` source,
+  and maps Gadget Durable Object state, lifecycle fences, execution events, network
+  decisions, usage, and deletion back to `SandboxProvider`. The real-only runner requires
+  this protocol and normalizes identity-shaped versus label-shaped inventory queries.
+- Deployment: official Cloudflare OS Worker
+  `https://e4t08-os-20260824.brett-lamy.workers.dev`, deployed with Wrangler from the
+  official `cloudflare/cloudflare-os` repository. The deployment uses KV-backed bindings;
+  the account's R2 service was unavailable, so no R2 binding is used by this E4 API path.
+- Cold run: `PATH=<bundled-runtime> E4_T08_IMPLEMENTATION_COMMIT=28c06e06241acb74a00a19d83dffc3b924244d2f TEST_RUN_ID=e4-t08-cold-real-20260824 TEST_ARTIFACT_DIR=/tmp/e4-t08-cold-real-20260824 CF_OS_PROTOCOL=official-cloudflare-os ... tools/verify/cold_clone.sh verify-E4-T08-real`; detached HTTPS submodule checkout, frozen install, and the real provider runner exited 0.
+- Evidence: `evidence/e4-t08-cold-real-20260824/verification-summary.json`,
+  `provider-inventory.json`, `execution-transcripts.json`, `network-probes.json`,
+  `quota-cost.json`, `manifest.json`, and `cold-verification-transcript.json`.
+- Evidence summary: provider type `cloudflare-os`; one resource bound consistently across
+  create/materialize/usage; workspace digest
+  `sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766`;
+  deterministic transcript digest
+  `sha256:8bf1bc234515fa6843ea03e038c772c60f9ac69212807670b1458a2b30892dbe`;
+  eight network decisions (allowlisted Gatekeeper origin allowed, all seven adversarial
+  destinations denied); stale fence rejected before provider exec; cancellation reported
+  zero survivors and no post-cancel output; accepted-timeout destroy retried with the same
+  idempotency key; final workspace/Gadget and storage inventory was zero.
+- Gates: `pnpm format:check:e4-t08-real`, `pnpm lint`, `pnpm typecheck`, `pnpm test:unit`
+  (209 passed, 0 skipped), `pnpm build`, and `pnpm test` (209 unit tests plus 15 Playwright
+  integration tests) passed. The pinned `emulate` submodule was initialized and built in
+  this isolated worktree only; it was not edited.
+- Runtime boundary: official Cloudflare OS Gadgets are Durable Objects, not shell
+  containers. The E4 profile therefore runs the finite conformance commands as
+  provider-native Gadget execution events and does not evaluate arbitrary shell text; the
+  client speaks only the official API and the Gadget owns the durable state and fences.
+- Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone
+  real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger,
+  and before/after Cloudflare OS inventory.
+- Claim: the capstone now has reproducible real-provider acceptance at the exact commit;
+  fresh critic must independently replay the committed evidence and prove the verifier
+  detects a targeted mutation before status can advance to `verified`.

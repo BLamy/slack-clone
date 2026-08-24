@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "task": "E4-T08",
+  "runId": "e4-t08-cold-real-20260824",
+  "providerResourceId": "fbbca21630594a2131e23e44a5f8d1aa4b5b9e0becf92db454b474f95d2e5f11:0",
+  "quota": {
+    "policyDigest": "sha256:ebbb96e825aad5182602938b72233b69f375596903aa0c2f2a75ebf2adcf67a8",
+    "reservations": [
+      {
+        "reservationId": "e4-t08-cold-20260824_mt7q2vcq_itoygqms_reservation",
+        "tenantId": "tenant-e4-t08",
+        "workspaceId": "workspace-e4-t08",
+        "agentId": "agent-e4-t08",
+        "runId": "rn_e4-t08-cold-20260824_mt7q2vcq_itoygqms",
+        "invocationDigest": "sha256:03ac1b716bb6a22c389eb8a9e0c8aa87300d1409cab7aeb3f7a35f8bc1bfb6e3",
+        "requested": {
+          "sandboxes": 1,
+          "cpuMillis": 1000,
+          "memoryBytes": 67108864,
+          "storageBytes": 67108864,
+          "durationMs": 600000,
+          "spendCents": 100000
+        },
+        "status": "released",
+        "fence": 2,
+        "releaseReason": "provider-cleanup"
+      }
+    ],
+    "usage": {
+      "activeReserved": {
+        "sandboxes": 0,
+        "cpuMillis": 0,
+        "memoryBytes": 0,
+        "storageBytes": 0,
+        "durationMs": 0,
+        "spendCents": 0
+      },
+      "committed": {
+        "sandboxes": 0,
+        "cpuMillis": 0,
+        "memoryBytes": 0,
+        "storageBytes": 0,
+        "durationMs": 0,
+        "spendCents": 0
+      },
+      "costs": [
+        {
+          "costId": "cost_0870d1183aae22a323543b8a613a886f",
+          "reservationId": "e4-t08-cold-20260824_mt7q2vcq_itoygqms_reservation",
+          "tenantId": "tenant-e4-t08",
+          "workspaceId": "workspace-e4-t08",
+          "agentId": "agent-e4-t08",
+          "runId": "rn_e4-t08-cold-20260824_mt7q2vcq_itoygqms",
+          "providerResourceId": "fbbca21630594a2131e23e44a5f8d1aa4b5b9e0becf92db454b474f95d2e5f11:0",
+          "meteringWindow": {
+            "startMs": 1787605366579,
+            "endMs": 1787605375509
+          },
+          "measured": {
+            "cpuMillis": 0,
+            "memoryByteMs": 0,
+            "storageByteMs": 0,
+            "durationMs": 0
+          },
+          "pricingVersion": "cloudflare-os-provider-v1",
+          "costCents": 0,
+          "sourceObservationId": "fbbca21630594a2131e23e44a5f8d1aa4b5b9e0becf92db454b474f95d2e5f11:0:usage:5",
+          "sourceOffset": "fbbca21630594a2131e23e44a5f8d1aa4b5b9e0becf92db454b474f95d2e5f11:0:offset:5"
+        }
+      ]
+    },
+    "eventDigest": "sha256:d664b00396a58c5e7e8599515803d1c1f6e8326423eb975f5f874d7cb09fde17"
+  }
+}

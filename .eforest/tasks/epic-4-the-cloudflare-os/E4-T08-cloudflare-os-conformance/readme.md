@@ -251,8 +251,8 @@ Cloudflare OS inventory.
   `https://e4t08-sandbox-20260824.brett-lamy.workers.dev`; dedicated Gatekeeper
   `https://e4t08-gatekeeper-20260824.brett-lamy.workers.dev`. Checked-in deployment sources
   and the official OS loader/service-binding overlay are under `deploy/e4-t08/`.
-- Cold run: `E4_T08_IMPLEMENTATION_COMMIT=2c4bdeba0f2e3d19969a7a753127ef45b0d67599 TEST_RUN_ID=e4-t08-cold-real-hybrid-20260824 TEST_ARTIFACT_DIR=/tmp/e4-t08-cold-real-hybrid-20260824 CF_OS_PROTOCOL=official-cloudflare-os ... tools/verify/cold_clone.sh verify-E4-T08-real`; detached checkout, HTTPS `emulate` submodule initialization, frozen install, and the real provider runner exited 0.
-- Evidence: `evidence/e4-t08-cold-real-hybrid-20260824/verification-summary.json`,
+- Cold run: `E4_T08_IMPLEMENTATION_COMMIT=19218c4717490db79163622dede658e1f7804c31 TEST_RUN_ID=e4-t08-cold-real-hybrid-final-20260824 TEST_ARTIFACT_DIR=/tmp/e4-t08-cold-real-hybrid-final-20260824 CF_OS_PROTOCOL=official-cloudflare-os ... tools/verify/cold_clone.sh verify-E4-T08-real`; detached checkout, HTTPS `emulate` submodule initialization, frozen install, and the real provider runner exited 0 at the exact deployment-contract head.
+- Evidence: `evidence/e4-t08-cold-real-hybrid-final-20260824/verification-summary.json`,
   `provider-inventory.json`, `execution-transcripts.json`, `network-probes.json`,
   `quota-cost.json`, `manifest.json`, and `cold-verification-transcript.json`.
 - Evidence summary: provider type `cloudflare-os`; workspace digest
@@ -262,7 +262,9 @@ Cloudflare OS inventory.
   remote allowlisted Gatekeeper observation plus provider-denied direct, private,
   link-local, metadata, inbound, DNS-rebinding, and public-listener probes; measured
   provider usage and cost; accepted-timeout destroy retry used the same idempotency key;
-  final workspace/Gadget and nested storage inventory was zero.
+  final workspace/Gadget and nested storage inventory was zero. Final network decision
+  digest: `sha256:748261878bf93b0ef3e6a6d475fa7b7860bb910221f9d22c7a1af325cfff224d`;
+  final quota event digest: `sha256:26b557f50bd5946fbf4656e3b1c3913d78e50d882b6839345a14b308a1f31b6a`.
 - Gates: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (209 unit tests
   and 15 Playwright integration tests), `pnpm build`, deployment-runner `npm run typecheck`,
   and the exact cold-clone real-provider run all passed.

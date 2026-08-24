@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "task": "E4-T08",
+  "runId": "e4-t08-cold-real-hybrid-final-20260824",
+  "result": "PASS",
+  "implementationCommit": "19218c4717490db79163622dede658e1f7804c31",
+  "providerResourceId": "69647658cc795f2eba177a7f027eee55f3f7fe2bfb6622cb033702c1b2f7ed47:0",
+  "providerAttestation": {
+    "providerType": "cloudflare-os",
+    "providerResourceId": "69647658cc795f2eba177a7f027eee55f3f7fe2bfb6622cb033702c1b2f7ed47:0",
+    "testProfile": "e4-t08-accepted-timeout-once"
+  },
+  "workspaceDigest": "sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766",
+  "transcriptDigest": "sha256:132e0e509857f1212fc396ed5f608682bc995f0d85479e11ac86284e953f3368",
+  "networkDecisionDigest": "sha256:748261878bf93b0ef3e6a6d475fa7b7860bb910221f9d22c7a1af325cfff224d",
+  "quotaEventDigest": "sha256:26b557f50bd5946fbf4656e3b1c3913d78e50d882b6839345a14b308a1f31b6a",
+  "acceptedTimeoutRetry": {
+    "timeoutObserved": true,
+    "retryAttempted": true,
+    "sameIdempotencyKey": true,
+    "resourceGone": true,
+    "storageGone": true
+  },
+  "finalInventoryCount": 0,
+  "replay": "Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger, and before/after Cloudflare OS inventory"
+}

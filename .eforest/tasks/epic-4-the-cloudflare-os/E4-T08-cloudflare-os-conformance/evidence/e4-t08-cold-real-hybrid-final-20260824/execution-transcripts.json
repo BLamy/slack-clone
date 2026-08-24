@@ -1,0 +1,259 @@
+{
+  "schemaVersion": 1,
+  "task": "E4-T08",
+  "runId": "e4-t08-cold-real-hybrid-final-20260824",
+  "executions": [
+    {
+      "executionId": "ex_cda774ee89ae42fc97baee4c627b0938",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_cda774ee89ae42fc97baee4c627b0938",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:a8c8925cc1a1edb412415e72caca1fad40f928d98f4eb043c9f974ece5a486a7",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"cGFyZW50OnN0YXJ0CnBpbm5lZC13b3Jrc3BhY2Utb2sKY2hpbGQ6b25lCmNoaWxkOnR3bwpwYXJlbnQ6ZW5kCg==\",\"encoding\":\"base64\",\"byteLength\":64},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "parent:start\npinned-workspace-ok\nchild:one\nchild:two\nparent:end\n",
+      "stderr": "",
+      "disconnected": true
+    },
+    {
+      "executionId": "ex_2b5687479c5e4bffaa6a4b03720d43fd",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_2b5687479c5e4bffaa6a4b03720d43fd",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:1100d8fbf84b7d319492e43d14eba68f8ac644ec5f9045bc33c32cde620eccc9",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"cGFyZW50OnN0YXJ0CnBpbm5lZC13b3Jrc3BhY2Utb2sKY2hpbGQ6b25lCmNoaWxkOnR3bwpwYXJlbnQ6ZW5kCg==\",\"encoding\":\"base64\",\"byteLength\":64},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "parent:start\npinned-workspace-ok\nchild:one\nchild:two\nparent:end\n",
+      "stderr": "",
+      "disconnected": true
+    },
+    {
+      "executionId": "ex_bb16ffc404bd444ab01386179cb701aa",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_bb16ffc404bd444ab01386179cb701aa",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:9b9df4f170a479eee6971e3869b32706f4b4d833ca1c37aa99d4957eed6db051",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"eyJtYXJrZXIiOiJlNC10MDgtZ2F0ZWtlZXBlci1vayJ9CnByb2JlOmFsbG93bGlzdGVkLWdhdGVrZWVwZXI6YWxsb3dlZAo=\",\"encoding\":\"base64\",\"byteLength\":71},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "{\"marker\":\"e4-t08-gatekeeper-ok\"}\nprobe:allowlisted-gatekeeper:allowed\n",
+      "stderr": "",
+      "disconnected": false
+    },
+    {
+      "executionId": "ex_e98a854f51284609bf563e4d7a995b17",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_e98a854f51284609bf563e4d7a995b17",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:def6091090bafc018e8b0f70b617d488822592dacb06f764999b012eb9be56da",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNTIwCk9yaWdpbiBpcyBkaXNhbGxvd2VkCnByb2JlOmRpcmVjdC1pbnRlcm5ldDpkZW5pZWQK\",\"encoding\":\"base64\",\"byteLength\":99},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 520\nOrigin is disallowed\nprobe:direct-internet:denied\n",
+      "stderr": "",
+      "disconnected": false
+    },
+    {
+      "executionId": "ex_b55f2991a27f41748d34b831d376058b",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_b55f2991a27f41748d34b831d376058b",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:02acdc3c2871e1a0730d9efe03f856fd86d1fef6d9c88cdf46356fcc8a1d5f7a",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDcpIEZhaWxlZCB0byBjb25uZWN0IHRvIDEwLjAuMC4xIHBvcnQgODAgYWZ0ZXIgMCBtczogQ29ubmVjdGlvbiByZWZ1c2VkCnByb2JlOnByaXZhdGUtYWRkcmVzczpkZW5pZWQK\",\"encoding\":\"base64\",\"byteLength\":108},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (7) Failed to connect to 10.0.0.1 port 80 after 0 ms: Connection refused\nprobe:private-address:denied\n",
+      "stderr": "",
+      "disconnected": false
+    },
+    {
+      "executionId": "ex_cb77a4d3468041169e8fab7d2bb5545b",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_cb77a4d3468041169e8fab7d2bb5545b",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:44a57993467de5ccc0296bab12bee603ce7cac9d16841990efaae793df6ada2f",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNTIwCk9yaWdpbiBpcyBkaXNhbGxvd2VkCnByb2JlOmxpbmstbG9jYWw6ZGVuaWVkCg==\",\"encoding\":\"base64\",\"byteLength\":94},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 520\nOrigin is disallowed\nprobe:link-local:denied\n",
+      "stderr": "",
+      "disconnected": false
+    },
+    {
+      "executionId": "ex_f1f1dd1ef4d94c94af0efa785bd05c1f",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_f1f1dd1ef4d94c94af0efa785bd05c1f",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:b7239820d5a41948938726d0b7914123db7f1c23bf71a2bb3d6950c737853eb8",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNTIwCk9yaWdpbiBpcyBkaXNhbGxvd2VkCnByb2JlOm1ldGFkYXRhOmRlbmllZAo=\",\"encoding\":\"base64\",\"byteLength\":92},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 520\nOrigin is disallowed\nprobe:metadata:denied\n",
+      "stderr": "",
+      "disconnected": false
+    },
+    {
+      "executionId": "ex_1eda0d69062c4bd6ab854a58b61e09e4",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_1eda0d69062c4bd6ab854a58b61e09e4",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:2624de4825c4a4115d2499d1436d08ce36c36b4b4db511e967b8660b29c00332",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDcpIEZhaWxlZCB0byBjb25uZWN0IHRvIDEyNy4wLjAuMSBwb3J0IDQ0MyBhZnRlciAwIG1zOiBDb25uZWN0aW9uIHJlZnVzZWQKcHJvYmU6aW5ib3VuZDpkZW5pZWQK\",\"encoding\":\"base64\",\"byteLength\":102},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (7) Failed to connect to 127.0.0.1 port 443 after 0 ms: Connection refused\nprobe:inbound:denied\n",
+      "stderr": "",
+      "disconnected": false
+    },
+    {
+      "executionId": "ex_d3db280ccedc49e59023f05cbbf3e14e",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_d3db280ccedc49e59023f05cbbf3e14e",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:382fa6b9be181b5776a9b4f40c8e1610a55ceec23cc2043b979c19b9e252f004",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNTIwCk9yaWdpbiBpcyBkaXNhbGxvd2VkCnByb2JlOmRucy1yZWJpbmRpbmc6ZGVuaWVkCg==\",\"encoding\":\"base64\",\"byteLength\":97},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 520\nOrigin is disallowed\nprobe:dns-rebinding:denied\n",
+      "stderr": "",
+      "disconnected": false
+    },
+    {
+      "executionId": "ex_eeaa0779036d4954aefbffa3f4dcf818",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_eeaa0779036d4954aefbffa3f4dcf818",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:be1ade8379aa02e68b43f0b777c9bec77af3d0e69d50674ae4451d91ef77b43f",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNTIwCk9yaWdpbiBpcyBkaXNhbGxvd2VkCnByb2JlOnB1YmxpYy1saXN0ZW5lcjpkZW5pZWQK\",\"encoding\":\"base64\",\"byteLength\":99},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 520\nOrigin is disallowed\nprobe:public-listener:denied\n",
+      "stderr": "",
+      "disconnected": false
+    },
+    {
+      "executionId": "ex_262029fbcf164d7d9e39dca2e23f8dfe",
+      "kind": "cancelled",
+      "terminal": {
+        "executionId": "ex_262029fbcf164d7d9e39dca2e23f8dfe",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "cancelled",
+        "exitCode": null,
+        "signal": null,
+        "reasonCode": "cancelled",
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:84b91ed43d5bc6ae72457e09834e9c24e33261861da21ddd058699c67ec213e2",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y2FuY2VsOnN0YXJ0Cg==\",\"encoding\":\"base64\",\"byteLength\":13},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"cancelled\",\"exitCode\":null,\"signal\":null,\"reasonCode\":\"cancelled\",\"termination\":{\"survivors\":0}}]",
+      "stdout": "cancel:start\n",
+      "stderr": "",
+      "disconnected": false
+    }
+  ],
+  "adversarial": {
+    "staleHandle": {
+      "staleFence": 3,
+      "freshFence": 4,
+      "rejectedCode": "SANDBOX_FENCE_MISMATCH",
+      "providerExecRequests": 0
+    },
+    "forkEscape": {
+      "executionId": "ex_262029fbcf164d7d9e39dca2e23f8dfe",
+      "backgroundChildSpawned": true,
+      "survivors": 0,
+      "postCancelSideEffect": false
+    }
+  },
+  "acceptedTimeoutRetry": {
+    "timeoutObserved": true,
+    "retryAttempted": true,
+    "sameIdempotencyKey": true,
+    "resourceGone": true,
+    "storageGone": true
+  }
+}

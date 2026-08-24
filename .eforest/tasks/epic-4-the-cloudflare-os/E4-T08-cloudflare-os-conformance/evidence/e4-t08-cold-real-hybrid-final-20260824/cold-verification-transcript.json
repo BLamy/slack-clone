@@ -1,0 +1,6 @@
+{
+  "implementationCommit": "19218c4717490db79163622dede658e1f7804c31",
+  "result": "PASS",
+  "runId": "e4-t08-cold-real-hybrid-final-20260824",
+  "replay": "Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger, and before/after Cloudflare OS inventory"
+}

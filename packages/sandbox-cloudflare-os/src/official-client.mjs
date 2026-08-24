@@ -256,6 +256,7 @@ export class Gadget extends DurableObject {
       events: [],
       stdoutOffset: 0,
       stderrOffset: 0,
+      providerObservations: [],
       terminal: null,
       cancelRequested: false,
       cancelObservation: null,
@@ -279,7 +280,10 @@ export class Gadget extends DurableObject {
     const execution = state.executions[String(executionId)];
     if (!execution) throw new Error("execution not found");
     const snapshot = await this.#refreshExecution(state, execution);
-    if (execution.cancelRequested && !execution.terminal) {
+    const canFinalize =
+      execution.pendingNetworkDecision === null &&
+      execution.events.some((event) => event.type === "output");
+    if (execution.cancelRequested && !execution.terminal && canFinalize) {
       const survivors = execution.cancelObservation?.runningProcessCount ??
         snapshot.runningProcessCount ?? 0;
       execution.events.push(this.#terminal(
@@ -290,8 +294,14 @@ export class Gadget extends DurableObject {
         "cancelled",
         { survivors, providerObservationId: "process:" + execution.processId },
       ));
+      execution.events.at(-1).providerObservation = execution.lastProviderObservation;
       execution.terminal = "cancelled";
-    } else if (!execution.terminal && snapshot.process && snapshot.process.status !== "running") {
+    } else if (
+      !execution.terminal &&
+      canFinalize &&
+      snapshot.process &&
+      snapshot.process.status !== "running"
+    ) {
       const exitCode = snapshot.process.exitCode ?? null;
       execution.events.push(this.#terminal(
         execution.id,
@@ -301,8 +311,11 @@ export class Gadget extends DurableObject {
         exitCode === 0 ? null : "process_exit",
         { survivors: snapshot.runningProcessCount ?? 0, providerObservationId: "process:" + execution.processId },
       ));
+      execution.events.at(-1).providerObservation = execution.lastProviderObservation;
       execution.terminal = exitCode === 0 ? "completed" : "failed";
     }
+    if (execution.terminal && execution.events.length > 0)
+      execution.events.at(-1).providerObservation = execution.lastProviderObservation;
     state.usage.lastObservedAtMs = Date.now();
     await this.#save(state);
     const offset = Number(afterSequence) || 0;
@@ -312,67 +325,138 @@ export class Gadget extends DurableObject {
   async #refreshExecution(state, execution) {
     const snapshot = await this.#runner(
       "/sandbox/exec/snapshot?sandboxId=" + encodeURIComponent(state.sandboxId) +
-        "&processId=" + encodeURIComponent(execution.processId),
+        "&processId=" + encodeURIComponent(execution.processId) +
+        "&stdoutOffset=" + String(execution.stdoutOffset) +
+        "&stderrOffset=" + String(execution.stderrOffset),
       undefined,
       "GET",
     );
-    const stdout = String(snapshot.stdout ?? "");
-    const stderr = String(snapshot.stderr ?? "");
-    const stdoutDelta = stdout.slice(execution.stdoutOffset);
-    const stderrDelta = stderr.slice(execution.stderrOffset);
-    execution.stdoutOffset = stdout.length;
-    execution.stderrOffset = stderr.length;
-    if (stdoutDelta) this.#appendOutput(state, execution, "stdout", stdoutDelta);
-    if (stderrDelta) this.#appendOutput(state, execution, "stderr", stderrDelta);
+    const stdoutDelta = String(snapshot.stdoutDelta ?? "");
+    const stderrDelta = String(snapshot.stderrDelta ?? "");
+    if (!Number.isSafeInteger(snapshot.stdoutOffset) ||
+        !Number.isSafeInteger(snapshot.stderrOffset) ||
+        snapshot.stdoutOffset < execution.stdoutOffset ||
+        snapshot.stderrOffset < execution.stderrOffset) {
+      throw new Error("Cloudflare Sandbox returned a regressing process offset");
+    }
+    execution.stdoutOffset = snapshot.stdoutOffset;
+    execution.stderrOffset = snapshot.stderrOffset;
+    const observed = snapshot.providerObservation ?? {};
+    const providerObservation = {
+      observationId: String(
+        observed.providerObservationId ?? snapshot.providerObservationId ?? "",
+      ),
+      processId: execution.processId,
+      requestedStdoutOffset: observed.requestedStdoutOffset,
+      requestedStderrOffset: observed.requestedStderrOffset,
+      stdoutOffset: snapshot.stdoutOffset,
+      stderrOffset: snapshot.stderrOffset,
+    };
+    if (!/^[A-Za-z0-9._:-]{1,160}$/u.test(providerObservation.observationId))
+      throw new Error("Cloudflare Sandbox omitted a bounded process observation id");
+    if (
+      !Number.isSafeInteger(providerObservation.requestedStdoutOffset) ||
+      !Number.isSafeInteger(providerObservation.requestedStderrOffset) ||
+      providerObservation.requestedStdoutOffset < 0 ||
+      providerObservation.requestedStderrOffset < 0
+    )
+      throw new Error("Cloudflare Sandbox omitted requested process offsets");
+    execution.lastProviderObservation = providerObservation;
+    const lastObservation = execution.providerObservations.at(-1);
+    if (
+      !lastObservation ||
+      lastObservation.observationId !== providerObservation.observationId ||
+      lastObservation.requestedStdoutOffset !==
+        providerObservation.requestedStdoutOffset ||
+      lastObservation.requestedStderrOffset !==
+        providerObservation.requestedStderrOffset
+    )
+      execution.providerObservations.push(providerObservation);
+    if (stdoutDelta)
+      this.#appendOutput(state, execution, "stdout", stdoutDelta, providerObservation);
+    if (stderrDelta)
+      this.#appendOutput(state, execution, "stderr", stderrDelta, providerObservation);
+    this.#attachPendingNetworkDecision(state, execution);
     if (execution.probe && !execution.networkDecisionAdded) {
       const egress = await this.#runner(
         "/sandbox/egress?sandboxId=" + encodeURIComponent(state.sandboxId) +
-          "&probeId=" + encodeURIComponent(execution.probe.id),
+        "&probeId=" + encodeURIComponent(execution.probe.id),
         undefined,
         "GET",
       );
-      const observedAllow = Array.isArray(egress.events) && egress.events.length > 0;
-      const deniedByProvider =
-        new RegExp("probe:" + execution.probe.id + ":denied", "u").test(stdout) &&
-        /(?:Origin is disallowed|error: 520|curl:\s+\(\d+\))/u.test(stdout + "\n" + stderr);
-      if (observedAllow || deniedByProvider) {
-        const observation = observedAllow ? egress.events[0] : null;
+      const observations = Array.isArray(egress.events) ? egress.events : [];
+      if (observations.length > 1)
+        throw new Error("Cloudflare Sandbox returned multiple observations for one probe");
+      const observation = observations[0] ?? null;
+      if (observation) {
+        if (!sameDestination(observation.destination, execution.probe.destination))
+          throw new Error("Cloudflare Sandbox network observation was bound to the wrong destination");
+        if (!["allow", "deny"].includes(observation.outcome))
+          throw new Error("Cloudflare Sandbox network observation has an invalid outcome");
+        const providerObservationId = String(
+          observation.providerObservationId ?? egress.observationId ?? "",
+        );
+        if (!/^[A-Za-z0-9._:-]{1,160}$/u.test(providerObservationId))
+          throw new Error("Cloudflare Sandbox network observation lacks an id");
         const decision = {
           type: "network-decision",
           probeId: execution.probe.id,
-          outcome: observedAllow ? "allow" : "deny",
-          reasonCode: observedAllow
+          outcome: observation.outcome,
+          reasonCode: observation.outcome === "allow"
             ? "gatekeeper_observed"
-            : /(?:Origin is disallowed|error: 520)/u.test(stdout + "\n" + stderr)
-              ? "cloudflare_sandbox_policy"
-              : "cloudflare_sandbox_network",
-          ruleId: observedAllow ? "e4-t08-gatekeeper" : "default-deny",
-          destination: execution.probe.destination,
-          providerObservationId: observedAllow
-            ? "gatekeeper:" + String(observation.timestampMs)
-            : "sandbox-process:" + execution.processId,
+            : "cloudflare_sandbox_policy",
+          ruleId: String(observation.ruleId ?? (observation.outcome === "allow" ? "e4-t08-gatekeeper" : "default-deny")),
+          destination: observation.destination,
+          providerObservationId,
         };
-        const output = [...execution.events].reverse().find((event) => event.type === "output");
-        if (!output) {
-          execution.pendingNetworkDecision = decision;
-          return snapshot;
-        }
-        output.networkDecision = decision;
-        execution.networkDecisionAdded = true;
-        state.usage.networkDecisions += 1;
-        state.usage.lastObservedAtMs = Date.now();
-        state.usage.sourceObservationId = decision.providerObservationId;
-        state.usage.sourceOffset = "process:" + execution.processId;
+        const output = [...execution.events]
+          .reverse()
+          .find((event) => event.type === "output");
+        if (output) this.#attachNetworkDecision(state, execution, decision, output);
+        else execution.pendingNetworkDecision = decision;
+      } else if (snapshot.process && snapshot.process.status !== "running") {
+        if (execution.pendingNetworkDecision === null)
+          throw new Error("Cloudflare Sandbox terminated without a provider network observation");
       }
     }
     return snapshot;
   }
 
-  #appendOutput(state, execution, channel, text) {
-    const event = this.#output(execution.id, execution.events.length + 1, channel, text);
+  #appendOutput(state, execution, channel, text, providerObservation) {
+    const event = this.#output(
+      execution.id,
+      execution.events.length + 1,
+      channel,
+      text,
+      providerObservation,
+    );
     execution.events.push(event);
     state.usage.outputBytes += event.byteLength;
     state.usage.lastObservedAtMs = Date.now();
+  }
+
+  #attachPendingNetworkDecision(state, execution) {
+    if (!execution.pendingNetworkDecision || execution.networkDecisionAdded) return;
+    const output = [...execution.events]
+      .reverse()
+      .find((event) => event.type === "output");
+    if (output)
+      this.#attachNetworkDecision(
+        state,
+        execution,
+        execution.pendingNetworkDecision,
+        output,
+      );
+  }
+
+  #attachNetworkDecision(state, execution, decision, output) {
+    output.networkDecision = decision;
+    execution.networkDecisionAdded = true;
+    execution.pendingNetworkDecision = null;
+    state.usage.networkDecisions += 1;
+    state.usage.lastObservedAtMs = Date.now();
+    state.usage.sourceObservationId = decision.providerObservationId;
+    state.usage.sourceOffset = "process:" + execution.processId;
   }
 
   async cancelExecution(executionId, expectedFence) {
@@ -410,6 +494,9 @@ export class Gadget extends DurableObject {
       state.usage.sourceObservationId = "destroy:" + state.sandboxId;
       state.usage.sourceOffset = "sandbox:" + state.sandboxId;
       await this.#save(state);
+      if (state.testProfile === "e4-t08-accepted-timeout-once") {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
     }
     return this.#resource(state);
   }
@@ -435,7 +522,7 @@ export class Gadget extends DurableObject {
     if (Number(expectedFence) !== state.fence) throw new Error("fence mismatch");
   }
 
-  #output(executionId, sequence, channel, text) {
+  #output(executionId, sequence, channel, text, providerObservation = null) {
     const bytes = encoder.encode(text);
     let binary = "";
     for (const byte of bytes) binary += String.fromCharCode(byte);
@@ -447,6 +534,7 @@ export class Gadget extends DurableObject {
       data: btoa(binary),
       encoding: "base64",
       byteLength: bytes.byteLength,
+      ...(providerObservation === null ? {} : { providerObservation }),
     };
   }
 
@@ -467,7 +555,10 @@ export class Gadget extends DurableObject {
 function parseProbe(command) {
   const id = /X-E4-T08-Probe:\s*([A-Za-z0-9._:-]+)/iu.exec(command)?.[1] ?? null;
   if (!id) return null;
-  const url = /https?:\/\/[^'"\s]+/u.exec(command)?.[0] ?? null;
+  const url =
+    /(?:^|[\s;])url=['"]?(https?:\/\/[^'"\s]+)['"]?/u.exec(command)?.[1] ??
+    /https?:\/\/[^'"\s]+/u.exec(command)?.[0] ??
+    null;
   if (!url) return null;
   const parsed = new URL(url);
   return {
@@ -478,6 +569,12 @@ function parseProbe(command) {
       port: parsed.port ? Number(parsed.port) : parsed.protocol === "https:" ? 443 : 80,
     },
   };
+}
+
+function sameDestination(actual, expected) {
+  return actual?.scheme === expected.scheme &&
+    actual?.host === expected.host &&
+    Number(actual?.port) === Number(expected.port);
 }
 
 async function digestManifest(manifest) {
@@ -658,19 +755,36 @@ export class OfficialCloudflareOsClient {
       !this.#destroyAttempts.has(idempotencyKey)
     ) {
       this.#destroyAttempts.add(idempotencyKey);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 100);
+      try {
+        await this.#facetCall(
+          reference,
+          "prepareDestroy",
+          [expectedFence],
+          "destroy",
+          idempotencyKey,
+          { signal: controller.signal },
+        );
+        throw cloudflareOsError(
+          CLOUDFLARE_OS_ERROR_CODES.UNAVAILABLE,
+          "Cloudflare OS destroy completed before the provider timeout profile fired",
+          { operation: "destroy", retryable: false },
+        );
+      } finally {
+        clearTimeout(timeout);
+      }
+    }
+    const current = await this.#resource(reference, "destroy");
+    if (!current.cleanupObservation) {
       await this.#facetCall(
         reference,
         "prepareDestroy",
-        [expectedFence],
+        [current.fence],
         "destroy",
-      );
-      throw cloudflareOsError(
-        CLOUDFLARE_OS_ERROR_CODES.TIMEOUT,
-        "Cloudflare OS accepted destroy before the client timed out",
-        { operation: "destroy", retryable: false },
+        idempotencyKey,
       );
     }
-    const current = await this.#resource(reference, "destroy");
     await this.#batch("destroy", (api) => {
       const auth = api.authenticate(this.#token);
       const over = auth.openGadget(reference.workspaceId);
@@ -781,7 +895,14 @@ export class OfficialCloudflareOsClient {
     return resource;
   }
 
-  async #facetCall(reference, method, args, operation, idempotencyKey) {
+  async #facetCall(
+    reference,
+    method,
+    args,
+    operation,
+    idempotencyKey,
+    { signal } = {},
+  ) {
     if (
       !reference ||
       typeof reference.workspaceId !== "string" ||
@@ -792,13 +913,17 @@ export class OfficialCloudflareOsClient {
         "official Gadget reference is invalid",
         { operation },
       );
-    const result = await this.#batch(operation, (api) => {
-      const auth = api.authenticate(this.#token);
-      const over = auth.openGadget(reference.workspaceId);
-      const gadget = over.getGadget(Number(reference.gadgetId));
-      const facet = gadget.connectToGadget();
-      return facet[method](...args);
-    });
+    const result = await this.#batch(
+      operation,
+      (api) => {
+        const auth = api.authenticate(this.#token);
+        const over = auth.openGadget(reference.workspaceId);
+        const gadget = over.getGadget(Number(reference.gadgetId));
+        const facet = gadget.connectToGadget();
+        return facet[method](...args);
+      },
+      { signal },
+    );
     if (idempotencyKey !== undefined) {
       this.#audit.push({
         method: "RPC",
@@ -811,14 +936,24 @@ export class OfficialCloudflareOsClient {
     return result;
   }
 
-  async #batch(operation, callback) {
+  async #batch(operation, callback, { signal } = {}) {
     try {
-      const api = newHttpBatchRpcSession(this.#apiUrl);
+      const request = signal
+        ? new Request(this.#apiUrl, { method: "POST", signal })
+        : this.#apiUrl;
+      const api = newHttpBatchRpcSession(request);
       const result = await callback(api);
       this.#audit.push({ method: "RPC", operation, path: "/api", status: 200 });
       return result;
     } catch (error) {
       if (error instanceof CloudflareOsProviderError) throw error;
+      if (signal?.aborted) {
+        throw cloudflareOsError(
+          CLOUDFLARE_OS_ERROR_CODES.TIMEOUT,
+          "Cloudflare OS destroy request timed out after the provider committed cleanup",
+          { operation, retryable: false },
+        );
+      }
       throw cloudflareOsError(
         CLOUDFLARE_OS_ERROR_CODES.UNAVAILABLE,
         "official Cloudflare OS Cap'n Web request failed: " +

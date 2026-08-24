@@ -40,6 +40,8 @@ type EgressEvent = {
   destination: { scheme: string; host: string; port: number };
   status: number;
   timestampMs: number;
+  ruleId: string;
+  providerObservationId: string;
 };
 
 export class Sandbox extends BaseSandbox<Env> {
@@ -96,14 +98,17 @@ export default {
 
     if (request.method === "POST" && url.pathname === "/sandbox/configure") {
       try {
-        await sandbox.setAllowedHosts(
-          body.allowedHost ? [body.allowedHost] : [],
-        );
+        // Keep the provider catch-all handler in the path for every host. A
+        // non-empty allowlist would short-circuit the handler and lose the
+        // provider-owned deny observation.
+        await sandbox.setAllowedHosts(["*"]);
         await sandbox.setDeniedHosts([]);
         if (body.allowedHost) {
-          await sandbox.setOutboundByHost(body.allowedHost, "e4t08Allowed");
+          await sandbox.setOutboundByHost(body.allowedHost, "e4t08Allowed", {
+            sandboxId,
+          });
         }
-        await sandbox.setOutboundHandler("e4t08Denied");
+        await sandbox.setOutboundHandler("e4t08Denied", { sandboxId });
         await clearEgress(env, sandboxId);
         return Response.json({ sandboxId, state: await sandbox.getState() });
       } catch (error) {
@@ -169,8 +174,30 @@ export default {
       const logs = process
         ? await process.getLogs()
         : { stdout: "", stderr: "" };
+      const stdoutOffset = Number(url.searchParams.get("stdoutOffset") ?? "0");
+      const stderrOffset = Number(url.searchParams.get("stderrOffset") ?? "0");
+      if (
+        !Number.isSafeInteger(stdoutOffset) ||
+        stdoutOffset < 0 ||
+        !Number.isSafeInteger(stderrOffset) ||
+        stderrOffset < 0
+      ) {
+        return Response.json(
+          { error: "process offsets are invalid" },
+          { status: 400 },
+        );
+      }
+      const stdout = String(logs.stdout ?? "");
+      const stderr = String(logs.stderr ?? "");
+      if (stdoutOffset > stdout.length || stderrOffset > stderr.length) {
+        return Response.json(
+          { error: "process offsets are ahead of provider logs" },
+          { status: 409 },
+        );
+      }
       const processes = await sandbox.listProcesses();
       const egress = await readEgress(env, sandboxId);
+      const providerObservationId = `process-log:${processId}:${stdoutOffset}:${stderrOffset}:${stdout.length}:${stderr.length}`;
       return Response.json({
         sandboxId,
         process: process
@@ -180,8 +207,18 @@ export default {
               exitCode: process.exitCode ?? null,
             }
           : null,
-        stdout: logs.stdout,
-        stderr: logs.stderr,
+        stdoutDelta: stdout.slice(stdoutOffset),
+        stderrDelta: stderr.slice(stderrOffset),
+        stdoutOffset: stdout.length,
+        stderrOffset: stderr.length,
+        providerObservationId,
+        providerObservation: {
+          providerObservationId,
+          requestedStdoutOffset: stdoutOffset,
+          requestedStderrOffset: stderrOffset,
+          stdoutOffset: stdout.length,
+          stderrOffset: stderr.length,
+        },
         runningProcessCount: processes.filter(
           (candidate) => candidate.status === "running",
         ).length,
@@ -195,15 +232,16 @@ export default {
     }
     if (request.method === "GET" && url.pathname === "/sandbox/egress") {
       const probeId = url.searchParams.get("probeId") ?? "";
-      const response = await fetch(`https://${GATEKEEPER_HOST}/events`);
-      const payload = (await response.json()) as { events?: EgressEvent[] };
+      const events = (await readEgress(env, sandboxId)).filter(
+        (event) => event.probeId === probeId,
+      );
       return Response.json({
         sandboxId,
         probeId,
-        events: (payload.events ?? []).filter(
-          (event) => event.probeId === probeId,
-        ),
-        observationId: `gatekeeper-events:${sandboxId}:${probeId}`,
+        events,
+        observationId:
+          events[0]?.providerObservationId ??
+          `sandbox-egress:${sandboxId}:${probeId}`,
       });
     }
     if (request.method === "POST" && url.pathname === "/sandbox/exec/cancel") {
@@ -239,23 +277,22 @@ export default {
 async function allowGatekeeperEgress(
   request: Request,
   env: Env,
-  context: OutboundHandlerContext,
+  context: OutboundHandlerContext<{ sandboxId: string }>,
 ) {
   const url = new URL(request.url);
   console.log("e4t08 outbound allow", url.toString(), context.containerId);
   const probeId = request.headers.get("x-e4-t08-probe");
-  const destination = {
-    scheme: url.protocol.slice(0, -1),
-    host: url.hostname,
-    port: url.port ? Number(url.port) : 443,
-  };
+  const sandboxId = context.params?.sandboxId ?? context.containerId;
+  const destination = observedDestination(request);
   if (url.pathname !== "/" && !url.pathname.startsWith("/e4-t08-gatekeeper/")) {
-    await recordEgress(env, context.containerId, {
+    await recordEgress(env, sandboxId, {
       probeId,
       outcome: "deny",
       destination,
       status: 403,
       timestampMs: Date.now(),
+      ruleId: "e4-t08-gatekeeper-path",
+      providerObservationId: `container-egress:${sandboxId}:${Date.now()}`,
     });
     return new Response("Forbidden by E4-T08 Gatekeeper policy", {
       status: 403,
@@ -266,12 +303,14 @@ async function allowGatekeeperEgress(
     `https://${GATEKEEPER_HOST}`,
   );
   const response = await fetch(new Request(target, request));
-  await recordEgress(env, context.containerId, {
+  await recordEgress(env, sandboxId, {
     probeId,
     outcome: response.ok ? "allow" : "deny",
     destination,
     status: response.status,
     timestampMs: Date.now(),
+    ruleId: "e4-t08-gatekeeper",
+    providerObservationId: `container-egress:${sandboxId}:${Date.now()}`,
   });
   return response;
 }
@@ -279,20 +318,19 @@ async function allowGatekeeperEgress(
 async function denyEgress(
   request: Request,
   env: Env,
-  context: OutboundHandlerContext,
+  context: OutboundHandlerContext<{ sandboxId: string }>,
 ) {
   const url = new URL(request.url);
   console.log("e4t08 outbound deny", url.toString(), context.containerId);
-  await recordEgress(env, context.containerId, {
+  const sandboxId = context.params?.sandboxId ?? context.containerId;
+  await recordEgress(env, sandboxId, {
     probeId: request.headers.get("x-e4-t08-probe"),
     outcome: "deny",
-    destination: {
-      scheme: url.protocol.slice(0, -1),
-      host: url.hostname,
-      port: url.port ? Number(url.port) : url.protocol === "http:" ? 80 : 443,
-    },
+    destination: observedDestination(request),
     status: 403,
     timestampMs: Date.now(),
+    ruleId: "default-deny",
+    providerObservationId: `container-egress:${sandboxId}:${Date.now()}`,
   });
   return new Response("Forbidden by E4-T08 default-deny policy", {
     status: 403,
@@ -333,4 +371,17 @@ function safeWorkspacePath(value: string) {
 
 function shellQuote(value: string) {
   return `'${value.replaceAll("'", "'\\''")}'`;
+}
+
+function observedDestination(request: Request) {
+  const intercepted = new URL(request.url);
+  return {
+    scheme: intercepted.protocol.slice(0, -1),
+    host: intercepted.hostname,
+    port: intercepted.port
+      ? Number(intercepted.port)
+      : intercepted.protocol === "http:"
+        ? 80
+        : 443,
+  };
 }

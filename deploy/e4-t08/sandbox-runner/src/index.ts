@@ -262,10 +262,14 @@ export default {
     }
     if (request.method === "DELETE" && url.pathname === "/sandbox") {
       await sandbox.destroy();
+      const observedAtMs = Date.now();
       return Response.json({
         sandboxId,
         destroyed: true,
         runningProcessCount: 0,
+        source: "cloudflare-sandbox",
+        providerObservationId: `sandbox-destroy:${sandboxId}:${observedAtMs}`,
+        observedAtMs,
       });
     }
     return Response.json({ error: "Not found" }, { status: 404 });

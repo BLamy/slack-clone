@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "task": "E4-T08",
+  "runId": "e4-t08-cold-repair-final8-20260824",
+  "result": "PASS",
+  "implementationCommit": "16a3358839b13eceec4a64f9b6b8ad9907056a20",
+  "providerResourceId": "742b6025a5291aa55a85d03b0176f8f6796ac6b884cc8874a6669f3b621e935c:0",
+  "providerAttestation": {
+    "providerType": "cloudflare-os",
+    "providerResourceId": "742b6025a5291aa55a85d03b0176f8f6796ac6b884cc8874a6669f3b621e935c:0",
+    "testProfile": "e4-t08-accepted-timeout-once"
+  },
+  "workspaceDigest": "sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766",
+  "transcriptDigest": "sha256:985879e8a12e782370b9ad6c50a663e5e26579d8be0699578bbbeb688f989d23",
+  "networkDecisionDigest": "sha256:f3c1ff3f237bb898d4d29533abda3f71aab5871e87b37979d9f202fdec83d524",
+  "quotaEventDigest": "sha256:17a2c6a42f84c3f8b302f0e0327b003d9a9ef15966e65a339f3a93e03f40d24a",
+  "acceptedTimeoutRetry": {
+    "timeoutObserved": true,
+    "retryAttempted": true,
+    "requestedFirstIdempotencyKey": "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy",
+    "requestedRetryIdempotencyKey": "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy",
+    "pendingDestroyRequestObservations": [
+      {
+        "attempt": 1,
+        "idempotencyKey": "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy",
+        "observedAtMs": 1787621353009,
+        "phase": "prepare-destroy"
+      }
+    ],
+    "providerObservedDestroyRequestObservations": [
+      {
+        "attempt": 1,
+        "idempotencyKey": "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy",
+        "observedAtMs": 1787621353009,
+        "phase": "prepare-destroy"
+      },
+      {
+        "attempt": 2,
+        "idempotencyKey": "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy",
+        "observedAtMs": 1787621353560,
+        "phase": "destroy-retry-reconciliation"
+      }
+    ],
+    "providerObservedDestroyRequestKeys": [
+      "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy",
+      "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy"
+    ],
+    "firstIdempotencyKey": "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy",
+    "retryIdempotencyKey": "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy",
+    "sameIdempotencyKey": true,
+    "cleanupCommitted": true,
+    "cleanupObservation": {
+      "sandboxId": "e4t08-034e8fc241ee474b8a7656074b0d732e",
+      "destroyed": true,
+      "runningProcessCount": 0,
+      "processSnapshotBeforeDestroy": [
+        {
+          "id": "proc_1787621349673_f5vk65",
+          "status": "killed",
+          "command": "sh -c 'set -eu\nprintf '\\''cancel:start\\n'\\''\n(sleep 30; printf '\\''post-cancel-side-effect\\n'\\'') &\nchild=$!\nwait $child'"
+        },
+        {
+          "id": "proc_1787621344572_qemj77",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nurl='\\''https://127.0.0.1.nip.io/'\\''\nif response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0 -H '\\''X-E4-T08-Probe: dns-rebinding'\\'' \"$url\" 2>&1); then result=allowed; else result=denied; fi\nprintf '\\''%s\\n'\\'' \"$response\"\nprintf '\\''probe:dns-rebinding:%s\\n'\\'' \"$result\"'"
+        },
+        {
+          "id": "proc_1787621338573_cv9ojc",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nprintf '\\''parent:start\\n'\\''\n./bin/scenario.sh\nsh -c '\\''printf \"child:one\\\\n\"'\\''\nsh -c '\\''printf \"child:two\\\\n\"'\\''\nprintf '\\''parent:end\\n'\\'''"
+        },
+        {
+          "id": "proc_1787621340910_glrcxn",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nurl='\\''https://example.com/'\\''\nif response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0 -H '\\''X-E4-T08-Probe: direct-internet'\\'' \"$url\" 2>&1); then result=allowed; else result=denied; fi\nprintf '\\''%s\\n'\\'' \"$response\"\nprintf '\\''probe:direct-internet:%s\\n'\\'' \"$result\"'"
+        },
+        {
+          "id": "proc_1787621337690_00giod",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nprintf '\\''parent:start\\n'\\''\n./bin/scenario.sh\nsh -c '\\''printf \"child:one\\\\n\"'\\''\nsh -c '\\''printf \"child:two\\\\n\"'\\''\nprintf '\\''parent:end\\n'\\'''"
+        },
+        {
+          "id": "proc_1787621343732_7828yz",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nurl='\\''https://127.0.0.1:443/'\\''\nif response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0 --noproxy \"\" --proxy '\\''https://e4t08-gatekeeper-20260824.brett-lamy.workers.dev:443/'\\'' --proxy-header '\\''X-E4-T08-Probe: inbound'\\'' -H '\\''X-E4-T08-Probe: inbound'\\'' \"$url\" 2>&1); then result=allowed; else result=denied; fi\nprintf '\\''%s\\n'\\'' \"$response\"\nprintf '\\''probe:inbound:%s\\n'\\'' \"$result\"'"
+        },
+        {
+          "id": "proc_1787621342485_llp57e",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nurl='\\''http://169.254.1.1/'\\''\nif response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0 -H '\\''X-E4-T08-Probe: link-local'\\'' \"$url\" 2>&1); then result=allowed; else result=denied; fi\nprintf '\\''%s\\n'\\'' \"$response\"\nprintf '\\''probe:link-local:%s\\n'\\'' \"$result\"'"
+        },
+        {
+          "id": "proc_1787621345284_ouno9c",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nurl='\\''https://httpbin.org/status/204'\\''\nif response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0 -H '\\''X-E4-T08-Probe: public-listener'\\'' \"$url\" 2>&1); then result=allowed; else result=denied; fi\nprintf '\\''%s\\n'\\'' \"$response\"\nprintf '\\''probe:public-listener:%s\\n'\\'' \"$result\"'"
+        },
+        {
+          "id": "proc_1787621339442_3z8gn9",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nurl='\\''https://e4t08-gatekeeper-20260824.brett-lamy.workers.dev:443/'\\''\nif response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0 -H '\\''X-E4-T08-Probe: allowlisted-gatekeeper'\\'' \"$url\" 2>&1); then result=allowed; else result=denied; fi\nprintf '\\''%s\\n'\\'' \"$response\"\nprintf '\\''probe:allowlisted-gatekeeper:%s\\n'\\'' \"$result\"'"
+        },
+        {
+          "id": "proc_1787621343118_vnf3qy",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nurl='\\''http://169.254.169.254/'\\''\nif response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0 -H '\\''X-E4-T08-Probe: metadata'\\'' \"$url\" 2>&1); then result=allowed; else result=denied; fi\nprintf '\\''%s\\n'\\'' \"$response\"\nprintf '\\''probe:metadata:%s\\n'\\'' \"$result\"'"
+        },
+        {
+          "id": "proc_1787621341553_0gmqn5",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nurl='\\''https://10.0.0.1/'\\''\nif response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0 --noproxy \"\" --proxy '\\''https://e4t08-gatekeeper-20260824.brett-lamy.workers.dev:443/'\\'' --proxy-header '\\''X-E4-T08-Probe: private-address'\\'' -H '\\''X-E4-T08-Probe: private-address'\\'' \"$url\" 2>&1); then result=allowed; else result=denied; fi\nprintf '\\''%s\\n'\\'' \"$response\"\nprintf '\\''probe:private-address:%s\\n'\\'' \"$result\"'"
+        }
+      ],
+      "source": "cloudflare-sandbox",
+      "providerObservationId": "sandbox-destroy:e4t08-034e8fc241ee474b8a7656074b0d732e:1787621353215",
+      "observedAtMs": 1787621353215
+    },
+    "resourceGone": true,
+    "storageGone": true,
+    "orphanPresentBeforeSweep": true,
+    "prefixedResourcesBeforeSweep": 1,
+    "prefixedStorageBeforeSweep": 2
+  },
+  "finalInventoryCount": 0,
+  "replay": "Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger, and before/after Cloudflare OS inventory"
+}

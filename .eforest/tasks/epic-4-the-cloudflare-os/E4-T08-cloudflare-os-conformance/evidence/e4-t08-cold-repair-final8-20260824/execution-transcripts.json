@@ -1,0 +1,586 @@
+{
+  "schemaVersion": 1,
+  "task": "E4-T08",
+  "runId": "e4-t08-cold-repair-final8-20260824",
+  "executions": [
+    {
+      "executionId": "ex_9b80b49f56ce490eba114c30aab32166",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_9b80b49f56ce490eba114c30aab32166",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:ca3b23f7dea90658e1f8e0f0cb1b187ecae2f6df616739d9eaa040dec1db888d",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"cGFyZW50OnN0YXJ0CnBpbm5lZC13b3Jrc3BhY2Utb2sKY2hpbGQ6b25lCmNoaWxkOnR3bwpwYXJlbnQ6ZW5kCg==\",\"encoding\":\"base64\",\"byteLength\":64},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "parent:start\npinned-workspace-ok\nchild:one\nchild:two\nparent:end\n",
+      "stderr": "",
+      "disconnected": true,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787621337690_00giod:0:0:64:0",
+          "processId": "proc_1787621337690_00giod",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 64,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787621337690_00giod:64:0:64:0",
+          "processId": "proc_1787621337690_00giod",
+          "requestedStdoutOffset": 64,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 64,
+          "stderrOffset": 0
+        }
+      ]
+    },
+    {
+      "executionId": "ex_91c3552fd18b4e65abf148f5ddfc77db",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_91c3552fd18b4e65abf148f5ddfc77db",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:1defd7c3f9b0718239785377bf6900edaa9b18d088fd41973eec7d520031e1d5",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"cGFyZW50OnN0YXJ0CnBpbm5lZC13b3Jrc3BhY2Utb2sKY2hpbGQ6b25lCmNoaWxkOnR3bwpwYXJlbnQ6ZW5kCg==\",\"encoding\":\"base64\",\"byteLength\":64},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "parent:start\npinned-workspace-ok\nchild:one\nchild:two\nparent:end\n",
+      "stderr": "",
+      "disconnected": true,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787621338573_cv9ojc:0:0:64:0",
+          "processId": "proc_1787621338573_cv9ojc",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 64,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787621338573_cv9ojc:64:0:64:0",
+          "processId": "proc_1787621338573_cv9ojc",
+          "requestedStdoutOffset": 64,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 64,
+          "stderrOffset": 0
+        }
+      ]
+    },
+    {
+      "executionId": "ex_3958d6da2339430f8c8a8943a874b5b2",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_3958d6da2339430f8c8a8943a874b5b2",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:18949c621e19cb2faddf7617f455487499bcd5a924181c1fa20e1ae17150571c",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"eyJtYXJrZXIiOiJlNC10MDgtZ2F0ZWtlZXBlci1vayJ9CnByb2JlOmFsbG93bGlzdGVkLWdhdGVrZWVwZXI6YWxsb3dlZAo=\",\"encoding\":\"base64\",\"byteLength\":71},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "{\"marker\":\"e4-t08-gatekeeper-ok\"}\nprobe:allowlisted-gatekeeper:allowed\n",
+      "stderr": "",
+      "disconnected": false,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787621339442_3z8gn9:0:0:71:0",
+          "processId": "proc_1787621339442_3z8gn9",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 71,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787621339442_3z8gn9:0:0:71:0",
+          "processId": "proc_1787621339442_3z8gn9",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 71,
+          "stderrOffset": 0
+        }
+      ]
+    },
+    {
+      "executionId": "ex_a8163cab0162431cb09731e8b6e6fbdc",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_a8163cab0162431cb09731e8b6e6fbdc",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:8ac748c4a9fc5fe0cd4b8912a18f35808f5872265b0e46fbbf0f5a73888006d9",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNDAzCkZvcmJpZGRlbiBieSBFNC1UMDggZGVmYXVsdC1kZW55IHBvbGljeQpwcm9iZTpkaXJlY3QtaW50ZXJuZXQ6ZGVuaWVkCg==\",\"encoding\":\"base64\",\"byteLength\":118},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 403\nForbidden by E4-T08 default-deny policy\nprobe:direct-internet:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787621340910_glrcxn:0:0:118:0",
+          "processId": "proc_1787621340910_glrcxn",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 118,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787621340910_glrcxn:0:0:118:0",
+          "processId": "proc_1787621340910_glrcxn",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 118,
+          "stderrOffset": 0
+        }
+      ]
+    },
+    {
+      "executionId": "ex_cea1c8bccd2a4e0b9308800335a5e640",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_cea1c8bccd2a4e0b9308800335a5e640",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:3bd14ee9130b439a7c154eae6d6da767af8a46e7163275e8226ae491918e5c13",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDU2KSBSZWNlaXZlZCBIVFRQIGNvZGUgNDAzIGZyb20gcHJveHkgYWZ0ZXIgQ09OTkVDVApwcm9iZTpwcml2YXRlLWFkZHJlc3M6ZGVuaWVkCg==\",\"encoding\":\"base64\",\"byteLength\":88},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (56) Received HTTP code 403 from proxy after CONNECT\nprobe:private-address:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787621341553_0gmqn5:0:0:88:0",
+          "processId": "proc_1787621341553_0gmqn5",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 88,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787621341553_0gmqn5:0:0:88:0",
+          "processId": "proc_1787621341553_0gmqn5",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 88,
+          "stderrOffset": 0
+        }
+      ]
+    },
+    {
+      "executionId": "ex_469c13bdb9cf481ab948b45560fbd9d0",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_469c13bdb9cf481ab948b45560fbd9d0",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:27c6837b74f724d26b7bd0de50ecef417c5db7d12e138ce3daf504896eff9c46",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNDAzCkZvcmJpZGRlbiBieSBFNC1UMDggZGVmYXVsdC1kZW55IHBvbGljeQpwcm9iZTpsaW5rLWxvY2FsOmRlbmllZAo=\",\"encoding\":\"base64\",\"byteLength\":113},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 403\nForbidden by E4-T08 default-deny policy\nprobe:link-local:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787621342485_llp57e:0:0:113:0",
+          "processId": "proc_1787621342485_llp57e",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 113,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787621342485_llp57e:0:0:113:0",
+          "processId": "proc_1787621342485_llp57e",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 113,
+          "stderrOffset": 0
+        }
+      ]
+    },
+    {
+      "executionId": "ex_0f8b1e5a1b58402e9e813482046e2e03",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_0f8b1e5a1b58402e9e813482046e2e03",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:a65d3a686c095aa924fd867066d66a1e6f1b023c15951f456e62b2015f306e6c",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNDAzCkZvcmJpZGRlbiBieSBFNC1UMDggZGVmYXVsdC1kZW55IHBvbGljeQpwcm9iZTptZXRhZGF0YTpkZW5pZWQK\",\"encoding\":\"base64\",\"byteLength\":111},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 403\nForbidden by E4-T08 default-deny policy\nprobe:metadata:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787621343118_vnf3qy:0:0:111:0",
+          "processId": "proc_1787621343118_vnf3qy",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 111,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787621343118_vnf3qy:0:0:111:0",
+          "processId": "proc_1787621343118_vnf3qy",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 111,
+          "stderrOffset": 0
+        }
+      ]
+    },
+    {
+      "executionId": "ex_b234aba5fe7b4687bdbd8b093dcbdf32",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_b234aba5fe7b4687bdbd8b093dcbdf32",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:2b89c0101af9fe2727b857dad3dad98ac61cfae597a19e8959af92a6e8c7f730",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDU2KSBSZWNlaXZlZCBIVFRQIGNvZGUgNDAzIGZyb20gcHJveHkgYWZ0ZXIgQ09OTkVDVApwcm9iZTppbmJvdW5kOmRlbmllZAo=\",\"encoding\":\"base64\",\"byteLength\":80},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (56) Received HTTP code 403 from proxy after CONNECT\nprobe:inbound:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787621343732_7828yz:0:0:80:0",
+          "processId": "proc_1787621343732_7828yz",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 80,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787621343732_7828yz:0:0:80:0",
+          "processId": "proc_1787621343732_7828yz",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 80,
+          "stderrOffset": 0
+        }
+      ]
+    },
+    {
+      "executionId": "ex_c38eaad86fa54f41be1c207332e4509f",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_c38eaad86fa54f41be1c207332e4509f",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:1ce800506190992e335e50112299aa0fa270106e26dd5431babafb19a359034e",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNDAzCkZvcmJpZGRlbiBieSBFNC1UMDggZGVmYXVsdC1kZW55IHBvbGljeQpwcm9iZTpkbnMtcmViaW5kaW5nOmRlbmllZAo=\",\"encoding\":\"base64\",\"byteLength\":116},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 403\nForbidden by E4-T08 default-deny policy\nprobe:dns-rebinding:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787621344572_qemj77:0:0:116:0",
+          "processId": "proc_1787621344572_qemj77",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 116,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787621344572_qemj77:0:0:116:0",
+          "processId": "proc_1787621344572_qemj77",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 116,
+          "stderrOffset": 0
+        }
+      ]
+    },
+    {
+      "executionId": "ex_c74c0f452bdc47128c4c4f6d27cfa08b",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_c74c0f452bdc47128c4c4f6d27cfa08b",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:7fb4229c8afcd55cbfaacb2d1b9064800ea75306eee62095ff1291ef0dcfd80a",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNDAzCkZvcmJpZGRlbiBieSBFNC1UMDggZGVmYXVsdC1kZW55IHBvbGljeQpwcm9iZTpwdWJsaWMtbGlzdGVuZXI6ZGVuaWVkCg==\",\"encoding\":\"base64\",\"byteLength\":118},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 403\nForbidden by E4-T08 default-deny policy\nprobe:public-listener:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787621345284_ouno9c:0:0:118:0",
+          "processId": "proc_1787621345284_ouno9c",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 118,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787621345284_ouno9c:0:0:118:0",
+          "processId": "proc_1787621345284_ouno9c",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 118,
+          "stderrOffset": 0
+        }
+      ]
+    },
+    {
+      "executionId": "ex_0c1e1b388b8b481c8d7073bc1d3308da",
+      "kind": "cancelled",
+      "terminal": {
+        "executionId": "ex_0c1e1b388b8b481c8d7073bc1d3308da",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "cancelled",
+        "exitCode": null,
+        "signal": null,
+        "reasonCode": "cancelled",
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:03e237280085e360f3e5be3195aa5c2089b75a87ba883e6cf4bd5413977fac0d",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y2FuY2VsOnN0YXJ0Cg==\",\"encoding\":\"base64\",\"byteLength\":13},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"cancelled\",\"exitCode\":null,\"signal\":null,\"reasonCode\":\"cancelled\",\"termination\":{\"survivors\":0}}]",
+      "stdout": "cancel:start\n",
+      "stderr": "",
+      "disconnected": false,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787621349673_f5vk65:0:0:13:0",
+          "processId": "proc_1787621349673_f5vk65",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 13,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787621349673_f5vk65:0:0:13:0",
+          "processId": "proc_1787621349673_f5vk65",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 13,
+          "stderrOffset": 0
+        }
+      ]
+    }
+  ],
+  "adversarial": {
+    "interruptedCreate": {
+      "mode": "provider-commit-acknowledgement-discard-and-reconcile",
+      "requestSent": true,
+      "acknowledgementDiscarded": {
+        "sandboxId": "sb_8b9f862dd295237cd60fff8a",
+        "lifecycle": "ready",
+        "discarded": true
+      },
+      "reconciled": {
+        "providerResourceId": "00a50a5c211f7b8418da83e8c8011dd4959c4dcdff56f0de4ecaabfe7addd1a5:0",
+        "fence": 1,
+        "lifecycle": "ready"
+      },
+      "cleanup": {
+        "lifecycle": "destroyed",
+        "resourceGone": true,
+        "storageGone": true
+      }
+    },
+    "staleHandle": {
+      "staleFence": 3,
+      "freshFence": 4,
+      "rejectedCode": "SANDBOX_FENCE_MISMATCH",
+      "providerExecRequests": 0
+    },
+    "forkEscape": {
+      "executionId": "ex_0c1e1b388b8b481c8d7073bc1d3308da",
+      "backgroundChildSpawned": true,
+      "survivors": 0,
+      "postCancelSideEffect": false
+    },
+    "orphanCleanup": {
+      "providerResourceId": "46d3d10536cf6d0f9621af21b5c40467b5f4840aecd472ded7d4da2fb96b36b7:0",
+      "labels": {
+        "stream-slack/tenant": "tenant-e4-t08-20260824",
+        "stream-slack/workspace": "workspace-e4-t08-20260824",
+        "stream-slack/agent": "agent-e4-t08-20260824",
+        "stream-slack/invocation": "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_orphan_invocation",
+        "stream-slack/idempotency": "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_orphan_create"
+      },
+      "testProfile": "e4-t08-orphan-cleanup"
+    }
+  },
+  "acceptedTimeoutRetry": {
+    "timeoutObserved": true,
+    "retryAttempted": true,
+    "requestedFirstIdempotencyKey": "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy",
+    "requestedRetryIdempotencyKey": "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy",
+    "pendingDestroyRequestObservations": [
+      {
+        "attempt": 1,
+        "idempotencyKey": "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy",
+        "observedAtMs": 1787621353009,
+        "phase": "prepare-destroy"
+      }
+    ],
+    "providerObservedDestroyRequestObservations": [
+      {
+        "attempt": 1,
+        "idempotencyKey": "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy",
+        "observedAtMs": 1787621353009,
+        "phase": "prepare-destroy"
+      },
+      {
+        "attempt": 2,
+        "idempotencyKey": "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy",
+        "observedAtMs": 1787621353560,
+        "phase": "destroy-retry-reconciliation"
+      }
+    ],
+    "providerObservedDestroyRequestKeys": [
+      "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy",
+      "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy"
+    ],
+    "firstIdempotencyKey": "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy",
+    "retryIdempotencyKey": "e4-t08-final8-20260824_mt7zl0w0_6j5pby0l_destroy",
+    "sameIdempotencyKey": true,
+    "cleanupCommitted": true,
+    "cleanupObservation": {
+      "sandboxId": "e4t08-034e8fc241ee474b8a7656074b0d732e",
+      "destroyed": true,
+      "runningProcessCount": 0,
+      "processSnapshotBeforeDestroy": [
+        {
+          "id": "proc_1787621349673_f5vk65",
+          "status": "killed",
+          "command": "sh -c 'set -eu\nprintf '\\''cancel:start\\n'\\''\n(sleep 30; printf '\\''post-cancel-side-effect\\n'\\'') &\nchild=$!\nwait $child'"
+        },
+        {
+          "id": "proc_1787621344572_qemj77",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nurl='\\''https://127.0.0.1.nip.io/'\\''\nif response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0 -H '\\''X-E4-T08-Probe: dns-rebinding'\\'' \"$url\" 2>&1); then result=allowed; else result=denied; fi\nprintf '\\''%s\\n'\\'' \"$response\"\nprintf '\\''probe:dns-rebinding:%s\\n'\\'' \"$result\"'"
+        },
+        {
+          "id": "proc_1787621338573_cv9ojc",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nprintf '\\''parent:start\\n'\\''\n./bin/scenario.sh\nsh -c '\\''printf \"child:one\\\\n\"'\\''\nsh -c '\\''printf \"child:two\\\\n\"'\\''\nprintf '\\''parent:end\\n'\\'''"
+        },
+        {
+          "id": "proc_1787621340910_glrcxn",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nurl='\\''https://example.com/'\\''\nif response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0 -H '\\''X-E4-T08-Probe: direct-internet'\\'' \"$url\" 2>&1); then result=allowed; else result=denied; fi\nprintf '\\''%s\\n'\\'' \"$response\"\nprintf '\\''probe:direct-internet:%s\\n'\\'' \"$result\"'"
+        },
+        {
+          "id": "proc_1787621337690_00giod",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nprintf '\\''parent:start\\n'\\''\n./bin/scenario.sh\nsh -c '\\''printf \"child:one\\\\n\"'\\''\nsh -c '\\''printf \"child:two\\\\n\"'\\''\nprintf '\\''parent:end\\n'\\'''"
+        },
+        {
+          "id": "proc_1787621343732_7828yz",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nurl='\\''https://127.0.0.1:443/'\\''\nif response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0 --noproxy \"\" --proxy '\\''https://e4t08-gatekeeper-20260824.brett-lamy.workers.dev:443/'\\'' --proxy-header '\\''X-E4-T08-Probe: inbound'\\'' -H '\\''X-E4-T08-Probe: inbound'\\'' \"$url\" 2>&1); then result=allowed; else result=denied; fi\nprintf '\\''%s\\n'\\'' \"$response\"\nprintf '\\''probe:inbound:%s\\n'\\'' \"$result\"'"
+        },
+        {
+          "id": "proc_1787621342485_llp57e",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nurl='\\''http://169.254.1.1/'\\''\nif response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0 -H '\\''X-E4-T08-Probe: link-local'\\'' \"$url\" 2>&1); then result=allowed; else result=denied; fi\nprintf '\\''%s\\n'\\'' \"$response\"\nprintf '\\''probe:link-local:%s\\n'\\'' \"$result\"'"
+        },
+        {
+          "id": "proc_1787621345284_ouno9c",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nurl='\\''https://httpbin.org/status/204'\\''\nif response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0 -H '\\''X-E4-T08-Probe: public-listener'\\'' \"$url\" 2>&1); then result=allowed; else result=denied; fi\nprintf '\\''%s\\n'\\'' \"$response\"\nprintf '\\''probe:public-listener:%s\\n'\\'' \"$result\"'"
+        },
+        {
+          "id": "proc_1787621339442_3z8gn9",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nurl='\\''https://e4t08-gatekeeper-20260824.brett-lamy.workers.dev:443/'\\''\nif response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0 -H '\\''X-E4-T08-Probe: allowlisted-gatekeeper'\\'' \"$url\" 2>&1); then result=allowed; else result=denied; fi\nprintf '\\''%s\\n'\\'' \"$response\"\nprintf '\\''probe:allowlisted-gatekeeper:%s\\n'\\'' \"$result\"'"
+        },
+        {
+          "id": "proc_1787621343118_vnf3qy",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nurl='\\''http://169.254.169.254/'\\''\nif response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0 -H '\\''X-E4-T08-Probe: metadata'\\'' \"$url\" 2>&1); then result=allowed; else result=denied; fi\nprintf '\\''%s\\n'\\'' \"$response\"\nprintf '\\''probe:metadata:%s\\n'\\'' \"$result\"'"
+        },
+        {
+          "id": "proc_1787621341553_0gmqn5",
+          "status": "completed",
+          "command": "sh -c 'set -eu\nurl='\\''https://10.0.0.1/'\\''\nif response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0 --noproxy \"\" --proxy '\\''https://e4t08-gatekeeper-20260824.brett-lamy.workers.dev:443/'\\'' --proxy-header '\\''X-E4-T08-Probe: private-address'\\'' -H '\\''X-E4-T08-Probe: private-address'\\'' \"$url\" 2>&1); then result=allowed; else result=denied; fi\nprintf '\\''%s\\n'\\'' \"$response\"\nprintf '\\''probe:private-address:%s\\n'\\'' \"$result\"'"
+        }
+      ],
+      "source": "cloudflare-sandbox",
+      "providerObservationId": "sandbox-destroy:e4t08-034e8fc241ee474b8a7656074b0d732e:1787621353215",
+      "observedAtMs": 1787621353215
+    },
+    "resourceGone": true,
+    "storageGone": true,
+    "orphanPresentBeforeSweep": true,
+    "prefixedResourcesBeforeSweep": 1,
+    "prefixedStorageBeforeSweep": 2
+  }
+}

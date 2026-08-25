@@ -510,7 +510,15 @@ export class Gadget extends DurableObject {
       idempotencyKey.length > 160
     )
       throw new Error("destroy idempotency key is invalid");
-    if (!state.destroyPending) {
+    const firstDestroyAttempt = !state.destroyPending;
+    state.destroyRequestObservations.push({
+      attempt: state.destroyRequestObservations.length + 1,
+      idempotencyKey,
+      observedAtMs: Date.now(),
+      phase: "prepare-destroy",
+    });
+    await this.#save(state);
+    if (firstDestroyAttempt) {
       state.cleanupObservation = await this.#runner(
         "/sandbox?sandboxId=" + encodeURIComponent(state.sandboxId),
         undefined,
@@ -521,14 +529,8 @@ export class Gadget extends DurableObject {
       state.usage.lastObservedAtMs = Date.now();
       state.usage.sourceObservationId = "destroy:" + state.sandboxId;
       state.usage.sourceOffset = "sandbox:" + state.sandboxId;
+      await this.#save(state);
     }
-    state.destroyRequestObservations.push({
-      attempt: state.destroyRequestObservations.length + 1,
-      idempotencyKey,
-      observedAtMs: Date.now(),
-      phase: "prepare-destroy",
-    });
-    await this.#save(state);
     if (
       state.testProfile === "e4-t08-accepted-timeout-once" &&
       state.destroyRequestObservations.length === 1

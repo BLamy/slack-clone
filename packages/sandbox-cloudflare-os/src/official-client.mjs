@@ -26,7 +26,7 @@ export class Gadget extends DurableObject {
   }
 
   async #load() {
-    return (await this.ctx.storage.get("e4t08")) ?? {
+    const state = (await this.ctx.storage.get("e4t08")) ?? {
       labels: null,
       spec: null,
       providerResourceId: null,
@@ -43,6 +43,7 @@ export class Gadget extends DurableObject {
       executions: {},
       destroyPending: false,
       cleanupObservation: null,
+      destroyRequestObservations: [],
       usage: {
         executions: 0,
         outputBytes: 0,
@@ -53,6 +54,8 @@ export class Gadget extends DurableObject {
         sourceOffset: null,
       },
     };
+    state.destroyRequestObservations ??= [];
+    return state;
   }
 
   async #save(state) {
@@ -126,6 +129,7 @@ export class Gadget extends DurableObject {
         observedAtMs: now,
       },
       cleanupObservation: state.cleanupObservation,
+      destroyRequestObservations: state.destroyRequestObservations,
     };
   }
 
@@ -480,9 +484,15 @@ export class Gadget extends DurableObject {
     return this.#resource(state);
   }
 
-  async prepareDestroy(expectedFence) {
+  async prepareDestroy(expectedFence, idempotencyKey) {
     const state = await this.#load();
     this.#assertFence(state, expectedFence);
+    if (
+      typeof idempotencyKey !== "string" ||
+      idempotencyKey.length === 0 ||
+      idempotencyKey.length > 160
+    )
+      throw new Error("destroy idempotency key is invalid");
     if (!state.destroyPending) {
       state.cleanupObservation = await this.#runner(
         "/sandbox?sandboxId=" + encodeURIComponent(state.sandboxId),
@@ -494,11 +504,44 @@ export class Gadget extends DurableObject {
       state.usage.lastObservedAtMs = Date.now();
       state.usage.sourceObservationId = "destroy:" + state.sandboxId;
       state.usage.sourceOffset = "sandbox:" + state.sandboxId;
-      await this.#save(state);
-      if (state.testProfile === "e4-t08-accepted-timeout-once") {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      }
     }
+    state.destroyRequestObservations.push({
+      attempt: state.destroyRequestObservations.length + 1,
+      idempotencyKey,
+      observedAtMs: Date.now(),
+      phase: "prepare-destroy",
+    });
+    await this.#save(state);
+    if (
+      state.testProfile === "e4-t08-accepted-timeout-once" &&
+      state.destroyRequestObservations.length === 1
+    ) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+    return this.#resource(state);
+  }
+
+  async recordDestroyRetry(idempotencyKey, expectedFence) {
+    const state = await this.#load();
+    this.#assertFence(state, expectedFence);
+    if (!state.destroyPending) throw new Error("destroy has not been prepared");
+    if (
+      typeof idempotencyKey !== "string" ||
+      idempotencyKey.length === 0 ||
+      idempotencyKey.length > 160
+    )
+      throw new Error("destroy idempotency key is invalid");
+    state.destroyRequestObservations.push({
+      attempt: state.destroyRequestObservations.length + 1,
+      idempotencyKey,
+      observedAtMs: Date.now(),
+      phase: "destroy-retry-reconciliation",
+    });
+    state.fence += 1;
+    state.usage.lastObservedAtMs = Date.now();
+    state.usage.sourceObservationId = "destroy-retry:" + state.sandboxId;
+    state.usage.sourceOffset = "sandbox:" + state.sandboxId;
+    await this.#save(state);
     return this.#resource(state);
   }
 
@@ -762,7 +805,7 @@ export class OfficialCloudflareOsClient {
         await this.#facetCall(
           reference,
           "prepareDestroy",
-          [expectedFence],
+          [expectedFence, idempotencyKey],
           "destroy",
           idempotencyKey,
           { signal: controller.signal },
@@ -776,12 +819,20 @@ export class OfficialCloudflareOsClient {
         clearTimeout(timeout);
       }
     }
-    const current = await this.#resource(reference, "destroy");
+    let current = await this.#resource(reference, "destroy");
     if (!current.cleanupObservation) {
-      await this.#facetCall(
+      current = await this.#facetCall(
         reference,
         "prepareDestroy",
-        [current.fence],
+        [current.fence, idempotencyKey],
+        "destroy",
+        idempotencyKey,
+      );
+    } else {
+      current = await this.#facetCall(
+        reference,
+        "recordDestroyRetry",
+        [idempotencyKey, current.fence],
         "destroy",
         idempotencyKey,
       );

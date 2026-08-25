@@ -101,6 +101,16 @@ export function mapResource(remote, expected) {
       lifecycle,
       fence,
       spec: structuredClone(expected.spec ?? record.spec ?? {}),
+      ...(record.cleanupObservation === undefined
+        ? {}
+        : { cleanupObservation: structuredClone(record.cleanupObservation) }),
+      ...(record.destroyRequestObservations === undefined
+        ? {}
+        : {
+            destroyRequestObservations: structuredClone(
+              record.destroyRequestObservations,
+            ),
+          }),
     },
     reference: { gadgetId, workspaceId },
     labels: structuredClone(labels),

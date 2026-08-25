@@ -261,12 +261,22 @@ export default {
       });
     }
     if (request.method === "DELETE" && url.pathname === "/sandbox") {
+      const processes = await sandbox.listProcesses();
+      const processSnapshot = processes.map((candidate) => ({
+        id: candidate.id,
+        status: candidate.status,
+        command: candidate.command,
+      }));
+      const runningProcessCount = processes.filter(
+        (candidate) => candidate.status === "running",
+      ).length;
       await sandbox.destroy();
       const observedAtMs = Date.now();
       return Response.json({
         sandboxId,
         destroyed: true,
-        runningProcessCount: 0,
+        runningProcessCount,
+        processSnapshotBeforeDestroy: processSnapshot,
         source: "cloudflare-sandbox",
         providerObservationId: `sandbox-destroy:${sandboxId}:${observedAtMs}`,
         observedAtMs,

@@ -3,7 +3,7 @@ id: E4-T08
 epic: 4
 title: "Capstone: a real Cloudflare OS workspace executes a pinned run under deny-by-default policy, survives reconnect, and leaves no orphan"
 priority: 408
-status: refuted
+status: verified
 depends_on: [E4-T05, E4-T07]
 estimate: L
 capstone: true
@@ -427,3 +427,58 @@ evidence. A fresh critic must address the findings above before setting this tic
 - Gates: `pnpm format:check`, `pnpm format:check:e4-t08-real`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (209 unit tests and 15 Playwright integration tests), `pnpm build`, and deployment-runner `npm run typecheck` all passed after the final implementation commit.
 - Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: committed cold-clone transcript, exact stream/tree digests, provider observation records, network probe evidence, cost ledger, before/after inventory, and disposable live-provider sensitivity evidence.
 - Claim: all four final3 critic findings are addressed at this exact implementation and deployed provider head; a fresh critic must independently replay the committed evidence, verify the cold missing-configuration detector, and set the lifecycle status to `verified` only if it cannot refute the claim.
+
+### Critic — 2026-08-24 (independent final8 audit)
+
+VERDICT: verified
+
+The fresh critic reviewed the exact implementation commit
+`16a3358839b13eceec4a64f9b6b8ad9907056a20`, the exact evidence/readme checkout
+commit `23c055b054889ea19bde9c9aebd33e0fe1eae2f3`, and the complete diff since
+prior critic commit `88c253c`. No product source was modified.
+
+Evidence reviewed:
+`.eforest/tasks/epic-4-the-cloudflare-os/E4-T08-cloudflare-os-conformance/evidence/e4-t08-cold-repair-final8-20260824/`.
+The provider resource was
+`742b6025a5291aa55a85d03b0176f8f6796ac6b884cc8874a6669f3b621e935c:0` and all
+resource bindings remained on that identity. Recomputed bindings matched the
+committed values: workspace/manifest
+`sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766`,
+completed-transcript `sha256:985879e8a12e782370b9ad6c50a663e5e26579d8be0699578bbbeb688f989d23`,
+network decisions
+`sha256:f3c1ff3f237bb898d4d29533abda3f71aab5871e87b37979d9f202fdec83d524`, and
+quota event `sha256:17a2c6a42f84c3f8b302f0e0327b003d9a9ef15966e65a339f3a93e03f40d24a`.
+All evidence artifacts carried the same run ID and the summary bound to
+implementation commit `16a3358`.
+
+The four final3 findings are closed. The accepted-timeout evidence contains two
+durably provider-observed destroy request records, both with the same key; the
+Sandbox DELETE path calls `listProcesses()` before destruction and the committed
+snapshot contains zero running processes; the network evidence exercises the
+concrete `127.0.0.1.nip.io` DNS-to-loopback fixture and
+`httpbin.org/status/204` public-listener fixture with provider-deny observations;
+and the create path discards the committed acknowledgement, reconciles the exact
+resource identity from provider inventory, and cleans the reconciled resource and
+storage. The provider inventory records one cleanup orphan plus two storage records
+before the sweep and zero uniquely prefixed resources/storage afterward.
+The committed sensitivity run independently turned red when `direct-internet`
+was mutated from deny to allow and recorded zero post-run provider resources.
+
+Independent commands and results:
+
+```text
+env -u CF_OS_BASE_URL -u CF_OS_TOKEN -u CF_OS_PROTOCOL -u CF_OS_TENANT_ID -u CF_OS_WORKSPACE_ID -u CF_OS_AGENT_ID -u CF_OS_TEST_SCOPE -u CF_OS_GATEKEEPER_SCHEME -u CF_OS_GATEKEEPER_HOST -u CF_OS_GATEKEEPER_PORT -u CF_OS_GATEKEEPER_PURPOSE -u CF_OS_TEST_PROFILE -u CF_OS_DNS_REBIND_PROBE_URL -u CF_OS_PUBLIC_LISTENER_PROBE_URL make verify-E4-T08-real  # exit 2; SKIPPED with all 15 names
+pnpm format:check                         # pass
+pnpm format:check:e4-t08-real              # pass
+pnpm lint                                  # pass
+pnpm typecheck                             # pass
+pnpm test                                  # pass: 209 unit, 15 Playwright integration
+pnpm build                                 # pass
+(cd deploy/e4-t08/sandbox-runner && npm run typecheck)  # pass
+```
+
+The missing-config detector made no provider call. Replay: N/A (real headless
+Cloudflare OS sandbox capstone) + mitigation: committed cold-clone transcript,
+exact stream/tree digests, provider observation records, network probe evidence,
+cost ledger, before/after inventory, and disposable live-provider sensitivity
+evidence.

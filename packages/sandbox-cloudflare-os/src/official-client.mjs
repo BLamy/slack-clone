@@ -382,16 +382,33 @@ export class Gadget extends DurableObject {
       this.#appendOutput(state, execution, "stderr", stderrDelta, providerObservation);
     this.#attachPendingNetworkDecision(state, execution);
     if (execution.probe && !execution.networkDecisionAdded) {
-      const egress = await this.#runner(
-        "/sandbox/egress?sandboxId=" + encodeURIComponent(state.sandboxId) +
-        "&probeId=" + encodeURIComponent(execution.probe.id),
-        undefined,
-        "GET",
-      );
-      const observations = Array.isArray(egress.events) ? egress.events : [];
-      if (observations.length > 1)
-        throw new Error("Cloudflare Sandbox returned multiple observations for one probe");
-      const observation = observations[0] ?? null;
+      let observation = null;
+      for (let attempt = 0; attempt < 6; attempt += 1) {
+        const egress = await this.#runner(
+          "/sandbox/egress?sandboxId=" +
+            encodeURIComponent(state.sandboxId) +
+            "&probeId=" +
+            encodeURIComponent(execution.probe.id),
+          undefined,
+          "GET",
+        );
+        const observations = Array.isArray(egress.events)
+          ? egress.events
+          : [];
+        if (observations.length > 1)
+          throw new Error(
+            "Cloudflare Sandbox returned multiple observations for one probe",
+          );
+        observation = observations[0] ?? null;
+        if (
+          observation ||
+          !snapshot.process ||
+          snapshot.process.status === "running" ||
+          attempt === 5
+        )
+          break;
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
       if (observation) {
         if (!sameDestination(observation.destination, execution.probe.destination))
           throw new Error("Cloudflare Sandbox network observation was bound to the wrong destination");

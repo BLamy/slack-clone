@@ -383,7 +383,7 @@ export class Gadget extends DurableObject {
     this.#attachPendingNetworkDecision(state, execution);
     if (execution.probe && !execution.networkDecisionAdded) {
       let observation = null;
-      for (let attempt = 0; attempt < 6; attempt += 1) {
+      for (let attempt = 0; attempt < 30; attempt += 1) {
         const egress = await this.#runner(
           "/sandbox/egress?sandboxId=" +
             encodeURIComponent(state.sandboxId) +
@@ -404,7 +404,7 @@ export class Gadget extends DurableObject {
           observation ||
           !snapshot.process ||
           snapshot.process.status === "running" ||
-          attempt === 5
+          attempt === 29
         )
           break;
         await new Promise((resolve) => setTimeout(resolve, 100));

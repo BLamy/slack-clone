@@ -315,3 +315,44 @@ Cloudflare OS inventory.
   orphan-cleanup, and manifest-provenance gaps are repaired at this exact commit; a fresh
   critic must still independently replay the evidence and run sensitivity checks before
   changing the lifecycle status to `verified`.
+
+### Builder — 2026-08-24 (fail-closed observation and cleanup attestation repair)
+
+- Commits: `beb5a12423fcb7f21aec056bf1487d375fac393c` and
+  `6816e163f68c24bb93d4ce381fad9aa85dbd5a86`.
+- Repair: network decisions now require an explicit provider observation ID from the
+  Sandbox EgressLog event; neither the Gadget nor the runner can substitute an ID when
+  the provider event is absent. The accepted-timeout path records the provider's durable
+  cleanup observation, independently records the first and retry idempotency keys, and
+  asserts that they compare equal. The Sandbox DELETE response now carries its provider
+  cleanup source, observation ID, timestamp, and zero running processes.
+- Deployment: the Sandbox runner is deployed at
+  `https://e4t08-sandbox-20260824.brett-lamy.workers.dev`, version
+  `7c96c9fb-93b6-4a08-8e40-f416a2231966`; the official OS Worker and Gatekeeper remain
+  `https://e4t08-os-20260824.brett-lamy.workers.dev` and
+  `https://e4t08-gatekeeper-20260824.brett-lamy.workers.dev`.
+- Cold run: `E4_T08_IMPLEMENTATION_COMMIT=6816e163f68c24bb93d4ce381fad9aa85dbd5a86 TEST_RUN_ID=e4-t08-cold-repair-final3-20260824 TEST_ARTIFACT_DIR=/tmp/e4-t08-cold-repair-final3-20260824 CF_OS_PROTOCOL=official-cloudflare-os CF_OS_BASE_URL=https://e4t08-os-20260824.brett-lamy.workers.dev CF_OS_TOKEN=<held-out-session-token> CF_OS_TENANT_ID=tenant-e4-t08-20260824 CF_OS_WORKSPACE_ID=workspace-e4-t08-20260824 CF_OS_AGENT_ID=agent-e4-t08-20260824 CF_OS_TEST_SCOPE=e4-t08-final3-20260824 CF_OS_GATEKEEPER_SCHEME=https CF_OS_GATEKEEPER_HOST=e4t08-gatekeeper-20260824.brett-lamy.workers.dev CF_OS_GATEKEEPER_PORT=443 CF_OS_GATEKEEPER_PURPOSE=e4-t08-gatekeeper CF_OS_TEST_PROFILE=e4-t08-accepted-timeout-once CF_OS_DNS_REBIND_PROBE_URL=https://example.com/ CF_OS_PUBLIC_LISTENER_PROBE_URL=https://public.example/ make verify-E4-T08-real`; detached HTTPS submodule checkout, frozen install, and the real provider runner exited 0.
+- Evidence: `evidence/e4-t08-cold-repair-final3-20260824/verification-summary.json`,
+  `provider-inventory.json`, `execution-transcripts.json`, `network-probes.json`,
+  `quota-cost.json`, `manifest.json`, `cold-verification-transcript.json`, and
+  `sensitivity.json`. The provider resource was
+  `088caf8fb9d6da2437d3cefadc824bf6c29c532633b1115e4c84e21ec05222ed:0`; workspace
+  digest `sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766`;
+  transcript digest `sha256:985879e8a12e782370b9ad6c50a663e5e26579d8be0699578bbbeb688f989d23`;
+  network decision digest `sha256:ea1bfeba32c53583343700b002001195fb2027827a43aead3c0fae9da310e10f`; quota
+  event digest `sha256:52425456e9f3b68bd2fa40d5a6ee285cff43aa99786e0add6372d56229619bfe`.
+  The timeout evidence attests provider cleanup, equal first/retry keys, one orphan
+  resource plus two orphan storage records swept, and zero final inventory.
+- Sensitivity: a disposable worktree at the exact implementation commit changed the
+  direct-internet expectation from `deny` to `allow`; the live provider run exited 1 with
+  `E4_T08_FAILURE: ERR_ASSERTION: probe direct-internet produced the wrong provider result`,
+  and the official account had zero remaining Gadgets afterward.
+- Gates: `pnpm format:check:e4-t08-real`, `pnpm lint`, `pnpm typecheck`, `pnpm test`
+  (209 unit tests and 15 Playwright integration tests), deployment-runner
+  `npm run typecheck`, and the exact cold-clone real-provider run passed. Replay: N/A
+  (real headless Cloudflare OS sandbox capstone) + mitigation: committed cold-clone
+  transcript, exact stream/tree digests, network probe evidence, cost ledger, inventory,
+  and disposable live-provider sensitivity evidence.
+- Claim: the four fresh-critic findings are addressed at the exact deployed provider
+  head; a fresh critic must now independently replay the evidence and set the lifecycle
+  status to `verified` only if it cannot refute the claim.

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "task": "E4-T08",
+  "baseline": {
+    "runId": "e4-t08-cold-repair-final3-20260824",
+    "implementationCommit": "6816e163f68c24bb93d4ce381fad9aa85dbd5a86",
+    "result": "PASS",
+    "summary": "verification-summary.json"
+  },
+  "mutation": {
+    "baseCommit": "6816e163f68c24bb93d4ce381fad9aa85dbd5a86",
+    "disposableWorktree": "work/sensitivity-disposable-20260824/checkout",
+    "file": "scripts/verify-e4-t08-real.mjs",
+    "change": "changed the direct-internet probe expectation from deny to allow",
+    "provider": "official Cloudflare OS plus Sandbox runner",
+    "testRunId": "e4-t08-sensitivity-direct-allow-20260824",
+    "mutatedExitCode": 1,
+    "detectorWentRed": true,
+    "failure": "E4_T08_FAILURE: ERR_ASSERTION: probe direct-internet produced the wrong provider result",
+    "postMutationOfficialAccountGadgetCount": 0
+  },
+  "replay": "Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript and disposable live-provider sensitivity run"
+}

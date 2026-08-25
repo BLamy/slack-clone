@@ -3,7 +3,7 @@ id: E4-T08
 epic: 4
 title: "Capstone: a real Cloudflare OS workspace executes a pinned run under deny-by-default policy, survives reconnect, and leaves no orphan"
 priority: 408
-status: implemented
+status: refuted
 depends_on: [E4-T05, E4-T07]
 estimate: L
 capstone: true
@@ -356,3 +356,61 @@ Cloudflare OS inventory.
 - Claim: the four fresh-critic findings are addressed at the exact deployed provider
   head; a fresh critic must now independently replay the evidence and set the lifecycle
   status to `verified` only if it cannot refute the claim.
+
+### Critic — 2026-08-24 (final3 evidence audit)
+
+VERDICT: needs-evidence
+
+Lifecycle status remains in the repository's `refuted` state because the committed live
+evidence does not independently prove every accepted-timeout cleanup claim. The critic
+reviewed exact checkout HEAD `15ad27fcd7654247042121a56ad789ede55b951e`, implementation
+commit `6816e163f68c24bb93d4ce381fad9aa85dbd5a86`, the exact parent-to-HEAD diff, and all
+committed files under `evidence/e4-t08-cold-repair-final3-20260824/`.
+
+Independent checks passed: the manifest recomputed to workspace digest
+`sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766`; all recorded
+execution transcript digests and the combined transcript digest matched
+`sha256:985879e8a12e782370b9ad6c50a663e5e26579d8be0699578bbbeb688f989d23`; the eight
+network decisions matched the committed network digest
+`sha256:ea1bfeba32c53583343700b002001195fb2027827a43aead3c0fae9da310e10f`; resource
+bindings, quota/cost resource identity, accepted-timeout fields, and final zero inventory
+were internally consistent; and `sensitivity.json` records the disposable live-provider
+mutation going red with zero post-run Gadgets. The cold missing-config detector exited 2
+with the required `SKIPPED:` output. `pnpm format:check:e4-t08-real`, `pnpm format:check`,
+`pnpm lint`, `pnpm typecheck`, `pnpm test` (209 unit and 15 Playwright integration tests),
+`pnpm build`, and deployment-runner `npm run typecheck` all passed at this checkout.
+
+Needs-evidence findings:
+
+1. The accepted-timeout idempotency-key equality is verifier-local, not independently
+   provider-observed. `scripts/verify-e4-t08-real.mjs` assigns
+   `retryIdempotencyKey = firstIdempotencyKey` at the retry call and then compares those
+   variables. The official client skips the second `prepareDestroy` once the durable
+   cleanup observation exists, and its successful destroy audit entry carries no
+   idempotency key. The committed `provider-inventory.json` destroy audit has no first or
+   retry `_destroy` key (only a later `_cleanup_...` key). Provide provider-side request
+   or audit evidence that independently captures both keys, or otherwise make the retry
+   comparison non-tautological.
+
+2. The accepted-timeout cleanup observation's `runningProcessCount: 0` is hard-coded in
+   the Sandbox runner's DELETE response after `sandbox.destroy()`; it is not obtained from
+   `listProcesses()` or a provider-returned count. The verifier checks the cleanup source,
+   destroyed flag, bounded IDs, and timestamp, but never asserts that process-count field.
+   Provide an independently measured/provider-attested zero-process observation or remove
+   that claim from the durable evidence.
+
+3. The committed DNS-rebinding and public-listener entries prove default-deny outcomes for
+   `https://example.com/` and `https://public.example/`, respectively, but contain no
+   evidence that either URL exercised an actual rebinding or public-listener attack. The
+   adversarial criterion therefore still needs a real attack endpoint/trace or an explicit
+   documented waiver.
+
+4. The final3 evidence records a disconnected execution and an accepted-timeout destroy,
+   but no interrupted-create/reconciliation attempt. The adversarial create/stream/destroy
+   retry criterion needs a committed create-interruption trace or an explicit waiver.
+
+Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: committed
+cold-clone real-provider transcript, exact stream/tree digests, network probe evidence,
+cost ledger, before/after Cloudflare OS inventory, and disposable live-provider sensitivity
+evidence. A fresh critic must address the findings above before setting this ticket to
+`verified`.

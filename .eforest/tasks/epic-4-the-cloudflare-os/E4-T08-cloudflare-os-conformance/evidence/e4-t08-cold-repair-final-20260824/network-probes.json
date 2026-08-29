@@ -1,0 +1,472 @@
+{
+  "schemaVersion": 1,
+  "task": "E4-T08",
+  "runId": "e4-t08-cold-repair-final-20260824",
+  "policyDigest": "sha256:eb4cb05b5d5cb5b945a3e785cd4994448e81c2f19f1dfaa151bd40ce917bf5b7",
+  "probes": [
+    {
+      "executionId": "ex_3ca85ff1da56472ea6867ee8ae84a3d7",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_3ca85ff1da56472ea6867ee8ae84a3d7",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:779fe370869322404d500386590eeebf5570182f7327e0a53ecea9b7a8dba7dd",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"eyJtYXJrZXIiOiJlNC10MDgtZ2F0ZWtlZXBlci1vayJ9CnByb2JlOmFsbG93bGlzdGVkLWdhdGVrZWVwZXI6YWxsb3dlZAo=\",\"encoding\":\"base64\",\"byteLength\":71},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "{\"marker\":\"e4-t08-gatekeeper-ok\"}\nprobe:allowlisted-gatekeeper:allowed\n",
+      "stderr": "",
+      "disconnected": false,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787613208403_eeupu0:0:0:71:0",
+          "processId": "proc_1787613208403_eeupu0",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 71,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787613208403_eeupu0:0:0:71:0",
+          "processId": "proc_1787613208403_eeupu0",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 71,
+          "stderrOffset": 0
+        }
+      ],
+      "probe": {
+        "id": "allowlisted-gatekeeper",
+        "url": "https://e4t08-gatekeeper-20260824.brett-lamy.workers.dev:443/",
+        "expected": "allow"
+      },
+      "decisions": [
+        {
+          "probeId": "allowlisted-gatekeeper",
+          "outcome": "allow",
+          "reasonCode": "gatekeeper_observed",
+          "ruleId": "e4-t08-gatekeeper",
+          "destination": {
+            "scheme": "https",
+            "host": "e4t08-gatekeeper-20260824.brett-lamy.workers.dev",
+            "port": 443
+          },
+          "providerObservationId": "container-egress:e4t08-303f85f213574160b5d1f205fb2cf5c5:1787613209077"
+        }
+      ]
+    },
+    {
+      "executionId": "ex_d33044b9e4694bf4aa9ed6ef16ef2bb0",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_d33044b9e4694bf4aa9ed6ef16ef2bb0",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:9d37b0683cfb0a6fcb20c1e358887428e5ee59f220e50ed49869d19ab4ed70dd",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNDAzCkZvcmJpZGRlbiBieSBFNC1UMDggZGVmYXVsdC1kZW55IHBvbGljeQpwcm9iZTpkaXJlY3QtaW50ZXJuZXQ6ZGVuaWVkCg==\",\"encoding\":\"base64\",\"byteLength\":118},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 403\nForbidden by E4-T08 default-deny policy\nprobe:direct-internet:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787613210032_gfc7uy:0:0:118:0",
+          "processId": "proc_1787613210032_gfc7uy",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 118,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787613210032_gfc7uy:0:0:118:0",
+          "processId": "proc_1787613210032_gfc7uy",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 118,
+          "stderrOffset": 0
+        }
+      ],
+      "probe": {
+        "id": "direct-internet",
+        "url": "https://example.com/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "direct-internet",
+          "outcome": "deny",
+          "reasonCode": "cloudflare_sandbox_policy",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "https",
+            "host": "example.com",
+            "port": 443
+          },
+          "providerObservationId": "container-egress:e4t08-303f85f213574160b5d1f205fb2cf5c5:1787613210161"
+        }
+      ]
+    },
+    {
+      "executionId": "ex_28857c3a3aa34dcb9aeb0eb86ba8a063",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_28857c3a3aa34dcb9aeb0eb86ba8a063",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:41398c65a61bdcbbb8db29312fe8a111f1d55f823eb243097841ad44e30f4389",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDU2KSBSZWNlaXZlZCBIVFRQIGNvZGUgNDAzIGZyb20gcHJveHkgYWZ0ZXIgQ09OTkVDVApwcm9iZTpwcml2YXRlLWFkZHJlc3M6ZGVuaWVkCg==\",\"encoding\":\"base64\",\"byteLength\":88},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (56) Received HTTP code 403 from proxy after CONNECT\nprobe:private-address:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787613210879_nl0m7i:0:0:88:0",
+          "processId": "proc_1787613210879_nl0m7i",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 88,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787613210879_nl0m7i:0:0:88:0",
+          "processId": "proc_1787613210879_nl0m7i",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 88,
+          "stderrOffset": 0
+        }
+      ],
+      "probe": {
+        "id": "private-address",
+        "url": "https://10.0.0.1/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "private-address",
+          "outcome": "deny",
+          "reasonCode": "cloudflare_sandbox_policy",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "https",
+            "host": "10.0.0.1",
+            "port": 443
+          },
+          "providerObservationId": "container-egress:e4t08-303f85f213574160b5d1f205fb2cf5c5:1787613211205"
+        }
+      ]
+    },
+    {
+      "executionId": "ex_128a9875c700496db053c5bea9ba4fab",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_128a9875c700496db053c5bea9ba4fab",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:d1b2f000c826b4fe3febf44ece46e8efa87e1b239174f6a63b9d927b02de0cd0",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNDAzCkZvcmJpZGRlbiBieSBFNC1UMDggZGVmYXVsdC1kZW55IHBvbGljeQpwcm9iZTpsaW5rLWxvY2FsOmRlbmllZAo=\",\"encoding\":\"base64\",\"byteLength\":113},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 403\nForbidden by E4-T08 default-deny policy\nprobe:link-local:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787613211728_s2alka:0:0:113:0",
+          "processId": "proc_1787613211728_s2alka",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 113,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787613211728_s2alka:0:0:113:0",
+          "processId": "proc_1787613211728_s2alka",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 113,
+          "stderrOffset": 0
+        }
+      ],
+      "probe": {
+        "id": "link-local",
+        "url": "http://169.254.1.1/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "link-local",
+          "outcome": "deny",
+          "reasonCode": "cloudflare_sandbox_policy",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "http",
+            "host": "169.254.1.1",
+            "port": 80
+          },
+          "providerObservationId": "container-egress:e4t08-303f85f213574160b5d1f205fb2cf5c5:1787613211806"
+        }
+      ]
+    },
+    {
+      "executionId": "ex_dcb41ca371f24cd282901ebcc9c235ec",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_dcb41ca371f24cd282901ebcc9c235ec",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:3d56c6e151243427beae26a241fb44a01c36256718cafc2ea47eb0c195dad0a8",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNDAzCkZvcmJpZGRlbiBieSBFNC1UMDggZGVmYXVsdC1kZW55IHBvbGljeQpwcm9iZTptZXRhZGF0YTpkZW5pZWQK\",\"encoding\":\"base64\",\"byteLength\":111},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 403\nForbidden by E4-T08 default-deny policy\nprobe:metadata:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787613212343_96eplq:0:0:111:0",
+          "processId": "proc_1787613212343_96eplq",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 111,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787613212343_96eplq:0:0:111:0",
+          "processId": "proc_1787613212343_96eplq",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 111,
+          "stderrOffset": 0
+        }
+      ],
+      "probe": {
+        "id": "metadata",
+        "url": "http://169.254.169.254/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "metadata",
+          "outcome": "deny",
+          "reasonCode": "cloudflare_sandbox_policy",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "http",
+            "host": "169.254.169.254",
+            "port": 80
+          },
+          "providerObservationId": "container-egress:e4t08-303f85f213574160b5d1f205fb2cf5c5:1787613212419"
+        }
+      ]
+    },
+    {
+      "executionId": "ex_1ce56b9391bf4a7e922d193d226f6210",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_1ce56b9391bf4a7e922d193d226f6210",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:42e896d1794d21af8d5de88ef3a22bd842cd364701ff767510df55cc152b90ff",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDU2KSBSZWNlaXZlZCBIVFRQIGNvZGUgNDAzIGZyb20gcHJveHkgYWZ0ZXIgQ09OTkVDVApwcm9iZTppbmJvdW5kOmRlbmllZAo=\",\"encoding\":\"base64\",\"byteLength\":80},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (56) Received HTTP code 403 from proxy after CONNECT\nprobe:inbound:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787613212965_q9v3t9:0:0:80:0",
+          "processId": "proc_1787613212965_q9v3t9",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 80,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787613212965_q9v3t9:0:0:80:0",
+          "processId": "proc_1787613212965_q9v3t9",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 80,
+          "stderrOffset": 0
+        }
+      ],
+      "probe": {
+        "id": "inbound",
+        "url": "https://127.0.0.1:443/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "inbound",
+          "outcome": "deny",
+          "reasonCode": "cloudflare_sandbox_policy",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "https",
+            "host": "127.0.0.1",
+            "port": 443
+          },
+          "providerObservationId": "container-egress:e4t08-303f85f213574160b5d1f205fb2cf5c5:1787613213294"
+        }
+      ]
+    },
+    {
+      "executionId": "ex_cad5218d7c9b49e9b6d8c985046aa7ab",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_cad5218d7c9b49e9b6d8c985046aa7ab",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:622939ed9a1c27893fb6e631c81e5fe38983509a9625cbda3e732dba16662bba",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNDAzCkZvcmJpZGRlbiBieSBFNC1UMDggZGVmYXVsdC1kZW55IHBvbGljeQpwcm9iZTpkbnMtcmViaW5kaW5nOmRlbmllZAo=\",\"encoding\":\"base64\",\"byteLength\":116},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 403\nForbidden by E4-T08 default-deny policy\nprobe:dns-rebinding:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787613213851_8awpj9:0:0:116:0",
+          "processId": "proc_1787613213851_8awpj9",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 116,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787613213851_8awpj9:0:0:116:0",
+          "processId": "proc_1787613213851_8awpj9",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 116,
+          "stderrOffset": 0
+        }
+      ],
+      "probe": {
+        "id": "dns-rebinding",
+        "url": "https://example.com/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "dns-rebinding",
+          "outcome": "deny",
+          "reasonCode": "cloudflare_sandbox_policy",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "https",
+            "host": "example.com",
+            "port": 443
+          },
+          "providerObservationId": "container-egress:e4t08-303f85f213574160b5d1f205fb2cf5c5:1787613217277"
+        }
+      ]
+    },
+    {
+      "executionId": "ex_fed08eb91d6d4f42b878d684c80d490f",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_fed08eb91d6d4f42b878d684c80d490f",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:a277b95030ec89c8f608075a2e5f39d977bfd36f1f3eb80c6664f937469b095a",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNDAzCkZvcmJpZGRlbiBieSBFNC1UMDggZGVmYXVsdC1kZW55IHBvbGljeQpwcm9iZTpwdWJsaWMtbGlzdGVuZXI6ZGVuaWVkCg==\",\"encoding\":\"base64\",\"byteLength\":118},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 403\nForbidden by E4-T08 default-deny policy\nprobe:public-listener:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "providerObservations": [
+        {
+          "providerObservationId": "process-log:proc_1787613218261_a4wi7k:0:0:118:0",
+          "processId": "proc_1787613218261_a4wi7k",
+          "requestedStdoutOffset": 0,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 118,
+          "stderrOffset": 0
+        },
+        {
+          "providerObservationId": "process-log:proc_1787613218261_a4wi7k:118:0:118:0",
+          "processId": "proc_1787613218261_a4wi7k",
+          "requestedStdoutOffset": 118,
+          "requestedStderrOffset": 0,
+          "stdoutOffset": 118,
+          "stderrOffset": 0
+        }
+      ],
+      "probe": {
+        "id": "public-listener",
+        "url": "https://public.example/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "public-listener",
+          "outcome": "deny",
+          "reasonCode": "cloudflare_sandbox_policy",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "https",
+            "host": "public.example",
+            "port": 443
+          },
+          "providerObservationId": "container-egress:e4t08-303f85f213574160b5d1f205fb2cf5c5:1787613220082"
+        }
+      ]
+    }
+  ]
+}

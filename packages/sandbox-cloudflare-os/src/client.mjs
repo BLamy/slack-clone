@@ -7,6 +7,7 @@ import {
   isRetryable,
   normalizeHttpError,
 } from "./errors.mjs";
+import { OfficialCloudflareOsClient } from "./official-client.mjs";
 
 const MAX_BODY_BYTES = 32 * 1024;
 const MAX_STREAM_EVENT_BYTES = 128 * 1024;
@@ -20,6 +21,7 @@ export class CloudflareOsClient {
   #maxAttempts;
   #sleep;
   #audit = [];
+  #official;
 
   constructor({
     baseUrl,
@@ -28,7 +30,12 @@ export class CloudflareOsClient {
     timeoutMs = 250,
     maxAttempts = 3,
     sleep = delay,
+    protocol = "http-v1",
   } = {}) {
+    if (protocol === "official-cloudflare-os") {
+      this.#official = new OfficialCloudflareOsClient({ baseUrl, token });
+      return;
+    }
     if (typeof baseUrl !== "string") throw new TypeError("baseUrl is required");
     const url = new URL(baseUrl);
     if (!/^https?:$/u.test(url.protocol))
@@ -54,14 +61,18 @@ export class CloudflareOsClient {
   }
 
   publicConfig() {
+    if (this.#official) return this.#official.publicConfig();
     return { baseUrl: this.#baseUrl, authMode: "server-deployment-identity" };
   }
 
   audit() {
+    if (this.#official) return this.#official.audit();
     return structuredClone(this.#audit);
   }
 
   create({ labels, spec, idempotencyKey }) {
+    if (this.#official)
+      return this.#official.create({ labels, spec, idempotencyKey });
     return this.#request("POST", "/v1/workspaces", {
       body: { labels, spec },
       idempotencyKey,
@@ -71,6 +82,7 @@ export class CloudflareOsClient {
   }
 
   listByLabels(labels, { cursor } = {}) {
+    if (this.#official) return this.#official.listByLabels(labels, { cursor });
     const query = new URLSearchParams();
     for (const key of Object.keys(labels).sort())
       query.set(`label.${key}`, labels[key]);
@@ -81,6 +93,7 @@ export class CloudflareOsClient {
   }
 
   inspect(reference, labels) {
+    if (this.#official) return this.#official.inspect(reference, labels);
     return this.#request("GET", resourcePath(reference), {
       operation: "inspect",
       labels,
@@ -88,6 +101,13 @@ export class CloudflareOsClient {
   }
 
   suspend(reference, labels, idempotencyKey, expectedFence) {
+    if (this.#official)
+      return this.#official.suspend(
+        reference,
+        labels,
+        idempotencyKey,
+        expectedFence,
+      );
     return this.#mutate(
       "suspend",
       reference,
@@ -98,6 +118,13 @@ export class CloudflareOsClient {
   }
 
   resume(reference, labels, idempotencyKey, expectedFence) {
+    if (this.#official)
+      return this.#official.resume(
+        reference,
+        labels,
+        idempotencyKey,
+        expectedFence,
+      );
     return this.#mutate(
       "resume",
       reference,
@@ -108,6 +135,13 @@ export class CloudflareOsClient {
   }
 
   reset(reference, labels, idempotencyKey, expectedFence) {
+    if (this.#official)
+      return this.#official.reset(
+        reference,
+        labels,
+        idempotencyKey,
+        expectedFence,
+      );
     return this.#mutate(
       "reset",
       reference,
@@ -118,6 +152,13 @@ export class CloudflareOsClient {
   }
 
   destroy(reference, labels, idempotencyKey, expectedFence) {
+    if (this.#official)
+      return this.#official.destroy(
+        reference,
+        labels,
+        idempotencyKey,
+        expectedFence,
+      );
     return this.#mutate(
       "destroy",
       reference,
@@ -132,6 +173,13 @@ export class CloudflareOsClient {
   }
 
   cancel(reference, labels, idempotencyKey, expectedFence) {
+    if (this.#official)
+      return this.#official.cancel(
+        reference,
+        labels,
+        idempotencyKey,
+        expectedFence,
+      );
     return this.#mutate(
       "cancel",
       reference,
@@ -142,6 +190,8 @@ export class CloudflareOsClient {
   }
 
   exec(reference, labels, exec, idempotencyKey) {
+    if (this.#official)
+      return this.#official.exec(reference, labels, exec, idempotencyKey);
     return this.#request("POST", `${resourcePath(reference)}/exec`, {
       body: { exec, labels },
       idempotencyKey,
@@ -150,6 +200,13 @@ export class CloudflareOsClient {
   }
 
   configureNetworkPolicy(reference, labels, policy, idempotencyKey) {
+    if (this.#official)
+      return this.#official.configureNetworkPolicy(
+        reference,
+        labels,
+        policy,
+        idempotencyKey,
+      );
     return this.#request("POST", `${resourcePath(reference)}/network-policy`, {
       body: { labels, policy },
       idempotencyKey,
@@ -164,6 +221,14 @@ export class CloudflareOsClient {
     workspaceDigest,
     idempotencyKey,
   ) {
+    if (this.#official)
+      return this.#official.publishWorkspace(
+        reference,
+        labels,
+        manifest,
+        workspaceDigest,
+        idempotencyKey,
+      );
     if (!DIGEST.test(workspaceDigest))
       throw cloudflareOsError(
         CLOUDFLARE_OS_ERROR_CODES.INVALID_REQUEST,
@@ -183,6 +248,13 @@ export class CloudflareOsClient {
 
   cancelExecution(reference, labels, executionId, idempotencyKey) {
     assertExecutionId(executionId);
+    if (this.#official)
+      return this.#official.cancelExecution(
+        reference,
+        labels,
+        executionId,
+        idempotencyKey,
+      );
     return this.#request(
       "POST",
       `${resourcePath(reference)}/exec/${encodeURIComponent(executionId)}/cancel`,
@@ -212,6 +284,13 @@ export class CloudflareOsClient {
         "execution stream offset is invalid",
         { operation: "exec-stream" },
       );
+    if (this.#official) {
+      yield* this.#official.streamExec(reference, labels, executionId, {
+        afterSequence,
+        signal,
+      });
+      return;
+    }
     const query = new URLSearchParams({ after: String(afterSequence) });
     for (const key of Object.keys(labels ?? {}).sort())
       query.set(`label.${key}`, labels[key]);

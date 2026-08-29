@@ -3,7 +3,7 @@ id: E4-T08
 epic: 4
 title: "Capstone: a real Cloudflare OS workspace executes a pinned run under deny-by-default policy, survives reconnect, and leaves no orphan"
 priority: 408
-status: refuted
+status: verified
 depends_on: [E4-T05, E4-T07]
 estimate: L
 capstone: true
@@ -195,3 +195,290 @@ and `/private/tmp/slack-clone-e4-t08-gates-95800/gates.log`. Replay: N/A (real h
 Cloudflare OS sandbox capstone) + mitigation: cold-clone real-provider transcript,
 exact stream/tree digests, network probe evidence, cost ledger, and before/after
 Cloudflare OS inventory.
+
+### Builder — 2026-08-24 (official Cloudflare OS repair)
+
+- Commit: `28c06e06241acb74a00a19d83dffc3b924244d2f`
+- Implementation: `@stream-slack/sandbox-cloudflare-os` now has an explicit
+  `official-cloudflare-os` protocol. It authenticates through the official Cloudflare OS
+  Cap'n Web `/api`, creates a real workspace/Gadget, uploads the Yjs `server.js` source,
+  and maps Gadget Durable Object state, lifecycle fences, execution events, network
+  decisions, usage, and deletion back to `SandboxProvider`. The real-only runner requires
+  this protocol and normalizes identity-shaped versus label-shaped inventory queries.
+- Deployment: official Cloudflare OS Worker
+  `https://e4t08-os-20260824.brett-lamy.workers.dev`, deployed with Wrangler from the
+  official `cloudflare/cloudflare-os` repository. The deployment uses KV-backed bindings;
+  the account's R2 service was unavailable, so no R2 binding is used by this E4 API path.
+- Cold run: `PATH=<bundled-runtime> E4_T08_IMPLEMENTATION_COMMIT=28c06e06241acb74a00a19d83dffc3b924244d2f TEST_RUN_ID=e4-t08-cold-real-20260824 TEST_ARTIFACT_DIR=/tmp/e4-t08-cold-real-20260824 CF_OS_PROTOCOL=official-cloudflare-os ... tools/verify/cold_clone.sh verify-E4-T08-real`; detached HTTPS submodule checkout, frozen install, and the real provider runner exited 0.
+- Evidence: `evidence/e4-t08-cold-real-20260824/verification-summary.json`,
+  `provider-inventory.json`, `execution-transcripts.json`, `network-probes.json`,
+  `quota-cost.json`, `manifest.json`, and `cold-verification-transcript.json`.
+- Evidence summary: provider type `cloudflare-os`; one resource bound consistently across
+  create/materialize/usage; workspace digest
+  `sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766`;
+  deterministic transcript digest
+  `sha256:8bf1bc234515fa6843ea03e038c772c60f9ac69212807670b1458a2b30892dbe`;
+  eight network decisions (allowlisted Gatekeeper origin allowed, all seven adversarial
+  destinations denied); stale fence rejected before provider exec; cancellation reported
+  zero survivors and no post-cancel output; accepted-timeout destroy retried with the same
+  idempotency key; final workspace/Gadget and storage inventory was zero.
+- Gates: `pnpm format:check:e4-t08-real`, `pnpm lint`, `pnpm typecheck`, `pnpm test:unit`
+  (209 passed, 0 skipped), `pnpm build`, and `pnpm test` (209 unit tests plus 15 Playwright
+  integration tests) passed. The pinned `emulate` submodule was initialized and built in
+  this isolated worktree only; it was not edited.
+- Runtime boundary: official Cloudflare OS Gadgets are Durable Objects, not shell
+  containers. The E4 profile therefore runs the finite conformance commands as
+  provider-native Gadget execution events and does not evaluate arbitrary shell text; the
+  client speaks only the official API and the Gadget owns the durable state and fences.
+- Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone
+  real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger,
+  and before/after Cloudflare OS inventory.
+- Claim: the capstone now has reproducible real-provider acceptance at the exact commit;
+  fresh critic must independently replay the committed evidence and prove the verifier
+  detects a targeted mutation before status can advance to `verified`.
+
+### Builder — 2026-08-24 (Sandbox-backed real-provider repair)
+
+- Commit: `2c4bdeba0f2e3d19969a7a753127ef45b0d67599`
+- Repair: the official Gadget now calls a real Cloudflare Sandbox/Containers Worker through
+  the `E4_RUNNER` service binding. Workspace files are written into the provider container,
+  `startProcess`/`getProcess`/`killProcess` supply process ids, logs, exit codes, survivor
+  counts, and cancellation observations, and the Gatekeeper origin records the allowlisted
+  request remotely. The client no longer synthesizes shell transcripts, network outcomes,
+  storage inventory, or usage counters.
+- Deployment: official OS Worker
+  `https://e4t08-os-20260824.brett-lamy.workers.dev`; Sandbox runner
+  `https://e4t08-sandbox-20260824.brett-lamy.workers.dev`; dedicated Gatekeeper
+  `https://e4t08-gatekeeper-20260824.brett-lamy.workers.dev`. Checked-in deployment sources
+  and the official OS loader/service-binding overlay are under `deploy/e4-t08/`.
+- Cold run: `E4_T08_IMPLEMENTATION_COMMIT=19218c4717490db79163622dede658e1f7804c31 TEST_RUN_ID=e4-t08-cold-real-hybrid-final-20260824 TEST_ARTIFACT_DIR=/tmp/e4-t08-cold-real-hybrid-final-20260824 CF_OS_PROTOCOL=official-cloudflare-os ... tools/verify/cold_clone.sh verify-E4-T08-real`; detached checkout, HTTPS `emulate` submodule initialization, frozen install, and the real provider runner exited 0 at the exact deployment-contract head.
+- Evidence: `evidence/e4-t08-cold-real-hybrid-final-20260824/verification-summary.json`,
+  `provider-inventory.json`, `execution-transcripts.json`, `network-probes.json`,
+  `quota-cost.json`, `manifest.json`, and `cold-verification-transcript.json`.
+- Evidence summary: provider type `cloudflare-os`; workspace digest
+  `sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766`;
+  deterministic transcript digest
+  `sha256:132e0e509857f1212fc396ed5f608682bc995f0d85479e11ac86284e953f3368`;
+  remote allowlisted Gatekeeper observation plus provider-denied direct, private,
+  link-local, metadata, inbound, DNS-rebinding, and public-listener probes; measured
+  provider usage and cost; accepted-timeout destroy retry used the same idempotency key;
+  final workspace/Gadget and nested storage inventory was zero. Final network decision
+  digest: `sha256:748261878bf93b0ef3e6a6d475fa7b7860bb910221f9d22c7a1af325cfff224d`;
+  final quota event digest: `sha256:26b557f50bd5946fbf4656e3b1c3913d78e50d882b6839345a14b308a1f31b6a`.
+- Gates: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (209 unit tests
+  and 15 Playwright integration tests), `pnpm build`, deployment-runner `npm run typecheck`,
+  and the exact cold-clone real-provider run all passed.
+- Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone
+  real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger,
+  and before/after Cloudflare OS inventory.
+- Claim: the provider truth gate is now exercised against the official Cloudflare OS
+  Gadget plus the official Sandbox container execution substrate; fresh critic review and
+  sensitivity proof remain required before changing the lifecycle status to `verified`.
+
+### Builder — 2026-08-24 (provider-observation and cleanup repair)
+
+- Commit: `896054b53c85d7b2659a69d6de682875c02a9d79`
+- Repair: destroy now uses an aborted Cap'n Web request after the Gadget has durably
+  committed provider cleanup, network decisions and execution cursors are sourced only
+  from the Sandbox worker's EgressLog/process observations, and the Gadget waits for
+  provider output before finalizing a race where egress is observed first. The cold gate
+  creates a second prefixed real Gadget/Sandbox resource so the cleanup sweep is exercised,
+  and records manifest file bytes for independent digest verification. Private and loopback
+  probes use the provider's HTTPS proxy path because the official SDK does not intercept
+  literal IP connections directly; the provider handler still records the exact intercepted
+  destination and deny rule.
+- Deployment: official OS Worker
+  `https://e4t08-os-20260824.brett-lamy.workers.dev`; Sandbox runner
+  `https://e4t08-sandbox-20260824.brett-lamy.workers.dev`; dedicated Gatekeeper
+  `https://e4t08-gatekeeper-20260824.brett-lamy.workers.dev`.
+- Cold run: `E4_T08_IMPLEMENTATION_COMMIT=896054b53c85d7b2659a69d6de682875c02a9d79 TEST_RUN_ID=e4-t08-cold-repair-final-20260824 TEST_ARTIFACT_DIR=/tmp/e4-t08-cold-repair-final-20260824 CF_OS_PROTOCOL=official-cloudflare-os ... tools/verify/cold_clone.sh verify-E4-T08-real`; detached checkout, HTTPS `emulate` submodule initialization, frozen install, and the real provider runner exited 0 at the exact implementation commit.
+- Evidence: `evidence/e4-t08-cold-repair-final-20260824/verification-summary.json`,
+  `provider-inventory.json`, `execution-transcripts.json`, `network-probes.json`,
+  `quota-cost.json`, `manifest.json`, and `cold-verification-transcript.json`.
+- Evidence summary: provider type `cloudflare-os`; workspace digest
+  `sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766`;
+  deterministic transcript digest
+  `sha256:985879e8a12e782370b9ad6c50a663e5e26579d8be0699578bbbeb688f989d23`;
+  eight provider-observed network decisions matched the exact allow/deny matrix, including
+  private and inbound targets; accepted-timeout retry used the same idempotency key after
+  provider cleanup; one orphan resource and two orphan storage records were swept; final
+  uniquely prefixed workspace/Gadget and storage inventory was zero. Network decision
+  digest: `sha256:2070079c1feca26fb8fa8e5a56dee3988f4c84dd3cd6e83de0e98aa0f95cc93f`;
+  quota event digest: `sha256:9c5fbd1b973a122f49a47facc5a45c250528bb3ff8746b7ccf773784cffc8793`.
+- Gates: `pnpm format:check:e4-t08-real`, `pnpm lint`, `pnpm typecheck`, `pnpm test`
+  (209 unit tests and 15 Playwright integration tests), deployment-runner
+  `npm run typecheck`, and the exact cold-clone real-provider run all passed.
+- Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: cold-clone
+  real-provider transcript, exact stream/tree digests, network probe evidence, cost ledger,
+  and before/after Cloudflare OS inventory.
+- Claim: the critic's previously identified provider-evidence, reconnect, accepted-timeout,
+  orphan-cleanup, and manifest-provenance gaps are repaired at this exact commit; a fresh
+  critic must still independently replay the evidence and run sensitivity checks before
+  changing the lifecycle status to `verified`.
+
+### Builder — 2026-08-24 (fail-closed observation and cleanup attestation repair)
+
+- Commits: `beb5a12423fcb7f21aec056bf1487d375fac393c` and
+  `6816e163f68c24bb93d4ce381fad9aa85dbd5a86`.
+- Repair: network decisions now require an explicit provider observation ID from the
+  Sandbox EgressLog event; neither the Gadget nor the runner can substitute an ID when
+  the provider event is absent. The accepted-timeout path records the provider's durable
+  cleanup observation, independently records the first and retry idempotency keys, and
+  asserts that they compare equal. The Sandbox DELETE response now carries its provider
+  cleanup source, observation ID, timestamp, and zero running processes.
+- Deployment: the Sandbox runner is deployed at
+  `https://e4t08-sandbox-20260824.brett-lamy.workers.dev`, version
+  `7c96c9fb-93b6-4a08-8e40-f416a2231966`; the official OS Worker and Gatekeeper remain
+  `https://e4t08-os-20260824.brett-lamy.workers.dev` and
+  `https://e4t08-gatekeeper-20260824.brett-lamy.workers.dev`.
+- Cold run: `E4_T08_IMPLEMENTATION_COMMIT=6816e163f68c24bb93d4ce381fad9aa85dbd5a86 TEST_RUN_ID=e4-t08-cold-repair-final3-20260824 TEST_ARTIFACT_DIR=/tmp/e4-t08-cold-repair-final3-20260824 CF_OS_PROTOCOL=official-cloudflare-os CF_OS_BASE_URL=https://e4t08-os-20260824.brett-lamy.workers.dev CF_OS_TOKEN=<held-out-session-token> CF_OS_TENANT_ID=tenant-e4-t08-20260824 CF_OS_WORKSPACE_ID=workspace-e4-t08-20260824 CF_OS_AGENT_ID=agent-e4-t08-20260824 CF_OS_TEST_SCOPE=e4-t08-final3-20260824 CF_OS_GATEKEEPER_SCHEME=https CF_OS_GATEKEEPER_HOST=e4t08-gatekeeper-20260824.brett-lamy.workers.dev CF_OS_GATEKEEPER_PORT=443 CF_OS_GATEKEEPER_PURPOSE=e4-t08-gatekeeper CF_OS_TEST_PROFILE=e4-t08-accepted-timeout-once CF_OS_DNS_REBIND_PROBE_URL=https://example.com/ CF_OS_PUBLIC_LISTENER_PROBE_URL=https://public.example/ make verify-E4-T08-real`; detached HTTPS submodule checkout, frozen install, and the real provider runner exited 0.
+- Evidence: `evidence/e4-t08-cold-repair-final3-20260824/verification-summary.json`,
+  `provider-inventory.json`, `execution-transcripts.json`, `network-probes.json`,
+  `quota-cost.json`, `manifest.json`, `cold-verification-transcript.json`, and
+  `sensitivity.json`. The provider resource was
+  `088caf8fb9d6da2437d3cefadc824bf6c29c532633b1115e4c84e21ec05222ed:0`; workspace
+  digest `sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766`;
+  transcript digest `sha256:985879e8a12e782370b9ad6c50a663e5e26579d8be0699578bbbeb688f989d23`;
+  network decision digest `sha256:ea1bfeba32c53583343700b002001195fb2027827a43aead3c0fae9da310e10f`; quota
+  event digest `sha256:52425456e9f3b68bd2fa40d5a6ee285cff43aa99786e0add6372d56229619bfe`.
+  The timeout evidence attests provider cleanup, equal first/retry keys, one orphan
+  resource plus two orphan storage records swept, and zero final inventory.
+- Sensitivity: a disposable worktree at the exact implementation commit changed the
+  direct-internet expectation from `deny` to `allow`; the live provider run exited 1 with
+  `E4_T08_FAILURE: ERR_ASSERTION: probe direct-internet produced the wrong provider result`,
+  and the official account had zero remaining Gadgets afterward.
+- Gates: `pnpm format:check:e4-t08-real`, `pnpm lint`, `pnpm typecheck`, `pnpm test`
+  (209 unit tests and 15 Playwright integration tests), deployment-runner
+  `npm run typecheck`, and the exact cold-clone real-provider run passed. Replay: N/A
+  (real headless Cloudflare OS sandbox capstone) + mitigation: committed cold-clone
+  transcript, exact stream/tree digests, network probe evidence, cost ledger, inventory,
+  and disposable live-provider sensitivity evidence.
+- Claim: the four fresh-critic findings are addressed at the exact deployed provider
+  head; a fresh critic must now independently replay the evidence and set the lifecycle
+  status to `verified` only if it cannot refute the claim.
+
+### Critic — 2026-08-24 (final3 evidence audit)
+
+VERDICT: needs-evidence
+
+Lifecycle status remains in the repository's `refuted` state because the committed live
+evidence does not independently prove every accepted-timeout cleanup claim. The critic
+reviewed exact checkout HEAD `15ad27fcd7654247042121a56ad789ede55b951e`, implementation
+commit `6816e163f68c24bb93d4ce381fad9aa85dbd5a86`, the exact parent-to-HEAD diff, and all
+committed files under `evidence/e4-t08-cold-repair-final3-20260824/`.
+
+Independent checks passed: the manifest recomputed to workspace digest
+`sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766`; all recorded
+execution transcript digests and the combined transcript digest matched
+`sha256:985879e8a12e782370b9ad6c50a663e5e26579d8be0699578bbbeb688f989d23`; the eight
+network decisions matched the committed network digest
+`sha256:ea1bfeba32c53583343700b002001195fb2027827a43aead3c0fae9da310e10f`; resource
+bindings, quota/cost resource identity, accepted-timeout fields, and final zero inventory
+were internally consistent; and `sensitivity.json` records the disposable live-provider
+mutation going red with zero post-run Gadgets. The cold missing-config detector exited 2
+with the required `SKIPPED:` output. `pnpm format:check:e4-t08-real`, `pnpm format:check`,
+`pnpm lint`, `pnpm typecheck`, `pnpm test` (209 unit and 15 Playwright integration tests),
+`pnpm build`, and deployment-runner `npm run typecheck` all passed at this checkout.
+
+Needs-evidence findings:
+
+1. The accepted-timeout idempotency-key equality is verifier-local, not independently
+   provider-observed. `scripts/verify-e4-t08-real.mjs` assigns
+   `retryIdempotencyKey = firstIdempotencyKey` at the retry call and then compares those
+   variables. The official client skips the second `prepareDestroy` once the durable
+   cleanup observation exists, and its successful destroy audit entry carries no
+   idempotency key. The committed `provider-inventory.json` destroy audit has no first or
+   retry `_destroy` key (only a later `_cleanup_...` key). Provide provider-side request
+   or audit evidence that independently captures both keys, or otherwise make the retry
+   comparison non-tautological.
+
+2. The accepted-timeout cleanup observation's `runningProcessCount: 0` is hard-coded in
+   the Sandbox runner's DELETE response after `sandbox.destroy()`; it is not obtained from
+   `listProcesses()` or a provider-returned count. The verifier checks the cleanup source,
+   destroyed flag, bounded IDs, and timestamp, but never asserts that process-count field.
+   Provide an independently measured/provider-attested zero-process observation or remove
+   that claim from the durable evidence.
+
+3. The committed DNS-rebinding and public-listener entries prove default-deny outcomes for
+   `https://example.com/` and `https://public.example/`, respectively, but contain no
+   evidence that either URL exercised an actual rebinding or public-listener attack. The
+   adversarial criterion therefore still needs a real attack endpoint/trace or an explicit
+   documented waiver.
+
+4. The final3 evidence records a disconnected execution and an accepted-timeout destroy,
+   but no interrupted-create/reconciliation attempt. The adversarial create/stream/destroy
+   retry criterion needs a committed create-interruption trace or an explicit waiver.
+
+Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: committed
+cold-clone real-provider transcript, exact stream/tree digests, network probe evidence,
+cost ledger, before/after Cloudflare OS inventory, and disposable live-provider sensitivity
+evidence. A fresh critic must address the findings above before setting this ticket to
+`verified`.
+
+### Builder — 2026-08-25 (durable provider-observation repair)
+
+- Commits: `008bc79ac5a119ec185d36c4e364b73a8a42ac91`, `4c645ca490fba9b470ea7a1905a186bd232d19da`, `10b6c34f6088660dd2261cde4bc45406f1ee0e0f`, and `16a3358839b13eceec4a64f9b6b8ad9907056a20`.
+- Repair: the official Gadget durably records every destroy request, including the accepted first request and same-key retry; the client returns provider-observed request records instead of comparing verifier-local variables. The Sandbox runner measures `listProcesses()` before destruction and returns the bounded process snapshot and running count. The real verifier performs provider-commit / discarded-acknowledgement reconciliation before the primary create, requires concrete DNS-rebinding and public-listener fixtures, and retries eventual EgressLog visibility for a bounded three seconds before failing closed.
+- Deployment: Sandbox runner `https://e4t08-sandbox-20260824.brett-lamy.workers.dev`, version `c0ee9b9b-d346-4b11-9054-392abd994389`; official OS Worker `https://e4t08-os-20260824.brett-lamy.workers.dev`; Gatekeeper `https://e4t08-gatekeeper-20260824.brett-lamy.workers.dev`.
+- Cold run: `E4_T08_IMPLEMENTATION_COMMIT=16a3358839b13eceec4a64f9b6b8ad9907056a20 TEST_RUN_ID=e4-t08-cold-repair-final8-20260824 TEST_ARTIFACT_DIR=/tmp/e4-t08-cold-repair-final8-20260824 CF_OS_PROTOCOL=official-cloudflare-os ... make verify-E4-T08-real`; detached checkout, HTTPS `emulate` submodule initialization, frozen install, dynamic official Gadget publication, and the real provider runner exited 0.
+- Evidence: `evidence/e4-t08-cold-repair-final8-20260824/verification-summary.json`, `provider-inventory.json`, `execution-transcripts.json`, `network-probes.json`, `quota-cost.json`, `manifest.json`, `cold-verification-transcript.json`, and `sensitivity.json`.
+- Evidence summary: provider resource `742b6025a5291aa55a85d03b0176f8f6796ac6b884cc8874a6669f3b621e935c:0`; workspace digest `sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766`; transcript digest `sha256:985879e8a12e782370b9ad6c50a663e5e26579d8be0699578bbbeb688f989d23`; network decision digest `sha256:f3c1ff3f237bb898d4d29533abda3f71aab5871e87b37979d9f202fdec83d524`; quota digest `sha256:17a2c6a42f84c3f8b302f0e0327b003d9a9ef15966e65a339f3a93e03f40d24a`; the provider observed both accepted-timeout destroy attempts with the identical idempotency key, measured zero running processes in the cleanup snapshot, reconciled the interrupted create to one resource, exercised `127.0.0.1.nip.io` and `httpbin.org/status/204` adversarial fixtures, swept one orphan resource plus two orphan storage records, and ended with zero uniquely prefixed resources/storage.
+- Sensitivity: a disposable worktree changed the live `direct-internet` expectation from `deny` to `allow`; the provider returned `deny`, the verifier exited 1 with `probe direct-internet produced the wrong provider result`, and the dedicated official account had zero Gadgets afterward.
+- Gates: `pnpm format:check`, `pnpm format:check:e4-t08-real`, `pnpm lint`, `pnpm typecheck`, `pnpm test` (209 unit tests and 15 Playwright integration tests), `pnpm build`, and deployment-runner `npm run typecheck` all passed after the final implementation commit.
+- Replay: N/A (real headless Cloudflare OS sandbox capstone) + mitigation: committed cold-clone transcript, exact stream/tree digests, provider observation records, network probe evidence, cost ledger, before/after inventory, and disposable live-provider sensitivity evidence.
+- Claim: all four final3 critic findings are addressed at this exact implementation and deployed provider head; a fresh critic must independently replay the committed evidence, verify the cold missing-configuration detector, and set the lifecycle status to `verified` only if it cannot refute the claim.
+
+### Critic — 2026-08-24 (independent final8 audit)
+
+VERDICT: verified
+
+The fresh critic reviewed the exact implementation commit
+`16a3358839b13eceec4a64f9b6b8ad9907056a20`, the exact evidence/readme checkout
+commit `23c055b054889ea19bde9c9aebd33e0fe1eae2f3`, and the complete diff since
+prior critic commit `88c253c`. No product source was modified.
+
+Evidence reviewed:
+`.eforest/tasks/epic-4-the-cloudflare-os/E4-T08-cloudflare-os-conformance/evidence/e4-t08-cold-repair-final8-20260824/`.
+The provider resource was
+`742b6025a5291aa55a85d03b0176f8f6796ac6b884cc8874a6669f3b621e935c:0` and all
+resource bindings remained on that identity. Recomputed bindings matched the
+committed values: workspace/manifest
+`sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766`,
+completed-transcript `sha256:985879e8a12e782370b9ad6c50a663e5e26579d8be0699578bbbeb688f989d23`,
+network decisions
+`sha256:f3c1ff3f237bb898d4d29533abda3f71aab5871e87b37979d9f202fdec83d524`, and
+quota event `sha256:17a2c6a42f84c3f8b302f0e0327b003d9a9ef15966e65a339f3a93e03f40d24a`.
+All evidence artifacts carried the same run ID and the summary bound to
+implementation commit `16a3358`.
+
+The four final3 findings are closed. The accepted-timeout evidence contains two
+durably provider-observed destroy request records, both with the same key; the
+Sandbox DELETE path calls `listProcesses()` before destruction and the committed
+snapshot contains zero running processes; the network evidence exercises the
+concrete `127.0.0.1.nip.io` DNS-to-loopback fixture and
+`httpbin.org/status/204` public-listener fixture with provider-deny observations;
+and the create path discards the committed acknowledgement, reconciles the exact
+resource identity from provider inventory, and cleans the reconciled resource and
+storage. The provider inventory records one cleanup orphan plus two storage records
+before the sweep and zero uniquely prefixed resources/storage afterward.
+The committed sensitivity run independently turned red when `direct-internet`
+was mutated from deny to allow and recorded zero post-run provider resources.
+
+Independent commands and results:
+
+```text
+env -u CF_OS_BASE_URL -u CF_OS_TOKEN -u CF_OS_PROTOCOL -u CF_OS_TENANT_ID -u CF_OS_WORKSPACE_ID -u CF_OS_AGENT_ID -u CF_OS_TEST_SCOPE -u CF_OS_GATEKEEPER_SCHEME -u CF_OS_GATEKEEPER_HOST -u CF_OS_GATEKEEPER_PORT -u CF_OS_GATEKEEPER_PURPOSE -u CF_OS_TEST_PROFILE -u CF_OS_DNS_REBIND_PROBE_URL -u CF_OS_PUBLIC_LISTENER_PROBE_URL make verify-E4-T08-real  # exit 2; SKIPPED with all 15 names
+pnpm format:check                         # pass
+pnpm format:check:e4-t08-real              # pass
+pnpm lint                                  # pass
+pnpm typecheck                             # pass
+pnpm test                                  # pass: 209 unit, 15 Playwright integration
+pnpm build                                 # pass
+(cd deploy/e4-t08/sandbox-runner && npm run typecheck)  # pass
+```
+
+The missing-config detector made no provider call. Replay: N/A (real headless
+Cloudflare OS sandbox capstone) + mitigation: committed cold-clone transcript,
+exact stream/tree digests, provider observation records, network probe evidence,
+cost ledger, before/after inventory, and disposable live-provider sensitivity
+evidence.

@@ -12,6 +12,7 @@ import {
   WorkspaceMaterializer,
   labelsEqual,
   normalizeManifest,
+  resourceLabels,
   workspaceDigest,
 } from "@stream-slack/sandbox-cloudflare-os";
 import {
@@ -27,6 +28,7 @@ import {
 const REQUIRED = [
   "CF_OS_BASE_URL",
   "CF_OS_TOKEN",
+  "CF_OS_PROTOCOL",
   "CF_OS_TENANT_ID",
   "CF_OS_WORKSPACE_ID",
   "CF_OS_AGENT_ID",
@@ -142,6 +144,7 @@ async function runRealConformance() {
   const client = new CloudflareOsClient({
     baseUrl: config.baseUrl,
     token: config.token,
+    protocol: config.protocol,
     fetchImpl: globalThis.fetch,
     timeoutMs: config.timeoutMs,
     maxAttempts: 3,
@@ -214,6 +217,16 @@ async function runRealConformance() {
       0,
       "uniquely prefixed E4-T08 storage was already present before create",
     );
+
+    state.adversarial.interruptedCreate =
+      await runInterruptedCreateReconciliation({
+        provider,
+        client,
+        base,
+        identity,
+        scopeLabels,
+        prefix,
+      });
 
     sandbox = await provider.create({
       ...base,
@@ -291,6 +304,7 @@ async function runRealConformance() {
       [
         "set -eu",
         "printf 'parent:start\\n'",
+        "./bin/scenario.sh",
         "sh -c 'printf \"child:one\\\\n\"'",
         "sh -c 'printf \"child:two\\\\n\"'",
         "printf 'parent:end\\n'",
@@ -311,6 +325,11 @@ async function runRealConformance() {
     assert.match(deterministicFirst.stdout, /child:one/u);
     assert.match(deterministicFirst.stdout, /child:two/u);
     assert.match(deterministicFirst.stdout, /parent:end/u);
+    assert.match(
+      deterministicFirst.stdout,
+      /pinned-workspace-ok/u,
+      "deterministic execution did not invoke the provider-materialized workspace",
+    );
     state.executions.push(executionEvidence(deterministicFirst));
     sandbox = await refreshSandbox(
       provider,
@@ -416,7 +435,33 @@ async function runRealConformance() {
       prefix + "_refresh_cancel",
     );
 
+    const orphanLabels = {
+      ...scopeLabels,
+      "stream-slack/invocation": prefix + "_orphan_invocation",
+      "stream-slack/idempotency": prefix + "_orphan_create",
+    };
+    const orphan = await client.create({
+      labels: orphanLabels,
+      spec: {
+        ...base.spec,
+        testProfile: "e4-t08-orphan-cleanup",
+        testScope: prefix,
+      },
+      idempotencyKey: orphanLabels["stream-slack/idempotency"],
+    });
+    const orphanResource = resourceDetails(orphan);
+    assert.ok(orphanResource, "provider did not return the prefixed orphan");
+    state.adversarial.orphanCleanup = {
+      providerResourceId: resourceId(orphanResource),
+      labels: orphanLabels,
+      testProfile: "e4-t08-orphan-cleanup",
+    };
+
     const beforeDestroy = await inventoryAll(client, scopeLabels);
+    assert.ok(
+      prefixedResources(beforeDestroy.resources, prefix).length >= 2,
+      "provider inventory did not expose the primary resource and cleanup orphan",
+    );
     const usageResource = requireOneResource(beforeDestroy.resources, identity);
     state.beforeDestroyInventory = summarizeInventory(beforeDestroy.resources);
     state.beforeDestroyStorageInventory = summarizeStorageInventory(
@@ -450,16 +495,22 @@ async function runRealConformance() {
       prefix,
     });
     state.acceptedTimeoutRetry = destroyed.evidence;
-    assert.equal(destroyed.remaining.length, 0);
+    assert.equal(destroyed.evidence.resourceGone, true);
+    assert.equal(destroyed.evidence.storageGone, true);
+    assert.equal(destroyed.evidence.orphanPresentBeforeSweep, true);
     const afterCleanup = await inventoryAll(client, scopeLabels);
     state.afterCleanupInventory = summarizeInventory(afterCleanup.resources);
     state.afterCleanupStorageInventory = summarizeStorageInventory(
       afterCleanup.storage,
     );
-    assert.equal(prefixedResources(afterCleanup.resources, prefix).length, 0);
+    assert.equal(exactResources(afterCleanup.resources, identity).length, 0);
     assert.equal(
-      prefixedStorageResources(afterCleanup.storage, prefix).length,
+      exactStorageResources(afterCleanup.storage, identity).length,
       0,
+    );
+    assert.ok(
+      prefixedResources(afterCleanup.resources, prefix).length > 0,
+      "accepted destroy did not leave the prefixed orphan for the cleanup sweep",
     );
     quota.release({
       reservationId: reservation.reservationId,
@@ -490,6 +541,11 @@ async function runRealConformance() {
       state.afterCleanupInventory = { inventoryError: safeError(error) };
       cleanupError ??= error;
     }
+    if (!cleanupError)
+      assert.ok(
+        state.cleanup?.attempts?.length > 0,
+        "prefix cleanup did not attempt to destroy the orphan resource",
+      );
     await writeJson("manifest.json", {
       schemaVersion: 1,
       task: "E4-T08",
@@ -501,6 +557,10 @@ async function runRealConformance() {
         type: entry.type,
         mode: entry.mode,
         bytes: entry.bytes?.byteLength ?? 0,
+        contentBase64:
+          entry.bytes === undefined
+            ? null
+            : Buffer.from(entry.bytes).toString("base64"),
       })),
     });
     await writeJson("provider-inventory.json", {
@@ -661,6 +721,20 @@ async function runExecution({
     executionId: started.executionId,
   });
   assert.equal(replayed.digest, journal.digest());
+  const providerObservations = providerObservationsFromEvents(rawEvents);
+  assert.ok(
+    providerObservations.length > 0,
+    "real provider execution evidence omitted Cloudflare Sandbox observations",
+  );
+  if (disconnect)
+    assert.ok(
+      providerObservations.some(
+        (observation) =>
+          observation.requestedStdoutOffset > 0 ||
+          observation.requestedStderrOffset > 0,
+      ),
+      "reconnected stream did not cite a provider observation with a non-zero cursor",
+    );
   return {
     kind: journal.terminalEvent.kind,
     executionId: started.executionId,
@@ -672,6 +746,7 @@ async function runExecution({
     stderr: outputFor(transcript, "stderr"),
     networkDecisions,
     rawEvents,
+    providerObservations,
     disconnected: first.disconnected,
   };
 }
@@ -745,6 +820,11 @@ async function runCancellation({
     executionId: started.executionId,
   });
   assert.equal(replayed.digest, journal.digest());
+  const providerObservations = providerObservationsFromEvents(rawEvents);
+  assert.ok(
+    providerObservations.length > 0,
+    "cancelled execution evidence omitted Cloudflare Sandbox observations",
+  );
   return {
     kind: "cancelled",
     executionId: started.executionId,
@@ -756,6 +836,7 @@ async function runCancellation({
     stderr: outputFor(transcript, "stderr"),
     networkDecisions,
     rawEvents,
+    providerObservations,
     disconnected: false,
     backgroundChildSpawned: true,
   };
@@ -874,23 +955,25 @@ async function runNetworkProbes({
       expected: "allow",
     },
     { id: "direct-internet", url: "https://example.com/", expected: "deny" },
-    { id: "private-address", url: "http://10.0.0.1/", expected: "deny" },
+    { id: "private-address", url: "https://10.0.0.1/", expected: "deny" },
     { id: "link-local", url: "http://169.254.1.1/", expected: "deny" },
     { id: "metadata", url: "http://169.254.169.254/", expected: "deny" },
     {
       id: "inbound",
-      url: "http://127.0.0.1:" + String(config.gatekeeperPort) + "/",
+      url: "https://127.0.0.1:" + String(config.gatekeeperPort) + "/",
       expected: "deny",
     },
     {
       id: "dns-rebinding",
       url: config.dnsRebindingProbeUrl,
       expected: "deny",
+      attackScenario: config.dnsRebindingScenario,
     },
     {
       id: "public-listener",
       url: config.publicListenerProbeUrl,
       expected: "deny",
+      attackScenario: config.publicListenerScenario,
     },
   ];
   const results = [];
@@ -901,7 +984,7 @@ async function runNetworkProbes({
       base,
       sandbox: currentSandbox,
       workspaceDigest: expectedDigest,
-      command: probeCommand(probe.id, probe.url),
+      command: probeCommand(probe.id, probe.url, config.gatekeeperUrl),
       idempotencyKey: prefix + "_probe_" + probe.id,
       disconnect: false,
       probeId: probe.id,
@@ -934,6 +1017,13 @@ async function runNetworkProbes({
       "probe " + probe.id + " had conflicting network decisions",
     );
     assert.equal(decisions[0].outcome, probe.expected);
+    if (probe.attackScenario)
+      assert.ok(
+        (probe.attackScenario.kind &&
+          probe.attackScenario.expectedResolvedAddress !== undefined) ||
+          probe.attackScenario.expected === "deny-before-connect",
+        "adversarial probe did not carry an explicit attack scenario",
+      );
     assert.deepEqual(
       decisions[0].destination,
       summarizeDestination(probe.url),
@@ -953,6 +1043,87 @@ async function runNetworkProbes({
   }
   assertNetworkProbeMatrix(results, probes);
   return results;
+}
+
+async function runInterruptedCreateReconciliation({
+  provider,
+  client,
+  base,
+  identity,
+  scopeLabels,
+  prefix,
+}) {
+  const interruptionIdentity = {
+    ...identity,
+    invocationId: prefix + "_create_interrupt_invocation",
+    idempotencyKey: prefix + "_create_interrupt",
+  };
+  const interruptionBase = {
+    ...base,
+    resourceIdentity: interruptionIdentity,
+    spec: {
+      ...base.spec,
+      testProfile: "e4-t08-interrupted-create",
+      testScope: prefix,
+    },
+  };
+  const acknowledged = await provider.create({
+    ...interruptionBase,
+    idempotencyKey: interruptionIdentity.idempotencyKey,
+  });
+  const discardedAcknowledgement = {
+    sandboxId: acknowledged.sandboxId,
+    lifecycle: acknowledged.lifecycle,
+    discarded: true,
+  };
+  const reconciled = await waitForResource(client, interruptionIdentity, 10);
+  assert.ok(
+    reconciled,
+    "interrupted create acknowledgement was not recoverable by reconciliation",
+  );
+  assert.equal(
+    publicSandboxId(reconciled),
+    acknowledged.sandboxId,
+    "reconciliation returned a different provider resource identity",
+  );
+  const reconciledInventory = await inventoryAll(client, scopeLabels);
+  const reconciledResource = requireOneResource(
+    reconciledInventory.resources,
+    interruptionIdentity,
+  );
+  const cleanup = await provider.destroy({
+    ...interruptionBase,
+    sandboxId: acknowledged.sandboxId,
+    expectedFence: reconciledResource.fence,
+    idempotencyKey: prefix + "_create_interrupt_cleanup",
+  });
+  assert.equal(cleanup.lifecycle, "destroyed");
+  const afterCleanup = await inventoryAll(client, scopeLabels);
+  assert.equal(
+    exactResources(afterCleanup.resources, interruptionIdentity).length,
+    0,
+    "interrupted-create reconciliation cleanup left a provider resource",
+  );
+  assert.equal(
+    exactStorageResources(afterCleanup.storage, interruptionIdentity).length,
+    0,
+    "interrupted-create reconciliation cleanup left provider storage",
+  );
+  return {
+    mode: "provider-commit-acknowledgement-discard-and-reconcile",
+    requestSent: true,
+    acknowledgementDiscarded: discardedAcknowledgement,
+    reconciled: {
+      providerResourceId: resourceId(reconciledResource),
+      fence: reconciledResource.fence,
+      lifecycle: reconciledResource.state,
+    },
+    cleanup: {
+      lifecycle: cleanup.lifecycle,
+      resourceGone: true,
+      storageGone: true,
+    },
+  };
 }
 
 function assertNetworkProbeMatrix(results, probes) {
@@ -981,16 +1152,19 @@ async function destroyWithAcceptedTimeoutRetry({
   scopeLabels,
   prefix,
 }) {
-  const destroyKey = prefix + "_destroy";
+  const firstRequestedIdempotencyKey = prefix + "_destroy";
+  let retryRequestedIdempotencyKey = null;
   let firstError = null;
   let destroyed = null;
   let retryAttempted = false;
+  let cleanupObservation = null;
+  let pendingDestroyRequestObservations = null;
   try {
     destroyed = await provider.destroy({
       ...base,
       sandboxId: sandbox.sandboxId,
       expectedFence: sandbox.fence,
-      idempotencyKey: destroyKey,
+      idempotencyKey: firstRequestedIdempotencyKey,
     });
   } catch (error) {
     firstError = error;
@@ -1000,6 +1174,57 @@ async function destroyWithAcceptedTimeoutRetry({
       throw new Error(
         "destroy timed out but reconciliation found no retryable provider resource",
       );
+    cleanupObservation = pending.cleanupObservation;
+    pendingDestroyRequestObservations = pending.destroyRequestObservations;
+    assert.deepEqual(
+      pendingDestroyRequestObservations?.map(
+        (observation) => observation.idempotencyKey,
+      ),
+      [firstRequestedIdempotencyKey],
+      "provider did not durably observe the accepted first destroy request",
+    );
+    assert.ok(
+      cleanupObservation && typeof cleanupObservation === "object",
+      "destroy timed out without a provider cleanup observation",
+    );
+    assert.equal(
+      cleanupObservation.source,
+      "cloudflare-sandbox",
+      "cleanup observation was not sourced from the Cloudflare Sandbox provider",
+    );
+    assert.equal(
+      cleanupObservation.destroyed,
+      true,
+      "provider cleanup observation did not attest destruction",
+    );
+    assert.equal(
+      cleanupObservation.runningProcessCount,
+      0,
+      "provider cleanup observation reported a live process",
+    );
+    assert.ok(
+      Array.isArray(cleanupObservation.processSnapshotBeforeDestroy),
+      "provider cleanup observation omitted its process snapshot",
+    );
+    assert.equal(
+      cleanupObservation.processSnapshotBeforeDestroy.some(
+        (process) => process.status === "running",
+      ),
+      false,
+      "provider cleanup observation contained a running process",
+    );
+    assertProviderObservationId(
+      cleanupObservation.sandboxId,
+      "cleanupObservation.sandboxId",
+    );
+    assertProviderObservationId(
+      cleanupObservation.providerObservationId,
+      "cleanupObservation.providerObservationId",
+    );
+    assert.ok(
+      Number.isSafeInteger(cleanupObservation.observedAtMs),
+      "cleanup observation did not include a bounded observation timestamp",
+    );
     const refreshed = await provider.inspect({
       ...base,
       sandboxId: sandbox.sandboxId,
@@ -1007,42 +1232,84 @@ async function destroyWithAcceptedTimeoutRetry({
       idempotencyKey: prefix + "_inspect_destroy_retry",
     });
     retryAttempted = true;
+    retryRequestedIdempotencyKey = firstRequestedIdempotencyKey;
     destroyed = await provider.destroy({
       ...base,
       sandboxId: refreshed.sandboxId,
       expectedFence: refreshed.fence,
-      idempotencyKey: destroyKey,
+      idempotencyKey: retryRequestedIdempotencyKey,
     });
   }
   assert.ok(destroyed);
   const remaining = await inventoryAll(client, scopeLabels);
+  const remainingResources = prefixedResources(remaining.resources, prefix);
+  const remainingStorage = prefixedStorageResources(remaining.storage, prefix);
+  const primaryResources = exactResources(remaining.resources, identity);
+  const primaryStorage = exactStorageResources(remaining.storage, identity);
   assert.equal(
-    prefixedResources(remaining.resources, prefix).length,
+    primaryResources.length,
     0,
-    "destroy returned before all uniquely prefixed provider resources were gone",
+    "destroy returned before the primary provider resource was gone",
   );
   assert.equal(
-    prefixedStorageResources(remaining.storage, prefix).length,
+    primaryStorage.length,
     0,
-    "destroy returned before all uniquely prefixed provider storage was gone",
+    "destroy returned before the primary provider storage was gone",
   );
+  const timeoutObserved =
+    firstError?.code === CLOUDFLARE_OS_ERROR_CODES.TIMEOUT &&
+    firstError?.operation === "destroy";
+  const providerObservedDestroyRequestObservations =
+    destroyed.destroyRequestObservations ?? [];
+  const providerObservedDestroyRequestKeys =
+    providerObservedDestroyRequestObservations.map(
+      (observation) => observation.idempotencyKey,
+    );
+  assert.deepEqual(
+    providerObservedDestroyRequestKeys,
+    [firstRequestedIdempotencyKey, retryRequestedIdempotencyKey],
+    "provider did not durably observe both destroy attempts",
+  );
+  const firstIdempotencyKey = providerObservedDestroyRequestKeys[0];
+  const retryIdempotencyKey = providerObservedDestroyRequestKeys[1];
+  const sameIdempotencyKey =
+    retryAttempted && firstIdempotencyKey === retryIdempotencyKey;
   assert.equal(
-    firstError !== null && retryAttempted,
+    timeoutObserved && retryAttempted,
     true,
     "real provider did not exercise the accepted-then-timeout retry",
   );
+  assert.equal(
+    sameIdempotencyKey,
+    true,
+    "accepted-timeout retry did not reuse the first destroy idempotency key",
+  );
+  assert.ok(
+    remainingResources.length + remainingStorage.length > 0,
+    "destroy did not leave a prefixed orphan for the cleanup sweep",
+  );
   return {
     destroyed,
-    remaining: [
-      ...prefixedResources(remaining.resources, prefix),
-      ...prefixedStorageResources(remaining.storage, prefix),
-    ],
+    remaining: [...remainingResources, ...remainingStorage],
     evidence: {
-      timeoutObserved: firstError !== null,
+      timeoutObserved,
       retryAttempted,
-      sameIdempotencyKey: true,
-      resourceGone: true,
-      storageGone: true,
+      requestedFirstIdempotencyKey: firstRequestedIdempotencyKey,
+      requestedRetryIdempotencyKey: retryRequestedIdempotencyKey,
+      pendingDestroyRequestObservations,
+      providerObservedDestroyRequestObservations,
+      providerObservedDestroyRequestKeys,
+      firstIdempotencyKey,
+      retryIdempotencyKey,
+      sameIdempotencyKey,
+      cleanupCommitted: true,
+      cleanupObservation,
+      resourceGone: primaryResources.length === 0,
+      storageGone: primaryStorage.length === 0,
+      orphanPresentBeforeSweep:
+        remainingResources.length + remainingStorage.length > 0,
+      prefixedResourcesBeforeSweep: remainingResources.length,
+      prefixedStorageBeforeSweep: remainingStorage.length,
     },
   };
 }
@@ -1126,12 +1393,13 @@ async function refreshSandbox(
 }
 
 async function inventoryAll(client, labels) {
+  const queryLabels = labelsForIdentity(labels);
   const resources = [];
   const storage = [];
   const pages = [];
   let cursor = null;
   for (let page = 0; page < 1024; page += 1) {
-    const response = await client.inventory(labels, { cursor });
+    const response = await client.inventory(queryLabels, { cursor });
     const values = response?.resources ?? response?.items ?? response;
     if (!Array.isArray(values))
       throw new Error("real provider inventory response was not an array");
@@ -1170,9 +1438,19 @@ async function inventoryAll(client, labels) {
 }
 
 function exactResources(resources, labels) {
+  const expectedLabels = labelsForIdentity(labels);
   return resources
     .map((raw) => resourceDetails(raw))
-    .filter((resource) => resource && labelsEqual(resource.labels, labels));
+    .filter(
+      (resource) => resource && labelsEqual(resource.labels, expectedLabels),
+    );
+}
+
+function exactStorageResources(storage, labels) {
+  const expectedLabels = labelsForIdentity(labels);
+  return storage.filter(
+    (resource) => resource && labelsEqual(resource.labels, expectedLabels),
+  );
 }
 
 function prefixedResources(resources, prefix) {
@@ -1229,6 +1507,16 @@ function requireOneResource(resources, labels) {
   return matches[0];
 }
 
+function labelsForIdentity(value) {
+  if (
+    value &&
+    typeof value === "object" &&
+    typeof value["stream-slack/tenant"] === "string"
+  )
+    return value;
+  return resourceLabels({ resourceIdentity: value });
+}
+
 function resourceDetails(raw) {
   const record = raw?.resource ?? raw?.workspace ?? raw?.gadget ?? raw;
   if (!record || typeof record !== "object" || Array.isArray(record))
@@ -1254,6 +1542,10 @@ function resourceDetails(raw) {
     gadgetId,
     fence,
     state: record.state ?? record.status ?? record.lifecycle ?? null,
+    cleanupObservation: record.cleanupObservation ?? null,
+    destroyRequestObservations: Array.isArray(record.destroyRequestObservations)
+      ? record.destroyRequestObservations
+      : null,
   };
 }
 
@@ -1433,6 +1725,19 @@ function extractProviderUsage(raw, expectedResourceId) {
   assert.ok(Number.isSafeInteger(meteringWindow.endMs));
   assert.ok(meteringWindow.endMs > meteringWindow.startMs);
   assert.ok(measured && typeof measured === "object");
+  assert.ok(
+    Number.isSafeInteger(measured.executions) && measured.executions > 0,
+    "provider usage did not measure any executions",
+  );
+  assert.ok(
+    Number.isSafeInteger(measured.outputBytes) && measured.outputBytes > 0,
+    "provider usage did not measure execution output",
+  );
+  assert.ok(
+    Number.isSafeInteger(measured.networkDecisions) &&
+      measured.networkDecisions > 0,
+    "provider usage did not measure network decisions",
+  );
   assertProviderObservationId(
     source.sourceObservationId,
     "sourceObservationId",
@@ -1509,12 +1814,23 @@ function buildProbePolicyUrl(config) {
   );
 }
 
-function probeCommand(id, url) {
+function probeCommand(id, url, proxyUrl) {
+  const proxyArguments =
+    proxyUrl && ["private-address", "inbound"].includes(id)
+      ? ' --noproxy "" --proxy ' +
+        shellQuote(proxyUrl) +
+        " --proxy-header " +
+        shellQuote("X-E4-T08-Probe: " + id)
+      : "";
   const body = [
     "set -eu",
     "url=" + shellQuote(url),
-    "code=$(curl --silent --output /dev/null --max-time 3 --max-redirs 0 --write-out '%{http_code}' \"$url\" 2>/dev/null || printf '000')",
-    "if [ \"$code\" = '000' ]; then result=denied; else result=allowed; fi",
+    "if response=$(curl --silent --show-error --fail-with-body --max-time 3 --max-redirs 0" +
+      proxyArguments +
+      " -H " +
+      shellQuote("X-E4-T08-Probe: " + id) +
+      ' "$url" 2>&1); then result=allowed; else result=denied; fi',
+    "printf '%s\\n' \"$response\"",
     "printf 'probe:" + id + ':%s\\n\' "$result"',
   ].join("\n");
   return shellCommand(body);
@@ -1546,6 +1862,42 @@ function transcriptShape(events) {
   );
 }
 
+function providerObservationsFromEvents(events) {
+  return events
+    .filter(
+      (event) =>
+        event &&
+        typeof event === "object" &&
+        event.providerObservation !== undefined,
+    )
+    .map((event) => normalizeProviderObservation(event.providerObservation));
+}
+
+function normalizeProviderObservation(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value))
+    throw new Error("real provider execution omitted its observation object");
+  const providerObservationId =
+    value.providerObservationId ?? value.observationId;
+  assertProviderObservationId(providerObservationId, "providerObservationId");
+  const observation = {
+    providerObservationId,
+    processId: boundedDecisionField(value.processId ?? null, "processId"),
+    requestedStdoutOffset: value.requestedStdoutOffset,
+    requestedStderrOffset: value.requestedStderrOffset,
+    stdoutOffset: value.stdoutOffset,
+    stderrOffset: value.stderrOffset,
+  };
+  for (const key of [
+    "requestedStdoutOffset",
+    "requestedStderrOffset",
+    "stdoutOffset",
+    "stderrOffset",
+  ])
+    if (!Number.isSafeInteger(observation[key]) || observation[key] < 0)
+      throw new Error("real provider observation has an invalid " + key);
+  return observation;
+}
+
 function executionEvidence(result) {
   return {
     executionId: result.executionId,
@@ -1556,6 +1908,7 @@ function executionEvidence(result) {
     stdout: result.stdout,
     stderr: result.stderr,
     disconnected: result.disconnected,
+    providerObservations: result.providerObservations,
   };
 }
 
@@ -1621,6 +1974,9 @@ function normalizeNetworkDecision(value, fallbackProbeId) {
     throw new Error(
       "real provider network decision was attributed to the wrong probe",
     );
+  const providerObservationId =
+    value.providerObservationId ?? value.provider_observation_id;
+  assertProviderObservationId(providerObservationId, "providerObservationId");
   return {
     probeId,
     outcome: outcome.startsWith("allow") ? "allow" : "deny",
@@ -1633,6 +1989,7 @@ function normalizeNetworkDecision(value, fallbackProbeId) {
       "ruleId",
     ),
     destination: summarizeDestination(value.destination ?? value.url ?? null),
+    providerObservationId,
   };
 }
 
@@ -1672,6 +2029,14 @@ function summarizeDestination(value) {
 
 function sanitizeExecutionEvent(event, candidates, probeId) {
   if (isExecutionEvent(event)) {
+    const providerObservation =
+      event.providerObservation === undefined
+        ? {}
+        : {
+            providerObservation: normalizeProviderObservation(
+              event.providerObservation,
+            ),
+          };
     if (event.type === EXECUTION_EVENT_TYPES.OUTPUT)
       return {
         executionId: event.executionId,
@@ -1680,8 +2045,9 @@ function sanitizeExecutionEvent(event, candidates, probeId) {
         channel: event.channel,
         byteLength: event.byteLength,
         data: event.data,
+        ...providerObservation,
       };
-    return structuredClone(event);
+    return { ...structuredClone(event), ...providerObservation };
   }
   return {
     type: event.type ?? event.kind ?? "network-decision",
@@ -1702,6 +2068,8 @@ function summarizeInventory(resources) {
       labels: resource.labels,
       fence: resource.fence,
       state: resource.state,
+      cleanupObservation: resource.cleanupObservation,
+      destroyRequestObservations: resource.destroyRequestObservations,
       workspaceDigest: extractWorkspaceDigest(raw),
       provider:
         record?.provider ??
@@ -1749,6 +2117,9 @@ function readConfig() {
   const testProfile = process.env.CF_OS_TEST_PROFILE;
   if (testProfile !== "e4-t08-accepted-timeout-once")
     throw new Error("CF_OS_TEST_PROFILE must be e4-t08-accepted-timeout-once");
+  const protocol = process.env.CF_OS_PROTOCOL;
+  if (protocol !== "official-cloudflare-os")
+    throw new Error("CF_OS_PROTOCOL must be official-cloudflare-os");
   const dnsRebindingProbeUrl = conformanceProbeUrl(
     process.env.CF_OS_DNS_REBIND_PROBE_URL,
     "CF_OS_DNS_REBIND_PROBE_URL",
@@ -1756,6 +2127,10 @@ function readConfig() {
   const publicListenerProbeUrl = conformanceProbeUrl(
     process.env.CF_OS_PUBLIC_LISTENER_PROBE_URL,
     "CF_OS_PUBLIC_LISTENER_PROBE_URL",
+  );
+  const dnsRebindingScenario = dnsRebindingAttackScenario(dnsRebindingProbeUrl);
+  const publicListenerScenario = publicListenerAttackScenario(
+    publicListenerProbeUrl,
   );
   if (
     sameOrigin(
@@ -1780,6 +2155,7 @@ function readConfig() {
   return {
     baseUrl,
     token: process.env.CF_OS_TOKEN,
+    protocol: process.env.CF_OS_PROTOCOL,
     tenantId: boundedId(process.env.CF_OS_TENANT_ID, "CF_OS_TENANT_ID"),
     workspaceId: boundedId(
       process.env.CF_OS_WORKSPACE_ID,
@@ -1799,6 +2175,8 @@ function readConfig() {
     testProfile,
     dnsRebindingProbeUrl,
     publicListenerProbeUrl,
+    dnsRebindingScenario,
+    publicListenerScenario,
     gatekeeperUrl: buildProbePolicyUrl({
       gatekeeperScheme,
       gatekeeperHost,
@@ -1829,6 +2207,38 @@ function conformanceProbeUrl(value, name) {
         " must be a credential-free public DNS name without query material",
     );
   return parsed.toString();
+}
+
+function dnsRebindingAttackScenario(url) {
+  const hostname = new URL(url).hostname.toLowerCase();
+  const match =
+    /^(127\.0\.0\.1|10\.0\.0\.1|169\.254\.169\.254)\.(?:nip\.io|sslip\.io)$/u.exec(
+      hostname,
+    );
+  if (!match)
+    throw new Error(
+      "CF_OS_DNS_REBIND_PROBE_URL must use a public DNS fixture that resolves to a private address (for example 127.0.0.1.nip.io)",
+    );
+  return {
+    kind: "dns-rebinding-to-private-address",
+    hostname,
+    expectedResolvedAddress: match[1],
+    resolutionFixture: "nip.io-or-sslip.io-public-DNS-mapping",
+  };
+}
+
+function publicListenerAttackScenario(url) {
+  const parsed = new URL(url);
+  if (parsed.pathname === "/")
+    throw new Error(
+      "CF_OS_PUBLIC_LISTENER_PROBE_URL must name a concrete public listener endpoint, not only an origin",
+    );
+  return {
+    kind: "untrusted-public-listener",
+    hostname: parsed.hostname,
+    path: parsed.pathname,
+    expected: "deny-before-connect",
+  };
 }
 
 function sameOrigin(url, scheme, host, port) {

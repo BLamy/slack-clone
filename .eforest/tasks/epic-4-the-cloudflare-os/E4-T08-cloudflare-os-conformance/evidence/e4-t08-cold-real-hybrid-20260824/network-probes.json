@@ -1,0 +1,320 @@
+{
+  "schemaVersion": 1,
+  "task": "E4-T08",
+  "runId": "e4-t08-cold-real-hybrid-20260824",
+  "policyDigest": "sha256:eb4cb05b5d5cb5b945a3e785cd4994448e81c2f19f1dfaa151bd40ce917bf5b7",
+  "probes": [
+    {
+      "executionId": "ex_7fff0eb2742040c9a7e190385278b4d0",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_7fff0eb2742040c9a7e190385278b4d0",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:34246032d74218b21a839c53b6eb6e28cc05e32052eedfdef0e7613100b9270d",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"eyJtYXJrZXIiOiJlNC10MDgtZ2F0ZWtlZXBlci1vayJ9CnByb2JlOmFsbG93bGlzdGVkLWdhdGVrZWVwZXI6YWxsb3dlZAo=\",\"encoding\":\"base64\",\"byteLength\":71},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "{\"marker\":\"e4-t08-gatekeeper-ok\"}\nprobe:allowlisted-gatekeeper:allowed\n",
+      "stderr": "",
+      "disconnected": false,
+      "probe": {
+        "id": "allowlisted-gatekeeper",
+        "url": "https://e4t08-gatekeeper-20260824.brett-lamy.workers.dev:443/",
+        "expected": "allow"
+      },
+      "decisions": [
+        {
+          "probeId": "allowlisted-gatekeeper",
+          "outcome": "allow",
+          "reasonCode": "gatekeeper_observed",
+          "ruleId": "e4-t08-gatekeeper",
+          "destination": {
+            "scheme": "https",
+            "host": "e4t08-gatekeeper-20260824.brett-lamy.workers.dev",
+            "port": 443
+          }
+        }
+      ]
+    },
+    {
+      "executionId": "ex_e6d04aa227e74b2e88945dc7f578ebef",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_e6d04aa227e74b2e88945dc7f578ebef",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:cfa3a6c467d9a907aa7c9b8d77183a0477dda4c1c27e965c0ce9b84b7e70ee4c",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNTIwCk9yaWdpbiBpcyBkaXNhbGxvd2VkCnByb2JlOmRpcmVjdC1pbnRlcm5ldDpkZW5pZWQK\",\"encoding\":\"base64\",\"byteLength\":99},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 520\nOrigin is disallowed\nprobe:direct-internet:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "probe": {
+        "id": "direct-internet",
+        "url": "https://example.com/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "direct-internet",
+          "outcome": "deny",
+          "reasonCode": "cloudflare_sandbox_policy",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "https",
+            "host": "example.com",
+            "port": 443
+          }
+        }
+      ]
+    },
+    {
+      "executionId": "ex_e0f1d2c289b64e18a7bb9c1e9e9285a9",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_e0f1d2c289b64e18a7bb9c1e9e9285a9",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:e04acf343d3630a2bc29f65322b8f5f4fb647b1d7d4654fe89457aa7a4334d73",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDcpIEZhaWxlZCB0byBjb25uZWN0IHRvIDEwLjAuMC4xIHBvcnQgODAgYWZ0ZXIgMCBtczogQ29ubmVjdGlvbiByZWZ1c2VkCnByb2JlOnByaXZhdGUtYWRkcmVzczpkZW5pZWQK\",\"encoding\":\"base64\",\"byteLength\":108},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (7) Failed to connect to 10.0.0.1 port 80 after 0 ms: Connection refused\nprobe:private-address:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "probe": {
+        "id": "private-address",
+        "url": "http://10.0.0.1/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "private-address",
+          "outcome": "deny",
+          "reasonCode": "cloudflare_sandbox_network",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "http",
+            "host": "10.0.0.1",
+            "port": 80
+          }
+        }
+      ]
+    },
+    {
+      "executionId": "ex_1d162ea55932479c8bf055283da1b90c",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_1d162ea55932479c8bf055283da1b90c",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:4bc84d6ad2343adb416c35a68187dfa852045044cd4be412c3a99fb7528e18e3",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNTIwCk9yaWdpbiBpcyBkaXNhbGxvd2VkCnByb2JlOmxpbmstbG9jYWw6ZGVuaWVkCg==\",\"encoding\":\"base64\",\"byteLength\":94},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 520\nOrigin is disallowed\nprobe:link-local:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "probe": {
+        "id": "link-local",
+        "url": "http://169.254.1.1/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "link-local",
+          "outcome": "deny",
+          "reasonCode": "cloudflare_sandbox_policy",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "http",
+            "host": "169.254.1.1",
+            "port": 80
+          }
+        }
+      ]
+    },
+    {
+      "executionId": "ex_73e0815e2c2c41129c7fceccf3e8dad9",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_73e0815e2c2c41129c7fceccf3e8dad9",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:2d7d590a3a0152e3c16442fd94edd59c1cd1300ce21fa4ae711c2f6e767de5fc",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNTIwCk9yaWdpbiBpcyBkaXNhbGxvd2VkCnByb2JlOm1ldGFkYXRhOmRlbmllZAo=\",\"encoding\":\"base64\",\"byteLength\":92},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 520\nOrigin is disallowed\nprobe:metadata:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "probe": {
+        "id": "metadata",
+        "url": "http://169.254.169.254/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "metadata",
+          "outcome": "deny",
+          "reasonCode": "cloudflare_sandbox_policy",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "http",
+            "host": "169.254.169.254",
+            "port": 80
+          }
+        }
+      ]
+    },
+    {
+      "executionId": "ex_faf5d90c52914e809b1b52005135d152",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_faf5d90c52914e809b1b52005135d152",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:e2c66ff98ebe3f6fd1da6807e9ce032da3333e532f6fd81e313438bb297af453",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDcpIEZhaWxlZCB0byBjb25uZWN0IHRvIDEyNy4wLjAuMSBwb3J0IDQ0MyBhZnRlciAwIG1zOiBDb25uZWN0aW9uIHJlZnVzZWQKcHJvYmU6aW5ib3VuZDpkZW5pZWQK\",\"encoding\":\"base64\",\"byteLength\":102},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (7) Failed to connect to 127.0.0.1 port 443 after 0 ms: Connection refused\nprobe:inbound:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "probe": {
+        "id": "inbound",
+        "url": "http://127.0.0.1:443/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "inbound",
+          "outcome": "deny",
+          "reasonCode": "cloudflare_sandbox_network",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "http",
+            "host": "127.0.0.1",
+            "port": 443
+          }
+        }
+      ]
+    },
+    {
+      "executionId": "ex_d34d0385486d4146a19616bd1b13330f",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_d34d0385486d4146a19616bd1b13330f",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:57010556f302c98f8881f4e7459a6d5b7bcfc3a5a5064371a7cc8085a483b82a",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNTIwCk9yaWdpbiBpcyBkaXNhbGxvd2VkCnByb2JlOmRucy1yZWJpbmRpbmc6ZGVuaWVkCg==\",\"encoding\":\"base64\",\"byteLength\":97},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 520\nOrigin is disallowed\nprobe:dns-rebinding:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "probe": {
+        "id": "dns-rebinding",
+        "url": "https://example.com/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "dns-rebinding",
+          "outcome": "deny",
+          "reasonCode": "cloudflare_sandbox_policy",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "https",
+            "host": "example.com",
+            "port": 443
+          }
+        }
+      ]
+    },
+    {
+      "executionId": "ex_68c0c688597248b6a26574484c6de2ec",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_68c0c688597248b6a26574484c6de2ec",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:8435e6f2995f7ccb60b768fb21586f3f9cbacf62c3f1f6a4b5ba41f57bb20bb3",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"Y3VybDogKDIyKSBUaGUgcmVxdWVzdGVkIFVSTCByZXR1cm5lZCBlcnJvcjogNTIwCk9yaWdpbiBpcyBkaXNhbGxvd2VkCnByb2JlOnB1YmxpYy1saXN0ZW5lcjpkZW5pZWQK\",\"encoding\":\"base64\",\"byteLength\":99},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "curl: (22) The requested URL returned error: 520\nOrigin is disallowed\nprobe:public-listener:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "probe": {
+        "id": "public-listener",
+        "url": "https://public.example/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "public-listener",
+          "outcome": "deny",
+          "reasonCode": "cloudflare_sandbox_policy",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "https",
+            "host": "public.example",
+            "port": 443
+          }
+        }
+      ]
+    }
+  ]
+}

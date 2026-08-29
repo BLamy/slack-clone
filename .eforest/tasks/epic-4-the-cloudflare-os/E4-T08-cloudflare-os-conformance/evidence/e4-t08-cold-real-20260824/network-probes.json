@@ -1,0 +1,320 @@
+{
+  "schemaVersion": 1,
+  "task": "E4-T08",
+  "runId": "e4-t08-cold-real-20260824",
+  "policyDigest": "sha256:0c3077b4c30d585807f44982451b4fb3b6a5cabc9195d61da11d318d7a9cfba2",
+  "probes": [
+    {
+      "executionId": "ex_a4f16263359c4bc3b1d2188c483f5628",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_a4f16263359c4bc3b1d2188c483f5628",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:12f56aa1c308eb2786f5e8137f9e8fcf80720c7f8d1b77dde7a387c90d7d3364",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"cHJvYmU6YWxsb3dsaXN0ZWQtZ2F0ZWtlZXBlcjphbGxvd2VkCg==\",\"encoding\":\"base64\",\"byteLength\":37},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "probe:allowlisted-gatekeeper:allowed\n",
+      "stderr": "",
+      "disconnected": false,
+      "probe": {
+        "id": "allowlisted-gatekeeper",
+        "url": "https://e4t08-os-20260824.brett-lamy.workers.dev:443/",
+        "expected": "allow"
+      },
+      "decisions": [
+        {
+          "probeId": "allowlisted-gatekeeper",
+          "outcome": "allow",
+          "reasonCode": "gatekeeper_allowlist",
+          "ruleId": "e4-t08-gatekeeper",
+          "destination": {
+            "scheme": "https",
+            "host": "e4t08-os-20260824.brett-lamy.workers.dev",
+            "port": 443
+          }
+        }
+      ]
+    },
+    {
+      "executionId": "ex_dd8068bd647a4b4786f90d782536ba84",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_dd8068bd647a4b4786f90d782536ba84",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:23356d1856ac453a859a09f46527967b58938fed7b7d78cc883343177490f449",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"cHJvYmU6ZGlyZWN0LWludGVybmV0OmRlbmllZAo=\",\"encoding\":\"base64\",\"byteLength\":29},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "probe:direct-internet:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "probe": {
+        "id": "direct-internet",
+        "url": "https://example.com/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "direct-internet",
+          "outcome": "deny",
+          "reasonCode": "default_deny",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "https",
+            "host": "example.com",
+            "port": 443
+          }
+        }
+      ]
+    },
+    {
+      "executionId": "ex_295b373f45a546b69fa5cabe978292e4",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_295b373f45a546b69fa5cabe978292e4",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:2da63dd16238ca6f94d59c0126edf855115b4f967974678dd521c861e51b3854",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"cHJvYmU6cHJpdmF0ZS1hZGRyZXNzOmRlbmllZAo=\",\"encoding\":\"base64\",\"byteLength\":29},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "probe:private-address:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "probe": {
+        "id": "private-address",
+        "url": "http://10.0.0.1/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "private-address",
+          "outcome": "deny",
+          "reasonCode": "default_deny",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "http",
+            "host": "10.0.0.1",
+            "port": 80
+          }
+        }
+      ]
+    },
+    {
+      "executionId": "ex_560e7170d640411fa4268e108e7f5091",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_560e7170d640411fa4268e108e7f5091",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:da9a0b4a91247919c5a67d8f9c815304856c26350c1f8c00686b7ee52bd1cab2",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"cHJvYmU6bGluay1sb2NhbDpkZW5pZWQK\",\"encoding\":\"base64\",\"byteLength\":24},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "probe:link-local:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "probe": {
+        "id": "link-local",
+        "url": "http://169.254.1.1/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "link-local",
+          "outcome": "deny",
+          "reasonCode": "default_deny",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "http",
+            "host": "169.254.1.1",
+            "port": 80
+          }
+        }
+      ]
+    },
+    {
+      "executionId": "ex_46c7fcef96b4432fb1f373222ad02717",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_46c7fcef96b4432fb1f373222ad02717",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:2262745d12e067dba2abe027007613beae97e9fbf8bbe2d143ff2caf3b2dff4c",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"cHJvYmU6bWV0YWRhdGE6ZGVuaWVkCg==\",\"encoding\":\"base64\",\"byteLength\":22},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "probe:metadata:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "probe": {
+        "id": "metadata",
+        "url": "http://169.254.169.254/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "metadata",
+          "outcome": "deny",
+          "reasonCode": "default_deny",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "http",
+            "host": "169.254.169.254",
+            "port": 80
+          }
+        }
+      ]
+    },
+    {
+      "executionId": "ex_f5027b5fd4464dbcb0a8fd4c8eddca0b",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_f5027b5fd4464dbcb0a8fd4c8eddca0b",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:9622a8d16e02dc726cac493a92c2707a12c2ebbe3fee8588309133971c93a4e8",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"cHJvYmU6aW5ib3VuZDpkZW5pZWQK\",\"encoding\":\"base64\",\"byteLength\":21},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "probe:inbound:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "probe": {
+        "id": "inbound",
+        "url": "http://127.0.0.1:443/",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "inbound",
+          "outcome": "deny",
+          "reasonCode": "default_deny",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "http",
+            "host": "127.0.0.1",
+            "port": 443
+          }
+        }
+      ]
+    },
+    {
+      "executionId": "ex_a8706989e902435f905cf48786814bba",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_a8706989e902435f905cf48786814bba",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:d5c1ad1c08122cad5c85d9a465d18596e17e565ed8db8a663e4a3e31107e5a50",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"cHJvYmU6ZG5zLXJlYmluZGluZzpkZW5pZWQK\",\"encoding\":\"base64\",\"byteLength\":27},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "probe:dns-rebinding:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "probe": {
+        "id": "dns-rebinding",
+        "url": "https://cloudflare.com/e4-t08-cold-rebind",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "dns-rebinding",
+          "outcome": "deny",
+          "reasonCode": "default_deny",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "https",
+            "host": "cloudflare.com",
+            "port": 443
+          }
+        }
+      ]
+    },
+    {
+      "executionId": "ex_5b8e2a71526e4586a6cc21453c1343e9",
+      "kind": "completed",
+      "terminal": {
+        "executionId": "ex_5b8e2a71526e4586a6cc21453c1343e9",
+        "sequence": 2,
+        "type": "terminal",
+        "kind": "completed",
+        "exitCode": 0,
+        "signal": null,
+        "reasonCode": null,
+        "termination": {
+          "survivors": 0
+        }
+      },
+      "transcriptDigest": "sha256:e7908feec326abfe6f4451e2186bf86372c2baca9a15431d6d68bdb428e597be",
+      "transcript": "[{\"sequence\":1,\"type\":\"output\",\"channel\":\"stdout\",\"data\":\"cHJvYmU6cHVibGljLWxpc3RlbmVyOmRlbmllZAo=\",\"encoding\":\"base64\",\"byteLength\":29},{\"sequence\":2,\"type\":\"terminal\",\"kind\":\"completed\",\"exitCode\":0,\"signal\":null,\"reasonCode\":null,\"termination\":{\"survivors\":0}}]",
+      "stdout": "probe:public-listener:denied\n",
+      "stderr": "",
+      "disconnected": false,
+      "probe": {
+        "id": "public-listener",
+        "url": "https://workers.dev/e4-t08-cold-listener",
+        "expected": "deny"
+      },
+      "decisions": [
+        {
+          "probeId": "public-listener",
+          "outcome": "deny",
+          "reasonCode": "default_deny",
+          "ruleId": "default-deny",
+          "destination": {
+            "scheme": "https",
+            "host": "workers.dev",
+            "port": 443
+          }
+        }
+      ]
+    }
+  ]
+}

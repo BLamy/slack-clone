@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "e4t08-gatekeeper-20260824",
+  "main": "src/index.js",
+  "compatibility_date": "2026-02-02",
+  "workers_dev": true,
+  "durable_objects": {
+    "bindings": [{ "name": "ProbeLog", "class_name": "ProbeLog" }],
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["ProbeLog"] }],
+}

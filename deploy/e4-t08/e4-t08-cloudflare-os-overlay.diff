@@ -1,0 +1,18 @@
+diff --git a/packages/workshop-backend/src/env.d.ts b/packages/workshop-backend/src/env.d.ts
+--- a/packages/workshop-backend/src/env.d.ts
++++ b/packages/workshop-backend/src/env.d.ts
+@@
+       // and never references a specific gatekeeper by name, so naming one here would be wrong.
++
++      E4_RUNNER: Fetcher;
+ 
+       // Optional product analytics stream. Deployments can bind this to a
+diff --git a/packages/workshop-backend/src/overseer.ts b/packages/workshop-backend/src/overseer.ts
+--- a/packages/workshop-backend/src/overseer.ts
++++ b/packages/workshop-backend/src/overseer.ts
+@@
+     let env: Record<string, any> = {}
+     let gadget = this.getGadgetRecord(gadgetId);
+     env.GADGET = this.makeBindingLoopback({type: "gadget", id: gadgetId}, caller);
++    if (this.env.E4_RUNNER) env.E4_RUNNER = this.env.E4_RUNNER;
+     for (let [name, edge] of this.visibleBindings(gadget, forChatId)) {

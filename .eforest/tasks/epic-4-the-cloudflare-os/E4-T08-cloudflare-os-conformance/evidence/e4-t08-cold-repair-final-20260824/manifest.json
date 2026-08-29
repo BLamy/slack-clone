@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "task": "E4-T08",
+  "runId": "e4-t08-cold-repair-final-20260824",
+  "invocationDigest": "sha256:b734ac6d8cde8cc92bc2bbcfbbf02118f8a97c924a76d82ebbfde138293ad800",
+  "workspaceDigest": "sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766",
+  "entries": [
+    {
+      "path": "workspace",
+      "type": "directory",
+      "mode": 493,
+      "bytes": 0,
+      "contentBase64": null
+    },
+    {
+      "path": "workspace/README.md",
+      "type": "file",
+      "mode": 420,
+      "bytes": 37,
+      "contentBase64": "U3RyZWFtIFNsYWNrIEU0LVQwOCBwaW5uZWQgd29ya3NwYWNlCg=="
+    },
+    {
+      "path": "workspace/bin",
+      "type": "directory",
+      "mode": 493,
+      "bytes": 0,
+      "contentBase64": null
+    },
+    {
+      "path": "workspace/bin/scenario.sh",
+      "type": "file",
+      "mode": 493,
+      "bytes": 41,
+      "contentBase64": "IyEvYmluL3NoCnByaW50ZiAncGlubmVkLXdvcmtzcGFjZS1va1xuJwo="
+    }
+  ]
+}

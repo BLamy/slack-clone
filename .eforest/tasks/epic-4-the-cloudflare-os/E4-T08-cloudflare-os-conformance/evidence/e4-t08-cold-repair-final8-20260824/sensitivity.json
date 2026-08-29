@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "task": "E4-T08",
+  "result": "EXPECTED_FAILURE",
+  "baselineImplementationCommit": "16a3358839b13eceec4a64f9b6b8ad9907056a20",
+  "disposableWorktree": "work/sensitivity-disposable-final8-20260824/checkout",
+  "mutation": {
+    "file": "scripts/verify-e4-t08-real.mjs",
+    "probeId": "direct-internet",
+    "fromExpected": "deny",
+    "toExpected": "allow"
+  },
+  "runId": "e4-t08-sensitivity-final8-20260824",
+  "exitCode": 1,
+  "failure": {
+    "code": "ERR_ASSERTION",
+    "detail": "probe direct-internet produced the wrong provider result: deny !== allow"
+  },
+  "detector": {
+    "sensitive": true,
+    "observation": "the verifier rejected the mutated expectation against the live Cloudflare Sandbox default-deny decision"
+  },
+  "postMutationProviderAccountGadgetCount": 0,
+  "postMutationAdapterPrefixedResourceCount": 0,
+  "postMutationAdapterPrefixedStorageCount": 0,
+  "replay": "Replay: N/A (server/provider conformance run) + mitigation: live provider decision and post-run account inventory"
+}

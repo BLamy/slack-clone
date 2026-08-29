@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "task": "E4-T08",
+  "runId": "e4-t08-cold-real-hybrid-final-20260824",
+  "providerResourceId": "69647658cc795f2eba177a7f027eee55f3f7fe2bfb6622cb033702c1b2f7ed47:0",
+  "quota": {
+    "policyDigest": "sha256:ebbb96e825aad5182602938b72233b69f375596903aa0c2f2a75ebf2adcf67a8",
+    "reservations": [
+      {
+        "reservationId": "e4-t08-cold-real-hybrid-final-20260824_mt7tic22_kbxbtzp6_reservation",
+        "tenantId": "tenant-e4-t08",
+        "workspaceId": "workspace-e4-t08",
+        "agentId": "agent-e4-t08",
+        "runId": "rn_e4-t08-cold-real-hybrid-final-20260824_mt7tic22_kbxbtzp6",
+        "invocationDigest": "sha256:1bf9ab5eac4fd9ef9a6de1e7d7633153b914be9ed8fcaaf8cd1e7c2950d75409",
+        "requested": {
+          "sandboxes": 1,
+          "cpuMillis": 1000,
+          "memoryBytes": 67108864,
+          "storageBytes": 67108864,
+          "durationMs": 600000,
+          "spendCents": 100000
+        },
+        "status": "released",
+        "fence": 2,
+        "releaseReason": "provider-cleanup"
+      }
+    ],
+    "usage": {
+      "activeReserved": {
+        "sandboxes": 0,
+        "cpuMillis": 0,
+        "memoryBytes": 0,
+        "storageBytes": 0,
+        "durationMs": 0,
+        "spendCents": 0
+      },
+      "committed": {
+        "sandboxes": 0,
+        "cpuMillis": 0,
+        "memoryBytes": 0,
+        "storageBytes": 0,
+        "durationMs": 0,
+        "spendCents": 1
+      },
+      "costs": [
+        {
+          "costId": "cost_945cfd0dd243772d4dbbcb26c2001ed8",
+          "reservationId": "e4-t08-cold-real-hybrid-final-20260824_mt7tic22_kbxbtzp6_reservation",
+          "tenantId": "tenant-e4-t08",
+          "workspaceId": "workspace-e4-t08",
+          "agentId": "agent-e4-t08",
+          "runId": "rn_e4-t08-cold-real-hybrid-final-20260824_mt7tic22_kbxbtzp6",
+          "providerResourceId": "69647658cc795f2eba177a7f027eee55f3f7fe2bfb6622cb033702c1b2f7ed47:0",
+          "meteringWindow": {
+            "startMs": 1787611126694,
+            "endMs": 1787611141271
+          },
+          "measured": {
+            "cpuMillis": 0,
+            "memoryByteMs": 0,
+            "storageByteMs": 0,
+            "durationMs": 14577
+          },
+          "pricingVersion": "cloudflare-os-provider-v1",
+          "costCents": 1,
+          "sourceObservationId": "cancel:proc_1787611139226_za5xym",
+          "sourceOffset": "process:proc_1787611139226_za5xym"
+        }
+      ]
+    },
+    "eventDigest": "sha256:26b557f50bd5946fbf4656e3b1c3913d78e50d882b6839345a14b308a1f31b6a"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "task": "E4-T08",
+  "runId": "e4-t08-cold-real-hybrid-20260824",
+  "invocationDigest": "sha256:0e638c7941447c375c870bb8bd0be5551e6bcab2d740fafbb838beeb03c783a1",
+  "workspaceDigest": "sha256:db5d4d6b298d86191815377d54851b85fe94da11bbb06deab6d86378bd512766",
+  "entries": [
+    {
+      "path": "workspace",
+      "type": "directory",
+      "mode": 493,
+      "bytes": 0
+    },
+    {
+      "path": "workspace/README.md",
+      "type": "file",
+      "mode": 420,
+      "bytes": 37
+    },
+    {
+      "path": "workspace/bin",
+      "type": "directory",
+      "mode": 493,
+      "bytes": 0
+    },
+    {
+      "path": "workspace/bin/scenario.sh",
+      "type": "file",
+      "mode": 493,
+      "bytes": 41
+    }
+  ]
+}

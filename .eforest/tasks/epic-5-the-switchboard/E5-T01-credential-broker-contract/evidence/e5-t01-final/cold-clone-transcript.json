@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T01",
+  "runId": "e5-t01-final-sensitivity",
+  "implementationCommit": "bddc23d7285e55537cdb0a359eaa8185e6c3cbc6",
+  "entrypoint": "make verify-E5-T01",
+  "result": "PASS",
+  "gates": [
+    "two fresh Agent Vault brokers",
+    "issue/use/revoke replay",
+    "provider-mode refusals",
+    "tamper sensitivity"
+  ],
+  "replay": "Replay: N/A (headless credential broker) + mitigation: cold-clone state replay, canary scans, provider-mode refusal fixtures, and gated real Infisical Agent Proxy transcript"
+}

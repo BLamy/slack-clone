@@ -1,0 +1,16 @@
+{
+  "refusals": [
+    {
+      "attack": "agent-vault-in-production",
+      "code": "CREDENTIAL_BROKER_LOCAL_PROVIDER_IN_PRODUCTION"
+    },
+    {
+      "attack": "ordinary-caching-proxy",
+      "code": "CREDENTIAL_BROKER_PROVIDER_UNSUPPORTED"
+    },
+    {
+      "attack": "generic-token-client-without-handshake",
+      "code": "CREDENTIAL_BROKER_PROVIDER_HANDSHAKE_REQUIRED"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T01",
+  "runId": "e5-t01-real-missing-final-sensitivity",
+  "result": "SKIPPED",
+  "missing": [
+    "INFISICAL_AGENT_PROXY_URL",
+    "INFISICAL_AGENT_PROXY_AUTH_TOKEN",
+    "INFISICAL_AGENT_PROXY_ATTESTATION_JSON",
+    "INFISICAL_AGENT_PROXY_ATTESTATION_PUBLIC_KEY",
+    "E5_T01_TENANT_ID",
+    "E5_T01_WORKSPACE_ID",
+    "E5_T01_AGENT_ID",
+    "E5_T01_RUN_ID",
+    "E5_T01_CONNECTION_ID",
+    "E5_T01_REQUEST_DIGEST",
+    "E5_T01_SECRET_REF_JSON",
+    "E5_T01_CANARY_CONSUMER_URL"
+  ],
+  "fallbackUsed": false,
+  "replay": "Replay: N/A (headless credential broker) + mitigation: cold-clone state replay, canary scans, provider-mode refusal fixtures, and gated real Infisical Agent Proxy transcript"
+}

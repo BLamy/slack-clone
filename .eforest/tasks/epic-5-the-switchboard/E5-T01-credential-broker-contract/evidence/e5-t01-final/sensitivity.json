@@ -1,0 +1,20 @@
+{
+  "findings": [
+    {
+      "attack": "changed-binding",
+      "code": "CREDENTIAL_BROKER_CAPABILITY_BINDING_MISMATCH"
+    },
+    {
+      "attack": "changed-request",
+      "code": "CREDENTIAL_BROKER_CAPABILITY_REQUEST_MISMATCH"
+    },
+    {
+      "attack": "live-replay",
+      "code": "CREDENTIAL_BROKER_CAPABILITY_REPLAYED"
+    }
+  ],
+  "evidenceCanary": {
+    "detected": true,
+    "findingCount": 1
+  }
+}

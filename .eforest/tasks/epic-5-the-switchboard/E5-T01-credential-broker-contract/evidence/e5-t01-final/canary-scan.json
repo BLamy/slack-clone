@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "filesChecked": [
+    "audit-events.json",
+    "broker-state.json",
+    "canary-scan.json",
+    "cold-clone-transcript.json",
+    "provider-mode-refusals.json",
+    "replay-digests.json",
+    "sensitivity.json",
+    "verification-summary.json"
+  ],
+  "environmentKeyCount": 58,
+  "findings": [],
+  "leaked": false
+}

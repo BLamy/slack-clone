@@ -5,6 +5,11 @@
       "mayImport": [],
       "pure": true
     },
+    "credential-broker": {
+      "path": "packages/credential-broker",
+      "mayImport": [],
+      "pure": false
+    },
     "reducers": {
       "path": "packages/reducers",
       "mayImport": ["protocol"],

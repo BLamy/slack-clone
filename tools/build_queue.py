@@ -118,7 +118,7 @@ def main() -> int:
         task
         for task in tasks
         if task.get("status")
-        in ("in-progress", "in_progress", "implemented", "refuted")
+        in ("in-progress", "in_progress", "implemented")
     ]
     if len(active) > 1:
         print(
@@ -134,7 +134,8 @@ def main() -> int:
             print(f"error: {task['id']} has unknown status {status!r}", file=sys.stderr)
             return 1
 
-    current_gate = active[0] if active else None
+    refuted = [task for task in tasks if task.get("status") == "refuted"]
+    current_gate = active[0] if active else (refuted[0] if refuted else None)
     next_up = [
         task
         for task in tasks

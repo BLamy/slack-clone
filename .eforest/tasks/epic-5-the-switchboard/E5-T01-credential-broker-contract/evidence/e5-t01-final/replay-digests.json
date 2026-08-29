@@ -1,0 +1,385 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T01",
+  "runId": "e5-t01-final-sensitivity",
+  "implementationCommit": "bddc23d7285e55537cdb0a359eaa8185e6c3cbc6",
+  "replays": [
+    {
+      "label": "first",
+      "provider": {
+        "schemaVersion": 1,
+        "providerId": "infisical-agent-vault",
+        "mode": "local",
+        "protocolVersion": "agent-vault-local-fixture.v1",
+        "attested": false,
+        "nonProduction": true,
+        "providerMarker": "local-agent-vault"
+      },
+      "capability": {
+        "schemaVersion": 1,
+        "type": "injection-capability",
+        "capabilityId": "capability-00000000000000000000000000000001",
+        "binding": {
+          "schemaVersion": 1,
+          "tenantId": "tenant-alpha",
+          "workspaceId": "workspace-alpha",
+          "agentId": "agent-ada",
+          "runId": "run-e5-t01-0000000000000000000000000001",
+          "connectionId": "connection-github",
+          "operation": "github.issue.read",
+          "requestDigest": "sha256:4e23a0ea9d71f76f51f70f07503546534758f4b3ecabf6779d3c069fea4fd669"
+        },
+        "issuedAt": "2026-08-19T17:00:00.000Z",
+        "expiresAt": "2026-08-19T17:01:00.000Z",
+        "providerId": "infisical-agent-vault",
+        "providerMode": "local"
+      },
+      "useAccepted": true,
+      "liveReplayCode": "CREDENTIAL_BROKER_CAPABILITY_REPLAYED",
+      "revokeConfirmed": true,
+      "secondUseCode": "CREDENTIAL_BROKER_CAPABILITY_REVOKED",
+      "consumerObserved": true,
+      "publicSnapshot": {
+        "schemaVersion": 1,
+        "provider": {
+          "schemaVersion": 1,
+          "providerId": "infisical-agent-vault",
+          "mode": "local",
+          "protocolVersion": "agent-vault-local-fixture.v1",
+          "attested": false,
+          "nonProduction": true,
+          "providerMarker": "local-agent-vault"
+        },
+        "capabilities": [
+          {
+            "capabilityId": "capability-00000000000000000000000000000001",
+            "binding": {
+              "schemaVersion": 1,
+              "tenantId": "tenant-alpha",
+              "workspaceId": "workspace-alpha",
+              "agentId": "agent-ada",
+              "runId": "run-e5-t01-0000000000000000000000000001",
+              "connectionId": "connection-github",
+              "operation": "github.issue.read",
+              "requestDigest": "sha256:4e23a0ea9d71f76f51f70f07503546534758f4b3ecabf6779d3c069fea4fd669"
+            },
+            "secretRefDigest": "sha256:e78f69047244ef23be624c590ef03574e27c83489d7e9ebbe296971054edae0a",
+            "issuedAt": "2026-08-19T17:00:00.000Z",
+            "expiresAt": "2026-08-19T17:01:00.000Z",
+            "usingAt": null,
+            "usedAt": "2026-08-19T17:00:00.000Z",
+            "status": "revoked"
+          }
+        ],
+        "auditEvents": [
+          {
+            "schemaVersion": 1,
+            "eventId": "audit-00000000000000000000000000000005",
+            "sequence": 1,
+            "timestamp": "2026-08-19T17:00:00.000Z",
+            "providerId": "infisical-agent-vault",
+            "providerMode": "local",
+            "type": "credential.capability.issued",
+            "capabilityId": "capability-00000000000000000000000000000001",
+            "binding": {
+              "schemaVersion": 1,
+              "tenantId": "tenant-alpha",
+              "workspaceId": "workspace-alpha",
+              "agentId": "agent-ada",
+              "runId": "run-e5-t01-0000000000000000000000000001",
+              "connectionId": "connection-github",
+              "operation": "github.issue.read",
+              "requestDigest": "sha256:4e23a0ea9d71f76f51f70f07503546534758f4b3ecabf6779d3c069fea4fd669"
+            },
+            "secretRefDigest": "sha256:e78f69047244ef23be624c590ef03574e27c83489d7e9ebbe296971054edae0a",
+            "providerOperationId": "vault-issue-00000000000000000000000000000004",
+            "expiresAt": "2026-08-19T17:01:00.000Z"
+          },
+          {
+            "schemaVersion": 1,
+            "eventId": "audit-00000000000000000000000000000007",
+            "sequence": 2,
+            "timestamp": "2026-08-19T17:00:00.000Z",
+            "providerId": "infisical-agent-vault",
+            "providerMode": "local",
+            "type": "credential.capability.used",
+            "capabilityId": "capability-00000000000000000000000000000001",
+            "binding": {
+              "schemaVersion": 1,
+              "tenantId": "tenant-alpha",
+              "workspaceId": "workspace-alpha",
+              "agentId": "agent-ada",
+              "runId": "run-e5-t01-0000000000000000000000000001",
+              "connectionId": "connection-github",
+              "operation": "github.issue.read",
+              "requestDigest": "sha256:4e23a0ea9d71f76f51f70f07503546534758f4b3ecabf6779d3c069fea4fd669"
+            },
+            "secretRefDigest": "sha256:e78f69047244ef23be624c590ef03574e27c83489d7e9ebbe296971054edae0a",
+            "providerOperationId": "vault-use-00000000000000000000000000000006",
+            "outcome": {
+              "accepted": true
+            }
+          },
+          {
+            "schemaVersion": 1,
+            "eventId": "audit-00000000000000000000000000000008",
+            "sequence": 3,
+            "timestamp": "2026-08-19T17:00:00.000Z",
+            "providerId": "infisical-agent-vault",
+            "providerMode": "local",
+            "type": "credential.capability.use.denied",
+            "capabilityId": "capability-00000000000000000000000000000001",
+            "binding": {
+              "schemaVersion": 1,
+              "tenantId": "tenant-alpha",
+              "workspaceId": "workspace-alpha",
+              "agentId": "agent-ada",
+              "runId": "run-e5-t01-0000000000000000000000000001",
+              "connectionId": "connection-github",
+              "operation": "github.issue.read",
+              "requestDigest": "sha256:4e23a0ea9d71f76f51f70f07503546534758f4b3ecabf6779d3c069fea4fd669"
+            },
+            "secretRefDigest": "sha256:e78f69047244ef23be624c590ef03574e27c83489d7e9ebbe296971054edae0a",
+            "reasonCode": "CREDENTIAL_BROKER_CAPABILITY_REPLAYED"
+          },
+          {
+            "schemaVersion": 1,
+            "eventId": "audit-00000000000000000000000000000010",
+            "sequence": 4,
+            "timestamp": "2026-08-19T17:00:00.000Z",
+            "providerId": "infisical-agent-vault",
+            "providerMode": "local",
+            "type": "credential.capability.revoked",
+            "capabilityId": "capability-00000000000000000000000000000001",
+            "binding": {
+              "schemaVersion": 1,
+              "tenantId": "tenant-alpha",
+              "workspaceId": "workspace-alpha",
+              "agentId": "agent-ada",
+              "runId": "run-e5-t01-0000000000000000000000000001",
+              "connectionId": "connection-github",
+              "operation": "github.issue.read",
+              "requestDigest": "sha256:4e23a0ea9d71f76f51f70f07503546534758f4b3ecabf6779d3c069fea4fd669"
+            },
+            "secretRefDigest": "sha256:e78f69047244ef23be624c590ef03574e27c83489d7e9ebbe296971054edae0a",
+            "providerOperationId": "vault-revoke-00000000000000000000000000000009",
+            "reason": "run-finished"
+          },
+          {
+            "schemaVersion": 1,
+            "eventId": "audit-00000000000000000000000000000011",
+            "sequence": 5,
+            "timestamp": "2026-08-19T17:00:00.000Z",
+            "providerId": "infisical-agent-vault",
+            "providerMode": "local",
+            "type": "credential.capability.use.denied",
+            "capabilityId": "capability-00000000000000000000000000000001",
+            "binding": {
+              "schemaVersion": 1,
+              "tenantId": "tenant-alpha",
+              "workspaceId": "workspace-alpha",
+              "agentId": "agent-ada",
+              "runId": "run-e5-t01-0000000000000000000000000001",
+              "connectionId": "connection-github",
+              "operation": "github.issue.read",
+              "requestDigest": "sha256:4e23a0ea9d71f76f51f70f07503546534758f4b3ecabf6779d3c069fea4fd669"
+            },
+            "secretRefDigest": "sha256:e78f69047244ef23be624c590ef03574e27c83489d7e9ebbe296971054edae0a",
+            "reasonCode": "CREDENTIAL_BROKER_CAPABILITY_REVOKED"
+          }
+        ]
+      }
+    },
+    {
+      "label": "second",
+      "provider": {
+        "schemaVersion": 1,
+        "providerId": "infisical-agent-vault",
+        "mode": "local",
+        "protocolVersion": "agent-vault-local-fixture.v1",
+        "attested": false,
+        "nonProduction": true,
+        "providerMarker": "local-agent-vault"
+      },
+      "capability": {
+        "schemaVersion": 1,
+        "type": "injection-capability",
+        "capabilityId": "capability-00000000000000000000000000000001",
+        "binding": {
+          "schemaVersion": 1,
+          "tenantId": "tenant-alpha",
+          "workspaceId": "workspace-alpha",
+          "agentId": "agent-ada",
+          "runId": "run-e5-t01-0000000000000000000000000001",
+          "connectionId": "connection-github",
+          "operation": "github.issue.read",
+          "requestDigest": "sha256:4e23a0ea9d71f76f51f70f07503546534758f4b3ecabf6779d3c069fea4fd669"
+        },
+        "issuedAt": "2026-08-19T17:00:00.000Z",
+        "expiresAt": "2026-08-19T17:01:00.000Z",
+        "providerId": "infisical-agent-vault",
+        "providerMode": "local"
+      },
+      "useAccepted": true,
+      "liveReplayCode": "CREDENTIAL_BROKER_CAPABILITY_REPLAYED",
+      "revokeConfirmed": true,
+      "secondUseCode": "CREDENTIAL_BROKER_CAPABILITY_REVOKED",
+      "consumerObserved": true,
+      "publicSnapshot": {
+        "schemaVersion": 1,
+        "provider": {
+          "schemaVersion": 1,
+          "providerId": "infisical-agent-vault",
+          "mode": "local",
+          "protocolVersion": "agent-vault-local-fixture.v1",
+          "attested": false,
+          "nonProduction": true,
+          "providerMarker": "local-agent-vault"
+        },
+        "capabilities": [
+          {
+            "capabilityId": "capability-00000000000000000000000000000001",
+            "binding": {
+              "schemaVersion": 1,
+              "tenantId": "tenant-alpha",
+              "workspaceId": "workspace-alpha",
+              "agentId": "agent-ada",
+              "runId": "run-e5-t01-0000000000000000000000000001",
+              "connectionId": "connection-github",
+              "operation": "github.issue.read",
+              "requestDigest": "sha256:4e23a0ea9d71f76f51f70f07503546534758f4b3ecabf6779d3c069fea4fd669"
+            },
+            "secretRefDigest": "sha256:e78f69047244ef23be624c590ef03574e27c83489d7e9ebbe296971054edae0a",
+            "issuedAt": "2026-08-19T17:00:00.000Z",
+            "expiresAt": "2026-08-19T17:01:00.000Z",
+            "usingAt": null,
+            "usedAt": "2026-08-19T17:00:00.000Z",
+            "status": "revoked"
+          }
+        ],
+        "auditEvents": [
+          {
+            "schemaVersion": 1,
+            "eventId": "audit-00000000000000000000000000000005",
+            "sequence": 1,
+            "timestamp": "2026-08-19T17:00:00.000Z",
+            "providerId": "infisical-agent-vault",
+            "providerMode": "local",
+            "type": "credential.capability.issued",
+            "capabilityId": "capability-00000000000000000000000000000001",
+            "binding": {
+              "schemaVersion": 1,
+              "tenantId": "tenant-alpha",
+              "workspaceId": "workspace-alpha",
+              "agentId": "agent-ada",
+              "runId": "run-e5-t01-0000000000000000000000000001",
+              "connectionId": "connection-github",
+              "operation": "github.issue.read",
+              "requestDigest": "sha256:4e23a0ea9d71f76f51f70f07503546534758f4b3ecabf6779d3c069fea4fd669"
+            },
+            "secretRefDigest": "sha256:e78f69047244ef23be624c590ef03574e27c83489d7e9ebbe296971054edae0a",
+            "providerOperationId": "vault-issue-00000000000000000000000000000004",
+            "expiresAt": "2026-08-19T17:01:00.000Z"
+          },
+          {
+            "schemaVersion": 1,
+            "eventId": "audit-00000000000000000000000000000007",
+            "sequence": 2,
+            "timestamp": "2026-08-19T17:00:00.000Z",
+            "providerId": "infisical-agent-vault",
+            "providerMode": "local",
+            "type": "credential.capability.used",
+            "capabilityId": "capability-00000000000000000000000000000001",
+            "binding": {
+              "schemaVersion": 1,
+              "tenantId": "tenant-alpha",
+              "workspaceId": "workspace-alpha",
+              "agentId": "agent-ada",
+              "runId": "run-e5-t01-0000000000000000000000000001",
+              "connectionId": "connection-github",
+              "operation": "github.issue.read",
+              "requestDigest": "sha256:4e23a0ea9d71f76f51f70f07503546534758f4b3ecabf6779d3c069fea4fd669"
+            },
+            "secretRefDigest": "sha256:e78f69047244ef23be624c590ef03574e27c83489d7e9ebbe296971054edae0a",
+            "providerOperationId": "vault-use-00000000000000000000000000000006",
+            "outcome": {
+              "accepted": true
+            }
+          },
+          {
+            "schemaVersion": 1,
+            "eventId": "audit-00000000000000000000000000000008",
+            "sequence": 3,
+            "timestamp": "2026-08-19T17:00:00.000Z",
+            "providerId": "infisical-agent-vault",
+            "providerMode": "local",
+            "type": "credential.capability.use.denied",
+            "capabilityId": "capability-00000000000000000000000000000001",
+            "binding": {
+              "schemaVersion": 1,
+              "tenantId": "tenant-alpha",
+              "workspaceId": "workspace-alpha",
+              "agentId": "agent-ada",
+              "runId": "run-e5-t01-0000000000000000000000000001",
+              "connectionId": "connection-github",
+              "operation": "github.issue.read",
+              "requestDigest": "sha256:4e23a0ea9d71f76f51f70f07503546534758f4b3ecabf6779d3c069fea4fd669"
+            },
+            "secretRefDigest": "sha256:e78f69047244ef23be624c590ef03574e27c83489d7e9ebbe296971054edae0a",
+            "reasonCode": "CREDENTIAL_BROKER_CAPABILITY_REPLAYED"
+          },
+          {
+            "schemaVersion": 1,
+            "eventId": "audit-00000000000000000000000000000010",
+            "sequence": 4,
+            "timestamp": "2026-08-19T17:00:00.000Z",
+            "providerId": "infisical-agent-vault",
+            "providerMode": "local",
+            "type": "credential.capability.revoked",
+            "capabilityId": "capability-00000000000000000000000000000001",
+            "binding": {
+              "schemaVersion": 1,
+              "tenantId": "tenant-alpha",
+              "workspaceId": "workspace-alpha",
+              "agentId": "agent-ada",
+              "runId": "run-e5-t01-0000000000000000000000000001",
+              "connectionId": "connection-github",
+              "operation": "github.issue.read",
+              "requestDigest": "sha256:4e23a0ea9d71f76f51f70f07503546534758f4b3ecabf6779d3c069fea4fd669"
+            },
+            "secretRefDigest": "sha256:e78f69047244ef23be624c590ef03574e27c83489d7e9ebbe296971054edae0a",
+            "providerOperationId": "vault-revoke-00000000000000000000000000000009",
+            "reason": "run-finished"
+          },
+          {
+            "schemaVersion": 1,
+            "eventId": "audit-00000000000000000000000000000011",
+            "sequence": 5,
+            "timestamp": "2026-08-19T17:00:00.000Z",
+            "providerId": "infisical-agent-vault",
+            "providerMode": "local",
+            "type": "credential.capability.use.denied",
+            "capabilityId": "capability-00000000000000000000000000000001",
+            "binding": {
+              "schemaVersion": 1,
+              "tenantId": "tenant-alpha",
+              "workspaceId": "workspace-alpha",
+              "agentId": "agent-ada",
+              "runId": "run-e5-t01-0000000000000000000000000001",
+              "connectionId": "connection-github",
+              "operation": "github.issue.read",
+              "requestDigest": "sha256:4e23a0ea9d71f76f51f70f07503546534758f4b3ecabf6779d3c069fea4fd669"
+            },
+            "secretRefDigest": "sha256:e78f69047244ef23be624c590ef03574e27c83489d7e9ebbe296971054edae0a",
+            "reasonCode": "CREDENTIAL_BROKER_CAPABILITY_REVOKED"
+          }
+        ]
+      }
+    }
+  ],
+  "parity": {
+    "stateDigestEqual": true,
+    "auditDigestEqual": true,
+    "publicSnapshotEqual": true
+  }
+}

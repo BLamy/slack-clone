@@ -121,6 +121,12 @@ const INLINE_SCRIPT = /<script\b[^>]*>([\s\S]*?)<\/script>/giu;
 
 const NETWORK_DOORS = Object.freeze([
   Object.freeze({
+    prefix: "packages/credential-broker/",
+    allowAmbient: true,
+    allowOfficialClient: false,
+    provider: true,
+  }),
+  Object.freeze({
     prefix: "packages/durable-streams/",
     allowAmbient: true,
     allowOfficialClient: true,

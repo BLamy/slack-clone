@@ -34,8 +34,12 @@ critic: falsification + sufficiency + sensitivity
         └── refuted / needs-evidence ──► builder rework, new final run
 ```
 
-One task is active at a time. A dependency is satisfied only by `verified`. A bare epic
-dependency is satisfied only when that epic's capstone is verified.
+One builder or critic task is active at a time. A `refuted` task remains visible as an
+eligible rework item, but it is not a concurrent builder session; an independent task
+may start when its own dependencies are verified. Once rework begins, the refuted task
+returns to `in-progress` and becomes the active gate. A dependency is satisfied only by
+`verified`. A bare epic dependency is satisfied only when that epic's capstone is
+verified.
 
 ## Project states
 

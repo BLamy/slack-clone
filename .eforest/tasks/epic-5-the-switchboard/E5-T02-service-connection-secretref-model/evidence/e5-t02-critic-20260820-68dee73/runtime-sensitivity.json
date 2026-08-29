@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "exactHead": "68dee73e288d411ee68095eae50dd4dbc9cb29f5",
+  "mutation": "Removed only the provider-token value-detector branch from CREDENTIAL_VALUE_PATTERNS in a detached disposable checkout.",
+  "mutationDiff": ["packages/connections/src/schema.mjs"],
+  "command": "TEST_RUN_ID=e5-t02-critic-68dee73-runtime-mutation TEST_ARTIFACT_DIR=/tmp/slack-e5-t02-critic-68dee73-runtime-mutation-artifacts make verify-E5-T02",
+  "exitCode": 2,
+  "observedAssertion": "expected CONNECTION_CREDENTIAL_MATERIAL was undefined",
+  "sensitive": true
+}

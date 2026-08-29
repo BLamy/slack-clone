@@ -1,0 +1,2787 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "exactHead": "ba08576",
+  "command": "independent Ajv 2020/runtime/store matrix",
+  "caseCount": 73,
+  "providerFamilies": [
+    "ghp",
+    "sk",
+    "rk",
+    "pk",
+    "github_pat",
+    "xoxb",
+    "xoxa",
+    "xoxp",
+    "xoxr",
+    "xoxs"
+  ],
+  "findings": {
+    "publicSchemaBoundary": [],
+    "runtimeBoundary": [],
+    "appendBoundary": []
+  },
+  "controls": {
+    "ordinaryPercentTextAccepted": {
+      "name": "ordinary-percent-positive",
+      "expected": "accept",
+      "publicSchemaAccepted": true,
+      "publicSchemaErrors": [],
+      "runtimeRejected": false,
+      "runtimeError": null,
+      "storeRejected": false,
+      "storeError": null,
+      "appendedEvents": 1
+    },
+    "allRequestedProviderFamiliesExercised": true
+  },
+  "results": [
+    {
+      "name": "ordinary-percent-positive",
+      "expected": "accept",
+      "publicSchemaAccepted": true,
+      "publicSchemaErrors": [],
+      "runtimeRejected": false,
+      "runtimeError": null,
+      "storeRejected": false,
+      "storeError": null,
+      "appendedEvents": 1
+    },
+    {
+      "name": "json-raw",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.payload"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.payload"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "json-fully-percent-one-pass",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.payload"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.payload"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "json-fully-percent-two-pass",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.payload"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.payload"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "json-mixed-percent-one-pass",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.payload"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.payload"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "json-mixed-percent-two-pass",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.payload"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.payload"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "json-escaped-key",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/payload",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.payload"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.payload"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "password-assignment",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.assignment"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "secret-assignment",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.assignment"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "client-secret-assignment",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.assignment"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "prefixed-client-secret-assignment",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.assignment"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "private-key-assignment",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.assignment"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "private-key-marker",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/material",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/material",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/material",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/material",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.material"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.material"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "private-key-marker-percent",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/material",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/material",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/material",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/material",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.material"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.material"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "client-secret-mixed-percent",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.assignment"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "client-secret-double-percent",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.assignment"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "client-secret-double-mixed-percent",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.assignment"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "url-raw",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/endpoint",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/endpoint",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/endpoint",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/endpoint",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.endpoint"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.endpoint"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "url-percent-one-pass",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/endpoint",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/endpoint",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/endpoint",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/endpoint",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.endpoint"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.endpoint"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "url-percent-two-pass",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/endpoint",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/endpoint",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/endpoint",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/endpoint",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.endpoint"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.endpoint"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "url-mixed-percent",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/endpoint",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/endpoint",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/endpoint",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/endpoint",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.endpoint"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.endpoint"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "unicode-confusable-key",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata",
+          "keyword": "pattern",
+          "schemaPath": "#/allOf/0/pattern"
+        },
+        {
+          "instancePath": "/data/metadata",
+          "keyword": "propertyNames",
+          "schemaPath": "#/propertyNames"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        },
+        {
+          "instancePath": "/data/metadata",
+          "keyword": "pattern",
+          "schemaPath": "#/allOf/0/pattern"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.tοken"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.tοken"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "unicode-confusable-assignment",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.assignment"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "unicode-confusable-value",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.note"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.note"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "zero-width-value",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.note"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.note"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "format-control-value",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.note"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.note"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "nested-cookie",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/nested",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/nested",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/nested",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/nested",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/3/type"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.nested.headers.cookie"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.nested.headers.cookie"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "base64",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encoded",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encoded",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encoded",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encoded",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encoded"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encoded"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "base64url",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encoded",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encoded",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encoded",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encoded",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encoded"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encoded"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "password-assignment-mixed-percent",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.assignment"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "password-assignment-double-mixed-percent",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.assignment"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "secret-assignment-mixed-percent",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.assignment"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "secret-assignment-double-mixed-percent",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.assignment"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "private-key-assignment-mixed-percent",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.assignment"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "private-key-assignment-double-mixed-percent",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/assignment",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.assignment"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.assignment"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "format-control-200b",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.note"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.note"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "format-control-200c",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.note"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.note"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "format-control-200d",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.note"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.note"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "format-control-200e",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.note"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.note"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "format-control-200f",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.note"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.note"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "format-control-feff",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.note"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.note"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "format-control-2060",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.note"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.note"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "format-control-2066",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/note",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.note"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.note"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "ghp-raw",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "ghp-mixed-percent-prefix",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "ghp-double-percent-token",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "sk-raw",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "sk-mixed-percent-prefix",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "sk-double-percent-token",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "rk-raw",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "rk-mixed-percent-prefix",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "rk-double-percent-token",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "pk-raw",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "pk-mixed-percent-prefix",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "pk-double-percent-token",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "github_pat-raw",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "github_pat-mixed-percent-prefix",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "github_pat-double-percent-token",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "xoxb-raw",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "xoxb-mixed-percent-prefix",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "xoxb-double-percent-token",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "xoxa-raw",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "xoxa-mixed-percent-prefix",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "xoxa-double-percent-token",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "xoxp-raw",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "xoxp-mixed-percent-prefix",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "xoxp-double-percent-token",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "xoxr-raw",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "xoxr-mixed-percent-prefix",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "xoxr-double-percent-token",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "xoxs-raw",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "xoxs-mixed-percent-prefix",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    },
+    {
+      "name": "xoxs-double-percent-token",
+      "expected": "reject",
+      "publicSchemaAccepted": false,
+      "publicSchemaErrors": [
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/encodedValue",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ],
+      "runtimeRejected": true,
+      "runtimeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.encodedValue"
+      },
+      "storeRejected": true,
+      "storeError": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.encodedValue"
+      },
+      "appendedEvents": 0
+    }
+  ]
+}

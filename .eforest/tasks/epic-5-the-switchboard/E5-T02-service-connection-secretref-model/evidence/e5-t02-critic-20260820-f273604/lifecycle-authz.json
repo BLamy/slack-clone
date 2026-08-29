@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "critic": "f273604-independent",
+  "exactHead": "f273604e4b01bc2c5c5e86b1b7b80d6ad282d50e",
+  "command": "independent lifecycle/replay/authz/leakage Node probe with fresh f273604 IDs",
+  "lifecycle": {
+    "createdRevision": 1,
+    "firstCaptureRevision": 1,
+    "rotatedRevision": 2,
+    "sameRunAfterRotationRevision": 1,
+    "sameRunBindingStable": true,
+    "newRunAfterRotationRevision": 2,
+    "staleRotationCode": "CONNECTION_REVISION_CONFLICT",
+    "staleRotationEventCount": 2,
+    "disabledCaptureCode": "CONNECTION_NOT_ACTIVE",
+    "finalStatus": "deleted",
+    "tombstone": true,
+    "eventCount": 4
+  },
+  "replay": {
+    "duplicateAndReorderedInput": true,
+    "storeDigest": "sha256:c484420f6b928da83599e718d37fafa5e9b4cd23b49bd3a53ed2e023fe052dad",
+    "replayDigest": "sha256:c484420f6b928da83599e718d37fafa5e9b4cd23b49bd3a53ed2e023fe052dad",
+    "equal": true
+  },
+  "authorization": {
+    "foreignCode": "CONNECTION_NOT_FOUND",
+    "unknownCode": "CONNECTION_NOT_FOUND",
+    "foreignJsonEqualsUnknown": true,
+    "stateUnchanged": true
+  },
+  "leakage": {
+    "rawCanaryPersisted": false,
+    "providerMaterialPersisted": false
+  }
+}

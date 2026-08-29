@@ -1,0 +1,388 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stream-slack.invalid/schemas/connection-events.v1.schema.json",
+  "title": "Stream Slack connection events v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "eventId",
+    "eventType",
+    "workspaceId",
+    "actorId",
+    "idempotencyKey",
+    "sequence",
+    "serverTimestamp",
+    "connectionId",
+    "data"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "eventId": { "$ref": "#/$defs/opaqueId" },
+    "eventType": {
+      "enum": [
+        "connection.created",
+        "connection.rotated",
+        "connection.disabled",
+        "connection.deleted"
+      ]
+    },
+    "workspaceId": { "$ref": "#/$defs/identifier" },
+    "actorId": { "$ref": "#/$defs/identifier" },
+    "idempotencyKey": { "$ref": "#/$defs/opaqueId" },
+    "sequence": { "type": "integer", "minimum": 1 },
+    "serverTimestamp": { "$ref": "#/$defs/timestamp" },
+    "connectionId": { "$ref": "#/$defs/opaqueId" },
+    "data": {
+      "oneOf": [
+        { "$ref": "#/$defs/createdData" },
+        { "$ref": "#/$defs/rotatedData" },
+        { "$ref": "#/$defs/terminalData" }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "eventType": { "const": "connection.created" } }
+      },
+      "then": { "properties": { "data": { "$ref": "#/$defs/createdData" } } }
+    },
+    {
+      "if": {
+        "properties": { "eventType": { "const": "connection.rotated" } }
+      },
+      "then": { "properties": { "data": { "$ref": "#/$defs/rotatedData" } } }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "enum": ["connection.disabled", "connection.deleted"]
+          }
+        }
+      },
+      "then": { "properties": { "data": { "$ref": "#/$defs/terminalData" } } }
+    }
+  ],
+  "$defs": {
+    "credentialFieldName": {
+      "type": "string",
+      "pattern": "(?:[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Ss][Ee][Cc][Rr][Ee][Tt]|[Cc][Ll][Ii][Ee][Nn][Tt][\\s_-]?[Ss][Ee][Cc][Rr][Ee][Tt]|[Cc][Rr][Ee][Dd][Ee][Nn][Tt][Ii][Aa][Ll]|[Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn]|[Cc][Oo][Oo][Kk][Ii][Ee]|[Bb][Ee][Aa][Rr][Ee][Rr]|[Tt][Oo][Kk][Ee][Nn]|[Pp][Rr][Ii][Vv][Aa][Tt][Ee][-_ ]?[Kk][Ee][Yy]|[Cc][Oo][Nn][Nn][Ee][Cc][Tt][Ii][Oo][Nn][-_ ]?[Ss][Tt][Rr][Ii][Nn][Gg]|[Aa][Pp][Ii][-_]?[Kk][Ee][Yy])"
+    },
+    "percentEncodedCredentialShape": {
+      "type": "string",
+      "anyOf": [
+        {
+          "pattern": "(?:^|[^A-Za-z0-9%])(?:(?:[pP]|%50|%70)(?:[aA]|%41|%61)(?:[sS]|%53|%73)(?:[sS]|%53|%73)(?:[wW]|%57|%77)(?:[oO]|%4[Ff]|%6[Ff])(?:[rR]|%52|%72)(?:[dD]|%44|%64)|(?:[tT]|%54|%74)(?:[oO]|%4[Ff]|%6[Ff])(?:[kK]|%4[Bb]|%6[Bb])(?:[eE]|%45|%65)(?:[nN]|%4[Ee]|%6[Ee])|(?:[sS]|%53|%73)(?:[eE]|%45|%65)(?:[cC]|%43|%63)(?:[rR]|%52|%72)(?:[eE]|%45|%65)(?:[tT]|%54|%74)|(?:[cC]|%43|%63)(?:[lL]|%4[Cc]|%6[Cc])(?:[iI]|%49|%69)(?:[eE]|%45|%65)(?:[nN]|%4[Ee]|%6[Ee])(?:[tT]|%54|%74)(?:[\\s_-]|%20|%09|%0[Aa]|%0[Dd]|%2[Dd]|%5[Ff])(?:[sS]|%53|%73)(?:[eE]|%45|%65)(?:[cC]|%43|%63)(?:[rR]|%52|%72)(?:[eE]|%45|%65)(?:[tT]|%54|%74)|(?:[aA]|%41|%61)(?:[pP]|%50|%70)(?:[iI]|%49|%69)(?:[\\s_-]|%20|%09|%0[Aa]|%0[Dd]|%2[Dd]|%5[Ff])(?:[kK]|%4[Bb]|%6[Bb])(?:[eE]|%45|%65)(?:[yY]|%59|%79)|(?:[pP]|%50|%70)(?:[rR]|%52|%72)(?:[iI]|%49|%69)(?:[vV]|%56|%76)(?:[aA]|%41|%61)(?:[tT]|%54|%74)(?:[eE]|%45|%65)(?:[\\s_-]|%20|%09|%0[Aa]|%0[Dd]|%2[Dd]|%5[Ff])(?:[kK]|%4[Bb]|%6[Bb])(?:[eE]|%45|%65)(?:[yY]|%59|%79)|(?:[cC]|%43|%63)(?:[oO]|%4[Ff]|%6[Ff])(?:[oO]|%4[Ff]|%6[Ff])(?:[kK]|%4[Bb]|%6[Bb])(?:[iI]|%49|%69)(?:[eE]|%45|%65)|(?:[aA]|%41|%61)(?:[uU]|%55|%75)(?:[tT]|%54|%74)(?:[hH]|%48|%68)(?:[oO]|%4[Ff]|%6[Ff])(?:[rR]|%52|%72)(?:[iI]|%49|%69)(?:[zZ]|%5[Aa]|%7[Aa])(?:[aA]|%41|%61)(?:[tT]|%54|%74)(?:[iI]|%49|%69)(?:[oO]|%4[Ff]|%6[Ff])(?:[nN]|%4[Ee]|%6[Ee]))\\s*[:=]"
+        },
+        {
+          "pattern": "[\\[{]\\s*[\"']?(?:(?:[pP]|%50|%70)(?:[aA]|%41|%61)(?:[sS]|%53|%73)(?:[sS]|%53|%73)(?:[wW]|%57|%77)(?:[oO]|%4[Ff]|%6[Ff])(?:[rR]|%52|%72)(?:[dD]|%44|%64)|(?:[tT]|%54|%74)(?:[oO]|%4[Ff]|%6[Ff])(?:[kK]|%4[Bb]|%6[Bb])(?:[eE]|%45|%65)(?:[nN]|%4[Ee]|%6[Ee])|(?:[sS]|%53|%73)(?:[eE]|%45|%65)(?:[cC]|%43|%63)(?:[rR]|%52|%72)(?:[eE]|%45|%65)(?:[tT]|%54|%74)|(?:[cC]|%43|%63)(?:[lL]|%4[Cc]|%6[Cc])(?:[iI]|%49|%69)(?:[eE]|%45|%65)(?:[nN]|%4[Ee]|%6[Ee])(?:[tT]|%54|%74)(?:[\\s_-]|%20|%09|%0[Aa]|%0[Dd]|%2[Dd]|%5[Ff])(?:[sS]|%53|%73)(?:[eE]|%45|%65)(?:[cC]|%43|%63)(?:[rR]|%52|%72)(?:[eE]|%45|%65)(?:[tT]|%54|%74)|(?:[cC]|%43|%63)(?:[oO]|%4[Ff]|%6[Ff])(?:[oO]|%4[Ff]|%6[Ff])(?:[kK]|%4[Bb]|%6[Bb])(?:[iI]|%49|%69)(?:[eE]|%45|%65)|(?:[aA]|%41|%61)(?:[uU]|%55|%75)(?:[tT]|%54|%74)(?:[hH]|%48|%68)(?:[oO]|%4[Ff]|%6[Ff])(?:[rR]|%52|%72)(?:[iI]|%49|%69)(?:[zZ]|%5[Aa]|%7[Aa])(?:[aA]|%41|%61)(?:[tT]|%54|%74)(?:[iI]|%49|%69)(?:[oO]|%4[Ff]|%6[Ff])(?:[nN]|%4[Ee]|%6[Ee]))[\"']?\\s*[:=]"
+        },
+        {
+          "pattern": "(?:^|[^A-Za-z0-9%]|%[0-9A-Fa-f]{2})(?:[Cc]|%[0-9A-Fa-f]{2})(?:[Ll]|%[0-9A-Fa-f]{2})(?:[Ii]|%[0-9A-Fa-f]{2})(?:[Ee]|%[0-9A-Fa-f]{2})(?:[Nn]|%[0-9A-Fa-f]{2})(?:[Tt]|%[0-9A-Fa-f]{2})(?:[\\s_-]|%[0-9A-Fa-f]{2})(?:[Ss]|%[0-9A-Fa-f]{2})(?:[Ee]|%[0-9A-Fa-f]{2})(?:[Cc]|%[0-9A-Fa-f]{2})(?:[Rr]|%[0-9A-Fa-f]{2})(?:[Ee]|%[0-9A-Fa-f]{2})(?:[Tt]|%[0-9A-Fa-f]{2})(?:\\s*[:=]|%[0-9A-Fa-f]{2})"
+        },
+        {
+          "pattern": "(?:^|[^A-Za-z0-9%]|%25[0-9A-Fa-f]{2})[Cc][Ll][Ii][Ee][Nn][Tt](?:[\\s_-]|%25(?:20|2[Dd]|5[Ff]))[Ss][Ee][Cc][Rr][Ee][Tt](?:\\s*[:=]|%25(?:3[Dd]))"
+        },
+        {
+          "pattern": "[\\[{]\\s*[\"']?(?:%25(?:54|74)[Oo][Kk][Ee][Nn]|%25(?:43|63)[Ll][Ii][Ee][Nn][Tt]%25(?:5[Ff])%25(?:53|73)[Ee][Cc][Rr][Ee][Tt])[\"']?\\s*[:=]"
+        },
+        {
+          "pattern": "(?:^|[^A-Za-z0-9%])(?:[Hh]|%48|%68)(?:[Tt]|%54|%74){2}(?:[Pp]|%50|%70)(?:[Ss]|%53|%73)?(?:%3[Aa]|%253[Aa])(?:%2[Ff]|%252[Ff]){2}\\S+"
+        },
+        {
+          "pattern": "(?:^|[^A-Za-z0-9%])(?:[Gg]|%47|%67)(?:[Hh]|%48|%68)(?:[Pp]|%50|%70)(?:[_-]|%5[Ff]|%255[Ff])[A-Za-z0-9._~+/=-]{8,}"
+        },
+        {
+          "pattern": "(?:^|[^A-Za-z0-9%]|%(?:25)?[0-9A-Fa-f]{2})(?:(?:(?:[\\[{]|%(?:25)?(?:5[Bb]|7[Bb]))[^\\r\\n]{0,256}(?:[\"']|%(?:25)?(?:22|27)))?)(?:(?:[pP]|%(?:25)?(?:70|50))(?:[aA]|%(?:25)?(?:61|41))(?:[sS]|%(?:25)?(?:73|53))(?:[sS]|%(?:25)?(?:73|53))(?:[wW]|%(?:25)?(?:77|57))(?:[oO]|%(?:25)?(?:6f|4f))(?:[rR]|%(?:25)?(?:72|52))(?:[dD]|%(?:25)?(?:64|44))|(?:[tT]|%(?:25)?(?:74|54))(?:[oO]|%(?:25)?(?:6f|4f))(?:[kK]|%(?:25)?(?:6b|4b))(?:[eE]|%(?:25)?(?:65|45))(?:[nN]|%(?:25)?(?:6e|4e))|(?:[sS]|%(?:25)?(?:73|53))(?:[eE]|%(?:25)?(?:65|45))(?:[cC]|%(?:25)?(?:63|43))(?:[rR]|%(?:25)?(?:72|52))(?:[eE]|%(?:25)?(?:65|45))(?:[tT]|%(?:25)?(?:74|54))|(?:[cC]|%(?:25)?(?:63|43))(?:[lL]|%(?:25)?(?:6c|4c))(?:[iI]|%(?:25)?(?:69|49))(?:[eE]|%(?:25)?(?:65|45))(?:[nN]|%(?:25)?(?:6e|4e))(?:[tT]|%(?:25)?(?:74|54))(?:[\\s_-]|%(?:25)?(?:20|09|0[Aa]|0[Dd]|2[Dd]|5[Ff]))(?:[sS]|%(?:25)?(?:73|53))(?:[eE]|%(?:25)?(?:65|45))(?:[cC]|%(?:25)?(?:63|43))(?:[rR]|%(?:25)?(?:72|52))(?:[eE]|%(?:25)?(?:65|45))(?:[tT]|%(?:25)?(?:74|54))|(?:[pP]|%(?:25)?(?:70|50))(?:[rR]|%(?:25)?(?:72|52))(?:[iI]|%(?:25)?(?:69|49))(?:[vV]|%(?:25)?(?:76|56))(?:[aA]|%(?:25)?(?:61|41))(?:[tT]|%(?:25)?(?:74|54))(?:[eE]|%(?:25)?(?:65|45))(?:[\\s_-]?|%(?:25)?(?:20|09|0[Aa]|0[Dd]|2[Dd]|5[Ff]))(?:[kK]|%(?:25)?(?:6b|4b))(?:[eE]|%(?:25)?(?:65|45))(?:[yY]|%(?:25)?(?:79|59))|(?:[cC]|%(?:25)?(?:63|43))(?:[oO]|%(?:25)?(?:6f|4f))(?:[oO]|%(?:25)?(?:6f|4f))(?:[kK]|%(?:25)?(?:6b|4b))(?:[iI]|%(?:25)?(?:69|49))(?:[eE]|%(?:25)?(?:65|45))|(?:[aA]|%(?:25)?(?:61|41))(?:[uU]|%(?:25)?(?:75|55))(?:[tT]|%(?:25)?(?:74|54))(?:[hH]|%(?:25)?(?:68|48))(?:[oO]|%(?:25)?(?:6f|4f))(?:[rR]|%(?:25)?(?:72|52))(?:[iI]|%(?:25)?(?:69|49))(?:[zZ]|%(?:25)?(?:7a|5a))(?:[aA]|%(?:25)?(?:61|41))(?:[tT]|%(?:25)?(?:74|54))(?:[iI]|%(?:25)?(?:69|49))(?:[oO]|%(?:25)?(?:6f|4f))(?:[nN]|%(?:25)?(?:6e|4e))|(?:[aA]|%(?:25)?(?:61|41))(?:[pP]|%(?:25)?(?:70|50))(?:[iI]|%(?:25)?(?:69|49))(?:[\\s_-]|%(?:25)?(?:20|09|0[Aa]|0[Dd]|2[Dd]|5[Ff]))(?:[kK]|%(?:25)?(?:6b|4b))(?:[eE]|%(?:25)?(?:65|45))(?:[yY]|%(?:25)?(?:79|59)))(?:(?:[\"']|%(?:25)?(?:22|27)))?(?:\\s*[:=]|%(?:25)?(?:3[Aa]|3[Dd]))"
+        },
+        {
+          "pattern": "(?:^|[^A-Za-z0-9%]|%(?:25)?[0-9A-Fa-f]{2})(?:[hH]|%(?:25)?(?:68|48))(?:[tT]|%(?:25)?(?:74|54))(?:[tT]|%(?:25)?(?:74|54))(?:[pP]|%(?:25)?(?:70|50))(?:[Ss]|%(?:25)?(?:53|73))?(?:[:]|%(?:25)?3[Aa])(?:/|%(?:25)?2[Ff]){2}\\S+"
+        },
+        {
+          "pattern": "(?:^|[^A-Za-z0-9%]|%(?:25)?[0-9A-Fa-f]{2})(?:[gG]|%(?:25)?(?:67|47))(?:[hH]|%(?:25)?(?:68|48))(?:[pP]|%(?:25)?(?:70|50))(?:[_-]|%(?:25)?(?:5[Ff]|2[Dd]))[A-Za-z0-9._~+/=-]{8,}"
+        },
+        {
+          "pattern": "(?:^|[^A-Za-z0-9%]|%(?:25)?[0-9A-Fa-f]{2})(?:-|%(?:25)?2[Dd]){5}(?:[bB]|%(?:25)?(?:62|42))(?:[eE]|%(?:25)?(?:65|45))(?:[gG]|%(?:25)?(?:67|47))(?:[iI]|%(?:25)?(?:69|49))(?:[nN]|%(?:25)?(?:6e|4e))(?:\\s|%(?:25)?20)(?:[pP]|%(?:25)?(?:70|50))(?:[rR]|%(?:25)?(?:72|52))(?:[iI]|%(?:25)?(?:69|49))(?:[vV]|%(?:25)?(?:76|56))(?:[aA]|%(?:25)?(?:61|41))(?:[tT]|%(?:25)?(?:74|54))(?:[eE]|%(?:25)?(?:65|45))(?:\\s|%(?:25)?20)(?:[kK]|%(?:25)?(?:6b|4b))(?:[eE]|%(?:25)?(?:65|45))(?:[yY]|%(?:25)?(?:79|59))(?:-|%(?:25)?2[Dd]){5}"
+        },
+        {
+          "pattern": "(?:^|[^A-Za-z0-9%]|%(?:25)?[0-9A-Fa-f]{2})(?:[\\[{]|%(?:25)?(?:5[Bb]|7[Bb]))[^\\r\\n]{0,256}(?:[\"']|%(?:25)?(?:22|27))(?:[Tt]|%(?:25)?(?:54|74))(?:[Oo]|%(?:25)?(?:4[Ff]|6[Ff]))(?:[Kk]|%(?:25)?(?:4[Bb]|6[Bb]))(?:[Ee]|%(?:25)?(?:45|65))(?:[Nn]|%(?:25)?(?:4[Ee]|6[Ee]))(?:[\"']|%(?:25)?(?:22|27))(?:\\s*[:=]|%(?:25)?(?:3[Aa]|3[Dd]))"
+        },
+        {
+          "pattern": "(?:^|[^A-Za-z0-9%]|%(?:25)?[0-9A-Fa-f]{2}|%25%[0-9A-Fa-f]%[0-9A-Fa-f])(?:[gG]|%(?:67|25(?:67|%36%37)))(?:[hH]|%(?:68|25(?:68|%36%38)))(?:[pP]|%(?:70|25(?:70|%37%30)))(?:[_-]|%(?:2[Dd]|5[Ff])|%25(?:2[Dd]|5[Ff]|%32%44|%35%46))(?:[A-Za-z0-9._~+/=-]|%(?:[0-9A-Fa-f]{2}|25[0-9A-Fa-f]{2}|25%[0-9A-Fa-f]%[0-9A-Fa-f])){8,}"
+        },
+        {
+          "pattern": "(?:^|[^A-Za-z0-9%]|%(?:25)?[0-9A-Fa-f]{2}|%25%[0-9A-Fa-f]%[0-9A-Fa-f])(?:(?:[sS]|%(?:73|25(?:73|%37%33)))(?:[kK]|%(?:6[bB]|25(?:6[bB]|%36%(?:62|42))))|(?:[rR]|%(?:72|25(?:72|%37%32)))(?:[kK]|%(?:6[bB]|25(?:6[bB]|%36%(?:62|42))))|(?:[pP]|%(?:70|25(?:70|%37%30)))(?:[kK]|%(?:6[bB]|25(?:6[bB]|%36%(?:62|42)))))(?:[_-]|%(?:2[Dd]|5[Ff])|%25(?:2[Dd]|5[Ff]|%32%44|%35%46))(?:[A-Za-z0-9._~+/=-]|%(?:[0-9A-Fa-f]{2}|25[0-9A-Fa-f]{2}|25%[0-9A-Fa-f]%[0-9A-Fa-f])){8,}"
+        },
+        {
+          "pattern": "(?:^|[^A-Za-z0-9%]|%(?:25)?[0-9A-Fa-f]{2}|%25%[0-9A-Fa-f]%[0-9A-Fa-f])(?:[gG]|%(?:67|25(?:67|%36%37)))(?:[iI]|%(?:69|25(?:69|%36%39)))(?:[tT]|%(?:74|25(?:74|%37%34)))(?:[hH]|%(?:68|25(?:68|%36%38)))(?:[uU]|%(?:75|25(?:75|%37%35)))(?:[bB]|%(?:62|25(?:62|%36%32)))(?:_|%(?:5[Ff])|%25(?:5[Ff]|%35%46))(?:[pP]|%(?:70|25(?:70|%37%30)))(?:[aA]|%(?:61|25(?:61|%36%31)))(?:[tT]|%(?:74|25(?:74|%37%34)))(?:[_-]|%(?:2[Dd]|5[Ff])|%25(?:2[Dd]|5[Ff]|%32%44|%35%46))(?:[A-Za-z0-9._~+/=-]|%(?:[0-9A-Fa-f]{2}|25[0-9A-Fa-f]{2}|25%[0-9A-Fa-f]%[0-9A-Fa-f])){8,}"
+        },
+        {
+          "pattern": "(?:^|[^A-Za-z0-9%]|%(?:25)?[0-9A-Fa-f]{2}|%25%[0-9A-Fa-f]%[0-9A-Fa-f])(?:[xX]|%(?:78|25(?:78|%37%38)))(?:[oO]|%(?:6[fF]|25(?:6[fF]|%36%(?:66|46))))(?:[xX]|%(?:78|25(?:78|%37%38)))(?:(?:[bB]|%(?:62|25(?:62|%36%32)))|(?:[aA]|%(?:61|25(?:61|%36%31)))|(?:[pP]|%(?:70|25(?:70|%37%30)))|(?:[rR]|%(?:72|25(?:72|%37%32)))|(?:[sS]|%(?:73|25(?:73|%37%33))))(?:[_-]|%(?:2[Dd]|5[Ff])|%25(?:2[Dd]|5[Ff]|%32%44|%35%46))(?:[A-Za-z0-9._~+/=-]|%(?:[0-9A-Fa-f]{2}|25[0-9A-Fa-f]{2}|25%[0-9A-Fa-f]%[0-9A-Fa-f])){8,}"
+        }
+      ]
+    },
+    "identifierCredentialShape": {
+      "type": "string",
+      "anyOf": [
+        { "pattern": "\\p{Cf}" },
+        {
+          "pattern": "-----[Bb][Ee][Gg][Ii][Nn] [^-]*[Pp][Rr][Ii][Vv][Aa][Tt][Ee] [Kk][Ee][Yy]-----"
+        },
+        {
+          "pattern": "\\b(?:[Bb][Ee][Aa][Rr][Ee][Rr]|[Bb][Aa][Ss][Ii][Cc])\\s+[A-Za-z0-9._~+/=-]{8,}"
+        },
+        {
+          "pattern": "\\b(?:[Ss][Kk]|[Rr][Kk]|[Pp][Kk]|[Gg][Hh][Pp]|[Gg][Ii][Tt][Hh][Uu][Bb]_[Pp][Aa][Tt]|[Xx][Oo][Xx][Bb][AaPpRrSs])[-_][A-Za-z0-9._~+/=-]{8,}\\b"
+        },
+        {
+          "pattern": "\\b[Xx][Oo][Xx][BbAaPpRrSs][-_][A-Za-z0-9._~+/=-]{8,}\\b"
+        },
+        {
+          "pattern": "(?:^|[^A-Za-z0-9])(?:[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Tt][Oo][Kk][Ee][Nn]|[Ss][Ee][Cc][Rr][Ee][Tt]|[Cc][Ll][Ii][Ee][Nn][Tt][\\s_-]?[Ss][Ee][Cc][Rr][Ee][Tt]|[Aa][Pp][Ii][-_]?[Kk][Ee][Yy]|[Pp][Rr][Ii][Vv][Aa][Tt][Ee][-_ ]?[Kk][Ee][Yy]|[Cc][Oo][Oo][Kk][Ii][Ee]|[Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn])\\s*[:=]"
+        },
+        {
+          "pattern": "\\b(?:[Hh][Tt][Tt][Pp][Ss]?|[Ss][Ss][Hh]|[Pp][Oo][Ss][Tt][Gg][Rr][Ee][Ss](?:[Qq][Ll])?|[Mm][Yy][Ss][Qq][Ll]|[Rr][Ee][Dd][Ii][Ss]|[Mm][Oo][Nn][Gg][Oo][Dd][Bb](?:\\+[Ss][Rr][Vv])?|[Aa][Mm][Qq][Pp]):\\/\\/\\S+"
+        },
+        {
+          "pattern": "(?:^|[\\s;])(?:[Hh][Oo][Ss][Tt]|[Uu][Ss][Ee][Rr](?:[Nn][Aa][Mm][Ee])?|[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Pp][Oo][Rr][Tt])\\s*=\\s*[^;]+"
+        },
+        {
+          "pattern": "[\\[{]\\s*[\"']?(?:[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Tt][Oo][Kk][Ee][Nn]|[Ss][Ee][Cc][Rr][Ee][Tt]|[Cc][Ll][Ii][Ee][Nn][Tt][\\s_-]?[Ss][Ee][Cc][Rr][Ee][Tt]|[Cc][Oo][Oo][Kk][Ii][Ee]|[Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn])[\"']?\\s*[:=]"
+        },
+        {
+          "pattern": "[\\[{]\\s*[\"'][^\"\\r\\n]*\\\\u[0-9A-Fa-f]{4}[^\"\\r\\n]*[\"']\\s*[:=]"
+        },
+        {
+          "pattern": "[\\[{]\\s*[\"'][^\"\\r\\n]*\\p{Cf}[^\"\\r\\n]*[\"']\\s*[:=]"
+        }
+      ]
+    },
+    "credentialValueShape": {
+      "type": "string",
+      "anyOf": [
+        {
+          "pattern": "-----[Bb][Ee][Gg][Ii][Nn] [^-]*[Pp][Rr][Ii][Vv][Aa][Tt][Ee] [Kk][Ee][Yy]-----"
+        },
+        {
+          "pattern": "\\b(?:[Bb][Ee][Aa][Rr][Ee][Rr]|[Bb][Aa][Ss][Ii][Cc])\\s+[A-Za-z0-9._~+/=-]{8,}"
+        },
+        {
+          "pattern": "\\b(?:[Ss][Kk]|[Rr][Kk]|[Pp][Kk]|[Gg][Hh][Pp]|[Gg][Ii][Tt][Hh][Uu][Bb]_[Pp][Aa][Tt]|[Xx][Oo][Xx][Bb][AaPpRrSs])[-_][A-Za-z0-9._~+/=-]{8,}\\b"
+        },
+        {
+          "pattern": "\\b[Xx][Oo][Xx][BbAaPpRrSs][-_][A-Za-z0-9._~+/=-]{8,}\\b"
+        },
+        {
+          "pattern": "(?:^|[^A-Za-z0-9])(?:[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Tt][Oo][Kk][Ee][Nn]|[Ss][Ee][Cc][Rr][Ee][Tt]|[Cc][Ll][Ii][Ee][Nn][Tt][\\s_-]?[Ss][Ee][Cc][Rr][Ee][Tt]|[Aa][Pp][Ii][-_]?[Kk][Ee][Yy]|[Pp][Rr][Ii][Vv][Aa][Tt][Ee][-_ ]?[Kk][Ee][Yy]|[Cc][Oo][Oo][Kk][Ii][Ee]|[Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn])\\s*[:=]"
+        },
+        {
+          "pattern": "(?:^|[^A-Za-z0-9])[Tt](?:[Oo]|\\u03bf|\\u039f)[Kk][Ee][Nn]\\s*[:=]"
+        },
+        {
+          "pattern": "\\b(?:[Hh][Tt][Tt][Pp][Ss]?|[Ss][Ss][Hh]|[Pp][Oo][Ss][Tt][Gg][Rr][Ee][Ss](?:[Qq][Ll])?|[Mm][Yy][Ss][Qq][Ll]|[Rr][Ee][Dd][Ii][Ss]|[Mm][Oo][Nn][Gg][Oo][Dd][Bb](?:\\+[Ss][Rr][Vv])?|[Aa][Mm][Qq][Pp]):\\/\\/\\S+"
+        },
+        {
+          "pattern": "(?:^|[\\s;])(?:[Hh][Oo][Ss][Tt]|[Uu][Ss][Ee][Rr](?:[Nn][Aa][Mm][Ee])?|[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Pp][Oo][Rr][Tt])\\s*=\\s*[^;]+"
+        },
+        { "pattern": "^\\s*[A-Za-z0-9+/_-]{22,}={0,2}\\s*$" },
+        { "pattern": "\\p{Cf}" },
+        { "$ref": "#/$defs/percentEncodedCredentialShape" },
+        {
+          "pattern": "[\\[{]\\s*[\"']?(?:[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Tt][Oo][Kk][Ee][Nn]|[Ss][Ee][Cc][Rr][Ee][Tt]|[Cc][Ll][Ii][Ee][Nn][Tt][\\s_-]?[Ss][Ee][Cc][Rr][Ee][Tt]|[Cc][Oo][Oo][Kk][Ii][Ee]|[Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn])[\"']?\\s*[:=]"
+        },
+        {
+          "pattern": "[\\[{]\\s*[\"'][^\"\\r\\n]*\\\\u[0-9A-Fa-f]{4}[^\"\\r\\n]*[\"']\\s*[:=]"
+        },
+        {
+          "pattern": "[\\[{]\\s*[\"'][^\"\\r\\n]*\\p{Cf}[^\"\\r\\n]*[\"']\\s*[:=]"
+        }
+      ]
+    },
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+      "not": { "$ref": "#/$defs/identifierCredentialShape" }
+    },
+    "opaqueId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9._:-]{2,127}$",
+      "not": { "$ref": "#/$defs/identifierCredentialShape" }
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+    },
+    "secretRef": {
+      "type": "object",
+      "required": ["id", "provider", "mount", "revision"],
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "id": { "$ref": "#/$defs/opaqueId" },
+        "provider": { "$ref": "#/$defs/identifier" },
+        "mount": { "$ref": "#/$defs/identifier" },
+        "revision": { "type": "integer", "minimum": 1 },
+        "label": { "$ref": "#/$defs/label" }
+      }
+    },
+    "owner": {
+      "type": "object",
+      "required": ["kind", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "enum": ["workspace", "agent", "user"] },
+        "id": { "$ref": "#/$defs/identifier" }
+      }
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[^\\u0000-\\u001f\\u007f]+$",
+      "not": { "$ref": "#/$defs/credentialValueShape" }
+    },
+    "metadataPropertyName": {
+      "allOf": [
+        { "pattern": "^[A-Za-z][A-Za-z0-9._-]{0,63}$" },
+        { "not": { "$ref": "#/$defs/credentialFieldName" } }
+      ]
+    },
+    "metadata": {
+      "type": "object",
+      "maxProperties": 64,
+      "propertyNames": { "$ref": "#/$defs/metadataPropertyName" },
+      "additionalProperties": { "$ref": "#/$defs/metadataValue" }
+    },
+    "metadataScalar": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "boolean" },
+        {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "string",
+          "maxLength": 512,
+          "pattern": "^[^\\u0000-\\u001f\\u007f]*$",
+          "not": { "$ref": "#/$defs/credentialValueShape" }
+        }
+      ]
+    },
+    "metadataValue": {
+      "anyOf": [
+        { "$ref": "#/$defs/metadataScalar" },
+        {
+          "type": "array",
+          "maxItems": 32,
+          "items": { "$ref": "#/$defs/metadataValueDepth2" }
+        },
+        { "$ref": "#/$defs/metadataDepth1" }
+      ]
+    },
+    "metadataValueDepth2": {
+      "anyOf": [
+        { "$ref": "#/$defs/metadataScalar" },
+        {
+          "type": "array",
+          "maxItems": 32,
+          "items": { "$ref": "#/$defs/metadataValueDepth3" }
+        },
+        { "$ref": "#/$defs/metadataDepth2" }
+      ]
+    },
+    "metadataValueDepth3": {
+      "anyOf": [
+        { "$ref": "#/$defs/metadataScalar" },
+        {
+          "type": "array",
+          "maxItems": 32,
+          "items": { "$ref": "#/$defs/metadataValueDepth4" }
+        },
+        { "$ref": "#/$defs/metadataDepth3" }
+      ]
+    },
+    "metadataValueDepth4": {
+      "anyOf": [
+        { "$ref": "#/$defs/metadataScalar" },
+        { "type": "array", "maxItems": 0 },
+        { "$ref": "#/$defs/metadataDepth4" }
+      ]
+    },
+    "metadataDepth1": {
+      "type": "object",
+      "maxProperties": 64,
+      "propertyNames": { "$ref": "#/$defs/metadataPropertyName" },
+      "additionalProperties": { "$ref": "#/$defs/metadataValueDepth2" }
+    },
+    "metadataDepth2": {
+      "type": "object",
+      "maxProperties": 64,
+      "propertyNames": { "$ref": "#/$defs/metadataPropertyName" },
+      "additionalProperties": { "$ref": "#/$defs/metadataValueDepth3" }
+    },
+    "metadataDepth3": {
+      "type": "object",
+      "maxProperties": 64,
+      "propertyNames": { "$ref": "#/$defs/metadataPropertyName" },
+      "additionalProperties": { "$ref": "#/$defs/metadataValueDepth4" }
+    },
+    "metadataDepth4": {
+      "type": "object",
+      "maxProperties": 0
+    },
+    "createdData": {
+      "type": "object",
+      "required": [
+        "connectionId",
+        "tenantId",
+        "workspaceId",
+        "owner",
+        "provider",
+        "integration",
+        "label",
+        "metadata",
+        "secretRef"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "connectionId": { "$ref": "#/$defs/opaqueId" },
+        "tenantId": { "$ref": "#/$defs/identifier" },
+        "workspaceId": { "$ref": "#/$defs/identifier" },
+        "owner": { "$ref": "#/$defs/owner" },
+        "provider": { "$ref": "#/$defs/identifier" },
+        "integration": { "$ref": "#/$defs/identifier" },
+        "label": { "$ref": "#/$defs/label" },
+        "metadata": { "$ref": "#/$defs/metadata" },
+        "secretRef": { "$ref": "#/$defs/secretRef" },
+        "revision": { "const": 1 }
+      }
+    },
+    "rotatedData": {
+      "type": "object",
+      "required": ["expectedRevision", "revision", "secretRef"],
+      "additionalProperties": false,
+      "properties": {
+        "expectedRevision": { "type": "integer", "minimum": 1 },
+        "revision": { "type": "integer", "minimum": 1 },
+        "secretRef": { "$ref": "#/$defs/secretRef" }
+      }
+    },
+    "terminalData": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "reason": {
+          "type": ["string", "null"],
+          "maxLength": 160,
+          "pattern": "^[^\\u0000-\\u001f\\u007f]*$",
+          "not": { "$ref": "#/$defs/credentialValueShape" }
+        }
+      }
+    }
+  }
+}

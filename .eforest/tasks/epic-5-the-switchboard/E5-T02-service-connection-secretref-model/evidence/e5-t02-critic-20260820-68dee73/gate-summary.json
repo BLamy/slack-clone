@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "exactHead": "68dee73e288d411ee68095eae50dd4dbc9cb29f5",
+  "productImplementationCommit": "1ff772e2b6fc7380740cf6b17d1f3f0959a5365f",
+  "targetWorktreeCleanAtOrientation": true,
+  "emulateSubmodule": "9a62e23a55dd01d3086e7e0aaa5bb755c7814fe7",
+  "commands": [
+    { "command": "pnpm install --frozen-lockfile", "result": "PASS" },
+    { "command": "pnpm format:check", "result": "PASS" },
+    { "command": "pnpm format:check:e5-t02", "result": "PASS" },
+    { "command": "pnpm lint", "result": "PASS" },
+    { "command": "pnpm typecheck", "result": "PASS" },
+    {
+      "command": "pnpm test",
+      "result": "PASS",
+      "unitTestsPassed": 209,
+      "integrationPlaywrightTestsPassed": 15
+    },
+    { "command": "pnpm build", "result": "PASS" },
+    { "command": "git diff --check HEAD^ HEAD", "result": "PASS" }
+  ],
+  "coldVerifier": {
+    "command": "TEST_RUN_ID=e5-t02-critic-68dee73-cold-20260820 TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/work/critic-68dee73-cold make verify-E5-T02",
+    "result": "PASS",
+    "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f",
+    "duplicateAndReorderedParity": true,
+    "secretCorpusRejected": 51,
+    "ordinaryPercentTextAccepted": true,
+    "appendedEventsForSecretCorpus": 0,
+    "leaked": false
+  },
+  "independentMatrix": {
+    "command": "EXACT_HEAD=68dee73 node independent-probes.mjs",
+    "caseCount": 78,
+    "findingCount": 0,
+    "providerFamilies": 10,
+    "ordinaryPercentControlsAccepted": true
+  },
+  "lifecycleAuthzBoundsLeakage": {
+    "capturedRevisions": [1, 2, 1],
+    "replayDigestEqual": true,
+    "foreignUnknownUniform": true,
+    "boundsChecked": true,
+    "canaryPersisted": false,
+    "eventsAppendedForCanary": 0
+  },
+  "sensitivity": {
+    "publicSchemaBranch": "PASS",
+    "runtimeProviderTokenBranch": "PASS"
+  }
+}

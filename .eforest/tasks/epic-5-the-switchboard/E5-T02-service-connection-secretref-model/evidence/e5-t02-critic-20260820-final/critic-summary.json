@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "verdict": "refuted",
+  "exactHead": "90b3805ad806c36e109f12debad09f3fb2e420e2",
+  "reviewedProductFix": "084019c957a42beb3c8ceee429108e19e6f0704a",
+  "evidenceDirectory": "evidence/e5-t02-critic-20260820-final",
+  "requiredAttack": {
+    "construction": "22 repeated lowercase a characters plus -a, constructed at runtime",
+    "length": 24,
+    "rawLiteralPersisted": false,
+    "runtimeEnvelopeFields": [
+      "eventId",
+      "workspaceId",
+      "actorId",
+      "idempotencyKey",
+      "connectionId"
+    ],
+    "runtimeBoundaries": [
+      "normalizePrincipal capabilities",
+      "normalizeOpaqueIdForStore",
+      "normalizeMetadata",
+      "normalizeReason",
+      "normalizeConnectionDefinition metadata",
+      "normalizeConnectionEvent terminal reason"
+    ],
+    "storeBoundaries": [
+      "create metadata",
+      "create actor capability",
+      "create connection id",
+      "authorization actor capability",
+      "capture actor capability",
+      "capture run id",
+      "disable reason",
+      "delete reason"
+    ],
+    "publicSchema": {
+      "validator": "Ajv 8 Draft-2020-12",
+      "rejected": [
+        "metadata",
+        "terminal reason",
+        "eventId",
+        "workspaceId",
+        "actorId",
+        "idempotencyKey",
+        "connectionId"
+      ]
+    },
+    "allRuntimeRejections": "CONNECTION_CREDENTIAL_MATERIAL",
+    "storeEventMovementFromRequiredAttack": false
+  },
+  "variantControls": {
+    "standardBase64": "rejected by runtime and public schema",
+    "providerShapedDynamicValue": "rejected by runtime and public schema",
+    "onePaddingUrlSafe": "rejected by runtime and public schema",
+    "underscoreUrlSafe": "rejected by runtime and public schema",
+    "mixedAlphabet": "rejected by runtime and public schema",
+    "canonicalShortUrlSafe": "accepted; finding 001",
+    "nonCanonicalThreePadding": "accepted as ordinary noncanonical text; not counted as a canonical-encoding finding",
+    "recursiveCaseExtra": "rejected by runtime/public schema controls"
+  },
+  "newAttack": {
+    "description": "Unicode-escaped JSON credential key plus parsed __proto__ metadata object",
+    "runtime": "both rejected with CONNECTION_CREDENTIAL_MATERIAL",
+    "publicSchema": "both rejected",
+    "findings": []
+  },
+  "findings": [
+    {
+      "id": "E5-T02-CRITIC-FINAL-001",
+      "severity": "high",
+      "title": "Canonical short base64url values bypass every-boundary rejection",
+      "prediction": "A canonical RFC 4648 base64url value below the implementation's 24-character threshold must still be refused as encoded credential material at runtime, store, and public-schema boundaries.",
+      "construction": "17 neutral bytes were encoded with base64url, round-trip checked, and retained only as a generated length/boolean observation; the raw value is absent from evidence.",
+      "observation": {
+        "length": 23,
+        "runtime": [
+          "normalizeMetadata accepted",
+          "normalizeOpaqueIdForStore accepted",
+          "normalizeReason accepted",
+          "normalizePrincipal capability accepted"
+        ],
+        "store": [
+          "create metadata accepted and appended",
+          "capture run-id accepted",
+          "disable reason accepted and appended terminal event"
+        ],
+        "publicSchema": [
+          "metadata accepted",
+          "terminal reason accepted",
+          "eventId accepted"
+        ]
+      },
+      "rootCause": "packages/connections/src/schema.mjs:679-690 returns false when value.length < 24; packages/connections/src/schemas/connection-events.v1.schema.json:73-94 uses the same 24-character lower bound.",
+      "evidence": "evidence/e5-t02-critic-20260820-final/independent-probes.json"
+    },
+    {
+      "id": "E5-T02-CRITIC-FINAL-002",
+      "severity": "medium",
+      "title": "Valid long opaque identifiers are over-blocked as base64url",
+      "prediction": "A syntactically valid opaque or event identifier must remain usable even when its characters happen to fit the base64url alphabet.",
+      "observation": {
+        "opaqueIdsRejected": [
+          "connection-normal-identifier-000001",
+          "run-20260820-normal-identifier"
+        ],
+        "eventWorkspaceIdentifierRejected": true,
+        "storeLifecycleCreateRejected": true,
+        "publicSchemaNormalLongIdentifierRejected": true,
+        "shortAndCommonControlsAccepted": true
+      },
+      "rootCause": "The generic credential detector runs before the valid opaque/identifier grammar in packages/connections/src/schema.mjs:722-743, while the public schema applies credentialValueShape exclusion to identifier and opaqueId at packages/connections/src/schemas/connection-events.v1.schema.json:100-108.",
+      "evidence": "evidence/e5-t02-critic-20260820-final/independent-probes.json"
+    }
+  ],
+  "independentControls": {
+    "lifecycleAndCapture": "PASS; revision 1 remains bound for the same run after rotation, new runs receive revision 2, and terminal fencing rejects new captures",
+    "duplicateReorderedReplay": "PASS; repeated replay produced equal state and view digests",
+    "authorizationParity": "PASS; foreign and unknown operations return equal typed not-found results without state movement",
+    "leakScan": "PASS; final recursive scan reported leaked=false and transient canary sensitivity detected=true",
+    "detectorSensitivity": "PASS; removing the base64 detector branch made the exact verifier turn red",
+    "coldReplay": "PASS; detached exact-head run matched state and replay-view digests"
+  },
+  "replayEvidence": "Replay: N/A (server connection model) + mitigation: detached exact-head cold-clone reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle digests, direct runtime/store probes, public Ajv validation, recursive leak scans, and detector-sensitivity mutation"
+}

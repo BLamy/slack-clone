@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "critic": "f273604-independent",
+  "exactHead": "f273604e4b01bc2c5c5e86b1b7b80d6ad282d50e",
+  "input": "tοken=<synthetic-redacted>",
+  "normalizeMetadata": { "accepted": true },
+  "createConnectionStore": {
+    "accepted": true,
+    "appendedEvents": 1,
+    "syntheticValuePersisted": true
+  },
+  "rawSecretUsed": false
+}

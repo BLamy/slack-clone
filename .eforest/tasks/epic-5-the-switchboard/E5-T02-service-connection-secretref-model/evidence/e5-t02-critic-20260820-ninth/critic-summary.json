@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "verdict": "refuted",
+  "reviewedHead": "a3572bf964fda394cadeb5c50368c8426356685d",
+  "reviewedProductFix": "e0cba219821a43db91da91252f9c28d7f370f8d8",
+  "criticEvidenceDirectory": "evidence/e5-t02-critic-20260820-ninth/",
+  "productCodeModifiedByCritic": false,
+  "findings": [
+    {
+      "id": "E5-T02-CRITIC-NINTH-FREEFORM-ASSIGNMENT-001",
+      "severity": "high",
+      "summary": "A client-secret assignment-shaped free-form value is accepted by runtime and store boundaries.",
+      "boundaries": [
+        "metadata",
+        "reason",
+        "connection-definition-metadata",
+        "terminal-data"
+      ],
+      "runtime": "accepted",
+      "store": "accepted and appended",
+      "publicSchema": "rejected",
+      "source": "packages/connections/src/schema.mjs:673-689,768-774; packages/connections/src/store.mjs:45-153,237-277",
+      "durableEvidence": "independent-probes.json freeFormMatrix rows with case assignment"
+    },
+    {
+      "id": "E5-T02-CRITIC-NINTH-SCHEMA-UNICODE-CF-URL-001",
+      "severity": "high",
+      "summary": "The public free-form schema accepts a URL credential whose scheme contains an invisible Unicode format control.",
+      "controls": [
+        "U+200B",
+        "U+200D",
+        "U+FEFF",
+        "U+202E",
+        "U+2060",
+        "U+2066",
+        "U+180E",
+        "U+061C"
+      ],
+      "publicBoundaries": [
+        "metadata",
+        "label",
+        "reason",
+        "connection-definition-metadata",
+        "terminal-data"
+      ],
+      "observations": 40,
+      "runtimeAndStore": "rejected",
+      "publicSchema": "accepted",
+      "source": "packages/connections/src/schema.mjs:673-689,768-774; packages/connections/src/schemas/connection-events.v1.schema.json:105-139,177-222,224-280",
+      "durableEvidence": "independent-probes.json findings with id prefix E5-T02-CRITIC-NINTH-SCHEMA-FREE-FORM-URL-SCHEME"
+    },
+    {
+      "id": "E5-T02-CRITIC-NINTH-SCHEMA-DEPTH-001",
+      "severity": "medium",
+      "summary": "The public schema accepts metadata at depth 9 while runtime and store enforce the depth limit.",
+      "publicSchema": "accepted",
+      "runtimeAndStore": "rejected",
+      "source": "packages/connections/src/schema.mjs:562-569; packages/connections/src/schemas/connection-events.v1.schema.json:199-222",
+      "durableEvidence": "independent-probes.json finding E5-T02-CRITIC-NINTH-SCHEMA-UNBOUNDED-METADATA"
+    }
+  ],
+  "coverage": {
+    "canonicalUrlSafeLengths": [
+      23,
+      24
+    ],
+    "standardBase64": true,
+    "whitespaceWrappers": [
+      "space",
+      "tab",
+      "NBSP"
+    ],
+    "formatControls": [
+      "U+200B",
+      "U+200D",
+      "U+FEFF",
+      "U+202E",
+      "U+2060",
+      "U+2066",
+      "U+180E",
+      "U+061C"
+    ],
+    "freeFormCaseCount": 146,
+    "freeFormBoundaries": [
+      "metadata",
+      "label",
+      "reason",
+      "capability",
+      "connection-definition-metadata",
+      "terminal-data"
+    ],
+    "jsonMatrixRows": 60,
+    "unicodeEscapedJsonKey": "rejected in runtime/store/public free-form paths",
+    "identifierFields": [
+      "eventId",
+      "actorId",
+      "workspaceId",
+      "idempotencyKey",
+      "connectionId"
+    ]
+  },
+  "controlsPassed": [
+    "canonical 23+ and longer URL-safe values reject in required free-form runtime/store/public paths",
+    "standard base64 rejects in required free-form runtime/store/public paths",
+    "space, tab, and NBSP wrappers reject in required free-form runtime/store/public paths",
+    "format controls inserted into or wrapped around encoded and explicit credential-shaped values reject at runtime and store",
+    "case-variant and Unicode-escaped JSON credential keys reject in the full free-form runtime/store/public matrix",
+    "ordinary long opaque IDs pass runtime and public identifier schema",
+    "explicit provider-token, private-key, URL, connection-string, assignment, and JSON-shaped identifiers reject",
+    "event identity fields follow the identifier policy",
+    "cyclic, case-variant, extra-field, and parsed prototype-key inputs reject",
+    "lifecycle, rotation, disable/delete fencing, tombstones, and capture revision binding pass",
+    "duplicate and reordered replay has equal state, event, and view digests",
+    "foreign and unknown authorization outcomes are equal and leave state unchanged",
+    "detector sensitivity turns red when runtime normalization or public format-control coverage is removed",
+    "redacted evidence leak scan is clean"
+  ],
+  "replay": {
+    "policy": "Replay: N/A (server connection model) + mitigation",
+    "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f",
+    "duplicateAndReorderedParity": true
+  },
+  "probe": {
+    "findingCount": 49,
+    "failureCount": 0,
+    "sensitivityPassed": true,
+    "leaked": false
+  }
+}

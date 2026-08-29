@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "verdict": "refuted",
+  "exactHead": "c7ad1ceaf8b2a746e6382b1e20e06e6d6e00b467",
+  "productRework": "eef62d259c0a7f72b3d7cd5cfd175a8dc3bfc7f7",
+  "predictions": [
+    {
+      "criterion": "neutral valid base64 and direct/encoded provider-token values",
+      "prediction": "runtime normalizers and store.create reject before append",
+      "result": "passed",
+      "evidence": "independent-probes.json runtimeBoundary; verifier verification-summary.json secretCorpus"
+    },
+    {
+      "criterion": "provider-token event fields and runtime identifiers",
+      "prediction": "eventId, actorId, workspace/tenant IDs, idempotencyKey, connection/run IDs, owner/principal IDs, and role reject with typed credential errors",
+      "result": "passed",
+      "evidence": "independent-probes.json eventBoundary and runtimeBoundary"
+    },
+    {
+      "criterion": "public schema identifiers, opaque IDs, labels, nested case variants, URLs, JSON, recursive metadata, and extra fields",
+      "prediction": "schema-only validation rejects each secret-shaped or unsupported case",
+      "result": "partial",
+      "evidence": "independent-probes.json publicSchema; terminal reasons remain accepted"
+    },
+    {
+      "criterion": "capture tuple binding and revision stability through rotate/disable/delete",
+      "prediction": "delimiter tuples remain distinct; same runs retain one revision; new terminal captures fail",
+      "result": "passed",
+      "evidence": "independent-probes.json lifecycle"
+    },
+    {
+      "criterion": "duplicate/reordered replay and stale rotation",
+      "prediction": "replay digests converge and stale/terminal rotations append nothing",
+      "result": "passed",
+      "evidence": "independent-probes.json lifecycle and verification-summary.json replay"
+    },
+    {
+      "criterion": "foreign versus unknown authorization parity",
+      "prediction": "read/grant/rotate/disable/delete return byte-equivalent typed not-found errors without state movement",
+      "result": "passed",
+      "evidence": "independent-probes.json authorization and authz-matrix.json"
+    },
+    {
+      "criterion": "canary detection and detector sensitivity",
+      "prediction": "transient canary is detected and cleaned; removing one detector branch makes the full verifier red",
+      "result": "passed",
+      "evidence": "canary-scan.json, independent-probes.json verifierCanary, sensitivity-mutation.json"
+    }
+  ],
+  "findings": [
+    {
+      "id": "E5-T02-CRITIC-FIFTH-001",
+      "severity": "high",
+      "summary": "The exported principal normalizer accepts a provider-token-shaped capability and returns the raw value.",
+      "sourceLines": [
+        "packages/connections/src/schema.mjs:242-283",
+        "packages/connections/src/index.mjs:21-30",
+        "packages/connections/src/store.mjs:378-393"
+      ],
+      "observation": "normalizePrincipal accepts capabilities matching its identifier regex without calling assertNoCredentialMaterial; an independent ghp-shaped capability was returned unchanged, and store.create accepted the same actor capability.",
+      "refutation": "This is an API-boundary acceptance of raw provider-token-shaped material despite the task goal requiring rejection at every API boundary."
+    },
+    {
+      "id": "E5-T02-CRITIC-FIFTH-002",
+      "severity": "high",
+      "summary": "The public event schema accepts secret-shaped terminal reasons.",
+      "sourceLines": [
+        "packages/connections/src/schemas/connection-events.v1.schema.json:221-229",
+        "packages/connections/src/schema.mjs:438-452"
+      ],
+      "observation": "A Draft-2020-12-compatible Ajv probe accepted both a provider-token-shaped reason and a neutral valid base64 reason. The runtime normalizeReason path rejects both, but terminalData.reason has only type, maxLength, and printable-character constraints and no credentialValueShape exclusion.",
+      "refutation": "A schema-only API consumer can pass raw credential-shaped reason material that the runtime boundary refuses, so the public API/event contract is not uniformly fail-closed."
+    }
+  ],
+  "replay": "Replay: N/A (server connection model) + mitigation: cold-clone reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle digests, independent boundary probes, and detector-sensitivity mutation",
+  "statusAfterVerdict": "refuted"
+}

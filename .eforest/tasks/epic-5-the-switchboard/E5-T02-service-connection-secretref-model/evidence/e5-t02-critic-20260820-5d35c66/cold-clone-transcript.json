@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "exactHead": "5d35c6631978583de5d68822ddceb23c8a0ab2cb",
+  "productAndVerifierAncestor": "9faf35526a5c9cdba0bff32c4359b365599e37b6",
+  "command": "TEST_RUN_ID=e5-t02-critic-5d35c66-cold-20260820 TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/work/critic-5d35c66-cold make verify-E5-T02",
+  "exitCode": 0,
+  "result": "PASS",
+  "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+  "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f",
+  "duplicateAndReorderedParity": true,
+  "leaked": false,
+  "replayEvidence": "Replay: N/A (server connection model) + mitigation: cold-clone reducer replay, secret-shaped input corpus, authz matrix, and exact lifecycle digests"
+}

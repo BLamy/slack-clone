@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "mutation": {
+    "branch": "provider-token value detector",
+    "source": "packages/connections/src/schema.mjs:39",
+    "action": "removed the provider-token regex from CREDENTIAL_VALUE_PATTERNS in a detached exact-head worktree",
+    "worktree": "/tmp/slack-e5-t02-third-sensitivity.ocE1eq"
+  },
+  "fixture": {
+    "metadataKey": "encodedValue",
+    "shape": "standard base64 encoding of a synthetic provider-token prefix",
+    "neutralKey": true
+  },
+  "command": "TEST_RUN_ID=e5-t02-third-sensitivity-provider-20260819 TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/evidence/e5-t02-sensitivity-provider-20260819 make verify-E5-T02",
+  "result": {
+    "exitCode": 2,
+    "verifierRed": true,
+    "failure": "scripts/verify-e5-t02.mjs:351 expected CONNECTION_CREDENTIAL_MATERIAL but observed undefined",
+    "interpretation": "the neutral encodedValue corpus entry was accepted after the detector branch was removed"
+  }
+}

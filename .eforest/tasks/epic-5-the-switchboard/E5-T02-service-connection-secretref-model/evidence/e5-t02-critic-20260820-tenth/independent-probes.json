@@ -1,0 +1,4000 @@
+{
+  "schemaId": "https://stream-slack.invalid/schemas/connection-events.v1.schema.json",
+  "generatedAt": "2026-08-20",
+  "controlsTested": [
+    "U+200B",
+    "U+200D",
+    "U+FEFF",
+    "U+202E",
+    "U+2060",
+    "U+2066",
+    "U+180E",
+    "U+061C"
+  ],
+  "caseCount": 266,
+  "findingCount": 15,
+  "findings": [
+    {
+      "id": "E5-T02-CRITIC-TENTH-RUNTIME-assignment-embedded-hyphen-metadata",
+      "boundary": "runtime",
+      "observation": {
+        "name": "assignment-embedded-hyphen-metadata",
+        "expectedAccepted": false,
+        "accepted": true,
+        "error": null
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-TENTH-RUNTIME-assignment-embedded-hyphen-reason",
+      "boundary": "runtime",
+      "observation": {
+        "name": "assignment-embedded-hyphen-reason",
+        "expectedAccepted": false,
+        "accepted": true,
+        "error": null
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-TENTH-RUNTIME-assignment-embedded-hyphen-definition",
+      "boundary": "runtime",
+      "observation": {
+        "name": "assignment-embedded-hyphen-definition",
+        "expectedAccepted": false,
+        "accepted": true,
+        "error": null
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-TENTH-RUNTIME-assignment-embedded-hyphen-created-event",
+      "boundary": "runtime",
+      "observation": {
+        "name": "assignment-embedded-hyphen-created-event",
+        "expectedAccepted": false,
+        "accepted": true,
+        "error": null
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-TENTH-RUNTIME-assignment-embedded-hyphen-disabled-event",
+      "boundary": "runtime",
+      "observation": {
+        "name": "assignment-embedded-hyphen-disabled-event",
+        "expectedAccepted": false,
+        "accepted": true,
+        "error": null
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-TENTH-STORE-assignment-embedded-hyphen",
+      "boundary": "store",
+      "observation": {
+        "name": "assignment-embedded-hyphen",
+        "expectedAccepted": false,
+        "accepted": true,
+        "appendedEvents": 1,
+        "error": null
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-TENTH-RUNTIME-assignment-embedded-underscore-metadata",
+      "boundary": "runtime",
+      "observation": {
+        "name": "assignment-embedded-underscore-metadata",
+        "expectedAccepted": false,
+        "accepted": true,
+        "error": null
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-TENTH-RUNTIME-assignment-embedded-underscore-reason",
+      "boundary": "runtime",
+      "observation": {
+        "name": "assignment-embedded-underscore-reason",
+        "expectedAccepted": false,
+        "accepted": true,
+        "error": null
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-TENTH-RUNTIME-assignment-embedded-underscore-definition",
+      "boundary": "runtime",
+      "observation": {
+        "name": "assignment-embedded-underscore-definition",
+        "expectedAccepted": false,
+        "accepted": true,
+        "error": null
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-TENTH-RUNTIME-assignment-embedded-underscore-created-event",
+      "boundary": "runtime",
+      "observation": {
+        "name": "assignment-embedded-underscore-created-event",
+        "expectedAccepted": false,
+        "accepted": true,
+        "error": null
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-TENTH-RUNTIME-assignment-embedded-underscore-disabled-event",
+      "boundary": "runtime",
+      "observation": {
+        "name": "assignment-embedded-underscore-disabled-event",
+        "expectedAccepted": false,
+        "accepted": true,
+        "error": null
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-TENTH-STORE-assignment-embedded-underscore",
+      "boundary": "store",
+      "observation": {
+        "name": "assignment-embedded-underscore",
+        "expectedAccepted": false,
+        "accepted": true,
+        "appendedEvents": 1,
+        "error": null
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-TENTH-RUNTIME-metadata-boundary-width-65",
+      "boundary": "runtime",
+      "observation": {
+        "name": "metadata-boundary-width-65",
+        "expectedAccepted": false,
+        "accepted": true,
+        "error": null
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-TENTH-STORE-metadata-boundary-width-65",
+      "boundary": "store",
+      "observation": {
+        "name": "metadata-boundary-width-65",
+        "expectedAccepted": false,
+        "accepted": true,
+        "appendedEvents": 1,
+        "error": null
+      }
+    },
+    {
+      "id": "E5-T02-CRITIC-TENTH-SCHEMA-metadata-astral-string-512-code-points",
+      "boundary": "public-schema",
+      "observation": {
+        "name": "metadata-astral-string-512-code-points",
+        "expectedAccepted": false,
+        "accepted": true,
+        "errorCount": 0,
+        "errors": []
+      }
+    }
+  ],
+  "cases": [
+    {
+      "boundary": "runtime",
+      "name": "assignment-hyphen-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-hyphen-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-hyphen-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-hyphen-created-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-hyphen-disabled-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-hyphen-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "assignment-hyphen",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-hyphen-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-hyphen-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-hyphen-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-underscore-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-underscore-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-underscore-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-underscore-created-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-underscore-disabled-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-underscore-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "assignment-underscore",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-underscore-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-underscore-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-underscore-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-space-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-space-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-space-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-space-created-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-space-disabled-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-space-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "assignment-space",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-space-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-space-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-space-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-case-variant-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-case-variant-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-case-variant-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-case-variant-created-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-case-variant-disabled-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-case-variant-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "assignment-case-variant",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-case-variant-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-case-variant-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-case-variant-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-embedded-hyphen-metadata",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-embedded-hyphen-reason",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-embedded-hyphen-definition",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-embedded-hyphen-created-event",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-embedded-hyphen-disabled-event",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-embedded-hyphen-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "assignment-embedded-hyphen",
+      "expectedAccepted": false,
+      "accepted": true,
+      "appendedEvents": 1,
+      "error": null
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-embedded-hyphen-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-embedded-hyphen-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-embedded-hyphen-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-embedded-underscore-metadata",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-embedded-underscore-reason",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-embedded-underscore-definition",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-embedded-underscore-created-event",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-embedded-underscore-disabled-event",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null
+    },
+    {
+      "boundary": "runtime",
+      "name": "assignment-embedded-underscore-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "assignment-embedded-underscore",
+      "expectedAccepted": false,
+      "accepted": true,
+      "appendedEvents": 1,
+      "error": null
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-embedded-underscore-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-embedded-underscore-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "assignment-embedded-underscore-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200B-url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200B-url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200B-url-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200B-url-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200B-url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "format-control-U+200B-url",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+200B-url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+200B-url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+200B-url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200B-base64url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200B-base64url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200B-base64url-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200B-base64url-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200B-base64url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "format-control-U+200B-base64url",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+200B-base64url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+200B-base64url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+200B-base64url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200D-url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200D-url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200D-url-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200D-url-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200D-url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "format-control-U+200D-url",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+200D-url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+200D-url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+200D-url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200D-base64url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200D-base64url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200D-base64url-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200D-base64url-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+200D-base64url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "format-control-U+200D-base64url",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+200D-base64url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+200D-base64url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+200D-base64url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+FEFF-url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+FEFF-url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+FEFF-url-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+FEFF-url-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+FEFF-url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "format-control-U+FEFF-url",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+FEFF-url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+FEFF-url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+FEFF-url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+FEFF-base64url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+FEFF-base64url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+FEFF-base64url-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+FEFF-base64url-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+FEFF-base64url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "format-control-U+FEFF-base64url",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+FEFF-base64url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+FEFF-base64url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+FEFF-base64url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+202E-url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+202E-url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+202E-url-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+202E-url-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+202E-url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "format-control-U+202E-url",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+202E-url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+202E-url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+202E-url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+202E-base64url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+202E-base64url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+202E-base64url-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+202E-base64url-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+202E-base64url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "format-control-U+202E-base64url",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+202E-base64url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+202E-base64url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+202E-base64url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2060-url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2060-url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2060-url-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2060-url-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2060-url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "format-control-U+2060-url",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+2060-url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+2060-url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+2060-url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2060-base64url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2060-base64url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2060-base64url-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2060-base64url-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2060-base64url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "format-control-U+2060-base64url",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+2060-base64url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+2060-base64url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+2060-base64url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2066-url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2066-url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2066-url-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2066-url-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2066-url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "format-control-U+2066-url",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+2066-url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+2066-url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+2066-url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2066-base64url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2066-base64url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2066-base64url-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2066-base64url-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+2066-base64url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "format-control-U+2066-base64url",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+2066-base64url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+2066-base64url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+2066-base64url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+180E-url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+180E-url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+180E-url-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+180E-url-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+180E-url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "format-control-U+180E-url",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+180E-url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+180E-url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+180E-url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+180E-base64url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+180E-base64url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+180E-base64url-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+180E-base64url-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+180E-base64url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "format-control-U+180E-base64url",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+180E-base64url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+180E-base64url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+180E-base64url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+061C-url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+061C-url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+061C-url-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+061C-url-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+061C-url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "format-control-U+061C-url",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+061C-url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+061C-url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+061C-url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+061C-base64url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+061C-base64url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.reason",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+061C-base64url-definition",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+061C-base64url-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "format-control-U+061C-base64url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.label",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "format-control-U+061C-base64url",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+061C-base64url-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+061C-base64url-reason",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/reason",
+          "keyword": "not",
+          "schemaPath": "#/properties/reason/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/2/if"
+        }
+      ]
+    },
+    {
+      "boundary": "public-schema",
+      "name": "format-control-U+061C-base64url-label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/label",
+          "keyword": "not",
+          "schemaPath": "#/not"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "json-key-raw-lower-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "json-key-raw-lower-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "json-key-raw-lower",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "json-key-raw-lower",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "json-key-raw-case-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "json-key-raw-case-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "json-key-raw-case",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "json-key-raw-case",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "json-key-unicode-escaped-lower-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "json-key-unicode-escaped-lower-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "json-key-unicode-escaped-lower",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "json-key-unicode-escaped-lower",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "json-key-unicode-escaped-case-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "json-key-unicode-escaped-case-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "json-key-unicode-escaped-case",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "json-key-unicode-escaped-case",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "json-key-unicode-escaped-client-secret-metadata",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "runtime",
+      "name": "json-key-unicode-escaped-client-secret-event",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.data.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "json-key-unicode-escaped-client-secret",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "json-key-unicode-escaped-client-secret",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 9,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/candidate",
+          "keyword": "not",
+          "schemaPath": "#/oneOf/3/not"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "metadata-boundary-object-depth-3-scalar",
+      "expectedAccepted": true,
+      "accepted": true,
+      "error": null
+    },
+    {
+      "boundary": "store",
+      "name": "metadata-boundary-object-depth-3-scalar",
+      "expectedAccepted": true,
+      "accepted": true,
+      "appendedEvents": 1,
+      "error": null
+    },
+    {
+      "boundary": "public-schema",
+      "name": "metadata-boundary-object-depth-3-scalar",
+      "expectedAccepted": true,
+      "accepted": true,
+      "errorCount": 0,
+      "errors": []
+    },
+    {
+      "boundary": "runtime",
+      "name": "metadata-boundary-object-depth-3-empty",
+      "expectedAccepted": true,
+      "accepted": true,
+      "error": null
+    },
+    {
+      "boundary": "store",
+      "name": "metadata-boundary-object-depth-3-empty",
+      "expectedAccepted": true,
+      "accepted": true,
+      "appendedEvents": 1,
+      "error": null
+    },
+    {
+      "boundary": "public-schema",
+      "name": "metadata-boundary-object-depth-3-empty",
+      "expectedAccepted": true,
+      "accepted": true,
+      "errorCount": 0,
+      "errors": []
+    },
+    {
+      "boundary": "runtime",
+      "name": "metadata-boundary-object-depth-4-empty",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.metadata.root.level1.level2.level3.level4",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "metadata-boundary-object-depth-4-empty",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.connection.metadata.root.level1.level2.level3.level4",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "metadata-boundary-object-depth-4-empty",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 30,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/3/type"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "metadata-boundary-object-depth-4-scalar",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.metadata.root.level1.level2.level3.level4",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "metadata-boundary-object-depth-4-scalar",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.connection.metadata.root.level1.level2.level3.level4",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "metadata-boundary-object-depth-4-scalar",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 30,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/3/type"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "metadata-boundary-object-depth-4-nonempty",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.metadata.root.level1.level2.level3.level4",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "metadata-boundary-object-depth-4-nonempty",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.connection.metadata.root.level1.level2.level3.level4",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "metadata-boundary-object-depth-4-nonempty",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 30,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/3/type"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "metadata-boundary-object-depth-5-scalar",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.metadata.root.level1.level2.level3.level4",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "metadata-boundary-object-depth-5-scalar",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.connection.metadata.root.level1.level2.level3.level4",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "metadata-boundary-object-depth-5-scalar",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 30,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/3/type"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "metadata-boundary-array-depth-3-scalar",
+      "expectedAccepted": true,
+      "accepted": true,
+      "error": null
+    },
+    {
+      "boundary": "store",
+      "name": "metadata-boundary-array-depth-3-scalar",
+      "expectedAccepted": true,
+      "accepted": true,
+      "appendedEvents": 1,
+      "error": null
+    },
+    {
+      "boundary": "public-schema",
+      "name": "metadata-boundary-array-depth-3-scalar",
+      "expectedAccepted": true,
+      "accepted": true,
+      "errorCount": 0,
+      "errors": []
+    },
+    {
+      "boundary": "runtime",
+      "name": "metadata-boundary-array-depth-3-empty",
+      "expectedAccepted": true,
+      "accepted": true,
+      "error": null
+    },
+    {
+      "boundary": "store",
+      "name": "metadata-boundary-array-depth-3-empty",
+      "expectedAccepted": true,
+      "accepted": true,
+      "appendedEvents": 1,
+      "error": null
+    },
+    {
+      "boundary": "public-schema",
+      "name": "metadata-boundary-array-depth-3-empty",
+      "expectedAccepted": true,
+      "accepted": true,
+      "errorCount": 0,
+      "errors": []
+    },
+    {
+      "boundary": "runtime",
+      "name": "metadata-boundary-array-depth-4-empty",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.metadata.root[0][0][0][0]",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "metadata-boundary-array-depth-4-empty",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.connection.metadata.root[0][0][0][0]",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "metadata-boundary-array-depth-4-empty",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 30,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/3/type"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "metadata-boundary-array-depth-4-nonempty",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.metadata.root[0][0][0][0]",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "metadata-boundary-array-depth-4-nonempty",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.connection.metadata.root[0][0][0][0]",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "metadata-boundary-array-depth-4-nonempty",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 30,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/3/type"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "metadata-boundary-array-depth-5-scalar",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.metadata.root[0][0][0][0]",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "metadata-boundary-array-depth-5-scalar",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.connection.metadata.root[0][0][0][0]",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "metadata-boundary-array-depth-5-scalar",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 30,
+      "errors": [
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/0/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/1/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/2/type"
+        },
+        {
+          "instancePath": "/data/metadata/root",
+          "keyword": "type",
+          "schemaPath": "#/oneOf/3/type"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "metadata-boundary-width-64",
+      "expectedAccepted": true,
+      "accepted": true,
+      "error": null
+    },
+    {
+      "boundary": "store",
+      "name": "metadata-boundary-width-64",
+      "expectedAccepted": true,
+      "accepted": true,
+      "appendedEvents": 1,
+      "error": null
+    },
+    {
+      "boundary": "public-schema",
+      "name": "metadata-boundary-width-64",
+      "expectedAccepted": true,
+      "accepted": true,
+      "errorCount": 0,
+      "errors": []
+    },
+    {
+      "boundary": "runtime",
+      "name": "metadata-boundary-width-65",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null
+    },
+    {
+      "boundary": "store",
+      "name": "metadata-boundary-width-65",
+      "expectedAccepted": false,
+      "accepted": true,
+      "appendedEvents": 1,
+      "error": null
+    },
+    {
+      "boundary": "public-schema",
+      "name": "metadata-boundary-width-65",
+      "expectedAccepted": false,
+      "accepted": false,
+      "errorCount": 2,
+      "errors": [
+        {
+          "instancePath": "/data/metadata",
+          "keyword": "maxProperties",
+          "schemaPath": "#/maxProperties"
+        },
+        {
+          "instancePath": "",
+          "keyword": "if",
+          "schemaPath": "#/allOf/0/if"
+        }
+      ]
+    },
+    {
+      "boundary": "runtime",
+      "name": "metadata-astral-string-512-code-points",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "store",
+      "name": "metadata-astral-string-512-code-points",
+      "expectedAccepted": false,
+      "accepted": false,
+      "appendedEvents": 0,
+      "error": {
+        "code": "CONNECTION_INVALID_REQUEST",
+        "path": "$.connection.metadata.candidate",
+        "name": "ConnectionError"
+      }
+    },
+    {
+      "boundary": "public-schema",
+      "name": "metadata-astral-string-512-code-points",
+      "expectedAccepted": false,
+      "accepted": true,
+      "errorCount": 0,
+      "errors": []
+    }
+  ],
+  "canaryValuesPersisted": false
+}

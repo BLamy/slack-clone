@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "auditedHead": "b2523f50d5b9f047a05fe62fcf9d1c915540dfb9",
+  "builderProductCommit": "a0ec965684fd0461c684e5acce37110a9d9c3475",
+  "targetCleanBeforeAudit": true,
+  "productSourceChangedByCritic": false,
+  "pinnedEmulateSubmoduleChanged": false,
+  "commands": [
+    { "command": "pnpm install --frozen-lockfile", "result": "PASS" },
+    { "command": "pnpm format:check", "result": "PASS" },
+    { "command": "pnpm format:check:e5-t02", "result": "PASS" },
+    { "command": "pnpm lint", "result": "PASS" },
+    { "command": "pnpm typecheck", "result": "PASS" },
+    {
+      "command": "pnpm test",
+      "result": "PASS",
+      "unitTests": 208,
+      "integrationAndPlaywrightTests": 15
+    },
+    { "command": "pnpm build", "result": "PASS" },
+    { "command": "git diff --check", "result": "PASS" }
+  ],
+  "coldVerifier": {
+    "command": "TEST_RUN_ID=e5-t02-critic-20260820-tenth-cold2 TEST_ARTIFACT_DIR=evidence/e5-t02-critic-20260820-tenth/cold-replay make verify-E5-T02",
+    "result": "PASS",
+    "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f",
+    "duplicateAndReorderedParity": true,
+    "leaked": false
+  },
+  "independentProbes": {
+    "publicSchemaValidator": "Ajv 2020",
+    "caseCount": 266,
+    "findingCount": 15,
+    "exactRequestedClientSecretFormsRejected": true,
+    "allEightFormatControlsRejectedAcrossUrlAndBase64Url": true,
+    "unicodeEscapedAndCaseVariantJsonKeysRejected": true,
+    "metadataDepthParity": true,
+    "evidence": "independent-probes.json"
+  },
+  "independentLifecycle": {
+    "findingCount": 0,
+    "evidence": "independent-lifecycle.json"
+  },
+  "sensitivity": {
+    "result": "RED",
+    "evidence": "sensitivity.json"
+  }
+}

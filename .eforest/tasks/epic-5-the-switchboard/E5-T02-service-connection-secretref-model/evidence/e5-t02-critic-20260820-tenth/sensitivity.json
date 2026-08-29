@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "mutation": {
+    "worktree": "/tmp/slack-e5-t02-tenth-sensitivity",
+    "baseHead": "b2523f50d5b9f047a05fe62fcf9d1c915540dfb9",
+    "changedFile": "packages/connections/src/schema.mjs",
+    "removedBranch": "provider-token value detector",
+    "productSourceChangedInTarget": false
+  },
+  "command": "TEST_RUN_ID=e5-t02-critic-20260820-tenth-sensitivity TEST_ARTIFACT_DIR=/tmp/e5-t02-critic-20260820-tenth-sensitivity make verify-E5-T02",
+  "exitCode": 2,
+  "result": "RED",
+  "failure": {
+    "assertion": "eventBoundaryFixture provider-token event identity must be rejected",
+    "file": "scripts/verify-e5-t02.mjs",
+    "line": 491,
+    "expectedCode": "CONNECTION_CREDENTIAL_MATERIAL",
+    "observedCode": null
+  },
+  "sensitive": true
+}

@@ -1,0 +1,2231 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "critic": "eleventh-independent",
+  "exactHead": "64171fb57c79fa65ddce942fa0d8111f49842033",
+  "requiredAttackCounts": {
+    "assignmentForms": 7,
+    "unicodeFormatControls": 8,
+    "jsonForms": 5,
+    "additionalAttacks": 2
+  },
+  "secretCases": [
+    {
+      "name": "assignment-client-secret",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "assignment-client-underscore-secret",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "assignment-client-space-secret",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "assignment-prefixed-hyphen",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "assignment-prefixed-underscore",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "assignment-prefixed-space",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "assignment-case-variant",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "url-scheme-U+200B",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "base64url-embedded-U+200B",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "url-scheme-U+200D",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "base64url-embedded-U+200D",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "url-scheme-U+FEFF",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "base64url-embedded-U+FEFF",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "url-scheme-U+202E",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "base64url-embedded-U+202E",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "url-scheme-U+2060",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "base64url-embedded-U+2060",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "url-scheme-U+2066",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "base64url-embedded-U+2066",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "url-scheme-U+180E",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "base64url-embedded-U+180E",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "url-scheme-U+061C",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "base64url-embedded-U+061C",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "json-lowercase-key",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "json-uppercase-key",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "json-escaped-lowercase-key",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "json-escaped-uppercase-key",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "json-client-secret-key",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.metadata.candidate"
+        },
+        "runtime-definition-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "runtime-event-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.metadata.candidate"
+        },
+        "store-metadata": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.candidate"
+        },
+        "public-metadata": {
+          "accepted": false
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": false
+        },
+        "runtime-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "runtime-event-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.data.reason"
+        },
+        "store-reason": {
+          "accepted": false,
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.reason"
+        },
+        "public-reason": {
+          "accepted": false
+        }
+      }
+    },
+    {
+      "name": "percent-encoded-assignment",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "runtime-definition-metadata": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "runtime-event-metadata": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "store-metadata": {
+          "accepted": true,
+          "code": null,
+          "path": null,
+          "appended": 1
+        },
+        "public-metadata": {
+          "accepted": true
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_INVALID_REQUEST",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_INVALID_REQUEST",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_INVALID_REQUEST",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": true
+        },
+        "runtime-reason": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "runtime-event-reason": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "store-reason": {
+          "accepted": true,
+          "code": null,
+          "path": null,
+          "appended": 1
+        },
+        "public-reason": {
+          "accepted": true
+        }
+      }
+    },
+    {
+      "name": "percent-encoded-json-key",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "runtime-definition-metadata": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "runtime-event-metadata": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "store-metadata": {
+          "accepted": true,
+          "code": null,
+          "path": null,
+          "appended": 1
+        },
+        "public-metadata": {
+          "accepted": true
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_INVALID_REQUEST",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_INVALID_REQUEST",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_INVALID_REQUEST",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": true
+        },
+        "runtime-reason": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "runtime-event-reason": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "store-reason": {
+          "accepted": true,
+          "code": null,
+          "path": null,
+          "appended": 1
+        },
+        "public-reason": {
+          "accepted": true
+        }
+      }
+    }
+  ],
+  "resourceBoundaryObservationCount": 58,
+  "resourceBoundaryFindings": [],
+  "additionalAttackResults": [
+    {
+      "name": "percent-encoded-assignment",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "runtime-definition-metadata": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "runtime-event-metadata": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "store-metadata": {
+          "accepted": true,
+          "code": null,
+          "path": null,
+          "appended": 1
+        },
+        "public-metadata": {
+          "accepted": true
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_INVALID_REQUEST",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_INVALID_REQUEST",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_INVALID_REQUEST",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": true
+        },
+        "runtime-reason": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "runtime-event-reason": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "store-reason": {
+          "accepted": true,
+          "code": null,
+          "path": null,
+          "appended": 1
+        },
+        "public-reason": {
+          "accepted": true
+        }
+      }
+    },
+    {
+      "name": "percent-encoded-json-key",
+      "boundaryResults": {
+        "runtime-metadata": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "runtime-definition-metadata": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "runtime-event-metadata": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "store-metadata": {
+          "accepted": true,
+          "code": null,
+          "path": null,
+          "appended": 1
+        },
+        "public-metadata": {
+          "accepted": true
+        },
+        "runtime-definition-label": {
+          "accepted": false,
+          "code": "CONNECTION_INVALID_REQUEST",
+          "path": "$.connection.label"
+        },
+        "runtime-event-label": {
+          "accepted": false,
+          "code": "CONNECTION_INVALID_REQUEST",
+          "path": "$.event.data.label"
+        },
+        "store-label": {
+          "accepted": false,
+          "code": "CONNECTION_INVALID_REQUEST",
+          "path": "$.connection.label"
+        },
+        "public-label": {
+          "accepted": true
+        },
+        "runtime-reason": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "runtime-event-reason": {
+          "accepted": true,
+          "code": null,
+          "path": null
+        },
+        "store-reason": {
+          "accepted": true,
+          "code": null,
+          "path": null,
+          "appended": 1
+        },
+        "public-reason": {
+          "accepted": true
+        }
+      }
+    }
+  ],
+  "sensitivity": {
+    "branchRemoved": "client-secret assignment value detector",
+    "mutatedFixtureAccepted": true,
+    "verifierWouldTurnRed": true
+  },
+  "findings": [
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-assignment-runtime-metadata",
+      "name": "percent-encoded-assignment",
+      "boundary": "runtime-metadata",
+      "code": null,
+      "path": null,
+      "appended": null
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-assignment-runtime-definition-metadata",
+      "name": "percent-encoded-assignment",
+      "boundary": "runtime-definition-metadata",
+      "code": null,
+      "path": null,
+      "appended": null
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-assignment-runtime-event-metadata",
+      "name": "percent-encoded-assignment",
+      "boundary": "runtime-event-metadata",
+      "code": null,
+      "path": null,
+      "appended": null
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-assignment-store-metadata",
+      "name": "percent-encoded-assignment",
+      "boundary": "store-metadata",
+      "code": null,
+      "path": null,
+      "appended": 1
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-assignment-public-metadata",
+      "name": "percent-encoded-assignment",
+      "boundary": "public-metadata",
+      "appended": null
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-assignment-public-label",
+      "name": "percent-encoded-assignment",
+      "boundary": "public-label",
+      "appended": null
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-assignment-runtime-reason",
+      "name": "percent-encoded-assignment",
+      "boundary": "runtime-reason",
+      "code": null,
+      "path": null,
+      "appended": null
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-assignment-runtime-event-reason",
+      "name": "percent-encoded-assignment",
+      "boundary": "runtime-event-reason",
+      "code": null,
+      "path": null,
+      "appended": null
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-assignment-store-reason",
+      "name": "percent-encoded-assignment",
+      "boundary": "store-reason",
+      "code": null,
+      "path": null,
+      "appended": 1
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-assignment-public-reason",
+      "name": "percent-encoded-assignment",
+      "boundary": "public-reason",
+      "appended": null
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-json-key-runtime-metadata",
+      "name": "percent-encoded-json-key",
+      "boundary": "runtime-metadata",
+      "code": null,
+      "path": null,
+      "appended": null
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-json-key-runtime-definition-metadata",
+      "name": "percent-encoded-json-key",
+      "boundary": "runtime-definition-metadata",
+      "code": null,
+      "path": null,
+      "appended": null
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-json-key-runtime-event-metadata",
+      "name": "percent-encoded-json-key",
+      "boundary": "runtime-event-metadata",
+      "code": null,
+      "path": null,
+      "appended": null
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-json-key-store-metadata",
+      "name": "percent-encoded-json-key",
+      "boundary": "store-metadata",
+      "code": null,
+      "path": null,
+      "appended": 1
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-json-key-public-metadata",
+      "name": "percent-encoded-json-key",
+      "boundary": "public-metadata",
+      "appended": null
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-json-key-public-label",
+      "name": "percent-encoded-json-key",
+      "boundary": "public-label",
+      "appended": null
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-json-key-runtime-reason",
+      "name": "percent-encoded-json-key",
+      "boundary": "runtime-reason",
+      "code": null,
+      "path": null,
+      "appended": null
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-json-key-runtime-event-reason",
+      "name": "percent-encoded-json-key",
+      "boundary": "runtime-event-reason",
+      "code": null,
+      "path": null,
+      "appended": null
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-json-key-store-reason",
+      "name": "percent-encoded-json-key",
+      "boundary": "store-reason",
+      "code": null,
+      "path": null,
+      "appended": 1
+    },
+    {
+      "id": "E5-T02-CRITIC-ELEVENTH-SECRET-percent-encoded-json-key-public-reason",
+      "name": "percent-encoded-json-key",
+      "boundary": "public-reason",
+      "appended": null
+    }
+  ],
+  "verdict": "refuted",
+  "replay": "Replay: N/A (server connection model) + mitigation: cold-clone reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle digests, and independent boundary probes"
+}

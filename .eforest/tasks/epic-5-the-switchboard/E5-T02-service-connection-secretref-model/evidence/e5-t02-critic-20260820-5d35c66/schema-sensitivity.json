@@ -1,0 +1,9 @@
+{
+  "exactHead": "5d35c6631978583de5d68822ddceb23c8a0ab2cb",
+  "mutation": "Removed only the public credentialValueShape anyOf reference to percentEncodedCredentialShape at connection-events.v1.schema.json:179 in a detached disposable checkout.",
+  "mutationDiff": ["packages/connections/src/schemas/connection-events.v1.schema.json"],
+  "command": "TEST_RUN_ID=e5-t02-critic-5d35c66-schema-mutation-20260820 TEST_ARTIFACT_DIR=/tmp/slack-e5-t02-critic-5d35c66-schema-mutation-artifacts make verify-E5-T02",
+  "exitCode": 2,
+  "observedAssertion": "percent-json-key: public connection schema accepted credential material",
+  "sensitive": true
+}

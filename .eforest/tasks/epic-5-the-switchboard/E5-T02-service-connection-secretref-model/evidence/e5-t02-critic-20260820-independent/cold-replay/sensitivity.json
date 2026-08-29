@@ -1,0 +1,19 @@
+{
+  "url": {
+    "branchRemoved": "URL and connection-string value detector",
+    "mutatedFixtureAccepted": true,
+    "verifierWouldTurnRed": true
+  },
+  "providerToken": {
+    "branchRemoved": "provider-token value detector",
+    "fixtureKey": "encodedValue",
+    "mutatedFixtureAccepted": true,
+    "verifierWouldTurnRed": true
+  },
+  "base64": {
+    "branchRemoved": "standard and URL-safe base64 value detector",
+    "fixtureKey": "encodedUrlSafe",
+    "mutatedFixtureAccepted": true,
+    "verifierWouldTurnRed": true
+  }
+}

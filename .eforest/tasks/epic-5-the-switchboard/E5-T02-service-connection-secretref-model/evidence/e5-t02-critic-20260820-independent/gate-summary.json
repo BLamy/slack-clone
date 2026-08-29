@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "exactHead": "6677c51700bde89c027492153081775bf8b171ff",
+  "result": "PASS",
+  "commands": [
+    { "command": "pnpm install --frozen-lockfile", "result": "PASS" },
+    { "command": "pnpm format:check", "result": "PASS" },
+    { "command": "pnpm format:check:e5-t02", "result": "PASS" },
+    { "command": "pnpm lint", "result": "PASS" },
+    { "command": "pnpm typecheck", "result": "PASS" },
+    {
+      "command": "pnpm test",
+      "result": "PASS",
+      "unitTests": 207,
+      "integrationTests": 15
+    },
+    { "command": "pnpm build", "result": "PASS" },
+    {
+      "command": "make verify-E5-T02",
+      "result": "PASS",
+      "runId": "e5-t02-critic-20260820-independent-final",
+      "evidence": ".",
+      "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+      "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f"
+    },
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "scope": "detached exact-head cold worktree /tmp/slack-e5-t02-independent-cold",
+      "result": "PASS"
+    },
+    {
+      "command": "make verify-E5-T02",
+      "scope": "detached exact-head cold worktree /tmp/slack-e5-t02-independent-cold",
+      "result": "PASS",
+      "runId": "e5-t02-critic-20260820-independent-cold",
+      "evidence": "cold-replay/",
+      "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+      "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f"
+    },
+    {
+      "command": "node independent-probe.mjs",
+      "result": "EXPECTED_REFUTATION",
+      "exitCode": 1,
+      "evidence": "independent-probes.json",
+      "findings": 7
+    },
+    {
+      "command": "pnpm exec prettier --check independent-probe.mjs",
+      "result": "PASS"
+    },
+    { "command": "node --check independent-probe.mjs", "result": "PASS" },
+    { "command": "git diff --check", "result": "PASS" }
+  ],
+  "replay": "Replay: N/A (server connection model) + mitigation: detached exact-head cold-clone verifier replay, duplicate/reordered lifecycle parity, and independent runtime/schema/store probes",
+  "evidenceDirectory": ".eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/evidence/e5-t02-critic-20260820-independent"
+}

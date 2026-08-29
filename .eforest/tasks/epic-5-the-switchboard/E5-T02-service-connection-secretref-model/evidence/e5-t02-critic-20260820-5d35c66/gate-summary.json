@@ -1,0 +1,14 @@
+{
+  "exactHead": "5d35c6631978583de5d68822ddceb23c8a0ab2cb",
+  "install": "pnpm install --frozen-lockfile: PASS",
+  "gates": {
+    "pnpm format:check": "PASS",
+    "pnpm format:check:e5-t02": "PASS",
+    "pnpm lint": "PASS",
+    "pnpm typecheck": "PASS",
+    "pnpm test": "PASS: 209 unit, 15 integration/Playwright",
+    "pnpm build": "PASS",
+    "git diff --check": "PASS"
+  },
+  "emulate": "untouched; pinned at 9a62e23a55dd01d3086e7e0aaa5bb755c7814fe7"
+}

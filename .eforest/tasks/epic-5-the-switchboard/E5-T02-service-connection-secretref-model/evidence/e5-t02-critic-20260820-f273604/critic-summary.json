@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "critic": "f273604-independent",
+  "verdict": "refuted",
+  "exactHead": "f273604e4b01bc2c5c5e86b1b7b80d6ad282d50e",
+  "builderProductCommit": "9127aa6eb28dc7f4dc68d84f52c4dd47a67060d6",
+  "findings": [
+    {
+      "id": "E5-T02-CRITIC-F273604-001",
+      "severity": "high",
+      "summary": "The public JSON Schema accepts mixed percent-encoded JSON credential material that runtime and store reject before append.",
+      "input": "see independent-probes.json: parityMismatches[0].metadata.payload",
+      "runtime": "CONNECTION_CREDENTIAL_MATERIAL at $.connection.metadata.payload",
+      "publicSchema": "Ajv 2020 accepted the same created-event metadata",
+      "source": "packages/connections/src/schema.mjs:681-699,722-733; packages/connections/src/schemas/connection-events.v1.schema.json:73-107,144-177",
+      "evidence": "independent-probes.json"
+    },
+    {
+      "id": "E5-T02-CRITIC-F273604-002",
+      "severity": "high",
+      "summary": "The public JSON Schema accepts valid Slack xox[baprs]-prefixed provider-token values that runtime rejects before append.",
+      "inputs": [
+        "xoxb-AAAAAAAAAAAAAAAA",
+        "xoxa-AAAAAAAAAAAAAAAA",
+        "xoxp-AAAAAAAAAAAAAAAA",
+        "xoxr-AAAAAAAAAAAAAAAA",
+        "xoxs-AAAAAAAAAAAAAAAA"
+      ],
+      "runtime": "CONNECTION_CREDENTIAL_MATERIAL at $.connection.metadata.encodedValue",
+      "publicSchema": "Ajv 2020 accepted all five values",
+      "source": "packages/connections/src/schema.mjs:36-43; packages/connections/src/schemas/connection-events.v1.schema.json:153-155",
+      "evidence": "independent-probes.json"
+    },
+    {
+      "id": "E5-T02-CRITIC-F273604-003",
+      "severity": "high",
+      "summary": "A Unicode-confusable token assignment is accepted and persisted by the authoritative runtime/store boundary.",
+      "input": "tοken=<synthetic-redacted>",
+      "runtime": "normalizeMetadata accepted the value",
+      "store": "create appended one event and persisted the synthetic value in event.data.metadata.candidate",
+      "source": "packages/connections/src/schema.mjs:681-699; securityNormalize is applied to keys at :669-679 but not credential values",
+      "evidence": "confusable-store.json"
+    }
+  ],
+  "matrix": {
+    "generatedCases": 58,
+    "runtimeRejected": 55,
+    "publicSchemaRejected": 49,
+    "schemaParityMismatches": 6,
+    "ordinaryPercentPositiveControl": "PASS",
+    "escapedCaseWhitespaceZeroWidthConfusableBase64TokenUrlClientSecret": "EXECUTED; confusable assignment finding above",
+    "metadataDepthArrayPropertyCountAstralBounds": "PASS",
+    "reasonBounds": "PASS",
+    "lifecycleReplayAuthzLeakage": "PASS",
+    "sensitivity": "PASS: exact verifier's disposable URL/provider-token/base64 detector mutations turned the verifier red and cleaned their scratch directories"
+  },
+  "status": "refuted",
+  "replay": "Replay: N/A (server connection model) + mitigation: detached exact-head cold replay, full gate transcript, independent runtime/store/public Ajv probes, lifecycle and capture checks, authorization matrix, leakage scan, and detector sensitivity mutation",
+  "productCodeModifiedByCritic": false,
+  "emulateModifiedByCritic": false,
+  "evidenceFiles": [
+    "critic-summary.json",
+    "gate-summary.json",
+    "cold-clone-transcript.json",
+    "independent-probes.mjs",
+    "independent-probes.json",
+    "confusable-store.json",
+    "lifecycle-authz.json",
+    "sensitivity.json",
+    "canary-scan.json"
+  ]
+}

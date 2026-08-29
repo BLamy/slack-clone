@@ -1,0 +1,377 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "probeSeed": 20260819,
+  "runtimeEnvelope": {
+    "fields": {
+      "eventId": {
+        "accepted": false,
+        "error": {
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.eventId",
+          "statusCode": 400
+        }
+      },
+      "actorId": {
+        "accepted": false,
+        "error": {
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.actorId",
+          "statusCode": 400
+        }
+      },
+      "idempotencyKey": {
+        "accepted": false,
+        "error": {
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.idempotencyKey",
+          "statusCode": 400
+        }
+      },
+      "connectionId": {
+        "accepted": false,
+        "error": {
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.event.connectionId",
+          "statusCode": 400
+        }
+      }
+    },
+    "generatedEventId": {
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_CREDENTIAL_MATERIAL",
+        "path": "$.event.eventId",
+        "statusCode": 400
+      },
+      "appendedBefore": 0,
+      "appendedAfter": 0
+    }
+  },
+  "publicSchema": {
+    "validator": "Ajv 6 with in-memory $defs-to-definitions adaptation",
+    "baseline": {
+      "accepted": true,
+      "errorCount": 0
+    },
+    "cases": {
+      "nested-case-key": {
+        "accepted": false,
+        "errorCount": 37
+      },
+      "nested-case-value": {
+        "accepted": false,
+        "errorCount": 47
+      },
+      "uppercase-url": {
+        "accepted": false,
+        "errorCount": 35
+      },
+      "json-secret": {
+        "accepted": false,
+        "errorCount": 35
+      },
+      "provider-prefix-value": {
+        "accepted": false,
+        "errorCount": 35
+      },
+      "provider-prefix-label": {
+        "accepted": false,
+        "errorCount": 23
+      },
+      "recursive-metadata": {
+        "accepted": false,
+        "errorCount": 71
+      },
+      "recursive-array-metadata": {
+        "accepted": false,
+        "errorCount": 71
+      },
+      "neutral-base64": {
+        "accepted": false,
+        "errorCount": 35
+      },
+      "provider-prefix-opaque-event-id": {
+        "accepted": false,
+        "errorCount": 1
+      },
+      "provider-prefix-opaque-idempotency": {
+        "accepted": false,
+        "errorCount": 1
+      },
+      "provider-prefix-opaque-connection": {
+        "accepted": false,
+        "errorCount": 1
+      },
+      "provider-prefix-identifier-actor": {
+        "accepted": true,
+        "errorCount": 0
+      },
+      "provider-prefix-identifier-workspace": {
+        "accepted": true,
+        "errorCount": 0
+      },
+      "extra-event-field": {
+        "accepted": false,
+        "errorCount": 1
+      },
+      "extra-created-data-field": {
+        "accepted": false,
+        "errorCount": 25
+      },
+      "extra-secretref-field": {
+        "accepted": false,
+        "errorCount": 24
+      }
+    }
+  },
+  "metadataBoundary": {
+    "results": {
+      "neutral-base64": {
+        "accepted": true,
+        "error": null,
+        "appendedBefore": 0,
+        "appendedAfter": 1
+      },
+      "provider-base64": {
+        "accepted": false,
+        "error": {
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.encodedValue",
+          "statusCode": 400
+        },
+        "appendedBefore": 1,
+        "appendedAfter": 1
+      },
+      "json-case-secret": {
+        "accepted": false,
+        "error": {
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.payload",
+          "statusCode": 400
+        },
+        "appendedBefore": 1,
+        "appendedAfter": 1
+      },
+      "uppercase-url": {
+        "accepted": false,
+        "error": {
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.endpoint",
+          "statusCode": 400
+        },
+        "appendedBefore": 1,
+        "appendedAfter": 1
+      },
+      "multiline-key": {
+        "accepted": false,
+        "error": {
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.material",
+          "statusCode": 400
+        },
+        "appendedBefore": 1,
+        "appendedAfter": 1
+      },
+      "confusable-key": {
+        "accepted": false,
+        "error": {
+          "code": "CONNECTION_INVALID_REQUEST",
+          "path": "$.connection.metadata.οken",
+          "statusCode": 400
+        },
+        "appendedBefore": 1,
+        "appendedAfter": 1
+      },
+      "nested-cookie": {
+        "accepted": false,
+        "error": {
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.nested.headers.cookie",
+          "statusCode": 400
+        },
+        "appendedBefore": 1,
+        "appendedAfter": 1
+      },
+      "connection-string": {
+        "accepted": false,
+        "error": {
+          "code": "CONNECTION_CREDENTIAL_MATERIAL",
+          "path": "$.connection.metadata.dsn",
+          "statusCode": 400
+        },
+        "appendedBefore": 1,
+        "appendedAfter": 1
+      }
+    },
+    "appendedEvents": 1,
+    "markerPersisted": true
+  },
+  "lifecycle": {
+    "revisions": {
+      "first": 1,
+      "secondRun": 2,
+      "sameRun": 1,
+      "sameRunAfterDisable": 1,
+      "sameRunAfterDelete": 1,
+      "activeAfterRotate": 2
+    },
+    "sameRunStable": true,
+    "priorRunPreservedThroughTerminals": true,
+    "newGrantAfterDisable": {
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_NOT_ACTIVE",
+        "path": null,
+        "statusCode": 409
+      }
+    },
+    "newGrantAfterDelete": {
+      "accepted": false,
+      "error": {
+        "code": "CONNECTION_NOT_ACTIVE",
+        "path": null,
+        "statusCode": 409
+      }
+    },
+    "staleRotation": {
+      "beforeTerminal": {
+        "accepted": false,
+        "error": {
+          "code": "CONNECTION_REVISION_CONFLICT",
+          "path": "$.event.data.expectedRevision",
+          "statusCode": 409
+        },
+        "noAppend": true
+      },
+      "afterDisable": {
+        "accepted": false,
+        "error": {
+          "code": "CONNECTION_NOT_ACTIVE",
+          "path": null,
+          "statusCode": 409
+        },
+        "noAppend": true
+      },
+      "afterDelete": {
+        "accepted": false,
+        "error": {
+          "code": "CONNECTION_NOT_ACTIVE",
+          "path": null,
+          "statusCode": 409
+        },
+        "noAppend": true
+      }
+    },
+    "tombstone": {
+      "status": "deleted",
+      "hasTombstone": true,
+      "reason": "retired"
+    },
+    "replay": {
+      "duplicateInputCount": 8,
+      "stateDigest": "sha256:e73740f9cf4cf7077a8de42334c618a38db27d753be7a4bf1af78a9d05e0fe4f",
+      "secondStateDigest": "sha256:e73740f9cf4cf7077a8de42334c618a38db27d753be7a4bf1af78a9d05e0fe4f",
+      "eventDigest": "sha256:5bdbea4737887045c26c9c98e3992bbad9f14a5f5937d10110e8d1df7521bac2",
+      "secondEventDigest": "sha256:5bdbea4737887045c26c9c98e3992bbad9f14a5f5937d10110e8d1df7521bac2",
+      "stateEqual": true,
+      "viewDigest": "sha256:bc0191ae662fea2e4dc575dc92f66977f3a040ab86925bae6d3f02ac63ff893b",
+      "secondViewDigest": "sha256:bc0191ae662fea2e4dc575dc92f66977f3a040ab86925bae6d3f02ac63ff893b"
+    }
+  },
+  "captureKeyCollision": {
+    "firstBinding": {
+      "connectionId": "connection-critic-a:b",
+      "runId": "run-critic-c",
+      "revision": 1
+    },
+    "secondRequest": {
+      "connectionId": "connection-critic-a",
+      "runId": "b:run-critic-c"
+    },
+    "returnedBinding": {
+      "connectionId": "connection-critic-a:b",
+      "runId": "run-critic-c",
+      "revision": 1
+    },
+    "collisionDetected": true
+  },
+  "authorization": {
+    "foreignResults": {
+      "read": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "grant": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "rotate": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "disable": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "delete": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      }
+    },
+    "unknownResults": {
+      "read": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "grant": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "rotate": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "disable": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      },
+      "delete": {
+        "code": "CONNECTION_NOT_FOUND",
+        "path": null,
+        "statusCode": 404
+      }
+    },
+    "equal": true,
+    "stateDigestBefore": "sha256:995e9811ce0d19be5d2c20f998f3c04c2682f11670d14fc8bf1268ba9821013a",
+    "stateDigestAfter": "sha256:995e9811ce0d19be5d2c20f998f3c04c2682f11670d14fc8bf1268ba9821013a",
+    "unchanged": true
+  },
+  "evidence": {
+    "transientDetectorSawMarker": true,
+    "persistentMarkerLeak": false,
+    "persistentProviderShapeLeak": false,
+    "checkedFiles": [
+      "authz-matrix.json",
+      "canary-scan.json",
+      "cold-clone-transcript.json",
+      "connection-state.json",
+      "independent-probes.json",
+      "independent-probes.mjs",
+      "lifecycle-events.json",
+      "replay-digests.json",
+      "secret-corpus.json",
+      "sensitivity.json",
+      "verification-summary.json"
+    ]
+  }
+}

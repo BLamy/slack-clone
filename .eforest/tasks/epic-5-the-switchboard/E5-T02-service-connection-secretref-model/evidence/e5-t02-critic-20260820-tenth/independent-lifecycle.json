@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "fixture": "independent lifecycle with new tenant, workspace, connection, and run ids",
+  "eventCount": 4,
+  "stateDigest": "sha256:d49208aefbb8e630ea3de8af6dacd23e8ca3842d9dc9732b4fcc1e20f332b98d",
+  "observations": [
+    {
+      "name": "create-active-revision",
+      "passed": true,
+      "observed": 1,
+      "expected": 1
+    },
+    {
+      "name": "rotation-advances-revision",
+      "passed": true,
+      "observed": 2,
+      "expected": 2
+    },
+    {
+      "name": "existing-run-keeps-revision",
+      "passed": true,
+      "observed": 1,
+      "expected": 1
+    },
+    {
+      "name": "existing-run-keeps-binding",
+      "passed": true,
+      "observed": "sha256:ab24c909b6b9df8ed3e0312175086097812ea52775da978cf59d4da2ff297f5c",
+      "expected": "sha256:ab24c909b6b9df8ed3e0312175086097812ea52775da978cf59d4da2ff297f5c"
+    },
+    {
+      "name": "new-run-gets-revision",
+      "passed": true,
+      "observed": 2,
+      "expected": 2
+    },
+    {
+      "name": "new-run-has-different-binding",
+      "passed": true,
+      "observed": true,
+      "expected": true
+    },
+    {
+      "name": "stale-rotation-is-fenced",
+      "passed": true,
+      "observed": {
+        "accepted": false,
+        "code": "CONNECTION_REVISION_CONFLICT"
+      },
+      "expected": {
+        "accepted": false,
+        "code": "CONNECTION_REVISION_CONFLICT"
+      }
+    },
+    {
+      "name": "stale-rotation-does-not-append",
+      "passed": true,
+      "observed": 2,
+      "expected": 2
+    },
+    {
+      "name": "disabled-connection-fences-new-grant",
+      "passed": true,
+      "observed": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_ACTIVE"
+      },
+      "expected": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_ACTIVE"
+      }
+    },
+    {
+      "name": "delete-records-tombstone",
+      "passed": true,
+      "observed": {
+        "status": "deleted",
+        "tombstonePresent": true
+      },
+      "expected": {
+        "status": "deleted",
+        "tombstonePresent": true
+      }
+    },
+    {
+      "name": "captured-snapshot-survives-terminal-fence",
+      "passed": true,
+      "observed": {
+        "revision": 1,
+        "secretRefRevision": 1
+      },
+      "expected": {
+        "revision": 1,
+        "secretRefRevision": 1
+      }
+    },
+    {
+      "name": "deleted-connection-fences-new-grant",
+      "passed": true,
+      "observed": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_ACTIVE"
+      },
+      "expected": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_ACTIVE"
+      }
+    },
+    {
+      "name": "deleted-connection-fences-rotation",
+      "passed": true,
+      "observed": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_ACTIVE"
+      },
+      "expected": {
+        "accepted": false,
+        "code": "CONNECTION_NOT_ACTIVE"
+      }
+    },
+    {
+      "name": "duplicate-reordered-replay-state",
+      "passed": true,
+      "observed": "sha256:d49208aefbb8e630ea3de8af6dacd23e8ca3842d9dc9732b4fcc1e20f332b98d",
+      "expected": "sha256:d49208aefbb8e630ea3de8af6dacd23e8ca3842d9dc9732b4fcc1e20f332b98d"
+    },
+    {
+      "name": "duplicate-reordered-replay-view",
+      "passed": true,
+      "observed": "sha256:8bb5f55e866b8cfb74283e25d770db3616e07f368050a3867aafad2d86d7fd1b",
+      "expected": "sha256:8bb5f55e866b8cfb74283e25d770db3616e07f368050a3867aafad2d86d7fd1b"
+    },
+    {
+      "name": "replay-applies-one-copy",
+      "passed": true,
+      "observed": 4,
+      "expected": 4
+    },
+    {
+      "name": "foreign-and-unknown-errors-match",
+      "passed": true,
+      "observed": {
+        "code": "CONNECTION_NOT_FOUND",
+        "detail": "connection was not found",
+        "name": "ConnectionError",
+        "path": null,
+        "statusCode": 404
+      },
+      "expected": {
+        "code": "CONNECTION_NOT_FOUND",
+        "detail": "connection was not found",
+        "name": "ConnectionError",
+        "path": null,
+        "statusCode": 404
+      }
+    },
+    {
+      "name": "authz-probes-do-not-move-state",
+      "passed": true,
+      "observed": "sha256:d49208aefbb8e630ea3de8af6dacd23e8ca3842d9dc9732b4fcc1e20f332b98d",
+      "expected": "sha256:d49208aefbb8e630ea3de8af6dacd23e8ca3842d9dc9732b4fcc1e20f332b98d"
+    }
+  ],
+  "findingCount": 0,
+  "findings": [],
+  "canaryValuesPersisted": false
+}

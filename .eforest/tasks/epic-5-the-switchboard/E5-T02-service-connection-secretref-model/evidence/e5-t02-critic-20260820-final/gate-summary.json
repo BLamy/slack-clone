@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "verdict": "refuted",
+  "exactHead": "90b3805ad806c36e109f12debad09f3fb2e420e2",
+  "reviewedProductFix": "084019c957a42beb3c8ceee429108e19e6f0704a",
+  "commands": [
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "result": "PASS",
+      "scope": "target exact-head checkout"
+    },
+    {
+      "command": "pnpm format:check",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm format:check:e5-t02",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "result": "PASS",
+      "notes": "207 unit tests and 15 emulator/Auth0 Playwright tests passed"
+    },
+    {
+      "command": "pnpm build",
+      "result": "PASS",
+      "notes": "Vite build completed"
+    },
+    {
+      "command": "node evidence/e5-t02-critic-20260820-final/independent-probes.mjs",
+      "result": "FINDINGS (exit 1)",
+      "notes": "Expected critic falsification result; writes independent-probes.json without raw fixture values"
+    },
+    {
+      "command": "TEST_RUN_ID=e5-t02-critic-final-20260820 TEST_ARTIFACT_DIR=evidence/e5-t02-critic-20260820-final E5_T02_ENTRYPOINT='make verify-E5-T02 (fresh critic exact-head run)' make verify-E5-T02",
+      "result": "PASS",
+      "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+      "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f",
+      "leaked": false
+    },
+    {
+      "command": "git worktree add --detach /tmp/slack-e5-t02-final-cold 90b3805",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm install --frozen-lockfile (detached cold worktree)",
+      "result": "PASS"
+    },
+    {
+      "command": "TEST_RUN_ID=e5-t02-critic-final-cold-20260820 TEST_ARTIFACT_DIR=evidence/e5-t02-critic-20260820-final/cold-replay E5_T02_ENTRYPOINT='make verify-E5-T02 (fresh detached cold worktree)' make verify-E5-T02",
+      "result": "PASS",
+      "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+      "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f",
+      "leaked": false
+    }
+  ],
+  "evidence": {
+    "directory": "evidence/e5-t02-critic-20260820-final",
+    "probe": "evidence/e5-t02-critic-20260820-final/independent-probes.json",
+    "finalVerifier": "evidence/e5-t02-critic-20260820-final/verification-summary.json",
+    "coldVerifier": "evidence/e5-t02-critic-20260820-final/cold-replay/verification-summary.json",
+    "leakScan": "evidence/e5-t02-critic-20260820-final/canary-scan.json",
+    "sensitivity": "evidence/e5-t02-critic-20260820-final/sensitivity.json"
+  },
+  "replayEvidence": "Replay: N/A (server connection model) + mitigation: detached exact-head cold-clone reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle digests, and independent runtime/schema probes"
+}

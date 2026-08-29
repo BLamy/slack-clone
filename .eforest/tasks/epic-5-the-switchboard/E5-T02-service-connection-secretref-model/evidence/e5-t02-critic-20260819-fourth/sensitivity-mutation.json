@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "criticHead": "89a9bb08a822342cc3c2ce112b1bb15cf833c8c1",
+  "command": "TEST_RUN_ID=e5-t02-critic-fourth-sensitivity TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/evidence/sensitivity-full-verifier-fourth make verify-E5-T02",
+  "mutation": {
+    "action": "removed only the provider-token value regex from CREDENTIAL_VALUE_PATTERNS in a detached exact-head worktree",
+    "source": "packages/connections/src/schema.mjs:39",
+    "worktree": "/tmp/slack-e5-t02-fourth-sensitivity"
+  },
+  "result": {
+    "exitCode": 2,
+    "verifierRed": true,
+    "failure": "scripts/verify-e5-t02.mjs:355 expected CONNECTION_CREDENTIAL_MATERIAL but observed undefined"
+  }
+}

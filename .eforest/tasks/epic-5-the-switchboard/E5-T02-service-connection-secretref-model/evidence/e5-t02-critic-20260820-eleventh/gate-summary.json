@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "critic": "eleventh-independent",
+  "exactHead": "f108463e85fc0d8a39060ec0040079c597b31b8d",
+  "builderProductCommit": "3d7f2e8466562958ba8e039f7020a22d231588ea",
+  "targetCheckoutCleanAtOrientation": true,
+  "productSourceChangedByCritic": false,
+  "emulateSubmoduleChangedByCritic": false,
+  "commands": [
+    { "command": "pnpm install --frozen-lockfile", "result": "PASS" },
+    { "command": "pnpm format:check", "result": "PASS" },
+    { "command": "pnpm format:check:e5-t02", "result": "PASS" },
+    { "command": "pnpm lint", "result": "PASS" },
+    { "command": "pnpm typecheck", "result": "PASS" },
+    {
+      "command": "pnpm test",
+      "result": "PASS",
+      "details": "209 unit tests and 15 integration/Playwright tests"
+    },
+    { "command": "pnpm build", "result": "PASS" },
+    { "command": "git diff --check", "result": "PASS" }
+  ],
+  "warmVerifier": {
+    "command": "TEST_RUN_ID=e5-t02-critic-20260820-eleventh-warm TEST_ARTIFACT_DIR=evidence/e5-t02-critic-20260820-eleventh make verify-E5-T02",
+    "result": "PASS",
+    "implementationCommit": "f108463e85fc0d8a39060ec0040079c597b31b8d",
+    "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f",
+    "canaryLeaked": false
+  },
+  "coldVerifier": {
+    "checkout": "/tmp/slack-e5-t02-critic-eleventh-cold.aob22U",
+    "command": "TEST_RUN_ID=e5-t02-critic-20260820-eleventh-cold TEST_ARTIFACT_DIR=evidence/e5-t02-critic-20260820-eleventh/cold-replay make verify-E5-T02",
+    "result": "PASS",
+    "implementationCommit": "f108463e85fc0d8a39060ec0040079c597b31b8d",
+    "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f",
+    "canaryLeaked": false
+  },
+  "independentProbe": {
+    "command": "node evidence/e5-t02-critic-20260820-eleventh/independent-probes.mjs",
+    "result": "REFUTED",
+    "exitCode": 1,
+    "evidence": "independent-probes.json"
+  },
+  "replay": "Replay: N/A (server connection model) + mitigation: cold-clone reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle digests, and independent runtime/store/public boundary probes"
+}

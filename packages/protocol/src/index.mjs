@@ -17,6 +17,7 @@ export * from "./run-queue.mjs";
 export * from "./conversation-scheduling.mjs";
 export * from "./run-control.mjs";
 export * from "./agent-replies.mjs";
+export { sha256Digest } from "./sha256.mjs";
 
 export function normalizeRoomId(roomId) {
   const normalized = String(roomId)

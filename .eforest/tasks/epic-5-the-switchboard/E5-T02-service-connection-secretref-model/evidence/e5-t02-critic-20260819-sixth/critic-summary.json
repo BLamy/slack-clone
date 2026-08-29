@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "verdict": "refuted",
+  "exactHead": "80e8296b8ba57300eae98b8f57863d8cd87cb5eb",
+  "reviewedProductFix": "dd20209fda6f5a5314d4a0a916aa038f52806a3c",
+  "finding": {
+    "id": "E5-T02-CRITIC-SIXTH-001",
+    "severity": "high",
+    "summary": "A neutral RFC 4648 URL-safe base64 value is accepted as credential-shaped material at runtime and by the public event schema.",
+    "falsifiablePrediction": "A valid URL-safe base64 value using the URL-safe alphabet and an opaque-id-compatible spelling should be refused before normalization, append, capture, or public-schema acceptance.",
+    "observation": {
+      "neutralFixture": "round-trip-valid URL-safe base64; length 24; URL-safe alphabet used; raw bytes are not written to evidence",
+      "runtimeDetector": { "standardBase64Detected": true, "urlSafeBase64Detected": false },
+      "directRuntimeAccepted": [
+        "normalizePrincipal capability",
+        "normalizeOpaqueIdForStore",
+        "normalizeMetadata",
+        "normalizeReason",
+        "normalizeConnectionEvent terminal reason",
+        "normalizeConnectionEvent event id"
+      ],
+      "storeAccepted": [
+        "create actor capability",
+        "authorization actor capability",
+        "capture actor capability",
+        "capture run id, with the value echoed in the frozen binding",
+        "disable terminal reason, with an event appended"
+      ],
+      "publicAjvAccepted": [
+        "terminalData.reason",
+        "createdData.metadata value",
+        "top-level eventId"
+      ],
+      "controls": {
+        "providerTokenCapabilityRejected": true,
+        "standardBase64CapabilityRejected": true,
+        "providerTokenTerminalReasonRejectedByAjv": true,
+        "standardBase64TerminalReasonRejectedByAjv": true,
+        "caseVariantUrlAndJsonRejected": true,
+        "recursiveCredentialMaterialRejected": true,
+        "extraEventDataSecretRefOwnerFieldsRejected": true
+      }
+    },
+    "source": [
+      "packages/connections/src/schema.mjs:661-672",
+      "packages/connections/src/schema.mjs:714-731",
+      "packages/connections/src/store.mjs:166-219",
+      "packages/connections/src/store.mjs:237-277",
+      "packages/connections/src/schemas/connection-events.v1.schema.json:73-98",
+      "packages/connections/src/schemas/connection-events.v1.schema.json:225-230"
+    ],
+    "evidence": [
+      "evidence/e5-t02-critic-20260819-sixth/independent-probes.json",
+      "evidence/e5-t02-critic-20260819-sixth/independent-probes.mjs"
+    ]
+  },
+  "coverage": {
+    "duplicateReorderedReplay": "PASS",
+    "authzOwnership": "PASS",
+    "foreignUnknownParityAndNoDigestMovement": "PASS",
+    "rotationCaptureStability": "PASS",
+    "disableDeleteFencingAndTombstone": "PASS",
+    "fullSecretCorpus": "PASS",
+    "coldReplay": "PASS",
+    "evidenceLeakScan": "PASS",
+    "detectorSensitivity": "PASS for existing provider-token and URL branches; the URL-safe-base64 gap remains unimplemented"
+  },
+  "evidencePaths": {
+    "criticDirectory": "evidence/e5-t02-critic-20260819-sixth/",
+    "coldReplayDirectory": "evidence/e5-t02-critic-20260819-sixth/cold-replay/",
+    "builderEvidence": "evidence/e5-t02-final/"
+  },
+  "replayEvidence": "Replay: N/A (server connection model) + mitigation: cold-clone reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle digests, independent runtime/schema probes, and detector sensitivity",
+  "statusReason": "The final builder fix closes provider-token principal capabilities and standard credentialValueShape terminal reasons, but a URL-safe base64 equivalent crosses the same raw-material boundary and can be appended or captured."
+}

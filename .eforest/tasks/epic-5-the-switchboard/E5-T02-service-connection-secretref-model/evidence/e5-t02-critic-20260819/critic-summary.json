@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "task": "E5-T02",
+  "verdict": "refuted",
+  "criticHead": "b3eb419a7769e452c5580c96cdd5ae13f1ca33a7",
+  "implementationCommit": "380bdd2047711f683c89535060b36fd0678d3920",
+  "verifier": {
+    "command": "make verify-E5-T02 TEST_RUN_ID=e5-t02-critic-20260819 TEST_ARTIFACT_DIR=.eforest/tasks/epic-5-the-switchboard/E5-T02-service-connection-secretref-model/work/critic-run",
+    "result": "PASS",
+    "stateDigest": "sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb",
+    "replayViewDigest": "sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f"
+  },
+  "gates": {
+    "installFrozen": "PASS",
+    "format": "PASS",
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "unitTests": "204 passed",
+    "integrationTests": "15 passed",
+    "build": "PASS"
+  },
+  "findings": [
+    {
+      "id": "E5-T02-CRITIC-001",
+      "severity": "high",
+      "criterion": "base64 and token-shaped values are rejected before append",
+      "operation": "store.create",
+      "metadataPath": "$.connection.metadata.encoded",
+      "encoding": "standard base64",
+      "decodedShape": "provider-token-prefix plus synthetic body",
+      "outcome": "accepted",
+      "eventsBefore": 0,
+      "eventsAfter": 1,
+      "source": [
+        "packages/connections/src/schema.mjs:659-676",
+        "packages/connections/src/store.mjs:49-84",
+        "packages/connections/src/store.mjs:248-270"
+      ]
+    },
+    {
+      "id": "E5-T02-CRITIC-002",
+      "severity": "medium",
+      "criterion": "the public schema permits only non-secret metadata",
+      "outcome": "schema permits arbitrary metadata properties and values",
+      "source": "packages/connections/src/schemas/connection-events.v1.schema.json:109-112",
+      "detail": "The metadata definition is only an object with additionalProperties true; it has no key, value, or recursive secret-shape constraints."
+    }
+  ],
+  "requestedAttacks": {
+    "json": "rejected with CONNECTION_CREDENTIAL_MATERIAL",
+    "url": "rejected with CONNECTION_CREDENTIAL_MATERIAL",
+    "multilinePrivateKey": "rejected with CONNECTION_CREDENTIAL_MATERIAL",
+    "unicodeConfusableKey": "rejected with CONNECTION_CREDENTIAL_MATERIAL",
+    "nestedMetadata": "rejected; credential-shaped nesting typed as CONNECTION_CREDENTIAL_MATERIAL and excessive depth as CONNECTION_INVALID_REQUEST",
+    "races": "capture bindings stayed immutable; rotation was revision-fenced; disable/delete blocked new captures; tombstone was recorded",
+    "foreignEnumeration": "read/grant/rotate/disable/delete returned equal CONNECTION_NOT_FOUND JSON for foreign and unknown ids; state digest was unchanged"
+  },
+  "sensitivity": {
+    "mutation": "removed the URL/connection-string detector branch from a scratch schema copy",
+    "mutatedCorpusAccepted": true,
+    "expectedVerifierAssertionTurnedRed": true
+  },
+  "replayEvidence": "Replay: N/A (server connection model) + mitigation: cold-clone reducer replay, secret-shaped input corpus, authz matrix, exact lifecycle digests, and independent negative-path probes"
+}

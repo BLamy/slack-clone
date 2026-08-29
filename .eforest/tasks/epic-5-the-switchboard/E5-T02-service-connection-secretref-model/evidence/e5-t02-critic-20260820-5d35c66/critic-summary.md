@@ -1,0 +1,15 @@
+VERDICT: refuted
+
+Exact head: `5d35c6631978583de5d68822ddceb23c8a0ab2cb` (`5d35c66`). The product and verifier change under review is ancestor `9faf35526a5c9cdba0bff32c4359b365599e37b6`. The target checkout was clean at orientation, and `emulate` remained pinned at `9a62e23a55dd01d3086e7e0aaa5bb755c7814fe7`.
+
+Finding `E5-T02-CRITIC-5D35C66-001` (high): the public Ajv schema accepts 13 independently generated percent-encoded provider-token values that runtime normalization and the store reject with `CONNECTION_CREDENTIAL_MATERIAL` before append. The mismatches are `ghp-double-percent-prefix`, mixed and double percent `sk`, `rk`, and `pk` prefixes, mixed percent `github_pat`, and mixed percent `xox[baprs]` prefixes. Every mismatch appended zero store events. The full redacted matrix and runnable probe are in `independent-probes.json` and `independent-probes.mjs`; it exercised 78 cases, including raw and encoded JSON, assignments, URLs, PEM markers, base64, all requested token families, confusables, all eight format controls, nested credentials, and ordinary percent-text controls.
+
+This violates the public-schema/runtime/store parity boundary: `credentialValueShape` has raw token patterns at `connection-events.v1.schema.json:159-164`, while the percent helper reference is at `:179`; the independent encoded forms for the non-`ghp` families and double-encoded `ghp` are accepted by Ajv. Runtime decoding and token detection are at `schema.mjs:681-694` and reject the same values.
+
+Independent controls passed: ordinary single- and double-percent text was accepted by all three paths; lifecycle create/rotate/capture/disable/delete and duplicate/reordered replay produced equal state digests with captured revisions `[1, 2, 1]`; authorization ownership and foreign/unknown not-found behavior matched; depth, object/array width, astral code-point, and reason bounds matched; and the synthetic canary was not persisted. Details and digests are in `lifecycle-authz.json`.
+
+The promoted cold verifier also passed at this exact head with state digest `sha256:f40a7853415af396818e3d0c25c9cf159ccae12875466ce07bf13f85da7424cb`, replay-view digest `sha256:9d70ac30cbe321f7c0f04fa2b05dde4dd9f51b97da9f7ace52e6899f819a640f`, duplicate/reordered parity, and `leaked: false`. Full gates passed: 209 unit tests, 15 integration/Playwright tests, lint, typecheck, formatting, build, and diff check.
+
+Sensitivity passed independently. Removing only the public percent-schema reference made the exact verifier exit 2 on `percent-json-key`; removing only the runtime provider-token detector made it exit 2 on the expected credential-material assertion. See `schema-sensitivity.json` and `runtime-sensitivity.json`.
+
+Status remains `refuted`; E5-T03 must not start until the public schema covers the independently found encoded token forms and a fresh critic reviews the resulting exact head. Replay: N/A (server connection model) + mitigation: cold-clone reducer replay, full gates, independent Ajv/runtime/store probes, lifecycle/authz/bounds/leakage checks, and disposable schema/runtime mutations.
